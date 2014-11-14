@@ -10,7 +10,7 @@
         $var = $msg;
       }
     }
-    function valid() {global $valid; return $valid;}
+    function isValid() {global $valid; return $valid;}
     function startValidations() {global $valid; $valid = true;}
 
     function render($view) {

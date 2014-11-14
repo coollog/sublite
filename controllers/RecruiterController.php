@@ -14,7 +14,7 @@
       startValidations();
 
       // Code
-      if ($this->valid()) {
+      if ($this->isValid()) {
         $this->render(/*SOMETHING*/);
         return;
       }
