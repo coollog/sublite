@@ -1,0 +1,3 @@
+<?php
+  // Close DB connection
+?>
