@@ -11,7 +11,8 @@
       }
     }
     function valid() {global $valid; return $valid;}
-    
+    function startValidations() {global $valid; $valid = true;}
+
     function render($view) {
       require_once('includes/htmlheader.php');
 
