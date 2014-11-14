@@ -3,8 +3,8 @@
 
   abstract class Controller {
     function validate($test, &$var, $msg) {
-      global valid;
-      if (!valid) return;
+      global $valid;
+      if (!$valid) return;
       if (!$test) {
         $valid = false;
         $var = $msg;
@@ -22,11 +22,9 @@
       require_once('includes/htmlfooter.php'); 
       require_once('includes/footer.php');
     }
-
-    function __construct() {
-      global params;
-      $params = $_POST;
-      session_start();
-    }
   }
+
+  global $params;
+  $params = $_POST;
+  session_start();
 ?>

@@ -3,7 +3,10 @@
   ini_set('display_errors', '1');
 
   // Require other header files
-  require_once('');
+  require_once('models/ListingModel.php');
+  require_once('models/RecruiterModel.php');
+  require_once('controllers/ListingController.php');
+  require_once('controllers/RecruiterController.php');
 
   // Configurations and setup
   date_default_timezone_set('America/New_York');

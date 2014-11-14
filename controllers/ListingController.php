@@ -1,12 +1,12 @@
 <?php
   require_once('controllers/Controller.php');
 
-  class RecruiterController extends Controller {
+  class ListingController extends Controller {
     function home() {
 
     }
-    
-    function register() {
+
+    function create() {
       global $params;
       // Params to vars
       
@@ -22,19 +22,15 @@
       $this->render(/*SOMETHING*/);
     }
 
-    function login() {
-      // USE SAME TEMPLATE
-    }
-
     function edit() {
-      // USE SAME TEMPLATE
+      
     }
-
+    
     function view() {
-      // USE SAME TEMPLATE
+      
     }
   }
 
-  $CRecruiter = new RecruiterController();
+  $CListing = new ListingController();
 
 ?>

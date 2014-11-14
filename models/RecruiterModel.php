@@ -9,12 +9,15 @@
     function save($data) {
 
     }
+
     function login($data) {
 
     }
+
     function get($email) {
 
     }
+    
     function exists($email) {
 
     }
