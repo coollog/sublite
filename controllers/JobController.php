@@ -1,7 +1,7 @@
 <?php
   require_once('controllers/Controller.php');
 
-  class ListingController extends Controller {
+  class JobController extends Controller {
     function home() {
 
     }
@@ -31,6 +31,6 @@
     }
   }
 
-  $CListing = new ListingController();
+  $CJob = new JobController();
 
 ?>

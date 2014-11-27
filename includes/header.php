@@ -2,14 +2,16 @@
   error_reporting(E_ALL);
   ini_set('display_errors', '1');
 
+  // Configurations and setup
+  require_once('config.php');
+  date_default_timezone_set('America/New_York');
+
   // Require other header files
-  require_once('models/ListingModel.php');
+  require_once('models/JobModel.php');
   require_once('models/RecruiterModel.php');
-  require_once('controllers/ListingController.php');
+  require_once('controllers/JobController.php');
   require_once('controllers/RecruiterController.php');
 
-  // Configurations and setup
-  date_default_timezone_set('America/New_York');
 
   header("Expires: Tue, 01 Jan 2000 00:00:00 GMT");
   header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");

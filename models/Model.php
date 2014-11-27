@@ -5,8 +5,8 @@
 
     function __construct($collectionname) {
       // Setup database
-      $m = new MongoClient(); // CHANGE THIS TO CONNECT TO CUSTOM MONGOSERVER
-      $db = $m->internships;  // MOVE THIS TO A CONFIG FILE
+      $m = new MongoClient($_GLOBALS['dburi']);
+      $db = $m->$_GLOBALS['dbname'];
       $this->collection = $db->$collectionname;
     }
   }
