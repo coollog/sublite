@@ -17,7 +17,7 @@
       require_once('includes/htmlheader.php');
 
       // Actual view here
-      require_once("views/$view");
+      require_once("views/$view.php");
 
       require_once('includes/htmlfooter.php'); 
       require_once('includes/footer.php');
