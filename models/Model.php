@@ -3,10 +3,10 @@
     // Database variables
     private $collection;
 
-    function __construct($collectionname) {
+    function __construct($collectionname) {var_dump($GLOBALS);
       // Setup database
-      $m = new MongoClient($_GLOBALS['dburi']);
-      $db = $m->$_GLOBALS['dbname'];
+      $m = new MongoClient($GLOBALS['dburi']);
+      $db = $m->$GLOBALS['dbname'];
       $this->collection = $db->$collectionname;
     }
   }
