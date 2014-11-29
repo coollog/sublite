@@ -4,7 +4,8 @@
   class RecruiterController extends Controller {
     function home() {
       $this->requireLogin();
-      echo 'yay!';
+      $id = $_SESSION['_id'];
+      echo "<a href='recruiter.php?id=$id'>View Profile</a>";
     }
     
     function register() {
@@ -19,27 +20,28 @@
       $company = clean($params['company']);
       $title = clean($params['title']);
       $phone = clean($params['phone']); // VALIDATE THIS
+      $data = array(
+        'email' => $email, 'pass' => $pass, 'firstname' => $firstname, 
+        'lastname' => $lastname, 'company' => $company, 'title' => $title,
+        'phone' => $phone
+      );
       
       // Validations
       $this->startValidations();
       $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL), 
         $err, 'invalid email');
-      $this->validate(($entry = $MRecruiter->get($email)) == NULL, 
+      $this->validate(!$MRecruiter->exists($email),
         $err, 'email taken');
 
       // Code
       if ($this->isValid()) {
-        $id = $MRecruiter->save($email, $pass, $firstname, $lastname, 
-                                $company, $title, $phone);
-        $this->login();
+        $MRecruiter->save($data);
+        $_POST['login'] = true; $this->login();
         return;
       }
       
       echo $err; // CHANGE THIS TO AN ERROR DISPLAY FUNCTION
-      $this->render('register', array(
-        'email' => $email, 'firstname' => $firstname, 'lastname' => $lastname,
-        'company' => $company, 'title' => $title, 'phone' => $phone
-      ));
+      $this->render('register', $data);
     }
 
     function login() {
@@ -50,6 +52,9 @@
       global $email;
       $email = clean($params['email']);
       $pass = $params['pass'];
+      $data = array(
+        'email' => $email
+      );
       
       // Validations
       $this->startValidations();
@@ -57,12 +62,13 @@
         $err, 'invalid email');
       $this->validate(
         ($entry = $MRecruiter->get($email)) != NULL and 
-        hash_equals($entry['pass'], crypt($pass, $entry['pass'])), 
+        $MRecruiter->login($email, $pass), 
         $err, 'invalid credentials');
 
       if ($this->isValid()) {
         $_SESSION['email'] = $email;
         $_SESSION['pass'] = $pass;
+        $_SESSION['_id'] = $entry['_id'];
         
         $this->redirect('home');
         return;
@@ -70,48 +76,70 @@
       
       echo $err; // CHANGE THIS TO AN ERROR DISPLAY FUNCTION
 
-      $this->render('login', array(
-        'email' => $email
-      ));
+      $this->render('login', $data);
     }
 
     function edit() {
       $this->requireLogin();
-      if (!isset($_POST['edit'])) { $this->render('editprofile'); return; }
       
       global $params, $MRecruiter;
       // Params to vars
       $email = $_SESSION['email'];
       $pass = $_SESSION['pass'];
-      $firstname = clean($params['firstname']);
-      $lastname = clean($params['lastname']);
-      $company = clean($params['company']);
-      $title = clean($params['title']);
-      $phone = clean($params['phone']); // VALIDATE THIS
       
       // Validations
       $this->startValidations();
-      $this->validate(($entry = $MRecruiter->get($email)) == NULL, 
-        $err, 'email not found');
 
       // Code
       if ($this->isValid()) {
-        $id = $MRecruiter->save($email, $pass, $firstname, $lastname, 
-                                $company, $title, $phone);
-        echo 'profile saved'; // REFACTOR TO A SUCCESS DISPLAY FUNCTION
+        if (!isset($_POST['edit'])) { 
+          $this->render('editprofile', 
+            $MRecruiter->data($MRecruiter->get($email))); return;
+        }
+
+        $firstname = clean($params['firstname']);
+        $lastname = clean($params['lastname']);
+        $company = clean($params['company']);
+        $title = clean($params['title']);
+        $phone = clean($params['phone']); // VALIDATE THIS
+        $data = array(
+          'email' => $email, 'pass' => $pass, 'firstname' => $firstname, 
+          'lastname' => $lastname, 'company' => $company, 'title' => $title,
+          'phone' => $phone
+        );
+        // Validations
+
+
+        if ($this->isValid()) {
+          $id = $MRecruiter->save($data);
+          echo 'profile saved'; // REFACTOR TO A SUCCESS DISPLAY FUNCTION
+          $this->render('editprofile', $data);
+          return;
+        }
+      }
+      
+      echo $err; // CHANGE THIS TO AN ERROR DISPLAY FUNCTION
+      $this->render('editprofile', $data);
+    }
+
+    function view() {
+      $this->requireLogin();
+      
+      global $params, $MRecruiter;
+      
+      // Validations
+      $this->startValidations();
+      $this->validate(isset($_GET['id']) and 
+        ($entry = $MRecruiter->getByID($_GET['id'])) != NULL, 
+        $err, 'unknown recruiter');
+
+      // Code
+      if ($this->isValid()) {
+        $this->render('recruiter', $MRecruiter->data($entry));
         return;
       }
       
       echo $err; // CHANGE THIS TO AN ERROR DISPLAY FUNCTION
-      $vEmail = $email;
-      $this->render('editprofile', array(
-        'firstname' => $firstname, 'lastname' => $lastname,
-        'company' => $company, 'title' => $title, 'phone' => $phone
-      ));
-    }
-
-    function view() {
-      // USE SAME TEMPLATE
     }
 
     function requireLogin() {

@@ -25,8 +25,13 @@
       require_once('includes/htmlfooter.php'); 
       require_once('includes/footer.php');
     }
-    function redirect($page) {
-      header("Location: /$page.php");
+    function redirect($page, $params = NULL) {
+      if ($params == NULL)
+        header("Location: /$page.php");
+      else {
+        $query = http_build_query($params);
+        header("Location: /$page.php?$query");
+      }
       die();
     }
   }
