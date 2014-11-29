@@ -1,0 +1,9 @@
+Todo:
+
+
+- make validations for company, phone number, first/last name
+- make company model and verify existing company
+- make validations for time in job model
+- add photo uploader (use same code as in sublite)
+- add location to geocode (use same code)
+- think of a way to do requirements in job

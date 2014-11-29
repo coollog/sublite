@@ -28,7 +28,7 @@
     }
 
     function get($email) {
-      return $this->collection->findOne(array('email' => $email);
+      return $this->collection->findOne(array('email' => $email));
     }
     
     function exists($email) {

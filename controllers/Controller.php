@@ -13,18 +13,27 @@
     function isValid() {global $valid; return $valid;}
     function startValidations() {global $valid; $valid = true;}
 
-    function render($view) {
+    function render($view, $vars = false) {
       require_once('includes/htmlheader.php');
 
       // Actual view here
+      global $viewVars;
+      if ($vars === false) $viewVars = array();
+      else $viewVars = $vars;
       require_once("views/$view.php");
 
       require_once('includes/htmlfooter.php'); 
       require_once('includes/footer.php');
     }
+    function redirect($page) {
+      header("Location: /$page.php");
+      die();
+    }
   }
 
   global $params;
   $params = $_POST;
+
+  // REFACTOR ALL LOGIN/SESSION HANDLING CODE
   session_start();
 ?>

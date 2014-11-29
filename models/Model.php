@@ -1,9 +1,9 @@
 <?php
   abstract class Model {
     // Database variables
-    private $collection;
+    protected $collection;
 
-    function __construct($collectionname) {var_dump($GLOBALS);
+    function __construct($collectionname) {
       // Setup database
       $m = new MongoClient($GLOBALS['dburi']);
       $db = $m->$GLOBALS['dbname'];
