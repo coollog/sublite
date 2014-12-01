@@ -11,3 +11,9 @@ short
 
 long
 - add css formatting in assets and include in htmlheader.php
+
+
+
+Notes:
+- check out how I did things in models, controllers, and views and ask me if
+  you have any questions. happy coding!
