@@ -85,12 +85,13 @@
 
     function edit() {
       $this->requireLogin();
+      
+      global $params, $MRecruiter;
       if (!isset($_POST['edit'])) { 
         $this->render('editprofile', 
           $this->data($MRecruiter->get($_SESSION['email']))); return;
       }
       
-      global $params, $MRecruiter;
       // Params to vars
       $params['_id'] = $_SESSION['_id'];
       $params['email'] = $_SESSION['email'];
