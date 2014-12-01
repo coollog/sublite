@@ -1,12 +1,12 @@
 <?php
   abstract class Model {
     // Database variables
-    private $collection;
+    protected $collection;
 
     function __construct($collectionname) {
       // Setup database
-      $m = new MongoClient(); // CHANGE THIS TO CONNECT TO CUSTOM MONGOSERVER
-      $db = $m->internships;  // MOVE THIS TO A CONFIG FILE
+      $m = new MongoClient($GLOBALS['dburi']);
+      $db = $m->$GLOBALS['dbname'];
       $this->collection = $db->$collectionname;
     }
   }
