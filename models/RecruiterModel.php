@@ -27,21 +27,6 @@
     function exists($email) {
       return ($this->get($email) !== NULL);
     }
-
-    function data($entry) {
-      $email = $entry['email'];
-      $firstname = $entry['firstname'];
-      $lastname = $entry['lastname'];
-      $company = $entry['company'];
-      $title = $entry['title'];
-      $phone = $entry['phone'];
-      $data = array(
-        'email' => $email, 'firstname' => $firstname, 
-        'lastname' => $lastname, 'company' => $company, 'title' => $title,
-        'phone' => $phone
-      );
-      return $data;
-    }
   }
 
   $MRecruiter = new RecruiterModel();

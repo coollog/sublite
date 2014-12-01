@@ -9,6 +9,7 @@ short
 - think of a way to do requirements in job
 - look through comments for any place needing fixing (eg. add error display code)
 
+
 long
 - add css formatting in assets and include in htmlheader.php
 

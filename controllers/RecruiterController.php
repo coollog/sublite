@@ -2,6 +2,21 @@
   require_once('controllers/Controller.php');
 
   class RecruiterController extends Controller {
+    function data($data) {
+      $email = $data['email'];
+      $pass = $data['pass'];
+      $firstname = clean($data['firstname']);
+      $lastname = clean($data['lastname']);
+      $company = clean($data['company']);
+      $title = clean($data['title']);
+      $phone = clean($data['phone']); // VALIDATE THIS
+      return array(
+        'email' => $email, 'pass' => $pass, 'firstname' => $firstname, 
+        'lastname' => $lastname, 'company' => $company, 'title' => $title,
+        'phone' => $phone
+      );
+    }
+
     function home() {
       $this->requireLogin();
       $id = $_SESSION['_id'];
@@ -13,18 +28,10 @@
       
       global $params, $MRecruiter;
       // Params to vars
-      $email = clean($params['email']);
-      $pass = crypt($params['pass']);
-      $firstname = clean($params['firstname']);
-      $lastname = clean($params['lastname']);
-      $company = clean($params['company']);
-      $title = clean($params['title']);
-      $phone = clean($params['phone']); // VALIDATE THIS
-      $data = array(
-        'email' => $email, 'pass' => $pass, 'firstname' => $firstname, 
-        'lastname' => $lastname, 'company' => $company, 'title' => $title,
-        'phone' => $phone
-      );
+      $data = $params;
+      $data['email'] = clean($params['email']);
+      $data['pass'] = crypt($params['pass']);
+      extract($data = $this->data($data));
       
       // Validations
       $this->startValidations();
@@ -52,10 +59,7 @@
       global $email;
       $email = clean($params['email']);
       $pass = $params['pass'];
-      $data = array(
-        'email' => $email
-      );
-      
+
       // Validations
       $this->startValidations();
       $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL), 
@@ -81,41 +85,26 @@
 
     function edit() {
       $this->requireLogin();
+      if (!isset($_POST['edit'])) { 
+        $this->render('editprofile', 
+          $this->data($MRecruiter->get($_SESSION['email']))); return;
+      }
       
       global $params, $MRecruiter;
       // Params to vars
-      $email = $_SESSION['email'];
-      $pass = $_SESSION['pass'];
-      
+      $params['_id'] = $_SESSION['_id'];
+      $params['email'] = $_SESSION['email'];
+      $params['pass'] = $_SESSION['pass'];
+      extract($data = $this->data($params));
+
       // Validations
       $this->startValidations();
 
-      // Code
       if ($this->isValid()) {
-        if (!isset($_POST['edit'])) { 
-          $this->render('editprofile', 
-            $MRecruiter->data($MRecruiter->get($email))); return;
-        }
-
-        $firstname = clean($params['firstname']);
-        $lastname = clean($params['lastname']);
-        $company = clean($params['company']);
-        $title = clean($params['title']);
-        $phone = clean($params['phone']); // VALIDATE THIS
-        $data = array(
-          'email' => $email, 'pass' => $pass, 'firstname' => $firstname, 
-          'lastname' => $lastname, 'company' => $company, 'title' => $title,
-          'phone' => $phone
-        );
-        // Validations
-
-
-        if ($this->isValid()) {
-          $id = $MRecruiter->save($data);
-          echo 'profile saved'; // REFACTOR TO A SUCCESS DISPLAY FUNCTION
-          $this->render('editprofile', $data);
-          return;
-        }
+        $id = $MRecruiter->save($data);
+        echo 'profile saved'; // REFACTOR TO A SUCCESS DISPLAY FUNCTION
+        $this->render('editprofile', $data);
+        return;
       }
       
       echo $err; // CHANGE THIS TO AN ERROR DISPLAY FUNCTION
@@ -135,7 +124,7 @@
 
       // Code
       if ($this->isValid()) {
-        $this->render('recruiter', $MRecruiter->data($entry));
+        $this->render('recruiter', $this->data($entry));
         return;
       }
       

@@ -29,23 +29,6 @@
     function exists($id) {
       return ($this->get($id) !== NULL);
     }
-
-    function data($entry) {
-      $title = $entry['title'];
-      $deadline = $entry['deadline'];
-      $duration = $entry['duration'];
-      $desc = $entry['desc'];
-      $funfacts = $entry['funfacts'];
-      $photo = $entry['photo'];
-      $location = $entry['location'];
-      $requirements = $entry['requirements'];
-      $data = array(
-        'title' => $title, 'deadline' => $deadline, 'duration' => $duration,
-        'desc' => $desc, 'funfacts' => $funfacts, 'photo' => $photo,
-        'location' => $location, 'requirements' => $requirements
-      );
-      return $data;
-    }
   }
 
   $MJob = new JobModel();

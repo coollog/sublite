@@ -2,29 +2,43 @@
   require_once('controllers/Controller.php');
 
   class JobController extends Controller {
+    function data($data) {
+        $title = clean($data['title']);
+        $deadline = clean($data['deadline']);
+        $duration = clean($data['duration']);
+        $salary = clean($data['salary']);
+        $desc = clean($data['desc']);
+        $funfacts = clean($data['funfacts']);
+        $photo = clean($data['photo']);
+        $location = clean($data['location']);
+        $requirements = clean($data['requirements']);
+        $link = clean($data['link']);
+        return array(
+          'title' => $title, 'deadline' => $deadline, 'duration' => $duration,
+          'desc' => $desc, 'funfacts' => $funfacts, 'photo' => $photo,
+          'location' => $location, 'requirements' => $requirements, 
+          'link' => $link, 'salary' => $salary
+        );
+    }
+
     function home() {
 
     }
 
     function add() {
+      function formData($data) {
+        return array_merge($data, array(
+          'submitname' => 'add', 'submitvalue' => 'Add Job'));
+      }
+
       global $CRecruiter; $CRecruiter->requireLogin();
-      if (!isset($_POST['add'])) { $this->render('addjob'); return; }
+      if (!isset($_POST['add'])) { 
+        $this->render('jobform', formData(array())); return; 
+      }
       
       global $params, $MJob;
       // Params to vars
-      $title = clean($params['title']);
-      $deadline = clean($params['deadline']);
-      $duration = clean($params['duration']);
-      $desc = clean($params['desc']);
-      $funfacts = clean($params['funfacts']);
-      $photo = clean($params['photo']);
-      $location = clean($params['location']);
-      $requirements = clean($params['requirements']);
-      $data = array(
-        'title' => $title, 'deadline' => $deadline, 'duration' => $duration,
-        'desc' => $desc, 'funfacts' => $funfacts, 'photo' => $photo,
-        'location' => $location, 'requirements' => $requirements
-      );
+      extract($data = $this->data($params));
       
       // Validations
       $this->startValidations();
@@ -37,7 +51,7 @@
       }
       
       echo $err; // CHANGE THIS TO AN ERROR DISPLAY FUNCTION
-      $this->render('addjob', $data);
+      $this->render('jobform', formData($data));
     }
 
     function edit() { // FIX THIS ADD GET INFO LIKE DATA FROM VIEW AND STUFF
@@ -54,30 +68,24 @@
 
       // Code
       if ($this->isValid()) {
-        if (!isset($_POST['edit'])) { 
-          $this->render('editjob', $MJob->data($entry)); return;
+        function formData($data) {
+          return array_merge($data, array(
+            'submitname' => 'edit', 'submitvalue' => 'Save Job'));
         }
 
-        $title = clean($params['title']);
-        $deadline = clean($params['deadline']);
-        $duration = clean($params['duration']);
-        $desc = clean($params['desc']);
-        $funfacts = clean($params['funfacts']);
-        $photo = clean($params['photo']);
-        $location = clean($params['location']);
-        $requirements = clean($params['requirements']);
-        $data = array(
-          'title' => $title, 'deadline' => $deadline, 'duration' => $duration,
-          'desc' => $desc, 'funfacts' => $funfacts, 'photo' => $photo,
-          'location' => $location, 'requirements' => $requirements
-        );
+        if (!isset($_POST['edit'])) { 
+          $this->render('jobform', formData($this->data($entry))); return;
+        }
+
+        extract($data = $this->data($params));
         // Validations
 
 
         if ($this->isValid()) {
+          $data['_id'] = new MongoId($id);
           $id = $MJob->save($data);
           echo 'job saved';
-          $this->render('editjob', $data);
+          $this->render('jobform', formData($data));
           return;
         }
       }
@@ -97,7 +105,7 @@
 
       // Code
       if ($this->isValid()) {
-        $this->render('viewjob', $MJob->data($entry));
+        $this->render('viewjob', $this->data($entry));
         return;
       }
 
