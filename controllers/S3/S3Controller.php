@@ -4,7 +4,7 @@
   class S3Controller extends Controller {
     function upload() {
       global $CRecruiter; $CRecruiter->requireLogin();
-      if (!isset($_FILES['upload'])) { $this->render('S3/S3'); return; }
+      if (!isset($_FILES['upload'])) { $this->directrender('S3/S3'); return; }
       
       global $params;
       // Params to vars
@@ -54,14 +54,14 @@
 
 					if ($this->isValid()) {
 						$reply = "https://$bucket.s3.amazonaws.com/$actual_image_name";
-						$this->render('S3/S3', array('reply' => "up(\"$reply\");"));
+						$this->directrender('S3/S3', array('reply' => "up(\"$reply\");"));
 						return;
 					}
 				}
       }
       
       // CHANGE THIS TO AN ERROR DISPLAY FUNCTION
-      $this->render('S3/S3', array('err', $err));
+      $this->directrender('S3/S3', array('err', $err));
     }
   }
 

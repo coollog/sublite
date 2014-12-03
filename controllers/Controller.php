@@ -1,7 +1,9 @@
 <?php
   global $params, $valid;
 
-  abstract class Controller {
+  class Controller {
+    public static $renderQueue = array();
+
     function validate($test, &$var, $msg) {
       global $valid;
       if (!$valid) return;
@@ -14,16 +16,26 @@
     function startValidations() {global $valid; $valid = true;}
 
     function render($view, $vars = false) {
-      require_once('includes/htmlheader.php');
-
+      self::$renderQueue[] = array($view, $vars);
+    }
+    function directrender($view, $vars = false) {
       // Actual view here
       global $viewVars;
       if ($vars === false) $viewVars = array();
       else $viewVars = $vars;
       require_once("views/$view.php");
+    }
+    function finish() {
+      if (count(self::$renderQueue) == 0) return;
+
+      require_once('includes/htmlheader.php');
+
+      foreach (self::$renderQueue as $pair) {
+        $view = $pair[0]; $vars = $pair[1];
+        self::directrender($view, $vars);
+      }
 
       require_once('includes/htmlfooter.php'); 
-      require_once('includes/footer.php');
     }
     function redirect($page, $params = NULL) {
       if ($params == NULL)

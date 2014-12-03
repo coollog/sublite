@@ -1,16 +1,19 @@
 <?php require_once('views/view.php'); ?>
 
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
 <style>
   html, body {
     margin: 0;
     height: 100%;
     overflow: hidden;
+    font-family: 'Open Sans', sans-serif;
   }
 </style>
 <script>
   $(function() {
     function resize() {
-      window.parent.$('iframe.S3Upload')
+      window.parent.$('iframe.S3')
         .width($('.container').width())
         .height($('.container').height());
     }

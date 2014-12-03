@@ -8,14 +8,12 @@
         $duration = clean($data['duration']);
         $salary = clean($data['salary']);
         $desc = clean($data['desc']);
-        $funfacts = clean($data['funfacts']);
-        $photo = clean($data['photo']);
         $location = clean($data['location']);
         $requirements = clean($data['requirements']);
         $link = clean($data['link']);
         return array(
           'title' => $title, 'deadline' => $deadline, 'duration' => $duration,
-          'desc' => $desc, 'funfacts' => $funfacts, 'photo' => $photo,
+          'desc' => $desc,
           'location' => $location, 'requirements' => $requirements, 
           'link' => $link, 'salary' => $salary
         );
@@ -28,6 +26,7 @@
     function add() {
       function formData($data) {
         return array_merge($data, array(
+          'headline' => 'Create',
           'submitname' => 'add', 'submitvalue' => 'Add Job'));
       }
 
@@ -70,6 +69,7 @@
       if ($this->isValid()) {
         function formData($data) {
           return array_merge($data, array(
+            'headline' => 'Edit',
             'submitname' => 'edit', 'submitvalue' => 'Save Job'));
         }
 

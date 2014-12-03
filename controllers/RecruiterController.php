@@ -10,10 +10,12 @@
       $company = clean($data['company']);
       $title = clean($data['title']);
       $phone = clean($data['phone']); // VALIDATE THIS
+      $photo = isset($data['photo']) ? 
+        clean($data['photo']) : 'assets/gfx/defaultpic.png';
       return array(
         'email' => $email, 'pass' => $pass, 'firstname' => $firstname, 
         'lastname' => $lastname, 'company' => $company, 'title' => $title,
-        'phone' => $phone
+        'phone' => $phone, 'photo' => $photo
       );
     }
 
@@ -21,6 +23,10 @@
       $this->requireLogin();
       $id = $_SESSION['_id'];
       echo "<a href='recruiter.php?id=$id'>View Profile</a>";
+    }
+
+    function index() {
+      $this->render('index');
     }
     
     function register() {
