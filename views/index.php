@@ -1,42 +1,4 @@
 <style>
-  html, body {
-    height: 100%;
-    margin: 0;
-    font-size: 14px;
-  }
-  navbar {
-    background: #000;
-    border-bottom: 3px solid #ffd800;
-    height: 50px;
-    display: block;
-    box-sizing: border-box;
-    padding: 10px 20px;
-    line-height: 1.5em;
-    font-size: 1.5em;
-    color: #fff;
-    overflow: hidden;
-  }
-  panel {
-    display: block;
-    width: 100%;
-    text-align: center;
-    padding: 50px 0;
-  }
-  .content {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 50px;
-  }
-  .cell {
-    display: table-cell;
-    vertical-align: middle;
-  }
-  headline {
-    display: block;
-    font-size: 2em;
-    text-transform: uppercase;
-    margin-bottom: 25px;
-  }
   panel.main {
     background: #cecacb no-repeat center center;;
     background-size: cover;
@@ -47,8 +9,31 @@
     padding: 30px 0;
     background: rgba(0, 0, 0, 0.5);
   }
+  panel.main .banner .tagline {
+    color: #ffd800;
+    font-size: 3em;
+    text-transform: uppercase;
+    text-shadow: 2px 2px #035d75;
+    line-height: 1.1em;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+  }
+  panel.main .banner .slogan {
+    color: #fff;
+    line-height: 4em;
+    letter-spacing: 1px;
+  }
+  panel.main .registerlogin {
+    font-size: 1.5em;
+    color: #035d75;
+    text-transform: uppercase;
+    box-shadow: 2px 2px 0px #035d75;
+  }
+  panel.main .registerlogin:hover {
+    color: #fff;
+  }
   panel.main .banner .switch {
-
+    color: #ffd800;
   }
   panel.why .whys {
     width: 100%;
@@ -78,9 +63,14 @@
     opacity: 0;
     transition: all 0.1s ease-in-out;
     border-radius: 50%;
+    font-size: 0.8em;
   }
   panel.why .whyroll:hover {
     opacity: 1;
+  }
+  panel.why .whytext {
+    text-transform: uppercase;
+    font-size: 0.8em;
   }
   panel.how {
     background: #fedcba no-repeat center center;
@@ -101,11 +91,12 @@
        -o-transform: skew(10deg);
     height: 3em;
     padding: 10px;
+    cursor: pointer;
   }
-  panel.how .step:hover {
+  panel.how .step.active {
     background: #ffd800;
   }
-  panel.how .step:hover .bignum {
+  panel.how .step.active .bignum {
     color: #035d75;
   }
   panel.how .bignum {
@@ -116,24 +107,59 @@
     text-align: left;
     background: rgba(255, 216, 0, 0.8);
     padding: 20px 40px;
-  }
-  footer {
-    background: #000;
-    height: 100px;
+    display: none;
+    font-size: 0.8em;
   }
 </style>
 
-<navbar>
-  SubLite
-</navbar>
+<script>
+  $(function() {
+    function scrollTo(q) {
+      $('html, body').finish().animate({
+        scrollTop: $(q).offset().top
+      }, 200);
+    }
+    function getStep(q) {
+      return parseInt($(q).find('.bignum').html());
+    }
+    var step = null;
+    $('panel.how .step').hover(function() {
+      $(this).addClass('active');
+    }, function() {
+      if (step != getStep(this)) {
+        $(this).removeClass('active');
+      }
+    }).click(function() {
+      scrollTo(this);
+      if (step == getStep(this)) {
+        $(this).removeClass('active');
+        step = null;
+        $('.desc').slideUp(200, 'easeInOutCubic');
+      } else {
+        $('panel.how .step').removeClass('active');
+        $(this).addClass('active');
+        step = getStep(this);
+        $('.desc').each(function() {
+          if ($(this).attr('num') == step)
+            $(this).slideDown(200, 'easeInOutCubic');
+          else
+            $(this).slideUp(200, 'easeInOutCubic');
+        });
+      }
+    })
+  });
+</script>
+
 <panel class="main">
   <div class="cell">
     <div class="banner">
       <div class="content">
         <div class="tagline">Student Recruitment, Reimagined.</div>
         <div class="slogan">Attract the New Generation Talent with your Company's Unique Personality.</div>
-        <div class="registerlogin">Register / Log In</div>
-        <div class="switch">switch to STUDENT</div>
+        <a href="loginregister.php">
+          <input type="button" class="registerlogin" value="Register / Log In" />
+        </a>
+        <div class="switch"><a href="http://sublite.net">switch to STUDENT</a></div>
       </div>
     </div>
   </div>
@@ -188,7 +214,10 @@
         <td class="steptext">Direct Contact</td>
       </tr></table></td>
     </tr></table>
-    <div class="desc">PLACEHOLDER</div>
+    <div class="desc" num="1">PLACEHOLDER 1</div>
+    <div class="desc" num="2">PLACEHOLDER 2</div>
+    <div class="desc" num="3">PLACEHOLDER 3</div>
+    <div class="desc" num="4">PLACEHOLDER 4</div>
+    <div class="desc" num="5">PLACEHOLDER 5</div>
   </div>
 </panel>
-<footer></footer>

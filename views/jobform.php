@@ -1,15 +1,24 @@
 <?php require_once('view.php'); ?>
 
-<form method="post">
-  <input type="text" name="title" placeholder="Job Title" value="<?php vecho('title'); ?>" />
-  <input type="text" name="deadline" placeholder="Deadline" value="<?php vecho('deadline'); ?>" />
-  <input type="text" name="salary" placeholder="Salary" value="<?php vecho('salary'); ?>" />
-  <input type="text" name="duration" placeholder="Duration" value="<?php vecho('duration'); ?>" />
-  <input type="text" name="desc" placeholder="Description" value="<?php vecho('desc'); ?>" />
-  <input type="text" name="funfacts" placeholder="Fun Facts" value="<?php vecho('funfacts'); ?>" />
-  <input type="text" name="photo" placeholder="Photo" value="<?php vecho('photo'); ?>" />
-  <input type="text" name="location" placeholder="Location" value="<?php vecho('location'); ?>" />
-  <input type="text" name="requirements" placeholder="Requirements" value="<?php vecho('requirements'); ?>" />
-  <input type="text" name="link" placeholder="Link" value="<?php vecho('link'); ?>" />
-  <input type="submit" name="<?php vecho('submitname'); ?>" value="<?php vecho('submitvalue'); ?>" />
-</form>
+<panel class="form">
+  <div class="content">
+    <headline><?php vecho('headline'); ?> Job Listing</headline>
+    <form method="post">
+      <div class="form-slider"><label for="title">Job Title:</label><input type="text" id="title" name="title" value="<?php vecho('title'); ?>" /></div>
+      <div class="form-slider"><label for="duration">Duration (weeks):</label><input type="number" id="duration" name="duration" value="<?php vecho('duration'); ?>" /></div>
+      <div class="form-slider"><label for="salary">Compensation / Stipend ($US):</label><input type="number" id="salary" name="salary" value="<?php vecho('salary'); ?>" /></div>
+      <right>
+        <input type="radio" name="salarytype" value="month" /> / month
+        <input type="radio" name="salarytype" value="day" /> / day
+        <input type="radio" name="salarytype" value="hour" /> / hour
+        <input type="radio" name="salarytype" value="total" /> total payment
+      </right>
+      <div class="form-slider"><label for="deadline">Deadline for Application:</label><input type="text" id="deadline" name="deadline" value="<?php vecho('deadline'); ?>" /></div>
+      <div class="form-slider"><label for="desc">Job Description:</label><textarea id="desc" name="desc"><?php vecho('desc'); ?></textarea></div>
+      <div class="form-slider"><label for="Requirements">Requirements:</label><input type="text" id="Requirements" name="requirements" value="<?php vecho('requirements'); ?>" /></div>
+      <div class="form-slider"><label for="link">Listing URL:</label><input type="text" id="link" name="link" value="<?php vecho('link'); ?>" /></div>
+      <div class="form-slider"><label for="location">Job Location:</label><input type="text" id="location" name="location" value="<?php vecho('location'); ?>" /></div>
+      <right><input type="submit" name="<?php vecho('submitname'); ?>" value="<?php vecho('submitvalue'); ?>" /></right>
+    </form>
+  </div>
+</panel>

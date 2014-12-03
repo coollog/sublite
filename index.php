@@ -1,6 +1,5 @@
 <?php
   require_once('includes/header.php');
-  $CRecruiter->register();
-  $CRecruiter->login();
+  $CRecruiter->index();
   require_once('includes/footer.php');
 ?>

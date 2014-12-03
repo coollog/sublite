@@ -4,16 +4,20 @@ short
 - make validations for company, phone number, first/last name
 - make company model and verify existing company
 - make validations for time in job model
-- add photo uploader (use same code as in sublite)
 - add location to geocode (use same code)
 - think of a way to do requirements in job
 - look through comments for any place needing fixing (eg. add error display code)
+- make navbar different for when logged in vs logged out (eg. have logout option)
 
 
 long
-- add css formatting in assets and include in htmlheader.php
+- make view job page and add jobs for that user to edit/view
 
 
 
 Notes:
-- Tony: I set up my new branch
+
+
+Done:
+- add css formatting in assets and include in htmlheader.php
+- add photo uploader (use same code as in sublite)

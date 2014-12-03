@@ -1,3 +1,3 @@
 <?php
-  // Close DB connection
+  Controller::finish();
 ?>
