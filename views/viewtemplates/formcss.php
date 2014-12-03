@@ -40,8 +40,8 @@
     cursor: pointer;
     text-transform: uppercase;
     font-size: 1.2em;
-    font-family: 'Oswald', sans-serif;
-    font-weight: 700;
+    font-family: 'BebasNeue', sans-serif;
+    font-weight: bold;
     outline: none;
   }
   input[type=submit]:hover, input[type=button]:hover {

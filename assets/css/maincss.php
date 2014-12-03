@@ -1,5 +1,15 @@
-<link href='http://fonts.googleapis.com/css?family=Oswald:400,700|Open+Sans:400,700' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
 <style>
+  @font-face {
+      font-family: BebasNeue;
+      src: url('assets/fonts/BebasNeue_Regular.ttf');
+      font-weight: normal;
+  }
+  @font-face {
+      font-family: BebasNeue;
+      src: url('assets/fonts/BebasNeue_Bold.ttf');
+      font-weight: bold;
+  }
   html, body {
     height: 100%;
     margin: 0;
@@ -35,12 +45,12 @@
   }
   headline {
     display: block;
-    font-size: 2.5em;
+    font-size: 3.5em;
     text-transform: uppercase;
     margin-bottom: 40px;
     color: #035d75;
-    font-family: 'Oswald', sans-serif;
-    font-weight: 700;
+    font-family: 'BebasNeue', sans-serif;
+    font-weight: bold;
   }
   subheadline {
     display: block;

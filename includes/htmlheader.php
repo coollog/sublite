@@ -9,4 +9,4 @@
     <?php require_once('assets/css/formcss.php'); ?>
   </head>
   <body>
-    <?php require_once('includes/navbar.php'); ?>
+    <?php require_once('views/navbar.php'); ?>

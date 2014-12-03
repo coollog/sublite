@@ -1,6 +1,6 @@
 <style>
   panel.main {
-    background: url('assets/gfx/main.jpg') no-repeat top center;;
+    background: url('assets/gfx/main.jpg') no-repeat top center;
     background-size: cover;
     display: table;
     height: 80%;
@@ -11,12 +11,13 @@
   }
   panel.main .banner .tagline {
     color: #ffd800;
-    font-size: 3em;
+    font-size: 4em;
     text-transform: uppercase;
     text-shadow: 2px 2px #035d75;
-    line-height: 1.1em;
-    font-family: 'Oswald', sans-serif;
-    font-weight: 700;
+    line-height: 1em;
+    margin-bottom: -0.2em;
+    font-family: 'BebasNeue', sans-serif;
+    font-weight: bold;
   }
   panel.main .banner .slogan {
     color: #fff;
@@ -75,6 +76,7 @@
     text-transform: uppercase;
     font-size: 0.8em;
     font-weight: 700;
+    line-height: 1.1em;
   }
   panel.how {
     background: url('assets/gfx/how.jpg') no-repeat center center;
@@ -176,7 +178,7 @@
 </panel>
 <panel class="why">
   <div class="content">
-    <headline>Why Choose Us?</headline>
+    <headline style="color: #000;">Why Choose Us?</headline>
     <table class="whys"><tr>
       <td class="whycell"><incell>
         <div class="whyimg whyimg1">
@@ -201,7 +203,7 @@
 </panel>
 <panel class="how">
   <div class="content">
-    <headline>How It Works</headline>
+    <headline style="color: #ffd800">How It Works</headline>
     <table class="steps"><tr>
       <td class="step"><table><tr>
         <td class="bignum">1</td>

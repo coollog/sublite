@@ -7,8 +7,8 @@
     box-sizing: border-box;
     padding: 10px 20px;
     line-height: 1.5em;
-    font-family: 'Oswald', sans-serif;
-    font-weight: 700;
+    font-family: 'BebasNeue', sans-serif;
+    font-weight: bold;
     text-transform: uppercase;
   }
   navbar:after{
@@ -17,14 +17,14 @@
     display: block;
   }
   logo {
-    font-size: 1.5em;
+    font-size: 2.5em;
     color: #ffd800;
     line-height: 30px;
     height: 30px;
   }
   options {
     float: right;
-    font-size: 1.3em;
+    font-size: 1.5em;
     padding-top: 10px;
     margin-bottom: -5px;
     min-height: 30px;

@@ -39,8 +39,8 @@
     text-transform: uppercase;
     margin-bottom: 40px;
     color: #035d75;
-    font-family: 'Oswald', sans-serif;
-    font-weight: 700;
+    font-family: 'BebasNeue', sans-serif;
+    font-weight: bold;
   }
   subheadline {
     display: block;

@@ -8,8 +8,8 @@
     padding: 10px 20px;
     line-height: 1.5em;
     color: #fff;
-    font-family: 'Oswald', sans-serif;
-    font-weight: 700;
+    font-family: 'BebasNeue', sans-serif;
+    font-weight: bold;
     text-transform: uppercase;
   }
   navbar:after{
