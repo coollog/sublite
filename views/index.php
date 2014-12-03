@@ -1,6 +1,6 @@
 <style>
   panel.main {
-    background: #cecacb no-repeat center center;;
+    background: url('assets/gfx/main.jpg') no-repeat top center;;
     background-size: cover;
     display: table;
     height: 80%;
@@ -54,10 +54,13 @@
     overflow: hidden;
     margin-bottom: 15px;
   }
+  panel.why .whyimg1 { background-image: url('assets/gfx/why1.jpg'); }
+  panel.why .whyimg2 { background-image: url('assets/gfx/why2.jpg'); }
+  panel.why .whyimg3 { background-image: url('assets/gfx/why3.jpg'); }
   panel.why .whyroll {
     width: 100%;
     height: 100%;
-    background: rgba(30, 80, 95, 0.5);
+    background: rgba(30, 80, 95, 0.8);
     display: table;
     color: #fff;
     opacity: 0;
@@ -71,9 +74,10 @@
   panel.why .whytext {
     text-transform: uppercase;
     font-size: 0.8em;
+    font-weight: 700;
   }
   panel.how {
-    background: #fedcba no-repeat center center;
+    background: url('assets/gfx/how.jpg') no-repeat center center;
     background-size: cover;
   }
   panel.how .headline {
@@ -92,6 +96,12 @@
     height: 3em;
     padding: 10px;
     cursor: pointer;
+    font-weight: 700;
+  }
+  panel.how .step table {
+    -webkit-transform: skew(-10deg);
+     -moz-transform: skew(-10deg);
+       -o-transform: skew(-10deg);    
   }
   panel.how .step.active {
     background: #ffd800;
@@ -169,19 +179,19 @@
     <headline>Why Choose Us?</headline>
     <table class="whys"><tr>
       <td class="whycell"><incell>
-        <div class="whyimg">
+        <div class="whyimg whyimg1">
           <div class="whyroll"><div class="cell">Rollover text</div></div>
         </div>
         <div class="whytext">Access a growing network of talented university students.</div>
       </incell></td>
       <td class="whycell"><incell>
-        <div class="whyimg">
+        <div class="whyimg whyimg2">
           <div class="whyroll"><div class="cell">Rollover text</div></div>
         </div>
         <div class="whytext">Showcase the personality of your company</div>
       </incell></td>
       <td class="whycell"><incell>
-        <div class="whyimg">
+        <div class="whyimg whyimg3">
           <div class="whyroll"><div class="cell">Rollover text</div></div>
         </div>
         <div class="whytext">Design a candid and creative job description</div>
