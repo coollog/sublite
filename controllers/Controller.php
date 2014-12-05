@@ -1,5 +1,5 @@
 <?php
-  global $params, $valid;
+  global $params, $valid, $notice;
 
   class Controller {
     public static $renderQueue = array();
@@ -15,6 +15,15 @@
     function isValid() {global $valid; return $valid;}
     function startValidations() {global $valid; $valid = true;}
 
+    function error($msg) {
+      global $error;
+      $error = $msg;
+    }
+    function success($msg) {
+      global $success;
+      $success = $msg;
+    }
+
     function render($view, $vars = false) {
       self::$renderQueue[] = array($view, $vars);
     }
@@ -25,25 +34,29 @@
 
       if (isset($_SESSION['loggedin'])) {
         $viewVars = array_merge($viewVars, array(
-          'loggedin' => true,
-          '_id' => $_SESSION['_id'],
-          'email' => $_SESSION['email'],
-          'pass' => $_SESSION['pass']
+          'Loggedin' => true,
+          'L_id' => $_SESSION['_id'],
+          'Lemail' => $_SESSION['email'],
+          'Lpass' => $_SESSION['pass']
         ));
       } else {
-        $viewVars['loggedin'] = false;
+        $viewVars['Loggedin'] = false;
       }
-
+      global $error, $success;
+      $viewVars['Error'] = isset($error) ? $error : '';
+      $viewVars['Success'] = isset($success) ? $success : '';
+      
+      require_once('views/view.php');
       require_once("views/$view.php");
     }
     function finish() {
       if (count(self::$renderQueue) == 0) return;
 
+      require_once('views/view.php');
       require_once('includes/htmlheader.php');
 
       foreach (self::$renderQueue as $pair) {
         $view = $pair[0]; $vars = $pair[1];
-        $vars[]
         self::directrender($view, $vars);
       }
 

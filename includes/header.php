@@ -23,5 +23,6 @@
   function clean($s) {
     return trim(htmlentities($s));
   }
-  require_once('includes/hash_equals.php');
+  require_once('includes/functions/hash_equals.php');
+  require_once('includes/functions/geocode.php')
 ?>

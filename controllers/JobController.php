@@ -9,14 +9,19 @@
         $salary = clean($data['salary']);
         $desc = clean($data['desc']);
         $location = clean($data['location']);
+        $geocode = geocode($location);
         $requirements = clean($data['requirements']);
         $link = clean($data['link']);
         return array(
           'title' => $title, 'deadline' => $deadline, 'duration' => $duration,
-          'desc' => $desc,
+          'desc' => $desc, 'geocode' => $geocode,
           'location' => $location, 'requirements' => $requirements, 
           'link' => $link, 'salary' => $salary
         );
+    }
+
+    function validateData($data, &$err) {
+      $this->validate($data['geocode'] != NULL, $err, 'location invalid');
     }
 
     function home() {
@@ -41,6 +46,7 @@
       
       // Validations
       $this->startValidations();
+      $this->validateData($data, $err);
 
       // Code
       if ($this->isValid()) {
@@ -49,7 +55,7 @@
         return;
       }
       
-      echo $err; // CHANGE THIS TO AN ERROR DISPLAY FUNCTION
+      $this->error($err);
       $this->render('jobform', formData($data));
     }
 
@@ -79,18 +85,19 @@
 
         extract($data = $this->data($params));
         // Validations
-
+        $this->validateData($data, $err);
 
         if ($this->isValid()) {
           $data['_id'] = new MongoId($id);
           $id = $MJob->save($data);
-          echo 'job saved';
+          $this->success('job saved');
           $this->render('jobform', formData($data));
           return;
         }
       }
       
-      echo $err; // CHANGE THIS TO AN ERROR DISPLAY FUNCTION
+      $this->error($err);
+      $this->render('notice');
     }
     
     function view() {
@@ -109,7 +116,8 @@
         return;
       }
 
-      echo $err;
+      $this->error($err);
+      $this->render('notice');
     }
   }
 

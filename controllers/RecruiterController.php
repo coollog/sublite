@@ -53,7 +53,7 @@
         return;
       }
       
-      echo $err; // CHANGE THIS TO AN ERROR DISPLAY FUNCTION
+      $this->error($err);
       $this->render('register', $data);
     }
 
@@ -85,8 +85,7 @@
         return;
       }
       
-      echo $err; // CHANGE THIS TO AN ERROR DISPLAY FUNCTION
-
+      $this->error($err);
       $this->render('login', $data);
     }
 
@@ -110,12 +109,12 @@
 
       if ($this->isValid()) {
         $id = $MRecruiter->save($data);
-        echo 'profile saved'; // REFACTOR TO A SUCCESS DISPLAY FUNCTION
+        $this->success('profile saved');
         $this->render('editprofile', $data);
         return;
       }
       
-      echo $err; // CHANGE THIS TO AN ERROR DISPLAY FUNCTION
+      $this->error($err);
       $this->render('editprofile', $data);
     }
 
@@ -136,7 +135,8 @@
         return;
       }
       
-      echo $err; // CHANGE THIS TO AN ERROR DISPLAY FUNCTION
+      $this->error($err);
+      $this->render('notice');
     }
 
     function requireLogin() {

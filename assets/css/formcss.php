@@ -3,6 +3,12 @@
     max-width: 600px;
     margin: 10px auto;
   }
+  .success {
+    
+  }
+  .error {
+    
+  }
   label {
     opacity: 0.7;
   }

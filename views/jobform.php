@@ -1,5 +1,3 @@
-<?php require_once('view.php'); ?>
-
 <panel class="form">
   <div class="content">
     <headline><?php vecho('headline'); ?> Job Listing</headline>
@@ -18,6 +16,7 @@
       <div class="form-slider"><label for="Requirements">Requirements:</label><input type="text" id="Requirements" name="requirements" value="<?php vecho('requirements'); ?>" /></div>
       <div class="form-slider"><label for="link">Listing URL:</label><input type="text" id="link" name="link" value="<?php vecho('link'); ?>" /></div>
       <div class="form-slider"><label for="location">Job Location:</label><input type="text" id="location" name="location" value="<?php vecho('location'); ?>" /></div>
+      <?php vnotice(); ?>
       <right><input type="submit" name="<?php vecho('submitname'); ?>" value="<?php vecho('submitvalue'); ?>" /></right>
     </form>
   </div>

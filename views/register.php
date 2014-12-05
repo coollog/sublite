@@ -1,5 +1,3 @@
-<?php require_once('view.php'); ?>
-
 <panel class="form">
   <div class="content">
     <headline>Register as a Recruiter!</headline>
@@ -10,6 +8,7 @@
       <div class="form-slider"><label for="email">Email</label><input type="text" id="email" name="email" value="<?php vecho('email'); ?>" /></div>
       <div class="form-slider"><label for="password">Password</label><input type="text" id="password" name="password" /></div>
       <div class="form-slider"><label for="confirm">Confirm Password</label><input type="text" id="confirm" name="confirm" /></div>
+      <?php vnotice(); ?>
       <input type="submit" name="register" value="Register" />
     </form>
   </div>

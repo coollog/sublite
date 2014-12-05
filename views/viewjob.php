@@ -1,5 +1,3 @@
-<?php require_once('views/view.php'); ?>
-
 <style>
   .jobinfo {
     margin: 40px 0;

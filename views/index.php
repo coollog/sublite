@@ -2,8 +2,7 @@
   panel.main {
     background: url('assets/gfx/main.jpg') no-repeat top center;
     background-size: cover;
-    background-position: 0 50px;
-    background-attachment: fixed;
+    /*background-attachment: fixed;*/
     display: table;
     height: 80%;
   }

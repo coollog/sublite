@@ -1,5 +1,3 @@
-<?php require_once('view.php'); ?>
-
 <style>
   .img img {
     max-height: 15em;
@@ -47,6 +45,7 @@
       <div class="iframe"><iframe class="S3" src="S3.php"></iframe></div>
       <subheadline>Current Photo</subheadline>
       <div class="img"><img src="<?php vecho('photo'); ?>" /></div>
+      <?php vnotice(); ?>
       <right><input type="submit" name="edit" value="Save Profile" /></right>
     </form>
   </div>
