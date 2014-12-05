@@ -19,10 +19,21 @@
       self::$renderQueue[] = array($view, $vars);
     }
     function directrender($view, $vars = false) {
-      // Actual view here
       global $viewVars;
       if ($vars === false) $viewVars = array();
       else $viewVars = $vars;
+
+      if (isset($_SESSION['loggedin'])) {
+        $viewVars = array_merge($viewVars, array(
+          'loggedin' => true,
+          '_id' => $_SESSION['_id'],
+          'email' => $_SESSION['email'],
+          'pass' => $_SESSION['pass']
+        ));
+      } else {
+        $viewVars['loggedin'] = false;
+      }
+
       require_once("views/$view.php");
     }
     function finish() {
@@ -32,6 +43,7 @@
 
       foreach (self::$renderQueue as $pair) {
         $view = $pair[0]; $vars = $pair[1];
+        $vars[]
         self::directrender($view, $vars);
       }
 

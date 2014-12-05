@@ -76,6 +76,7 @@
         $err, 'invalid credentials');
 
       if ($this->isValid()) {
+        $_SESSION['loggedin'] = true;
         $_SESSION['email'] = $email;
         $_SESSION['pass'] = $pass;
         $_SESSION['_id'] = $entry['_id'];
@@ -139,7 +140,7 @@
     }
 
     function requireLogin() {
-      if (isset($_SESSION['email'])) {
+      if (isset($_SESSION['loggedin'])) {
         global $MRecruiter;
         // Params to vars
         $email = $_SESSION['email'];

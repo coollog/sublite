@@ -11,7 +11,9 @@ short
 
 
 long
-- make view job page and add jobs for that user to edit/view
+- make profile page
+- make page for job listing management
+- add approval for registration with creation of company profile
 
 
 
@@ -21,3 +23,4 @@ Notes:
 Done:
 - add css formatting in assets and include in htmlheader.php
 - add photo uploader (use same code as in sublite)
+- change navbar for logged-in vs not logged-in
