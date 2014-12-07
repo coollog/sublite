@@ -9,13 +9,14 @@
       $lastname = clean($data['lastname']);
       $company = clean($data['company']);
       $title = clean($data['title']);
-      $phone = clean($data['phone']); // VALIDATE THIS
+      $phone = isset($data['phone']) ? clean($data['phone']) : '';
       $photo = isset($data['photo']) ? 
         clean($data['photo']) : 'assets/gfx/defaultpic.png';
+      $approved = $data['approved'];
       return array(
         'email' => $email, 'pass' => $pass, 'firstname' => $firstname, 
         'lastname' => $lastname, 'company' => $company, 'title' => $title,
-        'phone' => $phone, 'photo' => $photo
+        'phone' => $phone, 'photo' => $photo, 'approved' => $approved
       );
     }
 
@@ -37,6 +38,7 @@
       $data = $params;
       $data['email'] = clean($params['email']);
       $data['pass'] = crypt($params['pass']);
+      $data['approved'] = 'pending';
       extract($data = $this->data($data));
       
       // Validations
@@ -45,6 +47,8 @@
         $err, 'invalid email');
       $this->validate(!$MRecruiter->exists($email),
         $err, 'email taken');
+      $this->validate($params['pass'] == $params['pass2'], 
+        $err, 'password mismatch');
 
       // Code
       if ($this->isValid()) {
@@ -65,6 +69,7 @@
       global $email;
       $email = clean($params['email']);
       $pass = $params['pass'];
+      $data = array('email' => $email);
 
       // Validations
       $this->startValidations();
@@ -74,6 +79,8 @@
         ($entry = $MRecruiter->get($email)) != NULL and 
         $MRecruiter->login($email, $pass), 
         $err, 'invalid credentials');
+      $this->validate($entry['approved'] == 'approved', 
+        $err, 'account approval status: ' . $entry['approved']);
 
       if ($this->isValid()) {
         $_SESSION['loggedin'] = true;
@@ -81,7 +88,9 @@
         $_SESSION['pass'] = $pass;
         $_SESSION['_id'] = $entry['_id'];
         
-        $this->redirect('home');
+        if (MongoId::isValid($entry['company'])) $this->redirect('home');
+        else $this->redirect('addcompany');
+
         return;
       }
       
@@ -95,19 +104,23 @@
       global $params, $MRecruiter;
       if (!isset($_POST['edit'])) { 
         $this->render('editprofile', 
-          $this->data($MRecruiter->get($_SESSION['email']))); return;
+          $this->data($MRecruiter->me())); return;
       }
       
       // Params to vars
-      $params['_id'] = $_SESSION['_id'];
-      $params['email'] = $_SESSION['email'];
-      $params['pass'] = $_SESSION['pass'];
+      $me = $MRecruiter->me();
+      $id = $params['_id'] = $me['_id'];
+      $params['email'] = $me['email'];
+      $params['pass'] = $me['pass'];
+      $params['company'] = $me['company'];
+      $params['approved'] = $me['approved'];
       extract($data = $this->data($params));
 
       // Validations
       $this->startValidations();
 
       if ($this->isValid()) {
+        $data['_id'] = new MongoId($id);
         $id = $MRecruiter->save($data);
         $this->success('profile saved');
         $this->render('editprofile', $data);

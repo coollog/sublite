@@ -7,8 +7,10 @@
   date_default_timezone_set('America/New_York');
 
   // Require other header files
+  require_once('models/CompanyModel.php');
   require_once('models/JobModel.php');
   require_once('models/RecruiterModel.php');
+  require_once('controllers/CompanyController.php');
   require_once('controllers/JobController.php');
   require_once('controllers/RecruiterController.php');
   require_once('controllers/S3/S3Controller.php');

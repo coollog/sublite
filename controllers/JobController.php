@@ -21,6 +21,8 @@
     }
 
     function validateData($data, &$err) {
+      $this->validate(MongoId::isValid($data['company']), 
+        $err, 'company invalid');
       $this->validate($data['geocode'] != NULL, $err, 'location invalid');
     }
 
@@ -40,7 +42,9 @@
         $this->render('jobform', formData(array())); return; 
       }
       
-      global $params, $MJob;
+      global $params, $MJob, $MRecruiter;
+      $me = $MRecruiter->me();
+      $data['company'] = $me['company'];
       // Params to vars
       extract($data = $this->data($params));
       
@@ -50,6 +54,7 @@
 
       // Code
       if ($this->isValid()) {
+        $data['applicants'] = array();
         $id = $MJob->save($data);
         $this->redirect('job', array('id' => $id));
         return;
@@ -83,6 +88,8 @@
           $this->render('jobform', formData($this->data($entry))); return;
         }
 
+        $me = $MRecruiter->me();
+        $data['company'] = $me['company'];
         extract($data = $this->data($params));
         // Validations
         $this->validateData($data, $err);
