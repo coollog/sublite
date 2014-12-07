@@ -7,6 +7,8 @@
         $deadline = clean($data['deadline']);
         $duration = clean($data['duration']);
         $salary = clean($data['salary']);
+        $salarytype = clean($data['salarytype']);
+        $company = $data['company'];
         $desc = clean($data['desc']);
         $location = clean($data['location']);
         $geocode = geocode($location);
@@ -16,7 +18,8 @@
           'title' => $title, 'deadline' => $deadline, 'duration' => $duration,
           'desc' => $desc, 'geocode' => $geocode,
           'location' => $location, 'requirements' => $requirements, 
-          'link' => $link, 'salary' => $salary
+          'link' => $link, 'salary' => $salary, 'company' => $company, 
+          'salarytype' => $salarytype
         );
     }
 
@@ -44,7 +47,7 @@
       
       global $params, $MJob, $MRecruiter;
       $me = $MRecruiter->me();
-      $data['company'] = $me['company'];
+      $params['company'] = $me['company'];
       // Params to vars
       extract($data = $this->data($params));
       
@@ -67,7 +70,7 @@
     function edit() { // FIX THIS ADD GET INFO LIKE DATA FROM VIEW AND STUFF
       global $CRecruiter; $CRecruiter->requireLogin();
       
-      global $params, $MJob;
+      global $params, $MJob, $MRecruiter;
       // Params to vars
       
       // Validations
@@ -89,7 +92,7 @@
         }
 
         $me = $MRecruiter->me();
-        $data['company'] = $me['company'];
+        $params['company'] = $me['company'];
         extract($data = $this->data($params));
         // Validations
         $this->validateData($data, $err);
@@ -119,7 +122,10 @@
 
       // Code
       if ($this->isValid()) {
-        $this->render('viewjob', $this->data($entry));
+        $data = $this->data($entry);
+        $data['salarytype'] = ($data['salarytype'] == 'total') ?
+                              $data['duration'] : $data['salarytype'];
+        $this->render('viewjob', $data);
         return;
       }
 

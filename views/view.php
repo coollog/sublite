@@ -31,4 +31,10 @@
     vecho('Success', "<div class=\"success\">{var}</div>");
     vecho('Error', "<div class=\"error\">{var}</div>");
   }
+  function vchecked($var, $val) {
+    global $viewVars;
+    if (isset($viewVars[$var]) and $viewVars[$var] == $val) {
+      echo 'checked';
+    }
+  }
 ?>

@@ -17,7 +17,7 @@
       <?php vEcho('duration'); ?>
 
       <subheadline>Compenation / Stipend</subheadline>
-      <?php vEcho('salary'); ?>
+      <?php vEcho('salary'); ?> / <?php vEcho('salarytype'); ?>
 
       <subheadline>Requirements</subheadline>
       <?php vEcho('requirements'); ?>

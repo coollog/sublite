@@ -8,9 +8,7 @@ short
 long
 - make profile page
 - make page for job listing management
-- add approval for registration with creation of company profile
-- finish footer
-
+- add email notification of approval status
 
 
 Notes:
@@ -23,3 +21,6 @@ Done:
 - add location to geocode (use same code)
 - add error display code
 - make company model and verify existing company
+- finish footer
+- add approval for registration with creation of company profile
+- finish up job listing with the type of salary

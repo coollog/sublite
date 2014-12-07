@@ -6,10 +6,10 @@
       <div class="form-slider"><label for="duration">Duration (weeks):</label><input type="number" id="duration" name="duration" value="<?php vecho('duration'); ?>" /></div>
       <div class="form-slider"><label for="salary">Compensation / Stipend ($US):</label><input type="number" id="salary" name="salary" value="<?php vecho('salary'); ?>" /></div>
       <right>
-        <input type="radio" name="salarytype" value="month" /> / month
-        <input type="radio" name="salarytype" value="day" /> / day
-        <input type="radio" name="salarytype" value="hour" /> / hour
-        <input type="radio" name="salarytype" value="total" /> total payment
+        <input type="radio" name="salarytype" value="month" <?php vchecked('salarytype', 'month'); ?> /> / month
+        <input type="radio" name="salarytype" value="day" <?php vchecked('salarytype', 'day'); ?> /> / day
+        <input type="radio" name="salarytype" value="hour" <?php vchecked('salarytype', 'hour'); ?> /> / hour
+        <input type="radio" name="salarytype" value="total" <?php vchecked('salarytype', 'total'); ?> /> total payment
       </right>
       <div class="form-slider"><label for="deadline">Deadline for Application:</label><input type="text" id="deadline" name="deadline" value="<?php vecho('deadline'); ?>" /></div>
       <div class="form-slider"><label for="desc">Job Description:</label><textarea id="desc" name="desc"><?php vecho('desc'); ?></textarea></div>
