@@ -29,8 +29,13 @@
       $this->validate($data['geocode'] != NULL, $err, 'location invalid');
     }
 
-    function home() {
-
+    function manage() {
+      global $CRecruiter; $CRecruiter->requireLogin();
+      global $MJob;
+      $data = array(
+        'jobs' => $MJob->getByRecruiter($_SESSION['_id'])
+      );
+      $this->render('managejobs', $data);
     }
 
     function add() {

@@ -37,4 +37,13 @@
       echo 'checked';
     }
   }
+  function vlinkto($in, $page, $params = null, $newtab = false) {
+    if ($newtab) $newtab = 'target="_blank"';
+    else $newtab = '';
+
+    if ($params == NULL) $query = '';
+    else $query = '?' . http_build_query($params);
+
+    return "<a href=\"$page.php$query\" $newtab>$in</a>";
+  }
 ?>

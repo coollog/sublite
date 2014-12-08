@@ -15,6 +15,9 @@
     function get($id) {
       return $this->collection->findOne(array('_id' => new MongoId($id)));
     }
+    function getByRecruiter($id) {
+      return $this->collection->find(array('recruiter' => $id));
+    }
 
     function owner($id) {
       if (($entry = $this->get($id)) === NULL) return NULL;

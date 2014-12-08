@@ -22,8 +22,10 @@
 
     function home() {
       $this->requireLogin();
-      $id = $_SESSION['_id'];
-      echo "<a href='recruiter.php?id=$id'>View Profile</a>";
+      global $MRecruiter, $MJobs;
+      $me = $MRecruiter->me();
+      $me['_id'] = $me['_id']->{'$id'};
+      $this->render('home', $me);
     }
 
     function index() {
