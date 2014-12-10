@@ -11,7 +11,7 @@
         <input type="radio" name="salarytype" value="hour" <?php vchecked('salarytype', 'hour'); ?> /> / hour
         <input type="radio" name="salarytype" value="total" <?php vchecked('salarytype', 'total'); ?> /> total payment
       </right>
-      <div class="form-slider"><label for="deadline">Deadline for Application:</label><input type="text" id="deadline" name="deadline" value="<?php vecho('deadline'); ?>" /></div>
+      <div class="form-slider"><label for="deadline">Deadline for Application (mm/dd/yyyy):</label><input type="text" id="deadline" name="deadline" value="<?php vecho('deadline'); ?>" /></div>
       <div class="form-slider"><label for="desc">Job Description:</label><textarea id="desc" name="desc"><?php vecho('desc'); ?></textarea></div>
       <div class="form-slider"><label for="Requirements">Requirements:</label><input type="text" id="Requirements" name="requirements" value="<?php vecho('requirements'); ?>" /></div>
       <div class="form-slider"><label for="link">Listing URL:</label><input type="text" id="link" name="link" value="<?php vecho('link'); ?>" /></div>

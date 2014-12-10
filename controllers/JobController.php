@@ -2,6 +2,45 @@
   require_once('controllers/Controller.php');
 
   class JobController extends Controller {
+    // TODO Decide some upper bound for duration
+    function isValidDuration($duration) {
+      if(!preg_match('`^[0-9]*$`', $duration)) return false;
+      if(strlen($duration) > 5) return false;
+      return intval($duration) > 0;
+    }
+      // TODO Should there be an upper bound for compensation?
+    function isValidCompensation($compensation) {
+      if(!preg_match('`^[0-9]*$`', $compensation)) return false;
+      if(strlen($compensation) > 10) return false;
+      return intval($compensation) > 0;
+    }
+
+    // TODO Check if date is today/after today
+    // Q you should make sure 2000 char limit is displayed.
+    function isValidDate($date) {
+      // Check proper formatting
+      if(!preg_match('`[0-9]{1,2}/[0-9]{1,2}/[0-9]{4}`', $date)) {
+        return false;
+      }
+      $ar = explode('/', $date);
+      // Check if date exists
+      return checkdate(intval($ar[0]), intval($ar[1]), intval($ar[2]));
+    }
+
+    // TODO Decide on a good description length
+    function isValidDescription($desc) {
+      return strlen($desc) <= 2000;
+    }
+
+    // TODO? See if URL is actually valid
+    function isValidURL($url) {
+      // filter_var is pretty weak so we use other tests
+      if(filter_var($url, FILTER_VALIDATE_URL) == false) return false;
+      if (!preg_match("/^(https?:\/\/+[\w\-]+\.[\w\-]+)/i", $url)) return false;  
+
+      return true;
+    }
+
     function data($data) {
         $title = clean($data['title']);
         $deadline = clean($data['deadline']);
@@ -27,6 +66,18 @@
       $this->validate(MongoId::isValid($data['company']), 
         $err, 'company invalid');
       $this->validate($data['geocode'] != NULL, $err, 'location invalid');
+      $this->validate(strlen($data['title']) <= 200,
+        $err, 'job title is too long');
+      $this->validate($this->isValidDuration($data['duration']),
+        $err, 'invalid duration');
+      $this->validate($this->isValidCompensation($data['salary']),
+        $err, 'invalid compensation');
+      $this->validate($this->isValidDate($data['deadline']),
+        $err, 'invalid deadline date');
+      $this->validate($this->isValidDescription($data['desc']),
+        $err, 'description too long');
+      $this->validate($this->isValidURL($data['link']),
+        $err, 'invalid listing URL');
     }
 
     function manage() {
@@ -83,6 +134,28 @@
       $this->validate(isset($_GET['id']) and ($entry = $MJob->get($id = $_GET['id'])) !== NULL, $err, 'unknown job');
       $this->validate($_SESSION['_id'] == $entry['recruiter'],
         $err, 'permission denied');
+      $this->validate(strlen($data['title']) <= 200,
+        $err, 'job title is too long');
+      $this->validate(isValidDuration($data['duration']),
+        $err, 'invalid duration');
+      $this->validate(isValidCompensation($data['salary']),
+        $err, 'invalid compensation');
+      $this->validate(isValidDate($data['deadline']),
+        $err, 'invalid deadline date');
+      $this->validate(isValidDescription($data['desc']),
+        $err, 'description too long');
+      $this->validate(isValidURL($data['link']),
+        $err, 'invalid listing URL');
+
+      /*
+        $salarytype = clean($data['salarytype']);
+        $company = $data['company'];
+        $desc = clean($data['desc']);
+        $location = clean($data['location']);
+        $geocode = geocode($location);
+        $requirements = clean($data['requirements']);
+        $link = clean($data['link']);
+        */
 
       // Code
       if ($this->isValid()) {

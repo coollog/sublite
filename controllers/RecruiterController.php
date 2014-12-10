@@ -2,6 +2,13 @@
   require_once('controllers/Controller.php');
 
   class RecruiterController extends Controller {
+    // Validation functions
+    function isValidName($name) { // Works for first or last name
+      if(strlen($name) > 100) return false;
+      if(preg_match('`[0-9]`', $name)) return false;
+      return true;
+    }
+
     function data($data) {
       $email = $data['email'];
       $pass = $data['pass'];
@@ -41,6 +48,7 @@
       $data['email'] = clean($params['email']);
       $data['pass'] = crypt($params['pass']);
       $data['approved'] = 'pending';
+      var_dump($data);
       extract($data = $this->data($data));
       
       // Validations
@@ -51,6 +59,11 @@
         $err, 'email taken');
       $this->validate($params['pass'] == $params['pass2'], 
         $err, 'password mismatch');
+      $this->validate($this->isValidName($data['firstname']),
+        $err, 'first name is too long');
+      $this->validate($this->isValidName($data['lastname']),
+        $err, 'last name is too long');
+
 
       // Code
       if ($this->isValid()) {

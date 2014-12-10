@@ -30,7 +30,7 @@ $(function() {
         <input type="radio" name="salarytype" value="hour" /> / hour
         <input type="radio" name="salarytype" value="total" /> total payment
       </right>
-      <div class="form-slider"><label for="deadline">Deadline for Application:</label><input type="text" id="deadline" name="deadline" /></div>
+      <div class="form-slider"><label for="deadline">Deadline for Application (mm/dd/yyyy):</label><input type="text" id="deadline" name="deadline" /></div>
       <div class="form-slider"><label for="desc">Job Description:</label><textarea id="desc"a</me="desc"></textarea></div>
       <div class="form-slider"><label for="Requirements">Requirements:</label><input type="text" id="Requirements" name="Requirements" /></div>
       <div class="form-slider"><label for="link">Listing URL:</label><input type="text" id="link" name="link" /></div>
