@@ -2,6 +2,7 @@ Todo:
 
 short
 - make validations for company, phone number, first/last name
+    -decide on character limits for names/titles/descriptions/etc
 - think of a way to do requirements in job
 - look through comments for any place needing fixing (eg. )
 
