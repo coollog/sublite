@@ -7,6 +7,8 @@
         $deadline = clean($data['deadline']);
         $duration = clean($data['duration']);
         $salary = clean($data['salary']);
+        $salarytype = clean($data['salarytype']);
+        $company = $data['company'];
         $desc = clean($data['desc']);
         $location = clean($data['location']);
         $geocode = geocode($location);
@@ -16,16 +18,24 @@
           'title' => $title, 'deadline' => $deadline, 'duration' => $duration,
           'desc' => $desc, 'geocode' => $geocode,
           'location' => $location, 'requirements' => $requirements, 
-          'link' => $link, 'salary' => $salary
+          'link' => $link, 'salary' => $salary, 'company' => $company, 
+          'salarytype' => $salarytype
         );
     }
 
     function validateData($data, &$err) {
+      $this->validate(MongoId::isValid($data['company']), 
+        $err, 'company invalid');
       $this->validate($data['geocode'] != NULL, $err, 'location invalid');
     }
 
-    function home() {
-
+    function manage() {
+      global $CRecruiter; $CRecruiter->requireLogin();
+      global $MJob;
+      $data = array(
+        'jobs' => $MJob->getByRecruiter($_SESSION['_id'])
+      );
+      $this->render('managejobs', $data);
     }
 
     function add() {
@@ -40,7 +50,9 @@
         $this->render('jobform', formData(array())); return; 
       }
       
-      global $params, $MJob;
+      global $params, $MJob, $MRecruiter;
+      $me = $MRecruiter->me();
+      $params['company'] = $me['company'];
       // Params to vars
       extract($data = $this->data($params));
       
@@ -50,6 +62,7 @@
 
       // Code
       if ($this->isValid()) {
+        $data['applicants'] = array();
         $id = $MJob->save($data);
         $this->redirect('job', array('id' => $id));
         return;
@@ -62,7 +75,7 @@
     function edit() { // FIX THIS ADD GET INFO LIKE DATA FROM VIEW AND STUFF
       global $CRecruiter; $CRecruiter->requireLogin();
       
-      global $params, $MJob;
+      global $params, $MJob, $MRecruiter;
       // Params to vars
       
       // Validations
@@ -83,6 +96,8 @@
           $this->render('jobform', formData($this->data($entry))); return;
         }
 
+        $me = $MRecruiter->me();
+        $params['company'] = $me['company'];
         extract($data = $this->data($params));
         // Validations
         $this->validateData($data, $err);
@@ -112,7 +127,10 @@
 
       // Code
       if ($this->isValid()) {
-        $this->render('viewjob', $this->data($entry));
+        $data = $this->data($entry);
+        $data['salarytype'] = ($data['salarytype'] == 'total') ?
+                              $data['duration'] : $data['salarytype'];
+        $this->render('viewjob', $data);
         return;
       }
 

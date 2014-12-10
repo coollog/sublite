@@ -2,16 +2,15 @@ Todo:
 
 short
 - make validations for company, phone number, first/last name
-- make company model and verify existing company
 - think of a way to do requirements in job
 - look through comments for any place needing fixing (eg. )
 
 long
 - make profile page
-- make page for job listing management
-- add approval for registration with creation of company profile
-- finish footer
-
+- finish page for job listing management
+- add email notification of approval status
+- add forgot password
+- add terms to register form
 
 
 Notes:
@@ -23,3 +22,7 @@ Done:
 - change navbar for logged-in vs not logged-in
 - add location to geocode (use same code)
 - add error display code
+- make company model and verify existing company
+- finish footer
+- add approval for registration with creation of company profile
+- finish up job listing with the type of salary

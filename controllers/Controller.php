@@ -32,16 +32,6 @@
       if ($vars === false) $viewVars = array();
       else $viewVars = $vars;
 
-      if (isset($_SESSION['loggedin'])) {
-        $viewVars = array_merge($viewVars, array(
-          'Loggedin' => true,
-          'L_id' => $_SESSION['_id'],
-          'Lemail' => $_SESSION['email'],
-          'Lpass' => $_SESSION['pass']
-        ));
-      } else {
-        $viewVars['Loggedin'] = false;
-      }
       global $error, $success;
       $viewVars['Error'] = isset($error) ? $error : '';
       $viewVars['Success'] = isset($success) ? $success : '';
@@ -52,6 +42,7 @@
     function finish() {
       if (count(self::$renderQueue) == 0) return;
 
+      global $viewVars; $viewVars = array();
       require_once('views/view.php');
       require_once('includes/htmlheader.php');
 

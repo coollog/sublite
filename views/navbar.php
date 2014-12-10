@@ -55,7 +55,8 @@
     <a href="."><opt class="small">Employers' Page</opt></a>
     <?php if (vget('Loggedin')) { ?>
       <a href="addjob.php"><opt>List Job</opt></a>
-      <a href="editprofile.php"><opt>Edit Profile</opt></a>
+      <a href="editprofile.php"><opt>Edit Personal Profile</opt></a>
+      <a href="editcompany.php"><opt>Edit Company Profile</opt></a>
       <a href="logout.php"><opt>Log Out</opt></a>
     <?php } else { ?>
       <a href="loginregister.php"><opt>Register/Log In</opt></a>

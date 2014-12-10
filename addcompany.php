@@ -1,6 +1,5 @@
 <?php
   require_once('includes/header.php');
-  $CRecruiter->home();
-  $CJob->manage();
+  $CCompany->add();
   require_once('includes/footer.php');
 ?>

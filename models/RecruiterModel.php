@@ -23,6 +23,9 @@
     function getByID($id) {
       return $this->collection->findOne(array('_id' => new MongoID($id)));
     }
+    function me() {
+      return $this->get($_SESSION['email']);
+    }
     
     function exists($email) {
       return ($this->get($email) !== NULL);
