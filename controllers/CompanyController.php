@@ -6,8 +6,16 @@
         $name = $data['name'];
         $industry = clean($data['industry']);
         $desc = clean($data['desc']);
+        $funfacts = clean($data['funfacts']);
+        $forfun = clean($data['forfun']);
+        $whyunique = clean($data['whyunique']);
+        $adjectives = clean($data['adjectives']);
+        $perks = clean($data['perks']);
         return array(
-          'name' => $name, 'industry' => $industry, 'desc' => $desc
+          'name' => $name, 'industry' => $industry, 'desc' => $desc,
+          'funfacts' => $funfacts, 'forfun' => $forfun, 
+          'whyunique' => $whyunique, 'adjectives' => $adjectives,
+          'perks' => $perks
         );
     }
     function validateData($data, &$err) {

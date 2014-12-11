@@ -35,9 +35,9 @@
   <div class="content">
     <headline>Edit Profile</headline>
     <form method="post">
-      <div class="form-slider"><label for="firstname">First Name:</label><input type="text" id="firstname" name="firstname" value="<?php vecho('firstname'); ?>" /></div>
-      <div class="form-slider"><label for="lastname">Last Name:</label><input type="text" id="lastname" name="lastname" value="<?php vecho('lastname'); ?>" /></div>
-      <div class="form-slider"><label for="title">Job Title:</label><input type="text" id="title" name="title" value="<?php vecho('title'); ?>" /></div>
+      <div class="form-slider"><label for="firstname">First Name:</label><input type="text" id="firstname" name="firstname" value="<?php vecho('firstname'); ?>" required /></div>
+      <div class="form-slider"><label for="lastname">Last Name:</label><input type="text" id="lastname" name="lastname" value="<?php vecho('lastname'); ?>" required /></div>
+      <div class="form-slider"><label for="title">Job Title:</label><input type="text" id="title" name="title" value="<?php vecho('title'); ?>" required /></div>
       <div class="form-slider"><label for="phone">Phone number:</label><input type="text" id="phone" name="phone" value="<?php vecho('phone'); ?>" /></div>
       <input type="hidden" name="photo" value="<?php vecho('photo'); ?>" />
       <subheadline>Upload Photo</subheadline>

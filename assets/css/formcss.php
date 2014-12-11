@@ -4,13 +4,28 @@
     margin: 10px auto;
   }
   .success {
-    
+    display: block;
+    margin: 20px 0;
+    padding: 20px;
+    border: 2px solid #00B233;
+    color: #00B233;
+    text-transform: uppercase;
   }
   .error {
-    
+    display: block;
+    margin: 20px 0;
+    padding: 20px;
+    border: 2px solid #FF1919;
+    color: #FF1919;
+    text-transform: uppercase;
   }
   label {
     opacity: 0.7;
+    cursor: pointer;
+  }
+  label.fortextarea {
+    max-width: 200px;
+    text-align: right;
   }
   input[type=number], input[type=text], input[type=password], input[type=email], textarea {
     transition: all 0.30s ease-in-out;

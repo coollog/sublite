@@ -7,28 +7,28 @@
 
 <panel class="job">
   <div class="content">
-    <headline><?php vEcho('title'); ?></headline>
-    <a href="<?php vEcho('link'); ?>" target="_blank"><input type="button" value="Apply Now" /></a>
+    <headline><?php vecho('title'); ?></headline>
+    <a href="<?php vecho('link'); ?>" target="_blank"><input type="button" value="Apply Now" /></a>
 
     <div class="jobinfo">
-      <?php vEcho('desc'); ?>
+      <?php vecho('desc'); ?>
 
       <subheadline>Duration</subheadline>
-      <?php vEcho('duration'); ?>
+      <?php vecho('duration'); ?>
 
-      <subheadline>Compenation / Stipend</subheadline>
-      <?php vEcho('salary'); ?> / <?php vEcho('salarytype'); ?>
+      <subheadline>Compensation / Stipend</subheadline>
+      <?php vecho('salary'); ?> / <?php vecho('salarytype'); ?>
 
       <subheadline>Requirements</subheadline>
-      <?php vEcho('requirements'); ?>
+      <?php vecho('requirements'); ?>
 
       <subheadline>Deadline for Application</subheadline>
-      <?php vEcho('deadline'); ?>
+      <?php vecho('deadline'); ?>
 
       <subheadline>Job Location</subheadline>
-      <?php vEcho('location'); ?>
+      <?php vecho('location'); ?>
     </div>
 
-    <a href="<?php vEcho('link'); ?>" target="_blank"><input type="button" value="Apply Now" /></a>
+    <a href="<?php vecho('link'); ?>" target="_blank"><input type="button" value="Apply Now" /></a>
   </div>
 </panel>

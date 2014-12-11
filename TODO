@@ -1,17 +1,13 @@
 Todo:
 
 short
-- make validations for company, phone number, first/last name
-    -decide on character limits for names/titles/descriptions/etc
+- decide on character limits for names/titles/descriptions/etc
 - think of a way to do requirements in job
 - look through comments for any place needing fixing (eg. )
 
 long
-- make profile page
-- finish page for job listing management
 - add email notification of approval status
 - add forgot password
-- add terms to register form
 
 
 Notes:
@@ -27,3 +23,8 @@ Done:
 - finish footer
 - add approval for registration with creation of company profile
 - finish up job listing with the type of salary
+- make profile page
+- make validations for company, phone number, first/last name
+- add terms to list form
+- add empty list designs
+- finish page for job listing management

@@ -25,6 +25,9 @@
   function clean($s) {
     return trim(htmlentities($s));
   }
+  function idcmp($id1, $id2) {
+    return strval($id1) == strval($id2);
+  }
   require_once('includes/functions/hash_equals.php');
   require_once('includes/functions/geocode.php')
 ?>

@@ -43,6 +43,10 @@
     display: table-cell;
     vertical-align: middle;
   }
+  .cellbottom {
+    display: table-cell;
+    vertical-align: bottom;
+  }
   headline {
     display: block;
     font-size: 3.5em;

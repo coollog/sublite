@@ -2,8 +2,8 @@
   <div class="content">
     <headline>Log In</headline>
     <form method="post">
-      <div class="form-slider"><label for="email">Email</label><input type="text" id="email" name="email" value="<?php vecho('email'); ?>" /></div>
-      <div class="form-slider"><label for="pass">Password</label><input type="password" id="pass" name="pass" /></div>
+      <div class="form-slider"><label for="email">Email</label><input type="email" id="email" name="email" value="<?php vecho('email'); ?>" required /></div>
+      <div class="form-slider"><label for="pass">Password</label><input type="password" id="pass" name="pass" required /></div>
       <?php vnotice(); ?>
       <input type="submit" name="login" value="Log In" />
     </form>

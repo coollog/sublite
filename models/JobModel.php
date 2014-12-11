@@ -16,7 +16,7 @@
       return $this->collection->findOne(array('_id' => new MongoId($id)));
     }
     function getByRecruiter($id) {
-      return $this->collection->find(array('recruiter' => $id));
+      return $this->collection->find(array('recruiter' => new MongoId($id)));
     }
 
     function owner($id) {

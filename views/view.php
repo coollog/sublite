@@ -15,7 +15,7 @@
   function vecho($var, $format = null) {
     global $viewVars;
     vprocess();
-    if (isset($viewVars[$var])) {
+    if (isset($viewVars[$var]) and strlen($viewVars[$var]) > 0) {
       $var = $viewVars[$var];
       if ($format == null) $format = "{var}";
       $format = str_replace("{var}", $var, $format);

@@ -2,9 +2,11 @@
   panel.main {
     background: url('assets/gfx/main.jpg') no-repeat top center;
     background-size: cover;
+    background-position: center -50px;
     /*background-attachment: fixed;*/
     display: table;
-    height: 80%;
+    height: 50%;
+    padding-bottom: 0;
   }
   panel.main .banner {
     padding: 30px 0;
@@ -51,7 +53,7 @@
     height: 150px;
     border-radius: 75px;
     background: #abcdef no-repeat center center;;
-    background-size: cover;
+    background-size: 150%;
     position: relative;
     overflow: hidden;
     margin-bottom: 15px;
@@ -102,6 +104,7 @@
     padding: 10px;
     cursor: pointer;
     font-weight: 700;
+    width: 20%;
   }
   panel.how .step table {
     -webkit-transform: skew(-10deg);
@@ -118,12 +121,16 @@
     font-size: 2em;
     color: #ffd800;
   }
+  panel.how .steptext {
+    text-align: left;
+    padding-left: 10px;
+  }
   panel.how .desc {
     text-align: left;
     background: rgba(255, 216, 0, 0.8);
     padding: 20px 40px;
     display: none;
-    font-size: 0.8em;
+    font-size: 1em;
   }
 </style>
 
@@ -166,7 +173,7 @@
 </script>
 
 <panel class="main">
-  <div class="cell">
+  <div class="cellbottom">
     <div class="banner">
       <div class="content">
         <div class="tagline">Student Recruitment, Reimagined.</div>
@@ -185,19 +192,19 @@
     <table class="whys"><tr>
       <td class="whycell"><incell>
         <div class="whyimg whyimg1">
-          <div class="whyroll"><div class="cell">Rollover text</div></div>
+          <div class="whyroll"><div class="cell">Our network includes 3500 students from 350 universities and is growing everyday.</div></div>
         </div>
         <div class="whytext">Access a growing network of talented university students.</div>
       </incell></td>
       <td class="whycell"><incell>
         <div class="whyimg whyimg2">
-          <div class="whyroll"><div class="cell">Rollover text</div></div>
+          <div class="whyroll"><div class="cell">Students can discover qualities about your company that they cannot find elsewhere.</div></div>
         </div>
         <div class="whytext">Showcase the personality of your company</div>
       </incell></td>
       <td class="whycell"><incell>
         <div class="whyimg whyimg3">
-          <div class="whyroll"><div class="cell">Rollover text</div></div>
+          <div class="whyroll"><div class="cell">Each posting will attract the right match for your company.</div></div>
         </div>
         <div class="whytext">Design a candid and creative job description</div>
       </incell></td>
@@ -229,10 +236,10 @@
         <td class="steptext">Direct Contact</td>
       </tr></table></td>
     </tr></table>
-    <div class="desc" num="1">PLACEHOLDER 1</div>
-    <div class="desc" num="2">PLACEHOLDER 2</div>
-    <div class="desc" num="3">PLACEHOLDER 3</div>
-    <div class="desc" num="4">PLACEHOLDER 4</div>
-    <div class="desc" num="5">PLACEHOLDER 5</div>
+    <div class="desc" num="1">Start by registering an account with your name, company and email address. Once your account is confirmed, you will be brought to your dashboard, where you can view weekly stats, send messages and edit the company profile and internship listings.</div>
+    <div class="desc" num="2">Create a profile for your company by filling out our Company Profile Questionnaire. We will transform your answers into an attractive page of descriptions, pictures, and videos that showcase the personality of your company.</div>
+    <div class="desc" num="3">Create internship listings for your company by filling out our Internship Listing Questionnaire. These listings are linked to your company profile and are easily searchable by students. </div>
+    <div class="desc" num="4">You can view important stats about your company profile and internship listings on your dashboard, such as the number of times an internship listing has been viewed. You can use these metrics measure and improve the performance of your listings.</div>
+    <div class="desc" num="5">Connect with our growing network of students directly through our internal messaging system!</div>
   </div>
 </panel>

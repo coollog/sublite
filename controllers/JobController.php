@@ -36,7 +36,7 @@
     function isValidURL($url) {
       // filter_var is pretty weak so we use other tests
       if(filter_var($url, FILTER_VALIDATE_URL) == false) return false;
-      if (!preg_match("/^(https?:\/\/+[\w\-]+\.[\w\-]+)/i", $url)) return false;  
+      //if (!preg_match("/^(https?:\/\/+[\w\-]+\.[\w\-]+)/i", $url)) return false;  
 
       return true;
     }
@@ -131,31 +131,10 @@
       
       // Validations
       $this->startValidations();
-      $this->validate(isset($_GET['id']) and ($entry = $MJob->get($id = $_GET['id'])) !== NULL, $err, 'unknown job');
-      $this->validate($_SESSION['_id'] == $entry['recruiter'],
-        $err, 'permission denied');
-      $this->validate(strlen($data['title']) <= 200,
-        $err, 'job title is too long');
-      $this->validate(isValidDuration($data['duration']),
-        $err, 'invalid duration');
-      $this->validate(isValidCompensation($data['salary']),
-        $err, 'invalid compensation');
-      $this->validate(isValidDate($data['deadline']),
-        $err, 'invalid deadline date');
-      $this->validate(isValidDescription($data['desc']),
-        $err, 'description too long');
-      $this->validate(isValidURL($data['link']),
-        $err, 'invalid listing URL');
-
-      /*
-        $salarytype = clean($data['salarytype']);
-        $company = $data['company'];
-        $desc = clean($data['desc']);
-        $location = clean($data['location']);
-        $geocode = geocode($location);
-        $requirements = clean($data['requirements']);
-        $link = clean($data['link']);
-        */
+      $this->validate(isset($_GET['id']) and MongoId::isValid($id = $_GET['id']) and ($entry = $MJob->get($id)) !== NULL, $err, 'unknown job');
+      if ($this->isValid())
+        $this->validate($_SESSION['_id'] == $entry['recruiter'],
+          $err, 'permission denied');
 
       // Code
       if ($this->isValid()) {
@@ -185,7 +164,7 @@
       }
       
       $this->error($err);
-      $this->render('notice');
+      $this->render('jobform', formData($data));
     }
     
     function view() {

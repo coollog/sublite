@@ -48,7 +48,6 @@
       $data['email'] = clean($params['email']);
       $data['pass'] = crypt($params['pass']);
       $data['approved'] = 'pending';
-      var_dump($data);
       extract($data = $this->data($data));
       
       // Validations
@@ -149,17 +148,30 @@
     function view() {
       $this->requireLogin();
       
-      global $params, $MRecruiter;
+      global $params, $MRecruiter, $MCompany, $MJob;
       
       // Validations
       $this->startValidations();
       $this->validate(isset($_GET['id']) and 
-        ($entry = $MRecruiter->getByID($_GET['id'])) != NULL, 
+        ($entry = $MRecruiter->getByID($id = $_GET['id'])) != NULL, 
         $err, 'unknown recruiter');
 
       // Code
       if ($this->isValid()) {
-        $this->render('recruiter', $this->data($entry));
+        $data = $this->data($entry);
+        $company = $MCompany->get($data['company']);
+        $data['company'] = $company['name'];
+
+        $jobs = $MJob->getByRecruiter($id);
+        $data['jobtitles'] = array(); $data['joblocations'] = array();
+        foreach ($jobs as $job) {
+          array_push($data['jobtitles'], $job['title']);
+          array_push($data['joblocations'], $job['location']);
+        }
+
+        $data['isme'] = idcmp($id, $_SESSION['_id']);
+
+        $this->render('recruiter', $data);
         return;
       }
       
