@@ -49,7 +49,7 @@
       $this->startValidations();
       $this->validate(!MongoId::isValid($me['company']), 
         $err, 'company exists');
-      $this->validate(strlen($data['desc']) <= 2000,
+      $this->validate(strlen($data['desc']) <= 2500,
         $err, 'description is too long'); // Figure out good char limits
       $this->validate(strlen($data['industry'] <= 100),
         $err, 'industry too long'); //Figure out good char limits
