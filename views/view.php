@@ -25,7 +25,8 @@
   function vget($var) {
     global $viewVars;
     vprocess();
-    return $viewVars[$var];
+    if (isset($viewVars[$var])) return $viewVars[$var];
+    else return null;
   }
   function vnotice() {
     vecho('Success', "<div class=\"success\">{var}</div>");

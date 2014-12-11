@@ -145,7 +145,7 @@
         }
 
         if (!isset($_POST['edit'])) { 
-          $this->render('jobform', formData($this->data($entry))); return;
+          $this->render('jobform', formData(array_merge($this->data($entry), array('_id' => $id)))); return;
         }
 
         $me = $MRecruiter->me();
@@ -158,13 +158,13 @@
           $data['_id'] = new MongoId($id);
           $id = $MJob->save($data);
           $this->success('job saved');
-          $this->render('jobform', formData($data));
+          $this->render('jobform', formData(array_merge($data, array('_id' => $id))));
           return;
         }
       }
       
       $this->error($err);
-      $this->render('jobform', formData($data));
+      $this->render('jobform', formData($data, array_merge($data, array('_id' => $id))));
     }
     
     function view() {

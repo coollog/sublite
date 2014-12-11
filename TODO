@@ -4,10 +4,16 @@ short
 - decide on character limits for names/titles/descriptions/etc
 - think of a way to do requirements in job
 - look through comments for any place needing fixing (eg. )
+- make the success/failure notices different for different subviews when
+  multiple on same page
+frontend
+- add down arrow to main panel to autoscroll down
+- make why circles bigger
 
 long
 - add email notification of approval status
 - add forgot password
+- add logo and banner upload for company profile
 
 
 Notes:

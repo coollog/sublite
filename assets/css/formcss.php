@@ -64,6 +64,9 @@
     font-weight: 700;
     outline: none;
   }
+  input[type=submit] {
+    margin-top: 20px;
+  }
   input[type=submit]:hover, input[type=button]:hover {
     background: #035d75;
     color: #fff;

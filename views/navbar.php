@@ -50,7 +50,7 @@
 </style>
 
 <navbar class="blackbar">
-  <logo>SubLite</logo>
+  <a href="."><logo>SubLite</logo></a>
   <options class="right">
     <a href="."><opt class="small">Employers' Page</opt></a>
     <?php if (vget('Loggedin')) { ?>
