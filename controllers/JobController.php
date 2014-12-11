@@ -24,19 +24,23 @@
       }
       $ar = explode('/', $date);
       // Check if date exists
-      return checkdate(intval($ar[0]), intval($ar[1]), intval($ar[2]));
+      if(!checkdate(intval($ar[0]), intval($ar[1]), intval($ar[2])))
+        return false;
+      // Check if date is in the future
+      return strtotime($date) > time();
     }
 
     // TODO Decide on a good description length
     function isValidDescription($desc) {
-      return strlen($desc) <= 2000;
+      return strlen($desc) <= 2500;
     }
 
     // TODO? See if URL is actually valid
     function isValidURL($url) {
       // filter_var is pretty weak so we use other tests
       if(filter_var($url, FILTER_VALIDATE_URL) == false) return false;
-      //if (!preg_match("/^(https?:\/\/+[\w\-]+\.[\w\-]+)/i", $url)) return false;  
+      if (!preg_match('`^((https?:\/\/)*[\w\-]+\.[\w\-]+)`',
+        $url)) return false;  
 
       return true;
     }
@@ -73,7 +77,9 @@
       $this->validate($this->isValidCompensation($data['salary']),
         $err, 'invalid compensation');
       $this->validate($this->isValidDate($data['deadline']),
-        $err, 'invalid deadline date');
+        $err, 'invalid deadline: please check date');
+      $this->validate(strtotime($data['deadline']) > time(),
+        $err, 'invalid deadline: date should be in the future');
       $this->validate($this->isValidDescription($data['desc']),
         $err, 'description too long');
       $this->validate($this->isValidURL($data['link']),
