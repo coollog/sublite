@@ -27,6 +27,9 @@
   options.right {
     float: right;
   }
+  options.left {
+    float: left;
+  }
   options {
     font-size: 1.5em;
     padding-top: 10px;

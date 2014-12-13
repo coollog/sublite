@@ -38,6 +38,10 @@
     function index() {
       $this->render('index');
     }
+
+    function faq() {
+      $this->render('faq');
+    }
     
     function register() {
       if (!isset($_POST['register'])) { $this->render('register'); return; }

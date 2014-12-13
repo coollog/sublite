@@ -16,6 +16,12 @@ long
 - add logo and banner upload for company profile
 
 
+FROM EMAIL:
+- Update company registration page with new list of questions, mandatory & option
+- New layout for the company listing 
+- New layout for the job listing (with a map for the location)
+
+
 Notes:
 
 
@@ -34,3 +40,8 @@ Done:
 - add terms to list form
 - add empty list designs
 - finish page for job listing management
+- New FAQ page
+- Update Team page
+- Remove “Resources”
+- make bottom bar aligned left and right
+- Landing page: make stock photo BIG, white text BIG, 3 circles BIGGER
