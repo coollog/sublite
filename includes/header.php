@@ -29,5 +29,6 @@
     return strval($id1) == strval($id2);
   }
   require_once('includes/functions/hash_equals.php');
-  require_once('includes/functions/geocode.php')
+  require_once('includes/functions/geocode.php');
+  require_once('includes/functions/sendgmail.php');
 ?>
