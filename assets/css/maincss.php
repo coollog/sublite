@@ -67,4 +67,8 @@
     text-align: right;
     display: block;
   }
+  left {
+    text-align: left;
+    display: block;
+  }
 </style>

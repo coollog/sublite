@@ -14,10 +14,9 @@
       }
     </style>
     <footer class="blackbar">
-      <options>
+      <options class="left">
         <a href="http://sublite.net/team.php"><opt>The Team</opt></a>
-        <a href="http://sublite.net/resources.php"><opt>Resources</opt></a>
-        <a href="http://sublite.net/faq.php"><opt>FAQ</opt></a>
+        <a href="faq.php"><opt>FAQ</opt></a>
       </options>
       <options class="right">
         <opt>

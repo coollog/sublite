@@ -5,7 +5,7 @@
     background-position: center -50px;
     /*background-attachment: fixed;*/
     display: table;
-    height: 50%;
+    height: 90%;
     padding-bottom: 0;
   }
   panel.main .banner {
@@ -45,13 +45,13 @@
   }
   panel.why incell {
     display: inline-block;
-    width: 150px;
+    width: 200px;
     text-align: center;
   }
   panel.why .whyimg {
-    width: 150px;
-    height: 150px;
-    border-radius: 75px;
+    width: 200px;
+    height: 200px;
+    border-radius: 100px;
     background: #abcdef no-repeat center center;;
     background-size: 150%;
     position: relative;
@@ -70,10 +70,13 @@
     opacity: 0;
     transition: all 0.1s ease-in-out;
     border-radius: 50%;
-    font-size: 0.8em;
+    font-size: 1em;
   }
   panel.why .whyroll:hover {
     opacity: 1;
+  }
+  panel.why .whyroll .cell {
+    padding: 20px;
   }
   panel.why .whytext {
     text-transform: uppercase;
@@ -173,7 +176,7 @@
 </script>
 
 <panel class="main">
-  <div class="cellbottom">
+  <div class="cell">
     <div class="banner">
       <div class="content">
         <div class="tagline">Student Recruitment, Reimagined.</div>
