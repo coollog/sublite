@@ -17,6 +17,7 @@
   .companylogo {
     width: 150px;
     height: 150px;
+    display: block;
   }
   .companyname {
     font-size: 1.5em;
@@ -24,7 +25,7 @@
     line-height: 2.5em;
   }
   .officephoto {
-    background: <?php vecho('bannerphoto'); ?> no-repeat center center;
+    background: url('<?php vecho('bannerphoto'); ?>') no-repeat center center;
     background-size: cover;
   }
   .brief .info {
@@ -65,25 +66,27 @@
         <tr>
           <td class="brief">
             <div class="info">
-              <img class="companylogo" src="<?php vecho('logophoto'); ?>" />
+              <div class="companylogo" style="background-image: url('<?php vecho('logophoto'); ?>');" />
               <div class="companyname"><?php vecho('name'); ?></div>
               <?php 
-                $industries = vget('industry');
-                $last = $industries[count($industries) - 1];
-                foreach ($industries as $industry) {
-                  if ($industry == $last) echo $industry;
-                  else echo "$industry, ";
-                }
+                // $industries = vget('industry');
+                // $last = $industries[count($industries) - 1];
+                // foreach ($industries as $industry) {
+                //   if ($industry == $last) echo $industry;
+                //   else echo "$industry, ";
+                // }
+                vecho('industry');
               ?><br />
               <?php vecho('size'); ?><br />
               Founded in <?php vecho('founded'); ?><br />
               <?php 
-                $locations = vget('location');
-                $last = $locations[count($locations) - 1];
-                foreach ($locations as $location) {
-                  if ($location == $last) echo $location;
-                  else echo "$location, ";
-                }
+                // $locations = vget('location');
+                // $last = $locations[count($locations) - 1];
+                // foreach ($locations as $location) {
+                //   if ($location == $last) echo $location;
+                //   else echo "$location, ";
+                // }
+                vecho('location');
               ?><br />
             </div>
           </td>
