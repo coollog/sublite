@@ -11,7 +11,7 @@
   navbar {
     border-bottom: 3px solid #ffd800;
     min-height: 50px;
-    padding: 10px 20px;
+    padding: 15px 20px 5px 20px;
   }
   navbar:after{
     clear: both;

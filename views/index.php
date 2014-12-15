@@ -25,6 +25,7 @@
   panel.main .banner .slogan {
     color: #fff;
     line-height: 4em;
+    font-size: 1.2em;
     letter-spacing: 1px;
   }
   panel.main .registerlogin {
@@ -37,6 +38,7 @@
     color: #fff;
   }
   panel.main .banner .switch {
+    margin-top: 0.5em;
     color: #ffd800;
   }
   panel.why .whys {
@@ -171,7 +173,9 @@
             $(this).slideUp(200, 'easeInOutCubic');
         });
       }
-    })
+    }).hover(function() {
+      if (step == null) $(this).click();
+    }, function() {});
   });
 </script>
 

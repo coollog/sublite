@@ -101,24 +101,24 @@
               vecho('desc', blurb('The Company', 'pink'));
               vecho('corevalues', blurb('Core Values', 'orange'));
               vecho('funfacts', blurb('Fun Facts', 'purple'));
-              vecho('socialevent', blurb('Social Events', 'purple'));
+              vecho('socialevent', blurb('Social Events', 'blue'));
             ?>
           </td>
           <td class="col">
             <?php
-              vecho('colorscheme', blurb('Colorful Office', 'purple'));
-              vecho('media', blurb(vget('name') . ' in the Media', 'purple'));
+              vecho('colorscheme', blurb('Colorful Office', 'cobalt'));
+              vecho('media', blurb(vget('name') . ' in the Media', 'orange'));
               vecho('employees', blurb('Employees Are Saying', 'purple'));
-              vecho('perks', blurb('Top 3 Perks', 'purple'));
+              vecho('perks', blurb('Top 3 Perks', 'pink'));
             ?>
           </td>
           <td class="col">
             <?php
               vecho('forfun', blurb('For Fun', 'purple'));
-              vecho('talent', blurb('Hidden Talents', 'purple'));
-              vecho('dresscode', blurb('Dress Code', 'purple'));
-              vecho('freeanswer1', blurb(vget('freequestion1'), 'purple'));
-              vecho('freeanswer2', blurb(vget('freequestion2'), 'purple'));
+              vecho('talent', blurb('Hidden Talents', 'cobalt'));
+              vecho('dresscode', blurb('Dress Code', 'pink'));
+              vecho('freeanswer1', blurb(vget('freequestion1'), 'orange'));
+              vecho('freeanswer2', blurb(vget('freequestion2'), 'blue'));
             ?>
           </td>
         </tr>
