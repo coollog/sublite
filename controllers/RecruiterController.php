@@ -257,7 +257,7 @@
     }
     function logout() {
       session_unset();
-      $this->redirect('loginregister');
+      $this->redirect('index');
     }
   }
 

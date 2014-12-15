@@ -121,7 +121,7 @@
         $this->validateData($data, $err);
         if ($this->isValid()) {
           $data['_id'] = new MongoId($id);
-          $id = $MCompany->save($data);
+          $MCompany->save($data);
           $this->success('company saved');
           $this->render('companyform', formData(array_merge($data, array('_id' => $id->{'$id'}))));
           return;

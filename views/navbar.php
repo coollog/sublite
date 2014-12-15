@@ -65,7 +65,7 @@
       <?php } ?>
       <a href="logout.php"><opt>Log Out</opt></a>
     <?php } else { ?>
-      <a href="loginregister.php"><opt>Register/Log In</opt></a>
+      <a href="login.php"><opt>Log In</opt></a>
     <?php } ?>
   </options>
 </navbar>

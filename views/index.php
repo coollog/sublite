@@ -203,8 +203,8 @@
       <div class="content">
         <div class="tagline">Student Recruitment, Reimagined.</div>
         <div class="slogan">Attract the New Generation Talent with your Company's Unique Personality.</div>
-        <a href="loginregister.php">
-          <input type="button" class="registerlogin" value="Register / Log In" />
+        <a href="register.php">
+          <input type="button" class="registerlogin" value="Register" />
         </a>
         <div class="switch"><a href="http://sublite.net">switch to STUDENT</a></div>
       </div>
