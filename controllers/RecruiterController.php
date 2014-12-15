@@ -32,6 +32,7 @@
       global $MRecruiter, $MJobs;
       $me = $MRecruiter->me();
       $me['_id'] = $me['_id']->{'$id'};
+      $me['company'] = $me['company']->{'$id'};
       $this->render('home', $me);
     }
 
