@@ -1,9 +1,16 @@
+<script>
+  function addImg(url, name) {
+    $('.img[name=' + name + ']').html('<img class="img" src="' + url + '" />');
+    $('input[name=' + name + ']').val(url);
+  }
+</script>
+
 <panel class="form">
   <div class="content">
     <headline><?php vecho('headline'); ?> Company Profile</headline>
     <form method="post">
       <div class="form-slider"><label for="name">Company Name*:</label><input type="text" id="name" name="name" value="<?php vecho('name'); ?>" disabled /></div>
-      <div class="form-slider"><label for="industry" class="fortextarea">What industry does your company belong to? You can choose up to 3 industries (click while holding down the Ctrl key to select more than 1 industry).*</label><input type="text" id="industry" name="industry" value="<?php vecho('industry'); ?>" required /></div>
+      <div class="form-slider"><label for="industry" class="fortextarea">What industry/industries does/do your company belong to?*</label><input type="text" id="industry" name="industry" value="<?php vecho('industry'); ?>" required /></div>
       <div class="form-slider"><label for="size">What is the size of your company?*</label><select id="size" name = "size" required>
         <option selected="selected"><?php vecho('size'); ?></option>
         <option>Very small (1-49 employees)</option>
@@ -17,23 +24,22 @@
 
       <div class="form-slider"><label for="founded">Year of founding? (max. 15 characters)*</label><input type="text" id="founded" name="founded" value="<?php vecho('founded'); ?>" required /></div>
 
-      <div class="form-slider"><label for="location" class="fortextarea">Where is/are your company office(s) located? You can choose more than one (click while holding down the Ctrl key to select more than 1 location).*</label><input type="text" id="location" name="location" value="<?php vecho('location'); ?>" required /></div>      
+      <div class="form-slider"><label for="location" class="fortextarea">Location of office(s)?*</label><input type="text" id="location" name="location" value="<?php vecho('location'); ?>" required /></div>      
 
       <div class="form-slider"><label for="corevalues" class="fortextarea">What are your company's core values?* (max. 1000 characters)</label><textarea id="corevalues" name="corevalues" required maxlength="1000"><?php vecho('corevalues'); ?></textarea></div>
 
 
-      
-      <input type="hidden" name="bannerphoto" value="<?php vecho('bannerphoto'); ?>" />
-      <subheadline>What would you like your banner image to be?*</subheadline>
-      <div class="iframe"><iframe class="S3" src="S3.php"></iframe></div>
-      <subheadline>Current Photo</subheadline>
-      <div class="img"><img src="<?php vecho('bannerphoto'); ?>" /></div>
-
-      <input type="hidden" name="logophoto" value="<?php vecho('logophoto'); ?>" />
+      <input type="hidden" required name="logophoto" value="<?php vecho('logophoto'); ?>" />
       <subheadline>What is your company logo?*</subheadline>
-      <div class="iframe"><iframe class="S3" src="S3.php"></iframe></div>
+      <div class="iframe"><iframe class="S3" src="S3.php?name='logophoto'"></iframe></div>
       <subheadline>Current Photo</subheadline>
-      <div class="img"><img src="<?php vecho('logophoto'); ?>" /></div>
+      <div class="img" name="logophoto"><img src="<?php vecho('logophoto'); ?>" /></div>
+
+      <input type="hidden" required name="bannerphoto" value="<?php vecho('bannerphoto'); ?>" />
+      <subheadline>What would you like your banner image to be?*</subheadline>
+      <div class="iframe"><iframe class="S3" src="S3.php?name='bannerphoto'"></iframe></div>
+      <subheadline>Current Photo</subheadline>
+      <div class="img" name="bannerphoto"><img src="<?php vecho('bannerphoto'); ?>" /></div>
 
       <br>
       The following questions are not mandatory but are highly recommended. These questions help students get a better understanding of the unique culture at your company. Please answer at least 6 of the following 13 questions.

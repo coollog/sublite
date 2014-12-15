@@ -22,7 +22,12 @@
   });
   function up(url) {
     console.log(url);
-    window.parent.addImg(url);
+    <?php 
+      if (isset($_GET['name'])) 
+        echo 'window.parent.addImg(url, ' . $_GET['name'] . ');';
+      else 
+        echo 'window.parent.addImg(url);';
+    ?>
   }
   <?php vecho('reply'); ?>
 </script>
