@@ -8,6 +8,7 @@ short
   multiple on same page
 frontend
 - make it so you cannot access register/login page if you are already logged in
+- alignment of input text
 
 long
 - add forgot password
