@@ -52,6 +52,10 @@
     }
     
     function register() {
+      if ($_SESSION['loggedin'] = true) {
+        $this->redirect('home');
+        return;
+      }
       if (!isset($_POST['register'])) { $this->render('register'); return; }
       
       global $params, $MRecruiter;
@@ -147,11 +151,8 @@
         $_SESSION['pass'] = $pass;
         $_SESSION['_id'] = $entry['_id'];
         
-        if (MongoId::isValid($entry['company'])) {
-          $_SESSION['company'] = $entry['company'];
-          $this->redirect('home');
-        } else
-          $this->redirect('addcompany');
+        if (MongoId::isValid($entry['company'])) $this->redirect('home');
+        else $this->redirect('addcompany');
 
         return;
       }
