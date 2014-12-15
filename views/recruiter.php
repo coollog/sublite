@@ -29,11 +29,11 @@
 
       <?php if (count($jobs = vget('jobtitles')) > 0) { ?>
         <subheadline>Looking for</subheadline>
-      <?php foreach ($jobs as $job) echo "$job<br />"; } ?>
+      <?php foreach (array_unique($jobs) as $job) echo "$job<br />"; } ?>
 
       <?php if (count($jobs = vget('joblocations')) > 0) { ?>
         <subheadline>Recruitment Locations</subheadline>
-      <?php foreach ($jobs as $job) echo "$job<br />"; } ?>
+      <?php foreach (array_unique($jobs) as $job) echo "$job<br />"; } ?>
     </div>
 
     <?php if (vget('isme')) { ?>
