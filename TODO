@@ -7,11 +7,9 @@ short
 - make the success/failure notices different for different subviews when
   multiple on same page
 frontend
-- add down arrow to main panel to autoscroll down
 
 long
 - add forgot password
-- add logo and banner upload for company profile
 - implement multi-photo uploading (question #8)
 - finish backend of company registration
 
@@ -46,3 +44,5 @@ Done:
 - New layout for the company listing 
 - Update company registration page with new list of questions, mandatory & option
 - New layout for the job listing
+- add logo and banner upload for company profile
+- add down arrow to main panel to autoscroll down

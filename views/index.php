@@ -8,6 +8,20 @@
     height: 90%;
     padding-bottom: 0;
   }
+  .arrow-down {
+    width: 0; 
+    height: 0;
+    border-left: 30px solid transparent;
+    border-right: 30px solid transparent;
+    border-top: 30px solid #000;
+    margin: -50px auto 0 auto;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: all 0.2s ease-in-out;
+  }
+  .arrow-down:hover {
+    opacity: 1;
+  }
   panel.main .banner {
     padding: 30px 0;
     background: rgba(0, 0, 0, 0.5);
@@ -176,6 +190,10 @@
     }).hover(function() {
       if (step == null) $(this).click();
     }, function() {});
+
+    $('.arrow-down').click(function() {
+      scrollTo('panel.why');
+    });
   });
 </script>
 
@@ -193,6 +211,7 @@
     </div>
   </div>
 </panel>
+<div class="arrow-down"></div>
 <panel class="why">
   <div class="content">
     <headline style="color: #000;">Why Choose Us?</headline>
