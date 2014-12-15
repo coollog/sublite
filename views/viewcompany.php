@@ -19,7 +19,7 @@
     height: 150px;
     display: block;
     background: url('<?php vecho('logophoto'); ?>') no-repeat center center;
-    background-size: cover;
+    background-size: contain;
   }
   .companyname {
     font-size: 1.5em;
