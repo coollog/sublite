@@ -10,7 +10,7 @@
     }
 
     function data($data) {
-      $email = $data['email'];
+      $email = strtolower($data['email']);
       $pass = $data['pass'];
       $firstname = clean($data['firstname']);
       $lastname = clean($data['lastname']);
