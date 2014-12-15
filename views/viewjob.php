@@ -75,7 +75,7 @@
       <table class="jobtable">
         <tr>
           <td style="width: 60%;">
-            <div style="overflow: hidden; width: 100%;">
+            <div style="overflow: hidden; width: 100%; white-space: pre-line;">
               <?php vecho('desc'); ?>
               <subheadline>Requirements</subheadline>
               <?php vecho('requirements'); ?>

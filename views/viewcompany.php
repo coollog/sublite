@@ -43,6 +43,7 @@
     font-size: 0.8em;
     line-height: 1.3em;
     margin-bottom: 20px;
+    white-space: pre-line;
   }
   .blurb subheadline {
     text-transform: uppercase;
@@ -52,10 +53,15 @@
     margin-bottom: 0.5em;
   }
   .blurb.pink { border-color: #ff2a5c; }
+  .blurb.pink subheadline { color: #ff2a5c; }
   .blurb.orange { border-color: #ff8a00; }
+  .blurb.orange subheadline { color: #ff8a00; }
   .blurb.purple { border-color: #9d0277; }
+  .blurb.purple subheadline { color: #9d0277; }
   .blurb.cobalt { border-color: #035e75; }
+  .blurb.cobalt subheadline { color: #035e75; }
   .blurb.blue { border-color: #01354a; }
+  .blurb.blue subheadline { color: #01354a; }
 </style>
 
 <panel class="job">

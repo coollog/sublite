@@ -10,20 +10,20 @@
     <headline><?php vecho('headline'); ?> Company Profile</headline>
     <form method="post">
       <div class="form-slider"><label for="name">Company Name*:</label><input type="text" id="name" name="name" value="<?php vecho('name'); ?>" disabled /></div>
-      <div class="form-slider"><label for="industry" class="fortextarea">Industry/Industries: *</label><input type="text" id="industry" name="industry" value="<?php vecho('industry'); ?>" required /></div>
-      <div class="form-slider"><label for="size">Company size: *</label>
+      <div class="form-slider"><label for="industry" class="fortextarea">Industry/Industries*: </label><input type="text" id="industry" name="industry" value="<?php vecho('industry'); ?>" required /></div>
+      <div class="form-slider"><label for="size">Company size*: </label>
       <select id="size" name = "size" required>
-        <option selected="selected"><?php vecho('size'); ?></option>
-        <option>Very small (1-49 employees)</option>
-        <option>Small (50-299 employees)</option>
-        <option>Medium (300-999 employees)</option>
-        <option>Large (1000-9999 employees)</option>
-        <option>Very large (10,000+ employees)</option>
+        <?php vecho('size', '<option selected="selected">{var}</option>'); ?>
+        <option>1-49 employees</option>
+        <option>50-299 employees</option>
+        <option>300-999 employees</option>
+        <option>1000-9999 employees</option>
+        <option>10,000+ employees</option>
       </select></div>
 
       <div class="form-slider"><label for="desc" class="fortextarea">What does your company do? (max. 1000 characters)*</label><textarea id="desc" name="desc" required maxlength="1000"><?php vecho('desc'); ?></textarea></div>
 
-      <div class="form-slider"><label for="founded">Year of founding? (max. 15 characters)*</label><input type="text" id="founded" name="founded" value="<?php vecho('founded'); ?>" required /></div>
+      <div class="form-slider"><label for="founded">Year of founding?*</label><input type="text" id="founded" name="founded" value="<?php vecho('founded'); ?>" required /></div>
 
       <div class="form-slider"><label for="location" class="fortextarea">Location of office(s)?*</label><input type="text" id="location" name="location" value="<?php vecho('location'); ?>" required /></div>      
 
@@ -56,7 +56,7 @@
 
       <div class="form-slider"><label for="media" class="fortextarea">What does the media say about your company? Direct quotes with source are recommended. (max. 500 characters)</label><textarea id="media" name="media" maxlength="500"><?php vecho('media'); ?></textarea></div>
 
-      <div class="form-slider"><label for="employees" class="fortextarea">What does your employees say about your company? Direct quotes with source are recommended. (max. 500 characters)</label><textarea id="employees" name="employees" maxlength="500"><?php vecho('employees'); ?></textarea></div>
+      <div class="form-slider"><label for="employees" class="fortextarea">What do your employees say about your company? Direct quotes with source are recommended. (max. 500 characters)</label><textarea id="employees" name="employees" maxlength="500"><?php vecho('employees'); ?></textarea></div>
 
       <div class="form-slider"><label for="perks" class="fortextarea">What are the top 3 perks of working at your company? (max. 1000 characters):</label><textarea id="perks" name="perks" maxlength="500"><?php vecho('perks'); ?></textarea></div>
 

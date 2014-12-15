@@ -7,6 +7,7 @@
       <div class="form-slider"><label for="salary">Compensation / Stipend ($US):</label><input type="number" id="salary" name="salary" value="<?php vecho('salary'); ?>" required /></div>
       <right>
         <input type="radio" name="salarytype" id="month" value="month" <?php vchecked('salarytype', 'month'); ?> required /><label for="month"> / month</label>
+        <input type="radio" name="salarytype" id="week" value="week" <?php vchecked('salarytype', 'week'); ?> /><label for="week"> / week</label>
         <input type="radio" name="salarytype" id="day" value="day" <?php vchecked('salarytype', 'day'); ?> /><label for="day"> / day</label>
         <input type="radio" name="salarytype" id="hour" value="hour" <?php vchecked('salarytype', 'hour'); ?> /><label for="hour"> / hour</label>
         <input type="radio" name="salarytype" id="total" value="total" <?php vchecked('salarytype', 'total'); ?> /><label for="total"> total payment</label>

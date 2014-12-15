@@ -1,3 +1,9 @@
+<style>
+  a {
+    color: #035d75;
+  }
+</style>
+
 <panel class="faq">
   <div class="content">
     <headline>Frequently Asked Questions</headline>

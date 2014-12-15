@@ -3,7 +3,6 @@ Todo:
 short
 - decide on character limits for names/titles/descriptions/etc
 - think of a way to do requirements in job
-- look through comments for any place needing fixing (eg. )
 - make the success/failure notices different for different subviews when
   multiple on same page
 frontend
@@ -13,25 +12,18 @@ frontend
 long
 - add forgot password
 - implement multi-photo uploading (question #8)
-- add white-space: pre to views
+- responsiveness fixing
 
 FROM EMAIL:
 - add map for location for job listing layout
 
 Notes:
 - fix team page responsiveness
-- change faq link color
-- remove qualifiers from company size
-- select not moving label
 - multiselect industries
 - multiselect continents
 - picture size validation
 - check 6 for company registration
 - make dress code part of listing
-- check grammar on company registration
-- add week to pay type
-- fix company id saving as text rather than mongoid
-- match color of title to box
 
 Done:
 - add css formatting in assets and include in htmlheader.php
@@ -61,3 +53,12 @@ Done:
 - add logo and banner upload for company profile
 - add down arrow to main panel to autoscroll down
 - finish backend of company registration
+- fix company id saving as text rather than mongoid
+- add week to pay type
+- remove qualifiers from company size
+- check grammar on company registration
+- add white-space: pre to views
+- take out max 15 chars from year of founding
+- match color of title to box
+- select not moving label
+- change faq link color
