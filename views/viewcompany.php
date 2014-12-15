@@ -102,37 +102,43 @@
           <td colspan="2" class="officephoto"></td>
         </tr>
         <tr>
-          <td class="col">
-            <?php
-              function blurb($title, $color) {
-                return "<div class=\"blurb $color\">
-                  <subheadline>$title</subheadline>
-                  {var}
-                </div>";
+          <?php
+            global $pointer, $cols;
+            $pointer = 0;
+            $cols = array(array(), array(), array());
+            function blurb($name, $title, $color) {
+              global $pointer, $cols;
+              if (strlen($val = vget($name)) > 0) {
+                $cols[$pointer][] = "<div class=\"blurb $color\">
+                                      <subheadline>$title</subheadline>
+                                      $val
+                                    </div>";
+                $pointer = ($pointer + 1) % 3;
               }
-              vecho('desc', blurb('The Company', 'pink'));
-              vecho('forfun', blurb('For Fun', 'purple'));
-              vecho('perks', blurb('Top 3 Perks', 'pink'));
-              vecho('dresscode', blurb('Dress Code', 'pink'));
-              vecho('freeanswer1', blurb(vget('freequestion1'), 'orange'));
-            ?>
+            }
+            blurb('desc', 'The Company', 'pink');
+            blurb('corevalues', 'Core Values', 'orange');
+            blurb('funfacts', 'Fun Facts', 'purple');
+            blurb('socialevent', 'Social Events', 'blue');
+            blurb('corevalues', 'Core Values', 'orange');
+            blurb('colorscheme', 'Colorful Office', 'cobalt');
+            blurb('media', vget('name') . ' in the Media', 'orange');
+            blurb('employees', 'Employees Are Saying', 'purple');
+            blurb('perks', 'Top 3 Perks', 'pink');
+            blurb('forfun', 'For Fun', 'purple');
+            blurb('talent', 'Hidden Talents', 'cobalt');
+            blurb('dresscode', 'Dress Code', 'pink');
+            blurb('freeanswer1', vget('freequestion1'), 'orange');
+            blurb('freeanswer2', vget('freequestion2'), 'blue');
+          ?>
+          <td class="col">
+            <?php foreach ($cols[0] as $blurb) { echo $blurb; } ?>
           </td>
           <td class="col">
-            <?php
-              vecho('corevalues', blurb('Core Values', 'orange'));
-              vecho('employees', blurb('Employees Are Saying', 'purple'));
-              vecho('talent', blurb('Hidden Talents', 'cobalt'));
-              vecho('freeanswer2', blurb(vget('freequestion2'), 'blue'));
-
-            ?>
+            <?php foreach ($cols[1] as $blurb) { echo $blurb; } ?>
           </td>
           <td class="col">
-            <?php
-              vecho('funfacts', blurb('Fun Facts', 'purple'));
-              vecho('colorscheme', blurb('Colorful Office', 'cobalt'));
-              vecho('media', blurb(vget('name') . ' in the Media', 'orange'));
-              vecho('socialevent', blurb('Social Events', 'blue'));
-            ?>
+            <?php foreach ($cols[2] as $blurb) { echo $blurb; } ?>
           </td>
         </tr>
       </table>
