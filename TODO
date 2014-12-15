@@ -13,12 +13,10 @@ long
 - add forgot password
 - add logo and banner upload for company profile
 - implement multi-photo uploading (question #8)
+- finish backend of company registration
 
 FROM EMAIL:
-- Update company registration page with new list of questions, mandatory & option
-- New layout for the company listing 
-- New layout for the job listing (with a map for the location)
-
+- add map for location for job listing layout
 
 Notes:
 
@@ -45,3 +43,6 @@ Done:
 - Landing page: make stock photo BIG, white text BIG, 3 circles BIGGER
 - add email notification of approval status
 - make why circles bigger
+- New layout for the company listing 
+- Update company registration page with new list of questions, mandatory & option
+- New layout for the job listing

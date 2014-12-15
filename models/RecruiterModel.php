@@ -26,6 +26,11 @@
     function getByPass($pass) {
       return $this->collection->findOne(array('pass' => $pass));
     }
+    function getCompany($rid) {
+      $r = $this->getByID($rid);
+      global $MCompany;
+      return $MCompany->get($r['company']);
+    }
     function me() {
       return $this->get($_SESSION['email']);
     }

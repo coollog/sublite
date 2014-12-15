@@ -175,6 +175,7 @@
     function view() {
       global $CRecruiter; $CRecruiter->requireLogin();
       global $MJob;
+      global $MRecruiter;
 
       // Validations
       $this->startValidations();
@@ -187,6 +188,10 @@
         $data = $this->data($entry);
         $data['salarytype'] = ($data['salarytype'] == 'total') ?
                               $data['duration'].' weeks' : $data['salarytype'];
+        $company = $MRecruiter->getCompany($entry['recruiter']);
+        $data['companyname'] = $company['name'];
+        $data['companybanner'] = $company['bannerphoto'];
+        $data['companyid'] = $company['_id']->{'$id'};
         $this->render('viewjob', $data);
         return;
       }
