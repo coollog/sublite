@@ -27,6 +27,13 @@
       );
     }
 
+    function validateData($data, &$err) {
+      $this->validate($this->isValidName($data['firstname']),
+        $err, 'first name is too long');
+      $this->validate($this->isValidName($data['lastname']),
+        $err, 'last name is too long');
+    }
+
     function home() {
       $this->requireLogin();
       global $MRecruiter, $MJobs;
@@ -63,11 +70,7 @@
         $err, 'email taken');
       $this->validate($params['pass'] == $params['pass2'], 
         $err, 'password mismatch');
-      $this->validate($this->isValidName($data['firstname']),
-        $err, 'first name is too long');
-      $this->validate($this->isValidName($data['lastname']),
-        $err, 'last name is too long');
-
+      $this->validateData($data, $err);
 
       // Code
       if ($this->isValid()) {
@@ -174,6 +177,7 @@
 
       // Validations
       $this->startValidations();
+      $this->validateData($data, $err);
 
       if ($this->isValid()) {
         $data['_id'] = new MongoId($id);

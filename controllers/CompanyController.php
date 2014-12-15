@@ -2,27 +2,50 @@
   require_once('controllers/Controller.php');
 
   class CompanyController extends Controller {
+    function format($token) {
+      return $token;
+    }
+
     function data($data) {
-        $name = $data['name'];
-        $industry = clean($data['industry']);
-        $desc = clean($data['desc']);
-        $funfacts = clean($data['funfacts']);
-        $forfun = clean($data['forfun']);
-        $whyunique = clean($data['whyunique']);
-        $adjectives = clean($data['adjectives']);
-        $perks = clean($data['perks']);
-        return array(
-          'name' => $name, 'industry' => $industry, 'desc' => $desc,
-          'funfacts' => $funfacts, 'forfun' => $forfun, 
-          'whyunique' => $whyunique, 'adjectives' => $adjectives,
-          'perks' => $perks
-        );
+      $name = $this->format(clean($data['name']));
+      $industry = $this->format(clean($data['industry']));
+      $size = $this->format(clean($data['size']));
+      $desc = $this->format(clean($data['desc']));
+      $founded = $this->format(clean($data['founded']));
+      $location = $this->format(clean($data['location']));
+      $corevalues = $this->format(clean($data['corevalues']));
+      $bannerphoto = $this->format(clean($data['bannerphoto']));
+      $logophoto = $this->format(clean($data['logophoto']));
+      $funfacts = $this->format(clean($data['funfacts']));
+      $society = $this->format(clean($data['society']));
+      $socialevent = $this->format(clean($data['socialevent']));
+      $colorscheme = $this->format(clean($data['colorscheme']));
+      $media = $this->format(clean($data['media']));
+      $employees = $this->format(clean($data['employees']));
+      $perks = $this->format(clean($data['perks']));
+      $forfun = $this->format(clean($data['forfun']));
+      $dessert = $this->format(clean($data['dessert']));
+      $talent = $this->format(clean($data['talent']));
+      $dresscode = $this->format(clean($data['dresscode']));
+      $freequestion1 = $this->format(clean($data['freequestion1']));
+      $freeanswer1 = $this->format(clean($data['freeanswer1']));
+      $freequestion2 = $this->format(clean($data['freequestion2']));
+      $freeanswer2 = $this->format(clean($data['freeanswer2']));
+      return array(
+        'name' => $name, 'industry' => $industry, 'size' => $size,
+        'desc' => $desc, 'founded' => $founded, 'location' => $location,
+        'corevalues' => $corevalues, 'bannerphoto' => $bannerphoto,
+        'logophoto' => $logophoto, 'funfacts' => $funfacts,
+        'society' => $society, 'socialevent' => $socialevent,
+        'colorscheme' => $colorscheme, 'media' => $media,
+        'employees' => $employees, 'perks' => $perks, 'forfun' => $forfun,
+        'dessert' => $dessert, 'talent' => $talent, 'dresscode' => $dresscode,
+        'freequestion1' => $freequestion1, 'freeanswer1' => $freeanswer1,
+        'freequestion2' => $freequestion2, 'freeanswer2' => $freeanswer2
+      );
     }
     function validateData($data, &$err) {
-      global $MRecruiter;
-      $me = $MRecruiter->me();
-      $this->validate($data['name'] == $me['company'],
-        $err, 'permission denied');
+      
     }
 
     function add() {
@@ -49,10 +72,7 @@
       $this->startValidations();
       $this->validate(!MongoId::isValid($me['company']), 
         $err, 'company exists');
-      $this->validate(strlen($data['desc']) <= 2500,
-        $err, 'description is too long'); // Figure out good char limits
-      $this->validate(strlen($data['industry'] <= 100),
-        $err, 'industry too long'); //Figure out good char limits
+      $this->validateData($data, $err);
 
       // Code
       if ($this->isValid()) {
@@ -97,7 +117,7 @@
         $params['name'] = $entry['name'];
         extract($data = $this->data($params));
         // Validations
-
+        $this->validateData($data, $err);
         if ($this->isValid()) {
           $data['_id'] = new MongoId($id);
           $id = $MCompany->save($data);

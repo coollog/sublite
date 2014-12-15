@@ -56,6 +56,7 @@
         $geocode = geocode($location);
         $requirements = clean($data['requirements']);
         $link = clean($data['link']);
+        if (!preg_match('`^(https?:\/\/)`', $link)) $link = "http://$link";
         return array(
           'title' => $title, 'deadline' => $deadline, 'duration' => $duration,
           'desc' => $desc, 'geocode' => $geocode,
@@ -66,8 +67,6 @@
     }
 
     function validateData($data, &$err) {
-      $this->validate(MongoId::isValid($data['company']), 
-        $err, 'company invalid');
       $this->validate($data['geocode'] != NULL, $err, 'location invalid');
       $this->validate(strlen($data['title']) <= 200,
         $err, 'job title is too long');
