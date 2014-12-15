@@ -13,13 +13,25 @@ frontend
 long
 - add forgot password
 - implement multi-photo uploading (question #8)
-- finish backend of company registration
+- add white-space: pre to views
 
 FROM EMAIL:
 - add map for location for job listing layout
 
 Notes:
-
+- fix team page responsiveness
+- change faq link color
+- remove qualifiers from company size
+- select not moving label
+- multiselect industries
+- multiselect continents
+- picture size validation
+- check 6 for company registration
+- make dress code part of listing
+- check grammar on company registration
+- add week to pay type
+- fix company id saving as text rather than mongoid
+- match color of title to box
 
 Done:
 - add css formatting in assets and include in htmlheader.php
@@ -48,3 +60,4 @@ Done:
 - New layout for the job listing
 - add logo and banner upload for company profile
 - add down arrow to main panel to autoscroll down
+- finish backend of company registration

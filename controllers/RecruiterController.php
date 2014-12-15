@@ -14,7 +14,7 @@
       $pass = $data['pass'];
       $firstname = clean($data['firstname']);
       $lastname = clean($data['lastname']);
-      $company = clean($data['company']);
+      $company = $data['company'];
       $title = clean($data['title']);
       $phone = isset($data['phone']) ? clean($data['phone']) : '';
       $photo = isset($data['photo']) ? 

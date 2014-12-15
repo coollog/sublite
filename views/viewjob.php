@@ -4,7 +4,6 @@
     background-size: cover;
     display: table;
     height: 200px;
-    padding-bottom: 0;
   }
   panel.main .banner {
     padding: 30px 0;

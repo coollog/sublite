@@ -13,7 +13,7 @@
     height: 0;
     border-left: 30px solid transparent;
     border-right: 30px solid transparent;
-    border-top: 30px solid #000;
+    border-top: 30px solid #ffd800;
     margin: -50px auto 0 auto;
     cursor: pointer;
     opacity: 0.5;
@@ -38,8 +38,8 @@
   }
   panel.main .banner .slogan {
     color: #fff;
-    line-height: 4em;
-    font-size: 1.2em;
+    line-height: 3.5em;
+    font-size: 1.6em;
     letter-spacing: 1px;
   }
   panel.main .registerlogin {
