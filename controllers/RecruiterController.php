@@ -52,6 +52,10 @@
     }
     
     function register() {
+      if ($_SESSION['loggedin'] = true) {
+        $this->redirect('home');
+        return;
+      }
       if (!isset($_POST['register'])) { $this->render('register'); return; }
       
       global $params, $MRecruiter;

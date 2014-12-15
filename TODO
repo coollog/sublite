@@ -65,3 +65,4 @@ Done:
 - select not moving label
 - change faq link color
 - must create company profile before seeing other things
+- email is now case insensitive

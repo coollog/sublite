@@ -49,7 +49,7 @@
     text-transform: uppercase;
     font-size: 2em;
     margin-top: 0;
-    line-height: 1.2em;
+    line-height: 1em;
     margin-bottom: 0.5em;
   }
   .blurb.pink { border-color: #ff2a5c; }
@@ -111,26 +111,27 @@
                 </div>";
               }
               vecho('desc', blurb('The Company', 'pink'));
-              vecho('corevalues', blurb('Core Values', 'orange'));
-              vecho('funfacts', blurb('Fun Facts', 'purple'));
-              vecho('socialevent', blurb('Social Events', 'blue'));
-            ?>
-          </td>
-          <td class="col">
-            <?php
-              vecho('colorscheme', blurb('Colorful Office', 'cobalt'));
-              vecho('media', blurb(vget('name') . ' in the Media', 'orange'));
-              vecho('employees', blurb('Employees Are Saying', 'purple'));
-              vecho('perks', blurb('Top 3 Perks', 'pink'));
-            ?>
-          </td>
-          <td class="col">
-            <?php
               vecho('forfun', blurb('For Fun', 'purple'));
-              vecho('talent', blurb('Hidden Talents', 'cobalt'));
+              vecho('perks', blurb('Top 3 Perks', 'pink'));
               vecho('dresscode', blurb('Dress Code', 'pink'));
               vecho('freeanswer1', blurb(vget('freequestion1'), 'orange'));
+            ?>
+          </td>
+          <td class="col">
+            <?php
+              vecho('corevalues', blurb('Core Values', 'orange'));
+              vecho('employees', blurb('Employees Are Saying', 'purple'));
+              vecho('talent', blurb('Hidden Talents', 'cobalt'));
               vecho('freeanswer2', blurb(vget('freequestion2'), 'blue'));
+
+            ?>
+          </td>
+          <td class="col">
+            <?php
+              vecho('funfacts', blurb('Fun Facts', 'purple'));
+              vecho('colorscheme', blurb('Colorful Office', 'cobalt'));
+              vecho('media', blurb(vget('name') . ' in the Media', 'orange'));
+              vecho('socialevent', blurb('Social Events', 'blue'));
             ?>
           </td>
         </tr>
