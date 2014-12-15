@@ -147,8 +147,11 @@
         $_SESSION['pass'] = $pass;
         $_SESSION['_id'] = $entry['_id'];
         
-        if (MongoId::isValid($entry['company'])) $this->redirect('home');
-        else $this->redirect('addcompany');
+        if (MongoId::isValid($entry['company'])) {
+          $_SESSION['company'] = $entry['company'];
+          $this->redirect('home');
+        } else
+          $this->redirect('addcompany');
 
         return;
       }

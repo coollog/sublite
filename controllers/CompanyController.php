@@ -80,6 +80,7 @@
         $me = $MRecruiter->me();
         $me['company'] = new MongoID($id);
         $MRecruiter->save($me);
+        $_SESSION['company'] = $id;
         $this->redirect('home');
         return;
       }

@@ -6,7 +6,8 @@
         'Loggedin' => true,
         'L_id' => $_SESSION['_id'],
         'Lemail' => $_SESSION['email'],
-        'Lpass' => $_SESSION['pass']
+        'Lpass' => $_SESSION['pass'],
+        'Lcompany' => isset($_SESSION['company'])
       ));
     } else {
       $viewVars['Loggedin'] = false;

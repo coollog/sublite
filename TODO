@@ -24,6 +24,8 @@ Notes:
 - picture size validation
 - check 6 for company registration
 - make dress code part of listing
+- change approval system so that user can still login and do stuff but not have
+  them go public
 
 Done:
 - add css formatting in assets and include in htmlheader.php
@@ -62,3 +64,4 @@ Done:
 - match color of title to box
 - select not moving label
 - change faq link color
+- must create company profile before seeing other things

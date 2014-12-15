@@ -2,6 +2,9 @@
   a {
     color: #035d75;
   }
+  a:hover {
+    color: #ffd800;
+  }
 </style>
 
 <panel class="faq">
