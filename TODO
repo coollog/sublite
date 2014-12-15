@@ -14,6 +14,7 @@ long
 - add email notification of approval status
 - add forgot password
 - add logo and banner upload for company profile
+- implement multi-photo uploading (question #8)
 
 
 FROM EMAIL:
