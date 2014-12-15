@@ -79,7 +79,15 @@
       <div class="form-slider"><label for="freeanswer2">Answer #2 (max. 500 characters)</label><textarea id="freeanswer2" name="freeanswer2" maxlength="500"><?php vecho('freeanswer2'); ?></textarea></div>
 
       <?php vnotice(); ?>
-      <right><input type="submit" name="<?php vecho('submitname'); ?>" value="<?php vecho('submitvalue'); ?>" /></right>
+      <right>
+        <input type="submit" name="<?php vecho('submitname'); ?>" value="<?php vecho('submitvalue'); ?>" />
+        <?php 
+          if (vget('_id') !== null) {
+            $id = vget('_id');
+            echo ' &nbsp; ' . vlinkto('<input type="button" value="View Company Profile" />', 'company', array('id' => $id));
+          }
+        ?>
+      </right>
     </form>
   </div>
 </panel>

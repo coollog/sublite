@@ -52,7 +52,7 @@
     }
     
     function register() {
-      if ($_SESSION['loggedin'] = true) {
+      if (isset($_SESSION['loggedin'])) {
         $this->redirect('home');
         return;
       }

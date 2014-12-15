@@ -112,7 +112,7 @@
         }
 
         if (!isset($_POST['edit'])) { 
-          $this->render('companyform', formData($this->data($entry))); return;
+          $this->render('companyform', formData(array_merge($this->data($entry), array('_id' => $id->{'$id'})))); return;
         }
 
         $params['name'] = $entry['name'];
@@ -123,7 +123,7 @@
           $data['_id'] = new MongoId($id);
           $id = $MCompany->save($data);
           $this->success('company saved');
-          $this->render('companyform', formData($data));
+          $this->render('companyform', formData(array_merge($data, array('_id' => $id->{'$id'}))));
           return;
         }
       }
