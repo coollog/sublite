@@ -10,8 +10,9 @@
     <headline><?php vecho('headline'); ?> Company Profile</headline>
     <form method="post">
       <div class="form-slider"><label for="name">Company Name*:</label><input type="text" id="name" name="name" value="<?php vecho('name'); ?>" disabled /></div>
-      <div class="form-slider"><label for="industry" class="fortextarea">What industry/industries does/do your company belong to?*</label><input type="text" id="industry" name="industry" value="<?php vecho('industry'); ?>" required /></div>
-      <div class="form-slider"><label for="size">What is the size of your company?*</label><select id="size" name = "size" required>
+      <div class="form-slider"><label for="industry" class="fortextarea">Industry/Industries: *</label><input type="text" id="industry" name="industry" value="<?php vecho('industry'); ?>" required /></div>
+      <div class="form-slider"><label for="size">Company size: *</label>
+      <select id="size" name = "size" required>
         <option selected="selected"><?php vecho('size'); ?></option>
         <option>Very small (1-49 employees)</option>
         <option>Small (50-299 employees)</option>

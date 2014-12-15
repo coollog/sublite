@@ -27,7 +27,7 @@
     max-width: 200px;
     text-align: right;
   }
-  input[type=number], input[type=text], input[type=password], input[type=email], textarea {
+  input[type=number], input[type=text], input[type=password], input[type=email], textarea, select {
     transition: all 0.30s ease-in-out;
     outline: none;
     padding: 0.5em 0px 0.5em 0.5em;

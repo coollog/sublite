@@ -18,6 +18,7 @@
     width: 150px;
     height: 150px;
     display: block;
+    margin: 0 auto;
     background: url('<?php vecho('logophoto'); ?>') no-repeat center center;
     background-size: contain;
   }
