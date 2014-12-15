@@ -1,5 +1,5 @@
 <?php
-	function countLines($path, $extensions = array('php')) {
+	function countLines($path, $extensions = array('php', 'html', 'css', 'js')) {
 		$it = new RecursiveIteratorIterator(
 			new RecursiveDirectoryIterator($path)
 		);

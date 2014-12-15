@@ -5,6 +5,7 @@
     background: transparent no-repeat center center;
     background-size: cover;
     border-radius: 100px;
+    display: inline-block;
   }
   .recruiter subheadline {
     color: #000;
@@ -22,7 +23,7 @@
     <?php } ?>
 
     <div class="recruiterinfo">
-      <img class="recruiterpic" src="<?php vecho('photo'); ?>" />
+      <div class="recruiterpic" style="background-image: url('<?php vecho('photo'); ?>');"></div>
 
       <subheadline><?php vecho('firstname'); ?> <?php vecho('lastname'); ?></subheadline>
       <?php vecho('title'); ?> at <?php vecho('company'); ?>
