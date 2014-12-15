@@ -18,6 +18,8 @@
     width: 150px;
     height: 150px;
     display: block;
+    background: url('<?php vecho('logophoto'); ?>') no-repeat center center;
+    background-size: cover;
   }
   .companyname {
     font-size: 1.5em;
@@ -66,7 +68,7 @@
         <tr>
           <td class="brief">
             <div class="info">
-              <div class="companylogo" style="background-image: url('<?php vecho('logophoto'); ?>');"></div>
+              <div class="companylogo"></div>
               <div class="companyname"><?php vecho('name'); ?></div>
               <?php 
                 // $industries = vget('industry');
