@@ -19,6 +19,7 @@
   <div class="content">
     <headline>Edit Profile</headline>
     <form method="post">
+      <?php echo ' &nbsp; ' . vlinkto('<input type="button" value="View Profile" /><br /><br />', 'recruiter', array('id' => vget('L_id')->{'$id'})); ?>
       <div class="form-slider"><label for="firstname">First Name:</label><input type="text" id="firstname" name="firstname" value="<?php vecho('firstname'); ?>" required /></div>
       <div class="form-slider"><label for="lastname">Last Name:</label><input type="text" id="lastname" name="lastname" value="<?php vecho('lastname'); ?>" required /></div>
       <div class="form-slider"><label for="title">Job Title:</label><input type="text" id="title" name="title" value="<?php vecho('title'); ?>" required /></div>

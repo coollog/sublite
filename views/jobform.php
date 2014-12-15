@@ -2,6 +2,12 @@
   <div class="content">
     <headline><?php vecho('headline'); ?> Job Listing</headline>
     <form method="post">
+      <?php 
+        if (vget('_id') !== null) {
+          $id = vget('_id');
+          echo ' &nbsp; ' . vlinkto('<input type="button" value="View Job Listing" /><br /><br />', 'job', array('id' => $id));
+        }
+      ?>
       <div class="form-slider"><label for="title">Job Title:</label><input type="text" id="title" name="title" value="<?php vecho('title'); ?>" required /></div>
       <div class="form-slider"><label for="duration">Duration (weeks):</label><input type="number" id="duration" name="duration" value="<?php vecho('duration'); ?>" required /></div>
       <div class="form-slider"><label for="salary">Compensation / Stipend ($US):</label><input type="number" id="salary" name="salary" value="<?php vecho('salary'); ?>" required /></div>
@@ -21,12 +27,6 @@
       <?php vnotice(); ?>
       <right>
         <input type="submit" name="<?php vecho('submitname'); ?>" value="<?php vecho('submitvalue'); ?>" />
-        <?php 
-          if (vget('_id') !== null) {
-            $id = vget('_id');
-            echo ' &nbsp; ' . vlinkto('<input type="button" value="View Job Listing" />', 'job', array('id' => $id));
-          }
-        ?>
       </right>
     </form>
   </div>
