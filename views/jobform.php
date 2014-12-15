@@ -12,8 +12,8 @@
         <input type="radio" name="salarytype" id="total" value="total" <?php vchecked('salarytype', 'total'); ?> /><label for="total"> total payment</label>
       </right>
       <div class="form-slider"><label for="deadline">Deadline for Application (mm/dd/yyyy):</label><input type="text" id="deadline" name="deadline" value="<?php vecho('deadline'); ?>" required /></div>
-      <div class="form-slider"><label for="desc">Job Description (2000 chars max):</label><textarea id="desc" name="desc" required maxlength="2000"><?php vecho('desc'); ?></textarea></div>
-      <div class="form-slider"><label for="Requirements">Requirements:</label><input type="text" id="Requirements" name="requirements" value="<?php vecho('requirements'); ?>" required /></div>
+      <div class="form-slider"><label for="desc">Job Description (2500 chars max):</label><textarea id="desc" name="desc" required maxlength="2500"><?php vecho('desc'); ?></textarea></div>
+      <div class="form-slider"><label for="requirements">Requirements (2000 chars max):</label><textarea id="requirements" name="requirements" required maxlength="2000"><?php vecho('requirements'); ?></textarea></div>
       <div class="form-slider"><label for="link">Listing URL:</label><input type="text" id="link" name="link" value="<?php vecho('link'); ?>" required /></div>
       <div class="form-slider"><label for="location">Job Location:</label><input type="text" id="location" name="location" value="<?php vecho('location'); ?>" required /></div>
       <input type="checkbox" name="terms" id="terms" value="agree" required /> <label for="terms">I represent and warrant that I am employed by the company offering the internship, that I have authority or permission to post this internship, and that the description is accurate and not misleading.</label>

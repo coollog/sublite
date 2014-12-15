@@ -32,6 +32,7 @@
       global $MRecruiter, $MJobs;
       $me = $MRecruiter->me();
       $me['_id'] = $me['_id']->{'$id'};
+      $me['company'] = $me['company']->{'$id'};
       $this->render('home', $me);
     }
 
@@ -70,7 +71,18 @@
 
       // Code
       if ($this->isValid()) {
+        // Register the user, send a notice to us, and log him in
         $MRecruiter->save($data);
+        $approveurl = "http://" . $GLOBALS['domain'] . "/approve.php?p=$pass";
+        $msg = "New recruiter registered needs approval of account.
+                <br />Registration information:<br />
+                Email: $email<br />
+                First Name: $firstname<br />
+                Last Name: $lastname<br />
+                Company: $company<br />
+                Title: $title<br /><br />
+                To approve: <a href=\"$approveurl\">$approveurl</a>";
+        sendgmail(array('qingyang.chen@gmail.com', 'tony.jiang@yale.edu', 'yuanling.yuan@yale.edu', 'shirley.guo@yale.edu', 'alisa.melekhina@gmail.com', 'michelle.chan@yale.edu'), 'info@sublite.net', 'New Recruiter Requires Approval', $msg);
         $_POST['login'] = true; $this->login();
         return;
       }
@@ -78,6 +90,32 @@
       $this->error($err);
       $this->render('register', $data);
     }
+
+    function approve() {
+      if (!isset($_GET['p'])) { $this->redirect('index'); return; }
+      
+      global $params, $MRecruiter;
+      // Params to vars
+      $p = $_GET['p'];
+
+      // Validations
+      $this->startValidations();
+      $this->validate(($entry = $MRecruiter->getByPass($p)) != NULL, 
+        $err, 'invalid');
+      $this->validate($entry['approved'] == 'pending',
+        $err, 'already approved');
+
+      if ($this->isValid()) {
+        $entry['approved'] = 'approved';
+        $MRecruiter->save($entry);
+        
+        echo 'Approved';
+        return;
+      }
+      
+      $this->error($err);
+    }
+
 
     function login() {
       if (!isset($_POST['login'])) { $this->render('login'); return; }

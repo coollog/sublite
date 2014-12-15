@@ -2,6 +2,7 @@
   .jobinfo {
     margin: 40px 0;
     text-align: left;
+    width: 100%;
   }
 </style>
 

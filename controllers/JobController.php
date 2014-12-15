@@ -38,7 +38,6 @@
     // TODO? See if URL is actually valid
     function isValidURL($url) {
       // filter_var is pretty weak so we use other tests
-      if(filter_var($url, FILTER_VALIDATE_URL) == false) return false;
       if (!preg_match('`^((https?:\/\/)*[\w\-]+\.[\w\-]+)`',
         $url)) return false;  
 
@@ -187,7 +186,7 @@
       if ($this->isValid()) {
         $data = $this->data($entry);
         $data['salarytype'] = ($data['salarytype'] == 'total') ?
-                              $data['duration'] : $data['salarytype'];
+                              $data['duration'].' weeks' : $data['salarytype'];
         $this->render('viewjob', $data);
         return;
       }

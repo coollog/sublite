@@ -1,20 +1,4 @@
 <style>
-  .img img {
-    max-height: 15em;
-    margin: 0.5em;
-    transition: all 0.3s ease-in-out;
-  }
-  .iframe {
-    border: 1px solid #999;
-    text-align: center;
-  }
-  iframe {
-    border: 0;
-    margin: 1em;
-    width: 90%;
-    display: inline-block;
-    box-sizing: border-box;
-  }
   subheadline {
     line-height: 2em;
     margin-top: 0.5em;

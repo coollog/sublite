@@ -22,7 +22,7 @@
       global $MRecruiter;
       $me = $MRecruiter->me();
       $this->validate($data['name'] == $me['company'],
-        $err, 'location invalid');
+        $err, 'permission denied');
     }
 
     function add() {
@@ -114,15 +114,19 @@
     function view() {
       global $CRecruiter; $CRecruiter->requireLogin();
       global $MCompany;
-
+      global $MRecruiter;
       // Validations
       $this->startValidations();
-      $this->validate(($entry = $MCompany->get($me['company'])) !== NULL, 
+      $this->validate(isset($_GET['id']) and 
+        ($entry = $MCompany->get($id = $_GET['id'])) != NULL, 
         $err, 'unknown company');
 
       // Code
       if ($this->isValid()) {
-        $this->render('viewcompany', $this->data($entry));
+        $data = $this->data($entry);
+        $me = $MRecruiter->me();
+        $data['isme'] = idcmp($id, $me['company']);
+        $this->render('viewcompany', $data);
         return;
       }
 

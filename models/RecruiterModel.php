@@ -23,6 +23,9 @@
     function getByID($id) {
       return $this->collection->findOne(array('_id' => new MongoID($id)));
     }
+    function getByPass($pass) {
+      return $this->collection->findOne(array('pass' => $pass));
+    }
     function me() {
       return $this->get($_SESSION['email']);
     }
