@@ -3,7 +3,7 @@
     <headline><?php vecho('headline'); ?> Company Profile</headline>
     <form method="post">
       <div class="form-slider"><label for="name">Company Name*:</label><input type="text" id="name" name="name" value="<?php vecho('name'); ?>" disabled /></div>
-      <div class="form-slider"><label for="industry">What industry does your company belong to? You can choose up to 3 industries (click while holding down the Ctrl key to select more than 1 industry).*</label><input type="text" id="industry" name="industry" value="<?php vecho('industry'); ?>" required /></div>
+      <div class="form-slider"><label for="industry" class="fortextarea">What industry does your company belong to? You can choose up to 3 industries (click while holding down the Ctrl key to select more than 1 industry).*</label><input type="text" id="industry" name="industry" value="<?php vecho('industry'); ?>" required /></div>
       <div class="form-slider"><label for="size">What is the size of your company?*</label><select id="size" name = "size" required>
         <option selected="selected"><?php vecho('size'); ?></option>
         <option>Very small (1-49 employees)</option>
@@ -15,7 +15,7 @@
 
       <div class="form-slider"><label for="desc" class="fortextarea">What does your company do? (max. 1000 characters)*</label><textarea id="desc" name="desc" required maxlength="1000"><?php vecho('desc'); ?></textarea></div>
 
-      <div class="form-slider"><label for="founded" class="fortextarea">When was your company founded? Please specify a year (e.g. 1978). (max. 15 characters)*</label><input type="text" id="founded" name="founded" value="<?php vecho('founded'); ?>" required /></div>
+      <div class="form-slider"><label for="founded">Year of founding? (max. 15 characters)*</label><input type="text" id="founded" name="founded" value="<?php vecho('founded'); ?>" required /></div>
 
       <div class="form-slider"><label for="location" class="fortextarea">Where is/are your company office(s) located? You can choose more than one (click while holding down the Ctrl key to select more than 1 location).*</label><input type="text" id="location" name="location" value="<?php vecho('location'); ?>" required /></div>      
 
@@ -61,9 +61,15 @@
 
       <div class="form-slider"><label for="dresscode" class="fortextarea">What is the dress code at the office? (max. 500 characters)</label><textarea id="dresscode" name="dresscode" maxlength="500"><?php vecho('dresscode'); ?></textarea></div>
 
-      <div class="form-slider">Please write your own question and answer below.<br><label for="freequestion1" class="fortextarea">Question:</label><textarea id="freequestion1" name="freequestion1" maxlength="100"><?php vecho('freequestion1'); ?></textarea><br><label for="freeanswer1" class="fortextarea">Answer:</label><textarea id="freeanswer1" name="freeanswer1" maxlength="500"><?php vecho('freeanswer1'); ?></textarea></div>
+      <br>
+      Please write your own questions and answers below.
+      <br>
 
-      <div class="form-slider">Please write your own question and answer below.<br><label for="freequestion2" class="fortextarea">Question:</label><textarea id="freequestion2" name="freequestion2" maxlength="100"><?php vecho('freequestion2'); ?></textarea><br><label for="freeanswer2" class="fortextarea">Answer:</label><textarea id="freeanswer2" name="freeanswer2" maxlength="500"><?php vecho('freeanswer2'); ?></textarea></div>
+      <div class="form-slider"><label for="freequestion1">Question #1 (max. 100 characters)</label><input type="text" id="freequestion1" name="freequestion1" maxlength="100" value="<?php vecho('freequestion1'); ?>" /></div>
+      <div class="form-slider"><label for="freeanswer1">Answer #1 (max. 500 characters)</label><textarea id="freeanswer1" name="freeanswer1" maxlength="500"><?php vecho('freeanswer1'); ?></textarea></div>
+
+      <div class="form-slider"><label for="freequestion2">Question #2 (max. 100 characters)</label><input type="text" id="freequestion2" name="freequestion2" maxlength="100" value="<?php vecho('freequestion2'); ?>" /></div>
+      <div class="form-slider"><label for="freeanswer2">Answer #2 (max. 500 characters)</label><textarea id="freeanswer2" name="freeanswer2" maxlength="500"><?php vecho('freeanswer2'); ?></textarea></div>
 
       <?php vnotice(); ?>
       <right><input type="submit" name="<?php vecho('submitname'); ?>" value="<?php vecho('submitvalue'); ?>" /></right>
