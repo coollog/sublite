@@ -7,6 +7,7 @@ short
 - make the success/failure notices different for different subviews when
   multiple on same page
 frontend
+- make it so you cannot access register/login page if you are already logged in
 
 long
 - add forgot password
