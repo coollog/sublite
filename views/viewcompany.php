@@ -66,7 +66,7 @@
         <tr>
           <td class="brief">
             <div class="info">
-              <div class="companylogo" style="background-image: url('<?php vecho('logophoto'); ?>');" />
+              <div class="companylogo" style="background-image: url('<?php vecho('logophoto'); ?>');"></div>
               <div class="companyname"><?php vecho('name'); ?></div>
               <?php 
                 // $industries = vget('industry');
