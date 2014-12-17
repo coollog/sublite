@@ -14,7 +14,7 @@
     border-left: 30px solid transparent;
     border-right: 30px solid transparent;
     border-top: 30px solid #ffd800;
-    margin: -50px auto 0 auto;
+    margin: -50px auto 30px auto;
     cursor: pointer;
     opacity: 0.5;
     transition: all 0.2s ease-in-out;
@@ -38,7 +38,7 @@
   }
   panel.main .banner .slogan {
     color: #fff;
-    line-height: 3.5em;
+    line-height: 2.5em;
     font-size: 1.6em;
     letter-spacing: 1px;
   }
