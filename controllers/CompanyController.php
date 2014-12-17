@@ -45,7 +45,15 @@
       );
     }
     function validateData($data, &$err) {
-      
+      $answered = 0;
+      foreach (array('funfacts', 'society', 'socialevent', 'colorscheme', 
+                     'media', 'employees', 'perks', 'forfun', 'dessert',
+                     'talent', 'dresscode', 'freequestion1', 'freequestion2')
+              as $key) {
+        if (strlen($data[$key]) > 0) $answered ++;
+      }
+      $this->validate($answered >= 6, 
+        $err, 'must answer at least 6 cultural questions');
     }
 
     function add() {
@@ -119,6 +127,7 @@
         extract($data = $this->data($params));
         // Validations
         $this->validateData($data, $err);
+
         if ($this->isValid()) {
           $data['_id'] = new MongoId($id);
           $MCompany->save($data);
@@ -126,6 +135,9 @@
           $this->render('companyform', formData(array_merge($data, array('_id' => $id->{'$id'}))));
           return;
         }
+
+        $this->error($err);
+        $this->render('companyform', formData(array_merge($this->data($data), array('_id' => $id->{'$id'})))); return;
       }
       
       $this->error($err);

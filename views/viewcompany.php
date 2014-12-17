@@ -21,19 +21,27 @@
     margin: 0 auto;
     background: url('<?php vecho('logophoto'); ?>') no-repeat center center;
     background-size: contain;
+    margin-bottom: 1em;
   }
   .companyname {
-    font-size: 1.5em;
+    font-size: 2.5em;
     font-weight: 700;
-    line-height: 2.5em;
+    line-height: 1em;
+    padding: 20px 80px;
+    position: absolute;
+    bottom: 40px;
+    color: #fff;
+    background: rgba(0,0,0,0.8);
+    right: 0;
   }
   .officephoto {
     background: url('<?php vecho('bannerphoto'); ?>') no-repeat center center;
     background-size: cover;
+    position: relative;
   }
   .brief .info {
-    padding: 40px;
-    font-size: 0.8em;
+    padding: 20px;
+    font-size: 1em;
   }
   .blurb {
     text-align: left;
@@ -76,7 +84,6 @@
           <td class="brief">
             <div class="info">
               <div class="companylogo"></div>
-              <div class="companyname"><?php vecho('name'); ?></div>
               <?php 
                 // $industries = vget('industry');
                 // $last = $industries[count($industries) - 1];
@@ -99,7 +106,9 @@
               ?><br />
             </div>
           </td>
-          <td colspan="2" class="officephoto"></td>
+          <td colspan="2" class="officephoto">
+              <div class="companyname"><?php vecho('name'); ?></div>
+          </td>
         </tr>
         <tr>
           <?php
@@ -120,12 +129,13 @@
             blurb('corevalues', 'Core Values', 'orange');
             blurb('funfacts', 'Fun Facts', 'purple');
             blurb('socialevent', 'Social Events', 'blue');
-            blurb('corevalues', 'Core Values', 'orange');
+            blurb('society', 'Giving Back to Society', 'orange');
             blurb('colorscheme', 'Colorful Office', 'cobalt');
             blurb('media', vget('name') . ' in the Media', 'orange');
             blurb('employees', 'Employees Are Saying', 'purple');
             blurb('perks', 'Top 3 Perks', 'pink');
             blurb('forfun', 'For Fun', 'purple');
+            blurb('dessert', 'Type of Dessert', 'blue');
             blurb('talent', 'Hidden Talents', 'cobalt');
             blurb('dresscode', 'Dress Code', 'pink');
             blurb('freeanswer1', vget('freequestion1'), 'orange');
