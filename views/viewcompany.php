@@ -75,7 +75,7 @@
 <panel class="job">
   <div class="content">
     <?php if (vget('isme')) { ?>
-      <a href="editcompany.php"><input type="button" value="Edit Company Profile" /></a>
+      <a href="editcompany.php"><input type="button" value="Edit Company Profile" /></a><br /><br />
     <?php } ?>
 
     <div class="companyinfo">

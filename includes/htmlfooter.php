@@ -20,9 +20,9 @@
       </options>
       <options class="right">
         <opt>
-          <a href=""><img src="assets/gfx/fbthumb.png" /></a>
-          <a href=""><img src="assets/gfx/bloggerthumb.png" /></a>
-          <a href=""><img src="assets/gfx/twitterthumb.png" /></a>
+          <a href="https://www.facebook.com/SubLiteNet"><img src="assets/gfx/fbthumb.png" /></a>
+          <a href="http://sublitenews.blogspot.com/"><img src="assets/gfx/bloggerthumb.png" /></a>
+          <a href="https://twitter.com/sublitenet"><img src="assets/gfx/twitterthumb.png" /></a>
         </opt>
       </options>
     </footer>
