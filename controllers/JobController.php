@@ -47,8 +47,8 @@
     function data($data) {
         $title = clean($data['title']);
         $deadline = clean($data['deadline']);
-        $duration = clean($data['duration']);
-        $salary = clean($data['salary']);
+        $duration = str2float(clean($data['duration']));
+        $salary = str2float(clean($data['salary']));
         $salarytype = clean($data['salarytype']);
         $company = $data['company'];
         $desc = clean($data['desc']);
@@ -70,10 +70,10 @@
       $this->validate($data['geocode'] != NULL, $err, 'location invalid');
       $this->validate(strlen($data['title']) <= 200,
         $err, 'job title is too long');
-      $this->validate($this->isValidDuration($data['duration']),
-        $err, 'invalid duration');
-      $this->validate($this->isValidCompensation($data['salary']),
-        $err, 'invalid compensation');
+      // $this->validate($this->isValidDuration($data['duration']),
+      //   $err, 'invalid duration');
+      // $this->validate($this->isValidCompensation($data['salary']),
+      //   $err, 'invalid compensation');
       $this->validate($this->isValidDate($data['deadline']),
         $err, 'invalid deadline: please check date');
       $this->validate(strtotime($data['deadline']) > time(),

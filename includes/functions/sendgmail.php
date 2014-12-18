@@ -5,8 +5,8 @@
 		$mail->isSMTP();                                      // Set mailer to use SMTP
 		$mail->Host = 'smtp.gmail.com';                       // Specify main and backup server
 		$mail->SMTPAuth = true;                               // Enable SMTP authentication
-		$mail->Username = 'info@sublite.net';                   // SMTP username
-		$mail->Password = '#SubLite2014';               		// SMTP password
+		$mail->Username = 'info@sublite.net';                 // SMTP username
+		$mail->Password = $GLOBALS['gmailpass'];              // SMTP password
 		$mail->SMTPSecure = 'tls';                            // Enable encryption, 'ssl' also accepted
 		$mail->Port = 587;                                    //Set the SMTP port number - 587 for authenticated TLS
 		

@@ -9,8 +9,8 @@
         }
       ?>
       <div class="form-slider"><label for="title">Job Title:</label><input type="text" id="title" name="title" value="<?php vecho('title'); ?>" required /></div>
-      <div class="form-slider"><label for="duration">Duration (weeks):</label><input type="number" id="duration" name="duration" value="<?php vecho('duration'); ?>" required /></div>
-      <div class="form-slider"><label for="salary">Compensation / Stipend ($US):</label><input type="number" id="salary" name="salary" value="<?php vecho('salary'); ?>" required /></div>
+      <div class="form-slider"><label for="duration">Duration (weeks):</label><input type="text" id="duration" name="duration" value="<?php vecho('duration'); ?>" required /></div>
+      <div class="form-slider"><label for="salary">Compensation / Stipend ($US):</label><input type="text" id="salary" name="salary" value="<?php vecho('salary'); ?>" required /></div>
       <right>
         <input type="radio" name="salarytype" id="month" value="month" <?php vchecked('salarytype', 'month'); ?> required /><label for="month"> / month</label>
         <input type="radio" name="salarytype" id="week" value="week" <?php vchecked('salarytype', 'week'); ?> /><label for="week"> / week</label>

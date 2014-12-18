@@ -115,12 +115,25 @@
       if ($this->isValid()) {
         $entry['approved'] = 'approved';
         $MRecruiter->save($entry);
+        extract($entry);
+
+        $msg = "Hi $firstname!
+                <br /><br />
+                Thank you for registering on SubLite! Your account has been approved.
+                <br /><br />
+                Log in at <a href=\"http://www.sublite.net/employers/login.php\">www.sublite.net/employers</a> to create a company profile and job listing! Students will be able to access your company and job listings in early January, so make sure to complete everything by then.
+                <br /><br />
+                As always, please do not hesitate to contact us if you have any questions or suggestions.
+                <br /><br />
+                Best,<br />
+                The SubLite Team";
+        sendgmail(array($email), 'yuanling.yuan@yale.edu', 'SubLite Employers Account Approved!', $msg);
         
-        echo 'Approved';
+        echo 'Approved and automatic notification email sent!';
         return;
       }
       
-      $this->error($err);
+      echo $err;
     }
 
 
@@ -143,7 +156,7 @@
         $MRecruiter->login($email, $pass), 
         $err, 'invalid credentials');
       $this->validate($entry['approved'] == 'approved', 
-        $err, 'account approval status: ' . $entry['approved']);
+        $err, 'account is pending approval. please allow 1-2 business days for us to verify your account. we will contact you when we approve your account. thank you!');
 
       if ($this->isValid()) {
         $_SESSION['loggedin'] = true;

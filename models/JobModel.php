@@ -6,8 +6,8 @@
       parent::__construct('jobs');
     }
 
-    function save($data) {
-      $data['recruiter'] = $_SESSION['_id'];
+    function save($data, $setRecruiter=true) {
+      if ($setRecruiter) $data['recruiter'] = $_SESSION['_id'];
       $this->collection->save($data);
       return $data['_id']->{'$id'};
     }
@@ -17,6 +17,9 @@
     }
     function getByRecruiter($id) {
       return $this->collection->find(array('recruiter' => new MongoId($id)));
+    }
+    function getAll() {
+      return $this->collection->find();
     }
 
     function owner($id) {

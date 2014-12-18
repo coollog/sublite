@@ -7,9 +7,11 @@
   date_default_timezone_set('America/New_York');
 
   // Require other header files
+  require_once('models/AppModel.php');
   require_once('models/CompanyModel.php');
   require_once('models/JobModel.php');
   require_once('models/RecruiterModel.php');
+  require_once('controllers/MigrationsController.php');
   require_once('controllers/CompanyController.php');
   require_once('controllers/JobController.php');
   require_once('controllers/RecruiterController.php');
@@ -28,6 +30,13 @@
   function idcmp($id1, $id2) {
     return strval($id1) == strval($id2);
   }
+  function str2int($str) { 
+    return filter_var($str, FILTER_SANITIZE_NUMBER_INT);
+  }
+  function str2float($str) {
+    return filter_var($str, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+  }
+
   require_once('includes/functions/hash_equals.php');
   require_once('includes/functions/geocode.php');
   require_once('includes/functions/sendgmail.php');
