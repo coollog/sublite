@@ -25,7 +25,8 @@
 
   // Utility functions
   function clean($s) {
-    return trim(htmlentities($s));
+    $s = trim(htmlentities(utf8_encode($s)));
+    return $s;
   }
   function idcmp($id1, $id2) {
     return strval($id1) == strval($id2);

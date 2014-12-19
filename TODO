@@ -20,7 +20,7 @@ FROM EMAIL:
 
 HIGH PRIORITY:
 - add "full time" over weeks and salary type of "based on experience"
-- add convert salary to number, so $0 would become just 0
+
 
 Notes:
 - fix team page responsiveness
@@ -31,3 +31,6 @@ Notes:
 - make dress code part of listing
 - change approval system so that user can still login and do stuff but not have
   them go public
+
+Done:
+- moved to README.MD
