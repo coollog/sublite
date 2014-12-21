@@ -54,6 +54,14 @@
   .icon subheadline {
     color: #000;
   }
+
+  #jobtitle {
+    margin-bottom: 10px;
+  }
+
+  #jobsubtitle {
+    margin-bottom: 20px;
+  }
 </style>
 
 <panel class="main">
@@ -68,7 +76,15 @@
 </panel>
 <panel class="job">
   <div class="content">
-    <headline><?php vecho('title'); ?></headline>
+    <headline id="jobtitle"><?php vecho('title'); ?></headline>
+    <subheadline id="jobsubtitle">
+      <?php
+        if(vget('jobtype') == "internship") echo 'Internship';
+        else {
+          echo 'Full-time Position';
+        }
+      ?>
+    </subheadline>
     <a href="<?php vecho('link'); ?>" target="_blank"><input type="button" value="Apply Now" /></a>
 
     <div class="jobinfo">
@@ -95,15 +111,60 @@
                 <small>Location</small>
               </div>
             </div>
-            <div class="icon" style="background-image: url('assets/gfx/durationico.png');">
+            <div class="icon" <?php 
+              if((!vget('duration') && !vget('startdate'))) {
+                echo 'style="display: none"';
+              }
+              else {
+                echo 'style="background-image: url(\'assets/gfx/durationico.png\');"';
+              }
+            ?>>
               <div class="cell">
-                <subheadline><?php vecho('duration'); ?> weeks</subheadline>
+                <subheadline>
+                <?php
+                  $duration = vget('duration');
+                  $startdate = vget('startdate');
+                  $enddate = vget('enddate');
+                  if($duration) {
+                    echo $duration . ' weeks';
+                  } 
+                  if($startdate) {
+                    if($duration) echo ', ';
+                    if($startdate && $enddate) {
+                      if(!$duration) {
+                        echo 'F';
+                      }
+                      else {
+                        echo 'f';
+                      }
+                      echo 'rom ' . $startdate . ' to ' . $enddate;
+                    }
+                    else {
+                      if(!$duration) {
+                        echo 'S';
+                      }
+                      else {
+                        echo 's';
+                      }
+                      echo 'tarts on ' . $startdate;
+                    }
+                  }
+                ?>
+                </subheadline>
                 <small>Duration</small>
               </div>
             </div>
             <div class="icon" style="background-image: url('assets/gfx/salaryico.png');">
               <div class="cell">
-                <subheadline>$<?php vecho('salary'); ?> / <?php vecho('salarytype'); ?></subheadline>
+                <subheadline>
+                $<?php
+                  vecho('salary');
+                  if(vget('salarytype') != "other") {
+                    echo ' / ';
+                    vecho('salarytype');
+                  }
+                ?>
+                </subheadline>
                 <small>Compensation</small>
               </div>
             </div>

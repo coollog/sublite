@@ -91,6 +91,25 @@
 </style>
 
 <script>
+  $(document).ready(function() {    
+    if($("#fulltime").is(":checked")){
+      $("#durationdiv").hide();
+      $("#enddatediv").hide();
+    }
+  });
+  $(document).ready(function(){
+    $("#fulltime").click(function(){
+      $("#durationdiv").hide(400);
+      $("#enddatediv").hide(400);
+    });
+  });
+  $(document).ready(function(){
+    $("#internship").click(function(){
+      $("#durationdiv").show(400);
+      $("#enddatediv").show(400);
+
+    });
+  });
   $(function() { 
     $('form').slidinglabels({ 
       /* these are all optional */ 

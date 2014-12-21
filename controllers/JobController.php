@@ -46,10 +46,18 @@
 
     function data($data) {
         $title = clean($data['title']);
+        $jobtype = clean($data['jobtype']);
         $deadline = clean($data['deadline']);
         $duration = str2float(clean($data['duration']));
-        $salary = str2float(clean($data['salary']));
+        $startdate = clean($data['startdate']);
+        $enddate = clean($data['enddate']);
         $salarytype = clean($data['salarytype']);
+        $salary = clean($data['salary']);
+        if ($salarytype != "other") $salary = str2float($salary);
+        if ($jobtype == "fulltime") {
+          $duration = "";
+          $enddate = "";
+        }
         $company = $data['company'];
         $desc = clean($data['desc']);
         $location = clean($data['location']);
@@ -62,7 +70,8 @@
           'desc' => $desc, 'geocode' => $geocode,
           'location' => $location, 'requirements' => $requirements, 
           'link' => $link, 'salary' => $salary, 'company' => $company, 
-          'salarytype' => $salarytype
+          'salarytype' => $salarytype, 'startdate' => $startdate,
+          'enddate' => $enddate, 'jobtype' => $jobtype
         );
     }
 
@@ -70,6 +79,25 @@
       $this->validate($data['geocode'] != NULL, $err, 'location invalid');
       $this->validate(strlen($data['title']) <= 200,
         $err, 'job title is too long');
+      $this->validate(strlen($data['salary']) > 0,
+        $err, 'please input numeric compensation/stipend amount');
+      if ($data['jobtype'] == "internship") {
+        $this->validate($data['duration'], $err, 'please input duration');
+        $this->validate(!(!$data['startdate'] && $data['enddate']),
+          $err, 'please also input a start date');
+        if($data['startdate']) $this->validate($this->isValidDate($data['startdate']),
+          $err, 'invalid start date: please check date');
+        if($data['enddate']) $this->validate($this->isValidDate($data['enddate']),
+          $err, 'invalid end date: please check date');
+        if($data['startdate'] && $data['enddate']) {
+          $this->validate(strtotime($data['enddate']) > strtotime($data['startdate']),
+            $err, 'invalid date range: end date should be after start date.');
+        }
+      }
+      else {
+        if($data['startdate']) $this->validate($this->isValidDate($data['startdate']),
+          $err, 'invalid start date: please check date');
+      }
       // $this->validate($this->isValidDuration($data['duration']),
       //   $err, 'invalid duration');
       // $this->validate($this->isValidCompensation($data['salary']),
@@ -199,7 +227,5 @@
       $this->render('notice');
     }
   }
-
   $CJob = new JobController();
-
 ?>

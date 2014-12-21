@@ -42,3 +42,4 @@ Done:
 - now duration and salary can be in decimal
 - added migration system for database migrations
 - add convert salary to number, so $0 would become just 0
+- added full-time job capabilities

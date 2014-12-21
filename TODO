@@ -8,6 +8,8 @@ short
 frontend
 - make it so you cannot access register/login page if you are already logged in
 - alignment of input text
+- reduce number of database calls in viewjob.php
+- make date entry more lenient (allow 4/5/13, for example)
 
 long
 - add forgot password
@@ -17,10 +19,6 @@ long
 
 FROM EMAIL:
 - add map for location for job listing layout
-
-HIGH PRIORITY:
-- add "full time" over weeks and salary type of "based on experience"
-
 
 Notes:
 - fix team page responsiveness
@@ -33,4 +31,4 @@ Notes:
   them go public
 
 Done:
-- moved to README.MD
+**moved to README.MD**
