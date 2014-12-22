@@ -107,18 +107,27 @@
             </div>
             <div class="icon" style="background-image: url('assets/gfx/locationico.png');">
               <div class="cell">
-                <subheadline><?php vecho('location'); ?></subheadline>
+                <subheadline>
+                  <?php 
+                    if(vget('locationtype') == "home") echo 'Work at home!';
+                    else {
+                      vecho('location');
+                    }
+                  ?>
+                </subheadline>
                 <small>Location</small>
               </div>
             </div>
-            <div class="icon" <?php 
-              if((!vget('duration') && !vget('startdate'))) {
-                echo 'style="display: none"';
-              }
-              else {
-                echo 'style="background-image: url(\'assets/gfx/durationico.png\');"';
-              }
-            ?>>
+            <div class="icon"
+              <?php 
+                if((!vget('duration') && !vget('startdate'))) {
+                  echo 'style="display: none"';
+                }
+                else {
+                  echo 'style="background-image: url(\'assets/gfx/durationico.png\');"';
+                }
+              ?>
+            >
               <div class="cell">
                 <subheadline>
                 <?php
@@ -157,7 +166,8 @@
             <div class="icon" style="background-image: url('assets/gfx/salaryico.png');">
               <div class="cell">
                 <subheadline>
-                $<?php
+                <?php
+                  if(vget('salarytype') != other) echo '$';
                   vecho('salary');
                   if(vget('salarytype') != "other") {
                     echo ' / ';

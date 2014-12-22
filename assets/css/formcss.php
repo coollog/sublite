@@ -107,8 +107,35 @@
     $("#internship").click(function(){
       $("#durationdiv").show(400);
       $("#enddatediv").show(400);
-
     });
+  });
+  $(document).ready(function() {    
+    $('#locationtype').click(function() {
+      var tmpLocation = $("#location").attr('value');
+      if($(this).is(":checked"))
+      {
+        tmpLocation = $("#location").attr('value');
+        $("#location").val('');
+        $("#location").prop('required', false);
+        $("#locationdiv").fadeTo(400, 0);
+        $("#locationdiv").css('visibility','hidden');
+      } else {
+        $("#location").prop('required', true);
+        $("#locationdiv").css('visibility','visible');
+        $("#locationdiv").fadeTo(400, 1);
+        $("#location").val(tmpLocation);      
+      }
+    });
+  });
+  $(document).ready(function() {    
+    if($("#locationtype").is(":checked"))
+    {
+      $("#location").prop('required', false);
+      $("#locationdiv").css('visibility','hidden');
+    } else {
+      $("#location").prop('required', true);
+      $("#locationdiv").css('visibility','visible');
+    }
   });
   $(function() { 
     $('form').slidinglabels({ 

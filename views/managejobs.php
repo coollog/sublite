@@ -28,6 +28,15 @@
         $location = $job['location'];
         $desc = $job['desc'];
         $deadline = $job['deadline'];
+        if($job['locationtype'] == 'home') {
+          return "
+          <div class=\"jobblock\">
+            <div class=\"title\">$title | Work at home</div>
+            <div class=\"desc\">$desc</div>
+            <div class=\"info\">Deadline: $deadline</div>
+          </div>
+        ";
+        }
         return "
           <div class=\"jobblock\">
             <div class=\"title\">$title | $location</div>

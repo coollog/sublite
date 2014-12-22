@@ -61,7 +61,12 @@
         $company = $data['company'];
         $desc = clean($data['desc']);
         $location = clean($data['location']);
+        $locationtype = clean($data['locationtype']);
         $geocode = geocode($location);
+        if ($locationtype) {
+          $location = "";
+          $geocode = "";
+        }
         $requirements = clean($data['requirements']);
         $link = clean($data['link']);
         if (!preg_match('`^(https?:\/\/)`', $link)) $link = "http://$link";
@@ -71,12 +76,15 @@
           'location' => $location, 'requirements' => $requirements, 
           'link' => $link, 'salary' => $salary, 'company' => $company, 
           'salarytype' => $salarytype, 'startdate' => $startdate,
-          'enddate' => $enddate, 'jobtype' => $jobtype
+          'enddate' => $enddate, 'jobtype' => $jobtype,
+          'locationtype' => $locationtype
         );
     }
 
     function validateData($data, &$err) {
-      $this->validate($data['geocode'] != NULL, $err, 'location invalid');
+      if ($geocode) {
+        $this->validate($data['geocode'] != NULL, $err, 'location invalid');        
+      }
       $this->validate(strlen($data['title']) <= 200,
         $err, 'job title is too long');
       $this->validate(strlen($data['salary']) > 0,

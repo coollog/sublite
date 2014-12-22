@@ -29,7 +29,10 @@
       <div class="form-slider"><label for="desc">Job Description (2500 chars max):</label><textarea id="desc" name="desc" required maxlength="2500"><?php vecho('desc'); ?></textarea></div>
       <div class="form-slider"><label for="requirements">Requirements (2000 chars max):</label><textarea id="requirements" name="requirements" required maxlength="2000"><?php vecho('requirements'); ?></textarea></div>
       <div class="form-slider"><label for="link">Listing URL:</label><input type="text" id="link" name="link" value="<?php vecho('link'); ?>" required /></div>
-      <div class="form-slider"><label for="location">Job Location (Specific Address):</label><input type="text" id="location" name="location" value="<?php vecho('location'); ?>" required /></div>
+      <left>
+        <input type="checkbox" name="locationtype" id="locationtype" value="home" <?php vchecked('locationtype', 'home'); ?> /><label for="locationtype"> Work at home job</label>
+      </left>
+      <div class="form-slider" id="locationdiv"><label for="location">Job Location (Specific Address):</label><input type="text" id="location" name="location" maxlength="500" value="<?php vecho('location'); ?>" required /></div>
       <input type="checkbox" name="terms" id="terms" value="agree" required /> <label for="terms">I represent and warrant that I am employed by the company offering the internship, that I have authority or permission to post this internship, and that the description is accurate and not misleading.</label>
       <?php vnotice(); ?>
       <right>
