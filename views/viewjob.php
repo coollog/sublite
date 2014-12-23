@@ -167,7 +167,7 @@
               <div class="cell">
                 <subheadline>
                 <?php
-                  if(vget('salarytype') != other) echo '$';
+                  if(vget('salarytype') != "other") echo '$';
                   vecho('salary');
                   if(vget('salarytype') != "other") {
                     echo ' / ';

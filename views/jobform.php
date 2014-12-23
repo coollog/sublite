@@ -26,6 +26,9 @@
         <input type="radio" name="salarytype" id="other" value="other" <?php vchecked('salarytype', 'other'); ?> /><label for="other"> other (100 chars max)</label>
       </right>
       <div class="form-slider"><label for="deadline">Deadline for Application (mm/dd/yyyy):</label><input type="text" id="deadline" name="deadline" value="<?php vecho('deadline'); ?>" required /></div>
+      <left>
+        <input type="checkbox" name="international" id="international" value="yes" <?php vchecked('international', 'yes'); ?> /><label for="international"> Can accomodate international students</label>
+      </left>
       <div class="form-slider"><label for="desc">Job Description (2500 chars max):</label><textarea id="desc" name="desc" required maxlength="2500"><?php vecho('desc'); ?></textarea></div>
       <div class="form-slider"><label for="requirements">Requirements (2000 chars max):</label><textarea id="requirements" name="requirements" required maxlength="2000"><?php vecho('requirements'); ?></textarea></div>
       <div class="form-slider"><label for="link">Listing URL:</label><input type="text" id="link" name="link" value="<?php vecho('link'); ?>" required /></div>
