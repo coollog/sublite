@@ -1,12 +1,10 @@
 Todo:
 
 short
-- decide on character limits for names/titles/descriptions/etc
 - think of a way to do requirements in job
 - make the success/failure notices different for different subviews when
   multiple on same page
 frontend
-- make it so you cannot access register/login page if you are already logged in
 - alignment of input text
 - reduce number of database calls in viewjob.php
 - make date entry more lenient (allow 4/5/13, for example)
