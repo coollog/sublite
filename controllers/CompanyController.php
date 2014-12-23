@@ -52,6 +52,10 @@
               as $key) {
         if (strlen($data[$key]) > 0) $answered ++;
       }
+      $this->validate(strlen($bannerphoto) > 0,
+        $err, 'must upload banner image');
+      $this->validate(strlen($logophoto) > 0,
+        $err, 'must upload logo');
       $this->validate($answered >= 6, 
         $err, 'must answer at least 6 cultural questions');
     }
