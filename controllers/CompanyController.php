@@ -14,8 +14,14 @@
       $founded = $this->format(clean($data['founded']));
       $location = $this->format(clean($data['location']));
       $corevalues = $this->format(clean($data['corevalues']));
-      $bannerphoto = $this->format(clean($data['bannerphoto']));
-      $logophoto = $this->format(clean($data['logophoto']));
+      $bannerphoto = "";
+      if(isset($data['bannerphoto'])) {
+        $bannerphoto = $this->format(clean($data['bannerphoto']));
+      }
+      $logophoto = "";
+      if(isset($data['logophoto'])) {
+        $logophoto = $this->format(clean($data['logophoto']));
+      }
       $funfacts = $this->format(clean($data['funfacts']));
       $society = $this->format(clean($data['society']));
       $socialevent = $this->format(clean($data['socialevent']));
@@ -52,9 +58,9 @@
               as $key) {
         if (strlen($data[$key]) > 0) $answered ++;
       }
-      $this->validate(strlen($bannerphoto) > 0,
+      $this->validate(strlen($data['bannerphoto']) > 0,
         $err, 'must upload banner image');
-      $this->validate(strlen($logophoto) > 0,
+      $this->validate(strlen($data['logophoto']) > 0,
         $err, 'must upload logo');
       $this->validate($answered >= 6, 
         $err, 'must answer at least 6 cultural questions');
