@@ -15,6 +15,7 @@
           echo ' &nbsp; ' . vlinkto('<input type="button" value="View Company Profile" /><br /><br />', 'company', array('id' => $id));
         }
       ?>
+      <?php vnotice(); ?>
       <div class="form-slider"><label for="name">Company Name*:</label><input type="text" id="name" name="name" value="<?php vecho('name'); ?>" disabled /></div>
       <div class="form-slider"><label for="industry" class="fortextarea">Industry/Industries*: </label><input type="text" id="industry" name="industry" value="<?php vecho('industry'); ?>" required /></div>
       <div class="form-slider"><label for="size">Company size*: </label>
