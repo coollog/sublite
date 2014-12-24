@@ -8,6 +8,7 @@ frontend
 - alignment of input text
 - reduce number of database calls in viewjob.php
 - make date entry more lenient (allow 4/5/13, for example)
+- DO TERMS OF SERVICE AND PRIVACY
 
 long
 - add forgot password

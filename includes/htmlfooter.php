@@ -20,12 +20,14 @@
         <opt><div class="footerlink" tag="privacy">Privacy</div></opt>
         <opt><div class="footerlink" tag="terms">Terms of Service</div></opt>
       </options>
+      <!--
       <div class="footertext" tag="privacy">
         <iframe src="privacy.html"></iframe>
       </div>
       <div class="footertext" tag="terms">
         <iframe src="terms.html"></iframe>
       </div>
+      -->
       <options class="right">
         <opt>
           <a href="https://www.facebook.com/SubLiteNet"><img src="assets/gfx/fbthumb.png" /></a>
