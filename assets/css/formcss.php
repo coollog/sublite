@@ -27,7 +27,12 @@
     max-width: 200px;
     text-align: right;
   }
-  input[type=number], input[type=text], input[type=password], input[type=email], textarea, select {
+  input[type=number],
+  input[type=text],
+  input[type=password],
+  input[type=email],
+  textarea,
+  select {
     transition: all 0.30s ease-in-out;
     outline: none;
     padding: 0.5em 0px 0.5em 0.5em;
@@ -43,7 +48,8 @@
   textarea {
     height: 10em;
   }
-  input[type=checkbox], input[type=radio] {
+  input[type=checkbox],
+  input[type=radio] {
     display: inline-block;
     width: 1em;
     height: 1em;
@@ -51,7 +57,8 @@
     border: 0;
     margin-right: 0.1em;
   }
-  input[type=submit], input[type=button] {
+  input[type=submit],
+  input[type=button] {
     padding: 0 40px;
     height: 2em;
     background: #ffd800;
@@ -67,7 +74,8 @@
   input[type=submit] {
     margin-top: 20px;
   }
-  input[type=submit]:hover, input[type=button]:hover {
+  input[type=submit]:hover,
+  input[type=button]:hover {
     background: #035d75;
     color: #fff;
   }
