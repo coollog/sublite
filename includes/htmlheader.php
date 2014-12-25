@@ -1,6 +1,9 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    
     <title>SubLite For Employers</title>
     <link rel="icon" type="image/png" href="assets/gfx/favicon.png" />
 
