@@ -1,6 +1,7 @@
 <?php
   error_reporting(E_ALL);
   ini_set('display_errors', '1');
+  header('Content-Type: text/html; charset=utf-8');
 
   // Configurations and setup
   require_once('config.php');
@@ -25,6 +26,13 @@
 
   // Utility functions
   function clean($s) {
+    // TODO Replace with preg_replace
+    $s = str_replace ('“', '"', $s);
+    $s = str_replace ('”', '"', $s);
+    $s = str_replace ('‘', '\'', $s);
+    $s = str_replace ('’', '\'', $s);
+    $s = str_replace('–', '', $s);
+    $s = str_replace('—', '', $s);
     $s = trim(htmlentities(utf8_encode($s)));
     return $s;
   }

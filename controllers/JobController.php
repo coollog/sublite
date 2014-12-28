@@ -61,10 +61,8 @@
         $company = $data['company'];
         $desc = clean($data['desc']);
         $location = clean($data['location']);
+        $locationtype = "";
         if(isset($data['locationtype'])) $locationtype = clean($data['locationtype']);
-        else {
-          $locationtype = "";
-        }
         $geocode = geocode($location);
         if ($locationtype) {
           $location = "";
