@@ -32,7 +32,7 @@
     $s = str_replace ('‘', '\'', $s);
     $s = str_replace ('’', '\'', $s);
     $s = str_replace('–', '', $s);
-    $s = str_replace('—', '', $s);
+    $s = str_replace('—', '', $s); //by the way these are 2 different dashes
     $s = trim(htmlentities(utf8_encode($s)));
     return $s;
   }
