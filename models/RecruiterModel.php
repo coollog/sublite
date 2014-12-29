@@ -1,5 +1,5 @@
 <?php
-  require_once('models/Model.php');
+  require_once($dirpre.'models/Model.php');
 
   class RecruiterModel extends Model {
     function __construct() {

@@ -1,3 +1,3 @@
 <?php
-  require_once('includes/header.php');
+  require_once($dirpre.'includes/header.php');
 ?>

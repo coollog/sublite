@@ -1,6 +1,6 @@
 <?php
-  $dirpre = '';
+  $dirpre = '../employers'
   require_once($dirpre.'includes/header.php');
-  $CRecruiter->logout();
+  $CStudent->home();
   require_once($dirpre.'includes/footer.php');
 ?>

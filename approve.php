@@ -1,5 +1,6 @@
 <?php
-  require_once('includes/header.php');
+  $dirpre = '';
+  require_once($dirpre.'includes/header.php');
   $CRecruiter->approve();
-  require_once('includes/footer.php');
+  require_once($dirpre.'includes/footer.php');
 ?>
