@@ -17,17 +17,9 @@
       <options class="left">
         <a href="http://sublite.net/team.php"><opt>The Team</opt></a>
         <a href="faq.php"><opt>FAQ</opt></a>
-        <opt><div class="footerlink" tag="privacy">Privacy</div></opt>
-        <opt><div class="footerlink" tag="terms">Terms of Service</div></opt>
+        <a href="privacy.php"><opt>Privacy</opt></a>
+        <a href="terms.php"><opt>Terms of Service</opt></a>
       </options>
-      <!--
-      <div class="footertext" tag="privacy">
-        <iframe src="privacy.html"></iframe>
-      </div>
-      <div class="footertext" tag="terms">
-        <iframe src="terms.html"></iframe>
-      </div>
-      -->
       <options class="right">
         <opt>
           <a href="https://www.facebook.com/SubLiteNet"><img src="assets/gfx/fbthumb.png" /></a>
