@@ -1,7 +1,7 @@
 <?php
   // Bucket Name
   $bucket="SubLite";
-  require_once('includes/S3/S3.php');
+  require_once($dirpre.'includes/S3/S3.php');
   			
   //AWS access info
   if (!defined('awsAccessKey')) define('awsAccessKey', $GLOBALS['s3access']);

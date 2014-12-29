@@ -36,22 +36,22 @@
       $viewVars['Error'] = isset($error) ? $error : '';
       $viewVars['Success'] = isset($success) ? $success : '';
       
-      require_once('views/view.php');
-      require_once("views/$view.php");
+      require_once($dirpre.'views/view.php');
+      require_once($dirpre."views/$view.php");
     }
     function finish() {
       if (count(self::$renderQueue) == 0) return;
 
       global $viewVars; $viewVars = array();
-      require_once('views/view.php');
-      require_once('includes/htmlheader.php');
+      require_once($dirpre.'views/view.php');
+      require_once($dirpre.'includes/htmlheader.php');
 
       foreach (self::$renderQueue as $pair) {
         $view = $pair[0]; $vars = $pair[1];
         self::directrender($view, $vars);
       }
 
-      require_once('includes/htmlfooter.php'); 
+      require_once($dirpre.'includes/htmlfooter.php'); 
     }
     function redirect($page, $params = NULL) {
       if ($params == NULL)

@@ -1,5 +1,5 @@
 <?php
-  require_once('controllers/Controller.php');
+  require_once($dirpre.'controllers/Controller.php');
 
   class RecruiterController extends Controller {
     // Validation functions
