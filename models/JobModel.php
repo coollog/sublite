@@ -1,5 +1,5 @@
 <?php
-  require_once($dirpre.'models/Model.php');
+  require_once($GLOBALS['dirpre'].'models/Model.php');
 
   class JobModel extends Model {
     function __construct() {

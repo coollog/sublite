@@ -4,19 +4,21 @@
   header('Content-Type: text/html; charset=utf-8');
 
   // Configurations and setup
-  require_once($dirpre.'config.php');
+  require_once($GLOBALS['dirpre'].'config.php');
   date_default_timezone_set('America/New_York');
 
   // Require other header files
-  require_once($dirpre.'models/AppModel.php');
-  require_once($dirpre.'models/CompanyModel.php');
-  require_once($dirpre.'models/JobModel.php');
-  require_once($dirpre.'models/RecruiterModel.php');
-  require_once($dirpre.'controllers/MigrationsController.php');
-  require_once($dirpre.'controllers/CompanyController.php');
-  require_once($dirpre.'controllers/JobController.php');
-  require_once($dirpre.'controllers/RecruiterController.php');
-  require_once($dirpre.'controllers/S3/S3Controller.php');
+  require_once($GLOBALS['dirpre'].'models/AppModel.php');
+  require_once($GLOBALS['dirpre'].'models/CompanyModel.php');
+  require_once($GLOBALS['dirpre'].'models/JobModel.php');
+  require_once($GLOBALS['dirpre'].'models/RecruiterModel.php');
+  require_once($GLOBALS['dirpre'].'models/StudentModel.php');
+  require_once($GLOBALS['dirpre'].'controllers/MigrationsController.php');
+  require_once($GLOBALS['dirpre'].'controllers/CompanyController.php');
+  require_once($GLOBALS['dirpre'].'controllers/JobController.php');
+  require_once($GLOBALS['dirpre'].'controllers/RecruiterController.php');
+  require_once($GLOBALS['dirpre'].'controllers/S3/S3Controller.php');
+  require_once($GLOBALS['dirpre'].'controllers/StudentController.php');
 
   header("Expires: Tue, 01 Jan 2000 00:00:00 GMT");
   header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
@@ -46,7 +48,7 @@
     return filter_var($str, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
   }
 
-  require_once($dirpre.'includes/functions/hash_equals.php');
-  require_once($dirpre.'includes/functions/geocode.php');
-  require_once($dirpre.'includes/functions/sendgmail.php');
+  require_once($GLOBALS['dirpre'].'includes/functions/hash_equals.php');
+  require_once($GLOBALS['dirpre'].'includes/functions/geocode.php');
+  require_once($GLOBALS['dirpre'].'includes/functions/sendgmail.php');
 ?>

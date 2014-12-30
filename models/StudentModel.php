@@ -1,11 +1,11 @@
 <?php
-  require_once($dirpre.'models/Model.php');
+  require_once($GLOBALS['dirpre'].'models/Model.php');
 
   class StudentModel extends Model {
     function __construct() {
       $m = new MongoClient($GLOBALS['dburistudent']);
       $db = $m->$GLOBALS['dbnamestudent'];
-      $this->collection = $db->'emails';
+      $this->collection = $db->emails;
     }
 
     function save($data) {

@@ -3,10 +3,10 @@ Have this folder be parallel to /employers
 In here will be the template files just like for example:
 company.php
 <?php
-  $dirpre = '';
-  require_once($dirpre.'includes/header.php');
+  $GLOBALS['dirpre'] = '';
+  require_once($GLOBALS['dirpre'].'includes/header.php');
   $CCompany->view();
-  require_once($dirpre.'includes/footer.php');
+  require_once($GLOBALS['dirpre'].'includes/footer.php');
 ?>
 
-But, the $dirpre should be set to '../employers'
+But, the $GLOBALS['dirpre'] should be set to '../employers'

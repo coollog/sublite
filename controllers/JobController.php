@@ -1,5 +1,5 @@
 <?php
-  require_once($dirpre.'controllers/Controller.php');
+  require_once($GLOBALS['dirpre'].'controllers/Controller.php');
 
   class JobController extends Controller {
     // TODO Decide some upper bound for duration

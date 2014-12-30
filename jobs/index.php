@@ -1,6 +1,6 @@
 <?php
-  $dirpre = '../employers/devq'
-  require_once($dirpre.'includes/header.php');
+  $GLOBALS['dirpre'] = '../employers/devq/';
+  require_once($GLOBALS['dirpre'].'includes/header.php');
   $CStudent->index();
-  require_once($dirpre.'includes/footer.php');
+  require_once($GLOBALS['dirpre'].'includes/footer.php');
 ?>

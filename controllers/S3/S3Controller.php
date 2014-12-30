@@ -1,5 +1,5 @@
 <?php
-  require_once($dirpre.'controllers/Controller.php');
+  require_once($GLOBALS['dirpre'].'controllers/Controller.php');
 
   class S3Controller extends Controller {
     function upload() {
@@ -20,7 +20,7 @@
       if ($this->isValid()) {
       	$fname = $_FILES['upload']['tmp_name'];
 				
-				require_once($dirpre.'includes/S3/SimpleImage.php');
+				require_once($GLOBALS['dirpre'].'includes/S3/SimpleImage.php');
 				$image = new SimpleImage();
 				$image->load($fname);
 				if ($image->getHeight() > 1000)
@@ -42,7 +42,7 @@
 												$err, 'invalid image type');
 
 				if ($this->isValid()) {
-					require_once($dirpre.'includes/S3/s3_config.php');
+					require_once($GLOBALS['dirpre'].'includes/S3/s3_config.php');
 					
 					//Rename image name. 
 					$actual_image_name = time() . "." . $filetype[1];
