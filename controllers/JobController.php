@@ -236,6 +236,11 @@
       $this->error($err);
       $this->render('notice');
     }
+
+    function search() {
+      global $CRecruiter, $CStudent;
+      $CRecruiter->requireLogin();
+    }
   }
   $CJob = new JobController();
 ?>
