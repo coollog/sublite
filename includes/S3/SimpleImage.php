@@ -21,7 +21,7 @@ class SimpleImage {
               $output = imagecreatetruecolor($width, $height);
               $white = imagecolorallocate($output,  255, 255, 255);
               imagefilledrectangle($output, 0, 0, $width, $height, $white);
-              imagecopy($output, $input, 0, 0, 0, 0, $width, $height);
+              imagecopy($output, $this->image, 0, 0, 0, 0, $width, $height);
               imagejpeg($output, $filename, $compression);
             }
             else {
