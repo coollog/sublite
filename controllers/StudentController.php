@@ -85,6 +85,40 @@
       $this->render('studentlogin', $data);
     }
 
+    function edit() {
+      // $this->requireLogin();
+      
+      // global $params, $MStudent;
+      // if (!isset($_POST['edit'])) { 
+      //   $this->render('editprofile', 
+      //     $this->data($MStudent->me())); return;
+      // }
+      
+      // // Params to vars
+      // $me = $MStudent->me();
+      // $id = $params['_id'] = $me['_id'];
+      // $params['email'] = $me['email'];
+      // $params['pass'] = $me['pass'];
+      // $params['company'] = $me['company'];
+      // $params['approved'] = $me['approved'];
+      // extract($data = $this->data($params));
+
+      // // Validations
+      // $this->startValidations();
+      // $this->validateData($data, $err);
+
+      // if ($this->isValid()) {
+      //   $data['_id'] = new MongoId($id);
+      //   $id = $MStudent->save($data);
+      //   $this->success('profile saved');
+      //   $this->render('editprofile', $data);
+      //   return;
+      // }
+      
+      // $this->error($err);
+      // $this->render('editprofile', $data);
+    }
+
     function view() {
       // $this->requireLogin();
       
