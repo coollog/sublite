@@ -8,6 +8,7 @@
           echo ' &nbsp; ' . vlinkto('<input type="button" value="View Job Listing" /><br /><br />', 'job', array('id' => $id), true);
         }
       ?>
+      <?php vnotice(); ?>
       <div class="form-slider"><label for="title">Job Title:</label><input type="text" id="title" name="title" value="<?php vecho('title'); ?>" required /></div>
       <left>
         <input type="radio" name="jobtype" id="fulltime" value="fulltime" <?php vchecked('jobtype', 'fulltime'); ?> required /><label for="fulltime"> Full-time position</label>
