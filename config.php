@@ -8,6 +8,8 @@
     'dbname' => $dbname,
     'dburi' => "mongodb://$dbuser:$dbpass@ds051980.mongolab.com:51980/$dbname",
     'domain' => "sublite.net/employers",
-    'gmailpass' => $gmailpass
+    'gmailpass' => $gmailpass,
+    's3access' => $s3access,
+    's3secret' => $s3secret
   ));
 ?>
