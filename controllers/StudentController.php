@@ -20,6 +20,30 @@
       global $MStudent, $MJobs;
       $me = $MStudent->me();
       $me['_id'] = $me['_id']->{'$id'};
+
+      function nameOf($email) {
+        $domain = $this->getDomain($email);
+        if (isset($this->LUT[$domain])) {
+          return $this->LUT[$domain];
+        } else {
+          $ed = explode('.', $this->getDomain($email));
+          array_pop($ed);
+          $ed = array_reverse($ed);
+          $name = ucwords(implode(' ', $ed));
+          return $name;
+        }
+      }
+
+      $pic = 'assets/gfx/defaultpic.png';
+      if (!is_null($me['pic'])) {
+        $pic = $me['pic'];
+        if ($pic == 'nopic.png') $pic = 'assets/gfx/defaultpic.png';
+      }
+      $me['pic'] = $pic;
+
+      $me['school'] = strlen($me['school']) > 0 ? 
+        $me['school'] : nameOf($me['email']);
+
       $this->render('home', $me);
     }
 
@@ -52,52 +76,13 @@
         $_SESSION['pass'] = $pass;
         $_SESSION['_id'] = $entry['_id'];
         
-        if (isset($entry['jobs'])) {
-          $this->redirect('home');
-        } else {
-          // Create profile
-          $this->redirect('addprofile');
-        }
+        $this->redirect('home');
 
         return;
       }
       
       $this->error($err);
       $this->render('studentlogin', $data);
-    }
-
-    function edit() {
-      // $this->requireLogin();
-      
-      // global $params, $MStudent;
-      // if (!isset($_POST['edit'])) { 
-      //   $this->render('editprofile', 
-      //     $this->data($MStudent->me())); return;
-      // }
-      
-      // // Params to vars
-      // $me = $MStudent->me();
-      // $id = $params['_id'] = $me['_id'];
-      // $params['email'] = $me['email'];
-      // $params['pass'] = $me['pass'];
-      // $params['company'] = $me['company'];
-      // $params['approved'] = $me['approved'];
-      // extract($data = $this->data($params));
-
-      // // Validations
-      // $this->startValidations();
-      // $this->validateData($data, $err);
-
-      // if ($this->isValid()) {
-      //   $data['_id'] = new MongoId($id);
-      //   $id = $MStudent->save($data);
-      //   $this->success('profile saved');
-      //   $this->render('editprofile', $data);
-      //   return;
-      // }
-      
-      // $this->error($err);
-      // $this->render('editprofile', $data);
     }
 
     function view() {

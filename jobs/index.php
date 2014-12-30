@@ -1,6 +1,6 @@
 <?php
   $dirpre = '../employers'
   require_once($dirpre.'includes/header.php');
-  $CStudent->addprofile();
+  $CStudent->index();
   require_once($dirpre.'includes/footer.php');
 ?>

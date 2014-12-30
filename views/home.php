@@ -7,4 +7,4 @@
       echo vlinkto('<input type="button" value="View Company Profile" />', 'company', array('id' => $company), true);
     ?>
   </div>
-
+</panel>
