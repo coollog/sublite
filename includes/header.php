@@ -25,6 +25,9 @@
   header("Pragma: no-cache");
 
   // Utility functions
+  require_once('includes/functions/Encoding.php'); 
+  use \ForceUTF8\Encoding;
+
   function clean($s) {
     // TODO Replace with preg_replace
     $s = str_replace ('“', '"', $s);
@@ -33,7 +36,8 @@
     $s = str_replace ('’', '\'', $s);
     $s = str_replace('–', '-', $s);
     $s = str_replace('—', '-', $s); //by the way these are 2 different dashes
-    $s = trim(htmlentities(utf8_encode($s), ENT_NOQUOTES));
+    $s = str_replace('…', '...', $s);
+    $s = trim(htmlspecialchars(Encoding::toUTF8($s), ENT_NOQUOTES));
     return $s;
   }
   function idcmp($id1, $id2) {

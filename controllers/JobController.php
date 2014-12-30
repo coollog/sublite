@@ -68,7 +68,8 @@
           $location = "";
           $geocode = "";
         }
-        $international = clean($data['international']);
+        $international = "";
+        if(isset($data['international'])) $international = clean($data['international']);
         $requirements = clean($data['requirements']);
         $link = clean($data['link']);
         if (!preg_match('`^(https?:\/\/)`', $link)) $link = "http://$link";
