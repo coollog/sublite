@@ -52,7 +52,7 @@
         $_SESSION['pass'] = $pass;
         $_SESSION['_id'] = $entry['_id'];
         
-        if (isset($entry['internships'])) {
+        if (isset($entry['jobs'])) {
           $this->redirect('home');
         } else {
           // Create profile
