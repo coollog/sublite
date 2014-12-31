@@ -241,8 +241,10 @@
 
     function dataSearch($data) {
       $recruiter = clean($data['recruiter']);
+      $company = clean($data['company']);
+      $title = clean($data['title']);
       return array(
-        'recruiter' => $recruiter
+        'recruiter' => $recruiter, 'company' => $company, 'title' => $title
       );
     }
 
@@ -262,15 +264,37 @@
 
       // Validations
       $this->startValidations();
+      $this->validate(strlen($recruiter) == 0 or 
+                      !is_null($MRecruiter->getByID($recruiter)),
+        $err, 'unknown recruiter');
+      $cs = $MCompany->find(array('name' => array('$regex' => keywords2mregex($company))));
+      $this->validate(strlen($company) == 0 or
+                      $cs->count() > 0,
+        $err, 'unknown company');
 
       // Code
       if ($this->isValid()) {
         $query = array();
 
-        if (strlen($recruiter) > 0) $query['recruiter'] = new MongoId($recruiter);
-        
+        // Search query building
+        if (strlen($recruiter) > 0) 
+          $query['recruiter'] = new MongoId($recruiter);
+        if (strlen($company) > 0) {
+          
+          $companies = array();
+          foreach ($cs as $c) {
+            array_push($companies, $c['_id']);
+          }
+          $query['company'] = array('$in' => $companies);
+        }
+        if (strlen($title) > 0) {
+          $query['title'] = array('$regex' => keywords2mregex($title));
+        }
+
+        // Performing search
         $res = $MJob->find($query);
 
+        // Processing results
         $jobs = array();
         foreach ($res as $job) {
           $job['company'] = $MCompany->getName($job['company']);

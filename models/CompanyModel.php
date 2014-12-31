@@ -14,9 +14,15 @@
     function get($id) {
       return $this->collection->findOne(array('_id' => new MongoId($id)));
     }
+    function getByName($name) {
+      return $this->collection->findOne(array('name' => $name));
+    }
     function getName($id) {
       $entry = $this->get($id);
       return $entry['name'];
+    }
+    function find($query) {
+      return $this->collection->find($query);
     }
 
     function delete($id) {

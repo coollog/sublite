@@ -47,6 +47,14 @@
   function str2float($str) {
     return filter_var($str, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
   }
+  function keywords2mregex($str) {
+    $regex = "";
+    $keywords = explode(" ", $str);
+    foreach ($keywords as $keyword) {
+      $regex .= "(?=.*$keyword)";
+    }
+    return new MongoRegex("/^$regex.*$/i");
+  }
 
   require_once($GLOBALS['dirpre'].'includes/functions/hash_equals.php');
   require_once($GLOBALS['dirpre'].'includes/functions/geocode.php');
