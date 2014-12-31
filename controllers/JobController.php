@@ -210,7 +210,7 @@
     }
     
     function view() {
-      global $CRecruiter; $CRecruiter->requireLogin();
+      $this->requireLogin();
       global $MJob;
       global $MRecruiter;
 
@@ -238,6 +238,11 @@
     }
 
 
+    function requireLogin() {
+      global $CRecruiter, $CStudent;
+      if ($CRecruiter->loggedIn()) $CRecruiter->requireLogin();
+      else $CStudent->requireLogin();
+    }
 
     function dataSearch($data) {
       $recruiter = clean($data['recruiter']);
@@ -249,10 +254,7 @@
     }
 
     function search() {
-      global $CRecruiter, $CStudent;
-      $CStudent->requireLogin();
-      if ($CRecruiter->loggedIn()) $CRecruiter->requireLogin();
-      else $CStudent->requireLogin();
+      $this->requireLogin();
 
       if (!isset($_POST['search'])) { 
         $this->render('searchform'); return; 

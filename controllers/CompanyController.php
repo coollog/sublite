@@ -155,7 +155,7 @@
     }
     
     function view() {
-      global $CRecruiter; $CRecruiter->requireLogin();
+      global $CJob; $CJob->requireLogin();
       global $MCompany;
       global $MRecruiter;
       // Validations
