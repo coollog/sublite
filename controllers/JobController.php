@@ -45,42 +45,42 @@
     }
 
     function data($data) {
-        $title = clean($data['title']);
-        $jobtype = clean($data['jobtype']);
-        $deadline = clean($data['deadline']);
-        $duration = str2float(clean($data['duration']));
-        $startdate = clean($data['startdate']);
-        $enddate = clean($data['enddate']);
-        $salarytype = clean($data['salarytype']);
-        $salary = clean($data['salary']);
-        if ($salarytype != "other") $salary = str2float($salary);
-        if ($jobtype == "fulltime") {
-          $duration = "";
-          $enddate = "";
-        }
-        $company = $data['company'];
-        $desc = clean($data['desc']);
-        $location = clean($data['location']);
-        $locationtype = "";
-        if(isset($data['locationtype'])) $locationtype = clean($data['locationtype']);
-        $geocode = geocode($location);
-        if ($locationtype) {
-          $location = "";
-          $geocode = "";
-        }
-        $international = clean($data['international']);
-        $requirements = clean($data['requirements']);
-        $link = clean($data['link']);
-        if (!preg_match('`^(https?:\/\/)`', $link)) $link = "http://$link";
-        return array(
-          'title' => $title, 'deadline' => $deadline, 'duration' => $duration,
-          'desc' => $desc, 'geocode' => $geocode,
-          'location' => $location, 'requirements' => $requirements, 
-          'link' => $link, 'salary' => $salary, 'company' => $company, 
-          'salarytype' => $salarytype, 'startdate' => $startdate,
-          'enddate' => $enddate, 'jobtype' => $jobtype,
-          'locationtype' => $locationtype, 'international' => $international
-        );
+      $title = clean($data['title']);
+      $jobtype = clean($data['jobtype']);
+      $deadline = clean($data['deadline']);
+      $duration = str2float(clean($data['duration']));
+      $startdate = clean($data['startdate']);
+      $enddate = clean($data['enddate']);
+      $salarytype = clean($data['salarytype']);
+      $salary = clean($data['salary']);
+      if ($salarytype != "other") $salary = str2float($salary);
+      if ($jobtype == "fulltime") {
+        $duration = "";
+        $enddate = "";
+      }
+      $company = $data['company'];
+      $desc = clean($data['desc']);
+      $location = clean($data['location']);
+      $locationtype = "";
+      if(isset($data['locationtype'])) $locationtype = clean($data['locationtype']);
+      $geocode = geocode($location);
+      if ($locationtype) {
+        $location = "";
+        $geocode = "";
+      }
+      $international = clean($data['international']);
+      $requirements = clean($data['requirements']);
+      $link = clean($data['link']);
+      if (!preg_match('`^(https?:\/\/)`', $link)) $link = "http://$link";
+      return array(
+        'title' => $title, 'deadline' => $deadline, 'duration' => $duration,
+        'desc' => $desc, 'geocode' => $geocode,
+        'location' => $location, 'requirements' => $requirements, 
+        'link' => $link, 'salary' => $salary, 'company' => $company, 
+        'salarytype' => $salarytype, 'startdate' => $startdate,
+        'enddate' => $enddate, 'jobtype' => $jobtype,
+        'locationtype' => $locationtype, 'international' => $international
+      );
     }
 
     function validateData($data, &$err) {
@@ -237,9 +237,45 @@
       $this->render('notice');
     }
 
+
+
+    function dataSearch($data) {
+      $recruiter = clean($data['recruiter']);
+      return array(
+        'recruiter' => $recruiter
+      );
+    }
+
     function search() {
       global $CRecruiter, $CStudent;
-      $CRecruiter->requireLogin();
+      if ($CRecruiter->loggedIn()) $CRecruiter->requireLogin();
+      if ($CStudent->loggedIn()) $CStudent->requireLogin();
+
+      if (!isset($_POST['search'])) { 
+        $this->render('searchform'); return; 
+      }
+      
+      global $params, $MJob, $MStudent;
+      // Params to vars
+      extract($data = $this->dataSearch($params));
+
+      // Validations
+      $this->startValidations();
+      $this->validate(
+        $err, 'unknown job');
+
+      // Code
+      if ($this->isValid()) {
+        $recruiter = $MStudent->getID($recruiter);
+        $query = array('recruiter' => $recruiter);
+        
+        $res = $MJob->find($query);
+        $this->render('searchform', $data);
+        $this->render('searchresults', $res);
+      }
+
+      $this->error($err);
+      $this->render('searchform', $data);
     }
   }
   $CJob = new JobController();

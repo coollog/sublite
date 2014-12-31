@@ -99,13 +99,13 @@
           </td>
           <td style="width: 30%;" style="vertical-align: middle;">
             
-            <div class="icon" style="background-image: url('assets/gfx/deadlineico.png');">
+            <div class="icon" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/deadlineico.png');">
               <div class="cell">
                 <subheadline><?php vecho('deadline'); ?></subheadline>
                 <small>Deadline of application</small>
               </div>
             </div>
-            <div class="icon" style="background-image: url('assets/gfx/locationico.png');">
+            <div class="icon" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/locationico.png');">
               <div class="cell">
                 <subheadline>
                   <?php 
@@ -124,7 +124,7 @@
                   echo 'style="display: none"';
                 }
                 else {
-                  echo 'style="background-image: url(\'assets/gfx/durationico.png\');"';
+                  echo 'style="background-image: url(\''.$GLOBALS['dirpre'].'assets/gfx/durationico.png\');"';
                 }
               ?>
             >
@@ -163,7 +163,7 @@
                 <small>Duration</small>
               </div>
             </div>
-            <div class="icon" style="background-image: url('assets/gfx/salaryico.png');">
+            <div class="icon" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/salaryico.png');">
               <div class="cell">
                 <subheadline>
                 <?php

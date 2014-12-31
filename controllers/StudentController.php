@@ -34,10 +34,11 @@
         }
       }
 
-      $pic = 'assets/gfx/defaultpic.png';
+      $pic = $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
       if (!is_null($me['pic'])) {
         $pic = $me['pic'];
-        if ($pic == 'nopic.png') $pic = 'assets/gfx/defaultpic.png';
+        if ($pic == 'nopic.png')
+          $pic = $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
       }
       $me['pic'] = $pic;
 
@@ -153,8 +154,11 @@
       // $this->render('notice');
     }
 
+    function loggedIn() {
+      return isset($_SESSION['loggedinstudent']);
+    }
     function requireLogin() {
-      if (isset($_SESSION['loggedinstudent'])) {
+      if ($this->loggedIn()) {
         global $MStudent;
         // Params to vars
         $email = $_SESSION['email'];

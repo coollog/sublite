@@ -18,7 +18,7 @@
       $title = clean($data['title']);
       $phone = isset($data['phone']) ? clean($data['phone']) : '';
       $photo = isset($data['photo']) ? 
-        clean($data['photo']) : 'assets/gfx/defaultpic.png';
+        clean($data['photo']) : $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
       $approved = $data['approved'];
       return array(
         'email' => $email, 'pass' => $pass, 'firstname' => $firstname, 
@@ -245,8 +245,11 @@
       $this->render('notice');
     }
 
+    function loggedIn() {
+      return isset($_SESSION['loggedin']);
+    }
     function requireLogin() {
-      if (isset($_SESSION['loggedin'])) {
+      if ($this->loggedIn()) {
         global $MRecruiter;
         // Params to vars
         $email = $_SESSION['email'];

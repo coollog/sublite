@@ -21,6 +21,9 @@
     function getAll() {
       return $this->collection->find();
     }
+    function find($query) {
+      return $this->collection->find($query);
+    }
 
     function owner($id) {
       if (($entry = $this->get($id)) === NULL) return NULL;
