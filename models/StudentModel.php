@@ -17,8 +17,8 @@
       return $this->collection->findOne(array('email' => $email));
     }
     function getID($email) {
-      $entry = $this->collection->findOne(array('email' => $email));
-      return $entry['_id'];
+      if (is_null($entry = $this->get($email))) return $entry;
+      else return $entry['_id'];
     }
     function me() {
       return $this->get($_SESSION['email']);

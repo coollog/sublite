@@ -248,30 +248,38 @@
 
     function search() {
       global $CRecruiter, $CStudent;
+      $CStudent->requireLogin();
       if ($CRecruiter->loggedIn()) $CRecruiter->requireLogin();
-      if ($CStudent->loggedIn()) $CStudent->requireLogin();
+      else $CStudent->requireLogin();
 
       if (!isset($_POST['search'])) { 
         $this->render('searchform'); return; 
       }
       
-      global $params, $MJob, $MStudent;
+      global $params, $MJob, $MStudent, $MCompany;
       // Params to vars
       extract($data = $this->dataSearch($params));
 
       // Validations
       $this->startValidations();
-      $this->validate(
-        $err, 'unknown job');
 
       // Code
       if ($this->isValid()) {
-        $recruiter = $MStudent->getID($recruiter);
-        $query = array('recruiter' => $recruiter);
+        $query = array();
+
+        if (strlen($recruiter) > 0) $query['recruiter'] = new MongoId($recruiter);
         
         $res = $MJob->find($query);
+
+        $jobs = array();
+        foreach ($res as $job) {
+          $job['company'] = $MCompany->getName($job['company']);
+          array_push($jobs, $job);
+        }
+
         $this->render('searchform', $data);
-        $this->render('searchresults', $res);
+        $this->render('searchresults', array('jobs' => $jobs));
+        return;
       }
 
       $this->error($err);

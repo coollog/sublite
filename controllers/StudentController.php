@@ -168,7 +168,7 @@
         $this->startValidations();
         $this->validate(($entry = $MStudent->get($email)) != NULL, 
           $err, 'unknown email');
-        $this->validate(hash_equals($entry['pass'], crypt($pass, $entry['pass'])), 
+        $this->validate($entry['pass'] == md5($pass), 
           $err, 'invalid password');
 
         if (!$this->isValid()) {
