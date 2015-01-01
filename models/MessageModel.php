@@ -6,7 +6,7 @@
       parent::__construct('message');
     }
 
-    function new($participants) {
+    function add($participants) {
       $data = array('participants' => $participants, 'replies' => array());
       $this->collection->save($data);
       return $data['_id']->{'$id'};
@@ -20,7 +20,7 @@
 
     function findByParticipant($participant) {
       return $this->collection->find(array(
-        'participants' => array('$elemMatch' => $participant),
+        'participants' => $participant,
         'replies' => array('$not' => array('$size' => 0))
       ));
     }

@@ -7,10 +7,10 @@
       $from = clean($data['from']);
       $to = clean($data['to']);
       return array(
-        'participants' => array($from, $to);
+        'participants' => array($from, $to)
       );
     }
-    function new() {
+    function add() {
       global $CJob; $CJob->requireLogin();
 
       global $params, $MMessage, $MRecruiter, $MStudent;
@@ -20,19 +20,20 @@
 
       // Validations
       $this->startValidations();
-      $this->validate($MRecruiter->exists($participants[0]) or $MStudent->exists($participants[0]), 
+      $this->validate($MRecruiter->IDexists($participants[0]) or $MStudent->exists($participants[0]), 
         $err, 'invalid sender');
-      $this->validate($MRecruiter->exists($participants[1]) or $MStudent->exists($participants[1]), 
+      $this->validate($MRecruiter->IDexists($participants[1]) or $MStudent->exists($participants[1]), 
         $err, 'invalid receiver');
 
       // Code
       if ($this->isValid()) {
-        $id = $MMessage->new($participants);
+        $id = $MMessage->add($participants);
         $this->redirect('messages', array('id' => $id));
         return;
       }
       
       $this->error($err);
+      $this->render('notice');
     }
 
     function data($data) {
@@ -46,11 +47,25 @@
       
       global $params, $MMessage;
       // Params to vars
+
+      function viewData($entry=NULL) {
+        global $MMessage;
+        $messages = array_reverse(iterator_to_array($MMessage->findByParticipant($_SESSION['_id']->{'$id'})));
+        if ($entry == NULL) $entry = $messages[0];
+
+        return array(
+          'messages' => $messages,
+          'current' => $entry
+        );
+      }
       
+      if (!isset($_GET['id'])) {
+        $this->render('messages', viewData()); return;
+      }
+
       // Validations
       $this->startValidations();
-      $this->validate(isset($_GET['id']) and 
-                      MongoId::isValid($id = $_GET['id']) and 
+      $this->validate(MongoId::isValid($id = $_GET['id']) and 
                       ($entry = $MMessage->get($id)) !== NULL, 
         $err, 'unknown message');
       if ($this->isValid())
@@ -59,12 +74,6 @@
 
       // Code
       if ($this->isValid()) {
-        function viewData($entry) {
-          return array(
-            'messages' => $MMessage->findByParticipant($myid),
-            'current' => $entry
-          );
-        }
 
         if (!isset($_POST['reply'])) {
           $this->render('messages', viewData($entry)); return;
@@ -80,9 +89,11 @@
           $this->render('messages', viewData($entry));
           return;
         }
+
       }
       
       $this->error($err);
+      $this->render('notice');
     }
   }
 

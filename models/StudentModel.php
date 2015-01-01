@@ -34,7 +34,7 @@
     }
     
     function exists($id) {
-      return ($this->get($id) !== NULL);
+      return ($this->collection->findOne(array('_id' => new MongoId($id))) !== NULL);
     }
   }
 

@@ -38,6 +38,9 @@
     function exists($email) {
       return ($this->get($email) !== NULL);
     }
+    function IDexists($id) {
+      return ($this->collection->findOne(array('_id' => new MongoId($id))) !== NULL);
+    }
   }
 
   $MRecruiter = new RecruiterModel();
