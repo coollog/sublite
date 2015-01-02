@@ -28,36 +28,7 @@
   header("Cache-Control: post-check=0, pre-check=0", false);
   header("Pragma: no-cache");
 
-  // Utility functions
-  function clean($s) {
-    // TODO Replace with preg_replace
-    $s = str_replace ('“', '"', $s);
-    $s = str_replace ('”', '"', $s);
-    $s = str_replace ('‘', '\'', $s);
-    $s = str_replace ('’', '\'', $s);
-    $s = str_replace('–', '-', $s);
-    $s = str_replace('—', '-', $s); //by the way these are 2 different dashes
-    $s = trim(htmlentities(utf8_encode($s)));
-    return $s;
-  }
-  function idcmp($id1, $id2) {
-    return strval($id1) == strval($id2);
-  }
-  function str2int($str) { 
-    return filter_var($str, FILTER_SANITIZE_NUMBER_INT);
-  }
-  function str2float($str) {
-    return filter_var($str, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-  }
-  function keywords2mregex($str) {
-    $regex = "";
-    $keywords = explode(" ", $str);
-    foreach ($keywords as $keyword) {
-      $regex .= "(?=.*$keyword)";
-    }
-    return new MongoRegex("/^$regex.*$/i");
-  }
-
+  require_once($GLOBALS['dirpre'].'includes/functions/utilities.php');
   require_once($GLOBALS['dirpre'].'includes/functions/hash_equals.php');
   require_once($GLOBALS['dirpre'].'includes/functions/geocode.php');
   require_once($GLOBALS['dirpre'].'includes/functions/sendgmail.php');

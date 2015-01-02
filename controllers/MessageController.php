@@ -49,12 +49,36 @@
       // Params to vars
 
       function viewData($entry=NULL) {
-        global $MMessage;
+        global $MMessage, $MStudent, $MRecruiter;
         $messages = array_reverse(iterator_to_array($MMessage->findByParticipant($_SESSION['_id']->{'$id'})));
-        if ($entry == NULL) $entry = $messages[0];
+
+        $replies = array();
+        foreach ($messages as $m) {
+          $reply = array_pop($m['replies']);
+          $reply['_id'] = $m['_id'];
+
+          $from = $reply['from'];
+          if ($MStudent->exists($from)) {
+            $reply['fromname'] = $MStudent->getName($from);
+            $reply['frompic'] = $MStudent->getPic($from);
+          } else if ($MRecruiter->exists($from)) {
+            $reply['fromname'] = $MRecruiter->getName($from);
+            $reply['frompic'] = $MRecruiter->getPic($from);
+          } else {
+            $reply['fromname'] = 'Nonexistent';
+            $reply['frompic'] = 'Nonexistent';
+          }
+          
+          if (strcmp($m['_id'], $entry['_id']) == 0) $reply['current'] = true;
+          else $reply['current'] = false;
+
+          $reply['time'] = timeAgo($reply['time']);
+
+          array_push($replies, $reply);
+        }
 
         return array(
-          'messages' => $messages,
+          'messages' => $replies,
           'current' => $entry
         );
       }

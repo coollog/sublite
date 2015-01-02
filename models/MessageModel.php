@@ -14,7 +14,9 @@
 
     function reply($id, $from, $msg) {
       $entry = $this->get($id);
-      array_push($entry['replies'], array('from' => $from, 'msg' => $msg));
+      array_push($entry['replies'], array(
+        'from' => $from, 'msg' => $msg, 'time' => time(), 'read' => false
+      ));
       $this->collection->save($entry);
     }
 

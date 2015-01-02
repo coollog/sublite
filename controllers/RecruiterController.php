@@ -18,7 +18,7 @@
       $title = clean($data['title']);
       $phone = isset($data['phone']) ? clean($data['phone']) : '';
       $photo = isset($data['photo']) ? 
-        clean($data['photo']) : $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
+        clean($data['photo']) : 'assets/gfx/defaultpic.png';
       $approved = $data['approved'];
       return array(
         'email' => $email, 'pass' => $pass, 'firstname' => $firstname, 
@@ -236,6 +236,9 @@
         }
 
         $data['isme'] = idcmp($id, $_SESSION['_id']);
+
+        if ($data['photo'] == 'assets/gfx/defaultpic.png')
+          $data['photo'] = $GLOBALS['dirpre'] . $data['photo'];
 
         $this->render('recruiter', $data);
         return;
