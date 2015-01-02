@@ -50,7 +50,7 @@
       <div class="img" name="bannerphoto"><img src="<?php vecho('bannerphoto'); ?>" /></div>
 
       <br>
-      The following questions are not mandatory but are highly recommended. These questions help students get a better understanding of the unique culture at your company. Please answer at least 6 of the following 13 questions.
+      The following questions are not mandatory but are highly recommended. These questions help students get a better understanding of the unique culture at your company. Please answer <b>at least 6</b> of the following 13 questions.
       <br>
 
       <div class="form-slider"><label for="funfacts" class="fortextarea">What are the top 3 fun or quirky facts about your company? (max. 500 characters)</label><textarea id="funfacts" name="funfacts" maxlength="500"><?php vecho('funfacts'); ?></textarea></div>
