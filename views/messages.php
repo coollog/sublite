@@ -103,7 +103,7 @@
   <table class="messages"><tr>
 
     <td class="mleft bottom">
-      <headline>Inbox <unread>unread</unread></headline>
+      <headline>Inbox <unread><?php vecho('unread'); ?> unread</unread></headline>
     </td>
     <td class="mright bottom">
       <headline>Message To:</headline>

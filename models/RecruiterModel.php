@@ -31,6 +31,14 @@
       global $MCompany;
       return $MCompany->get($r['company']);
     }
+    function getName($id) {
+      $entry = $this->getById($id);
+      return $entry['firstname'] . ' ' . $entry['lastname'];
+    }
+    function getPic($id) {
+      $entry = $this->getById($id);
+      return isset($entry['photo']) ? $entry['photo'] : null;
+    }
     function me() {
       return $this->get($_SESSION['email']);
     }

@@ -57,7 +57,7 @@
           if ($MStudent->exists($from)) {
             $reply['fromname'] = $MStudent->getName($from);
             $reply['frompic'] = $MStudent->getPic($from);
-          } else if ($MRecruiter->exists($from)) {
+          } else if ($MRecruiter->IDexists($from)) {
             $reply['fromname'] = $MRecruiter->getName($from);
             $reply['frompic'] = $MRecruiter->getPic($from);
           } else {
@@ -67,6 +67,7 @@
         }
 
         $replies = array();
+        $unread = 0;
         foreach ($messages as $m) {
           $reply = array_pop($m['replies']);
           $reply['_id'] = $m['_id'];
@@ -75,6 +76,7 @@
           if (!$reply['read']) {
             $reply['read'] = (strcmp($from, $_SESSION['_id']) == 0);
           }
+          if (!$reply['read']) $unread ++;
 
           setFromNamePic($reply, $from);
           
@@ -98,7 +100,8 @@
 
         return array(
           'messages' => $replies,
-          'current' => $current
+          'current' => $current,
+          'unread' => $unread
         );
       }
       
