@@ -66,7 +66,8 @@
         $_SESSION['pass'] = $pass;
         $_SESSION['_id'] = $entry['_id'];
         
-        $this->redirect('home');
+        // $this->redirect('home');
+        $this->redirect('search');
 
         return;
       }

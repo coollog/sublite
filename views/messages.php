@@ -2,6 +2,7 @@
   .messages {
     text-align: left;
     width: 100%;
+    min-height: 900px;
   }
   table {
     border-collapse: collapse;
@@ -10,6 +11,9 @@
   .mleft {
     background: #f4f3ee;
     width: 400px;
+    vertical-align: top;
+  }
+  .mright {
     vertical-align: top;
   }
   .bottom {
@@ -102,11 +106,11 @@
 <panel>
   <table class="messages"><tr>
 
-    <td class="mleft bottom">
+    <td class="mleft bottom" style="height: 2em;">
       <headline>Inbox <unread><?php vecho('unread'); ?> unread</unread></headline>
     </td>
-    <td class="mright bottom">
-      <headline>Message To:</headline>
+    <td class="mright bottom" style="height: 2em;">
+      <headline><?php vecho('to'); ?></headline>
     </td>
 
   </tr><tr>
@@ -140,9 +144,9 @@
           <td class="pp"><profpic style="background-image: url('asdf');"></profpic></td>
           <td><data>
             <form method="post">
-              <textarea id="msg" name="msg" required maxlength="2000" placeholder="Your Reply Here:"><?php vecho('msg'); ?></textarea>
+              <textarea id="msg" name="msg" required maxlength="2000" placeholder="Write Your Message:"><?php vecho('msg'); ?></textarea>
               <?php vnotice(); ?>
-              <right><input type="submit" name="reply" value="Reply" /></right>
+              <right><input type="submit" name="reply" value="Send" /></right>
             </form>
           </data></td>
         </table>

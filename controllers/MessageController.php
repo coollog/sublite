@@ -52,8 +52,20 @@
         global $MMessage;
         $messages = array_reverse(iterator_to_array($MMessage->findByParticipant($_SESSION['_id']->{'$id'})));
 
+        function getName($p) {
+          global $MStudent, $MRecruiter;
+          if ($MStudent->exists($p)) {
+            $name = $MStudent->getName($p);
+          } else if ($MRecruiter->IDexists($p)) {
+            $name = $MRecruiter->getName($p);
+          } else {
+            $name = 'Nonexistent';
+          }
+          return $name;
+        }
         function setFromNamePic(&$reply, $from) {
           global $MStudent, $MRecruiter;
+          $reply['fromname'] = getName($from);
           if ($MStudent->exists($from)) {
             $reply['fromname'] = $MStudent->getName($from);
             $reply['frompic'] = $MStudent->getPic($from);
@@ -96,12 +108,22 @@
             $m['time'] = timeAgo($m['time']);
             array_push($current, $m);
           }
-        } else $current = null;
+
+          foreach ($entry['participants'] as $p) {
+            if (strcmp($p, $_SESSION['_id']) != 0) {
+              $to = 'Message To: ' . getName($p);
+            }
+          }
+        } else {
+          $current = null;
+          $to = '';
+        }
 
         return array(
           'messages' => $replies,
           'current' => $current,
-          'unread' => $unread
+          'unread' => $unread,
+          'to' => $to
         );
       }
       
