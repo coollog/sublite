@@ -264,11 +264,29 @@
     function search() {
       $this->requireLogin();
 
-      if (!isset($_POST['search'])) { 
+      global $params;
+      global $MJob, $MStudent, $MCompany, $MRecruiter;
+
+      $showSearch = true;
+      $showCompany = null;
+      if (isset($_GET['recruiter'])) {
+        $params = array(
+          'recruiter' => $_GET['recruiter'], 'company' => '', 'title' => ''
+        );
+        $showSearch = false;
+      }
+      if (isset($_GET['company'])) {
+        $params = array(
+          'recruiter' => '', 'company' => $_GET['company'], 'title' => ''
+        );
+        $showCompany = $MCompany->getByName($_GET['company']);
+        $showSearch = false;
+      }
+
+      if ($showSearch and !isset($_POST['search'])) { 
         $this->render('searchform'); return; 
       }
       
-      global $params, $MJob, $MStudent, $MCompany;
       // Params to vars
       extract($data = $this->dataSearch($params));
 
@@ -296,6 +314,7 @@
             array_push($companies, $c['_id']);
           }
           $query['company'] = array('$in' => $companies);
+
         }
         if (strlen($title) > 0) {
           $query['title'] = array('$regex' => keywords2mregex($title));
@@ -311,8 +330,8 @@
           array_push($jobs, $job);
         }
 
-        $this->render('searchform', $data);
-        $this->render('searchresults', array('jobs' => $jobs));
+        if ($showSearch) $this->render('searchform', $data);
+        $this->render('searchresults', array('jobs' => $jobs, 'showCompany' => $showCompany));
         return;
       }
 

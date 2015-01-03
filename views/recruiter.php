@@ -42,7 +42,10 @@
       <?php } ?>
     </div>
 
+    <a href="search.php?recruiter=<?php vecho('recruiterid'); ?>"><input type="button" value="View Job Listings" /></a>
+
     <?php if (vget('isme')) { ?>
+      <br /><br />
       <a href="editprofile.php"><input type="button" value="Edit Profile" /></a>
     <?php } ?>
   </div>

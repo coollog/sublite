@@ -19,6 +19,50 @@
   }
 </style>
 
+<?php if (!is_null($company = vget('showCompany'))) { ?>
+  <style>
+    panel.main {
+      background: url('<?php echo $company['bannerphoto']; ?>') no-repeat center center;
+      background-size: cover;
+      display: table;
+      height: 200px;
+    }
+    panel.main .banner {
+      padding: 30px 0;
+      background: rgba(0, 0, 0, 0.5);
+    }
+    panel.main .banner .tagline {
+      color: #ffd800;
+      font-size: 4em;
+      text-transform: uppercase;
+      text-shadow: 2px 2px #035d75;
+      line-height: 1em;
+      margin-bottom: 0.2em;
+      font-family: 'BebasNeue', sans-serif;
+      font-weight: bold;
+    }
+    panel.main .button {
+      font-size: 1.5em;
+      color: #035d75;
+      text-transform: uppercase;
+      box-shadow: 2px 2px 0px #035d75;
+    }
+    panel.main .button:hover {
+      color: #fff;
+    }
+  </style>
+
+  <panel class="main">
+    <div class="cell">
+      <div class="banner">
+        <div class="content">
+          <div class="tagline">Look inside <?php echo $company['name']; ?></div>
+          <?php echo vlinkto('<input type="button" class="button" value="View Company Profile" />', 'company', array('id' => $company['_id']->{'$id'}), true); ?></div>
+        </div>
+      </div>
+    </div>
+  </panel>
+<?php } ?>
 <panel class="results">
   <div class="content">
     <?php
