@@ -213,6 +213,7 @@
       $this->requireLogin();
       global $MJob;
       global $MRecruiter;
+      global $MCompany;
 
       // Validations
       $this->startValidations();
@@ -225,10 +226,17 @@
         $data = $this->data($entry);
         $data['salarytype'] = ($data['salarytype'] == 'total') ?
                               $data['duration'].' weeks' : $data['salarytype'];
-        $company = $MRecruiter->getCompany($entry['recruiter']);
+        
+        $r = $MRecruiter->getById($entry['recruiter']);
+        
+        $company = $MCompany->get($r['company']);
         $data['companyname'] = $company['name'];
         $data['companybanner'] = $company['bannerphoto'];
         $data['companyid'] = $company['_id']->{'$id'};
+
+        $data['recruitername'] = $r['firstname'] . ' ' . $r['lastname'];
+        $data['recruiterid'] = $r['_id']->{'$id'};
+
         $this->render('viewjob', $data);
         return;
       }

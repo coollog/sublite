@@ -95,6 +95,8 @@
               <?php vecho('desc'); ?>
               <subheadline>Requirements</subheadline>
               <?php vecho('requirements'); ?>
+              <subheadline>Posted By</subheadline>
+              <?php echo vlinkto(vget('recruitername'), 'recruiter', array('id' => vget('recruiterid'))); ?>
             </div>
           </td>
           <td style="width: 30%;" style="vertical-align: middle;">
