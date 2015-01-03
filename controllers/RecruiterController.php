@@ -236,6 +236,7 @@
         }
 
         $data['isme'] = idcmp($id, $_SESSION['_id']);
+        $data['recruiterid'] = $id;
 
         if ($data['photo'] == 'assets/gfx/defaultpic.png')
           $data['photo'] = $GLOBALS['dirpre'] . $data['photo'];
