@@ -1,5 +1,5 @@
 <?php
-  require_once('controllers/Controller.php');
+  require_once($GLOBALS['dirpre'].'controllers/Controller.php');
 
   class MigrationsController extends Controller {
     function migrate() {

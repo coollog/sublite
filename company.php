@@ -1,5 +1,6 @@
 <?php
-  require_once('includes/header.php');
+  $GLOBALS['dirpre'] = '';
+  require_once($GLOBALS['dirpre'].'includes/header.php');
   $CCompany->view();
-  require_once('includes/footer.php');
+  require_once($GLOBALS['dirpre'].'includes/footer.php');
 ?>

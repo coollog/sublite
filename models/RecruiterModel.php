@@ -1,5 +1,5 @@
 <?php
-  require_once('models/Model.php');
+  require_once($GLOBALS['dirpre'].'models/Model.php');
 
   class RecruiterModel extends Model {
     function __construct() {
@@ -31,12 +31,23 @@
       global $MCompany;
       return $MCompany->get($r['company']);
     }
+    function getName($id) {
+      $entry = $this->getById($id);
+      return $entry['firstname'] . ' ' . $entry['lastname'];
+    }
+    function getPic($id) {
+      $entry = $this->getById($id);
+      return isset($entry['photo']) ? $entry['photo'] : null;
+    }
     function me() {
       return $this->get($_SESSION['email']);
     }
     
     function exists($email) {
       return ($this->get($email) !== NULL);
+    }
+    function IDexists($id) {
+      return ($this->collection->findOne(array('_id' => new MongoId($id))) !== NULL);
     }
   }
 

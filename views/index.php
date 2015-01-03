@@ -1,6 +1,6 @@
 <style>
   panel.main {
-    background: url('assets/gfx/main.jpg') no-repeat top center;
+    background: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/main.jpg') no-repeat top center;
     background-size: cover;
     background-position: center -50px;
     /*background-attachment: fixed;*/
@@ -74,9 +74,9 @@
     overflow: hidden;
     margin-bottom: 15px;
   }
-  panel.why .whyimg1 { background-image: url('assets/gfx/why1.jpg'); }
-  panel.why .whyimg2 { background-image: url('assets/gfx/why2.jpg'); }
-  panel.why .whyimg3 { background-image: url('assets/gfx/why3.jpg'); }
+  panel.why .whyimg1 { background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/why1.jpg'); }
+  panel.why .whyimg2 { background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/why2.jpg'); }
+  panel.why .whyimg3 { background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/why3.jpg'); }
   panel.why .whyroll {
     width: 100%;
     height: 100%;
@@ -101,7 +101,7 @@
     line-height: 1.1em;
   }
   panel.how {
-    background: url('assets/gfx/how.jpg') no-repeat center center;
+    background: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/how.jpg') no-repeat center center;
     background-size: cover;
     background-attachment: fixed;
     min-height: 300px;

@@ -1,5 +1,5 @@
 <?php
-  require_once('models/Model.php');
+  require_once($GLOBALS['dirpre'].'models/Model.php');
 
   class JobModel extends Model {
     function __construct() {
@@ -20,6 +20,9 @@
     }
     function getAll() {
       return $this->collection->find();
+    }
+    function find($query) {
+      return $this->collection->find($query);
     }
 
     function owner($id) {

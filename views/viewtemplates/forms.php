@@ -1,6 +1,6 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="jquery.slidinglabels.min.js"></script>
-<?php require_once('maincss.php'); ?>
+<?php require_once($GLOBALS['dirpre'].'maincss.php'); ?>
 
 <script>
 $(function() { 
@@ -16,7 +16,7 @@ $(function() {
 </script>
 
 
-<?php require_once('navbar.php'); ?>
+<?php require_once($GLOBALS['dirpre'].'navbar.php'); ?>
 <panel class="form">
   <div class="content">
     <headline>Create Job Listing</headline>
@@ -53,4 +53,4 @@ $(function() {
     </form>
   </div>
 </panel>
-<?php require_once('footer.php'); ?>
+<?php require_once($GLOBALS['dirpre'].'footer.php'); ?>

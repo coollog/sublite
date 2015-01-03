@@ -1,5 +1,5 @@
 <?php
-  require_once('controllers/Controller.php');
+  require_once($GLOBALS['dirpre'].'controllers/Controller.php');
 
   class JobController extends Controller {
     // TODO Decide some upper bound for duration
@@ -45,42 +45,42 @@
     }
 
     function data($data) {
-        $title = clean($data['title']);
-        $jobtype = clean($data['jobtype']);
-        $deadline = clean($data['deadline']);
-        $duration = str2float(clean($data['duration']));
-        $startdate = clean($data['startdate']);
-        $enddate = clean($data['enddate']);
-        $salarytype = clean($data['salarytype']);
-        $salary = clean($data['salary']);
-        if ($salarytype != "other") $salary = str2float($salary);
-        if ($jobtype == "fulltime") {
-          $duration = "";
-          $enddate = "";
-        }
-        $company = $data['company'];
-        $desc = clean($data['desc']);
-        $location = clean($data['location']);
-        $locationtype = "";
-        if(isset($data['locationtype'])) $locationtype = clean($data['locationtype']);
-        $geocode = geocode($location);
-        if ($locationtype) {
-          $location = "";
-          $geocode = "";
-        }
-        $international = clean($data['international']);
-        $requirements = clean($data['requirements']);
-        $link = clean($data['link']);
-        if (!preg_match('`^(https?:\/\/)`', $link)) $link = "http://$link";
-        return array(
-          'title' => $title, 'deadline' => $deadline, 'duration' => $duration,
-          'desc' => $desc, 'geocode' => $geocode,
-          'location' => $location, 'requirements' => $requirements, 
-          'link' => $link, 'salary' => $salary, 'company' => $company, 
-          'salarytype' => $salarytype, 'startdate' => $startdate,
-          'enddate' => $enddate, 'jobtype' => $jobtype,
-          'locationtype' => $locationtype, 'international' => $international
-        );
+      $title = clean($data['title']);
+      $jobtype = clean($data['jobtype']);
+      $deadline = clean($data['deadline']);
+      $duration = str2float(clean($data['duration']));
+      $startdate = clean($data['startdate']);
+      $enddate = clean($data['enddate']);
+      $salarytype = clean($data['salarytype']);
+      $salary = clean($data['salary']);
+      if ($salarytype != "other") $salary = str2float($salary);
+      if ($jobtype == "fulltime") {
+        $duration = "";
+        $enddate = "";
+      }
+      $company = $data['company'];
+      $desc = clean($data['desc']);
+      $location = clean($data['location']);
+      $locationtype = "";
+      if(isset($data['locationtype'])) $locationtype = clean($data['locationtype']);
+      $geocode = geocode($location);
+      if ($locationtype) {
+        $location = "";
+        $geocode = "";
+      }
+      $international = clean($data['international']);
+      $requirements = clean($data['requirements']);
+      $link = clean($data['link']);
+      if (!preg_match('`^(https?:\/\/)`', $link)) $link = "http://$link";
+      return array(
+        'title' => $title, 'deadline' => $deadline, 'duration' => $duration,
+        'desc' => $desc, 'geocode' => $geocode,
+        'location' => $location, 'requirements' => $requirements, 
+        'link' => $link, 'salary' => $salary, 'company' => $company, 
+        'salarytype' => $salarytype, 'startdate' => $startdate,
+        'enddate' => $enddate, 'jobtype' => $jobtype,
+        'locationtype' => $locationtype, 'international' => $international
+      );
     }
 
     function validateData($data, &$err) {
@@ -210,9 +210,10 @@
     }
     
     function view() {
-      global $CRecruiter; $CRecruiter->requireLogin();
+      $this->requireLogin();
       global $MJob;
       global $MRecruiter;
+      global $MCompany;
 
       // Validations
       $this->startValidations();
@@ -225,16 +226,117 @@
         $data = $this->data($entry);
         $data['salarytype'] = ($data['salarytype'] == 'total') ?
                               $data['duration'].' weeks' : $data['salarytype'];
-        $company = $MRecruiter->getCompany($entry['recruiter']);
+        
+        $r = $MRecruiter->getById($entry['recruiter']);
+        
+        $company = $MCompany->get($r['company']);
         $data['companyname'] = $company['name'];
         $data['companybanner'] = $company['bannerphoto'];
         $data['companyid'] = $company['_id']->{'$id'};
+
+        $data['recruitername'] = $r['firstname'] . ' ' . $r['lastname'];
+        $data['recruiterid'] = $r['_id']->{'$id'};
+
         $this->render('viewjob', $data);
         return;
       }
 
       $this->error($err);
       $this->render('notice');
+    }
+
+
+    function requireLogin() {
+      global $CRecruiter, $CStudent;
+      if ($CRecruiter->loggedIn()) $CRecruiter->requireLogin();
+      else $CStudent->requireLogin();
+    }
+
+    function dataSearch($data) {
+      $recruiter = clean($data['recruiter']);
+      $company = clean($data['company']);
+      $title = clean($data['title']);
+      return array(
+        'recruiter' => $recruiter, 'company' => $company, 'title' => $title
+      );
+    }
+
+    function search() {
+      $this->requireLogin();
+
+      global $params;
+      global $MJob, $MStudent, $MCompany, $MRecruiter;
+
+      $showSearch = true;
+      $showCompany = null;
+      if (isset($_GET['recruiter'])) {
+        $params = array(
+          'recruiter' => $_GET['recruiter'], 'company' => '', 'title' => ''
+        );
+        $showSearch = false;
+      }
+      if (isset($_GET['company'])) {
+        $params = array(
+          'recruiter' => '', 'company' => $_GET['company'], 'title' => ''
+        );
+        $showCompany = $MCompany->getByName($_GET['company']);
+        $showSearch = false;
+      }
+
+      if ($showSearch and !isset($_POST['search'])) { 
+        $this->render('searchform'); return; 
+      }
+      
+      // Params to vars
+      extract($data = $this->dataSearch($params));
+
+      // Validations
+      $this->startValidations();
+      $this->validate(strlen($recruiter) == 0 or 
+                      !is_null($MRecruiter->getByID($recruiter)),
+        $err, 'unknown recruiter');
+      $cs = $MCompany->find(array('name' => array('$regex' => keywords2mregex($company))));
+      $this->validate(strlen($company) == 0 or
+                      $cs->count() > 0,
+        $err, 'unknown company');
+
+      // Code
+      if ($this->isValid()) {
+        $query = array();
+
+        // Search query building
+        if (strlen($recruiter) > 0) 
+          $query['recruiter'] = new MongoId($recruiter);
+        if (strlen($company) > 0) {
+          
+          $companies = array();
+          foreach ($cs as $c) {
+            array_push($companies, $c['_id']);
+          }
+          $query['company'] = array('$in' => $companies);
+
+        }
+        if (strlen($title) > 0) {
+          $query['title'] = array('$regex' => keywords2mregex($title));
+        }
+
+        // Performing search
+        $res = $MJob->find($query);
+
+        // Processing results
+        $jobs = array();
+        foreach ($res as $job) {
+          $job['company'] = $MCompany->getName($job['company']);
+          array_push($jobs, $job);
+        }
+
+        if ($showSearch) $this->render('searchform', $data);
+        $this->render('searchresults', array('jobs' => $jobs, 'showCompany' => $showCompany));
+        return;
+      }
+
+      $this->error($err);
+      $this->render('searchform', $data);
     }
   }
   $CJob = new JobController();
