@@ -6,8 +6,15 @@
       parent::__construct('message');
     }
 
+    function save($data) {
+      $this->collection->save($data);
+      return $data['_id']->{'$id'};
+    }
+
     function add($participants) {
-      $data = array('participants' => $participants, 'replies' => array());
+      $data = array(
+        'participants' => $participants, 'replies' => array()
+      );
       $this->collection->save($data);
       return $data['_id']->{'$id'};
     }

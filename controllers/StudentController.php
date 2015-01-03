@@ -21,29 +21,18 @@
       $me = $MStudent->me();
       $me['_id'] = $me['_id']->{'$id'};
 
-      function nameOf($email) {
-        $domain = $this->getDomain($email);
-        if (isset($this->LUT[$domain])) {
-          return $this->LUT[$domain];
-        } else {
-          $ed = explode('.', $this->getDomain($email));
-          array_pop($ed);
-          $ed = array_reverse($ed);
-          $name = ucwords(implode(' ', $ed));
-          return $name;
-        }
-      }
-
       $pic = $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
-      if (!is_null($me['pic'])) {
+      if (isset($me['pic']) and !is_null($me['pic'])) {
         $pic = $me['pic'];
         if ($pic == 'nopic.png')
           $pic = $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
       }
       $me['pic'] = $pic;
 
-      $me['school'] = strlen($me['school']) > 0 ? 
-        $me['school'] : nameOf($me['email']);
+      if (strlen($me['school']) == 0) {
+        require_once('../schools.php');
+        $me['school'] = $S->nameOf($me['email']);
+      }
 
       $this->render('home', $me);
     }

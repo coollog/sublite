@@ -33,7 +33,6 @@
     $difference = time() - $time;
     $periods = array(
       'y' => 31536000,
-      'm' => 2628000,
       'w' => 604800, 
       'd' => 86400,
       'h' => 3600,

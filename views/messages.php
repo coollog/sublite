@@ -1,11 +1,10 @@
-<?php
-  var_dump($viewVars);
-
-?>
-
 <style>
   .messages {
     text-align: left;
+    width: 100%;
+  }
+  table {
+    border-collapse: collapse;
   }
 
   .mleft {
@@ -26,16 +25,23 @@
     color: #ffd800;
   }
 
+  none {
+    padding: 20px 40px;
+    display: block;
+  }
+
   table.iblock {
     padding: 20px 40px;
     display: table;
-    border: 1px solid 000;
     width: 100%;
     cursor: pointer;
     color: #000;
   }
   table.iblock.current {
     background: #fff;
+  }
+  table.iblock.unread {
+    border-left: 4px solid #f33;
   }
   table.iblock profpic {
     width: 80px;
@@ -44,6 +50,9 @@
   }
   table.iblock .pp {
     width: 80px;
+  }
+  table.iblock:hover {
+    background: #fff;
   }
   profpic {
     background: transparent no-repeat center center;
@@ -103,8 +112,11 @@
   </tr><tr>
 
     <td class="mleft">
+      <?php if (count(vget('messages')) == 0) { ?>
+        <none>No messages so far.</none>
+      <?php } ?>
       <?php foreach (vget('messages') as $m) { ?>
-        <a href="?id=<?php echo $m['_id']; ?>"><table class="iblock <?php if ($m['current']) echo 'current'; ?>"><tr>
+        <a href="?id=<?php echo $m['_id']; ?>"><table class="iblock <?php if ($m['current']) echo 'current'; ?> <?php if (!$m['read']) echo 'unread'; ?>"><tr>
           <td class="pp"><profpic style="background-image: url('<?php echo $m['frompic'] ?>');"></profpic></td>
           <td><data>
             <name><?php echo $m['fromname']; ?></name><time><?php echo $m['time']; ?></time>
@@ -114,26 +126,27 @@
       <?php } ?>
     </td>
     <td class="mright">
-      <?php foreach (vget('current') as $m) { ?>
-        <table class="mblock"><tr>
-          <td class="pp"><profpic style="background-image: url('<?php echo $m['frompic'] ?>');"></profpic></td>
+      <?php if (!is_null(vget('current'))) { ?>
+        <?php foreach (vget('current') as $m) { ?>
+          <table class="mblock"><tr>
+            <td class="pp"><profpic style="background-image: url('<?php echo $m['frompic'] ?>');"></profpic></td>
+            <td><data>
+              <name><?php echo $m['fromname']; ?></name><time><?php echo $m['time']; ?></time>
+              <text><?php echo $m['msg']; ?></text>
+            </data></td>
+          </tr></table>
+        <?php } ?>
+        <table class="mblock">
+          <td class="pp"><profpic style="background-image: url('asdf');"></profpic></td>
           <td><data>
-            <name><?php echo $m['fromname']; ?></name><time><?php echo $m['time']; ?></time>
-            <text><?php echo $m['msg']; ?></text>
+            <form method="post">
+              <textarea id="msg" name="msg" required maxlength="2000" placeholder="Your Reply Here:"><?php vecho('msg'); ?></textarea>
+              <?php vnotice(); ?>
+              <right><input type="submit" name="reply" value="Reply" /></right>
+            </form>
           </data></td>
-        </tr></table>
+        </table>
       <?php } ?>
-      <table class="mblock">
-        <td class="pp"><profpic style="background-image: url('asdf');"></profpic></td>
-        <td><data>
-          <form method="post">
-            <textarea id="msg" name="msg" required maxlength="2000" placeholder="Your Reply Here:"><?php vecho('msg'); ?></textarea>
-            <?php vnotice(); ?>
-            <right><input type="submit" name="reply" value="Reply" /></right>
-          </form>
-        </data></td>
-      </table>
-
     </td>
   </tr></table>
 </panel>

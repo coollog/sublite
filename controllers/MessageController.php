@@ -72,6 +72,10 @@
           $reply['_id'] = $m['_id'];
 
           $from = $reply['from'];
+          if (!$reply['read']) {
+            $reply['read'] = (strcmp($from, $_SESSION['_id']) == 0);
+          }
+
           setFromNamePic($reply, $from);
           
           if (strcmp($m['_id'], $entry['_id']) == 0) $reply['current'] = true;
@@ -82,13 +86,15 @@
           array_push($replies, $reply);
         }
 
-        $currentreplies = $entry['replies'];
-        $current = array();
-        foreach ($currentreplies as $m) {
-          setFromNamePic($m, $m['from']);
-          $m['time'] = timeAgo($m['time']);
-          array_push($current, $m);
-        }
+        if (!is_null($entry)) {
+          $currentreplies = $entry['replies'];
+          $current = array();
+          foreach ($currentreplies as $m) {
+            setFromNamePic($m, $m['from']);
+            $m['time'] = timeAgo($m['time']);
+            array_push($current, $m);
+          }
+        } else $current = null;
 
         return array(
           'messages' => $replies,
@@ -111,6 +117,12 @@
 
       // Code
       if ($this->isValid()) {
+        // Set replies to read
+        for ($i = 0; $i < count($entry['replies']); $i ++) {
+          if (strcmp($entry['replies'][$i]['from'], $_SESSION['_id']) != 0)
+            $entry['replies'][$i]['read'] = true;
+        }
+        $MMessage->save($entry);
 
         if (!isset($_POST['reply'])) {
           $this->render('messages', viewData($entry)); return;

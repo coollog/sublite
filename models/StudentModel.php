@@ -29,7 +29,7 @@
     }
     function getPic($id) {
       $entry = $this->getById($id);
-      return $entry['pic'];
+      return isset($entry['pic']) ? $entry['pic'] : null;
     }
     function me() {
       return $this->get($_SESSION['email']);
