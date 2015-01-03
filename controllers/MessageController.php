@@ -49,15 +49,11 @@
       // Params to vars
 
       function viewData($entry=NULL) {
-        global $MMessage, $MStudent, $MRecruiter;
+        global $MMessage;
         $messages = array_reverse(iterator_to_array($MMessage->findByParticipant($_SESSION['_id']->{'$id'})));
 
-        $replies = array();
-        foreach ($messages as $m) {
-          $reply = array_pop($m['replies']);
-          $reply['_id'] = $m['_id'];
-
-          $from = $reply['from'];
+        function setFromNamePic(&$reply, $from) {
+          global $MStudent, $MRecruiter;
           if ($MStudent->exists($from)) {
             $reply['fromname'] = $MStudent->getName($from);
             $reply['frompic'] = $MStudent->getPic($from);
@@ -68,6 +64,15 @@
             $reply['fromname'] = 'Nonexistent';
             $reply['frompic'] = 'Nonexistent';
           }
+        }
+
+        $replies = array();
+        foreach ($messages as $m) {
+          $reply = array_pop($m['replies']);
+          $reply['_id'] = $m['_id'];
+
+          $from = $reply['from'];
+          setFromNamePic($reply, $from);
           
           if (strcmp($m['_id'], $entry['_id']) == 0) $reply['current'] = true;
           else $reply['current'] = false;
@@ -77,9 +82,17 @@
           array_push($replies, $reply);
         }
 
+        $currentreplies = $entry['replies'];
+        $current = array();
+        foreach ($currentreplies as $m) {
+          setFromNamePic($m, $m['from']);
+          $m['time'] = timeAgo($m['time']);
+          array_push($current, $m);
+        }
+
         return array(
           'messages' => $replies,
-          'current' => $entry
+          'current' => $current
         );
       }
       
@@ -108,7 +121,7 @@
         $this->validate(strlen($msg) > 0, $err, 'message empty');
 
         if ($this->isValid()) {
-          $MMessage->reply($entry['_id']->{'$id'}, $myid, $msg);
+          $entry = $MMessage->reply($entry['_id']->{'$id'}, $myid, $msg);
 
           $this->render('messages', viewData($entry));
           return;

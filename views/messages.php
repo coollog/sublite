@@ -114,14 +114,15 @@
       <?php } ?>
     </td>
     <td class="mright">
-
-      <table class="mblock"><tr>
-        <td class="pp"><profpic style="background-image: url('asdf');"></profpic></td>
-        <td><data>
-          <name>Name</name><time>1/12, 10:41pm</time>
-          <text>Lorem ipsum agjwlkejwk jlgjkj ewljglk jglkewgj aw lkglkwjlkje lkawejglk ajwlkwjgkaw lkajwlkgjwelg jalwj ;jwegl jaelw;gj ;lkwajg l;kwjgl;agljwg hwejkghwaelkj ghkejlwagl jaewgh jewghjklewhgljkwghlk e awhgkjewgl ewkjhgkjkj ghaewk ljhgejwkh wejk ghewkj kjlewghkj hkjweh  k </text>
-        </data></td>
-      </tr></table>
+      <?php foreach (vget('current') as $m) { ?>
+        <table class="mblock"><tr>
+          <td class="pp"><profpic style="background-image: url('<?php echo $m['frompic'] ?>');"></profpic></td>
+          <td><data>
+            <name><?php echo $m['fromname']; ?></name><time><?php echo $m['time']; ?></time>
+            <text><?php echo $m['msg']; ?></text>
+          </data></td>
+        </tr></table>
+      <?php } ?>
       <table class="mblock">
         <td class="pp"><profpic style="background-image: url('asdf');"></profpic></td>
         <td><data>

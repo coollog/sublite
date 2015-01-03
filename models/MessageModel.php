@@ -18,6 +18,7 @@
         'from' => $from, 'msg' => $msg, 'time' => time(), 'read' => false
       ));
       $this->collection->save($entry);
+      return $entry;
     }
 
     function findByParticipant($participant) {
