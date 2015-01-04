@@ -50,6 +50,14 @@
     function faq() {
       $this->render('faq');
     }
+
+    function privacy() {
+      $this->render('privacy');
+    }
+
+    function terms() {
+      $this->render('terms');
+    }
     
     function register() {
       if (isset($_SESSION['loggedin'])) {

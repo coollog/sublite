@@ -30,7 +30,7 @@
       $var = $viewVars[$var];
       if ($format == null) $format = "{var}";
       $format = str_replace("{var}", $var, $format);
-      echo $format;
+      echo html_entity_decode($format);
     }
   }
   function vget($var) {

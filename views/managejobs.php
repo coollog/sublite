@@ -50,7 +50,7 @@
         echo vlinkto(jobBlock($job), 'editjob', array('id' => $job['_id']->{'$id'}));
       }
       if ($jobs->count() == 0) {
-        echo "No jobs yet.<br /><br />" . vlinkto('<input type="button" value="List Job" />', 'addjob');
+        echo "<b style=\"font-size: 1.5em;\">Congratulations! You have completed your company profile and are on your way to recruiting the most talented students. Just take a moment to complete your job listing(s) by clicking the button below and you'll be all set!</b><br /><br />" . vlinkto('<input type="button" value="List Job" />', 'addjob');
       }
     ?>
   </div>
