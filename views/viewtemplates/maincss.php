@@ -53,4 +53,4 @@
     display: block;
   }
 </style>
-<?php require_once('formcss.php'); ?>
+<?php require_once($GLOBALS['dirpre'].'formcss.php'); ?>

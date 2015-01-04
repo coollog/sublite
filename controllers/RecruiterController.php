@@ -1,5 +1,5 @@
 <?php
-  require_once('controllers/Controller.php');
+  require_once($GLOBALS['dirpre'].'controllers/Controller.php');
 
   class RecruiterController extends Controller {
     // Validation functions
@@ -244,6 +244,10 @@
         }
 
         $data['isme'] = idcmp($id, $_SESSION['_id']);
+        $data['recruiterid'] = $id;
+
+        if ($data['photo'] == 'assets/gfx/defaultpic.png')
+          $data['photo'] = $GLOBALS['dirpre'] . $data['photo'];
 
         $this->render('recruiter', $data);
         return;
@@ -253,8 +257,11 @@
       $this->render('notice');
     }
 
+    function loggedIn() {
+      return isset($_SESSION['loggedin']);
+    }
     function requireLogin() {
-      if (isset($_SESSION['loggedin'])) {
+      if ($this->loggedIn()) {
         global $MRecruiter;
         // Params to vars
         $email = $_SESSION['email'];

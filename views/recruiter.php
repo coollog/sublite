@@ -35,9 +35,17 @@
       <?php if (count($jobs = vget('joblocations')) > 0) { ?>
         <subheadline>Recruitment Locations</subheadline>
       <?php foreach (array_unique($jobs) as $job) echo "$job<br />"; } ?>
+
+      <?php if (!vget('isme')) { ?>
+        <br /><br />
+        <a href="newmessage.php?from=<?php vecho('L_id'); ?>&to=<?php vecho('recruiterid'); ?>"><input type="button" value="Message" /></a>
+      <?php } ?>
     </div>
 
+    <a href="search.php?recruiter=<?php vecho('recruiterid'); ?>"><input type="button" value="View Job Listings" /></a>
+
     <?php if (vget('isme')) { ?>
+      <br /><br />
       <a href="editprofile.php"><input type="button" value="Edit Profile" /></a>
     <?php } ?>
   </div>

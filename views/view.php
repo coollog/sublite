@@ -12,6 +12,16 @@
     } else {
       $viewVars['Loggedin'] = false;
     }
+    if (isset($_SESSION['loggedinstudent'])) {
+      $viewVars = array_merge($viewVars, array(
+        'Loggedinstudent' => true,
+        'L_id' => $_SESSION['_id'],
+        'Lemail' => $_SESSION['email'],
+        'Lpass' => $_SESSION['pass']
+      ));
+    } else {
+      $viewVars['Loggedinstudent'] = false;
+    }
   }
   function vecho($var, $format = null) {
     global $viewVars;
