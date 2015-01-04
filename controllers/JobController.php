@@ -53,20 +53,20 @@
       $enddate = clean($data['enddate']);
       $salarytype = clean($data['salarytype']);
       $salary = clean($data['salary']);
-      if ($salarytype != "other") $salary = str2float($salary);
-      if ($jobtype == "fulltime") {
-        $duration = "";
-        $enddate = "";
+      if ($salarytype != 'other') $salary = str2float($salary);
+      if ($jobtype == 'fulltime') {
+        $duration = '';
+        $enddate = '';
       }
       $company = $data['company'];
       $desc = clean($data['desc']);
       $location = clean($data['location']);
-      $locationtype = "";
+      $locationtype = '';
       if(isset($data['locationtype'])) $locationtype = clean($data['locationtype']);
       $geocode = geocode($location);
       if ($locationtype) {
-        $location = "";
-        $geocode = "";
+        $location = '';
+        $geocode = '';
       }
       $requirements = clean($data['requirements']);
       $link = clean($data['link']);
@@ -90,7 +90,7 @@
         $err, 'job title is too long');
       $this->validate(strlen($data['salary']) > 0,
         $err, 'please input numeric compensation/stipend amount');
-      if ($data['jobtype'] == "internship") {
+      if ($data['jobtype'] == 'internship') {
         $this->validate($data['duration'], $err, 'please input duration');
         $this->validate(!(!$data['startdate'] && $data['enddate']),
           $err, 'please also input a start date');
