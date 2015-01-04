@@ -68,8 +68,6 @@
         $location = "";
         $geocode = "";
       }
-      $international = "";
-      if(isset($data['international'])) $international = clean($data['international']);
       $requirements = clean($data['requirements']);
       $link = clean($data['link']);
       if (!preg_match('`^(https?:\/\/)`', $link)) $link = "http://$link";
@@ -80,7 +78,7 @@
         'link' => $link, 'salary' => $salary, 'company' => $company, 
         'salarytype' => $salarytype, 'startdate' => $startdate,
         'enddate' => $enddate, 'jobtype' => $jobtype,
-        'locationtype' => $locationtype, 'international' => $international
+        'locationtype' => $locationtype,
       );
     }
 

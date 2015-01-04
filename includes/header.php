@@ -28,7 +28,7 @@
   header("Cache-Control: post-check=0, pre-check=0", false);
   header("Pragma: no-cache");
 
-  require_once('includes/functions/Encoding.php'); 
+  require_once($GLOBALS['dirpre'].'includes/functions/Encoding.php'); 
   use \ForceUTF8\Encoding;
   require_once($GLOBALS['dirpre'].'includes/functions/utilities.php');
   require_once($GLOBALS['dirpre'].'includes/functions/hash_equals.php');
