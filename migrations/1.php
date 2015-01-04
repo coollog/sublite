@@ -4,7 +4,8 @@
   $jobs = $MJob->getAll();
 
   foreach ($jobs as $job) {
-    $job['fulltime'] = false;
+    if (!isset($job['fulltime']))
+      $job['fulltime'] = false;
     $MJob->save($job, false);
   }
 ?>
