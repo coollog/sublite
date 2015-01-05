@@ -102,6 +102,7 @@
     font-weight: 700;
     line-height: 1.1em;
   }
+  
   panel.backedby {
     background-color: #ffd800;
   }
@@ -110,14 +111,37 @@
   }
   panel.backedby .backedlogo {
     background: transparent no-repeat center center;
-    background-size: auto 70%;
-    height: 236px;
-    width: 20%;
-    position: absolute;
-    top: 0;
+    background-size: contain;
+    height: 150px;
+    width: 15%;
+    display: inline-block;
+    vertical-align: top;
   }
-  panel.backedby .backedlogo1 { background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/upenn.png'); }
-  panel.backedby .backedlogo2 { background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/yale.png'); right: 0; }
+  panel.backedby .backedlogo1 {
+    background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/upenn.png');
+  }
+  panel.backedby .backedlogo2 {
+    background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/yale.png');
+    background-size: 80%;
+  }
+  panel.backedby .line1 {
+    font-size: 2em;
+    color: #035d75;
+    line-height: 1.2em;
+  }
+  panel.backedby .line2 {
+    font-size: 2.5em;
+    line-height: 1.1em;
+  }
+  panel.backedby .backedtext {
+    margin-top: 20px;
+    width: 60%;
+    display: inline-block;
+    font-family: 'BebasNeue', sans-serif;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
   panel.how {
     background: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/how.jpg') no-repeat center center;
     background-size: cover;
@@ -257,10 +281,11 @@
   </div>
 </panel>
 <panel class="backedby">
-  <div class="content">
+  <div class="content" style="position: relative;">
     <div class="backedlogo backedlogo1"></div>
     <div class="backedtext">
-      
+      <div class="line1">SubLite is backed by:</div>
+      <div class="line2">Yale Venture Creation Program &amp; Wharton Innovation Fund</div>
     </div>
     <div class="backedlogo backedlogo2"></div>
   </div>
