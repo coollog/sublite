@@ -2,11 +2,13 @@
   panel.main {
     background: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/studentmain.jpg') no-repeat top center;
     background-size: cover;
-    background-position: center -50px;
+    background-position: center 0;
     /*background-attachment: fixed;*/
     display: table;
     height: 90%;
     padding-bottom: 0;
+    position: relative;
+    box-sizing: border-box;
   }
   .arrow-down {
     width: 0; 
@@ -14,7 +16,10 @@
     border-left: 30px solid transparent;
     border-right: 30px solid transparent;
     border-top: 30px solid #ffd800;
-    margin: -50px auto 30px auto;
+    left: 50%;
+    margin-left: -30px;
+    position: absolute;
+    bottom: 30px;
     cursor: pointer;
     opacity: 0.5;
     transition: all 0.2s ease-in-out;
@@ -38,7 +43,7 @@
   }
   panel.main .banner .slogan {
     color: #fff;
-    line-height: 1em;
+    line-height: 1.1em;
     font-size: 1.6em;
     letter-spacing: 1px;
     margin-top: 0.25em;
@@ -57,6 +62,31 @@
     margin-top: 0.5em;
     color: #ffd800;
   }
+
+  panel.stats {
+    padding: 20px 0;
+    background: #000;
+  }
+  panel.stats .stat {
+    display: inline-block;
+    margin-right: 10%;
+  }
+  panel.stats .stat:last-of-type {
+    margin-right: 0px;
+  }
+  panel.stats num {
+    display: block;
+    font-size: 2.5em;
+    line-height: 1.2em;
+    color: #ffd800;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+  }
+  panel.stats type {
+    display: block;
+    color: #fff;
+  }
+
   panel.why .whys {
     width: 100%;
     text-align: center;
@@ -244,7 +274,7 @@
     <div class="banner">
       <div class="content">
         <div class="tagline">One-Stop Shop for a Great Summer!</div>
-        <div class="slogan">Find summer internships and safe, student-only summer housing with Sub-Lite! Verify your ".edu" email address to get started! It's completely free!</div>
+        <div class="slogan">Find summer internships and safe, student-only summer housing with SubLite! Verify your ".edu" email address to get started! It's completely free!</div>
         <a href="register.php">
           <input type="button" class="registerlogin" value="Register" />
         </a>
@@ -252,8 +282,17 @@
       </div>
     </div>
   </div>
+  <div class="arrow-down"></div>
 </panel>
-<div class="arrow-down"></div>
+<panel class="stats">
+  <div class="content">
+    <div class="stat"><num>3590</num><type>users</type></div>
+    <div class="stat"><num>353</num><type>universities</type></div>
+    <div class="stat"><num>218</num><type>listings</type></div>
+    <div class="stat"><num>24</num><type>cities</type></div>
+    <div class="stat"><num>13</num><type>companies</type></div>
+  </div>
+</panel>
 <panel class="why">
   <div class="content">
     <headline style="color: #035d75;">Why SubLite?</headline>

@@ -2,11 +2,13 @@
   panel.main {
     background: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/main.jpg') no-repeat top center;
     background-size: cover;
-    background-position: center -50px;
+    background-position: center 0px;
     /*background-attachment: fixed;*/
     display: table;
     height: 90%;
     padding-bottom: 0;
+    position: relative;
+    box-sizing: border-box;
   }
   .arrow-down {
     width: 0; 
@@ -14,7 +16,10 @@
     border-left: 30px solid transparent;
     border-right: 30px solid transparent;
     border-top: 30px solid #ffd800;
-    margin: -50px auto 30px auto;
+    left: 50%;
+    margin-left: -30px;
+    position: absolute;
+    bottom: 30px;
     cursor: pointer;
     opacity: 0.5;
     transition: all 0.2s ease-in-out;
@@ -210,8 +215,8 @@
       </div>
     </div>
   </div>
+  <div class="arrow-down"></div>
 </panel>
-<div class="arrow-down"></div>
 <panel class="why">
   <div class="content">
     <headline style="color: #000;">Why Choose Us?</headline>
