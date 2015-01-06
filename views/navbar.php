@@ -55,7 +55,7 @@
 <navbar class="blackbar">
   <a href="."><logo>SubLite</logo></a>
   <options class="right">
-    <a href="."><opt class="small">Employers' Page</opt></a>
+    <a href="."><opt class="small">Home Page</opt></a>
     
     <?php if (vget('Loggedin')) { ?>
 

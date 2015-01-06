@@ -266,6 +266,22 @@
       global $params;
       global $MJob, $MStudent, $MCompany, $MRecruiter;
 
+      // Function for processing results and showing them
+      function process($res) {
+        global $MCompany;
+        // Processing results
+        $jobs = array();
+        foreach ($res as $job) {
+          $job['company'] = $MCompany->getName($job['company']);
+          if (strlen($job['desc']) > 300) {
+            $job['desc'] = substr($job['desc'], 0, 297) . '...';
+          }
+          array_push($jobs, $job);
+        }
+        return $jobs;
+      }
+
+      // Predefined searches
       $showSearch = true;
       $showCompany = null;
       if (isset($_GET['recruiter'])) {
@@ -282,8 +298,14 @@
         $showSearch = false;
       }
 
-      if ($showSearch and !isset($_POST['search'])) { 
-        $this->render('searchform'); return; 
+      if ($showSearch and !isset($_POST['search'])) {
+        // If not searching for anything, then return last 5 entries
+        $res = $MJob->last(5);
+        $jobs = process($res);
+
+        $this->render('searchform');
+        $this->render('searchresults', array('jobs' => $jobs, 'recent' => true));
+        return; 
       }
       
       // Params to vars
@@ -321,13 +343,7 @@
 
         // Performing search
         $res = $MJob->find($query);
-
-        // Processing results
-        $jobs = array();
-        foreach ($res as $job) {
-          $job['company'] = $MCompany->getName($job['company']);
-          array_push($jobs, $job);
-        }
+        $jobs = process($res);
 
         if ($showSearch) $this->render('searchform', $data);
         $this->render('searchresults', array('jobs' => $jobs, 'showCompany' => $showCompany));

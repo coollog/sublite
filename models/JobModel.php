@@ -24,6 +24,9 @@
     function find($query) {
       return $this->collection->find($query);
     }
+    function last($n=1) {
+      return $this->collection->find()->sort(array('_id'=>-1))->limit($n);
+    }
 
     function owner($id) {
       if (($entry = $this->get($id)) === NULL) return NULL;
