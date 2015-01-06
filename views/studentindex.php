@@ -1,8 +1,8 @@
 <style>
   panel.main {
-    background: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/main.jpg') no-repeat top center;
+    background: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/studentmain.jpg') no-repeat top center;
     background-size: cover;
-    background-position: center 0px;
+    background-position: center 0;
     /*background-attachment: fixed;*/
     display: table;
     height: 90%;
@@ -43,9 +43,11 @@
   }
   panel.main .banner .slogan {
     color: #fff;
-    line-height: 2.5em;
+    line-height: 1.1em;
     font-size: 1.6em;
     letter-spacing: 1px;
+    margin-top: 0.25em;
+    margin-bottom: 0.5em;
   }
   panel.main .registerlogin {
     font-size: 1.5em;
@@ -60,6 +62,31 @@
     margin-top: 0.5em;
     color: #ffd800;
   }
+
+  panel.stats {
+    padding: 20px 0;
+    background: #000;
+  }
+  panel.stats .stat {
+    display: inline-block;
+    margin-right: 10%;
+  }
+  panel.stats .stat:last-of-type {
+    margin-right: 0px;
+  }
+  panel.stats num {
+    display: block;
+    font-size: 2.5em;
+    line-height: 1.2em;
+    color: #ffd800;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+  }
+  panel.stats type {
+    display: block;
+    color: #fff;
+  }
+
   panel.why .whys {
     width: 100%;
     text-align: center;
@@ -79,9 +106,9 @@
     overflow: hidden;
     margin-bottom: 15px;
   }
-  panel.why .whyimg1 { background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/why1.jpg'); }
-  panel.why .whyimg2 { background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/why2.jpg'); }
-  panel.why .whyimg3 { background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/why3.jpg'); }
+  panel.why .whyimg1 { background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/studentwhy1.jpg'); }
+  panel.why .whyimg2 { background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/studentwhy2.jpg'); }
+  panel.why .whyimg3 { background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/why1.jpg'); }
   panel.why .whyroll {
     width: 100%;
     height: 100%;
@@ -101,10 +128,50 @@
   }
   panel.why .whytext {
     text-transform: uppercase;
-    font-size: 0.8em;
+    font-size: 1.25em;
     font-weight: 700;
     line-height: 1.1em;
   }
+  
+  panel.backedby {
+    background-color: #ffd800;
+  }
+  panel.backedby .content {
+    position: relative;
+  }
+  panel.backedby .backedlogo {
+    background: transparent no-repeat center center;
+    background-size: contain;
+    height: 150px;
+    width: 15%;
+    display: inline-block;
+    vertical-align: top;
+  }
+  panel.backedby .backedlogo1 {
+    background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/upenn.png');
+  }
+  panel.backedby .backedlogo2 {
+    background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/yale.png');
+    background-size: 80%;
+  }
+  panel.backedby .line1 {
+    font-size: 2em;
+    color: #035d75;
+    line-height: 1.2em;
+  }
+  panel.backedby .line2 {
+    font-size: 2.5em;
+    line-height: 1.1em;
+  }
+  panel.backedby .backedtext {
+    margin-top: 20px;
+    width: 60%;
+    display: inline-block;
+    font-family: 'BebasNeue', sans-serif;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
   panel.how {
     background: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/how.jpg') no-repeat center center;
     background-size: cover;
@@ -206,40 +273,60 @@
   <div class="cell">
     <div class="banner">
       <div class="content">
-        <div class="tagline">Student Recruitment, Reimagined.</div>
-        <div class="slogan">Attract the New Generation Talent with your Company's Unique Personality.</div>
+        <div class="tagline">One-Stop Shop for a Great Summer!</div>
+        <div class="slogan">Find summer internships and safe, student-only summer housing with SubLite! Verify your ".edu" email address to get started! It's completely free!</div>
         <a href="register.php">
           <input type="button" class="registerlogin" value="Register" />
         </a>
-        <div class="switch"><a href="http://sublite.net">switch to STUDENT</a></div>
+        <div class="switch"><a href="http://sublite.net">switch to RECRUITER</a></div>
       </div>
     </div>
   </div>
   <div class="arrow-down"></div>
 </panel>
+<panel class="stats">
+  <div class="content">
+    <div class="stat"><num>3590</num><type>users</type></div>
+    <div class="stat"><num>353</num><type>universities</type></div>
+    <div class="stat"><num>218</num><type>listings</type></div>
+    <div class="stat"><num>24</num><type>cities</type></div>
+    <div class="stat"><num>13</num><type>companies</type></div>
+  </div>
+</panel>
 <panel class="why">
   <div class="content">
-    <headline style="color: #000;">Why Choose Us?</headline>
+    <headline style="color: #035d75;">Why SubLite?</headline>
+    <div style="font-size: 1em; margin-top: -20px; margin-bottom: 20px;">We know you are working hard to network and get top grades for the best summer experience.<br>Finding jobs and housing can be a painstaking process, but it doesn't have to be.</div>
     <table class="whys"><tr>
       <td class="whycell"><incell>
         <div class="whyimg whyimg1">
           <div class="whyroll"><div class="cell">Our network includes 3500 students from 350 universities and is growing everyday.</div></div>
         </div>
-        <div class="whytext">Access a growing network of talented university students.</div>
+        <div class="whytext">Verified housing and job listings</div>
       </incell></td>
       <td class="whycell"><incell>
         <div class="whyimg whyimg2">
           <div class="whyroll"><div class="cell">Students can discover qualities about your company that they cannot find elsewhere.</div></div>
         </div>
-        <div class="whytext">Showcase the personality of your company</div>
+        <div class="whytext">Criteria you care about</div>
       </incell></td>
       <td class="whycell"><incell>
         <div class="whyimg whyimg3">
           <div class="whyroll"><div class="cell">Each posting will attract the right match for your company.</div></div>
         </div>
-        <div class="whytext">Design a candid and creative job description</div>
+        <div class="whytext">Exclusively for students</div>
       </incell></td>
     </tr></table>
+  </div>
+</panel>
+<panel class="backedby">
+  <div class="content" style="position: relative;">
+    <div class="backedlogo backedlogo1"></div>
+    <div class="backedtext">
+      <div class="line1">SubLite is backed by:</div>
+      <div class="line2">Yale Venture Creation Program &amp; Wharton Innovation Fund</div>
+    </div>
+    <div class="backedlogo backedlogo2"></div>
   </div>
 </panel>
 <panel class="how">
