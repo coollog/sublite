@@ -255,8 +255,10 @@
       $recruiter = clean($data['recruiter']);
       $company = clean($data['company']);
       $title = clean($data['title']);
+      $industry = clean($data['industry']);
       return array(
-        'recruiter' => $recruiter, 'company' => $company, 'title' => $title
+        'recruiter' => $recruiter, 'company' => $company, 'title' => $title,
+        'industry' => $industry
       );
     }
 
@@ -316,30 +318,36 @@
       $this->validate(strlen($recruiter) == 0 or 
                       !is_null($MRecruiter->getByID($recruiter)),
         $err, 'unknown recruiter');
-      $cs = $MCompany->find(array('name' => array('$regex' => keywords2mregex($company))));
-      $this->validate(strlen($company) == 0 or
-                      $cs->count() > 0,
-        $err, 'unknown company');
 
       // Code
       if ($this->isValid()) {
-        $query = array();
+
+        // Searching for companies
+        $companyquery = array();
+
+        if (strlen($company) > 0) {
+          $companyquery['name'] = array('$regex' => keywords2mregex($company));
+        }
+        if (strlen($industry) > 0) {
+          $companyquery['industry'] = array('$regex' => keywords2mregex($industry));
+        }
+        $cs = $MCompany->find($companyquery);
 
         // Search query building
+        $query = array();
+
         if (strlen($recruiter) > 0) 
           $query['recruiter'] = new MongoId($recruiter);
-        if (strlen($company) > 0) {
-          
-          $companies = array();
-          foreach ($cs as $c) {
-            array_push($companies, $c['_id']);
-          }
-          $query['company'] = array('$in' => $companies);
-
-        }
+        
         if (strlen($title) > 0) {
           $query['title'] = array('$regex' => keywords2mregex($title));
         }
+
+        $companies = array();
+        foreach ($cs as $c) {
+          array_push($companies, $c['_id']);
+        }
+        $query['company'] = array('$in' => $companies);
 
         // Performing search
         $res = $MJob->find($query);
