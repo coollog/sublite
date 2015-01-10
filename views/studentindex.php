@@ -286,11 +286,11 @@
 </panel>
 <panel class="stats">
   <div class="content">
-    <div class="stat"><num>3590</num><type>users</type></div>
-    <div class="stat"><num>353</num><type>universities</type></div>
-    <div class="stat"><num>218</num><type>listings</type></div>
-    <div class="stat"><num>24</num><type>cities</type></div>
-    <div class="stat"><num>13</num><type>companies</type></div>
+    <div class="stat"><num><?php vecho('users'); ?></num><type>users</type></div>
+    <div class="stat"><num><?php vecho('universities'); ?></num><type>universities</type></div>
+    <div class="stat"><num><?php vecho('listings'); ?></num><type>listings</type></div>
+    <div class="stat"><num><?php vecho('cities'); ?></num><type>cities</type></div>
+    <div class="stat"><num><?php vecho('companies'); ?></num><type>companies</type></div>
   </div>
 </panel>
 <panel class="why">
