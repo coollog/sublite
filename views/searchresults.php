@@ -65,6 +65,9 @@
 <?php } ?>
 <panel class="results">
   <div class="content">
+    <?php if (!is_null(vget('recent'))) { ?>
+      <headline>Recent Listings</headline>
+    <?php } ?>
     <?php
       function jobBlock($job) {
         $title = $job['title'];

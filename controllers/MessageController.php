@@ -109,6 +109,7 @@
             array_push($current, $m);
           }
 
+          $to = 'Message To: ' . getName($entry['participants'][0]);
           foreach ($entry['participants'] as $p) {
             if (strcmp($p, $_SESSION['_id']) != 0) {
               $to = 'Message To: ' . getName($p);

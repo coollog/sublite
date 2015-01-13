@@ -275,10 +275,10 @@
       <div class="content">
         <div class="tagline">One-Stop Shop for a Great Summer!</div>
         <div class="slogan">Find summer internships and safe, student-only summer housing with SubLite! Verify your ".edu" email address to get started! It's completely free!</div>
-        <a href="register.php">
+        <a href="..">
           <input type="button" class="registerlogin" value="Register" />
         </a>
-        <div class="switch"><a href="http://sublite.net">switch to RECRUITER</a></div>
+        <div class="switch"><a href="../employers">switch to RECRUITER</a></div>
       </div>
     </div>
   </div>
@@ -286,11 +286,11 @@
 </panel>
 <panel class="stats">
   <div class="content">
-    <div class="stat"><num>3590</num><type>users</type></div>
-    <div class="stat"><num>353</num><type>universities</type></div>
-    <div class="stat"><num>218</num><type>listings</type></div>
-    <div class="stat"><num>24</num><type>cities</type></div>
-    <div class="stat"><num>13</num><type>companies</type></div>
+    <div class="stat"><num><?php vecho('users'); ?></num><type>users</type></div>
+    <div class="stat"><num><?php vecho('universities'); ?></num><type>universities</type></div>
+    <div class="stat"><num><?php vecho('listings'); ?></num><type>listings</type></div>
+    <div class="stat"><num><?php vecho('cities'); ?></num><type>cities</type></div>
+    <div class="stat"><num><?php vecho('companies'); ?></num><type>companies</type></div>
   </div>
 </panel>
 <panel class="why">

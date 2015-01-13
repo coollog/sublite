@@ -38,7 +38,18 @@
     }
 
     function index() {
-      $this->render('studentindex');
+      global $MApp;
+      $stats = $MApp->getStats();
+      $users = $stats['recruiters'] + $stats['students'];
+      $listings = $stats['jobs'] + $stats['sublets'];
+
+      $this->render('studentindex', array(
+        'users' => $users,
+        'listings' => $listings,
+        'universities' => $stats['universities'],
+        'cities' => $stats['cities'],
+        'companies' => $stats['companies']
+      ));
     }
 
     function login() {
