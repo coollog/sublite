@@ -4,14 +4,13 @@
   class StudentController extends Controller {
 
     function data($data) {
-      $email = clean($data['email']);
       $name = clean($data['name']);
       $pass = $data['pass'];
       $pass2 = $data['pass2'];
       $class = clean($data['class']);
       $school = clean($data['school']);
       return array(
-        'email' => $email, 'pass' => $pass, 'pass2' => $pass2, 
+        'pass' => $pass, 'pass2' => $pass2, 
         'name' => $name, 'class' => $class, 'school' => $school
       );
     }
@@ -36,7 +35,7 @@
       $me['pic'] = $pic;
 
       if (strlen($me['school']) == 0) {
-        require_once('../housing/schools.php');
+        require_once($GLOBALS['dirpre'].'../housing/schools.php');
         $me['school'] = $S->nameOf($me['email']);
       }
 
@@ -107,7 +106,7 @@
       $this->startValidations();
       $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL), 
         $err, 'invalid email');
-      require_once('../housing/schools.php');
+      require_once($GLOBALS['dirpre'].'../housing/schools.php');
       $this->validate($S->verify($email), $err, 'email must be .edu');
       $this->validate(($entry = $MStudent->get($email)) == NULL or !isset($entry['pass']),
         $err, 'email already in use, please log in instead');
@@ -157,8 +156,6 @@
     function confirm() {
 
       global $params, $MStudent;
-      // Params to vars
-      $data = $this->data($params);
 
       // Validations
       $this->startValidations();
@@ -178,22 +175,32 @@
 
           if (!isset($_POST['register'])) { $this->render('confirm'); return; }
 
+          // Params to vars
+          extract($data = $this->data($params));
+
           $this->validate($pass == $pass2, $err, 'password mismatch');
           $this->validate(strlen($name) > 0, $err, 'name empty');
           $this->validate($class >= 1900 and $class <= 2100, 
             $err, 'invalid class year');
-          
-          $pass = md5($pass);
-          // Save new account information
-          $entry['name'] = $name;
-          $entry['pass'] = $pass;
-          $entry['orig'] = $pass2;
-          $entry['class'] = $class;
-          $entry['school'] = $school;
-          $entry['time'] = time();
-          $MStudent->save($entry);
 
-          $_POST['login'] = true; $this->login();
+          if ($this->isValid()) {
+            $pass = md5($pass);
+            // Save new account information
+            $entry['name'] = $name;
+            $entry['pass'] = $pass;
+            $entry['orig'] = $pass2;
+            $entry['class'] = $class;
+            $entry['school'] = $school;
+            $entry['time'] = time();
+            $MStudent->save($entry);
+
+            $params['email'] = $email;
+            $_POST['login'] = true; $this->login();
+            return;
+          }
+
+          $this->error($err);
+          $this->render('confirm', $data);
           return;
         }
       }

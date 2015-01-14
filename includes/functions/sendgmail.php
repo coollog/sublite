@@ -26,7 +26,8 @@
 				}
 			}
 		} else {
-			$mail->addAddress($to);
+			if (is_array($to)) $mail->addAddress($to[0]);
+			else $mail->addAddress($to);
 		}
 		if (!is_null($cc)) {
 			$mail->addCC($cc);

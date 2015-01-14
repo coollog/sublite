@@ -8,7 +8,7 @@
       <div class="form-slider"><label for="pass2">Confirm Password</label><input type="password" id="pass2" name="pass2" required pattern=".{6,}" /></div>
       <div class="form-slider"><label for="class">Class Year</label><input type="text" id="class" name="class" value="<?php vecho('class'); ?>" required /></div>
       If you are a graduate student, enter your school:
-      <div class="form-slider"><label for="school">(eg. Law School, Business School)</label><input type="text" id="name" name="school" value="<?php vecho('school'); ?>" required /></div>
+      <div class="form-slider"><label for="school">(eg. Law School, Business School)</label><input type="text" id="name" name="school" value="<?php vecho('school'); ?>" /></div>
       <?php vnotice(); ?>
       <input type="submit" name="register" value="Register" />
     </form>

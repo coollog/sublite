@@ -138,6 +138,13 @@
       }
 
       global $CRecruiter; $CRecruiter->requireLogin();
+
+      global $CCompany;
+      if (!$CCompany->exists()) {
+        $this->error('you must create a company profile first');
+        $this->render('notice'); return;
+      }
+
       if (!isset($_POST['add'])) { 
         $this->render('jobform', formData(array())); return; 
       }
