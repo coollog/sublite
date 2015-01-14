@@ -88,7 +88,7 @@
       
       // Validations
       $this->startValidations();
-      $this->validate(!MongoId::isValid($me['company']), 
+      $this->validate(!$this->exists(), 
         $err, 'company exists');
       $this->validateData($data, $err);
 
@@ -175,6 +175,12 @@
 
       $this->error($err);
       $this->render('notice');
+    }
+
+    function exists() {
+      global $MRecruiter;
+      $me = $MRecruiter->me();
+      return MongoId::isValid($me['company']);
     }
   }
 

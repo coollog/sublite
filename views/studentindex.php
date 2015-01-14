@@ -275,7 +275,7 @@
       <div class="content">
         <div class="tagline">One-Stop Shop for a Great Summer!</div>
         <div class="slogan">Find summer internships and safe, student-only summer housing with SubLite! Verify your ".edu" email address to get started! It's completely free!</div>
-        <a href="..">
+        <a href="register.php">
           <input type="button" class="registerlogin" value="Register" />
         </a>
         <div class="switch"><a href="../employers">switch to RECRUITER</a></div>
