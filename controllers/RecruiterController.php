@@ -220,7 +220,7 @@
     }
 
     function view() {
-      $this->requireLogin();
+      global $CJob; $CJob->requireLogin();
       
       global $params, $MRecruiter, $MCompany, $MJob;
       
@@ -229,28 +229,36 @@
       $this->validate(isset($_GET['id']) and 
         ($entry = $MRecruiter->getByID($id = $_GET['id'])) != NULL, 
         $err, 'unknown recruiter');
+      if ($this->isValid()) {
+
+      }
 
       // Code
       if ($this->isValid()) {
         $data = $this->data($entry);
-        $company = $MCompany->get($data['company']);
-        $data['company'] = $company['name'];
 
-        $jobs = $MJob->getByRecruiter($id);
-        $data['jobtitles'] = array(); $data['joblocations'] = array();
-        foreach ($jobs as $job) {
-          array_push($data['jobtitles'], $job['title']);
-          array_push($data['joblocations'], $job['location']);
+        $this->validate(($company = $MCompany->get($data['company'])) != NULL,
+          $err, 'recruiter has not set up company profile');
+        
+        if ($this->isValid()) {
+          $data['company'] = $company['name'];
+
+          $jobs = $MJob->getByRecruiter($id);
+          $data['jobtitles'] = array(); $data['joblocations'] = array();
+          foreach ($jobs as $job) {
+            array_push($data['jobtitles'], $job['title']);
+            array_push($data['joblocations'], $job['location']);
+          }
+
+          $data['isme'] = idcmp($id, $_SESSION['_id']);
+          $data['recruiterid'] = $id;
+
+          if ($data['photo'] == 'assets/gfx/defaultpic.png')
+            $data['photo'] = $GLOBALS['dirpre'] . $data['photo'];
+
+          $this->render('recruiter', $data);
+          return;
         }
-
-        $data['isme'] = idcmp($id, $_SESSION['_id']);
-        $data['recruiterid'] = $id;
-
-        if ($data['photo'] == 'assets/gfx/defaultpic.png')
-          $data['photo'] = $GLOBALS['dirpre'] . $data['photo'];
-
-        $this->render('recruiter', $data);
-        return;
       }
       
       $this->error($err);

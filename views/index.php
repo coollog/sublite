@@ -211,7 +211,7 @@
         <a href="register.php">
           <input type="button" class="registerlogin" value="Register" />
         </a>
-        <div class="switch"><a href="http://sublite.net">switch to STUDENT</a></div>
+        <div class="switch"><a href="../jobs">switch to STUDENT</a></div>
       </div>
     </div>
   </div>

@@ -55,7 +55,7 @@
 <navbar class="blackbar">
   <a href="."><logo>SubLite</logo></a>
   <options class="right">
-    <a href="."><opt class="small">Employers' Page</opt></a>
+    <a href="."><opt class="small">Home Page</opt></a>
     
     <?php if (vget('Loggedin')) { ?>
 
@@ -70,7 +70,8 @@
 
     <?php } elseif (vget('Loggedinstudent')) { ?>
 
-      <a href="search.php"><opt>Search For Jobs</opt></a>
+      <a href="<?php echo $GLOBALS['dirpre']; ?>../housing"><opt>Search For Housing</opt></a>
+      <a href="<?php echo $GLOBALS['dirpre']; ?>../jobs/search.php"><opt>Search For Jobs</opt></a>
       <a href="messages.php"><opt>Messages</opt></a>
       <a href="logout.php"><opt>Log Out</opt></a>
 

@@ -58,9 +58,10 @@
 <panel class="search">
   <div class="content">
     <form method="post">
-      <div class="form-slider"><label for="recruiter">Recruiter ID:</label><input type="text" id="recruiter" name="recruiter" value="<?php vecho('recruiter'); ?>" /></div>
+      <input type="hidden" id="recruiter" name="recruiter" value="<?php vecho('recruiter'); ?>" />
       <div class="form-slider"><label for="company">Company:</label><input type="text" id="company" name="company" value="<?php vecho('company'); ?>" /></div>
       <div class="form-slider"><label for="title">Job Title:</label><input type="text" id="title" name="title" value="<?php vecho('title'); ?>" /></div>
+      <div class="form-slider"><label for="industry">Industry:</label><input type="text" id="industry" name="industry" value="<?php vecho('industry'); ?>" /></div>
       <?php vnotice(); ?>
       <input type="submit" name="search" value="Search" />
     </form>

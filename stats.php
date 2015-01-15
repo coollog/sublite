@@ -1,6 +1,6 @@
 <?php
-  $GLOBALS['dirpre'] = '../employers/';
+  $GLOBALS['dirpre'] = '';
   require_once($GLOBALS['dirpre'].'includes/header.php');
-  $CStudent->index();
+  $CStats->update();
   require_once($GLOBALS['dirpre'].'includes/footer.php');
 ?>

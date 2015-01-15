@@ -4,9 +4,14 @@
   class StudentController extends Controller {
 
     function data($data) {
-      $lastname = clean($data['lastname']);
+      $name = clean($data['name']);
+      $pass = $data['pass'];
+      $pass2 = $data['pass2'];
+      $class = clean($data['class']);
+      $school = clean($data['school']);
       return array(
-        'email' => $email
+        'pass' => $pass, 'pass2' => $pass2, 
+        'name' => $name, 'class' => $class, 'school' => $school
       );
     }
 
@@ -30,7 +35,7 @@
       $me['pic'] = $pic;
 
       if (strlen($me['school']) == 0) {
-        require_once('../schools.php');
+        require_once($GLOBALS['dirpre'].'../housing/schools.php');
         $me['school'] = $S->nameOf($me['email']);
       }
 
@@ -38,7 +43,18 @@
     }
 
     function index() {
-      $this->render('studentindex');
+      global $MApp;
+      $stats = $MApp->getStats();
+      $users = $stats['recruiters'] + $stats['students'];
+      $listings = $stats['jobs'] + $stats['sublets'];
+
+      $this->render('studentindex', array(
+        'users' => $users,
+        'listings' => $listings,
+        'universities' => $stats['universities'],
+        'cities' => $stats['cities'],
+        'companies' => $stats['companies']
+      ));
     }
 
     function login() {
@@ -67,13 +83,136 @@
         $_SESSION['_id'] = $entry['_id'];
         
         // $this->redirect('home');
-        $this->redirect('search');
+        // $this->redirect('search');
+        $this->redirect('whereto');
 
         return;
       }
       
       $this->error($err);
       $this->render('studentlogin', $data);
+    }
+
+    function register() {
+      if (!isset($_POST['register'])) { $this->render('studentregister'); return; }
+
+      global $params, $MStudent;
+      // Params to vars
+      global $email;
+      $email = clean($params['email']);
+      $data = array('email' => $email);
+
+      // Validations
+      $this->startValidations();
+      $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL), 
+        $err, 'invalid email');
+      require_once($GLOBALS['dirpre'].'../housing/schools.php');
+      $this->validate($S->verify($email), $err, 'email must be .edu');
+      $this->validate(($entry = $MStudent->get($email)) == NULL or !isset($entry['pass']),
+        $err, 'email already in use, please log in instead');
+
+      if ($this->isValid()) {
+        // Send confirmation email
+        $confirm = $this->sendConfirm($email);
+        if ($entry == NULL) {
+          $entry = array('email' => $email, 'confirm' => $confirm);
+        } else {
+          $entry['confirm'] = $confirm;
+        }
+        $MStudent->save($entry);
+
+        $this->success("A confirmation email has been sent to <strong>$email</strong>. Check your inbox or spam. The email may take up to 24 hours to show up.");
+        $this->render('notice');
+        return;
+      }
+      
+      $this->error($err);
+      $this->render('studentregister', $data);
+    }
+
+    function sendConfirm($email) {
+
+      $id = md5(uniqid($email, true));
+      $link = "http://sublite.net/confirm.php?id=$id&email=$email";
+
+      $message = "
+        <h1 style=\"padding: 0.5em 0; margin: 1em 0; background: #f78d1d; color: #fff; text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4); text-align: center;\">Welcome to SubLite!</h1>
+        Hi there!
+        <br /><br />
+        My name is Yuanling and I&rsquo;m a co-founder of SubLite. We care about facilitating verified summer sublets from students to students. Whether you are looking for a summer sublet or have a vacant space to sublet, we want to ensure a safe and secure experience for you. That&rsquo;s why we need you to click on the link below to verify your email address.
+        <br /><br />
+        <a href='$link'>$link</a>
+        <br /><br /><br />
+        <i>Thanks again and welcome aboard!<br />
+        Team SubLite</i>";
+      
+      if (($error = sendgmail($email, array("info@sublite.net", "Yuanling Yuan - SubLite, LLC."), 'SubLite Email Confirmation', $message)) !== true) {
+        sendgmail('info@sublite.net', 'info@sublite.net', 'Email Confirmation Failed to Send', "Email address: $email<br />Reason: $error");
+      }     
+      
+      return $id;
+    }
+
+    function confirm() {
+
+      global $params, $MStudent;
+
+      // Validations
+      $this->startValidations();
+      $this->validate(isset($_REQUEST['id']), $err, 'permission denied');
+      $this->validate(isset($_REQUEST['email']), $err, 'permission denied');
+
+      if ($this->isValid()) {
+        $confirm = $_REQUEST['id'];
+        $email = $_REQUEST['email'];
+
+        $this->validate(($entry = $MStudent->get($email)) != NULL, 
+          $err, 'permission denied');
+        $this->validate(isset($entry['confirm']) and $entry['confirm'] == $confirm and !isset($entry['pass']),
+          $err, 'invalid confirmation code. your code may have expired. return to the registration page to re-enter your email for a new confirmation link.');
+
+        if ($this->isValid()) {
+
+          if (!isset($_POST['register'])) { $this->render('confirm'); return; }
+
+          // Params to vars
+          extract($data = $this->data($params));
+
+          $this->validate($pass == $pass2, $err, 'password mismatch');
+          $this->validate(strlen($name) > 0, $err, 'name empty');
+          $this->validate($class >= 1900 and $class <= 2100, 
+            $err, 'invalid class year');
+
+          if ($this->isValid()) {
+            $pass = md5($pass);
+            // Save new account information
+            $entry['name'] = $name;
+            $entry['pass'] = $pass;
+            $entry['orig'] = $pass2;
+            $entry['class'] = $class;
+            $entry['school'] = $school;
+            $entry['time'] = time();
+            $MStudent->save($entry);
+
+            $params['email'] = $email;
+            $_POST['login'] = true; $this->login();
+            return;
+          }
+
+          $this->error($err);
+          $this->render('confirm', $data);
+          return;
+        }
+      }
+
+      $this->error($err);
+      $this->render('notice');
+    }
+
+    function whereto() {
+      $this->requireLogin();
+
+      $this->render('whereto');
     }
 
     function edit() {

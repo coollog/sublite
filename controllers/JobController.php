@@ -138,6 +138,13 @@
       }
 
       global $CRecruiter; $CRecruiter->requireLogin();
+
+      global $CCompany;
+      if (!$CCompany->exists()) {
+        $this->error('you must create a company profile first');
+        $this->render('notice'); return;
+      }
+
       if (!isset($_POST['add'])) { 
         $this->render('jobform', formData(array())); return; 
       }
@@ -255,8 +262,10 @@
       $recruiter = clean($data['recruiter']);
       $company = clean($data['company']);
       $title = clean($data['title']);
+      $industry = clean($data['industry']);
       return array(
-        'recruiter' => $recruiter, 'company' => $company, 'title' => $title
+        'recruiter' => $recruiter, 'company' => $company, 'title' => $title,
+        'industry' => $industry
       );
     }
 
@@ -266,6 +275,22 @@
       global $params;
       global $MJob, $MStudent, $MCompany, $MRecruiter;
 
+      // Function for processing results and showing them
+      function process($res) {
+        global $MCompany;
+        // Processing results
+        $jobs = array();
+        foreach ($res as $job) {
+          $job['company'] = $MCompany->getName($job['company']);
+          if (strlen($job['desc']) > 300) {
+            $job['desc'] = substr($job['desc'], 0, 297) . '...';
+          }
+          array_push($jobs, $job);
+        }
+        return $jobs;
+      }
+
+      // Predefined searches
       $showSearch = true;
       $showCompany = null;
       if (isset($_GET['recruiter'])) {
@@ -282,8 +307,14 @@
         $showSearch = false;
       }
 
-      if ($showSearch and !isset($_POST['search'])) { 
-        $this->render('searchform'); return; 
+      if ($showSearch and !isset($_POST['search'])) {
+        // If not searching for anything, then return last 5 entries
+        $res = $MJob->last(5);
+        $jobs = process($res);
+
+        $this->render('searchform');
+        $this->render('searchresults', array('jobs' => $jobs, 'recent' => true));
+        return; 
       }
       
       // Params to vars
@@ -294,40 +325,40 @@
       $this->validate(strlen($recruiter) == 0 or 
                       !is_null($MRecruiter->getByID($recruiter)),
         $err, 'unknown recruiter');
-      $cs = $MCompany->find(array('name' => array('$regex' => keywords2mregex($company))));
-      $this->validate(strlen($company) == 0 or
-                      $cs->count() > 0,
-        $err, 'unknown company');
 
       // Code
       if ($this->isValid()) {
-        $query = array();
+
+        // Searching for companies
+        $companyquery = array();
+
+        if (strlen($company) > 0) {
+          $companyquery['name'] = array('$regex' => keywords2mregex($company));
+        }
+        if (strlen($industry) > 0) {
+          $companyquery['industry'] = array('$regex' => keywords2mregex($industry));
+        }
+        $cs = $MCompany->find($companyquery);
 
         // Search query building
+        $query = array();
+
         if (strlen($recruiter) > 0) 
           $query['recruiter'] = new MongoId($recruiter);
-        if (strlen($company) > 0) {
-          
-          $companies = array();
-          foreach ($cs as $c) {
-            array_push($companies, $c['_id']);
-          }
-          $query['company'] = array('$in' => $companies);
-
-        }
+        
         if (strlen($title) > 0) {
           $query['title'] = array('$regex' => keywords2mregex($title));
         }
 
+        $companies = array();
+        foreach ($cs as $c) {
+          array_push($companies, $c['_id']);
+        }
+        $query['company'] = array('$in' => $companies);
+
         // Performing search
         $res = $MJob->find($query);
-
-        // Processing results
-        $jobs = array();
-        foreach ($res as $job) {
-          $job['company'] = $MCompany->getName($job['company']);
-          array_push($jobs, $job);
-        }
+        $jobs = process($res);
 
         if ($showSearch) $this->render('searchform', $data);
         $this->render('searchresults', array('jobs' => $jobs, 'showCompany' => $showCompany));

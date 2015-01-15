@@ -17,12 +17,17 @@
 			$mail->setFrom($from);
 			$mail->addReplyTo($from);
 		}
-		foreach($to as $email) {
-			if (count($email) > 1) {
-				$mail->addAddress($email[0], $email[1]);
-			} else {
-				$mail->addAddress($email);
+		if (count($to) > 1) {
+			foreach($to as $email) {
+				if (count($email) > 1) {
+					$mail->addAddress($email[0], $email[1]);
+				} else {
+					$mail->addAddress($email);
+				}
 			}
+		} else {
+			if (is_array($to)) $mail->addAddress($to[0]);
+			else $mail->addAddress($to);
 		}
 		if (!is_null($cc)) {
 			$mail->addCC($cc);
