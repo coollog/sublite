@@ -216,7 +216,7 @@
     }
     
     function view() {
-      $this->requireLogin();
+      //$this->requireLogin();
       global $MJob;
       global $MRecruiter;
       global $MCompany;

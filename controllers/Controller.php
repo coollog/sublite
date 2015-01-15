@@ -43,6 +43,11 @@
       if (count(self::$renderQueue) == 0) return;
 
       global $viewVars; $viewVars = array();
+      foreach (self::$renderQueue as $pair) {
+        $vars = $pair[1];
+        if ($vars === false) $vars = array();
+        $viewVars = array_merge($viewVars, $vars);
+      }
       require_once($GLOBALS['dirpre'].'views/view.php');
       require_once($GLOBALS['dirpre'].'includes/htmlheader.php');
 
