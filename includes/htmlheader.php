@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:fb="http://ogp.me/ns/fb#">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
@@ -11,7 +11,7 @@
         $photo = vget('photo');
         if (strpos($photo, 'assets/gfx') !== FALSE)
           $photo = 'https://sublite.net/employers/' . $photo;
-        echo '<meta property="og:img" content="' . $photo . '" />';
+        echo '<meta property="og:image" content="' . $photo . '" />';
         echo '<meta property="og:description" content="Check out ' . $name .
           '\'s profile on SubLite!" />';
       }
@@ -21,7 +21,7 @@
         echo '<meta property="og:title" content="' . $name . ' is hiring for the position of ' . $title . ' on SubLite!" />';
         $photo = vget('companybanner');
         if(!$photo) $photo = 'https://sublite.net/dev/employers/assets/gfx/defaultpic.png';
-        echo '<meta property="og:img" content="' . $photo . '" />';
+        echo '<meta property="og:image" content="' . $photo . '" />';
         echo '<meta property="og:description" content="Apply to the ' . $title .
           ' position on SubLite!" />';
       }
@@ -30,14 +30,18 @@
         echo '<meta property="og:title" content="Check out ' . $name . ' on SubLite!" />';
         $photo = vget('logophoto');
         if(!$photo) $photo = 'https://sublite.net/dev/employers/assets/gfx/defaultpic.png';
-        echo '<meta property="og:img" content="' . $photo . '" />';
+        echo '<meta property="og:image" content="' . $photo . '" />';
         $desc = vget('desc');
         echo '<meta property="og:description" content="' . $desc . '" />';
       }
       else { // default
-        echo '<meta property="og:title" content="SubLite &ndash; Your One-Stop Shop for a Great Summer!" />';
-        echo '<meta property="og:img" content="https://sublite.net/employers/assets/gfx/studentmain.jpg" />';
-        echo '<meta property="og:description" content="Find summer internships and safe, student-only summer housing with SubLite! Verify your ".edu" email address to get started! It\'s completely free!" />';
+    ?>
+        <meta property="og:title" content="SubLite &ndash; Your One-Stop Shop for a Great Summer!" />
+        <meta property="og:image" content="https://sublite.net/employers/assets/gfx/studentmain.jpg" />
+        <meta property="og:description" content="Find summer internships and safe, student-only summer housing with SubLite! Verify your &quot;.edu&quot; email address to get started! It's completely free!" />
+        <meta property="og:image:width" content="1677" />
+        <meta property="og:image:height" content="1118" />
+    <?php
       }
       $url = !empty($_SERVER['HTTPS']) ? 'https://' : 'http://';
       $url .= $_SERVER['HTTP_HOST'] . htmlspecialchars($_SERVER['REQUEST_URI']);
