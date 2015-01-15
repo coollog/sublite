@@ -15,7 +15,7 @@
     </style>
     <footer class="blackbar">
       <options class="left">
-        <a href="http://sublite.net/team.php"><opt>The Team</opt></a>
+        <a href="https://sublite.net/housing/team.php"><opt>The Team</opt></a>
         <a href="faq.php"><opt>FAQ</opt></a>
         <a href="privacy.php"><opt>Privacy</opt></a>
         <a href="terms.php"><opt>Terms of Service</opt></a>
