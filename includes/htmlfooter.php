@@ -28,5 +28,22 @@
         </opt>
       </options>
     </footer>
+    <script>
+      function repositionFooter() {
+        var h = 0;
+        $('.blackbar, panel').each(function() {
+          h += $(this).height();
+        });
+        var mt = $(window).height() - h - $('footer').height();
+        if (mt > 0) {
+          $('footer').css('margin-top', mt);
+        }
+      }
+
+      $(window).on('resize', function() {
+        repositionFooter();
+      });
+      repositionFooter();
+    </script>
   </body>
 </html>
