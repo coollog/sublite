@@ -46,8 +46,8 @@
     line-height: 1.1em;
     font-size: 1.6em;
     letter-spacing: 1px;
-    margin-top: 0.25em;
-    margin-bottom: 0.5em;
+    margin-top: 0.75em;
+    margin-bottom: 1em;
   }
   panel.main .registerlogin {
     font-size: 1.5em;
@@ -335,29 +335,33 @@
     <table class="steps"><tr>
       <td class="step"><table><tr>
         <td class="bignum">1</td>
-        <td class="steptext">Recruiter Registration</td>
+        <td class="steptext">Register</td>
       </tr></table></td>
       <td class="step"><table><tr>
         <td class="bignum">2</td>
-        <td class="steptext">Company Profile</td>
+        <td class="steptext">Search for Internships</td>
       </tr></table></td>
       <td class="step"><table><tr>
         <td class="bignum">3</td>
-        <td class="steptext">Job Listing</td>
+        <td class="steptext">Contact Recruiters</td>
       </tr></table></td>
       <td class="step"><table><tr>
         <td class="bignum">4</td>
-        <td class="steptext">Data Analysis</td>
+        <td class="steptext">Secure Internships</td>
       </tr></table></td>
       <td class="step"><table><tr>
         <td class="bignum">5</td>
-        <td class="steptext">Direct Contact</td>
+        <td class="steptext">SubLet</td>
+      </tr></table></td>
+      <td class="step"><table><tr>
+        <td class="bignum">6</td>
+        <td class="steptext">Summer Success!</td>
       </tr></table></td>
     </tr></table>
-    <div class="desc" num="1">Start by registering an account with your name, company and email address. Once your account is confirmed, you will be brought to your dashboard, where you can view weekly stats, send messages and edit the company profile and internship listings.</div>
+    <!-- <div class="desc" num="1">Start by registering an account with your name, company and email address. Once your account is confirmed, you will be brought to your dashboard, where you can view weekly stats, send messages and edit the company profile and internship listings.</div>
     <div class="desc" num="2">Create a profile for your company by filling out our Company Profile Questionnaire. We will transform your answers into an attractive page of descriptions, pictures, and videos that showcase the personality of your company.</div>
     <div class="desc" num="3">Create internship listings for your company by filling out our Internship Listing Questionnaire. These listings are linked to your company profile and are easily searchable by students. </div>
     <div class="desc" num="4">You can view important stats about your company profile and internship listings on your dashboard, such as the number of times an internship listing has been viewed. You can use these metrics measure and improve the performance of your listings.</div>
-    <div class="desc" num="5">Connect with our growing network of students directly through our internal messaging system!</div>
+    <div class="desc" num="5">Connect with our growing network of students directly through our internal messaging system!</div> -->
   </div>
 </panel>

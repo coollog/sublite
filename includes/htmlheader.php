@@ -57,6 +57,9 @@
     <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" />
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
     <script src="<?php echo $GLOBALS['dirpre']; ?>assets/js/jquery.slidinglabels.min.js"></script>
+
+
+    <?php require_once($GLOBALS['dirpre'].'assets/js/formjs.php'); ?>
     <?php require_once($GLOBALS['dirpre'].'assets/css/maincss.php'); ?>
     <?php require_once($GLOBALS['dirpre'].'assets/css/formcss.php'); ?>
 
