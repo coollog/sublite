@@ -21,8 +21,8 @@
       <?php vnotice(); ?>
       <div class="form-slider"><label for="name">Company Name*:</label><input type="text" id="name" name="name" value="<?php vecho('name'); ?>" disabled /></div>
       <div class="form-slider"><label for="size">Industry*: </label>
-      <select id="industry" name = "industry" required>
-        <?php vecho('size', '<option selected="selected">{var}</option>'); ?>
+      <select id="industry" name="industry" required>
+        <?php vecho('industry', '<option selected="selected">{var}</option>'); ?>
         <option>Architecture/Design/Urban Planning</option>
         <option>Communications/Marketing/Advertising/PR</option>
         <option>Computer Science/Technology</option>

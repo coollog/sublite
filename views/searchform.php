@@ -64,7 +64,6 @@
       <div class="form-slider"><label for="industry">Industry:</label>
         <!-- <input type="text" id="industry" name="industry" value="<?php vecho('industry'); ?>" /> -->
         <select id="industry" name="industry" required>
-          <?php vecho('size', '<option selected="selected">{var}</option>'); ?>
           <option>Architecture/Design/Urban Planning</option>
           <option>Communications/Marketing/Advertising/PR</option>
           <option>Computer Science/Technology</option>
