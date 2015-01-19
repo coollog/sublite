@@ -21,6 +21,10 @@
       $entry = $this->get($id);
       return $entry['name'];
     }
+    function getIndustry($id) {
+      $entry = $this->get($id);
+      return $entry['industry'];
+    }
     function find($query) {
       return $this->collection->find($query);
     }

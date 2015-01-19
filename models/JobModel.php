@@ -21,7 +21,7 @@
     function getAll() {
       return $this->collection->find();
     }
-    function find($query) {
+    function find($query=array()) {
       return $this->collection->find($query);
     }
     function last($n=1) {

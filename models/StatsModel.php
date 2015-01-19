@@ -21,6 +21,27 @@
     function countCompanies() {
       return $this->db->companies->count();
     }
+    function getIndustries() {
+      $industries = $this->db->companies->find(array(), array('industry' => 1));
+      $is = array();
+      foreach ($industries as $i) {
+        $is[] = $i['industry'];
+      }
+      return $is;
+    }
+    function getIndustriesByJobs() {
+      global $MCompany;
+
+      $industries = array();
+      $jobs = $this->db->jobs->find();
+      foreach ($jobs as $job) {
+        $industry = $MCompany->getIndustry($job['company']);
+        if (!in_array($industry, $industries))
+          $industries[] = $industry;
+      }
+
+      return $industries;
+    }
     function countSubletListings() {
       return $this->dbstudent->listings->count();
     }

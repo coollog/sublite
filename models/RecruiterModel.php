@@ -43,6 +43,9 @@
       if (!isset($_SESSION['email'])) return null;
       return $this->get($_SESSION['email']);
     }
+    function find($query=array()) {
+      return $this->collection->find($query);
+    }
     
     function exists($email) {
       return ($this->get($email) !== NULL);

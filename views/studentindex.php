@@ -195,7 +195,7 @@
     padding: 10px;
     cursor: pointer;
     font-weight: 700;
-    width: 20%;
+    width: 16%;
   }
   panel.how .step table {
     -webkit-transform: skew(-10deg);
@@ -300,19 +300,19 @@
     <table class="whys"><tr>
       <td class="whycell"><incell>
         <div class="whyimg whyimg1">
-          <div class="whyroll"><div class="cell">Our network includes 3500 students from 350 universities and is growing everyday.</div></div>
+          <div class="whyroll"><div class="cell">Sublet from other students and connect directly with recruiters.</div></div>
         </div>
         <div class="whytext">Verified housing and job listings</div>
       </incell></td>
       <td class="whycell"><incell>
         <div class="whyimg whyimg2">
-          <div class="whyroll"><div class="cell">Students can discover qualities about your company that they cannot find elsewhere.</div></div>
+          <div class="whyroll"><div class="cell">Filter housing by amenities, price, dates, and browse among jobs based on the company's culture.</div></div>
         </div>
         <div class="whytext">Criteria you care about</div>
       </incell></td>
       <td class="whycell"><incell>
         <div class="whyimg whyimg3">
-          <div class="whyroll"><div class="cell">Each posting will attract the right match for your company.</div></div>
+          <div class="whyroll"><div class="cell">Only students with university .edu emails can register for an account.</div></div>
         </div>
         <div class="whytext">Exclusively for students</div>
       </incell></td>
@@ -347,11 +347,11 @@
       </tr></table></td>
       <td class="step"><table><tr>
         <td class="bignum">4</td>
-        <td class="steptext">Secure Internships</td>
+        <td class="steptext">Secure Internship</td>
       </tr></table></td>
       <td class="step"><table><tr>
         <td class="bignum">5</td>
-        <td class="steptext">SubLet</td>
+        <td class="steptext">Sublet</td>
       </tr></table></td>
       <td class="step"><table><tr>
         <td class="bignum">6</td>

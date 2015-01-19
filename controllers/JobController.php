@@ -258,15 +258,20 @@
       else $CStudent->requireLogin();
     }
 
+    function dataSearchSetup() {
+      global $MApp;
+      return array('industries' => $MApp->getIndustriesByJobs());
+    }
     function dataSearch($data) {
       $recruiter = clean($data['recruiter']);
       $company = clean($data['company']);
       $title = clean($data['title']);
       $industry = clean($data['industry']);
-      return array(
+
+      return array_merge($this->dataSearchSetup(), array(
         'recruiter' => $recruiter, 'company' => $company, 'title' => $title,
         'industry' => $industry
-      );
+      ));
     }
 
     function search() {
@@ -312,7 +317,7 @@
         $res = $MJob->last(5);
         $jobs = process($res);
 
-        $this->render('searchform');
+        $this->render('searchform', $this->dataSearchSetup());
         $this->render('searchresults', array('jobs' => $jobs, 'recent' => true));
         return; 
       }
