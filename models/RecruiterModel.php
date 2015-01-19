@@ -40,6 +40,7 @@
       return isset($entry['photo']) ? $entry['photo'] : null;
     }
     function me() {
+      if (!isset($_SESSION['email'])) return null;
       return $this->get($_SESSION['email']);
     }
     
