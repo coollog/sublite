@@ -29,6 +29,8 @@
         'recruiters' => $MStats->countRecruiters(),
         'jobs' => $MStats->countJobListings(),
         'companies' => $MStats->countCompanies(),
+        'industries' => $MStats->getIndustries(),
+        'industriesbyjobs' => $MStats->getIndustriesByJobs(),
         'sublets' => $MStats->countSubletListings(),
         'students' => $MStats->countStudents(),
         'universities' => $MStats->countUniversities(),
@@ -40,6 +42,14 @@
     function getStats() {
       global $MStats;
       return $this->get('stats');
+    }
+    function getIndustries() {
+      $stats = $this->getStats();
+      return $stats['industries'];
+    }
+    function getIndustriesByJobs() {
+      $stats = $this->getStats();
+      return $stats['industriesbyjobs'];
     }
   }
 

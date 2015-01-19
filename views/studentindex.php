@@ -195,7 +195,7 @@
     padding: 10px;
     cursor: pointer;
     font-weight: 700;
-    width: 20%;
+    width: 16%;
   }
   panel.how .step table {
     -webkit-transform: skew(-10deg);
