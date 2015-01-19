@@ -155,7 +155,7 @@
     }
     
     function view() {
-      global $CJob; $CJob->requireLogin();
+      // global $CJob; $CJob->requireLogin();
       global $MCompany;
       global $MRecruiter;
       // Validations
@@ -168,7 +168,8 @@
       if ($this->isValid()) {
         $data = $this->data($entry);
         $me = $MRecruiter->me();
-        $data['isme'] = idcmp($id, $me['company']);
+        if (!is_null($me)) $data['isme'] = idcmp($id, $me['company']);
+        else $data['isme'] = false;
         $this->render('viewcompany', $data);
         return;
       }
