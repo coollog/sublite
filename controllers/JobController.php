@@ -262,6 +262,10 @@
       global $MApp;
       return array('industries' => $MApp->getIndustriesByJobs());
     }
+    function dataSearchEmpty() {
+      return array('recruiter' => '', 'company' => '', 'title' => '', 
+                   'industry' => '');
+    }
     function dataSearch($data) {
       $recruiter = clean($data['recruiter']);
       $company = clean($data['company']);
@@ -299,15 +303,13 @@
       $showSearch = true;
       $showCompany = null;
       if (isset($_GET['recruiter'])) {
-        $params = array(
-          'recruiter' => $_GET['recruiter'], 'company' => '', 'title' => ''
-        );
+        $params = $this->dataSearchEmpty();
+        $params['recruiter'] = $_GET['recruiter'];
         $showSearch = false;
       }
       if (isset($_GET['company'])) {
-        $params = array(
-          'recruiter' => '', 'company' => $_GET['company'], 'title' => ''
-        );
+        $params = $this->dataSearchEmpty();
+        $params['company'] = $_GET['company'];
         $showCompany = $MCompany->getByName($_GET['company']);
         $showSearch = false;
       }

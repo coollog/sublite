@@ -250,7 +250,7 @@
             array_push($data['joblocations'], $job['location']);
           }
 
-          $data['isme'] = isset($_SESSION['_id']) and idcmp($id, $_SESSION['_id']);
+          $data['isme'] = isset($_SESSION['_id']) ? idcmp($id, $_SESSION['_id']) : false;
           $data['recruiterid'] = $id;
 
           if ($data['photo'] == 'assets/gfx/defaultpic.png')
