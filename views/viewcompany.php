@@ -118,6 +118,7 @@
             function blurb($name, $title, $color) {
               global $pointer, $cols;
               if (strlen($val = vget($name)) > 0) {
+                $val = html_entity_decode($val);
                 $cols[$pointer][] = "<div class=\"blurb $color\">
                                       <subheadline>$title</subheadline>
                                       $val
