@@ -358,10 +358,11 @@
         <td class="steptext">Summer Success!</td>
       </tr></table></td>
     </tr></table>
-    <!-- <div class="desc" num="1">Start by registering an account with your name, company and email address. Once your account is confirmed, you will be brought to your dashboard, where you can view weekly stats, send messages and edit the company profile and internship listings.</div>
-    <div class="desc" num="2">Create a profile for your company by filling out our Company Profile Questionnaire. We will transform your answers into an attractive page of descriptions, pictures, and videos that showcase the personality of your company.</div>
-    <div class="desc" num="3">Create internship listings for your company by filling out our Internship Listing Questionnaire. These listings are linked to your company profile and are easily searchable by students. </div>
-    <div class="desc" num="4">You can view important stats about your company profile and internship listings on your dashboard, such as the number of times an internship listing has been viewed. You can use these metrics measure and improve the performance of your listings.</div>
-    <div class="desc" num="5">Connect with our growing network of students directly through our internal messaging system!</div> -->
+    <div class="desc" num="1">Use your .edu email address to create a SubLite profile. Connect exclusively with other university students.</div>
+    <div class="desc" num="2">Our enhanced listing portal allows you to search for jobs by geographic region, industry, dates, and more. Unlike plain listings, SubLite allows companies to highlight their culture &mdash; allowing you to make an informed decision based on criteria you care about.</div>
+    <div class="desc" num="3">Our internal messaging system allows you to contact recruiters directly.</div>
+    <div class="desc" num="4">Land that internship you want!</div>
+    <div class="desc" num="5">Now that you know your summer location, you may need to either find housing or sublet your apartment while away. Our platform gives you the peace of mind of subletting exclusively to students. Show off your place by highlighting its amenities and uploading photos. Negotiate directly with other students on the final terms &mdash; there is no fee!</div>
+    <div class="desc" num="6">With a job and housing secured, you are set for a stress-free summer!</div>
   </div>
 </panel>

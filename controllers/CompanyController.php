@@ -168,8 +168,9 @@
       if ($this->isValid()) {
         $data = $this->data($entry);
         $me = $MRecruiter->me();
-        if (!is_null($me)) $data['isme'] = idcmp($id, $me['company']);
-        else $data['isme'] = false;
+
+        $data['isme'] = !is_null($me) ? idcmp($id, $me['company']) : false;
+        
         $this->render('viewcompany', $data);
         return;
       }
