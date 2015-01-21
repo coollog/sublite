@@ -33,12 +33,12 @@
 
       <?php 
         vpartial('s3single', array(
-          'name' => 'logophoto', 'title' => 'What is your company logo?*'
+          's3name' => 'logophoto', 'title' => 'What is your company logo?*'
         ));
       ?>
       <?php 
         vpartial('s3single', array(
-          'name' => 'bannerphoto', 'title' => 'What would you like your banner image to be?*'
+          's3name' => 'bannerphoto', 'title' => 'What would you like your banner image to be?*'
         ));
       ?>
 

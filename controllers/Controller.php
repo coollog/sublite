@@ -37,7 +37,7 @@
       $viewVars['Success'] = isset($success) ? $success : '';
       
       require_once($GLOBALS['dirpre'].'views/view.php');
-      require($GLOBALS['dirpre']."views/$view.php");
+      require_once($GLOBALS['dirpre']."views/$view.php");
     }
     function finish() {
       if (count(self::$renderQueue) == 0) return;

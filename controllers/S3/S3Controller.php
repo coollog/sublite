@@ -22,46 +22,50 @@
 				
 				require_once($GLOBALS['dirpre'].'includes/S3/SimpleImage.php');
 				$image = new SimpleImage();
-				$image->load($fname);
-				if ($image->getHeight() > 1000)
-					$image->resizeToHeight(1000);
-				$image->save($fname);
+				$this->validate($image->load($fname), $err, 'invalid image type');
 
-				function getMIME($fname) {
-					$finfo = finfo_open(FILEINFO_MIME_TYPE);
-					$mime = finfo_file($finfo, $fname);
-					finfo_close($finfo);
-					return $mime;
-				}
+        if ($this->isValid()) {
+  				if ($image->getHeight() > 1000)
+  					$image->resizeToHeight(1000);
+  				$image->save($fname);
 
-				$filetype = explode('/', getMIME($fname));
-				$valid_formats = array("jpg", "png", "gif", "jpeg");
+  				function getMIME($fname) {
+  					$finfo = finfo_open(FILEINFO_MIME_TYPE);
+  					$mime = finfo_file($finfo, $fname);
+  					finfo_close($finfo);
+  					return $mime;
+  				}
 
-				$this->validate($filetype[0] === 'image' and 
-												in_array($filetype[1], $valid_formats), 
-												$err, 'invalid image type');
+  				$filetype = explode('/', getMIME($fname));
+  				$valid_formats = array("jpg", "png", "gif", "jpeg");
 
-				if ($this->isValid()) {
-					require_once($GLOBALS['dirpre'].'includes/S3/s3_config.php');
-					
-					//Rename image name. 
-					$actual_image_name = time() . "." . $filetype[1];
+  				$this->validate($filetype[0] === 'image' and 
+  												in_array($filetype[1], $valid_formats), 
+  												$err, 'invalid image type');
 
-					$this->validate($s3->putObjectFile($fname, $bucket , 
-																						 $actual_image_name, 
-																						 S3::ACL_PUBLIC_READ), 
-																						 $err, 'upload failed');
+  				if ($this->isValid()) {
+  					require_once($GLOBALS['dirpre'].'includes/S3/s3_config.php');
+  					
+  					//Rename image name. 
+  					$actual_image_name = time() . "." . $filetype[1];
 
-					if ($this->isValid()) {
-						$reply = "https://$bucket.s3.amazonaws.com/$actual_image_name";
-						$this->directrender('S3/S3', array('reply' => "up(\"$reply\");"));
-						return;
-					}
+  					$this->validate($s3->putObjectFile($fname, $bucket , 
+  																						 $actual_image_name, 
+  																						 S3::ACL_PUBLIC_READ), 
+  																						 $err, 'upload failed');
+
+  					if ($this->isValid()) {
+  						$reply = "https://$bucket.s3.amazonaws.com/$actual_image_name";
+              $this->success('image successfully uploaded');
+  						$this->directrender('S3/S3', array('reply' => "up(\"$reply\");"));
+  						return;
+  					}
+          }
 				}
       }
       
-      // CHANGE THIS TO AN ERROR DISPLAY FUNCTION
-      $this->directrender('S3/S3', array('err', $err));
+      $this->error($err);
+      $this->directrender('S3/S3');
     }
   }
 

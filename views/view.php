@@ -60,7 +60,7 @@
   }
   function vpartial($page, $vars = false) {
     global $viewVars;
-    if ($vars) array_merge($viewVars, $vars);
+    if ($vars) $viewVars = array_merge($viewVars, $vars);
 
     require($GLOBALS['dirpre']."views/partials/$page.php");
   }
