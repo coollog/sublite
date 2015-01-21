@@ -78,7 +78,7 @@
         'link' => $link, 'salary' => $salary, 'company' => $company, 
         'salarytype' => $salarytype, 'startdate' => $startdate,
         'enddate' => $enddate, 'jobtype' => $jobtype,
-        'locationtype' => $locationtype,
+        'locationtype' => $locationtype
       );
     }
 
@@ -162,6 +162,7 @@
       // Code
       if ($this->isValid()) {
         $data['applicants'] = array();
+        $data['viewcount'] = 0;
         $id = $MJob->save($data);
         $this->redirect('job', array('id' => $id));
         return;
@@ -229,6 +230,9 @@
 
       // Code
       if ($this->isValid()) {
+        $entry['viewcount']++;
+        $MJob->save($entry);
+
         $data = $this->data($entry);
         $data['salarytype'] = ($data['salarytype'] == 'total') ?
                               $data['duration'].' weeks' : $data['salarytype'];
