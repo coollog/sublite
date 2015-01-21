@@ -162,7 +162,7 @@
       // Code
       if ($this->isValid()) {
         $data['applicants'] = array();
-        $data['viewcount'] = 0;
+        $data['stats'] = array('views' => 0, 'clicks' => 0);
         $id = $MJob->save($data);
         $this->redirect('job', array('id' => $id));
         return;
@@ -230,7 +230,7 @@
 
       // Code
       if ($this->isValid()) {
-        $entry['viewcount']++;
+        $entry['stats']['views']++;
         $MJob->save($entry);
 
         $data = $this->data($entry);
