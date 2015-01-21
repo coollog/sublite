@@ -266,17 +266,18 @@
     }
     function dataSearchEmpty() {
       return array('recruiter' => '', 'company' => '', 'title' => '', 
-                   'industry' => '');
+                   'industry' => '', 'city' => '');
     }
     function dataSearch($data) {
       $recruiter = clean($data['recruiter']);
       $company = clean($data['company']);
       $title = clean($data['title']);
       $industry = clean($data['industry']);
+      $city = clean($data['city']);
 
       return array_merge($this->dataSearchSetup(), array(
         'recruiter' => $recruiter, 'company' => $company, 'title' => $title,
-        'industry' => $industry
+        'industry' => $industry, 'city' => $city
       ));
     }
 
@@ -346,6 +347,9 @@
         }
         if (strlen($industry) > 0) {
           $companyquery['industry'] = array('$regex' => keywords2mregex($industry));
+        }
+        if (strlen($city) > 0) {
+          $companyquery['location'] = array('$regex' => keywords2mregex($city));
         }
         $cs = $MCompany->find($companyquery);
 

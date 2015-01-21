@@ -1,6 +1,6 @@
 <?php
   $GLOBALS['dirpre'] = 'employers/';
-  require_once('includes/header.php');
+  require_once($GLOBALS['dirpre'].'includes/header.php');
   $CRecruiter->privacy();
-  require_once('includes/footer.php');
+  require_once($GLOBALS['dirpre'].'includes/footer.php');
 ?>

@@ -12,8 +12,8 @@
 
       // Do migrations after counter
       $mcur = $mlast;
-      $migrations = glob('migrations/*.php');
-      sort($migrations, SORT_NUMERIC);
+      $migrations = glob($GLOBALS['dirpre'].'migrations/*.php');
+      natsort($migrations);
       foreach ($migrations as $m) {
         if (($mcur = str2int($m)) > $mlast) {
           require_once($m);

@@ -62,7 +62,7 @@
       <div class="form-slider"><label for="title">Job Title:</label><input type="text" id="title" name="title" value="<?php vecho('title'); ?>" /></div>
       <div class="form-slider"><label for="industry">Industry:</label>
         <!-- <input type="text" id="industry" name="industry" value="<?php vecho('industry'); ?>" /> -->
-        <select id="industry" name="industry" required>
+        <select id="industry" name="industry">
           <?php vecho('industry', '<option selected="selected">{var}</option>'); ?>
           <?php
             // Process list of industries to make select form
@@ -72,6 +72,7 @@
           ?>
         </select>
       </div>
+      <div class="form-slider"><label for="city">City:</label><input type="text" id="city" name="city" value="<?php vecho('city'); ?>" /></div>
       <div class="form-slider"><label for="company">Company:</label><input type="text" id="company" name="company" value="<?php vecho('company'); ?>" /></div>
       <?php vnotice(); ?>
       <input type="submit" name="search" value="Search" />
