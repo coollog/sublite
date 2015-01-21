@@ -1,13 +1,3 @@
-<script>
-  function addImg(url, name) {
-    $('.img[name=' + name + ']').html('<img class="img" src="' + url + '" />');
-    $('input[name=' + name + ']').val(url);
-  }
-  window.onbeforeunload = function() {
-    return "Are you sure you wish to leave this page? Unsaved changes will be lost.";
-  }
-</script>
-
 <panel class="form">
   <div class="content">
     <headline><?php vecho('headline'); ?> Company Profile</headline>
@@ -21,7 +11,7 @@
       <?php vnotice(); ?>
       <div class="form-slider"><label for="name">Company Name*:</label><input type="text" id="name" name="name" value="<?php vecho('name'); ?>" disabled /></div>
       <div class="form-slider"><label for="size">Industry*: </label>
-        <?php require_once($GLOBALS['dirpre'].'views/partials/industryselect.php'); ?>
+        <?php vpartial('industryselect'); ?>
       </div>
       <div class="form-slider"><label for="size">Company size*: </label>
       <select id="size" name = "size" required>
@@ -41,18 +31,16 @@
 
       <div class="form-slider"><label for="corevalues" class="fortextarea">What are your company's core values?* (max. 1000 characters)</label><textarea id="corevalues" name="corevalues" required maxlength="1000"><?php vecho('corevalues'); ?></textarea></div>
 
-
-      <input type="hidden" required name="logophoto" value="<?php vecho('logophoto'); ?>" />
-      <subheadline>What is your company logo?*</subheadline>
-      <div class="iframe"><iframe class="S3" src="S3.php?name='logophoto'"></iframe></div>
-      <subheadline>Current Photo</subheadline>
-      <div class="img" name="logophoto"><img src="<?php vecho('logophoto'); ?>" /></div>
-
-      <input type="hidden" required name="bannerphoto" value="<?php vecho('bannerphoto'); ?>" />
-      <subheadline>What would you like your banner image to be?*</subheadline>
-      <div class="iframe"><iframe class="S3" src="S3.php?name='bannerphoto'"></iframe></div>
-      <subheadline>Current Photo</subheadline>
-      <div class="img" name="bannerphoto"><img src="<?php vecho('bannerphoto'); ?>" /></div>
+      <?php 
+        vpartial('s3single', array(
+          'name' => 'logophoto', 'title' => 'What is your company logo?*'
+        ));
+      ?>
+      <?php 
+        vpartial('s3single', array(
+          'name' => 'bannerphoto', 'title' => 'What would you like your banner image to be?*'
+        ));
+      ?>
 
       <br>
       The following questions are not mandatory but are highly recommended. These questions help students get a better understanding of the unique culture at your company. Please answer <b>at least 6</b> of the following 13 questions.
@@ -97,3 +85,11 @@
     </form>
   </div>
 </panel>
+
+<script>
+  function addImg(url, name) {
+    $('.img[name=' + name + ']').html('<img class="img" src="' + url + '" />');
+    $('input[name=' + name + ']').val(url);
+  }
+  formunloadmsg("Are you sure you wish to leave this page? Unsaved changes will be lost.");
+</script>

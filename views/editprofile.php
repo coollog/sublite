@@ -5,19 +5,6 @@
   }
 </style>
 
-<script>
-  function addImg(url) {
-    $('.img').html('<img class="img" src="' + url + '" />');
-    $('input[name=photo]').val(url);
-  }
-  $(function() {
-
-  });
-  window.onbeforeunload = function() {
-    return "Are you sure you wish to leave this page? Unsaved changes will be lost.";
-  }
-</script>
-
 <panel class="form">
   <div class="content">
     <headline>Edit Profile</headline>
@@ -37,3 +24,14 @@
     </form>
   </div>
 </panel>
+
+<script>
+  function addImg(url) {
+    $('.img').html('<img class="img" src="' + url + '" />');
+    $('input[name=photo]').val(url);
+  }
+  $(function() {
+
+  });
+  formunloadmsg("Are you sure you wish to leave this page? Unsaved changes will be lost.");
+</script>

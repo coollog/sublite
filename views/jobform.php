@@ -1,9 +1,3 @@
-<script>
-  window.onbeforeunload = function() {
-    return "Are you sure you wish to leave this page? Unsaved changes will be lost.";
-  }
-</script>
-
 <panel class="form">
   <div class="content">
     <headline><?php vecho('headline'); ?> Job Listing</headline>
@@ -48,3 +42,7 @@
     </form>
   </div>
 </panel>
+
+<script>
+  formunloadmsg("Are you sure you wish to leave this page? Unsaved changes will be lost.");
+</script>
