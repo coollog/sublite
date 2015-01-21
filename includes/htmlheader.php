@@ -25,7 +25,7 @@
         echo '<meta property="og:description" content="Apply to the ' . $title .
           ' position on SubLite!" />';
       }
-      elseif (vget('dessert')) { // is company profile
+      elseif (vget('industry')) { // is company profile
         $name = vget('name');
         echo '<meta property="og:title" content="Check out ' . $name . ' on SubLite!" />';
         $photo = vget('logophoto');
