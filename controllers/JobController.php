@@ -260,7 +260,9 @@
 
     function dataSearchSetup() {
       global $MApp;
-      return array('industries' => $MApp->getIndustriesByJobs());
+      return array('industries' => 
+        array_merge(array(''), $MApp->getIndustriesByJobs())
+      );
     }
     function dataSearchEmpty() {
       return array('recruiter' => '', 'company' => '', 'title' => '', 

@@ -57,6 +57,7 @@
 
   #jobtitle {
     margin-bottom: 10px;
+    line-height: 1em;
   }
 
   #jobsubtitle {
