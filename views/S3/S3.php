@@ -35,6 +35,7 @@
   <div class="msg"><?php vecho('err'); ?></div>
   <form method="post" enctype="multipart/form-data">
     Image (< 10MB): <input type="file" name="upload" />
-    <input type="submit" value="Upload" />
+    <input type="submit" value="Upload" /><br />
+    <small>(.JPG/.JPEG, .PNG, .GIF only)</small>
   </form>
 </div>

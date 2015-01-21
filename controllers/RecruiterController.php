@@ -219,6 +219,96 @@
       $this->render('editprofile', $data);
     }
 
+
+    function dataChangePass($data) {
+      $pass = $data['pass'];
+      $pass2 = $data['pass2'];
+      return array(
+        'pass' => $pass, 'pass2' => $pass2
+      );
+    }
+    function changePass() {
+      global $params, $MRecruiter;
+
+      // Validations
+      $this->startValidations();
+      $this->validate(
+          isset($_GET['id']) and isset($_GET['code']) and 
+          ($entry = $MRecruiter->getByID($id = $_GET['id'])) != NULL and
+          $entry['pass'] == $_GET['code'], 
+        $err, 'permission denied');
+
+      if ($this->isValid()) {
+        if (!isset($_POST['change'])) { $this->render('changepass'); return; }
+
+        extract($data = $this->dataChangePass($params));
+
+        $this->validate($pass == $pass2, $err, 'password mismatch');
+
+        if ($this->isValid()) {
+          $entry['pass'] = crypt($pass);
+          $MRecruiter->save($entry);
+
+          $params['email'] = $entry['email'];
+          $_POST['login'] = true; $this->login();
+          return;
+        }
+
+        $this->error($err);
+        $this->render('changepass', $data);
+        return;
+      }
+
+      $this->error($err);
+      $this->render('notice');
+    }
+
+    function dataForgotPass($data) {
+      $email = strtolower($data['email']);
+
+      return array(
+        'email' => $email
+      );
+    }
+    function forgotPass() {
+      global $params, $MRecruiter;
+
+      if (!isset($_POST['forgot'])) { $this->render('forgotpass'); return; }
+
+      extract($data = $this->dataForgotPass($params));
+
+      // Validations
+      $this->startValidations();
+      $this->validate(($entry = $MRecruiter->get($email)) != NULL, 
+        $err, 'no account found');
+
+      if ($this->isValid()) {
+        $id = $entry['_id'];
+        $firstname = $entry['firstname'];
+        $pass = $entry['pass'];
+        $link = "http://sublite.net/employers/changepass.php?id=$id&code=$pass";
+
+        $msg = "Hi $firstname!
+                <br /><br />
+                Below please find the link to reset your password. Thanks for using SubLite!
+                <br /><br />
+                Change your password here: <a href=\"$link\">$link</a>
+                <br /><br />
+                If you did not request this password reset, please contact us at <a href=\"mailto:info@sublite.net\">info@sublite.net</a>.
+                <br /><br />
+                Best,<br />
+                The SubLite Team";
+        sendgmail($email, 'yuanling.yuan@yale.edu', 'SubLite Recruiter Account Password Reset', $msg);
+
+        $this->success('A link to reset your password has been sent to your email. If you do not receive it in the next hour, check your spam folder or whitelist info@sublite.net. <a href="mailto: info@sublite.net">Contact us</a> if you have any further questions.');
+        $this->render('forgotpass');
+        return;
+      }
+
+      $this->error($err);
+      $this->render('forgotpass', $data);
+    }
+
     function view() {
       // global $CJob; $CJob->requireLogin();
       
@@ -229,9 +319,6 @@
       $this->validate(isset($_GET['id']) and 
         ($entry = $MRecruiter->getByID($id = $_GET['id'])) != NULL, 
         $err, 'unknown recruiter');
-      if ($this->isValid()) {
-
-      }
 
       // Code
       if ($this->isValid()) {
