@@ -33,12 +33,24 @@
 
       <?php 
         vpartial('s3single', array(
-          's3name' => 'logophoto', 'title' => 'What is your company logo?*'
+          's3name' => 'logophoto', 
+          's3title' => 'What is your company logo?*',
+          's3link' => vget('logophoto')
         ));
       ?>
       <?php 
         vpartial('s3single', array(
-          's3name' => 'bannerphoto', 'title' => 'What would you like your banner image to be?*'
+          's3name' => 'bannerphoto', 
+          's3title' => 'What would you like your banner image to be?*',
+          's3link' => vget('bannerphoto')
+        ));
+      ?>
+
+      <?php 
+        vpartial('s3multiple', array(
+          's3name' => 'photos', 
+          's3title' => 'Additional photos (upload at least 4 more):',
+          's3links' => vget('photos')
         ));
       ?>
 
@@ -87,9 +99,5 @@
 </panel>
 
 <script>
-  function addImg(url, name) {
-    $('.img[name=' + name + ']').html('<img class="img" src="' + url + '" />');
-    $('input[name=' + name + ']').val(url);
-  }
   formunloadmsg("Are you sure you wish to leave this page? Unsaved changes will be lost.");
 </script>

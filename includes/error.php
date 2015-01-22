@@ -20,9 +20,11 @@
           return sprintf($f, $k, $v); 
         }, $arr, array_keys($arr)));
       }
+      $session = $_SESSION;
+      unset($session['pass']);
       $m = array2str(array(
         'errormsg' => $error, 
-        'session' => array2str($_SESSION, " &nbsp; &nbsp; %s = '%s'"), 
+        'session' => array2str($session, " &nbsp; &nbsp; %s = '%s'"), 
         'server' => array2str($_SERVER, " &nbsp; &nbsp; %s = '%s'")
       ));
 

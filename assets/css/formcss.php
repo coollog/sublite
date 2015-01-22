@@ -85,6 +85,10 @@
     margin: 0.5em;
     transition: all 0.3s ease-in-out;
   }
+  .img .remove {
+    float: right;
+    margin-top: 100px;
+  }
   .iframe {
     border: 1px solid #999;
     text-align: center;
