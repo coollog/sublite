@@ -24,8 +24,9 @@
         echo '<meta property="og:image:secure_url" content="' . $photo . '" />';
         echo '<meta property="og:image" content="' . $photo . '" />';
         echo '<meta property="og:image:type" content="image/jpeg" />';
-        echo '<meta property="og:image:width" content="400" />';
-        echo '<meta property="og:image:height" content="300" />';
+        list($width, $height) = getimagesize($photo);
+        echo '<meta property="og:image:width" content="' . $width . '" />';
+        echo '<meta property="og:image:height" content="' . $height . '" />';
         echo '<meta property="og:description" content="Apply to the ' . $title .
           ' position on SubLite!" />';
       }
@@ -37,8 +38,9 @@
         echo '<meta property="og:image:secure_url" content="' . $photo . '" />';
         echo '<meta property="og:image" content="' . $photo . '" />';
         echo '<meta property="og:image:type" content="image/jpeg" />';
-        echo '<meta property="og:image:width" content="400" />';
-        echo '<meta property="og:image:height" content="300" />';
+        list($width, $height) = getimagesize($photo);
+        echo '<meta property="og:image:width" content="' . $width . '" />';
+        echo '<meta property="og:image:height" content="' . $height . '" />';
         $desc = vget('desc');
         echo '<meta property="og:description" content="' . $desc . '" />';
       }
