@@ -2,33 +2,33 @@
 
 <subheadline><?php vecho('s3title'); ?></subheadline>
 
-<div class="iframe"><iframe class="S3" src="S3.php?name='<?php vecho('s3name'); ?>'"></iframe></div>
+<div class="iframe"><iframe class="S3" src="S3.php?name=<?php vecho('s3name'); ?>"></iframe></div>
 
 <subheadline>Current Photos</subheadline>
-<div class="img" name="<?php vecho('s3name'); ?>">None</div>
+<div class="img" type="multiple" name="<?php vecho('s3name'); ?>">None</div>
 
 <script>
-  function addImg(url, name) {
+  function addImg<?php vecho('s3name'); ?>(url, name) {
     if ($('.img[name='+name+']').html() == 'None') $('.img[name='+name+']').html('');
 
     $('.inputs[name='+name+']')
       .prepend('<input class="imginput" type="hidden" name="'+name+'[]" value="' + url + '" />');
     $('.img[name='+name+']')
-      .prepend('<input type="button" class="remove" url="' + url + '" value="Remove" />')
       .prepend('<img class="img" src="' + url + '" />');
 
-    $('.img[name='+name+'] .remove[url="'+url+'"]').click(function() {console.log('clicked ' + url);
+    $('.img[name='+name+'] img[src="'+url+'"]').click(function() {
       $('.inputs[name='+name+'] .imginput[value="'+url+'"]').remove();
-      $('.img[name='+name+'] img.img[src="'+url+'"]').remove();
-      $('.img[name='+name+'] .remove[url="'+url+'"]').remove();
+      $(this).remove();
 
-      if ($('.img[name='+name+']').html() == '') $('.img').html('None');
+      if ($('.img[name='+name+']').html() == '') $('.img[name='+name+']').html('None');
     });
   }
   <?php
-    $name = vget('s3name');
-    foreach (vget('s3links') as $link) {
-      echo "addImg('$link', '$name');";
+    if (!is_null(vget('s3links'))) {
+      $name = vget('s3name');
+      foreach (vget('s3links') as $link) {
+        echo "addImg$name('$link', '$name');";
+      }
     }
   ?>
 </script>

@@ -62,7 +62,8 @@
 
       <div class="form-slider"><label for="title">Job Title:</label><input type="text" id="title" name="title" value="<?php vecho('title'); ?>" /></div>
 
-      <div class="form-slider"><label for="industry">Industry:</label>
+      <div class="form-slider"><label for="industrylabel" id="ilabel">Industry:</label>
+      <input type="hidden" id="industrylabel">
       <select id="industry" name="industry">
         <?php vecho('industry', '<option selected="selected">{var}</option>'); ?>
         <?php
@@ -72,6 +73,21 @@
           }
         ?>
       </select></div>
+      <script>
+        function changeIndustryLabel(bool) {
+          if (bool) {
+            $('#ilabel').css('left', '-4.5em');
+          } else {
+            $('#ilabel').css('left', '0.5em;');
+          }
+        }
+        $('#industry')
+          .change(function() { changeIndustryLabel($(this).val().length > 0); })
+          .ready(function() { changeIndustryLabel(<?php 
+            if (strlen(vget('industry')) > 0) echo 'true';
+            else echo 'false';
+          ?>) });
+      </script>
 
       <div class="form-slider"><label for="city">City:</label><input type="text" id="city" name="city" value="<?php vecho('city'); ?>" /></div>
 

@@ -22,6 +22,7 @@
   label {
     opacity: 0.7;
     cursor: pointer;
+    transition: 0.2s all ease-in-out;
   }
   label.fortextarea {
     max-width: 200px;
@@ -84,6 +85,10 @@
     max-height: 15em;
     margin: 0.5em;
     transition: all 0.3s ease-in-out;
+    cursor: pointer;
+  }
+  .img img:hover {
+    opacity: 0.5;
   }
   .img .remove {
     float: right;

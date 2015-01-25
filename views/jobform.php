@@ -33,7 +33,7 @@
       <left>
         <input type="checkbox" name="locationtype" id="locationtype" value="home" <?php vchecked('locationtype', 'home'); ?> /><label for="locationtype"> Work at home job</label>
       </left>
-      <div class="form-slider" id="locationdiv"><label for="location">Job Location (Specific Address):</label><input type="text" id="location" name="location" maxlength="500" value="<?php vecho('location'); ?>" required /></div>
+      <div class="form-slider" id="locationdiv"><label for="location">Job Location (Address, City, State):</label><input type="text" id="location" name="location" maxlength="500" value="<?php vecho('location'); ?>" required /></div>
       <input type="checkbox" name="terms" id="terms" value="agree" required /> <label for="terms">I represent and warrant that I am employed by the company offering the internship, that I have authority or permission to post this internship, and that the description is accurate and not misleading.</label>
       <?php vnotice(); ?>
       <right>

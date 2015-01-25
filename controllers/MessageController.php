@@ -76,6 +76,8 @@
             $reply['fromname'] = 'Nonexistent';
             $reply['frompic'] = 'Nonexistent';
           }
+          if ($reply['frompic'] == 'assets/gfx/defaultpic.png')
+            $reply['frompic'] = $GLOBALS['dirpre'].$reply['frompic'];
         }
 
         $replies = array();
@@ -96,6 +98,10 @@
           else $reply['current'] = false;
 
           $reply['time'] = timeAgo($reply['time']);
+
+          if (strlen($reply['msg']) > 100) {
+            $reply['msg'] = substr($reply['msg'], 0, 97) . '...';
+          }
 
           array_push($replies, $reply);
         }

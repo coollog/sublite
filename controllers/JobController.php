@@ -83,12 +83,12 @@
     }
 
     function validateData($data, &$err) {
-      if (!$data['locationtype']) {
-        $this->validate($data['geocode'] != NULL, $err, 'location invalid');        
+      if (strlen($data['locationtype']) == 0) {
+        $this->validate($data['geocode'] != NULL, $err, 'location invalid');
       }
       $this->validate(strlen($data['title']) <= 200,
         $err, 'job title is too long');
-      $this->validate(strlen($data['salary']) > 0,
+      $this->validate(strlen(strval($data['salary'])) > 0,
         $err, 'please input numeric compensation/stipend amount');
       if ($data['jobtype'] == 'internship') {
         $this->validate($data['duration'], $err, 'please input duration');
@@ -152,11 +152,15 @@
       global $params, $MJob, $MRecruiter;
       $me = $MRecruiter->me();
       $params['company'] = $me['company'];
+
+      $this->startValidations();
+      $this->validate(isset($params['salarytype']), 
+        $err, 'must select salary type');
+
       // Params to vars
       extract($data = $this->data($params));
       
       // Validations
-      $this->startValidations();
       $this->validateData($data, $err);
 
       // Code

@@ -33,9 +33,10 @@
   function up(url) {
     console.log(url);
     <?php 
-      if (isset($_GET['name'])) 
-        echo 'window.parent.addImg(url, ' . $_GET['name'] . ');';
-      else 
+      if (isset($_GET['name'])) {
+        $name = $_GET['name'];
+        echo "window.parent.addImg$name(url, '$name');";
+      } else 
         echo 'window.parent.addImg(url);';
     ?>
   }

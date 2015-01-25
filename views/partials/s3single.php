@@ -2,13 +2,13 @@
 
 <subheadline><?php vecho('s3title'); ?></subheadline>
 
-<div class="iframe"><iframe class="S3" src="S3.php?name='<?php vecho('s3name'); ?>'"></iframe></div>
+<div class="iframe"><iframe class="S3" src="S3.php?name=<?php vecho('s3name'); ?>"></iframe></div>
 
 <subheadline>Current Photo</subheadline>
 <div class="img" name="<?php vecho('s3name'); ?>"><img src="<?php vecho('s3link'); ?>" /></div>
 
 <script>
-  function addImg(url, name) {
+  function addImg<?php vecho('s3name'); ?>(url, name) {
     $('.img[name=' + name + ']').html('<img class="img" src="' + url + '" />');
     $('input[name=' + name + ']').val(url);
   }
