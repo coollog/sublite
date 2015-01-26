@@ -1,6 +1,6 @@
 <?php
-  $GLOBALS['dirpre'] = '';
+  $GLOBALS['dirpre'] = 'employers/';
   require_once($GLOBALS['dirpre'].'includes/header.php');
-  $CRecruiter->register();
+  $CStudent->register();
   require_once($GLOBALS['dirpre'].'includes/footer.php');
 ?>
