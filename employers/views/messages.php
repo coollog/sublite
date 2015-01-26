@@ -74,6 +74,7 @@
   }
   data {
     display: block;
+    margin-left: 0.5em;
   }
   text {
     display: block;
@@ -121,7 +122,7 @@
       <?php } ?>
       <?php foreach (vget('messages') as $m) { ?>
         <a href="?id=<?php echo $m['_id']; ?>"><table class="iblock <?php if ($m['current']) echo 'current'; ?> <?php if (!$m['read']) echo 'unread'; ?>"><tr>
-          <td class="pp"><profpic style="background-image: url('<?php echo $GLOBALS['dirpre'].$m['frompic'] ?>');"></profpic></td>
+          <td class="pp"><profpic style="background-image: url('<?php echo $m['frompic'] ?>');"></profpic></td>
           <td><data>
             <name><?php echo $m['fromname']; ?></name><time><?php echo $m['time']; ?></time>
             <text><?php echo $m['msg']; ?></text>
@@ -133,7 +134,7 @@
       <?php if (!is_null(vget('current'))) { ?>
         <?php foreach (vget('current') as $m) { ?>
           <table class="mblock"><tr>
-            <td class="pp"><profpic style="background-image: url('<?php echo $GLOBALS['dirpre'].$m['frompic'] ?>');"></profpic></td>
+            <td class="pp"><profpic style="background-image: url('<?php echo $m['frompic'] ?>');"></profpic></td>
             <td><data>
               <name><?php echo $m['fromname']; ?></name><time><?php echo $m['time']; ?></time>
               <text><?php echo $m['msg']; ?></text>

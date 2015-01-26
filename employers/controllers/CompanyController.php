@@ -22,6 +22,11 @@
       if(isset($data['logophoto'])) {
         $logophoto = $this->format(clean($data['logophoto']));
       }
+      $photos = array();
+      if (isset($data['photos'])) {
+        foreach ($data['photos'] as $photo)
+          $photos[] = $this->format(clean($photo));
+      }
       $funfacts = $this->format(clean($data['funfacts']));
       $society = $this->format(clean($data['society']));
       $socialevent = $this->format(clean($data['socialevent']));
@@ -41,7 +46,8 @@
         'name' => $name, 'industry' => $industry, 'size' => $size,
         'desc' => $desc, 'founded' => $founded, 'location' => $location,
         'corevalues' => $corevalues, 'bannerphoto' => $bannerphoto,
-        'logophoto' => $logophoto, 'funfacts' => $funfacts,
+        'logophoto' => $logophoto, 'photos' => $photos, 
+        'funfacts' => $funfacts,
         'society' => $society, 'socialevent' => $socialevent,
         'colorscheme' => $colorscheme, 'media' => $media,
         'employees' => $employees, 'perks' => $perks, 'forfun' => $forfun,
@@ -62,6 +68,8 @@
         $err, 'must upload banner image');
       $this->validate(strlen($data['logophoto']) > 0,
         $err, 'must upload logo');
+      $this->validate(count($data['photos']) >= 4,
+        $err, 'must upload at least 4 additional photos');
       $this->validate($answered >= 6, 
         $err, 'must answer at least 6 cultural questions');
     }

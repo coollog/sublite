@@ -22,6 +22,7 @@
 <panel class="jobs">
   <div class="content">
     <headline>Manage Job Listings</headline>
+    <div>(Analytics Under Construction)</div>
     <?php
       function jobBlock($job) {
         $title = $job['title'];

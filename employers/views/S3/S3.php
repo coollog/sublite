@@ -9,6 +9,16 @@
     overflow: hidden;
     font-family: 'Open Sans', sans-serif;
   }
+  .success {
+    display: block;
+    color: #00B233;
+    text-transform: uppercase;
+  }
+  .error {
+    display: block;
+    color: #FF1919;
+    text-transform: uppercase;
+  }
 </style>
 <script>
   $(function() {
@@ -23,16 +33,17 @@
   function up(url) {
     console.log(url);
     <?php 
-      if (isset($_GET['name'])) 
-        echo 'window.parent.addImg(url, ' . $_GET['name'] . ');';
-      else 
+      if (isset($_GET['name'])) {
+        $name = $_GET['name'];
+        echo "window.parent.addImg$name(url, '$name');";
+      } else 
         echo 'window.parent.addImg(url);';
     ?>
   }
   <?php vecho('reply'); ?>
 </script>
 <div class="container">
-  <div class="msg"><?php vecho('err'); ?></div>
+  <?php vnotice(); ?>
   <form method="post" enctype="multipart/form-data">
     Image (< 10MB): <input type="file" name="upload" />
     <input type="submit" value="Upload" /><br />

@@ -58,4 +58,10 @@
 
     return "<a href=\"$page.php$query\" $newtab>$in</a>";
   }
+  function vpartial($page, $vars = false) {
+    global $viewVars;
+    if ($vars) $viewVars = array_merge($viewVars, $vars);
+
+    require($GLOBALS['dirpre']."views/partials/$page.php");
+  }
 ?>
