@@ -23,7 +23,7 @@
       <options class="right">
         <opt>
           <a href="https://www.facebook.com/SubLiteNet"><img src="<?php echo $GLOBALS['dirpre']; ?>assets/gfx/fbthumb.png" /></a>
-          <a href="http://sublitenews.blogspot.com/"><img src="<?php echo $GLOBALS['dirpre']; ?>assets/gfx/bloggerthumb.png" /></a>
+          <a href="http://sublite.wordpress.com/"><img src="<?php echo $GLOBALS['dirpre']; ?>assets/gfx/bloggerthumb.png" /></a>
           <a href="https://twitter.com/sublitenet"><img src="<?php echo $GLOBALS['dirpre']; ?>assets/gfx/twitterthumb.png" /></a>
         </opt>
       </options>

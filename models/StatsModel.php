@@ -36,9 +36,14 @@
       $jobs = $this->db->jobs->find();
       foreach ($jobs as $job) {
         $industry = $MCompany->getIndustry($job['company']);
-        if (!in_array($industry, $industries))
-          $industries[] = $industry;
+        $industrysplit = explode(',', $industry);
+        foreach ($industrysplit as $i) {
+          $i = trim($i);
+          if (strlen($i) > 0 and !in_array($i, $industries))
+            $industries[] = $i;
+        }
       }
+      natsort($industries);
 
       return $industries;
     }

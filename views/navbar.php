@@ -24,6 +24,12 @@
     line-height: 30px;
     height: 30px;
   }
+  navbar beta {
+    font-size: 1em;
+    color: #ADCC14;
+    vertical-align: bottom;
+    margin-left: 0.5em;
+  }
   options.right {
     float: right;
   }
@@ -53,7 +59,7 @@
 </style>
 
 <navbar class="blackbar">
-  <a href="."><logo>SubLite</logo></a>
+  <a href="."><logo>SubLite</logo></a><beta>beta</beta>
   <options class="right">
     <a href="."><opt class="small">Home Page</opt></a>
     

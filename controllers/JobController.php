@@ -83,12 +83,12 @@
     }
 
     function validateData($data, &$err) {
-      if (!$data['locationtype']) {
-        $this->validate($data['geocode'] != NULL, $err, 'location invalid');        
+      if (strlen($data['locationtype']) == 0) {
+        $this->validate($data['geocode'] != NULL, $err, 'location invalid');
       }
       $this->validate(strlen($data['title']) <= 200,
         $err, 'job title is too long');
-      $this->validate(strlen($data['salary']) > 0,
+      $this->validate(strlen(strval($data['salary'])) > 0,
         $err, 'please input numeric compensation/stipend amount');
       if ($data['jobtype'] == 'internship') {
         $this->validate($data['duration'], $err, 'please input duration');
@@ -152,11 +152,15 @@
       global $params, $MJob, $MRecruiter;
       $me = $MRecruiter->me();
       $params['company'] = $me['company'];
+
+      $this->startValidations();
+      $this->validate(isset($params['salarytype']), 
+        $err, 'must select salary type');
+
       // Params to vars
       extract($data = $this->data($params));
       
       // Validations
-      $this->startValidations();
       $this->validateData($data, $err);
 
       // Code
@@ -270,17 +274,18 @@
     }
     function dataSearchEmpty() {
       return array('recruiter' => '', 'company' => '', 'title' => '', 
-                   'industry' => '');
+                   'industry' => '', 'city' => '');
     }
     function dataSearch($data) {
       $recruiter = clean($data['recruiter']);
       $company = clean($data['company']);
       $title = clean($data['title']);
       $industry = clean($data['industry']);
+      $city = clean($data['city']);
 
       return array_merge($this->dataSearchSetup(), array(
         'recruiter' => $recruiter, 'company' => $company, 'title' => $title,
-        'industry' => $industry
+        'industry' => $industry, 'city' => $city
       ));
     }
 
@@ -296,10 +301,12 @@
         // Processing results
         $jobs = array();
         foreach ($res as $job) {
-          $job['company'] = $MCompany->getName($job['company']);
+          $company = $MCompany->get($job['company']);
+          $job['company'] = $company['name'];
           if (strlen($job['desc']) > 300) {
             $job['desc'] = substr($job['desc'], 0, 297) . '...';
           }
+          $job['logophoto'] = $company['logophoto'];
           array_push($jobs, $job);
         }
         return $jobs;
@@ -350,6 +357,9 @@
         }
         if (strlen($industry) > 0) {
           $companyquery['industry'] = array('$regex' => keywords2mregex($industry));
+        }
+        if (strlen($city) > 0) {
+          $companyquery['location'] = array('$regex' => keywords2mregex($city));
         }
         $cs = $MCompany->find($companyquery);
 

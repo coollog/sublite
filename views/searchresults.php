@@ -4,6 +4,7 @@
     padding: 20px 0;
     border-bottom: 1px solid #eee;
     color: #000;
+    border-spacing: 20px;
   }
   .jobblock:hover {
     opacity: 0.5;
@@ -16,6 +17,11 @@
   .jobblock .info {
     opacity: 0.5;
     line-height: 40px;
+  }
+  .jobblock .img {
+    background: transparent no-repeat center center;
+    background-size: contain;
+    width: 180px;
   }
 </style>
 
@@ -75,12 +81,16 @@
         $location = $job['location'];
         $desc = $job['desc'];
         $deadline = $job['deadline'];
+        $logo = $job['logophoto'];
         return "
-          <div class=\"jobblock\">
-            <div class=\"title\">$title | $company</div>
-            <div class=\"desc\">$desc</div>
-            <div class=\"info\">Deadline: $deadline</div>
-          </div>
+          <table class=\"jobblock\"><tr>
+            <td class=\"img\" style=\"background-image: url('$logo');\"></td>
+            <td>
+              <div class=\"title\">$title | $company</div>
+              <div class=\"desc\">$desc</div>
+              <div class=\"info\">Deadline: $deadline</div>
+            </td>
+          </tr></table>
         ";
       }
       $jobs = vget('jobs');

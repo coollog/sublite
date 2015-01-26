@@ -71,22 +71,33 @@
       $this->startValidations();
       $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL), 
         $err, 'invalid email');
-      $this->validate(
-        ($entry = $MStudent->get($email)) != NULL and 
-        $MStudent->login($email, $pass), 
-        $err, 'invalid credentials');
+      $this->validate(($entry = $MStudent->get($email)) != NULL,
+        $err, 'not registered');
 
       if ($this->isValid()) {
-        $_SESSION['loggedinstudent'] = true;
-        $_SESSION['email'] = $email;
-        $_SESSION['pass'] = $pass;
-        $_SESSION['_id'] = $entry['_id'];
-        
-        // $this->redirect('home');
-        // $this->redirect('search');
-        $this->redirect('whereto');
+        if (!isset($entry['pass'])) {
+          $confirm = $this->sendConfirm($email);
+          $entry['confirm'] = $confirm;
+          $MStudent->save($entry);
 
-        return;
+          $err = "Your account has not been confirmed yet. A confirmation email has been sent to <strong>$email</strong>. Check your inbox or spam. The email may take up to 24 hours to show up.";
+        } else {
+          $this->validate($MStudent->login($email, $pass), 
+            $err, 'invalid credentials');
+
+          if ($this->isValid()) {
+            $_SESSION['loggedinstudent'] = true;
+            $_SESSION['email'] = $email;
+            $_SESSION['pass'] = $pass;
+            $_SESSION['_id'] = $entry['_id'];
+            
+            // $this->redirect('home');
+            // $this->redirect('search');
+            $this->redirect('whereto');
+
+            return;
+          }
+        }
       }
       
       $this->error($err);

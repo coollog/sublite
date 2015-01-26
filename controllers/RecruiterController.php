@@ -281,6 +281,8 @@
       $this->startValidations();
       $this->validate(($entry = $MRecruiter->get($email)) != NULL, 
         $err, 'no account found');
+      $this->validate($entry['approved'] == 'approved',
+        $err, 'account pending approval');
 
       if ($this->isValid()) {
         $id = $entry['_id'];
