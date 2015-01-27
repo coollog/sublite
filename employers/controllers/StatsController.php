@@ -39,6 +39,27 @@
       }
       echo '</textarea>';
     }
+    function students() {
+      global $MStats;
+
+      $c = $MStats->getStudentsConfirmed();
+      $u = $MStats->getStudentsUnConfirmed();
+
+      echo '<br />Confirmed students:'.$c->count().'<br />
+        <textarea style="width:400px; height: 200px;">';
+      foreach ($c as $student) {
+        $email = $student['email'];
+        echo "$email\n";
+      }
+      echo '</textarea>';
+      echo '<br />Unconfirmed students:'.$u->count().'<br />
+        <textarea style="width:400px; height: 200px;">';
+      foreach ($u as $student) {
+        $email = $student['email'];
+        echo "$email\n";
+      }
+      echo '</textarea>';
+    }
   }
 
   $CStats = new StatsController();

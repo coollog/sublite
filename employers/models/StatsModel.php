@@ -53,6 +53,16 @@
     function countStudents() {
       return $this->dbstudent->emails->count();
     }
+    function getStudentsConfirmed() {
+      return $this->dbstudent->emails->find(array(
+        'pass' => array('$exists' => true)
+      ), array('email' => true));
+    }
+    function getStudentsUnconfirmed() {
+      return $this->dbstudent->emails->find(array(
+        'pass' => array('$exists' => false)
+      ), array('email' => true));
+    }
     function countCities() {
       $jobs = $this->db->jobs->find();
       $sublets = $this->dbstudent->listings->find();
