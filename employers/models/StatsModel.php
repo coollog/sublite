@@ -18,6 +18,20 @@
     function countJobListings() {
       return $this->db->jobs->count();
     }
+    function getJobsMissingRecruiter() {
+      $jobs = $this->db->jobs->find();
+
+      global $MRecruiter;
+
+      $norecruiter = array();
+      foreach ($jobs as $job) {
+        if (!$MRecruiter->IDexists($job['recruiter'])) {
+          $norecruiter[] = $job;
+        }
+      }
+
+      return $norecruiter;
+    }
     function countCompanies() {
       return $this->db->companies->count();
     }

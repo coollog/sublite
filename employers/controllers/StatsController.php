@@ -33,7 +33,7 @@
       }
 
       echo 'Recruiters who have not posted jobs:<br />
-        <textarea style="width:400px; height: 400px;">';
+        <textarea style="width:800px; height: 400px;">';
       foreach ($emails as $email) {
         echo "$email\n";
       }
@@ -45,20 +45,35 @@
       $c = $MStats->getStudentsConfirmed();
       $u = $MStats->getStudentsUnConfirmed();
 
-      echo '<br />Confirmed students:'.$c->count().'<br />
-        <textarea style="width:400px; height: 200px;">';
+      echo '<br />Confirmed students: '.$c->count().'<br />
+        <textarea style="width:800px; height: 200px;">';
       foreach ($c as $student) {
         $email = $student['email'];
         echo "$email\n";
       }
       echo '</textarea>';
-      echo '<br />Unconfirmed students:'.$u->count().'<br />
-        <textarea style="width:400px; height: 200px;">';
+      echo '<br />Unconfirmed students: '.$u->count().'<br />
+        <textarea style="width:800px; height: 200px;">';
       foreach ($u as $student) {
         $email = $student['email'];
         echo "$email\n";
       }
       echo '</textarea>';
+    }
+    function missingrecruiter() {
+      global $MStats;
+
+      $mr = $MStats->getJobsMissingRecruiter();
+      echo '<br />Jobs nonexistent recruiter: '.count($mr).'<br />
+        <textarea style="width:800px; height: 200px;">';
+      foreach ($mr as $job) {
+        $id = $job['_id'];
+        $company = $job['company'];
+        $recruiter = $job['recruiter'];
+        echo "$id - c: $company, r: $recruiter\n";
+      }
+      echo '</textarea>';
+
     }
   }
 
