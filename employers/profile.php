@@ -1,5 +1,5 @@
 <?php
-  $GLOBALS['dirpre'] = '';
+  $GLOBALS['dirpre'] = '../app/';
   require_once($GLOBALS['dirpre'].'includes/header.php');
   // PROB THINK OF ANOTHER WAY OF REFACTORING THE FOLLOWING CODE
   if (isset($_SESSION['email'])) echo 'yay!';

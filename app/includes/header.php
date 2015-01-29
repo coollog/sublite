@@ -1,10 +1,12 @@
 <?php
-  require_once($GLOBALS['dirpre'].'includes/error.php');
-  header('Content-Type: text/html; charset=utf-8');
-
   // Configurations and setup
   require_once($GLOBALS['dirpre'].'config.php');
   date_default_timezone_set('America/New_York');
+
+  // Error reporting
+  require_once($GLOBALS['dirpre'].'includes/error.php');
+
+  header('Content-Type: text/html; charset=utf-8');
 
   // Require other header files
   require_once($GLOBALS['dirpre'].'models/AppModel.php');

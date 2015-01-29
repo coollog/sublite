@@ -208,7 +208,7 @@
         $this->validateData($data, $err);
 
         if ($this->isValid()) {
-          $data['_id'] = new MongoId($id);
+          $data = array_merge($entry, $data);
           $id = $MJob->save($data);
           $this->success('job saved');
           $this->render('jobform', formData(array_merge($data, array('_id' => $id))));
@@ -235,7 +235,7 @@
       // Code
       if ($this->isValid()) {
         $entry['stats']['views']++;
-        $MJob->save($entry);
+        $MJob->save($entry, false);
 
         $data = $this->data($entry);
         $data['salarytype'] = ($data['salarytype'] == 'total') ?
@@ -243,7 +243,8 @@
         
         $r = $MRecruiter->getById($entry['recruiter']);
         
-        $company = $MCompany->get($r['company']);
+        $company = $MCompany->get($entry['company']);
+        // var_dump($entry);
         $data['companyname'] = $company['name'];
         $data['companybanner'] = $company['bannerphoto'];
         $data['companyid'] = $company['_id']->{'$id'};
