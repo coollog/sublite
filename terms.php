@@ -1,6 +1,6 @@
 <?php
   $GLOBALS['dirpre'] = 'app/';
-  require_once('includes/header.php');
+  require_once($GLOBALS['dirpre'].'includes/header.php');
   $CRecruiter->terms();
-  require_once('includes/footer.php');
+  require_once($GLOBALS['dirpre'].'includes/footer.php');
 ?>
