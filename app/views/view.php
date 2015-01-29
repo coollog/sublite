@@ -45,8 +45,11 @@
   }
   function vchecked($var, $val) {
     global $viewVars;
-    if (isset($viewVars[$var]) and $viewVars[$var] == $val) {
-      echo 'checked';
+    if (isset($viewVars[$var])) {
+      if ((is_array($viewVars[$var]) and in_array($val, $viewVars[$var])) or
+          $viewVars[$var] == $val) {
+        echo 'checked';
+      }
     }
   }
   function vlinkto($in, $page, $params = null, $newtab = false) {
