@@ -10,7 +10,7 @@
         echo '<meta property="og:title" content="' . $name . ' on SubLite" />';
         $photo = vget('photo');
         if (strpos($photo, 'assets/gfx') !== FALSE)
-          $photo = 'https://sublite.net/employers/' . $photo;
+          $photo = 'https://sublite.net/app/' . $photo;
         echo '<meta property="og:image" content="' . $photo . '" />';
         echo '<meta property="og:description" content="Check out ' . $name .
           '\'s profile on SubLite!" />';
@@ -34,7 +34,7 @@
         $name = vget('name');
         echo '<meta property="og:title" content="Check out ' . $name . ' on SubLite!" />';
         $photo = vget('logophoto');
-        if(!$photo) $photo = 'https://sublite.net/dev/employers/assets/gfx/defaultpic.png';
+        if(!$photo) $photo = 'https://sublite.net/app/assets/gfx/defaultpic.png';
         echo '<meta property="og:image:secure_url" content="' . $photo . '" />';
         echo '<meta property="og:image" content="' . $photo . '" />';
         echo '<meta property="og:image:type" content="image/jpeg" />';
@@ -47,7 +47,7 @@
       else { // default
     ?>
         <meta property="og:title" content="SubLite &ndash; Your One-Stop Shop for a Great Summer!" />
-        <meta property="og:image" content="https://sublite.net/employers/assets/gfx/studentmain.jpg" />
+        <meta property="og:image" content="https://sublite.net/app/assets/gfx/studentmain.jpg" />
         <meta property="og:description" content="Find summer internships and safe, student-only summer housing with SubLite! Verify your &quot;.edu&quot; email address to get started! It's completely free!" />
         <meta property="og:image:width" content="1677" />
         <meta property="og:image:height" content="1118" />
