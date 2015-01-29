@@ -1,0 +1,32 @@
+#!/bin/bash
+
+sbase="sublite"
+sn=1
+
+sibase="subliteinternships"
+sin=1
+
+while [ -e "$sbase$sn" ]
+do
+  sn=$((sn+1))
+done
+
+while [ -e "$sibase$sin" ]
+do
+  sin=$((sin+1))
+done
+
+
+# dump the data
+
+echo "dumping $sbase number $sn"
+
+mongodump -h ds047057.mongolab.com:47057 -d sublite -u sublite -p -o "sublite$sn"
+
+echo "dumped $sbase number $sn"
+
+echo "dumping $sibase number $sin"
+
+mongodump -h ds051980.mongolab.com:51980 -d subliteinternships -u sublite -p -o "subliteinternships$sin"
+
+echo "dumped $sibase number $sin"
