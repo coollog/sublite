@@ -20,7 +20,7 @@
         $title = vget('title');
         echo '<meta property="og:title" content="' . $name . ' is hiring for the position of ' . $title . ' on SubLite!" />';
         $photo = vget('companybanner');
-        if(!$photo) $photo = 'https://sublite.net/dev/employers/assets/gfx/defaultpic.png';
+        if(!$photo) $photo = 'https://sublite.net/app/assets/gfx/defaultpic.png';
         echo '<meta property="og:image:secure_url" content="' . $photo . '" />';
         echo '<meta property="og:image" content="' . $photo . '" />';
         echo '<meta property="og:image:type" content="image/jpeg" />';
