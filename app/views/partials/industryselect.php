@@ -23,9 +23,15 @@
   );
 ?>
 
-<left>
-  <?php foreach ($industries as $industry) { ?>
-    <input type="checkbox" name="industry[]" id="industry" value="home" <?php vchecked('industry', $industry); ?> />
-    <label for="industry"><?php echo $industry; ?></label>
-  <?php } ?>
+<left style="margin-left: 1em;">
+  <?php 
+    $i = 1;
+    foreach ($industries as $industry) {
+  ?>
+    <input type="checkbox" name="industry[]" id="industry<?php echo $i; ?>" value="<?php echo $industry; ?>" <?php vchecked('industry', $industry); ?> />
+    <label style="display: inline-block" for="industry<?php echo $i; ?>"><?php echo $industry; ?></label><br />
+  <?php
+      $i ++;
+    }
+  ?>
 </left>

@@ -84,3 +84,4 @@ Stack trace:
 [28-Jan-2015 19:29:00 America/New_York] PHP Warning:  Unknown: open(/var/lib/php/session/sess_0s1eqnomnrdcmc1hv9itcrjh75, O_RDWR) failed: Permission denied (13) in Unknown on line 0
 [28-Jan-2015 19:29:00 America/New_York] PHP Warning:  Unknown: Failed to write session data (files). Please verify that the current setting of session.save_path is correct (/var/lib/php/session) in Unknown on line 0
 [28-Jan-2015 20:02:15 America/New_York] PHP Parse error:  parse error in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/controllers/StatsController.php on line 36
+[28-Jan-2015 21:07:29 America/New_York] PHP Fatal error:  [] operator not supported for strings in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/controllers/CompanyController.php on line 14

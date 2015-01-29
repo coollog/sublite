@@ -8,7 +8,15 @@
 
     function data($data) {
       $name = $this->format(clean($data['name']));
-      $industry = $this->format(clean($data['industry']));
+      if (isset($data['industry'])) {
+        $industry = $data['industry'];
+        if (is_array($industry)) {
+          $industry = implode(', ', $industry);
+          $industry = $this->format(clean($industry));
+        }
+      } else {
+        $industry = "";
+      }
       $size = $this->format(clean($data['size']));
       $desc = $this->format(clean($data['desc']));
       $founded = $this->format(clean($data['founded']));
@@ -64,6 +72,8 @@
               as $key) {
         if (strlen($data[$key]) > 0) $answered ++;
       }
+      $this->validate(strlen($data['industry']) > 0,
+        $err, 'must choose at least 1 industry');
       $this->validate(strlen($data['bannerphoto']) > 0,
         $err, 'must upload banner image');
       $this->validate(strlen($data['logophoto']) > 0,
@@ -132,6 +142,7 @@
       // Code
       if ($this->isValid()) {
         function formData($data) {
+          $data['industry'] = explode(', ', $data['industry']);
           return array_merge($data, array(
             'headline' => 'Edit',
             'submitname' => 'edit', 'submitvalue' => 'Save Company'));

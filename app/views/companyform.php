@@ -10,9 +10,10 @@
       ?>
       <?php vnotice(); ?>
       <div class="form-slider"><label for="name">Company Name*:</label><input type="text" id="name" name="name" value="<?php vecho('name'); ?>" disabled /></div>
-      <div class="form-slider"><label for="size">Industry*: </label>
-        <?php vpartial('industryselect'); ?>
-      </div>
+
+      <div class="form-slider"><label>Industry*:</label></div>
+      <?php vpartial('industryselect'); ?>
+
       <div class="form-slider"><label for="size">Company size*: </label>
       <select id="size" name = "size" required>
         <?php vecho('size', '<option selected="selected">{var}</option>'); ?>
