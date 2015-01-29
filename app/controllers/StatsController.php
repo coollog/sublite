@@ -24,17 +24,27 @@
       }
 
       $emails = array();
+      $emailswc = array();
       foreach ($r as $recruiter) {
         $id = $recruiter['_id']->{'$id'};
+        $rdoc = $MRecruiter->getById($id);
         if (!in_array($id, $rids)) {
-          $rdoc = $MRecruiter->getById($id);
           $emails[] = $rdoc['email'];
+        }
+        if (MongoID::isValid($recruiter['company'])) {
+          $emailswc[] = $rdoc['email'];
         }
       }
 
       echo 'Recruiters who have not posted jobs:<br />
         <textarea style="width:800px; height: 400px;">';
       foreach ($emails as $email) {
+        echo "$email\n";
+      }
+      echo '</textarea>';
+      echo '<br />Recruiters who have not posted jobs but have made a company profile:<br />
+        <textarea style="width:800px; height: 400px;">';
+      foreach ($emailswc as $email) {
         echo "$email\n";
       }
       echo '</textarea>';
