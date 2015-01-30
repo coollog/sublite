@@ -46,7 +46,7 @@
   .icon {
     height: 100px;
     background: transparent no-repeat center left;
-    background-size: contain;
+    background-size: 100px 100px;
     display: table;
     padding-left: 100px;
     width: 300px;
