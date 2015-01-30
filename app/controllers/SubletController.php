@@ -2,132 +2,59 @@
   require_once($GLOBALS['dirpre'].'controllers/Controller.php');
 
   class SubletController extends Controller {
-    // TODO Decide some upper bound for duration
-    function isValidDuration($duration) {
-      if(!preg_match('`^[0-9]*$`', $duration)) return false;
-      if(strlen($duration) > 5) return false;
-      return intval($duration) > 0;
-    }
-      // TODO Should there be an upper bound for compensation?
-    function isValidCompensation($compensation) {
-      if(!preg_match('`^[0-9]*$`', $compensation)) return false;
-      if(strlen($compensation) > 10) return false;
-      return intval($compensation) > 0;
-    }
-
-    // TODO Check if date is today/after today
-    // Q you should make sure 2000 char limit is displayed.
-    function isValidDate($date) {
-      // Check proper formatting
-      if(!preg_match('`[0-9]{1,2}/[0-9]{1,2}/[0-9]{4}`', $date)) {
-        return false;
-      }
-      $ar = explode('/', $date);
-      // Check if date exists
-      if(!checkdate(intval($ar[0]), intval($ar[1]), intval($ar[2])))
-        return false;
-      // Check if date is in the future
-      return strtotime($date) > time();
-    }
-
-    // TODO Decide on a good description length
-    function isValidDescription($desc) {
-      return strlen($desc) <= 2500;
-    }
-
-    // TODO? See if URL is actually valid
-    function isValidURL($url) {
-      // filter_var is pretty weak so we use other tests
-      if (!preg_match('`^((https?:\/\/)*[\w\-]+\.[\w\-]+)`',
-        $url)) return false;  
-
-      return true;
-    }
-
     function data($data) {
-      $title = clean($data['title']);
-      $Sublettype = clean($data['Sublettype']);
-      $deadline = clean($data['deadline']);
-      $duration = str2float(clean($data['duration']));
+      $student = $data['student'];
+      $address = clean($data['address']);
+      $gender = clean($data['gender']);
+      $city = clean($data['city']);
+      $state = clean($data['state']);
+      $geocode = geocode($data['geocode']);
       $startdate = clean($data['startdate']);
       $enddate = clean($data['enddate']);
-      $salarytype = clean($data['salarytype']);
-      $salary = clean($data['salary']);
-      if ($salarytype != 'other') $salary = str2float($salary);
-      if ($Sublettype == 'fulltime') {
-        $duration = '';
-        $enddate = '';
+      $price = clean($data['price']);
+      $title = clean($data['title']);
+      $summary = clean($data['summary']);
+      $occupancy = clean($data['occupancy']);
+      $room = clean($data['room']);
+      $buildingtype = clean($data['buildingtype']);
+      $imgs = array();
+      if (isset($data['img'])) {
+        foreach ($data['img'] as $img)
+          $imgs[] = clean($img);
       }
-      $company = $data['company'];
-      $desc = clean($data['desc']);
-      $location = clean($data['location']);
-      $locationtype = '';
-      if(isset($data['locationtype'])) $locationtype = clean($data['locationtype']);
-      $geocode = geocode($location);
-      if ($locationtype) {
-        $location = '';
-        $geocode = '';
+      $amenities = array();
+      if (isset($data['amenity'])) {
+        foreach ($data['amenity'] as $amenity)
+          $amenities[] = clean($amenity);
       }
-      $requirements = clean($data['requirements']);
-      $link = clean($data['link']);
-      if (!preg_match('`^(https?:\/\/)`', $link)) $link = "http://$link";
+      $publish = $data['publish'];
+      $comments = $data['comments'];
+
       return array(
-        'title' => $title, 'deadline' => $deadline, 'duration' => $duration,
-        'desc' => $desc, 'geocode' => $geocode,
-        'location' => $location, 'requirements' => $requirements, 
-        'link' => $link, 'salary' => $salary, 'company' => $company, 
-        'salarytype' => $salarytype, 'startdate' => $startdate,
-        'enddate' => $enddate, 'Sublettype' => $Sublettype,
-        'locationtype' => $locationtype
+        'student' => $student, 'address' => $address, 'gender' => $gender,
+        'city' => $city, 'state' => $state, 'geocode' => $geocode, 
+        'startdate' => $startdate, 'enddate' => $enddate, 'price' => $price,
+        'title' => $title, 'summary' => $summary, 'occupancy' => $occupancy,
+        'room' => $room, 'buildingtype' => $buildingtype, 'imgs' => $imgs,
+        'amenities' => $amenities, 'publish' => $publish, 
+        'comments' => $comments
       );
+
+
+      // MIGRATIONS NEEDED:
+      // - change location to address
+      // - change N and W to just geocode object with also "location_type": "APPROXIMATE"
+      // - change from to startdate and to to enddate
+      // - change occ to occupancy
+      // - change building to buildingtype
     }
 
     function validateData($data, &$err) {
-      if (strlen($data['locationtype']) == 0) {
-        $this->validate($data['geocode'] != NULL, $err, 'location invalid');
-      }
-      $this->validate(strlen($data['title']) <= 200,
-        $err, 'Sublet title is too long');
-      $this->validate(strlen(strval($data['salary'])) > 0,
-        $err, 'please input numeric compensation/stipend amount');
-      if ($data['Sublettype'] == 'internship') {
-        $this->validate($data['duration'], $err, 'please input duration');
-        $this->validate(!(!$data['startdate'] && $data['enddate']),
-          $err, 'please also input a start date');
-        if($data['startdate']) $this->validate($this->isValidDate($data['startdate']),
-          $err, 'invalid start date: please check date');
-        if($data['enddate']) $this->validate($this->isValidDate($data['enddate']),
-          $err, 'invalid end date: please check date');
-        if($data['startdate'] && $data['enddate']) {
-          $this->validate(strtotime($data['enddate']) > strtotime($data['startdate']),
-            $err, 'invalid date range: end date should be after start date.');
-        }
-      }
-      else {
-        if($data['startdate']) $this->validate($this->isValidDate($data['startdate']),
-          $err, 'invalid start date: please check date');
-      }
-      // $this->validate($this->isValidDuration($data['duration']),
-      //   $err, 'invalid duration');
-      // $this->validate($this->isValidCompensation($data['salary']),
-      //   $err, 'invalid compensation');
-      $this->validate($this->isValidDate($data['deadline']),
-        $err, 'invalid deadline: please check date');
-      $this->validate(strtotime($data['deadline']) > time(),
-        $err, 'invalid deadline: date should be in the future');
-      $this->validate($this->isValidDescription($data['desc']),
-        $err, 'description too long');
-      $this->validate($this->isValidURL($data['link']),
-        $err, 'invalid listing URL');
+      // WRITE VALIDATEDATA
     }
 
     function manage() {
-      global $CRecruiter; $CRecruiter->requireLogin();
-      global $MSublet;
-      $data = array(
-        'Sublets' => $MSublet->getByRecruiter($_SESSION['_id'])
-      );
-      $this->render('manageSublets', $data);
+      // WRITE MANAGE
     }
 
     function add() {
@@ -137,56 +64,48 @@
           'submitname' => 'add', 'submitvalue' => 'Add Sublet'));
       }
 
-      global $CRecruiter; $CRecruiter->requireLogin();
-
-      global $CCompany;
-      if (!$CCompany->exists()) {
-        $this->error('you must create a company profile first');
-        $this->render('notice'); return;
-      }
+      global $CStudent; $CStudent->requireLogin();
 
       if (!isset($_POST['add'])) { 
-        $this->render('Subletform', formData(array())); return; 
+        $this->render('subletform', formData(array())); return;
       }
       
-      global $params, $MSublet, $MRecruiter;
-      $me = $MRecruiter->me();
-      $params['company'] = $me['company'];
-
-      $this->startValidations();
-      $this->validate(isset($params['salarytype']), 
-        $err, 'must select salary type');
+      global $params, $MSublet, $MStudent;
+      $me = $MStudent->me();
+      $params['student'] = $me['_id'];
+      $params['publish'] = true;
+      $params['comments'] = array();
 
       // Params to vars
       extract($data = $this->data($params));
       
       // Validations
+      $this->startValidations();
       $this->validateData($data, $err);
 
       // Code
       if ($this->isValid()) {
-        $data['applicants'] = array();
         $data['stats'] = array('views' => 0, 'clicks' => 0);
         $id = $MSublet->save($data);
-        $this->redirect('Sublet', array('id' => $id));
+        $this->redirect('sublet', array('id' => $id));
         return;
       }
       
       $this->error($err);
-      $this->render('Subletform', formData($data));
+      $this->render('subletform', formData($data));
     }
 
     function edit() { // FIX THIS ADD GET INFO LIKE DATA FROM VIEW AND STUFF
-      global $CRecruiter; $CRecruiter->requireLogin();
+      global $CStudent; $CStudent->requireLogin();
       
-      global $params, $MSublet, $MRecruiter;
+      global $params, $MSublet, $MStudent;
       // Params to vars
       
       // Validations
       $this->startValidations();
       $this->validate(isset($_GET['id']) and MongoId::isValid($id = $_GET['id']) and ($entry = $MSublet->get($id)) !== NULL, $err, 'unknown Sublet');
       if ($this->isValid())
-        $this->validate($_SESSION['_id'] == $entry['recruiter'],
+        $this->validate($_SESSION['_id'] == $entry['Student'],
           $err, 'permission denied');
 
       // Code
@@ -201,7 +120,7 @@
           $this->render('Subletform', formData(array_merge($this->data($entry), array('_id' => $id)))); return;
         }
 
-        $me = $MRecruiter->me();
+        $me = $MStudent->me();
         $params['company'] = $me['company'];
         extract($data = $this->data($params));
         // Validations
@@ -223,7 +142,7 @@
     function view() {
       //$this->requireLogin();
       global $MSublet;
-      global $MRecruiter;
+      global $MStudent;
       global $MCompany;
 
       // Validations
@@ -241,7 +160,7 @@
         $data['salarytype'] = ($data['salarytype'] == 'total') ?
                               $data['duration'].' weeks' : $data['salarytype'];
         
-        $r = $MRecruiter->getById($entry['recruiter']);
+        $r = $MStudent->getById($entry['Student']);
         
         $company = $MCompany->get($entry['company']);
         // var_dump($entry);
@@ -249,8 +168,8 @@
         $data['companybanner'] = $company['bannerphoto'];
         $data['companyid'] = $company['_id']->{'$id'};
 
-        $data['recruitername'] = $r['firstname'] . ' ' . $r['lastname'];
-        $data['recruiterid'] = $r['_id']->{'$id'};
+        $data['Studentname'] = $r['firstname'] . ' ' . $r['lastname'];
+        $data['Studentid'] = $r['_id']->{'$id'};
 
         $this->render('viewSublet', $data);
         return;
@@ -262,8 +181,8 @@
 
 
     function requireLogin() {
-      global $CRecruiter, $CStudent;
-      if ($CRecruiter->loggedIn()) $CRecruiter->requireLogin();
+      global $CStudent, $CStudent;
+      if ($CStudent->loggedIn()) $CStudent->requireLogin();
       else $CStudent->requireLogin();
     }
 
@@ -274,18 +193,18 @@
       );
     }
     function dataSearchEmpty() {
-      return array('recruiter' => '', 'company' => '', 'title' => '', 
+      return array('Student' => '', 'company' => '', 'title' => '', 
                    'industry' => '', 'city' => '');
     }
     function dataSearch($data) {
-      $recruiter = clean($data['recruiter']);
+      $Student = clean($data['Student']);
       $company = clean($data['company']);
       $title = clean($data['title']);
       $industry = clean($data['industry']);
       $city = clean($data['city']);
 
       return array_merge($this->dataSearchSetup(), array(
-        'recruiter' => $recruiter, 'company' => $company, 'title' => $title,
+        'Student' => $Student, 'company' => $company, 'title' => $title,
         'industry' => $industry, 'city' => $city
       ));
     }
@@ -294,7 +213,7 @@
       $this->requireLogin();
 
       global $params;
-      global $MSublet, $MStudent, $MCompany, $MRecruiter;
+      global $MSublet, $MStudent, $MCompany, $MStudent;
 
       // Function for processing results and showing them
       function process($res) {
@@ -316,9 +235,9 @@
       // Predefined searches
       $showSearch = true;
       $showCompany = null;
-      if (isset($_GET['recruiter'])) {
+      if (isset($_GET['Student'])) {
         $params = $this->dataSearchEmpty();
-        $params['recruiter'] = $_GET['recruiter'];
+        $params['Student'] = $_GET['Student'];
         $showSearch = false;
       }
       if (isset($_GET['company'])) {
@@ -343,9 +262,9 @@
 
       // Validations
       $this->startValidations();
-      $this->validate(strlen($recruiter) == 0 or 
-                      !is_null($MRecruiter->getByID($recruiter)),
-        $err, 'unknown recruiter');
+      $this->validate(strlen($Student) == 0 or 
+                      !is_null($MStudent->getByID($Student)),
+        $err, 'unknown Student');
 
       // Code
       if ($this->isValid()) {
@@ -367,8 +286,8 @@
         // Search query building
         $query = array();
 
-        if (strlen($recruiter) > 0) 
-          $query['recruiter'] = new MongoId($recruiter);
+        if (strlen($Student) > 0) 
+          $query['Student'] = new MongoId($Student);
         
         if (strlen($title) > 0) {
           $query['title'] = array('$regex' => keywords2mregex($title));
