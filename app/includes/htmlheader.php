@@ -44,6 +44,15 @@
         $desc = vget('desc');
         echo '<meta property="og:description" content="' . $desc . '" />';
       }
+      elseif (strpos(htmlspecialchars($_SERVER['REQUEST_URI']), "/jobs") !== FALSE) { // on /jobs
+    ?>
+        <meta property="og:title" content="SubLite &ndash; Your One-Stop Shop for a Great Summer!" />
+        <meta property="og:image" content="Attract the New Generation Talent with your Company's Unique Personality." />
+        <meta property="og:description" content="Find summer internships and safe, student-only summer housing with SubLite! Verify your &quot;.edu&quot; email address to get started! It's completely free!" />
+        <meta property="og:image:width" content="1677" />
+        <meta property="og:image:height" content="1118" />
+    <?php
+      }
       else { // default
     ?>
         <meta property="og:title" content="SubLite &ndash; Your One-Stop Shop for a Great Summer!" />
