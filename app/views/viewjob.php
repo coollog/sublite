@@ -97,7 +97,19 @@
               <subheadline>Requirements</subheadline>
               <?php vecho('requirements'); ?>
               <subheadline>Posted By</subheadline>
-              <?php echo vlinkto(vget('recruitername'), 'recruiter', array('id' => vget('recruiterid'))); ?>
+              <?php
+                echo vlinkto(vget('recruitername'), 'recruiter', array('id' => vget('recruiterid')));
+                if(vget('Loggedinstudent')) {
+              ?>
+                  | <a href="newmessage.php?from=<?php vecho('L_id'); ?>&to=<?php vecho('recruiterid'); ?>" onClick="return confirm('I have read, fully understand, and agree to Sublite’s Terms of Service and Privacy Policy. I agree to contact the recruiter in good-faith to inquire about the listing.')">Contact</a>
+              <?php
+                }
+                else if(!vget('Loggedin')) {
+              ?>
+                  | <?php echo vlinkto('Create an account to message this recruiter!', 'register'); ?>
+              <?php
+                } 
+              ?>
             </div>
           </td>
           <td style="width: 30%;" style="vertical-align: middle;">
