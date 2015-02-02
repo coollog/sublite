@@ -69,7 +69,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="SubLite" />
 
-    <title>SubLite For Employers</title>
+    <title>SubLite &ndash; Your One-Stop Shop for a Great Summer!</title>
     <link rel="icon" type="image/png" href="<?php echo $GLOBALS['dirpre']; ?>assets/gfx/favicon.png" />
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
