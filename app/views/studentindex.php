@@ -317,6 +317,7 @@
         <div class="whytext">Exclusively for students</div>
       </incell></td>
     </tr></table>
+    <iframe src="https://www.youtube.com/embed/LY_JB8zc0lk" scrolling="no" allowTransparency="true" frameborder="0" style="max-width: 900px; max-height: 400px; height: 400px; margin-top: 50px;"></iframe>
   </div>
 </panel>
 <panel class="backedby">
