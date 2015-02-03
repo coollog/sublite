@@ -357,7 +357,8 @@
 			"students.mimuw.edu.pl" => "MIM UW",
 			"sfu.ca" => "Simon Fraser University",
 			"student.pravo.hr" => "University of Zagreb Faculty of Law",
-			"mail.utoronto.ca" => "University of Toronto"
+			"mail.utoronto.ca" => "University of Toronto",
+			"hunterschools.org" => "Hunter College Campus Schools"
 		);
 		public function getDomain($email) {
 			$ea = explode('@', $email);

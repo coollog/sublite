@@ -85,7 +85,7 @@
 
       // Code
       if ($this->isValid()) {
-        $data['stats'] = array('views' => 0, 'clicks' => 0);
+        $data['stats'] = array('views' => 0);
         $id = $MSublet->save($data);
         $this->redirect('sublet', array('id' => $id));
         return;
@@ -103,9 +103,9 @@
       
       // Validations
       $this->startValidations();
-      $this->validate(isset($_GET['id']) and MongoId::isValid($id = $_GET['id']) and ($entry = $MSublet->get($id)) !== NULL, $err, 'unknown Sublet');
+      $this->validate(isset($_GET['id']) and MongoId::isValid($id = $_GET['id']) and ($entry = $MSublet->get($id)) !== NULL, $err, 'unknown sublet');
       if ($this->isValid())
-        $this->validate($_SESSION['_id'] == $entry['Student'],
+        $this->validate($_SESSION['_id'] == $entry['student'],
           $err, 'permission denied');
 
       // Code
@@ -117,11 +117,9 @@
         }
 
         if (!isset($_POST['edit'])) { 
-          $this->render('Subletform', formData(array_merge($this->data($entry), array('_id' => $id)))); return;
+          $this->render('subletform', formData(array_merge($this->data($entry), array('_id' => $id)))); return;
         }
 
-        $me = $MStudent->me();
-        $params['company'] = $me['company'];
         extract($data = $this->data($params));
         // Validations
         $this->validateData($data, $err);
@@ -130,48 +128,49 @@
           $data = array_merge($entry, $data);
           $id = $MSublet->save($data);
           $this->success('Sublet saved');
-          $this->render('Subletform', formData(array_merge($data, array('_id' => $id))));
+          $this->render('subletform', formData(array_merge($data, array('_id' => $id))));
           return;
         }
       }
       
       $this->error($err);
-      $this->render('Subletform', formData($data, array_merge($data, array('_id' => $id))));
+      $this->render('subletform', formData($data, array_merge($data, array('_id' => $id))));
     }
     
     function view() {
       //$this->requireLogin();
       global $MSublet;
       global $MStudent;
-      global $MCompany;
 
       // Validations
       $this->startValidations();
       $this->validate(isset($_GET['id']) and 
         ($entry = $MSublet->get($_GET['id'])) != NULL, 
-        $err, 'unknown Sublet');
+        $err, 'unknown sublet');
 
       // Code
       if ($this->isValid()) {
         $entry['stats']['views']++;
-        $MSublet->save($entry, false);
+        $MSublet->save($entry);
 
         $data = $this->data($entry);
-        $data['salarytype'] = ($data['salarytype'] == 'total') ?
-                              $data['duration'].' weeks' : $data['salarytype'];
+        // ANY MODiFICATIONS ON DATA GOES HERE
         
-        $r = $MStudent->getById($entry['Student']);
-        
-        $company = $MCompany->get($entry['company']);
-        // var_dump($entry);
-        $data['companyname'] = $company['name'];
-        $data['companybanner'] = $company['bannerphoto'];
-        $data['companyid'] = $company['_id']->{'$id'};
+        $s = $MStudent->getById($entry['student']);
 
-        $data['Studentname'] = $r['firstname'] . ' ' . $r['lastname'];
-        $data['Studentid'] = $r['_id']->{'$id'};
+        $data['studentname'] = $s['name'];
+        $data['studentid'] = $s['_id']->{'$id'};
+        $data['studentclass'] = $data['class'] > 0 ? 
+          "Class of ".$data['class'] : '';
+        $data['studentschool'] = strlen($p['school']) > 0 ?
+          $data['school'] : 'Undergraduate';
+        $data['studentpic'] = isset($p['pic']) ?
+          $dta['pic'] : $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
+        $data['studentcollege'] = $S->nameOf($email);
+        $data['studentbio'] = isset($p['bio']) ?
+          $data['bio'] : 'Welcome to my profile!';
 
-        $this->render('viewSublet', $data);
+        $this->render('viewsublet', $data);
         return;
       }
 

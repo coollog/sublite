@@ -13,7 +13,7 @@
       return $data['_id']->{'$id'};
     }
 
-    function getById($id) {
+    function get($id) {
       return $this->collection->findOne(array('_id' => new MongoId($id)));
     }
     
