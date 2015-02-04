@@ -43,8 +43,9 @@
     box-sizing: border-box;
     margin: 0.5em 0;
     background: #fbf9ec;
-    line-height: 2em;
+    line-height: 1.5em;
     font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
   }
   textarea {
     height: 10em;
