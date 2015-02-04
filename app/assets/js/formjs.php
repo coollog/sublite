@@ -61,7 +61,7 @@
     $('form').slidinglabels({ 
       /* these are all optional */ 
       className : 'form-slider', // the class you're wrapping the label & input with -> default = slider 
-      topPosition : '1em', // how far down you want each label to start 
+      topPosition : '0.5em', // how far down you want each label to start 
       leftPosition : '0.5em', // how far left you want each label to start 
       axis : 'x', // can take 'x' or 'y' for slide direction 
       speed : 'fast' // can take 'fast', 'slow', or a numeric value 
