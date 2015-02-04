@@ -53,16 +53,11 @@
   opt:hover {
     color: #ffd800;
   }
-  opt.small {
-    font-size: 0.8em;
-  }
 </style>
 
 <navbar class="blackbar">
   <a href="."><logo>SubLite</logo></a><beta>beta</beta>
   <options class="right">
-    <a href="."><opt class="small">Home Page</opt></a>
-    
     <?php if (vget('Loggedin')) { ?>
 
       <?php if (vget('Lcompany')) { ?>
