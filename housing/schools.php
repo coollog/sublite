@@ -358,7 +358,8 @@
 			"sfu.ca" => "Simon Fraser University",
 			"student.pravo.hr" => "University of Zagreb Faculty of Law",
 			"mail.utoronto.ca" => "University of Toronto",
-			"hunterschools.org" => "Hunter College Campus Schools"
+			"hunterschools.org" => "Hunter College Campus Schools",
+			"hku.hk" => "Hong Kong University"
 		);
 		public function getDomain($email) {
 			$ea = explode('@', $email);

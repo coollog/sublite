@@ -16,6 +16,9 @@
     function get($email) {
       return $this->collection->findOne(array('email' => $email));
     }
+    function getAll() {
+      return $this->collection->find();
+    }
     function getById($id) {
       return $this->collection->findOne(array('_id' => new MongoId($id)));
     }

@@ -48,12 +48,15 @@
       $users = $stats['recruiters'] + $stats['students'];
       $listings = $stats['jobs'] + $stats['sublets'];
 
+      $r = isset($_GET['r']) ? $_GET['r'] : null;
+
       $this->render('studentindex', array(
         'users' => $users,
         'listings' => $listings,
         'universities' => $stats['universities'],
         'cities' => $stats['cities'],
-        'companies' => $stats['companies']
+        'companies' => $stats['companies'],
+        'r' => $r
       ));
     }
 
@@ -125,15 +128,26 @@
       if ($this->isValid()) {
         // Send confirmation email
         $confirm = $this->sendConfirm($email);
+
+        // Set up registration entry
         if ($entry == NULL) {
           $entry = array('email' => $email, 'confirm' => $confirm);
         } else {
           $entry['confirm'] = $confirm;
         }
-        $MStudent->save($entry);
+        $entry['stats'] = array('referrals' => array());
+        $id = $MStudent->save($entry);
 
-        $this->success("A confirmation email has been sent to <strong>$email</strong>. Check your inbox or spam. The email may take up to 24 hours to show up.");
-        $this->render('notice');
+        // Handle referrals
+        if (isset($_GET['r']) and $MStudent->exists($r = $_GET['r'])) {
+          $referrer = $MStudent->getById($r);
+          $referrer['stats']['referrals'][] = $id;
+          $MStudent->save($referrer);
+        }
+
+        $this->render('studentregisterfinish', array(
+          'email' => $email
+        ));
         return;
       }
       
