@@ -143,6 +143,16 @@
           $referrer = $MStudent->getById($r);
           $referrer['stats']['referrals'][] = $id;
           $MStudent->save($referrer);
+
+          $message = "
+            <h1 style=\"padding: 0.5em 0; margin: 1em 0; background: #f78d1d; color: #fff; text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4); text-align: center;\">Thanks for referring your friend!</h1>
+            Hi there!
+            <br /><br />
+            Thanks for referring your friend with email $email! Your friend has also started using SubLite. You have now been entered into our iPad Mini drawing! Good luck!
+            <br /><br /><br />
+            <i>Thanks again!<br />
+            Team SubLite</i>";
+          sendgmail($referrer['email'], array("info@sublite.net", "Yuanling Yuan - SubLite, LLC."), 'SubLite - Successful Referral!', $message);
         }
 
         $this->render('studentregisterfinish', array(
