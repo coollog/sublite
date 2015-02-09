@@ -1,3 +1,4 @@
 pass.php
 *.tmp
 .DS_Store
+housing/s3_config.php

@@ -275,7 +275,7 @@
       <div class="content">
         <div class="tagline">One-Stop Shop for a Great Summer!</div>
         <div class="slogan">Find summer internships and safe, student-only summer housing with SubLite! Verify your ".edu" email address to get started! It's completely free!</div>
-        <a href="register.php">
+        <a href="register.php<?php if (!is_null($r = vget('r'))) echo "?r=$r"; ?>">
           <input type="button" class="registerlogin" value="Register" />
         </a>
         <div class="switch"><a href="../employers">switch to RECRUITER</a></div>
@@ -317,6 +317,7 @@
         <div class="whytext">Exclusively for students</div>
       </incell></td>
     </tr></table>
+    <iframe src="https://www.youtube.com/embed/LY_JB8zc0lk" scrolling="no" allowTransparency="true" frameborder="0" style="max-width: 900px; max-height: 400px; height: 400px; margin-top: 50px;"></iframe>
   </div>
 </panel>
 <panel class="backedby">

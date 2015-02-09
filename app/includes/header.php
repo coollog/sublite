@@ -16,6 +16,7 @@
   require_once($GLOBALS['dirpre'].'models/StudentModel.php');
   require_once($GLOBALS['dirpre'].'models/MessageModel.php');
   require_once($GLOBALS['dirpre'].'models/StatsModel.php');
+  require_once($GLOBALS['dirpre'].'models/SubletModel.php');
   require_once($GLOBALS['dirpre'].'controllers/MigrationsController.php');
   require_once($GLOBALS['dirpre'].'controllers/CompanyController.php');
   require_once($GLOBALS['dirpre'].'controllers/JobController.php');
@@ -24,6 +25,7 @@
   require_once($GLOBALS['dirpre'].'controllers/StudentController.php');
   require_once($GLOBALS['dirpre'].'controllers/MessageController.php');
   require_once($GLOBALS['dirpre'].'controllers/StatsController.php');
+  require_once($GLOBALS['dirpre'].'controllers/SubletController.php');
 
   header("Expires: Tue, 01 Jan 2000 00:00:00 GMT");
   header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
