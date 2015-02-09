@@ -34,6 +34,7 @@
 	$sugg['New Haven'] = 'New Haven, CT';
 	$sugg['Washington D.C.'] = 'Washington, D.C.';
 	$sugg['San Francisco, CA'] = 'San Francisco, CA';
+	$sugg['Kansas City'] = 'Kansas City, KS';
 	
 	require_once('htmlheader.php');
 ?>

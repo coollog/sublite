@@ -33,7 +33,12 @@
 			$mail->addCC($cc);
 		}
 		if (!is_null($bcc)) {
-			$mail->addBCC($bcc);
+			if (is_array($bcc)) {
+				foreach ($bcc as $email) {
+					$mail->addBCC($email);
+				}
+			} else
+				$mail->addBCC($bcc);
 		}
 		$mail->WordWrap = 80;
 		$mail->isHTML(true);

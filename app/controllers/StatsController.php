@@ -30,9 +30,9 @@
         $rdoc = $MRecruiter->getById($id);
         if (!in_array($id, $rids)) {
           $emails[] = $rdoc['email'];
-        }
-        if (MongoID::isValid($recruiter['company'])) {
-          $emailswc[] = $rdoc['email'];
+          if (MongoID::isValid($recruiter['company'])) {
+            $emailswc[] = $rdoc['email'];
+          }
         }
       }
 

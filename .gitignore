@@ -2,3 +2,4 @@ pass.php
 *.tmp
 .DS_Store
 errors.log
+housing/s3_config.php

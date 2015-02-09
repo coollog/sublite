@@ -36,7 +36,7 @@
   select {
     transition: all 0.30s ease-in-out;
     outline: none;
-    padding: 0.5em 0px 0.5em 0.5em;
+    padding: 0.75em 0px 0.5em 0.5em;
     border: 0;
     width: 100%;
     height: 2.5em;
