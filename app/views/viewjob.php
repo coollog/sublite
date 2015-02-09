@@ -86,7 +86,7 @@
         }
       ?>
     </subheadline>
-    <a href="<?php vecho('link'); ?>" target="_blank" onClick="return confirm('You have clicked on an external link and are leaving the pages of SubLite.net. We are not responsible for the accuracy or effectiveness of any content outside of SubLite.net.')"><input type="button" value="Apply Now" /></a>
+    <a href="redirect.php?<?php echo "id="; echo $_GET['id']; echo "&url="; vecho('link'); ?>" onClick="return confirm('You have clicked on an external link and are leaving the pages of SubLite.net. We are not responsible for the accuracy or effectiveness of any content outside of SubLite.net.')"><input type="button" value="Apply Now" /></a>
 
     <div class="jobinfo">
       <table class="jobtable">
@@ -198,7 +198,6 @@
         </tr>
       </table>
     </div>
-
-    <a href="<?php vecho('link'); ?>" onClick="return confirm('You have clicked on an external link and are leaving the pages of SubLite.net. We are not responsible for the accuracy or effectiveness of any content outside of SubLite.net.')"><input type="button" value="Apply Now" /></a>
+    <a href="redirect.php?<?php echo "id="; echo $_GET['id']; echo "&url="; vecho('link'); ?>" onClick="return confirm('You have clicked on an external link and are leaving the pages of SubLite.net. We are not responsible for the accuracy or effectiveness of any content outside of SubLite.net.')"><input type="button" value="Apply Now" /></a>
   </div>
 </panel>

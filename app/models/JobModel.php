@@ -40,6 +40,18 @@
     function exists($id) {
       return ($this->get($id) !== NULL);
     }
+
+    function incrementApply($id) {
+      $entry = $this->get($id);
+      if($entry !== NULL) {
+        ++$entry['stats']['clicks'];
+        $this->save($entry, false);
+        return $entry['stats']['clicks'];
+      }
+      else {
+        return NULL;
+      }
+    }
   }
 
   $MJob = new JobModel();
