@@ -46,7 +46,7 @@
   .icon {
     height: 100px;
     background: transparent no-repeat center left;
-    background-size: contain;
+    background-size: 100px 100px;
     display: table;
     padding-left: 100px;
     width: 300px;
@@ -86,7 +86,7 @@
         }
       ?>
     </subheadline>
-    <a href="<?php vecho('link'); ?>" target="_blank" onClick="return confirm('You have clicked on an external link and are leaving the pages of SubLite.net. We are not responsible for the accuracy or effectiveness of any content outside of SubLite.net.')"><input type="button" value="Apply Now" /></a>
+    <a href="redirect.php?<?php echo "id="; echo $_GET['id']; echo "&url="; vecho('link'); ?>" onClick="return confirm('You have clicked on an external link and are leaving the pages of SubLite.net. We are not responsible for the accuracy or effectiveness of any content outside of SubLite.net.')"><input type="button" value="Apply Now" /></a>
 
     <div class="jobinfo">
       <table class="jobtable">
@@ -97,7 +97,19 @@
               <subheadline>Requirements</subheadline>
               <?php vecho('requirements'); ?>
               <subheadline>Posted By</subheadline>
-              <?php echo vlinkto(vget('recruitername'), 'recruiter', array('id' => vget('recruiterid'))); ?>
+              <?php
+                echo vlinkto(vget('recruitername'), 'recruiter', array('id' => vget('recruiterid')));
+                if(vget('Loggedinstudent')) {
+              ?>
+                  | <a href="newmessage.php?from=<?php vecho('L_id'); ?>&to=<?php vecho('recruiterid'); ?>" onClick="return confirm('I have read, fully understand, and agree to Sublite’s Terms of Service and Privacy Policy. I agree to contact the recruiter in good-faith to inquire about the listing.')">Contact</a>
+              <?php
+                }
+                else if(!vget('Loggedin')) {
+              ?>
+                  | <?php echo vlinkto('Create an account to message this recruiter!', 'register'); ?>
+              <?php
+                } 
+              ?>
             </div>
           </td>
           <td style="width: 30%;" style="vertical-align: middle;">
@@ -186,7 +198,6 @@
         </tr>
       </table>
     </div>
-
-    <a href="<?php vecho('link'); ?>" target="_blank" onClick="confirm('You have clicked on an external link and are leaving the pages of SubLite.net. We are not responsible for the accuracy or effectiveness of any content outside of SubLite.net.')"><input type="button" value="Apply Now" /></a>
+    <a href="redirect.php?<?php echo "id="; echo $_GET['id']; echo "&url="; vecho('link'); ?>" onClick="return confirm('You have clicked on an external link and are leaving the pages of SubLite.net. We are not responsible for the accuracy or effectiveness of any content outside of SubLite.net.')"><input type="button" value="Apply Now" /></a>
   </div>
 </panel>

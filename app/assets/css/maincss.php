@@ -16,17 +16,30 @@
     font: 400 14px/1.5em 'Open Sans', sans-serif;
   }
   a {
-    color: #ffd800;
+    color: #035d75;
     text-decoration: none;
   }
   a:active {
     color: #035d75;
   }
   a:hover {
-    color: #fff;
+    color: #4da1a9;
     text-decoration: none;
   }
   a:visited {
+  }
+  .switch a {
+    color: #ffD800;
+    text-decoration: none;
+  }
+  .switch a:active {
+    color: #035d75;
+  }
+  .switch a:hover {
+    color: #fff;
+    text-decoration: none;
+  }
+  .switch a:visited {
   }
   panel {
     display: block;

@@ -44,13 +44,24 @@
         $desc = vget('desc');
         echo '<meta property="og:description" content="' . $desc . '" />';
       }
+      elseif (strpos(htmlspecialchars($_SERVER['REQUEST_URI']), "/jobs") !== FALSE) { // on /jobs
+    ?>
+        <meta property="og:title" content="SubLite &ndash; Your One-Stop Shop for a Great Summer!" />
+        <meta property="og:image" content="https://sublite.net/app/assets/gfx/studentmain.jpg" />
+        <meta property="og:description" content="Attract the New Generation Talent with your Company's Unique Personality." />
+        <meta property="og:image:width" content="1677" />
+        <meta property="og:image:height" content="1118" />
+    <?php
+      }
       else { // default
     ?>
         <meta property="og:title" content="SubLite &ndash; Your One-Stop Shop for a Great Summer!" />
         <meta property="og:image" content="https://sublite.net/app/assets/gfx/studentmain.jpg" />
+        <meta property="og:image" content="https://sublite.net/app/assets/gfx/main.jpg" />
+        <meta property="og:image" content="https://sublite.s3.amazonaws.com/1423101952.jpeg" />
         <meta property="og:description" content="Find summer internships and safe, student-only summer housing with SubLite! Verify your &quot;.edu&quot; email address to get started! It's completely free!" />
-        <meta property="og:image:width" content="1677" />
-        <meta property="og:image:height" content="1118" />
+        <meta property="og:image:width" content="1000" />
+        <meta property="og:image:height" content="1000" />
     <?php
       }
       $url = !empty($_SERVER['HTTPS']) ? 'https://' : 'http://';
@@ -60,7 +71,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="SubLite" />
 
-    <title>SubLite For Employers</title>
+    <title>SubLite &ndash; Your One-Stop Shop for a Great Summer!</title>
     <link rel="icon" type="image/png" href="<?php echo $GLOBALS['dirpre']; ?>assets/gfx/favicon.png" />
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>

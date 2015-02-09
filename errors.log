@@ -85,6 +85,14 @@ Stack trace:
 [28-Jan-2015 19:29:00 America/New_York] PHP Warning:  Unknown: Failed to write session data (files). Please verify that the current setting of session.save_path is correct (/var/lib/php/session) in Unknown on line 0
 [28-Jan-2015 20:02:15 America/New_York] PHP Parse error:  parse error in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/controllers/StatsController.php on line 36
 [28-Jan-2015 21:07:29 America/New_York] PHP Fatal error:  [] operator not supported for strings in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/controllers/CompanyController.php on line 14
+<<<<<<< HEAD
+[29-Jan-2015 19:25:15 America/New_York] PHP Fatal error:  Class 'PHPMailer' not found in /Library/WebServer/Documents/sublite/app/includes/functions/sendgmail.php on line 4
+[29-Jan-2015 19:25:15 America/New_York] PHP Fatal error:  Cannot redeclare senderror() (previously declared in /Library/WebServer/Documents/sublite/app/includes/error.php:14) in /Library/WebServer/Documents/sublite/app/includes/error.php on line 14
+[29-Jan-2015 19:27:22 America/New_York] PHP Fatal error:  Class 'Controller' not found in /Library/WebServer/Documents/sublite/app/includes/error.php on line 50
+[29-Jan-2015 19:27:22 America/New_York] PHP Fatal error:  Cannot redeclare senderror() (previously declared in /Library/WebServer/Documents/sublite/app/includes/error.php:14) in /Library/WebServer/Documents/sublite/app/includes/error.php on line 14
+[29-Jan-2015 19:48:48 America/New_York] PHP Fatal error:  Class 'PHPMailer' not found in /Library/WebServer/Documents/sublite/app/includes/functions/sendgmail.php on line 4
+[29-Jan-2015 19:48:48 America/New_York] PHP Fatal error:  Cannot redeclare senderror() (previously declared in /Library/WebServer/Documents/sublite/app/includes/error.php:14) in /Library/WebServer/Documents/sublite/app/includes/error.php on line 14
+=======
 [05-Feb-2015 15:36:37 America/New_York] PHP Fatal error:  Cannot use isset() on the result of an expression (you can use "null !== expression" instead) in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/controllers/StudentController.php on line 142
 [05-Feb-2015 15:36:58 America/New_York] PHP Parse error:  parse error, expecting `')'' in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/controllers/StudentController.php on line 149
 [05-Feb-2015 16:19:25 America/New_York] PHP Fatal error:  Uncaught exception 'MongoConnectionException' with message 'Failed to connect to: ds051980.mongolab.com:51980: Remote server has closed the connection' in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/models/Model.php:8
@@ -215,3 +223,4 @@ Stack trace:
 #5 {main}
   thrown in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/models/Model.php on line 8
 [08-Feb-2015 19:34:11 America/New_York] PHP Fatal error:  Class 'Controller' not found in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/includes/error.php on line 50
+>>>>>>> f48472bf911fb65f693a247a27e8b8096c6fdf18
