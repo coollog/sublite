@@ -145,7 +145,7 @@
           $MStudent->save($referrer);
 
           $message = "
-            <h1 style=\"padding: 0.5em 0; margin: 1em 0; background: #f78d1d; color: #fff; text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4); text-align: center;\">Thanks for referring your friend!</h1>
+            <h1 style=\"padding: 0.5em 0; margin: 1em 0; background: #000; color: #ffd800; text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4); text-align: center;\">Thanks for referring your friend!</h1>
             Hi there!
             <br /><br />
             Thanks for referring your friend with email $email! Your friend has also started using SubLite. You have now been entered into our iPad Mini drawing! Good luck!
@@ -156,7 +156,7 @@
         }
 
         $this->render('studentregisterfinish', array(
-          'email' => $email
+          'id' => $id
         ));
         return;
       }
@@ -171,7 +171,7 @@
       $link = "http://sublite.net/confirm.php?id=$id&email=$email";
 
       $message = "
-        <h1 style=\"padding: 0.5em 0; margin: 1em 0; background: #f78d1d; color: #fff; text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4); text-align: center;\">Welcome to SubLite!</h1>
+        <h1 style=\"padding: 0.5em 0; margin: 1em 0; background: #000; color: #ffd800; text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4); text-align: center;\">Welcome to SubLite!</h1>
         Hi there!
         <br /><br />
         My name is Yuanling and I&rsquo;m a co-founder of SubLite. We care about facilitating verified summer sublets from students to students. Whether you are looking for a summer sublet or have a vacant space to sublet, we want to ensure a safe and secure experience for you. That&rsquo;s why we need you to click on the link below to verify your email address.
@@ -186,6 +186,29 @@
       }     
       
       return $id;
+    }
+
+    function sendReferral() {
+      if (isset($_REQUEST['emails']) and isset($_REQUEST['name'])) {
+        $emails = $_REQUEST['emails'];
+        $name = $_REQUEST['name'];
+        $r = $_REQUEST['r'];
+
+        $message = "
+          <h1 style=\"padding: 0.5em 0; margin: 1em 0; background: #000; color: #ffd800; text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4); text-align: center;\">SubLite!</h1>
+
+          Hey there!
+          <br /><br />
+          Check out SubLite, a free website that's helping me find summer opportunities and housing. It was founded by Yale students last year and more than 4,000 students have already started using it.
+          <br /><br />
+          The link is www.sublite.net?r=$r!
+          <br /><br />
+          Best,
+          $name";
+
+        sendgmail('', array("info@sublite.net", "Yuanling Yuan - SubLite, LLC."), 'Your friend has invited you to SubLite!', $message, null, $emails);
+
+      }
     }
 
     function confirm() {
