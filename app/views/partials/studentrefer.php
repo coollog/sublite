@@ -73,7 +73,7 @@
           <form>
             <div class="form-slider"><label for="name">Your Name: </label><input type="text" id="name" name="name" /></div>
             <input type="button" value="Select All" id="selectall" />
-            <br />
+            <br /><br />
             <input type="button" value="Send Invite" id="sendinvite" />
           </form>
         </right>
@@ -108,10 +108,13 @@
 
         if (addresses instanceof Array) {
           for (var j = 0; j < addresses.length; j ++) {
-            emails.push({
-              'name': name,
-              'email': addresses[j]['address']
-            });
+            var email = addresses[j]['address'];
+            if (email.split(".").pop() == 'edu') {
+              emails.push({
+                'name': name,
+                'email': email
+              });
+            }
           }
         }
       }
@@ -135,7 +138,7 @@
     }, 100);
   }
   function inviteSuccess(data) {
-    $('.invitecontacts').html('Invites sent!');
+    $('.invitecontacts').html('Thanks for inviting your contacts!');
     console.log(data);
   }
 
@@ -177,6 +180,7 @@
     var data = {
       emails: emails,
       name: name,
+      email: '<?php vecho('email'); ?>',
       r: "<?php vecho('id'); ?>",
     };
     $.ajax({

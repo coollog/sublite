@@ -156,7 +156,7 @@
         }
 
         $this->render('studentregisterfinish', array(
-          'id' => $id
+          'id' => $id, 'email' => $email
         ));
         return;
       }
@@ -189,10 +189,22 @@
     }
 
     function sendReferral() {
-      if (isset($_REQUEST['emails']) and isset($_REQUEST['name'])) {
-        $emails = $_REQUEST['emails'];
+      if (isset($_REQUEST['emails']) and 
+          isset($_REQUEST['name']) and 
+          isset($_REQUEST['email'])) {
+        $emailspre = $_REQUEST['emails'];
         $name = $_REQUEST['name'];
         $r = $_REQUEST['r'];
+
+        // Remove emails that are registered
+        global $MStudent;
+        $emails = array();
+        for ($i = 0; $i < count($emails); $i ++) {
+          $email = $emails[$i];
+          if (!$MStudent->exists($email)) {
+            $emails[] = $email;
+          }
+        }
 
         $message = "
           <h1 style=\"padding: 0.5em 0; margin: 1em 0; background: #000; color: #ffd800; text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4); text-align: center;\">SubLite!</h1>
@@ -203,11 +215,21 @@
           <br /><br />
           The link is www.sublite.net?r=$r!
           <br /><br />
-          Best,
-          $name";
+          Best,<br />
+          $name
+        ";
 
-        sendgmail('', array("info@sublite.net", "Yuanling Yuan - SubLite, LLC."), 'Your friend has invited you to SubLite!', $message, null, $emails);
+        sendgmail('', array("info@sublite.net", "$name - SubLite, LLC."), 'Your friend has invited you to SubLite!', $message, null, $emails);
 
+        $email = $_REQUEST['email'];
+        $emailsstr = implode("<br />\n", $emails);
+        $report = "
+          $name - $email has referred:
+          <br /><br />
+          $emailsstr
+        ";
+
+        sendgmail(array('tony.jiang@yale.edu', 'qingyang.chen@gmail.com'), "info@sublite.net", 'Referral Invitations Sent', $report);
       }
     }
 
