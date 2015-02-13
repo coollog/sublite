@@ -7,6 +7,7 @@
       <?php vnotice(); ?>
       <input type="submit" name="login" value="Log In" />
       <div style="font-size: 0.8em"><a href="forgotpass.php">Forgot Your Password?</a></div>
+      <div style="font-size: 0.8em"><a href="../login.php">Log In As Student</a></div>
     </form>
   </div>
 </panel>
