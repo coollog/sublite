@@ -81,6 +81,9 @@
     background: #035d75;
     color: #fff;
   }
+  .checkboxes {
+    margin-left: 1em;
+  }
   
   .img img {
     max-height: 15em;

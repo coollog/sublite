@@ -8,34 +8,102 @@
           echo ' &nbsp; ' . vlinkto('<input type="button" value="View Sublet Listing" /><br /><br />', 'Sublet', array('id' => $id), true);
         }
       ?>
+      
+      'student' => $student,'imgs' => $imgs,
+
       <?php vnotice(); ?>
-      <div class="form-slider"><label for="title">Sublet Title:</label><input type="text" id="title" name="title" value="<?php vecho('title'); ?>" required /></div>
-      <left>
-        <input type="radio" name="Sublettype" id="fulltime" value="fulltime" <?php vchecked('Sublettype', 'fulltime'); ?> required /><label for="fulltime"> Full-time position</label>
-        <input type="radio" name="Sublettype" id="internship" value="internship" <?php vchecked('Sublettype', 'internship'); ?> required /><label for="internship"> Internship</label>
-      </left>
-      <div class="form-slider" id="durationdiv"><label for="duration">Duration (weeks):</label><input type="text" id="duration" name="duration" maxlength="100" value="<?php vecho('duration'); ?>" /></div>
-      <div class="form-slider"><label for="startdate">Start date (optional, mm/dd/yyyy):</label><input type="text" id="startdate" name="startdate" maxlength="100" value="<?php vecho('startdate'); ?>" /></div>
-      <div class="form-slider" id="enddatediv"><label for="enddate">End date (optional, mm/dd/yyyy):</label><input type="text" id="enddate" name="enddate" maxlength="100" value="<?php vecho('enddate'); ?>" /></div>
-      <div class="form-slider"><label for="salary">Compensation / Stipend ($US):</label><input type="text" id="salary" name="salary" required maxlength="100" value="<?php vecho('salary'); ?>" required /></div>
+      
+      <div class="form-slider"><label for="address">Address:</label><input type="text" id="address" name="address" value="<?php vecho('address'); ?>" required /></div>
+      <div class="form-slider"><label for="city">City:</label><input type="text" id="city" name="city" value="<?php vecho('city'); ?>" required /></div>
+      <div class="form-slider"><label for="state">State:</label><input type="text" id="state" name="state" value="<?php vecho('state'); ?>" required /></div>
+
+      <div class="form-slider"><label for="startdate">Available from (mm/dd/yyyy):</label><input type="text" id="startdate" name="startdate" value="<?php vecho('startdate'); ?>" required /></div>
+      <div class="form-slider"><label for="enddate">Available till (mm/dd/yyyy):</label><input type="text" id="enddate" name="enddate" value="<?php vecho('enddate'); ?>" required /></div>
+
+      <div class="form-slider"><label for="price">Price ($):</label><input type="text" id="price" name="price" value="<?php vecho('price'); ?>" required /></div>
       <right>
-        <input type="radio" name="salarytype" id="month" value="month" <?php vchecked('salarytype', 'month'); ?> required /><label for="month"> / month</label>
-        <input type="radio" name="salarytype" id="week" value="week" <?php vchecked('salarytype', 'week'); ?> /><label for="week"> / week</label>
-        <input type="radio" name="salarytype" id="day" value="day" <?php vchecked('salarytype', 'day'); ?> /><label for="day"> / day</label>
-        <input type="radio" name="salarytype" id="hour" value="hour" <?php vchecked('salarytype', 'hour'); ?> /><label for="hour"> / hour</label>
-        <input type="radio" name="salarytype" id="total" value="total" <?php vchecked('salarytype', 'total'); ?> /><label for="total"> total payment</label>
-        <input type="radio" name="salarytype" id="other" value="other" <?php vchecked('salarytype', 'other'); ?> /><label for="other"> other (100 chars max)</label>
+        <input type="radio" name="pricetype" id="month" value="month" <?php vchecked('pricetype', 'month'); ?> required /><label for="month"> / month</label>
+        <input type="radio" name="pricetype" id="week" value="week" <?php vchecked('pricetype', 'week'); ?> required /><label for="week"> / week</label>
+        <input type="radio" name="pricetype" id="day" value="day" <?php vchecked('pricetype', 'day'); ?> required /><label for="day"> / day</label>
       </right>
-      <div class="form-slider"><label for="deadline">Deadline for Application (mm/dd/yyyy):</label><input type="text" id="deadline" name="deadline" value="<?php vecho('deadline'); ?>" required /></div>
-      <div class="form-slider"><label for="desc">Sublet Description (2500 chars max):</label><textarea id="desc" name="desc" required maxlength="2500"><?php vecho('desc'); ?></textarea></div>
-      <div class="form-slider"><label for="requirements">Requirements (2000 chars max):</label><textarea id="requirements" name="requirements" required maxlength="2000"><?php vecho('requirements'); ?></textarea></div>
-      <div class="form-slider"><label for="link">Listing URL:</label><input type="text" id="link" name="link" value="<?php vecho('link'); ?>" required /></div>
-      <left>
-        <input type="checkbox" name="locationtype" id="locationtype" value="home" <?php vchecked('locationtype', 'home'); ?> /><label for="locationtype"> Work at home Sublet</label>
+
+      <div class="form-slider"><label for="title">Title:</label><input type="text" id="title" name="title" value="<?php vecho('title'); ?>" required /></div>
+      <div class="form-slider"><label for="summary">Summary:</label><input type="text" id="summary" name="summary" value="<?php vecho('summary'); ?>" required /></div>
+
+      <div class="form-slider"><label for="occupancy">Max occupancy:</label><input type="text" id="occupancy" name="occupancy" value="<?php vecho('occupancy'); ?>" required /></div>
+
+      <div class="form-slider"><label for="gender">Gender restriction: </label>
+      <select id="gender" name="gender" required>
+        <?php vecho('gender', '<option selected="selected">{var}</option>'); ?>
+        <option>All genders welcome</option>
+        <option>Male only</option>
+        <option>Female only</option>
+      </select></div>
+
+      <div class="form-slider"><label for="roomtype">Room type: </label>
+      <select id="roomtype" name="roomtype" required>
+        <?php vecho('roomtype', '<option selected="selected">{var}</option>'); ?>
+        <option>Private Room</option>
+        <option>Shared Room</option>
+        <option>Entire Home/Apt</option>
+        <option>Other</option>
+      </select></div>
+
+      <div class="form-slider"><label for="buildingtype">Building type: </label>
+      <select id="buildingtype" name="buildingtype" required>
+        <?php vecho('buildingtype', '<option selected="selected">{var}</option>'); ?>
+        <option>Apartment Building</option>
+        <option>Student Housing (Dorm)</option>
+        <option>Elevator Building</option>
+        <option>Walk-Up</option>
+        <option>Town-House</option>
+        <option>Brownstone</option>
+        <option>Rowhouse</option>
+        <option>Duplex</option>
+        <option>House</option>
+        <option>Other</option>
+      </select></div>
+
+      Amenities:
+      <left class="checkboxes">
+        <?php
+          $amenities = array(
+            "In-Building Gym",
+            "Free Parking",
+            "Reserved Parking (Additional Cost)",
+            "Pool",
+            "Rooftop Access",
+            "Yard",
+            "In-Building Mailboxes",
+            "Laundry Machines",
+            "Wi-Fi",
+            "Cable",
+            "Wheelchair Accessibility",
+            "Sports Fields"
+          );
+          $i = 1;
+          foreach ($amenities as $a) {
+        ?>
+            <input type="checkbox" name="amenities[]" id="amenities<?php echo $i; ?>" value="<?php echo $a; ?>" <?php vchecked('amenities', $a); ?> />
+            <label style="display: inline-block" for="amenities<?php echo $i; ?>"><?php echo $a; ?></label><br />
+        <?php
+            $i ++;
+          }
+        ?>
       </left>
-      <div class="form-slider" id="locationdiv"><label for="location">Sublet Location (Address, City, State):</label><input type="text" id="location" name="location" maxlength="500" value="<?php vecho('location'); ?>" required /></div>
-      <input type="checkbox" name="terms" id="terms" value="agree" required /> <label for="terms">I represent and warrant that I am employed by the company offering the internship, that I have authority or permission to post this internship, and that the description is accurate and not misleading.</label>
+
+      <?php 
+        vpartial('s3multiple', array(
+          's3name' => 'photos', 
+          's3title' => 'Additional photos (upload at least 4 more):',
+          's3links' => vget('photos')
+        ));
+      ?>
+
+      <input type="checkbox" name="terms" id="terms" value="agree" required /> <label for="terms">I have read, fully understand, and agree to SubLite&rsquo;s <a href="terms.php">Terms of Service</a>. I represent and warrant that I have permission to list this property, and that the description is accurate and not misleading. I will negotiate the terms of the stay with potential guests in good-faith.</label>
+
       <?php vnotice(); ?>
+
       <right>
         <input type="submit" name="<?php vecho('submitname'); ?>" value="<?php vecho('submitvalue'); ?>" />
       </right>

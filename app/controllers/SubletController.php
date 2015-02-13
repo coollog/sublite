@@ -12,15 +12,16 @@
       $startdate = clean($data['startdate']);
       $enddate = clean($data['enddate']);
       $price = clean($data['price']);
+      $pricetype = clean($data['pricetype']);
       $title = clean($data['title']);
       $summary = clean($data['summary']);
       $occupancy = clean($data['occupancy']);
-      $room = clean($data['room']);
+      $roomtype = clean($data['roomtype']);
       $buildingtype = clean($data['buildingtype']);
-      $imgs = array();
-      if (isset($data['img'])) {
-        foreach ($data['img'] as $img)
-          $imgs[] = clean($img);
+      $photos = array();
+      if (isset($data['photos'])) {
+        foreach ($data['photos'] as $photo)
+          $photos[] = clean($photo);
       }
       $amenities = array();
       if (isset($data['amenity'])) {
@@ -35,9 +36,9 @@
         'city' => $city, 'state' => $state, 'geocode' => $geocode, 
         'startdate' => $startdate, 'enddate' => $enddate, 'price' => $price,
         'title' => $title, 'summary' => $summary, 'occupancy' => $occupancy,
-        'room' => $room, 'buildingtype' => $buildingtype, 'imgs' => $imgs,
+        'roomtype' => $roomtype, 'buildingtype' => $buildingtype, 'photos' => $photos,
         'amenities' => $amenities, 'publish' => $publish, 
-        'comments' => $comments
+        'comments' => $comments, 'pricetype' => $pricetype
       );
 
 
@@ -47,6 +48,10 @@
       // - change from to startdate and to to enddate
       // - change occ to occupancy
       // - change building to buildingtype
+      // - change room to roomtype
+      // - add pricetype
+      // - add gender
+      // - change imgs to photos
     }
 
     function validateData($data, &$err) {
@@ -95,7 +100,7 @@
       $this->render('subletform', formData($data));
     }
 
-    function edit() { // FIX THIS ADD GET INFO LIKE DATA FROM VIEW AND STUFF
+    function edit() {
       global $CStudent; $CStudent->requireLogin();
       
       global $params, $MSublet, $MStudent;
@@ -127,7 +132,7 @@
         if ($this->isValid()) {
           $data = array_merge($entry, $data);
           $id = $MSublet->save($data);
-          $this->success('Sublet saved');
+          $this->success('sublet saved');
           $this->render('subletform', formData(array_merge($data, array('_id' => $id))));
           return;
         }
@@ -154,8 +159,8 @@
         $MSublet->save($entry);
 
         $data = $this->data($entry);
-        // ANY MODiFICATIONS ON DATA GOES HERE
         
+        // ANY MODiFICATIONS ON DATA GOES HERE
         $s = $MStudent->getById($entry['student']);
 
         $data['studentname'] = $s['name'];
@@ -178,13 +183,6 @@
       $this->render('notice');
     }
 
-
-    function requireLogin() {
-      global $CStudent, $CStudent;
-      if ($CStudent->loggedIn()) $CStudent->requireLogin();
-      else $CStudent->requireLogin();
-    }
-
     function dataSearchSetup() {
       global $MApp;
       return array('industries' => 
@@ -192,8 +190,7 @@
       );
     }
     function dataSearchEmpty() {
-      return array('Student' => '', 'company' => '', 'title' => '', 
-                   'industry' => '', 'city' => '');
+      return array('location' => '', 'startdate' => '');
     }
     function dataSearch($data) {
       $Student = clean($data['Student']);
@@ -209,14 +206,13 @@
     }
 
     function search() {
-      $this->requireLogin();
+      global $CStudent; $CStudent->requireLogin();
 
       global $params;
-      global $MSublet, $MStudent, $MCompany, $MStudent;
+      global $MSublet, $MStudent;
 
       // Function for processing results and showing them
       function process($res) {
-        global $MCompany;
         // Processing results
         $Sublets = array();
         foreach ($res as $Sublet) {
@@ -233,16 +229,9 @@
 
       // Predefined searches
       $showSearch = true;
-      $showCompany = null;
-      if (isset($_GET['Student'])) {
+      if (isset($_GET['student'])) {
         $params = $this->dataSearchEmpty();
-        $params['Student'] = $_GET['Student'];
-        $showSearch = false;
-      }
-      if (isset($_GET['company'])) {
-        $params = $this->dataSearchEmpty();
-        $params['company'] = $_GET['company'];
-        $showCompany = $MCompany->getByName($_GET['company']);
+        $params['student'] = $_GET['student'];
         $showSearch = false;
       }
 
