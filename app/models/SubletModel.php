@@ -16,6 +16,10 @@
     function get($id) {
       return $this->collection->findOne(array('_id' => new MongoId($id)));
     }
+
+    function find($query=array(), $fields=array()) {
+      return $this->collection->find($query, $fields);
+    }
     
     function delete($id) {
       

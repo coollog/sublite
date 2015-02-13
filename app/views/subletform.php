@@ -40,57 +40,11 @@
         <option>Female only</option>
       </select></div>
 
-      <div class="form-slider"><label for="roomtype">Room type: </label>
-      <select id="roomtype" name="roomtype" required>
-        <?php vecho('roomtype', '<option selected="selected">{var}</option>'); ?>
-        <option>Private Room</option>
-        <option>Shared Room</option>
-        <option>Entire Home/Apt</option>
-        <option>Other</option>
-      </select></div>
+      <?php vpartial('roomtype'); ?>
 
-      <div class="form-slider"><label for="buildingtype">Building type: </label>
-      <select id="buildingtype" name="buildingtype" required>
-        <?php vecho('buildingtype', '<option selected="selected">{var}</option>'); ?>
-        <option>Apartment Building</option>
-        <option>Student Housing (Dorm)</option>
-        <option>Elevator Building</option>
-        <option>Walk-Up</option>
-        <option>Town-House</option>
-        <option>Brownstone</option>
-        <option>Rowhouse</option>
-        <option>Duplex</option>
-        <option>House</option>
-        <option>Other</option>
-      </select></div>
+      <?php vpartial('buildingtype'); ?>
 
-      Amenities:
-      <left class="checkboxes">
-        <?php
-          $amenities = array(
-            "In-Building Gym",
-            "Free Parking",
-            "Reserved Parking (Additional Cost)",
-            "Pool",
-            "Rooftop Access",
-            "Yard",
-            "In-Building Mailboxes",
-            "Laundry Machines",
-            "Wi-Fi",
-            "Cable",
-            "Wheelchair Accessibility",
-            "Sports Fields"
-          );
-          $i = 1;
-          foreach ($amenities as $a) {
-        ?>
-            <input type="checkbox" name="amenities[]" id="amenities<?php echo $i; ?>" value="<?php echo $a; ?>" <?php vchecked('amenities', $a); ?> />
-            <label style="display: inline-block" for="amenities<?php echo $i; ?>"><?php echo $a; ?></label><br />
-        <?php
-            $i ++;
-          }
-        ?>
-      </left>
+      <?php vpartial('amenities'); ?>
 
       <?php 
         vpartial('s3multiple', array(

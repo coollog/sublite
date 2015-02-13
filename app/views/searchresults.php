@@ -69,6 +69,7 @@
     </div>
   </panel>
 <?php } ?>
+
 <panel class="results">
   <div class="content">
     <?php if (!is_null(vget('recent'))) { ?>

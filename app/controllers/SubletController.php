@@ -190,18 +190,32 @@
       );
     }
     function dataSearchEmpty() {
-      return array('location' => '', 'startdate' => '');
+      return array(
+        'location' => '', 'startdate' => '', 'enddate' => '', 'price0' => '',
+        'price1' => '', 'people' => '', 'roomtype' => '', 'buildingtype' => '',
+        'gender' => '', 'amenities' => array()
+      );
     }
     function dataSearch($data) {
-      $Student = clean($data['Student']);
-      $company = clean($data['company']);
-      $title = clean($data['title']);
-      $industry = clean($data['industry']);
-      $city = clean($data['city']);
+      $location = clean($data['location']);
+      $startdate = clean($data['startdate']);
+      $enddate = clean($data['enddate']);
+      $price0 = clean($data['price0']);
+      $price1 = clean($data['price1']);
+      $people = clean($data['people']);
+      $roomtype = clean($data['roomtype']);
+      $buildingtype = clean($data['buildingtype']);
+      $gender = clean($data['gender']);
+      for ($i = 0; $i < count($amenities); $i ++) {
+        $amenities[$i] = clean($amenities[$i]);
+      }
 
       return array_merge($this->dataSearchSetup(), array(
-        'Student' => $Student, 'company' => $company, 'title' => $title,
-        'industry' => $industry, 'city' => $city
+        'location' => $location, 'startdate' => $startdate, 
+        'enddate' => $enddate, 'price0' => $price0, 'price1' => $price1,
+        'people' => $people, 'roomtype' => $roomtype,
+        'buildingtype' => $buildingtype, 'gender' => $gender,
+        'amenities' = $amenities
       ));
     }
 
@@ -214,15 +228,10 @@
       // Function for processing results and showing them
       function process($res) {
         // Processing results
-        $Sublets = array();
-        foreach ($res as $Sublet) {
-          $company = $MCompany->get($Sublet['company']);
-          $Sublet['company'] = $company['name'];
-          if (strlen($Sublet['desc']) > 300) {
-            $Sublet['desc'] = substr($Sublet['desc'], 0, 297) . '...';
-          }
-          $Sublet['logophoto'] = $company['logophoto'];
-          array_push($Sublets, $Sublet);
+        $sublets = array();
+        foreach ($res as $sublet) {
+          $sublet['logophoto'] = $company['logophoto'];
+          array_push($sublets, $sublet);
         }
         return $Sublets;
       }
@@ -238,10 +247,10 @@
       if ($showSearch and !isset($_POST['search'])) {
         // If not searching for anything, then return last 5 entries
         $res = $MSublet->last(5);
-        $Sublets = process($res);
+        $sublets = process($res);
 
         $this->render('searchform', $this->dataSearchSetup());
-        $this->render('searchresults', array('Sublets' => $Sublets, 'recent' => true));
+        $this->render('searchresults', array('sublets' => $sublets, 'recent' => true));
         return; 
       }
       
