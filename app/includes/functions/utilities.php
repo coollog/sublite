@@ -59,4 +59,13 @@
     } else
       return $retval . ' ago';
   }
+
+  function array2str($arr, $format="<b>%s</b> = '%s'", $sep="<br />\n") {
+    global $f;
+    $f = $format;
+    return implode($sep, array_map(function ($v, $k) {
+      global $f;
+      return sprintf($f, $k, $v); 
+    }, $arr, array_keys($arr)));
+  }
 ?>
