@@ -27,8 +27,8 @@
         <input type="radio" name="pricetype" id="day" value="day" <?php vchecked('pricetype', 'day'); ?> required /><label for="day"> / day</label>
       </right>
 
-      <div class="form-slider"><label for="title">Title:</label><input type="text" id="title" name="title" value="<?php vecho('title'); ?>" required /></div>
-      <div class="form-slider"><label for="summary">Summary:</label><input type="text" id="summary" name="summary" value="<?php vecho('summary'); ?>" required /></div>
+      <div class="form-slider"><label for="title">Title:</label><input type="text" id="title" name="title" value="<?php vecho('title'); ?>" required maxlength="100" /></div>
+      <div class="form-slider"><label for="summary">Summary:</label><input type="text" id="summary" name="summary" value="<?php vecho('summary'); ?>" required maxlength="1000" /></div>
 
       <div class="form-slider"><label for="occupancy">Max occupancy:</label><input type="text" id="occupancy" name="occupancy" value="<?php vecho('occupancy'); ?>" required /></div>
 

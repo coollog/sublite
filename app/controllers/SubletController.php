@@ -55,7 +55,12 @@
     }
 
     function validateData($data, &$err) {
-      // WRITE VALIDATEDATA
+      $this->validate($data['price'] >= 0), $err, 'price cannot be negative');
+      $this->validate($data['occupancy'] > 0,
+        $err, 'occupancy must be positive');
+      $this->validate(
+        (new DateTime($data['enddate'])) >= (new DateTime($data['startdate'])),
+        $err, 'invalid dates');
     }
 
     function manage() {
@@ -184,16 +189,21 @@
     }
 
     function dataSearchSetup() {
+      /* CONVERT */
       global $MApp;
       return array('industries' => 
         array_merge(array(''), $MApp->getIndustriesBySublets())
       );
     }
     function dataSearchEmpty() {
+      /* MAKE GENDER THE GENDER OF THE USER */
+      $gender = '';
+
       return array(
         'location' => '', 'startdate' => '', 'enddate' => '', 'price0' => '',
-        'price1' => '', 'people' => '', 'roomtype' => '', 'buildingtype' => '',
-        'gender' => '', 'amenities' => array()
+        'price1' => '', 'people' => '', 'roomtype' => 'Any',
+        'buildingtype' => 'Any',
+        'gender' => $gender, 'amenities' => array(), 'proximity' => ''
       );
     }
     function dataSearch($data) {
@@ -202,21 +212,29 @@
       $enddate = clean($data['enddate']);
       $price0 = clean($data['price0']);
       $price1 = clean($data['price1']);
-      $people = clean($data['people']);
+      $occupancy = clean($data['occupancy']);
       $roomtype = clean($data['roomtype']);
       $buildingtype = clean($data['buildingtype']);
       $gender = clean($data['gender']);
+      $amenities = array();
       for ($i = 0; $i < count($amenities); $i ++) {
         $amenities[$i] = clean($amenities[$i]);
       }
+      $proximity = clean($data['proximity']);
+      $sortby = clean($data['sortby']);
 
       return array_merge($this->dataSearchSetup(), array(
         'location' => $location, 'startdate' => $startdate, 
         'enddate' => $enddate, 'price0' => $price0, 'price1' => $price1,
-        'people' => $people, 'roomtype' => $roomtype,
+        'occupancy' => $occupancy, 'roomtype' => $roomtype,
         'buildingtype' => $buildingtype, 'gender' => $gender,
-        'amenities' = $amenities
+        'amenities' = $amenities, 'proximity' => $proximity,
+        'sortby' => $sortby
       ));
+    }
+    function validateSearch($query, &$err) {
+      /* CONVERT */
+      $this->validate($query[''] == null)
     }
 
     function search() {
@@ -226,87 +244,123 @@
       global $MSublet, $MStudent;
 
       // Function for processing results and showing them
-      function process($res) {
-        // Processing results
+      function process($res, $sortby, $latitude, $longitude) {
         $sublets = array();
-        foreach ($res as $sublet) {
-          $sublet['logophoto'] = $company['logophoto'];
-          array_push($sublets, $sublet);
+
+        // Sort
+        switch ($sortby) {
+          case 'priceIncreasing':
+            $res->sort(array('price' => 1));
+            break;
+          case 'priceDecreasing':
+            $res->sort(array('price' => -1));
+            break;
         }
-        return $Sublets;
+        foreach ($res as $sublet) {
+          $sublet['proximity'] = distance($latitude, $longitude, $sublet['latitude'], $sublet['longitude']);
+          if ($sublet['proximity'] <= $maxProximity) {
+            // Processing result
+            $sublet['img'] = isset($sublet['imgs'][0]) ? 
+                             $sublet['imgs'][0] : 'assets/gfx/defaultpic.png';
+            
+            $sublets[] = $sublet;
+          }
+        }
+        switch ($sortby) {
+          case 'proximityIncreasing':
+            function sorter($a, $b) {
+              if ($a['proximity'] < $b['proximity']) return -1;
+              if ($a['proximity'] > $b['proximity']) return 1;
+              return 0;
+            }
+            usort($sublets, 'sorter');
+            break;
+        }
+        
+        return $sublets;
       }
 
       // Predefined searches
       $showSearch = true;
-      if (isset($_GET['student'])) {
-        $params = $this->dataSearchEmpty();
-        $params['student'] = $_GET['student'];
-        $showSearch = false;
-      }
 
       if ($showSearch and !isset($_POST['search'])) {
         // If not searching for anything, then return last 5 entries
         $res = $MSublet->last(5);
         $sublets = process($res);
 
-        $this->render('searchform', $this->dataSearchSetup());
-        $this->render('searchresults', array('sublets' => $sublets, 'recent' => true));
+        $this->render('subletsearchform', $this->dataSearchSetup());
+        $this->render('subletsearchresults', array('sublets' => $sublets, 'recent' => true));
         return; 
       }
       
       // Params to vars
       extract($data = $this->dataSearch($params));
 
-      // Validations
       $this->startValidations();
-      $this->validate(strlen($Student) == 0 or 
-                      !is_null($MStudent->getByID($Student)),
-        $err, 'unknown Student');
 
-      // Code
+      $this->validate(!is_null($geocode = geocode($location)), $err, 'invalid location');
       if ($this->isValid()) {
+        $latitude = $geocode['latitude'];
+        $longitude = $geocode['longitude'];
+        $startdate = strtotime($startdate);
+        $enddate = strtotime($enddate);
+        $maxProximity = (int)$proximity;
+        $minPrice = (float)$price0;
+        $maxPrice = (float)$price1;
+        $minOccupancy = (int)$occupancy;
 
-        // Searching for companies
-        $companyquery = array();
+        // Validate parameters
 
-        if (strlen($company) > 0) {
-          $companyquery['name'] = array('$regex' => keywords2mregex($company));
+
+        if ($this->isValid()) {
+          if (strlen($title) > 0) {
+            $query['title'] = array('$regex' => keywords2mregex($title));
+          }
+          // Search query building and validations
+          $query = array(
+            'publish' => true,
+            'price' => array('$gte' => $minPrice, '$lte' => $maxPrice),
+            'occupancy' => array('$gte' => $minOccupancy)
+          );
+          if ($roomtype != 'Any') {
+            $query['roomtype'] = $roomtype;
+          }
+          if ($buildingtype != 'Any') {
+            $query['buildingtype'] = $buildingtype;
+          }
+          if ($roomtype != 'Any') {
+            $query['roomtype'] = $roomtype;
+          }
+          if (count($amenities) > 0) {
+            $query['amenities'] = array('$in' => $amenities);
+          }
+          if (strlen($startdate) > 0) {
+            $query['startdate'] = array('$lte' => $startdate);
+          }
+          if (strlen($enddate) > 0) {
+            $query['enddate'] = array('$gte' => $enddate);
+          }
+
+          // Validate query
+          $this->validateSearch($query, $err);
+
+          if ($this->isValid()) {
+            // Performing search
+            $starttime = microtime(true);
+            $res = $MSublet->find($query);
+            $delay = microtime(true) - $starttime;
+
+            $sublets = process($res, $sortby, $latitude, $longitude);
+
+            if ($showSearch) $this->render('subletsearchform', $data);
+            $this->render('subletsearchresults', array('sublets' => $sublets));
+            return;
+          }
         }
-        if (strlen($industry) > 0) {
-          $companyquery['industry'] = array('$regex' => keywords2mregex($industry));
-        }
-        if (strlen($city) > 0) {
-          $companyquery['location'] = array('$regex' => keywords2mregex($city));
-        }
-        $cs = $MCompany->find($companyquery);
-
-        // Search query building
-        $query = array();
-
-        if (strlen($Student) > 0) 
-          $query['Student'] = new MongoId($Student);
-        
-        if (strlen($title) > 0) {
-          $query['title'] = array('$regex' => keywords2mregex($title));
-        }
-
-        $companies = array();
-        foreach ($cs as $c) {
-          array_push($companies, $c['_id']);
-        }
-        $query['company'] = array('$in' => $companies);
-
-        // Performing search
-        $res = $MSublet->find($query);
-        $Sublets = process($res);
-
-        if ($showSearch) $this->render('searchform', $data);
-        $this->render('searchresults', array('Sublets' => $Sublets, 'showCompany' => $showCompany));
-        return;
       }
 
       $this->error($err);
-      $this->render('searchform', $data);
+      $this->render('subletsearchform', $data);
     }
   }
   $CSublet = new SubletController();

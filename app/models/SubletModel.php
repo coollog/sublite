@@ -16,9 +16,11 @@
     function get($id) {
       return $this->collection->findOne(array('_id' => new MongoId($id)));
     }
-
     function find($query=array(), $fields=array()) {
       return $this->collection->find($query, $fields);
+    }
+    function last($n=1) {
+      return $this->collection->find()->sort(array('_id'=>-1))->limit($n);
     }
     
     function delete($id) {

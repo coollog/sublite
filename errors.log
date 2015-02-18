@@ -224,3 +224,4 @@ Stack trace:
   thrown in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/models/Model.php on line 8
 [08-Feb-2015 19:34:11 America/New_York] PHP Fatal error:  Class 'Controller' not found in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/includes/error.php on line 50
 >>>>>>> f48472bf911fb65f693a247a27e8b8096c6fdf18
+[16-Feb-2015 19:30:54 America/New_York] PHP Parse error:  parse error in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/controllers/SubletController.php on line 58
