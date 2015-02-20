@@ -9,8 +9,8 @@
       $city = clean($data['city']);
       $state = clean($data['state']);
       $geocode = geocode($data['geocode']);
-      $startdate = clean($data['startdate']);
-      $enddate = clean($data['enddate']);
+      $startdate = strtotime($data['startdate']);
+      $enddate = strtotime($data['enddate']);
       $price = clean($data['price']);
       $pricetype = clean($data['pricetype']);
       $title = clean($data['title']);
@@ -40,18 +40,6 @@
         'amenities' => $amenities, 'publish' => $publish, 
         'comments' => $comments, 'pricetype' => $pricetype
       );
-
-
-      // MIGRATIONS NEEDED:
-      // - change location to address
-      // - change N and W to just geocode object with also "location_type": "APPROXIMATE"
-      // - change from to startdate and to to enddate
-      // - change occ to occupancy
-      // - change building to buildingtype
-      // - change room to roomtype
-      // - add pricetype
-      // - add gender
-      // - change imgs to photos
     }
 
     function validateData($data, &$err) {
@@ -148,7 +136,6 @@
     }
     
     function view() {
-      //$this->requireLogin();
       global $MSublet;
       global $MStudent;
 
@@ -234,7 +221,7 @@
     }
     function validateSearch($query, &$err) {
       /* CONVERT */
-      $this->validate($query[''] == null)
+      //$this->validate($query[''] == null)
     }
 
     function search() {
@@ -328,8 +315,8 @@
           if ($buildingtype != 'Any') {
             $query['buildingtype'] = $buildingtype;
           }
-          if ($roomtype != 'Any') {
-            $query['roomtype'] = $roomtype;
+          if ($gender != 'Any') {
+            $query['gender'] = $gender;
           }
           if (count($amenities) > 0) {
             $query['amenities'] = array('$in' => $amenities);

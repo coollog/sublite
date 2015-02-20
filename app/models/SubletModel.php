@@ -3,8 +3,8 @@
 
   class SubletModel extends Model {
     function __construct() {
-      $m = new MongoClient($GLOBALS['dburistudent']);
-      $db = $m->$GLOBALS['dbnamestudent'];
+      $m = new MongoClient($GLOBALS['dburistudenttest']);
+      $db = $m->$GLOBALS['dbnamestudenttest'];
       $this->collection = $db->listings;
     }
 
@@ -21,6 +21,9 @@
     }
     function last($n=1) {
       return $this->collection->find()->sort(array('_id'=>-1))->limit($n);
+    }
+    function getAll() {
+      return $this->collection->find();
     }
     
     function delete($id) {

@@ -35,9 +35,9 @@
       <div class="form-slider"><label for="gender">Gender restriction: </label>
       <select id="gender" name="gender" required>
         <?php vecho('gender', '<option selected="selected">{var}</option>'); ?>
-        <option>All genders welcome</option>
-        <option>Male only</option>
-        <option>Female only</option>
+        <option value="Any">All genders welcome</option>
+        <option value="male">Male only</option>
+        <option value="female">Female only</option>
       </select></div>
 
       <?php vpartial('roomtype'); ?>
