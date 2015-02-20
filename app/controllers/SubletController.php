@@ -36,14 +36,15 @@
         'city' => $city, 'state' => $state, 'geocode' => $geocode, 
         'startdate' => $startdate, 'enddate' => $enddate, 'price' => $price,
         'title' => $title, 'summary' => $summary, 'occupancy' => $occupancy,
-        'roomtype' => $roomtype, 'buildingtype' => $buildingtype, 'photos' => $photos,
+        'roomtype' => $roomtype, 'buildingtype' => $buildingtype, 
+        'photos' => $photos,
         'amenities' => $amenities, 'publish' => $publish, 
         'comments' => $comments, 'pricetype' => $pricetype
       );
     }
 
     function validateData($data, &$err) {
-      $this->validate($data['price'] >= 0), $err, 'price cannot be negative');
+      $this->validate($data['price'] >= 0, $err, 'price cannot be negative');
       $this->validate($data['occupancy'] > 0,
         $err, 'occupancy must be positive');
       $this->validate(
@@ -215,7 +216,7 @@
         'enddate' => $enddate, 'price0' => $price0, 'price1' => $price1,
         'occupancy' => $occupancy, 'roomtype' => $roomtype,
         'buildingtype' => $buildingtype, 'gender' => $gender,
-        'amenities' = $amenities, 'proximity' => $proximity,
+        'amenities' => $amenities, 'proximity' => $proximity,
         'sortby' => $sortby
       ));
     }

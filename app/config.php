@@ -3,7 +3,7 @@
   $dbpass = getenv('DBPASS');
   $dbname = 'subliteinternships';
   $dbnamestudent = 'sublite';
-  $dbnamestudent = 'sublitetest';
+  $dbnamestudenttest = 'sublitetest';
   require_once($GLOBALS['dirpre'].'pass.php');
 
   $GLOBALS = array_merge($GLOBALS, array(

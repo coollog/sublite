@@ -8,8 +8,6 @@
           echo ' &nbsp; ' . vlinkto('<input type="button" value="View Sublet Listing" /><br /><br />', 'Sublet', array('id' => $id), true);
         }
       ?>
-      
-      'student' => $student,'imgs' => $imgs,
 
       <?php vnotice(); ?>
       

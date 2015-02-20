@@ -28,6 +28,7 @@
         'location_type' => 'APPROXIMATE'
       );
       unset($sublet['N']);
+      unset($sublet['W']);
     }
     if (isset($sublet['from'])) {
       $sublet['startdate'] = $sublet['from'];
