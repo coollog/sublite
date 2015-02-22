@@ -8,7 +8,7 @@
       $gender = clean($data['gender']);
       $city = clean($data['city']);
       $state = clean($data['state']);
-      $geocode = geocode($data['geocode']);
+      $geocode = geocode("$address, $city, $state");
       $startdate = strtotime($data['startdate']);
       $enddate = strtotime($data['enddate']);
       $price = clean($data['price']);
@@ -24,8 +24,8 @@
           $photos[] = clean($photo);
       }
       $amenities = array();
-      if (isset($data['amenity'])) {
-        foreach ($data['amenity'] as $amenity)
+      if (isset($data['amenities'])) {
+        foreach ($data['amenities'] as $amenity)
           $amenities[] = clean($amenity);
       }
       $publish = $data['publish'];
@@ -48,7 +48,7 @@
       $this->validate($data['occupancy'] > 0,
         $err, 'occupancy must be positive');
       $this->validate(
-        (new DateTime($data['enddate'])) >= (new DateTime($data['startdate'])),
+        strtotime($data['enddate']) >= strtotime($data['startdate']),
         $err, 'invalid dates');
     }
 
@@ -107,24 +107,26 @@
         $this->validate($_SESSION['_id'] == $entry['student'],
           $err, 'permission denied');
 
+      function formData($data) {
+        function ftime($timestamp) { return date('n/j/Y', $timestamp); }
+        $data['startdate'] = ftime($data['startdate']);
+        $data['enddate'] = ftime($data['enddate']);
+        return array_merge($data, array(
+          'headline' => 'Edit',
+          'submitname' => 'edit', 'submitvalue' => 'Save Sublet'));
+      }
+
       // Code
       if ($this->isValid()) {
-        function formData($data) {
-          return array_merge($data, array(
-            'headline' => 'Edit',
-            'submitname' => 'edit', 'submitvalue' => 'Save Sublet'));
-        }
-
         if (!isset($_POST['edit'])) { 
           $this->render('subletform', formData(array_merge($this->data($entry), array('_id' => $id)))); return;
         }
 
-        extract($data = $this->data($params));
+        extract($data = $this->data(array_merge($entry, $params)));
         // Validations
         $this->validateData($data, $err);
 
         if ($this->isValid()) {
-          $data = array_merge($entry, $data);
           $id = $MSublet->save($data);
           $this->success('sublet saved');
           $this->render('subletform', formData(array_merge($data, array('_id' => $id))));
@@ -158,14 +160,15 @@
 
         $data['studentname'] = $s['name'];
         $data['studentid'] = $s['_id']->{'$id'};
-        $data['studentclass'] = $data['class'] > 0 ? 
-          "Class of ".$data['class'] : '';
-        $data['studentschool'] = strlen($p['school']) > 0 ?
+        $data['studentclass'] = $s['class'] > 0 ? 
+          "Class of ".$s['class'] : '';
+        $data['studentschool'] = strlen($s['school']) > 0 ?
           $data['school'] : 'Undergraduate';
-        $data['studentpic'] = isset($p['pic']) ?
+        $data['studentpic'] = isset($s['pic']) ?
           $dta['pic'] : $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
-        $data['studentcollege'] = $S->nameOf($email);
-        $data['studentbio'] = isset($p['bio']) ?
+        require_once($GLOBALS['dirpre'].'../housing/schools.php');
+        $data['studentcollege'] = $S->nameOf($s['email']);
+        $data['studentbio'] = isset($s['bio']) ?
           $data['bio'] : 'Welcome to my profile!';
 
         $this->render('viewsublet', $data);

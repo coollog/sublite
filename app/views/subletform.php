@@ -26,7 +26,7 @@
       </right>
 
       <div class="form-slider"><label for="title">Title:</label><input type="text" id="title" name="title" value="<?php vecho('title'); ?>" required maxlength="100" /></div>
-      <div class="form-slider"><label for="summary">Summary:</label><input type="text" id="summary" name="summary" value="<?php vecho('summary'); ?>" required maxlength="1000" /></div>
+      <div class="form-slider"><label for="summary" class="fortextarea">Summary (max 1000 chars): </label><textarea id="summary" name="summary" maxlength="1000"><?php vecho('summary'); ?></textarea></div>
 
       <div class="form-slider"><label for="occupancy">Max occupancy:</label><input type="text" id="occupancy" name="occupancy" value="<?php vecho('occupancy'); ?>" required /></div>
 
@@ -52,6 +52,7 @@
         ));
       ?>
 
+      <br />
       <input type="checkbox" name="terms" id="terms" value="agree" required /> <label for="terms">I have read, fully understand, and agree to SubLite&rsquo;s <a href="terms.php">Terms of Service</a>. I represent and warrant that I have permission to list this property, and that the description is accurate and not misleading. I will negotiate the terms of the stay with potential guests in good-faith.</label>
 
       <?php vnotice(); ?>

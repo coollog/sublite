@@ -225,3 +225,22 @@ Stack trace:
 [08-Feb-2015 19:34:11 America/New_York] PHP Fatal error:  Class 'Controller' not found in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/includes/error.php on line 50
 >>>>>>> f48472bf911fb65f693a247a27e8b8096c6fdf18
 [16-Feb-2015 19:30:54 America/New_York] PHP Parse error:  parse error in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/controllers/SubletController.php on line 58
+[20-Feb-2015 08:37:34 America/New_York] PHP Fatal error:  Uncaught exception 'MongoConnectionException' with message 'Failed to connect to: ds051980.mongolab.com:51980: Remote server has closed the connection' in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/models/Model.php:8
+Stack trace:
+#0 /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/models/Model.php(8): MongoClient->__construct('mongodb://subli...')
+#1 /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/models/AppModel.php(6): Model->__construct('app')
+#2 /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/models/AppModel.php(56): AppModel->__construct()
+#3 /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/includes/header.php(12): require_once('/Users/coollog/...')
+#4 /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/housingnew/editsublet.php(3): require_once('/Users/coollog/...')
+#5 {main}
+  thrown in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/models/Model.php on line 8
+[20-Feb-2015 08:37:34 America/New_York] PHP Fatal error:  Class 'Controller' not found in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/includes/error.php on line 42
+[20-Feb-2015 08:37:56 America/New_York] PHP Fatal error:  Uncaught exception 'MongoConnectionException' with message 'Failed to connect to: ds047057.mongolab.com:47057: Remote server has closed the connection' in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/models/StudentModel.php:6
+Stack trace:
+#0 /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/models/StudentModel.php(6): MongoClient->__construct('mongodb://subli...')
+#1 /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/models/StudentModel.php(55): StudentModel->__construct()
+#2 /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/includes/header.php(16): require_once('/Users/coollog/...')
+#3 /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/housingnew/editsublet.php(3): require_once('/Users/coollog/...')
+#4 {main}
+  thrown in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/models/StudentModel.php on line 6
+[20-Feb-2015 08:37:56 America/New_York] PHP Fatal error:  Class 'Controller' not found in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/includes/error.php on line 42

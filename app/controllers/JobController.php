@@ -189,14 +189,14 @@
         $this->validate($_SESSION['_id'] == $entry['recruiter'],
           $err, 'permission denied');
 
+      function formData($data) {
+        return array_merge($data, array(
+          'headline' => 'Edit',
+          'submitname' => 'edit', 'submitvalue' => 'Save Job'));
+      }
+
       // Code
       if ($this->isValid()) {
-        function formData($data) {
-          return array_merge($data, array(
-            'headline' => 'Edit',
-            'submitname' => 'edit', 'submitvalue' => 'Save Job'));
-        }
-
         if (!isset($_POST['edit'])) { 
           $this->render('jobform', formData(array_merge($this->data($entry), array('_id' => $id)))); return;
         }

@@ -11,6 +11,7 @@
   // - add pricetype
   // - add gender
   // - change imgs to photos
+  // - change amenity to amenities
 
   global $MSublet;
 
@@ -57,6 +58,10 @@
     if (isset($sublet['imgs'])) {
       $sublet['photos'] = $sublet['imgs'];
       unset($sublet['imgs']);
+    }
+    if (isset($sublet['amenity'])) {
+      $sublet['amenities'] = $sublet['amenity'];
+      unset($sublet['amenity']);
     }
     
     $MSublet->save($sublet, false);
