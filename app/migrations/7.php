@@ -12,6 +12,7 @@
   // - add gender
   // - change imgs to photos
   // - change amenity to amenities
+  // - add stats
 
   global $MSublet;
 
@@ -63,7 +64,9 @@
       $sublet['amenities'] = $sublet['amenity'];
       unset($sublet['amenity']);
     }
-    
+    if (!isset($sublet['stats']))
+      $sublet['stats'] = array('views' => 0);
+
     $MSublet->save($sublet, false);
   }
 ?>

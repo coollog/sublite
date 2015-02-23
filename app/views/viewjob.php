@@ -2,6 +2,7 @@
   panel.main {
     background: url('<?php vecho("companybanner") ?>') no-repeat center center;
     background-size: cover;
+    display: table;
     height: 200px;
   }
   panel.main .banner {
@@ -64,8 +65,16 @@
   }
 </style>
 
-<panel class="main"></panel>
-
+<panel class="main">
+  <div class="cell">
+    <div class="banner">
+      <div class="content">
+        <div class="tagline">Look inside <?php vecho('companyname'); ?></div>
+        <?php echo vlinkto('<input type="button" class="button" value="View Company Profile" />', 'company', array('id' => vget('companyid')), true); ?></div>
+      </div>
+    </div>
+  </div>
+</panel>
 <panel class="job">
   <div class="content">
     <headline id="jobtitle"><?php vecho('title'); ?></headline>

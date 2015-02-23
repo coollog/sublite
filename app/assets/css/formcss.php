@@ -73,13 +73,23 @@
     font-weight: 700;
     outline: none;
   }
-  input[type=submit] {
-    margin-top: 20px;
+  input[type=submit].reverse,
+  input[type=button].reverse {
+    background: #035d75;
+    color: #fff;
   }
   input[type=submit]:hover,
   input[type=button]:hover {
     background: #035d75;
     color: #fff;
+  }
+  input[type=submit].reverse:hover,
+  input[type=button].reverse:hover {
+    background: #fff;
+    color: #000;
+  }
+  input[type=submit] {
+    margin-top: 20px;
   }
   .checkboxes {
     margin-left: 1em;

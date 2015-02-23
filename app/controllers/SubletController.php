@@ -108,9 +108,8 @@
           $err, 'permission denied');
 
       function formData($data) {
-        function ftime($timestamp) { return date('n/j/Y', $timestamp); }
-        $data['startdate'] = ftime($data['startdate']);
-        $data['enddate'] = ftime($data['enddate']);
+        $data['startdate'] = fdate($data['startdate']);
+        $data['enddate'] = fdate($data['enddate']);
         return array_merge($data, array(
           'headline' => 'Edit',
           'submitname' => 'edit', 'submitvalue' => 'Save Sublet'));
@@ -127,6 +126,7 @@
         $this->validateData($data, $err);
 
         if ($this->isValid()) {
+          $data = array_merge($entry, $data);
           $id = $MSublet->save($data);
           $this->success('sublet saved');
           $this->render('subletform', formData(array_merge($data, array('_id' => $id))));
@@ -161,7 +161,7 @@
         $data['studentname'] = $s['name'];
         $data['studentid'] = $s['_id']->{'$id'};
         $data['studentclass'] = $s['class'] > 0 ? 
-          "Class of ".$s['class'] : '';
+          " '".substr($s['class'], -2) : '';
         $data['studentschool'] = strlen($s['school']) > 0 ?
           $data['school'] : 'Undergraduate';
         $data['studentpic'] = isset($s['pic']) ?
@@ -170,6 +170,12 @@
         $data['studentcollege'] = $S->nameOf($s['email']);
         $data['studentbio'] = isset($s['bio']) ?
           $data['bio'] : 'Welcome to my profile!';
+
+        $data['address'] = 
+          $data['address'].', '.$data['city'].', '.$data['state'];
+        $data['mainphoto'] = $data['photos'][0];
+        $data['startdate'] = fdate($data['startdate']);
+        $data['enddate'] = fdate($data['enddate']);
 
         $this->render('viewsublet', $data);
         return;

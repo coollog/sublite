@@ -1,203 +1,195 @@
 <style>
   panel.main {
-    background: url('<?php vecho("companybanner") ?>') no-repeat center center;
-    background-size: cover;
-    display: table;
-    height: 200px;
+    height: 500px;
+    position: relative;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
   }
-  panel.main .banner {
-    padding: 30px 0;
-    background: rgba(0, 0, 0, 0.5);
-  }
-  panel.main .banner .tagline {
-    color: #ffd800;
-    font-size: 4em;
-    text-transform: uppercase;
-    text-shadow: 2px 2px #035d75;
-    line-height: 1em;
-    margin-bottom: 0.2em;
-    font-family: 'BebasNeue', sans-serif;
-    font-weight: bold;
-  }
-  panel.main .button {
-    font-size: 1.5em;
-    color: #035d75;
-    text-transform: uppercase;
-    box-shadow: 2px 2px 0px #035d75;
-  }
-  panel.main .button:hover {
-    color: #fff;
-  }
-  .jobinfo {
-    margin: 40px 0;
+    .photo {
+      background: url('<?php vecho("mainphoto") ?>') no-repeat center center;
+      background-size: cover;
+      width: 100%;
+      height: 100%;
+      display: inline-block;
+    }
+  panel .content {
     text-align: left;
-    width: 100%;
   }
-  .jobtable {
-    border-spacing: 10px;
-    border-collapse: separate;
+  panel.sublet {
+    padding-top: 0;
   }
-  .jobtable td {
-    vertical-align: top;
-  }
-  .jobtable td.col {
-    width: 30%;
-  }
-  .icon {
-    height: 100px;
-    background: transparent no-repeat center left;
-    background-size: 100px 100px;
-    display: table;
-    padding-left: 100px;
-    width: 300px;
-  }
-  .icon subheadline {
+  subheadline {
+    margin-bottom: 1em;
     color: #000;
   }
+  .subletinfo {
+    padding: 20px 20px 0 0;
+    position: relative;
+  }
+    .subletinfo .title {
+      font-size: 2em;
+      line-height: 1.1em;
+      font-weight: 700;
+      max-width: 80%;
+    }
+    .subletinfo .address {
 
-  #jobtitle {
-    margin-bottom: 10px;
-    line-height: 1em;
+    }
+    .subletinfo .price {
+      display: inline-block;
+      float: right;
+      font-size: 3em;
+      line-height: 1.1em;
+      letter-spacing: -1px;
+      font-weight: 600;
+    }
+    .subletinfo .price small {
+      font-size: 0.5em;
+      font-weight: 400;
+      opacity: 0.4;
+    }
+  .section2 {
+    padding: 20px;
+  }
+  .summary {
+    margin-top: 60px;
+  }
+  .studentinfo{
+    width: 200px;
+    text-align: center;
+    vertical-align: top;
+  }
+    .studentprofile {
+      background: #ffd800;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .studentprofile input {
+      margin-top: 20px;
+      padding: 0 20px;
+      text-transform: none;
+      font-weight: 400;
+    }
+  .studentpic {
+    width: 75px;
+    height: 75px;
+    margin: 0 auto 10px auto;
+    border-radius: 25px;
+    background: transparent no-repeat center center;
+    background-size: cover;
+  }
+  .studentname {
+
+  }
+  .studentschool {
+
   }
 
-  #jobsubtitle {
-    margin-bottom: 20px;
+  panel.amenities {
+    background: #fffefa;
   }
+  .amenity {
+    display: inline-block;
+    text-align: center;
+    width: 140px;
+  }
+  .amenity table {
+    width: 100%;
+  }
+    .amenitypng {
+      background: transparent no-repeat center center;
+      background-size: contain;
+      height: 90px;
+      width: 90px;
+    }
+
+
 </style>
 
 <panel class="main">
-  <div class="cell">
-    <div class="banner">
-      <div class="content">
-        <div class="tagline">Look inside <?php vecho('companyname'); ?></div>
-        <?php echo vlinkto('<input type="button" class="button" value="View Company Profile" />', 'company', array('id' => vget('companyid')), true); ?></div>
-      </div>
-    </div>
+  <?php
+    foreach (vget('photos') as $photo) {
+  ?>
+      <div class="photo" style="background-image: url('<?php echo $photo; ?>');"></div>
+  <?php
+    }
+  ?>
+</panel>
+
+<panel class="info sublet">
+  <div class="content">
+    <table><tr>
+      <td class="subletinfo">
+        <div class="section1">
+          <div class="price">
+            $<?php vecho('price'); ?><small>/<?php vecho('pricetype'); ?></small>
+          </div>
+          <div class="title"><?php vecho('title'); ?></div>
+          <div class="address"><?php vecho('address'); ?></div>
+        </div>
+        <div class="section2">
+          <?php vecho('roomtype'); ?><br />
+          <?php vecho('buildingtype'); ?><br />
+          <?php vecho('gender'); ?><br />
+          max <?php vecho('occupancy'); ?> people<br />
+          anytime between <?php vecho('startdate'); ?> &ndash; <?php vecho('enddate'); ?>
+        </div>
+        <div class="summary">
+          <subheadline>Summary</subheadline>
+          <?php vecho('summary'); ?>
+        </div>
+      </td>
+      <td class="studentinfo">
+        <div class="studentprofile">
+          <div class="studentpic" style="background-image: url('<?php vecho('studentpic'); ?>');"></div>
+          <div class="studentname"><?php vecho('studentname'); ?></div>
+          <div class="studentsschool">
+            <?php vecho('studentschool'); ?><?php vecho('studentclass'); ?>
+          </div>
+          <input type="button" class="reverse" value="Contact Owner" />
+        </div>
+      </td>
+    </tr></table>
   </div>
 </panel>
-<panel class="job">
+
+<panel class="amenities">
   <div class="content">
-    <headline id="jobtitle"><?php vecho('title'); ?></headline>
-    <subheadline id="jobsubtitle">
-      <?php
-        if(vget('jobtype') == "internship") echo 'Internship';
-        else {
-          echo 'Full-time Position';
-        }
-      ?>
-    </subheadline>
-    <a href="redirect.php?<?php echo "id="; echo $_GET['id']; echo "&url="; vecho('link'); ?>" onClick="return confirm('You have clicked on an external link and are leaving the pages of SubLite.net. We are not responsible for the accuracy or effectiveness of any content outside of SubLite.net.')"><input type="button" value="Apply Now" /></a>
+    <subheadline>Amenities</subheadline>
+    <?php
+      $amenities = array(
+        "In-Building Gym" => "gym",
+        "Free Parking" => "carpark",
+        "Reserved Parking (Additional Cost)" => "carpark",
+        "Pool" => "pool",
+        "Rooftop Access" => "rooftop",
+        "Yard" => "fence",
+        "In-Building Mailboxes" => "mail",
+        "Laundry Machines" => "laundry",
+        "Wi-Fi" => "wifi",
+        "Cable" => "cable",
+        "Wheelchair Accessibility" => "handicap",
+        "Sports Fields" => "ball"
+      );
+      foreach (vget('amenities') as $amenity) {
+        $png = $amenities[$amenity];
+    ?>
+        <div class="amenity">
+          <table>
+            <tr><td class="amenitypng" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/sublet/<?php echo $png; ?>.png');"></td></tr>
+            <tr><td class="amenityname"><?php echo $amenity; ?></td></tr>
+          </table>
+        </div>
+    <?php  
+      }
+    ?>
+  </div>
+</panel>
+<panel class="comments">
+  <div class="content">
 
-    <div class="jobinfo">
-      <table class="jobtable">
-        <tr>
-          <td style="width: 60%;">
-            <div style="overflow: hidden; width: 100%; white-space: pre-line;">
-              <?php vecho('desc'); ?>
-              <subheadline>Requirements</subheadline>
-              <?php vecho('requirements'); ?>
-              <subheadline>Posted By</subheadline>
-              <?php
-                echo vlinkto(vget('recruitername'), 'recruiter', array('id' => vget('recruiterid')));
-                if(vget('Loggedinstudent')) {
-              ?>
-                  | <a href="newmessage.php?from=<?php vecho('L_id'); ?>&to=<?php vecho('recruiterid'); ?>" onClick="return confirm('I have read, fully understand, and agree to Sublite’s Terms of Service and Privacy Policy. I agree to contact the recruiter in good-faith to inquire about the listing.')">Contact</a>
-              <?php
-                }
-                else if(!vget('Loggedin')) {
-              ?>
-                  | <?php echo vlinkto('Create an account to message this recruiter!', 'register'); ?>
-              <?php
-                } 
-              ?>
-            </div>
-          </td>
-          <td style="width: 30%;" style="vertical-align: middle;">
-            
-            <div class="icon" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/deadlineico.png');">
-              <div class="cell">
-                <subheadline><?php vecho('deadline'); ?></subheadline>
-                <small>Deadline of application</small>
-              </div>
-            </div>
-            <div class="icon" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/locationico.png');">
-              <div class="cell">
-                <subheadline>
-                  <?php 
-                    if(vget('locationtype') == "home") echo 'Work at home!';
-                    else {
-                      vecho('location');
-                    }
-                  ?>
-                </subheadline>
-                <small>Location</small>
-              </div>
-            </div>
-            <div class="icon"
-              <?php 
-                if((!vget('duration') && !vget('startdate'))) {
-                  echo 'style="display: none"';
-                }
-                else {
-                  echo 'style="background-image: url(\''.$GLOBALS['dirpre'].'assets/gfx/durationico.png\');"';
-                }
-              ?>
-            >
-              <div class="cell">
-                <subheadline>
-                <?php
-                  $duration = vget('duration');
-                  $startdate = vget('startdate');
-                  $enddate = vget('enddate');
-                  if($duration) {
-                    echo $duration . ' weeks';
-                  } 
-                  if($startdate) {
-                    if($duration) echo ', ';
-                    if($startdate && $enddate) {
-                      if(!$duration) {
-                        echo 'F';
-                      }
-                      else {
-                        echo 'f';
-                      }
-                      echo 'rom ' . $startdate . ' to ' . $enddate;
-                    }
-                    else {
-                      if(!$duration) {
-                        echo 'S';
-                      }
-                      else {
-                        echo 's';
-                      }
-                      echo 'tarts on ' . $startdate;
-                    }
-                  }
-                ?>
-                </subheadline>
-                <small>Duration</small>
-              </div>
-            </div>
-            <div class="icon" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/salaryico.png');">
-              <div class="cell">
-                <subheadline>
-                <?php
-                  if(vget('salarytype') != "other") echo '$';
-                  vecho('salary');
-                  if(vget('salarytype') != "other") {
-                    echo ' / ';
-                    vecho('salarytype');
-                  }
-                ?>
-                </subheadline>
-                <small>Compensation</small>
-              </div>
-            </div>
-
-          </td>
-        </tr>
-      </table>
-    </div>
-    <a href="redirect.php?<?php echo "id="; echo $_GET['id']; echo "&url="; vecho('link'); ?>" onClick="return confirm('You have clicked on an external link and are leaving the pages of SubLite.net. We are not responsible for the accuracy or effectiveness of any content outside of SubLite.net.')"><input type="button" value="Apply Now" /></a>
   </div>
 </panel>

@@ -68,4 +68,6 @@
       return sprintf($f, $k, $v); 
     }, $arr, array_keys($arr)));
   }
+
+  function fdate($timestamp) { return date('n/j/Y', $timestamp); }
 ?>

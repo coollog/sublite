@@ -5,7 +5,7 @@
       <?php 
         if (vget('_id') !== null) {
           $id = vget('_id');
-          echo ' &nbsp; ' . vlinkto('<input type="button" value="View Sublet Listing" /><br /><br />', 'Sublet', array('id' => $id), true);
+          echo ' &nbsp; ' . vlinkto('<input type="button" value="View Sublet Listing" /><br /><br />', 'sublet', array('id' => $id), true);
         }
       ?>
 
