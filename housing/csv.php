@@ -11,7 +11,7 @@
 <pre>
 Email,First Name,Last Name
 <?php	
-	$registered = $E->cEmails->find(array('pass' => array('$exists' => true)), array('_id' => true, 'email' => true, 'name' => true));
+	$registered = $E->cEmails->find(array('pass' => array('$exists' => true)), array('_id' => true, 'email' => true, 'name' => true))->sort(array('_id' => 1));
 	foreach ($registered as $doc) {
 		$email = $doc['email'];
 		echo "\n$email";

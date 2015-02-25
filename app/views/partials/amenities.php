@@ -1,4 +1,4 @@
-Amenities:
+<div class="form-slider"><label>Amenities:</label></div>
 <left class="checkboxes">
   <?php
     $amenities = array(

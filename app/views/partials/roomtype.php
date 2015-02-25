@@ -5,6 +5,8 @@
     "Entire Home/Apt",
     "Other"
   );
+  if (!is_null(vget('any')))
+    array_unshift($roomtypes, 'Any');
 ?>
 
 <div class="form-slider"><label for="roomtype">Room type: </label>

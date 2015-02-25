@@ -69,5 +69,5 @@
     }, $arr, array_keys($arr)));
   }
 
-  function fdate($timestamp) { return date('n/j/Y', $timestamp); }
+  function fdate($timestamp) { return date('n/j/y', $timestamp); }
 ?>

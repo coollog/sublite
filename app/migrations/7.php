@@ -66,6 +66,14 @@
     }
     if (!isset($sublet['stats']))
       $sublet['stats'] = array('views' => 0);
+    if (isset($sublet['geocode']['latitude']) and 
+        isset($sublet['geocode']['longitude'])) {
+      $latitude = $sublet['geocode']['latitude'];
+      if ($latitude < 0) {
+        $sublet['geocode']['latitude'] = $sublet['geocode']['longitude'];
+        $sublet['geocode']['longitude'] = $latitude;
+      }
+    }
 
     $MSublet->save($sublet, false);
   }

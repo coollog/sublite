@@ -30,8 +30,8 @@
       function subletBlock($sublet) {
         $photo = $sublet['photo'];
         $title = $sublet['title'];
-        $location = $sublet['location'];
-        $proximity = $sublet['proximity'];
+        $address = $sublet['address'];
+        $proximity = "<div class=\"proximity\">".$sublet['proximity'].' mi</div>';
         $price = $sublet['price'];
         $pricetype = $sublet['pricetype'];
         return "
@@ -39,8 +39,8 @@
             <td class=\"photo\" style=\"background-image: url('$photo');\"></td>
             <td>
               <div class=\"title\">$title</div>
-              <div class=\"location\">$location</div>
-              <div class=\"proximity\">$proximity mi</div>
+              <div class=\"address\">$address</div>
+              $proximity
               <div class=\"price\">\$$price</div>
               <div class=\"pricetype\">$pricetype</div>
             </td>

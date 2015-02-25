@@ -6,6 +6,7 @@
       $student = $data['student'];
       $address = clean($data['address']);
       $gender = clean($data['gender']);
+      if ($gender == 'both') $gender = '';
       $city = clean($data['city']);
       $state = clean($data['state']);
       $geocode = geocode("$address, $city, $state");
@@ -48,12 +49,20 @@
       $this->validate($data['occupancy'] > 0,
         $err, 'occupancy must be positive');
       $this->validate(
-        strtotime($data['enddate']) >= strtotime($data['startdate']),
+        $data['enddate'] >= $data['startdate'],
         $err, 'invalid dates');
+      $this->validate(count($data['photos']) >= 4, 
+        $err, 'must upload at least 4 photos');
     }
 
     function manage() {
       // WRITE MANAGE
+    }
+
+    function formDataCommon($data) {
+      $data['startdate'] = fdate($data['startdate']);
+      $data['enddate'] = fdate($data['enddate']);
+      return $data;
     }
 
     function add() {
@@ -91,7 +100,7 @@
       }
       
       $this->error($err);
-      $this->render('subletform', formData($data));
+      $this->render('subletform', formData($this->formDataCommon($data)));
     }
 
     function edit() {
@@ -108,8 +117,6 @@
           $err, 'permission denied');
 
       function formData($data) {
-        $data['startdate'] = fdate($data['startdate']);
-        $data['enddate'] = fdate($data['enddate']);
         return array_merge($data, array(
           'headline' => 'Edit',
           'submitname' => 'edit', 'submitvalue' => 'Save Sublet'));
@@ -118,7 +125,7 @@
       // Code
       if ($this->isValid()) {
         if (!isset($_POST['edit'])) { 
-          $this->render('subletform', formData(array_merge($this->data($entry), array('_id' => $id)))); return;
+          $this->render('subletform', formData(array_merge($this->formDataCommon($this->data($entry)), array('_id' => $id)))); return;
         }
 
         extract($data = $this->data(array_merge($entry, $params)));
@@ -129,13 +136,13 @@
           $data = array_merge($entry, $data);
           $id = $MSublet->save($data);
           $this->success('sublet saved');
-          $this->render('subletform', formData(array_merge($data, array('_id' => $id))));
+          $this->render('subletform', formData(array_merge($this->formDataCommon($data), array('_id' => $id))));
           return;
         }
       }
       
       $this->error($err);
-      $this->render('subletform', formData($data, array_merge($data, array('_id' => $id))));
+      $this->render('subletform', formData($data, array_merge($this->formDataCommon($data), array('_id' => $id))));
     }
     
     function view() {
@@ -147,6 +154,8 @@
       $this->validate(isset($_GET['id']) and 
         ($entry = $MSublet->get($_GET['id'])) != NULL, 
         $err, 'unknown sublet');
+      $this->validate($entry['publish'], 
+        $err, 'access denied');
 
       // Code
       if ($this->isValid()) {
@@ -156,6 +165,8 @@
         $data = $this->data($entry);
         
         // ANY MODiFICATIONS ON DATA GOES HERE
+        $me = $MStudent->me();
+
         $s = $MStudent->getById($entry['student']);
 
         $data['studentname'] = $s['name'];
@@ -163,19 +174,28 @@
         $data['studentclass'] = $s['class'] > 0 ? 
           " '".substr($s['class'], -2) : '';
         $data['studentschool'] = strlen($s['school']) > 0 ?
-          $data['school'] : 'Undergraduate';
+          $s['school'] : 'Undergraduate';
         $data['studentpic'] = isset($s['pic']) ?
           $dta['pic'] : $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
         require_once($GLOBALS['dirpre'].'../housing/schools.php');
         $data['studentcollege'] = $S->nameOf($s['email']);
         $data['studentbio'] = isset($s['bio']) ?
           $data['bio'] : 'Welcome to my profile!';
+        $data['studentmsg'] = 
+          "Hi ".$data['studentname'].",%0A%0A".
+          "I am writing to inquire about your listing '".$data['title']."' (http://sublite.net/housing/sublet.php?id=".$entry['_id'].").%0A%0A".
+          "Best,%0A".
+          $me['name'];
 
         $data['address'] = 
           $data['address'].', '.$data['city'].', '.$data['state'];
         $data['mainphoto'] = $data['photos'][0];
         $data['startdate'] = fdate($data['startdate']);
         $data['enddate'] = fdate($data['enddate']);
+        switch ($data['gender']) {
+          case 'male': $data['gender'] = 'Male only'; break;
+          case 'female': $data['gender'] = 'Female only'; break;
+        }
 
         $this->render('viewsublet', $data);
         return;
@@ -187,19 +207,18 @@
 
     function dataSearchSetup() {
       /* CONVERT */
-      global $MApp;
-      return array('industries' => 
-        array_merge(array(''), $MApp->getIndustriesBySublets())
-      );
+      return array();
     }
     function dataSearchEmpty() {
       /* MAKE GENDER THE GENDER OF THE USER */
-      $gender = '';
+      global $MStudent;
+      $me = $MStudent->me();
+      $gender = $me['gender'];
 
       return array(
         'location' => '', 'startdate' => '', 'enddate' => '', 'price0' => '',
         'price1' => '', 'people' => '', 'roomtype' => 'Any',
-        'buildingtype' => 'Any',
+        'buildingtype' => 'Any', 'occupancy' => '', 'sortby' => '',
         'gender' => $gender, 'amenities' => array(), 'proximity' => ''
       );
     }
@@ -212,10 +231,10 @@
       $occupancy = clean($data['occupancy']);
       $roomtype = clean($data['roomtype']);
       $buildingtype = clean($data['buildingtype']);
-      $gender = clean($data['gender']);
+      $gender = $data['gender'];
       $amenities = array();
-      for ($i = 0; $i < count($amenities); $i ++) {
-        $amenities[$i] = clean($amenities[$i]);
+      for ($i = 0; $i < count($data['amenities']); $i ++) {
+        $amenities[$i] = clean($data['amenities'][$i]);
       }
       $proximity = clean($data['proximity']);
       $sortby = clean($data['sortby']);
@@ -240,8 +259,19 @@
       global $params;
       global $MSublet, $MStudent;
 
+      // process without sorting/filtering
+      function processRaw($sublet) {
+        // Processing result
+        $sublet['photo'] = isset($sublet['photos'][0]) ? $sublet['photos'][0]
+          : $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
+        $sublet['address'] = $sublet['address'].', '.$sublet['city'].', '.$sublet['state'];
+        $sublet['proximity'] = isset($sublet['proximity']) ? $sublet['proximity'] : null;
+
+        return $sublet;
+      }
+
       // Function for processing results and showing them
-      function process($res, $sortby, $latitude, $longitude) {
+      function process($res, $sortby, $latitude, $longitude, $maxProximity) {
         $sublets = array();
 
         // Sort
@@ -254,13 +284,9 @@
             break;
         }
         foreach ($res as $sublet) {
-          $sublet['proximity'] = distance($latitude, $longitude, $sublet['latitude'], $sublet['longitude']);
-          if ($sublet['proximity'] <= $maxProximity) {
-            // Processing result
-            $sublet['img'] = isset($sublet['imgs'][0]) ? 
-                             $sublet['imgs'][0] : 'assets/gfx/defaultpic.png';
-            
-            $sublets[] = $sublet;
+          $sublet['proximity'] = distance($latitude, $longitude, $sublet['geocode']['latitude'], $sublet['geocode']['longitude']);
+          if ($maxProximity == 0 or $sublet['proximity'] <= $maxProximity) {
+            $sublets[] = processRaw($sublet);
           }
         }
         switch ($sortby) {
@@ -283,15 +309,18 @@
       if ($showSearch and !isset($_POST['search'])) {
         // If not searching for anything, then return last 5 entries
         $res = $MSublet->last(5);
-        $sublets = process($res);
+        $sublets = array();
+        foreach ($res as $sublet) {
+          $sublets[] = processRaw($sublet);
+        }
 
-        $this->render('subletsearchform', $this->dataSearchSetup());
+        $this->render('subletsearchstart', $this->dataSearchSetup());
         $this->render('subletsearchresults', array('sublets' => $sublets, 'recent' => true));
         return; 
       }
       
       // Params to vars
-      extract($data = $this->dataSearch($params));
+      extract($data = $this->dataSearch(array_merge($this->dataSearchEmpty(), $params)));
 
       $this->startValidations();
 
@@ -310,22 +339,37 @@
 
 
         if ($this->isValid()) {
-          if (strlen($title) > 0) {
-            $query['title'] = array('$regex' => keywords2mregex($title));
-          }
           // Search query building and validations
           $query = array(
             'publish' => true,
-            'price' => array('$gte' => $minPrice, '$lte' => $maxPrice),
-            'occupancy' => array('$gte' => $minOccupancy)
           );
+          if (strlen($proximity) > 0) {
+            $proximityDeg = distanceDeg($maxProximity);
+            $query['geocode.latitude'] = array(
+              '$gte' => $latitude - $proximityDeg,
+              '$lte' => $latitude + $proximityDeg
+            );
+            $query['geocode.longitude'] = array(
+              '$gte' => $longitude - $proximityDeg,
+              '$lte' => $longitude + $proximityDeg
+            );
+          }
+          if (strlen($price0) > 0) {
+            $query['price']['$gte'] = $minPrice;
+          }
+          if (strlen($price1) > 0) {
+            $query['price']['$lte'] = $maxPrice;
+          }
+          if (strlen($occupancy) > 0) {
+            $query['occupancy'] = array('$gte' => $minOccupancy);
+          }
           if ($roomtype != 'Any') {
             $query['roomtype'] = $roomtype;
           }
           if ($buildingtype != 'Any') {
             $query['buildingtype'] = $buildingtype;
           }
-          if ($gender != 'Any') {
+          if ($gender != '') {
             $query['gender'] = $gender;
           }
           if (count($amenities) > 0) {
@@ -346,8 +390,9 @@
             $starttime = microtime(true);
             $res = $MSublet->find($query);
             $delay = microtime(true) - $starttime;
+            var_dump($query);
 
-            $sublets = process($res, $sortby, $latitude, $longitude);
+            $sublets = process($res, $sortby, $latitude, $longitude, $maxProximity);
 
             if ($showSearch) $this->render('subletsearchform', $data);
             $this->render('subletsearchresults', array('sublets' => $sublets));

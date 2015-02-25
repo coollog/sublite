@@ -11,6 +11,8 @@
     "House",
     "Other"
   );
+  if (!is_null(vget('any')))
+    array_unshift($buildingtypes, 'Any');
 ?>
 
 <div class="form-slider"><label for="buildingtype">Building type: </label>

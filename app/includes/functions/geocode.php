@@ -25,8 +25,8 @@
 		$latitude = $geometry['location']['lng'];
 
 		$array = array(
-			'latitude' => $geometry['location']['lng'],
-			'longitude' => $geometry['location']['lat'],
+			'latitude' => $geometry['location']['lat'],
+			'longitude' => $geometry['location']['lng'],
 			'location_type' => $geometry['location_type'],
 		);
 
@@ -54,6 +54,7 @@
 			return null;
 		return "$city, $state";
 	}
+	// distance between coords
 	function distance($lat1, $lon1, $lat2, $lon2) {
 		$theta = $lon1 - $lon2;
 		$dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
@@ -61,5 +62,10 @@
 		$dist = rad2deg($dist);
 		$miles = $dist * 60 * 1.1515;
 		return $miles;
+	}
+	// approx mi to coord degrees
+	function distanceDeg($mi) {
+		$km = $mi * 0.621371;
+		return (1 / 110.54) * $km;
 	}
 ?>

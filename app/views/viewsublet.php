@@ -54,8 +54,33 @@
   .section2 {
     padding: 20px;
   }
+  .details {
+    position: relative;
+  }
+    .detail {
+      display: inline-block;
+      text-align: center;
+      margin: 0 0%;
+      font-size: 0.8em;
+      height: 80px;
+    }
+    .detail table {
+      width: 100%;
+    }
+      .detailpng {
+        background: transparent no-repeat center center;
+        background-size: 80px 80px;
+        height: 40px;
+        width: 60px;
+      }
+      .detailname {
+        width: 80px;
+      }
   .summary {
-    margin-top: 60px;
+    background: #fafaf8;
+    text-align: left;
+    margin-top: -40px;
+    padding: 40px 0 60px 0;
   }
   .studentinfo{
     width: 200px;
@@ -89,12 +114,12 @@
   }
 
   panel.amenities {
-    background: #fffefa;
   }
   .amenity {
     display: inline-block;
     text-align: center;
     width: 140px;
+    height: 140px;
   }
   .amenity table {
     width: 100%;
@@ -106,7 +131,9 @@
       width: 90px;
     }
 
-
+  panel.comments {
+    background: #fafaf8;
+  }
 </style>
 
 <panel class="main">
@@ -123,6 +150,7 @@
   <div class="content">
     <table><tr>
       <td class="subletinfo">
+
         <div class="section1">
           <div class="price">
             $<?php vecho('price'); ?><small>/<?php vecho('pricetype'); ?></small>
@@ -130,29 +158,64 @@
           <div class="title"><?php vecho('title'); ?></div>
           <div class="address"><?php vecho('address'); ?></div>
         </div>
+
         <div class="section2">
-          <?php vecho('roomtype'); ?><br />
-          <?php vecho('buildingtype'); ?><br />
-          <?php vecho('gender'); ?><br />
-          max <?php vecho('occupancy'); ?> people<br />
-          anytime between <?php vecho('startdate'); ?> &ndash; <?php vecho('enddate'); ?>
-        </div>
-        <div class="summary">
-          <subheadline>Summary</subheadline>
-          <?php vecho('summary'); ?>
+          <div class="details">
+            <div class="detail"><table>
+              <tr><td class="detailpng" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/sublet/room.png');"></td></tr>
+              <tr><td class="detailname"><?php vecho('roomtype'); ?></td></tr>
+            </table></div>
+            <div class="detail"><table>
+              <tr><td class="detailpng" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/sublet/house.png');"></td></tr>
+              <tr><td class="detailname"><?php vecho('buildingtype'); ?></td></tr>
+            </table></div>
+            <?php if (strlen(vget('gender')) > 0) { ?>
+              <div class="detail"><table>
+                <tr><td class="detailpng" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/sublet/gender.png'); background-size: 50px 50px;"></td></tr>
+                <tr><td class="detailname"><?php vecho('gender'); ?></td></tr>
+              </table></div>
+            <?php } ?>
+            <div class="detail"><table>
+              <tr><td class="detailpng" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/sublet/guest.png');"></td></tr>
+              <tr><td class="detailname">max <?php vecho('occupancy'); ?> people</td></tr>
+            </table></div>
+            <div class="detail"><table>
+              <tr>
+                <td class="detailpng" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/sublet/calendar.png');"></td>
+                <td rowspan="2" style="width: auto; position: relative; left: -10px; text-align: left;">
+                  anytime between
+                  <div style="font-size: 1.5em; letter-spacing: -1px;">
+                    <strong><?php vecho('startdate'); ?></strong> &ndash; <strong><?php vecho('enddate'); ?></strong></normal>
+                  </div>
+                </td>
+              </tr>
+              <tr><td class="detailname">available</td></tr>
+            </table></div>
+          </div>
         </div>
       </td>
+
       <td class="studentinfo">
         <div class="studentprofile">
           <div class="studentpic" style="background-image: url('<?php vecho('studentpic'); ?>');"></div>
           <div class="studentname"><?php vecho('studentname'); ?></div>
-          <div class="studentsschool">
-            <?php vecho('studentschool'); ?><?php vecho('studentclass'); ?>
+          <div class="studentschool">
+            <?php vecho('studentcollege'); ?><?php vecho('studentclass'); ?>
           </div>
-          <input type="button" class="reverse" value="Contact Owner" />
+          <a href="newmessage.php?from=<?php vecho('L_id'); ?>&to=<?php vecho('studentid'); ?>&msg=<?php vecho('studentmsg'); ?>" onClick="return confirm('I have read, fully understand, and agree to Sublite’s Terms of Service and Privacy Policy. I agree to contact the owner in good-faith to inquire about the listing.')">
+            <input type="button" class="reverse" value="Contact Owner" />
+          </a>
         </div>
       </td>
+
     </tr></table>
+  </div>
+</panel>
+
+<panel class="summary">
+  <div class="content">
+    <subheadline>Summary</subheadline>
+    <?php vecho('summary'); ?>
   </div>
 </panel>
 
@@ -185,11 +248,17 @@
         </div>
     <?php  
       }
+      if (count(vget('amenities')) == 0) {
+    ?>
+        <i>No amenities reported.</i>
+    <?php
+      }
     ?>
   </div>
 </panel>
 <panel class="comments">
   <div class="content">
-
+    <subheadline>Comments</subheadline>
+    <i>No comments so far. Be the first to comment!</i>
   </div>
 </panel>

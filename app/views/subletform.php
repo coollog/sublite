@@ -33,7 +33,7 @@
       <div class="form-slider"><label for="gender">Gender restriction: </label>
       <select id="gender" name="gender" required>
         <?php vecho('gender', '<option selected="selected">{var}</option>'); ?>
-        <option value="Any">All genders welcome</option>
+        <option value="both">All genders welcome</option>
         <option value="male">Male only</option>
         <option value="female">Female only</option>
       </select></div>
@@ -47,7 +47,7 @@
       <?php 
         vpartial('s3multiple', array(
           's3name' => 'photos', 
-          's3title' => 'Additional photos (upload at least 4 more):',
+          's3title' => 'Photos (upload at least 4):',
           's3links' => vget('photos')
         ));
       ?>
