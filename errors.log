@@ -2165,3 +2165,25 @@ Stack trace:
 #4 {main}
   thrown in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/models/SubletModel.php on line 6
 [24-Feb-2015 23:35:30 America/New_York] PHP Fatal error:  Class 'Controller' not found in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/includes/error.php on line 42
+[25-Feb-2015 00:07:25 America/New_York] PHP Parse error:  parse error in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/views/subletsearchresults.php on line 85
+[25-Feb-2015 10:29:43 America/New_York] PHP Fatal error:  Uncaught exception 'MongoConnectionException' with message 'MongoClient::__construct(): php_network_getaddresses: getaddrinfo failed: nodename nor servname provided, or not known' in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/models/Model.php:8
+Stack trace:
+#0 /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/models/Model.php(8): MongoClient->__construct('mongodb://subli...')
+#1 /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/models/AppModel.php(6): Model->__construct('app')
+#2 /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/models/AppModel.php(56): AppModel->__construct()
+#3 /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/includes/header.php(12): require_once('/Users/coollog/...')
+#4 /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/housingnew/search.php(3): require_once('/Users/coollog/...')
+#5 {main}
+
+Next exception 'MongoConnectionException' with message 'Failed to connect to: ds051980.mongolab.com:51980: php_network_getaddresses: getaddrinfo  in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/models/Model.php on line 8
+[25-Feb-2015 10:29:43 America/New_York] PHP Fatal error:  Class 'Controller' not found in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/includes/error.php on line 42
+[25-Feb-2015 10:29:44 America/New_York] PHP Fatal error:  Uncaught exception 'MongoConnectionException' with message 'Failed to connect to: ds051980.mongolab.com:51980: Previous connection attempts failed, server blacklisted' in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/models/Model.php:8
+Stack trace:
+#0 /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/models/Model.php(8): MongoClient->__construct('mongodb://subli...')
+#1 /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/models/AppModel.php(6): Model->__construct('app')
+#2 /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/models/AppModel.php(56): AppModel->__construct()
+#3 /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/includes/header.php(12): require_once('/Users/coollog/...')
+#4 /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/housingnew/sublet.php(3): require_once('/Users/coollog/...')
+#5 {main}
+  thrown in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/models/Model.php on line 8
+[25-Feb-2015 10:29:44 America/New_York] PHP Fatal error:  Class 'Controller' not found in /Users/coollog/dropbox/sublite/site/root/vnew1/sublite/app/includes/error.php on line 42

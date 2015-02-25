@@ -4,8 +4,7 @@
     position: relative;
     padding: 0;
     box-sizing: border-box;
-    overflow-x: scroll;
-    overflow-y: hidden;
+    overflow: hidden;
     white-space: nowrap;
   }
     .photo {
@@ -13,8 +12,32 @@
       background-size: cover;
       width: 100%;
       height: 100%;
-      display: inline-block;
+      position: absolute;
+      transition: 0.5s all ease-in-out;
     }
+    .photocontrol {
+      opacity: 0.5;
+      background: transparent no-repeat center center;
+      background-size: contain;
+      width: 100px;
+      position: absolute;
+      height: 100%;
+      cursor: pointer;
+      transition: 0.1s all ease-in-out;
+    }
+    .photocontrol:hover {
+      opacity: 0.8;
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+      .photocontrolleft {
+        background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/left.png');
+        left: 0;
+        display: none;
+      }
+      .photocontrolright {
+        background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/right.png');
+        right: 0;
+      }
   panel .content {
     text-align: left;
   }
@@ -36,7 +59,7 @@
       max-width: 80%;
     }
     .subletinfo .address {
-
+      
     }
     .subletinfo .price {
       display: inline-block;
@@ -136,14 +159,47 @@
   }
 </style>
 
+<script>
+  var curPhoto = 0;
+
+  function showPhoto(index) {
+    $('.photo').each(function() {
+      var n = $(this).attr('index');
+      $(this).css('left', (n - index) * 100 + "%");
+    });
+    if (index == 0)
+      $('.photocontrolleft').hide();
+    if (index > 0)
+      $('.photocontrolleft').show();
+    if (index < $('.photo').length - 1)
+      $('.photocontrolright').show();
+    if (index == $('.photo').length - 1)
+      $('.photocontrolright').hide();
+
+    curPhoto = index;
+  }
+  function showPhotoLeft() { showPhoto(curPhoto - 1); }
+  function showPhotoRight() { showPhoto(curPhoto + 1); }
+
+  $(function() {
+    showPhoto(0);
+    $('.photocontrolleft').click(function() { showPhotoLeft(); });
+    $('.photocontrolright').click(function() { showPhotoRight(); });
+  });
+</script>
+
 <panel class="main">
   <?php
+    $i = 0;
     foreach (vget('photos') as $photo) {
   ?>
-      <div class="photo" style="background-image: url('<?php echo $photo; ?>');"></div>
+      <div class="photo" index="<?php echo $i; ?>" style="background-image: url('<?php echo $photo; ?>');"></div>
   <?php
+      $i ++;
     }
   ?>
+  <div class="photocontrol photocontrolleft"></div>
+  <div class="photocontrol photocontrolright"></div>
 </panel>
 
 <panel class="info sublet">
