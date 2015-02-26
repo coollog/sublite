@@ -30,9 +30,9 @@
       $entry = $this->getById($id);
       return $entry['name'];
     }
-    function getPic($id) {
+    function getPhoto($id) {
       $entry = $this->getById($id);
-      return isset($entry['pic']) ? $entry['pic'] : null;
+      return isset($entry['photo']) ? $entry['photo'] : null;
     }
     function me() {
       return $this->get($_SESSION['email']);

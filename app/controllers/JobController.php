@@ -304,9 +304,7 @@
         foreach ($res as $job) {
           $company = $MCompany->get($job['company']);
           $job['company'] = $company['name'];
-          if (strlen($job['desc']) > 300) {
-            $job['desc'] = substr($job['desc'], 0, 297) . '...';
-          }
+          $job['desc'] = strmax($job['desc'], 300);
           $job['logophoto'] = $company['logophoto'];
           array_push($jobs, $job);
         }

@@ -25,6 +25,9 @@
     function getAll() {
       return $this->collection->find();
     }
+    function getByStudent($id) {
+      return $this->collection->find(array('student' => new MongoId($id)));
+    }
     
     function delete($id) {
       

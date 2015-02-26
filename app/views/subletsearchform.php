@@ -1,3 +1,33 @@
+<style>
+  .search {
+    width: 29%;
+    display: inline-block;
+    box-sizing: border-box;
+    vertical-align: top;
+    float: left;
+  }
+
+  .form-slider label {
+    position: static !important;
+    display: block !important;
+    text-align: left;
+  }
+  .sliderlabel {
+    /*text-align: left;*/
+  }
+
+  @media (min-width: 1000px) {
+    .form-half1, .form-half2 {
+      width: 100%;
+    }
+  }
+  @media (max-width: 1000px) {
+    .search {
+      display: block;
+      width: 100%;
+    }
+  }
+</style>
 <panel class="search">
   <div class="content">
     <form method="post">
@@ -11,7 +41,7 @@
       <div class="form-slider form-half1"><label for="startdate">From: </label><input class="datepicker" type="text" id="startdate" name="startdate" value="<?php vecho('startdate'); ?>" /></div>
       <div class="form-slider form-half2"><label for="enddate">To: </label><input class="datepicker" type="text" id="enddate" name="enddate" value="<?php vecho('enddate'); ?>" /></div>
 
-      <div class="sliderlabel">Price range ($): </div>
+      <div class="sliderlabel">Price range ($ /month): </div>
       <input type="hidden" id="price0" name="price0" value="<?php vecho('price0', null, 0); ?>" />
       <input type="hidden" id="price1" name="price1" value="<?php vecho('price1', null, 5000); ?>" />
       <div class="slider sliderrange" min="0" max="10000" minfield="#price0" maxfield="#price1"></div>

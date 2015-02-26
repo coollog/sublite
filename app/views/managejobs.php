@@ -27,7 +27,7 @@
       function jobBlock($job) {
         $title = $job['title'];
         $location = $job['location'];
-        $desc = $job['desc'];
+        $desc = strmax($job['desc'], 300);
         $deadline = $job['deadline'];
         if($job['locationtype'] == 'home') {
           return "

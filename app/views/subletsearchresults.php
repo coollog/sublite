@@ -1,4 +1,23 @@
 <style>
+  .results {
+    width: 70%;
+    display: inline-block;
+    box-sizing: border-box;
+    max-height: 1000px;
+    overflow-y: scroll;
+    float: right;
+  }
+
+  <?php if (!is_null(vget('recent'))) { ?>
+    .results {
+      width: 100%;
+      display: block;
+      float: none;
+      max-height: none;
+      overflow-y: visible;
+    }
+  <?php } ?>
+
   .list {
     text-align: left;
   }
@@ -56,6 +75,22 @@
     font-size: 0.5em;
     opacity: 0.5;
   }
+
+  @media (max-width: 1000px) {
+    .results {
+      display: block;
+      width: 100%;
+      float: none;
+      max-height: none;
+      overflow-y: visible;
+    }
+    .subletblock {
+      width: 100%;
+    }
+    .subletlink {
+      width: 100%;
+    }
+  }
 </style>
 
 <panel class="results">
@@ -64,6 +99,7 @@
       <headline>Recent Listings</headline>
     <?php } ?>
     <div class="list">
+      <?php if (isset($_GET['delay'])) vecho('delay', '<div style="text-align: center;"><i>Results returned in {var} ms</div><br />'); ?>
       <?php
         function subletBlock($sublet) {
           $photo = $sublet['photo'];
@@ -99,3 +135,4 @@
     </div>
   </div>
 </panel>
+<div class="clear"></div>

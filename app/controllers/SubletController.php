@@ -56,7 +56,12 @@
     }
 
     function manage() {
-      // WRITE MANAGE
+      global $CStudent; $CStudent->requireLogin();
+      global $MSublet;
+      $data = array(
+        'sublets' => $MSublet->getByStudent($_SESSION['_id'])
+      );
+      $this->render('managesublets', $data);
     }
 
     function formDataCommon($data) {
@@ -125,8 +130,15 @@
       // Code
       if ($this->isValid()) {
         if (!isset($_POST['edit'])) { 
-          $this->render('subletform', formData(array_merge($this->formDataCommon($this->data($entry)), array('_id' => $id)))); return;
+          $this->render('subletform', formData(
+            array_merge(
+              $this->formDataCommon($this->data($entry)),
+              array('_id' => $id)
+            )
+          )); return;
         }
+
+        $params['publish'] = isset($params['publish']) ? true : false;
 
         extract($data = $this->data(array_merge($entry, $params)));
         // Validations
@@ -154,7 +166,8 @@
       $this->validate(isset($_GET['id']) and 
         ($entry = $MSublet->get($_GET['id'])) != NULL, 
         $err, 'unknown sublet');
-      $this->validate($entry['publish'], 
+      $this->validate(
+        $entry['publish'] or $entry['student'] == $_SESSION['_id'], 
         $err, 'access denied');
 
       // Code
@@ -175,8 +188,8 @@
           " '".substr($s['class'], -2) : '';
         $data['studentschool'] = strlen($s['school']) > 0 ?
           $s['school'] : 'Undergraduate';
-        $data['studentpic'] = isset($s['pic']) ?
-          $dta['pic'] : $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
+        $data['studentpic'] = isset($s['photo']) ?
+          $s['photo'] : $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
         require_once($GLOBALS['dirpre'].'../housing/schools.php');
         $data['studentcollege'] = $S->nameOf($s['email']);
         $data['studentbio'] = isset($s['bio']) ?
@@ -189,7 +202,8 @@
 
         $data['address'] = 
           $data['address'].', '.$data['city'].', '.$data['state'];
-        $data['mainphoto'] = $data['photos'][0];
+        if (count($data['photos']) == 0)
+          $data['photos'][] = $GLOBALS['dirpre'].'assets/gfx/subletnophoto.png';
         $data['startdate'] = fdate($data['startdate']);
         $data['enddate'] = fdate($data['enddate']);
         switch ($data['gender']) {
@@ -313,8 +327,8 @@
       $showSearch = true;
 
       if ($showSearch and !isset($_POST['search'])) {
-        // If not searching for anything, then return last 5 entries
-        $res = $MSublet->last(5);
+        // If not searching for anything, then return last 6 entries
+        $res = $MSublet->last(6);
         $sublets = array();
         foreach ($res as $sublet) {
           $sublets[] = processRaw($sublet);
@@ -349,17 +363,16 @@
           $query = array(
             'publish' => true,
           );
-          if (strlen($proximity) > 0) {
-            $proximityDeg = distanceDeg($maxProximity);
-            $query['geocode.latitude'] = array(
-              '$gte' => $latitude - $proximityDeg,
-              '$lte' => $latitude + $proximityDeg
-            );
-            $query['geocode.longitude'] = array(
-              '$gte' => $longitude - $proximityDeg,
-              '$lte' => $longitude + $proximityDeg
-            );
-          }
+          if (strlen($proximity) == 0) $proximity = 50;
+          $proximityDeg = distanceDeg($maxProximity);
+          $query['geocode.latitude'] = array(
+            '$gte' => $latitude - $proximityDeg,
+            '$lte' => $latitude + $proximityDeg
+          );
+          $query['geocode.longitude'] = array(
+            '$gte' => $longitude - $proximityDeg,
+            '$lte' => $longitude + $proximityDeg
+          );
           if (strlen($price0) > 0) {
             $query['price']['$gte'] = $minPrice;
           }
@@ -375,11 +388,11 @@
           if ($buildingtype != 'Any') {
             $query['buildingtype'] = $buildingtype;
           }
-          if ($gender != '') {
-            $query['gender'] = $gender;
+          if ($gender != '' and $gender != 'other') {
+            $query['gender'] = array('$in' => array('', $gender));
           }
           if (count($amenities) > 0) {
-            $query['amenities'] = array('$in' => $amenities);
+            $query['amenities'] = array('$all' => $amenities);
           }
           if (strlen($startdate) > 0) {
             $query['startdate'] = array('$lte' => $startdate);
@@ -394,13 +407,29 @@
           if ($this->isValid()) {
             // Performing search
             $starttime = microtime(true);
-            $res = $MSublet->find($query);
-            $delay = microtime(true) - $starttime;
 
-            $sublets = process($res, $sortby, $latitude, $longitude, $maxProximity);
+            $querymonth = array_merge($query, array('pricetype' => 'month'));
+            if (strlen($price0) > 0) $querymonth['price']['$gte'] *= 4.35;
+            if (strlen($price1) > 0) $querymonth['price']['$lte'] *= 4.35;
+            $queryday = array_merge($query, array('pricetype' => 'day'));
+            if (strlen($price0) > 0) $queryday['price']['$gte'] /= 30;
+            if (strlen($price1) > 0) $queryday['price']['$lte'] /= 30;
+            $resmonth = $MSublet->find($querymonth);
+            $resweek = $MSublet->find($query);
+            $resday = $MSublet->find($queryday);
+
+            $sublets = array_merge(
+              process($resmonth, $sortby, $latitude, $longitude, $maxProximity),
+              process($resweek, $sortby, $latitude, $longitude, $maxProximity),
+              process($resday, $sortby, $latitude, $longitude, $maxProximity)
+            );
+
+            $delay = round((microtime(true) - $starttime) * 1000, 0);
 
             if ($showSearch) $this->render('subletsearchform', $data);
-            $this->render('subletsearchresults', array('sublets' => $sublets));
+            $this->render('subletsearchresults', array(
+              'sublets' => $sublets, 'delay' => $delay
+            ));
             return;
           }
         }

@@ -2,23 +2,21 @@
   form {
     max-width: 600px;
     margin: 10px auto;
-    text-align: left;
+  }
+  .success, .error {
+    text-align: center;
+    display: block;
+    margin: 20px 0;
+    padding: 20px;
+    text-transform: uppercase;
   }
   .success {
-    display: block;
-    margin: 20px 0;
-    padding: 20px;
     border: 2px solid #00B233;
     color: #00B233;
-    text-transform: uppercase;
   }
   .error {
-    display: block;
-    margin: 20px 0;
-    padding: 20px;
     border: 2px solid #FF1919;
     color: #FF1919;
-    text-transform: uppercase;
   }
   label {
     opacity: 0.7;
@@ -94,8 +92,12 @@
   }
   .checkboxes {
     margin-left: 1em;
+    padding-top: 1em;
   }
   
+  .img {
+    text-align: left;
+  }
   .img img {
     max-height: 15em;
     margin: 0.5em;
@@ -121,6 +123,7 @@
     box-sizing: border-box;
   }
 
+  /* JQUERY UI */
   .ui-datepicker {
     z-index: 999 !important;
   }

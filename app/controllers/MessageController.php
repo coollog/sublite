@@ -72,13 +72,13 @@
           $reply['fromname'] = getName($from);
           if ($MStudent->exists($from)) {
             $reply['fromname'] = $MStudent->getName($from);
-            $pic = $MStudent->getPic($from);
-            if ($pic == '' or $pic == 'defaultpic.png' or $pic == 'noprofilepic.png')
-              $pic = $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
-            $reply['frompic'] = $pic;
+            $Photo = $MStudent->getPhoto($from);
+            if ($Photo == '' or $Photo == 'defaultpic.png' or $Photo == 'noprofilepic.png')
+              $Photo = $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
+            $reply['frompic'] = $Photo;
           } else if ($MRecruiter->IDexists($from)) {
             $reply['fromname'] = $MRecruiter->getName($from);
-            $reply['frompic'] = $MRecruiter->getPic($from);
+            $reply['frompic'] = $MRecruiter->getPhoto($from);
           } else {
             $reply['fromname'] = 'Nonexistent';
             $reply['frompic'] = 'Nonexistent';

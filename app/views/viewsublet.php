@@ -8,7 +8,7 @@
     white-space: nowrap;
   }
     .photo {
-      background: url('<?php vecho("mainphoto") ?>') no-repeat center center;
+      background: transparent no-repeat center center;
       background-size: cover;
       width: 100%;
       height: 100%;
@@ -122,10 +122,10 @@
       font-weight: 400;
     }
   .studentpic {
-    width: 75px;
-    height: 75px;
+    width: 100px;
+    height: 100px;
     margin: 0 auto 10px auto;
-    border-radius: 25px;
+    border-radius: 50px;
     background: transparent no-repeat center center;
     background-size: cover;
   }
