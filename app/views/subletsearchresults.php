@@ -4,7 +4,7 @@
   }
   .subletlink {
     display: inline-block;
-    margin: 10px;
+    margin: 0 10px;
   }
   .subletblock {
     text-align: left;
@@ -20,31 +20,35 @@
     height: 300px;
     vertical-align: bottom;
     color: #fff;
+    position: relative;
   }
   .subletblock .info {
     color: #035d75;
-    padding: 20px;
+    padding: 20px 20px 10px 20px;
     box-sizing: border-box;
   }
   .subletblock .title {
     line-height: 1.5em;
     width: 75%;
-    float: left;
     vertical-align: bottom;
   }
   .subletblock .proximity {
     font-size: 0.8em;
-    float: right;
     vertical-align: bottom;
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
   }
   .subletblock .address {
     width: 60%;
     line-height: 1.5em;
     float: left;
+    font-size: 0.9em;
   }
   .subletblock .price {
     font-weight: 700;
     font-size: 2em;
+    line-height: 1em;
     letter-spacing: -0.5px;
     float: right;
   }
@@ -66,7 +70,7 @@
           $title = $sublet['title'];
           $address = $sublet['address'];
           $proximity = ($sublet['proximity'] == '') ? $sublet['proximity'] : 
-            "<div class=\"proximity\">".$sublet['proximity'].' mi</div>';
+            round($sublet['proximity'], 1).' mi';
           $price = $sublet['price'];
           $pricetype = $sublet['pricetype'];
           return "
@@ -78,7 +82,6 @@
                 </td></tr>
                 <tr><td class=\"info\">
                   <div class=\"address\">$address</div>
-                  $proximity
                   <div class=\"price\">\$$price<div class=\"pricetype\">/$pricetype</div></div>
                 </td></tr>
               </table>

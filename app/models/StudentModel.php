@@ -50,6 +50,9 @@
     function exists($id) {
       return ($this->collection->findOne(array('_id' => new MongoId($id))) !== NULL);
     }
+    function existsEmail($email) {
+      return ($this->collection->findOne(array('email' => $email)) !== NULL);
+    }
   }
 
   $MStudent = new StudentModel();

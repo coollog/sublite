@@ -264,7 +264,13 @@
         // Processing result
         $sublet['photo'] = isset($sublet['photos'][0]) ? $sublet['photos'][0]
           : $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
-        $sublet['address'] = $sublet['address'].', '.$sublet['city'].', '.$sublet['state'];
+
+        $sublet['address'] = $sublet['address'];
+        if (strlen($sublet['city']) > 0)
+          $sublet['address'] .= ', '.$sublet['city'];
+        if (strlen($sublet['state']) > 0)
+          $sublet['address'] .= ', '.$sublet['state'];
+
         $sublet['proximity'] = isset($sublet['proximity']) ? $sublet['proximity'] : null;
 
         return $sublet;
@@ -390,7 +396,6 @@
             $starttime = microtime(true);
             $res = $MSublet->find($query);
             $delay = microtime(true) - $starttime;
-            var_dump($query);
 
             $sublets = process($res, $sortby, $latitude, $longitude, $maxProximity);
 

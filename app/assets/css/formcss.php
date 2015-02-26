@@ -2,6 +2,7 @@
   form {
     max-width: 600px;
     margin: 10px auto;
+    text-align: left;
   }
   .success {
     display: block;
@@ -118,5 +119,34 @@
     width: 90%;
     display: inline-block;
     box-sizing: border-box;
+  }
+
+  .ui-datepicker {
+    z-index: 999 !important;
+  }
+  .ui-slider-range {
+    background: #ffd800;
+  }
+  .slider {
+    display: inline-block;
+    width: 80%;
+  }
+  .sliderafter {
+    display: inline-block;
+    padding-left: 10px;
+    max-width: 19%;
+    white-space: nowrap;
+    box-sizing: border-box;
+  }
+  .sliderlabel {
+    margin-bottom: 5px;
+  }
+  .form-half1 {
+    width: 49%;
+    display: inline-block;
+  }
+  .form-half2 {
+    width: 50%;
+    display: inline-block;
   }
 </style>

@@ -199,9 +199,9 @@
         // Remove emails that are registered
         global $MStudent;
         $emails = array();
-        for ($i = 0; $i < count($emails); $i ++) {
-          $email = $emails[$i];
-          if (!$MStudent->exists($email)) {
+        for ($i = 0; $i < count($emailspre); $i ++) {
+          $email = $emailspre[$i];
+          if (!$MStudent->existsEmail($email)) {
             $emails[] = $email;
           }
         }

@@ -38,8 +38,8 @@
     <form method="post" style="width: 300px;">
       <div class="form-slider"><label for="location">Address </label><input type="text" id="location" name="location" value="<?php vecho('location'); ?>" /></div>
 
-      <div class="form-slider startdate"><label for="startdate">From: </label><input type="text" id="startdate" name="startdate" value="<?php vecho('startdate'); ?>" /></div>
-      <div class="form-slider enddate"><label for="enddate">To: </label><input type="text" id="enddate" name="enddate" value="<?php vecho('enddate'); ?>" /></div>
+      <div class="form-slider startdate"><label for="startdate">From: </label><input class="datepicker" type="text" id="startdate" name="startdate" value="<?php vecho('startdate'); ?>" /></div>
+      <div class="form-slider enddate"><label for="enddate">To: </label><input class="datepicker" type="text" id="enddate" name="enddate" value="<?php vecho('enddate'); ?>" /></div>
 
       <input type="submit" name="search" value="Search" />
     </form>
