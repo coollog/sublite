@@ -56,7 +56,7 @@
       font-size: 2em;
       line-height: 1.1em;
       font-weight: 700;
-      max-width: 80%;
+      max-width: 75%;
     }
     .subletinfo .address {
       

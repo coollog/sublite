@@ -10,8 +10,8 @@
       $city = clean($data['city']);
       $state = clean($data['state']);
       $geocode = geocode("$address, $city, $state");
-      $startdate = strtotime($data['startdate']);
-      $enddate = strtotime($data['enddate']);
+      $startdate = $data['startdate'];
+      $enddate = $data['enddate'];
       $price = clean($data['price']);
       $pricetype = clean($data['pricetype']);
       $title = clean($data['title']);
@@ -88,6 +88,8 @@
       $params['student'] = $me['_id'];
       $params['publish'] = true;
       $params['comments'] = array();
+      $params['startdate'] = strtotime($params['startdate']);
+      $params['enddate'] = strtotime($params['enddate']);
 
       // Params to vars
       extract($data = $this->data($params));
@@ -139,6 +141,8 @@
         }
 
         $params['publish'] = isset($params['publish']) ? true : false;
+        $params['startdate'] = strtotime($params['startdate']);
+        $params['enddate'] = strtotime($params['enddate']);
 
         extract($data = $this->data(array_merge($entry, $params)));
         // Validations
