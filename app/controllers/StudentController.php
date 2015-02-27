@@ -272,8 +272,6 @@
 
           $this->validate($pass == $pass2, $err, 'password mismatch');
           $this->validate(strlen($name) > 0, $err, 'name empty');
-          $this->validate($class >= 1900 and $class <= 2100, 
-            $err, 'invalid class year');
           $this->validate(strlen($photo) > 0, 
             $err, 'must have profile picture');
 

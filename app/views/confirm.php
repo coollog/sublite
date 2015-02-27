@@ -3,6 +3,7 @@
     <headline>Register as a Student!</headline>
     <subheadline><?php vecho('email'); ?></subheadline>
     <form method="post">
+      <?php vnotice(); ?>
       
       <div class="form-slider"><label for="name">Full Name</label><input type="text" id="name" name="name" value="<?php vecho('name'); ?>" maxlength="100" required /></div>
 
