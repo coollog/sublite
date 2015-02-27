@@ -10,7 +10,7 @@
       $gender = $data['gender'];
       $class = clean($data['class']);
       $school = clean($data['school']);
-      $bio = isset($data['photo']) ? clean($data['bio']) : '';
+      $bio = isset($data['bio']) ? clean($data['bio']) : '';
       $photo = '';
       if(isset($data['photo'])) {
         $photo = clean($data['photo']);
