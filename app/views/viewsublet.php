@@ -204,7 +204,7 @@
 
 <panel class="info sublet">
   <div class="content">
-    <table><tr>
+    <table style="width: 100%;"><tr>
       <td class="subletinfo">
 
         <div class="section1">
