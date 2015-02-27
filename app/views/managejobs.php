@@ -47,6 +47,12 @@
         ";
       }
       $jobs = vget('jobs');
+      $totalViewCount = 0;
+      $totalApplyCount = 0;
+      foreach ($jobs as $job) {
+        $totalViewCount += $job['stats']['views'];
+        $totalApplyCount += $job['stats']['clicks'];
+      }
       foreach ($jobs as $job) {
         echo vlinkto(jobBlock($job), 'editjob', array('id' => $job['_id']->{'$id'}));
       }

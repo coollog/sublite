@@ -86,8 +86,14 @@
         }
       ?>
     </subheadline>
-    <a href="redirect.php?<?php echo "id="; echo $_GET['id']; echo "&url="; vecho('link'); ?>" onClick="return confirm('You have clicked on an external link and are leaving the pages of SubLite.net. We are not responsible for the accuracy or effectiveness of any content outside of SubLite.net.')"><input type="button" value="Apply Now" /></a>
-
+    <?php
+      if(vget('Loggedinstudent') || vget('Loggedin')) {
+    ?>
+        <a href="../redirect.php?<?php echo "id="; echo $_GET['id']; echo "&url="; vecho('link'); ?>" onClick="return confirm('You have clicked on an external link and are leaving the pages of SubLite.net. We are not responsible for the accuracy or effectiveness of any content outside of SubLite.net.')"><input type="button" value="Apply Now" /></a>
+    <?php } else {
+      echo vlinkto('<input type="button" class="button" value="Login or register to apply for this opening!" />', 'index');
+    }
+    ?>
     <div class="jobinfo">
       <table class="jobtable">
         <tr>
@@ -198,6 +204,13 @@
         </tr>
       </table>
     </div>
-    <a href="redirect.php?<?php echo "id="; echo $_GET['id']; echo "&url="; vecho('link'); ?>" onClick="return confirm('You have clicked on an external link and are leaving the pages of SubLite.net. We are not responsible for the accuracy or effectiveness of any content outside of SubLite.net.')"><input type="button" value="Apply Now" /></a>
+    <?php
+      if(vget('Loggedinstudent') || vget('Loggedin')) {
+    ?>
+        <a href="../redirect.php?<?php echo "id="; echo $_GET['id']; echo "&url="; vecho('link'); ?>" onClick="return confirm('You have clicked on an external link and are leaving the pages of SubLite.net. We are not responsible for the accuracy or effectiveness of any content outside of SubLite.net.')"><input type="button" value="Apply Now" /></a>
+    <?php } else {
+      echo vlinkto('<input type="button" class="button" value="Login or register to apply for this opening!" />', 'index');
+    }
+    ?>
   </div>
 </panel>
