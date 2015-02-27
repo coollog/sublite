@@ -1,6 +1,7 @@
 <style>
   .search {
     width: 24%;
+    padding: 20px;
     display: inline-block;
     box-sizing: border-box;
     vertical-align: top;
