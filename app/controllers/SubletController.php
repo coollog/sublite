@@ -277,7 +277,7 @@
       function processRaw($sublet) {
         // Processing result
         $sublet['photo'] = isset($sublet['photos'][0]) ? $sublet['photos'][0]
-          : $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
+          : $GLOBALS['dirpre'].'assets/gfx/subletnophoto.png';
 
         $sublet['address'] = $sublet['address'];
         if (strlen($sublet['city']) > 0)

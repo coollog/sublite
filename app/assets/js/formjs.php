@@ -63,7 +63,17 @@
     }); 
 
     /* JQUERY UI STUFF */
-    $('.datepicker').datepicker();
+    $('.datepicker').datepicker({
+      onSelect: function(dateText, inst) {
+        $('<style id="nodatepicker">.ui-datepicker { visibility: hidden !important; }</style>').appendTo('body');
+        setTimeout(function() {
+          $('.datepicker').focus().datepicker('hide');
+          setTimeout(function() {
+            $('#nodatepicker').remove();
+          }, 1000);
+        }, 500);
+      }
+    });
 
     $('.sliderrange').each(function() {
       var min = $(this).attr('min'),
