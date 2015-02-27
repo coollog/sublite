@@ -1,6 +1,6 @@
 <style>
   .results {
-    width: 70%;
+    width: 75%;
     display: inline-block;
     box-sizing: border-box;
     max-height: 1000px;
@@ -94,45 +94,43 @@
 </style>
 
 <panel class="results">
-  <div class="content">
-    <?php if (!is_null(vget('recent'))) { ?>
-      <headline>Recent Listings</headline>
-    <?php } ?>
-    <div class="list">
-      <?php if (isset($_GET['delay'])) vecho('delay', '<div style="text-align: center;"><i>Results returned in {var} ms</div><br />'); ?>
-      <?php
-        function subletBlock($sublet) {
-          $photo = $sublet['photo'];
-          $title = $sublet['title'];
-          $address = $sublet['address'];
-          $proximity = ($sublet['proximity'] == '') ? $sublet['proximity'] : 
-            round($sublet['proximity'], 1).' mi';
-          $price = $sublet['price'];
-          $pricetype = $sublet['pricetype'];
-          return "
-            <a class=\"subletlink\" href=\"sublet.php?id=".$sublet['_id']->{'$id'}."\">
-              <table class=\"subletblock\">
-                <tr><td class=\"photo\" style=\"background-image: url('$photo');\">
-                  <div class=\"title\">$title</div>
-                  <div class=\"proximity\">$proximity</div>
-                </td></tr>
-                <tr><td class=\"info\">
-                  <div class=\"address\">$address</div>
-                  <div class=\"price\">\$$price<div class=\"pricetype\">/$pricetype</div></div>
-                </td></tr>
-              </table>
-            </a>
-          ";
-        }
-        $sublets = vget('sublets');
-        foreach ($sublets as $sublet) {
-          echo subletBlock($sublet);
-        }
-        if (count($sublets) == 0) {
-          echo "No sublets matching your query. Try reducing your filters.";
-        }
-      ?>
-    </div>
+  <?php if (!is_null(vget('recent'))) { ?>
+    <headline>Recent Listings</headline>
+  <?php } ?>
+  <div class="list">
+    <?php if (isset($_GET['delay'])) vecho('delay', '<div style="text-align: center;"><i>Results returned in {var} ms</div><br />'); ?>
+    <?php
+      function subletBlock($sublet) {
+        $photo = $sublet['photo'];
+        $title = $sublet['title'];
+        $address = $sublet['address'];
+        $proximity = ($sublet['proximity'] == '') ? $sublet['proximity'] : 
+          round($sublet['proximity'], 1).' mi';
+        $price = $sublet['price'];
+        $pricetype = $sublet['pricetype'];
+        return "
+          <a class=\"subletlink\" href=\"sublet.php?id=".$sublet['_id']->{'$id'}."\">
+            <table class=\"subletblock\">
+              <tr><td class=\"photo\" style=\"background-image: url('$photo');\">
+                <div class=\"title\">$title</div>
+                <div class=\"proximity\">$proximity</div>
+              </td></tr>
+              <tr><td class=\"info\">
+                <div class=\"address\">$address</div>
+                <div class=\"price\">\$$price<div class=\"pricetype\">/$pricetype</div></div>
+              </td></tr>
+            </table>
+          </a>
+        ";
+      }
+      $sublets = vget('sublets');
+      foreach ($sublets as $sublet) {
+        echo subletBlock($sublet);
+      }
+      if (count($sublets) == 0) {
+        echo "No sublets matching your query. Try reducing your filters.";
+      }
+    ?>
   </div>
 </panel>
 <div class="clear"></div>
