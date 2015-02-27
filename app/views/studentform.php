@@ -29,7 +29,7 @@
         ));
       ?>
 
-      <div class="form-slider"><label for="bio" class="fortextarea">About yourself: (max. 1000 characters)*</label><textarea id="bio" name="bio" required maxlength="1000"><?php vecho('bio'); ?></textarea></div>
+      <div class="form-slider"><label for="bio" class="fortextarea">About yourself: (max. 1000 characters)*</label><textarea id="bio" name="bio" maxlength="1000"><?php vecho('bio'); ?></textarea></div>
 
       <?php vnotice(); ?>
       <input type="submit" name="edit" value="Update Profile" />
