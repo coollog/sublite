@@ -1,3 +1,0 @@
-<?php
-	DB::$mongo->close();
-?>
