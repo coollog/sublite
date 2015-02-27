@@ -30,9 +30,9 @@
       $entry = $this->getById($id);
       return $entry['name'];
     }
-    function getPic($id) {
+    function getPhoto($id) {
       $entry = $this->getById($id);
-      return isset($entry['pic']) ? $entry['pic'] : null;
+      return isset($entry['photo']) ? $entry['photo'] : null;
     }
     function me() {
       return $this->get($_SESSION['email']);
@@ -49,6 +49,9 @@
     
     function exists($id) {
       return ($this->collection->findOne(array('_id' => new MongoId($id))) !== NULL);
+    }
+    function existsEmail($email) {
+      return ($this->collection->findOne(array('email' => $email)) !== NULL);
     }
   }
 

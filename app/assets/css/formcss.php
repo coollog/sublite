@@ -3,21 +3,20 @@
     max-width: 600px;
     margin: 10px auto;
   }
-  .success {
+  .success, .error {
+    text-align: center;
     display: block;
     margin: 20px 0;
     padding: 20px;
-    border: 2px solid #00B233;
-    color: #00B233;
     text-transform: uppercase;
   }
+  .success {
+    border: 2px solid #00B233;
+    color: #00B233;
+  }
   .error {
-    display: block;
-    margin: 20px 0;
-    padding: 20px;
     border: 2px solid #FF1919;
     color: #FF1919;
-    text-transform: uppercase;
   }
   label {
     opacity: 0.7;
@@ -73,15 +72,32 @@
     font-weight: 700;
     outline: none;
   }
-  input[type=submit] {
-    margin-top: 20px;
+  input[type=submit].reverse,
+  input[type=button].reverse {
+    background: #035d75;
+    color: #fff;
   }
   input[type=submit]:hover,
   input[type=button]:hover {
     background: #035d75;
     color: #fff;
   }
+  input[type=submit].reverse:hover,
+  input[type=button].reverse:hover {
+    background: #fff;
+    color: #000;
+  }
+  input[type=submit] {
+    margin-top: 20px;
+  }
+  .checkboxes {
+    margin-left: 1em;
+    padding-top: 1em;
+  }
   
+  .img {
+    text-align: left;
+  }
   .img img {
     max-height: 15em;
     margin: 0.5em;
@@ -105,5 +121,35 @@
     width: 90%;
     display: inline-block;
     box-sizing: border-box;
+  }
+
+  /* JQUERY UI */
+  .ui-datepicker {
+    z-index: 999 !important;
+  }
+  .ui-slider-range {
+    background: #ffd800;
+  }
+  .slider {
+    display: inline-block;
+    width: 80%;
+  }
+  .sliderafter {
+    display: inline-block;
+    padding-left: 10px;
+    max-width: 19%;
+    white-space: nowrap;
+    box-sizing: border-box;
+  }
+  .sliderlabel {
+    margin-bottom: 5px;
+  }
+  .form-half1 {
+    width: 49%;
+    display: inline-block;
+  }
+  .form-half2 {
+    width: 50%;
+    display: inline-block;
   }
 </style>

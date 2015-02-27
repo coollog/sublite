@@ -75,14 +75,14 @@
     <link rel="icon" type="image/png" href="<?php echo $GLOBALS['dirpre']; ?>assets/gfx/favicon.png" />
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" />
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
     <script src="<?php echo $GLOBALS['dirpre']; ?>assets/js/jquery.slidinglabels.min.js"></script>
-
+    <?php require_once($GLOBALS['dirpre'].'assets/jqueryui/jquery-uimincss.php'); ?>
 
     <?php require_once($GLOBALS['dirpre'].'assets/js/formjs.php'); ?>
     <?php require_once($GLOBALS['dirpre'].'assets/css/maincss.php'); ?>
     <?php require_once($GLOBALS['dirpre'].'assets/css/formcss.php'); ?>
+    <?php require_once($GLOBALS['dirpre'].'assets/css/responsivecss.php'); ?>
 
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

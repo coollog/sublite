@@ -1,35 +1,32 @@
 <script>
-  $(function() {
-    $('form').submit(function() {
-      window.onbeforeunload = null;
-    });
-  });
-
   function formunloadmsg(msg) {
     $('input, textarea, select').change(function() {
       window.onbeforeunload = function() { return msg; }
     });
   }
 
-  $(document).ready(function() {    
+  $(function() {
+
+    $('form').submit(function() {
+      window.onbeforeunload = null;
+    });
+
+
     if($("#fulltime").is(":checked")){
       $("#durationdiv").hide();
       $("#enddatediv").hide();
     }
-  });
-  $(document).ready(function(){
+
     $("#fulltime").click(function(){
       $("#durationdiv").hide(400);
       $("#enddatediv").hide(400);
     });
-  });
-  $(document).ready(function(){
+
     $("#internship").click(function(){
       $("#durationdiv").show(400);
       $("#enddatediv").show(400);
     });
-  });
-  $(document).ready(function() {    
+
     $('#locationtype').click(function() {
       var tmpLocation = $("#location").attr('value');
       if($(this).is(":checked"))
@@ -46,8 +43,7 @@
         $("#location").val(tmpLocation);      
       }
     });
-  });
-  $(document).ready(function() {    
+
     if($("#locationtype").is(":checked"))
     {
       $("#location").prop('required', false);
@@ -56,8 +52,7 @@
       $("#location").prop('required', true);
       $("#locationdiv").css('visibility','visible');
     }
-  });
-  $(function() { 
+
     $('form').slidinglabels({ 
       /* these are all optional */ 
       className : 'form-slider', // the class you're wrapping the label & input with -> default = slider 
@@ -66,5 +61,49 @@
       axis : 'x', // can take 'x' or 'y' for slide direction 
       speed : 'fast' // can take 'fast', 'slow', or a numeric value 
     }); 
+
+    /* JQUERY UI STUFF */
+    $('.datepicker').datepicker();
+
+    $('.sliderrange').each(function() {
+      var min = $(this).attr('min'),
+          max = $(this).attr('max'),
+          minfield = $(this).attr('minfield'),
+          maxfield = $(this).attr('maxfield'),
+          minval = parseInt($(minfield).val()) || 0,
+          maxval = parseInt($(maxfield).val()) || 0,
+          values = [minval, maxval];
+
+      $(this).slider({
+        range: true,
+        min: min,
+        max: max,
+        values: values,
+        slide: function( event, ui ) {
+          $(minfield).val(ui.values[0]).focus();
+          $(maxfield).val(ui.values[1]).focus();
+          $(minfield + 'after').children().first().html(ui.values[0]);
+          $(minfield + 'after').children().last().html(ui.values[1]);
+        }
+      });
+    });
+
+    $('.slidermin').each(function() {
+      var min = $(this).attr('min'),
+          max = $(this).attr('max'),
+          field = $(this).attr('field'),
+          value = parseInt($(field).val()) || 0;
+
+      $(this).slider({
+        range: "min",
+        min: min,
+        max: max,
+        value: value,
+        slide: function( event, ui ) {
+          $(field).val(ui.value).focus();
+          $(field + 'after').children().first().html(ui.value);
+        }
+      });
+    });
   });
 </script>

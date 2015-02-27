@@ -15,8 +15,8 @@
         <input type="radio" name="jobtype" id="internship" value="internship" <?php vchecked('jobtype', 'internship'); ?> required /><label for="internship"> Internship</label>
       </left>
       <div class="form-slider" id="durationdiv"><label for="duration">Duration (weeks):</label><input type="text" id="duration" name="duration" maxlength="100" value="<?php vecho('duration'); ?>" /></div>
-      <div class="form-slider"><label for="startdate">Start date (optional, mm/dd/yyyy):</label><input type="text" id="startdate" name="startdate" maxlength="100" value="<?php vecho('startdate'); ?>" /></div>
-      <div class="form-slider" id="enddatediv"><label for="enddate">End date (optional, mm/dd/yyyy):</label><input type="text" id="enddate" name="enddate" maxlength="100" value="<?php vecho('enddate'); ?>" /></div>
+      <div class="form-slider"><label for="startdate">Start date (optional, mm/dd/yyyy):</label><input class="datepicker" type="text" id="startdate" name="startdate" maxlength="100" value="<?php vecho('startdate'); ?>" /></div>
+      <div class="form-slider" id="enddatediv"><label for="enddate">End date (optional, mm/dd/yyyy):</label><input class="datepicker" type="text" id="enddate" name="enddate" maxlength="100" value="<?php vecho('enddate'); ?>" /></div>
       <div class="form-slider"><label for="salary">Compensation / Stipend ($US):</label><input type="text" id="salary" name="salary" required maxlength="100" value="<?php vecho('salary'); ?>" required /></div>
       <right>
         <input type="radio" name="salarytype" id="month" value="month" <?php vchecked('salarytype', 'month'); ?> required /><label for="month"> / month</label>

@@ -23,7 +23,7 @@
       $viewVars['Loggedinstudent'] = false;
     }
   }
-  function vecho($var, $format = null) {
+  function vecho($var, $format=null, $default='') {
     global $viewVars;
     vprocess();
     if (isset($viewVars[$var]) and strlen($viewVars[$var]) > 0) {
@@ -31,7 +31,8 @@
       if ($format == null) $format = "{var}";
       $format = str_replace("{var}", $var, $format);
       echo html_entity_decode($format);
-    }
+    } else
+      echo $default;
   }
   function vget($var) {
     global $viewVars;

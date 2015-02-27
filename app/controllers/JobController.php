@@ -189,14 +189,14 @@
         $this->validate($_SESSION['_id'] == $entry['recruiter'],
           $err, 'permission denied');
 
+      function formData($data) {
+        return array_merge($data, array(
+          'headline' => 'Edit',
+          'submitname' => 'edit', 'submitvalue' => 'Save Job'));
+      }
+
       // Code
       if ($this->isValid()) {
-        function formData($data) {
-          return array_merge($data, array(
-            'headline' => 'Edit',
-            'submitname' => 'edit', 'submitvalue' => 'Save Job'));
-        }
-
         if (!isset($_POST['edit'])) { 
           $this->render('jobform', formData(array_merge($this->data($entry), array('_id' => $id)))); return;
         }
@@ -304,9 +304,7 @@
         foreach ($res as $job) {
           $company = $MCompany->get($job['company']);
           $job['company'] = $company['name'];
-          if (strlen($job['desc']) > 300) {
-            $job['desc'] = substr($job['desc'], 0, 297) . '...';
-          }
+          $job['desc'] = strmax($job['desc'], 300);
           $job['logophoto'] = $company['logophoto'];
           array_push($jobs, $job);
         }

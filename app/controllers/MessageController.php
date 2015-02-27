@@ -6,8 +6,10 @@
     function newData($data) {
       $from = clean($data['from']);
       $to = clean($data['to']);
+      $msg = isset($data['msg']) ? clean($data['msg']) : '';
       return array(
-        'participants' => array($from, $to)
+        'participants' => array($from, $to),
+        'msg' => $msg
       );
     }
     function add() {
@@ -20,15 +22,17 @@
 
       // Validations
       $this->startValidations();
-      $this->validate($MRecruiter->IDexists($participants[0]) or $MStudent->exists($participants[0]), 
+      $this->validate($MRecruiter->IDexists($participants[0]) or 
+                      $MStudent->exists($participants[0]), 
         $err, 'invalid sender');
-      $this->validate($MRecruiter->IDexists($participants[1]) or $MStudent->exists($participants[1]), 
+      $this->validate($MRecruiter->IDexists($participants[1]) or 
+                      $MStudent->exists($participants[1]), 
         $err, 'invalid receiver');
 
       // Code
       if ($this->isValid()) {
         $id = $MMessage->add($participants);
-        $this->redirect('messages', array('id' => $id));
+        $this->redirect('messages', array('id' => $id, 'msg' => $msg));
         return;
       }
       
@@ -68,10 +72,13 @@
           $reply['fromname'] = getName($from);
           if ($MStudent->exists($from)) {
             $reply['fromname'] = $MStudent->getName($from);
-            $reply['frompic'] = $MStudent->getPic($from);
+            $Photo = $MStudent->getPhoto($from);
+            if ($Photo == '' or $Photo == 'defaultpic.png' or $Photo == 'noprofilepic.png')
+              $Photo = $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
+            $reply['frompic'] = $Photo;
           } else if ($MRecruiter->IDexists($from)) {
             $reply['fromname'] = $MRecruiter->getName($from);
-            $reply['frompic'] = $MRecruiter->getPic($from);
+            $reply['frompic'] = $MRecruiter->getPhoto($from);
           } else {
             $reply['fromname'] = 'Nonexistent';
             $reply['frompic'] = 'Nonexistent';
@@ -106,6 +113,7 @@
           array_push($replies, $reply);
         }
 
+        // Handle current message
         if (!is_null($entry)) {
           $currentreplies = $entry['replies'];
           $current = array();
@@ -121,17 +129,22 @@
               $to = 'Message To: ' . getName($p);
             }
           }
+          $currentid = $entry['_id'];
         } else {
           $current = null;
+          $currentid = null;
           $to = '';
         }
 
-        return array(
+        $data = array(
           'messages' => $replies,
           'current' => $current,
+          'currentid' => $currentid,
           'unread' => $unread,
           'to' => $to
         );
+        if (isset($_GET['msg'])) $data['msg'] = $_GET['msg'];
+        return $data;
       }
       
       if (!isset($_GET['id'])) {

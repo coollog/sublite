@@ -15,6 +15,12 @@
     margin: 0;
     font: 400 14px/1.5em 'Open Sans', sans-serif;
   }
+  green {
+    color: #00B233;
+  }
+  red {
+    color: #FF1919;
+  }
   a {
     color: #035d75;
     text-decoration: none;
@@ -84,4 +90,10 @@
     text-align: left;
     display: block;
   }
+
+  /* MISC CLASSES */
+  .capitalize {
+    text-transform: capitalize;
+  }
+  .clear{ clear:both; }
 </style>

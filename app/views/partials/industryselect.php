@@ -23,7 +23,7 @@
   );
 ?>
 
-<left style="margin-left: 1em;">
+<left class="checkboxes">
   <?php 
     $i = 1;
     foreach ($industries as $industry) {

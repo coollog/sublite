@@ -68,4 +68,12 @@
       return sprintf($f, $k, $v); 
     }, $arr, array_keys($arr)));
   }
+
+  function fdate($timestamp) { return date('n/j/y', $timestamp); }
+
+  function strmax($str, $len) {
+    if (strlen($str) > $len) {
+      return substr($str, 0, $len-3) . '...';
+    }
+  }
 ?>

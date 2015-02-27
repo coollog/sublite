@@ -3,7 +3,7 @@
 
   class S3Controller extends Controller {
     function upload() {
-      global $CRecruiter; $CRecruiter->requireLogin();
+      global $CJob; $CJob->requireLogin();
       if (!isset($_FILES['upload'])) { $this->directrender('S3/S3'); return; }
       
       global $params;

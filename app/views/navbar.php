@@ -80,8 +80,9 @@
       <?php } ?>
     <?php } elseif (vget('Loggedinstudent')) { ?>
 
-      <a href="<?php echo $GLOBALS['dirpre']; ?>../housing"><opt>Search For Housing</opt></a>
+      <a href="<?php echo $GLOBALS['dirpre']; ?>../housing/search.php"><opt>Search For Housing</opt></a>
       <a href="<?php echo $GLOBALS['dirpre']; ?>../jobs/search.php"><opt>Search For Jobs</opt></a>
+      <a href="home.php"><opt>Manage</opt></a>
       <a href="messages.php"><opt>Messages</opt></a>
       <a href="logout.php"><opt>Log Out</opt></a>
 

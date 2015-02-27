@@ -104,7 +104,7 @@
   }
 </style>
 
-<panel>
+<panel style="padding: 0;">
   <table class="messages"><tr>
 
     <td class="mleft bottom" style="height: 2em;">
@@ -144,7 +144,7 @@
         <table class="mblock">
           <td class="pp"><profpic style="background-image: url('asdf');"></profpic></td>
           <td><data>
-            <form method="post">
+            <form method="post" action="?id=<?php vecho('currentid'); ?>">
               <textarea id="msg" name="msg" required maxlength="2000" placeholder="Write Your Message:"><?php vecho('msg'); ?></textarea>
               <?php vnotice(); ?>
               <right><input type="submit" name="reply" value="Send" /></right>

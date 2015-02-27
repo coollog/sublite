@@ -5,14 +5,25 @@
 
     function data($data) {
       $name = clean($data['name']);
-      $pass = $data['pass'];
-      $pass2 = $data['pass2'];
+      if (isset($data['pass'])) $pass = $data['pass'];
+      if (isset($data['pass2'])) $pass2 = $data['pass2'];
+      $gender = $data['gender'];
       $class = clean($data['class']);
       $school = clean($data['school']);
-      return array(
-        'pass' => $pass, 'pass2' => $pass2, 
-        'name' => $name, 'class' => $class, 'school' => $school
+      $photo = '';
+      if(isset($data['photo'])) {
+        $photo = clean($data['photo']);
+      }
+      $data = array(
+        'gender' => $gender,
+        'name' => $name, 'class' => $class, 'school' => $school,
+        'photo' => $photo
       );
+      if (isset($pass) and isset($pass2)) {
+        $data['pass'] = $pass;
+        $data['pass2'] = $pass2;
+      }
+      return $data;
     }
 
     function validateData($data, &$err) {
@@ -22,24 +33,24 @@
 
     function home() {
       $this->requireLogin();
-      global $MStudent, $MJobs;
+      global $MStudent, $MSublet;
       $me = $MStudent->me();
       $me['_id'] = $me['_id']->{'$id'};
 
-      $pic = $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
-      if (isset($me['pic']) and !is_null($me['pic'])) {
-        $pic = $me['pic'];
-        if ($pic == 'nopic.png')
-          $pic = $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
+      $photo = $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
+      if (isset($me['photo']) and !is_null($me['photo'])) {
+        $photo = $me['photo'];
+        if ($photo == 'nopic.png')
+          $photo = $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
       }
-      $me['pic'] = $pic;
+      $me['photo'] = $photo;
 
       if (strlen($me['school']) == 0) {
         require_once($GLOBALS['dirpre'].'../housing/schools.php');
         $me['school'] = $S->nameOf($me['email']);
       }
 
-      $this->render('home', $me);
+      $this->render('studenthome', $me);
     }
 
     function index() {
@@ -199,9 +210,9 @@
         // Remove emails that are registered
         global $MStudent;
         $emails = array();
-        for ($i = 0; $i < count($emails); $i ++) {
-          $email = $emails[$i];
-          if (!$MStudent->exists($email)) {
+        for ($i = 0; $i < count($emailspre); $i ++) {
+          $email = $emailspre[$i];
+          if (!$MStudent->existsEmail($email)) {
             $emails[] = $email;
           }
         }
@@ -262,6 +273,8 @@
           $this->validate(strlen($name) > 0, $err, 'name empty');
           $this->validate($class >= 1900 and $class <= 2100, 
             $err, 'invalid class year');
+          $this->validate(strlen($photo) > 0, 
+            $err, 'must have profile picture');
 
           if ($this->isValid()) {
             $pass = md5($pass);
@@ -272,6 +285,8 @@
             $entry['class'] = $class;
             $entry['school'] = $school;
             $entry['time'] = time();
+            $entry['gender'] = $gender;
+            $entry['photo'] = $photo;
             $MStudent->save($entry);
 
             $params['email'] = $email;
@@ -289,44 +304,42 @@
       $this->render('notice');
     }
 
+    function edit() {
+      $this->requireLogin();
+
+      global $params, $MStudent;
+      $me = $MStudent->me();
+
+      // Validations
+      $this->startValidations();
+
+      if (!isset($_POST['edit'])) { $this->render('studentform', $this->data($me)); return; }
+
+      // Params to vars
+      extract($data = $this->data($params));
+
+      $this->validate($class >= 1900 and $class <= 2100, 
+        $err, 'invalid class year');
+      $this->validate(strlen($photo) > 0, 
+        $err, 'must have profile picture');
+
+      if ($this->isValid()) {
+        $me = array_merge($me, $data);
+        $MStudent->save($me);
+
+        $this->success('profile saved');
+        $this->render('studentform', $data);
+        return;
+      }
+
+      $this->error($err);
+      $this->render('studentform', $data);
+    }
+
     function whereto() {
       $this->requireLogin();
 
       $this->render('whereto');
-    }
-
-    function edit() {
-      // $this->requireLogin();
-      
-      // global $params, $MStudent;
-      // if (!isset($_POST['edit'])) { 
-      //   $this->render('editprofile', 
-      //     $this->data($MStudent->me())); return;
-      // }
-      
-      // // Params to vars
-      // $me = $MStudent->me();
-      // $id = $params['_id'] = $me['_id'];
-      // $params['email'] = $me['email'];
-      // $params['pass'] = $me['pass'];
-      // $params['company'] = $me['company'];
-      // $params['approved'] = $me['approved'];
-      // extract($data = $this->data($params));
-
-      // // Validations
-      // $this->startValidations();
-      // $this->validateData($data, $err);
-
-      // if ($this->isValid()) {
-      //   $data['_id'] = new MongoId($id);
-      //   $id = $MStudent->save($data);
-      //   $this->success('profile saved');
-      //   $this->render('editprofile', $data);
-      //   return;
-      // }
-      
-      // $this->error($err);
-      // $this->render('editprofile', $data);
     }
 
     function view() {
