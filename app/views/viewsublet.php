@@ -174,11 +174,11 @@
     width: 100%;
     height: 100%;
     display: table;
-    vertical-align: middle;
     text-align: center;
   }
   .popphoto {
     display: table-cell;
+    vertical-align: middle;
     z-index: 999;
   }
   .popphoto img {
