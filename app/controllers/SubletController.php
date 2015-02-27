@@ -193,7 +193,7 @@
         require_once($GLOBALS['dirpre'].'../housing/schools.php');
         $data['studentcollege'] = $S->nameOf($s['email']);
         $data['studentbio'] = isset($s['bio']) ?
-          $data['bio'] : 'Welcome to my profile!';
+          $s['bio'] : 'Welcome to my profile!';
         $data['studentmsg'] = 
           "Hi ".$data['studentname'].",%0A%0A".
           "I am writing to inquire about your listing '".$data['title']."' (http://sublite.net/housing/sublet.php?id=".$entry['_id'].").%0A%0A".

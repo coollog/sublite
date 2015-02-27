@@ -10,12 +10,13 @@
       $gender = $data['gender'];
       $class = clean($data['class']);
       $school = clean($data['school']);
+      $bio = isset($data['photo']) ? clean($data['bio']) : '';
       $photo = '';
       if(isset($data['photo'])) {
         $photo = clean($data['photo']);
       }
       $data = array(
-        'gender' => $gender,
+        'gender' => $gender, 'bio' => $bio,
         'name' => $name, 'class' => $class, 'school' => $school,
         'photo' => $photo
       );
@@ -287,6 +288,7 @@
             $entry['time'] = time();
             $entry['gender'] = $gender;
             $entry['photo'] = $photo;
+            $entry['bio'] = $bio;
             $MStudent->save($entry);
 
             $params['email'] = $email;

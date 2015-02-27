@@ -157,6 +157,34 @@
   panel.comments {
     background: #fafaf8;
   }
+
+  .pop {
+    position: fixed;
+    left: 0;
+    top: 0;
+    margin: 0; padding: 0;
+    z-index: 999;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    transition: 0.2s all ease-in-out;
+    width: 100%;
+    height: 100%;
+  }
+  .poptable {
+    width: 100%;
+    height: 100%;
+    display: table;
+    vertical-align: middle;
+    text-align: center;
+  }
+  .popphoto {
+    display: table-cell;
+    z-index: 999;
+  }
+  .popphoto img {
+    max-width: 70vw;
+    max-height: 70vh;
+  }
 </style>
 
 <script>
@@ -181,10 +209,20 @@
   function showPhotoLeft() { showPhoto(curPhoto - 1); }
   function showPhotoRight() { showPhoto(curPhoto + 1); }
 
+  function popPhoto(photo) {
+    $('.pop').show();
+    $('.popphoto img').attr('src', photo);
+  }
+
   $(function() {
     showPhoto(0);
     $('.photocontrolleft').click(function() { showPhotoLeft(); });
     $('.photocontrolright').click(function() { showPhotoRight(); });
+
+    $('.photo').click(function() {
+      popPhoto($(this).attr('photo'));
+    });
+    $('.pop').click(function() { $(this).hide(); });
   });
 </script>
 
@@ -193,7 +231,7 @@
     $i = 0;
     foreach (vget('photos') as $photo) {
   ?>
-      <div class="photo" index="<?php echo $i; ?>" style="background-image: url('<?php echo $photo; ?>');"></div>
+      <div class="photo" index="<?php echo $i; ?>" style="background-image: url('<?php echo $photo; ?>');" photo="<?php echo $photo; ?>"></div>
   <?php
       $i ++;
     }
@@ -318,3 +356,9 @@
     <i>No comments so far. Be the first to comment!</i>
   </div>
 </panel>
+
+<div class="pop">
+  <div class="poptable">
+    <div class="popphoto"><img src="" /></div>
+  </div>
+</div>
