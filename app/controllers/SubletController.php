@@ -363,7 +363,7 @@
           $query = array(
             'publish' => true,
           );
-          if (strlen($proximity) == 0) $proximity = 50;
+          if (strlen($maxProximity) == 0) $maxProximity = 50;
           $proximityDeg = distanceDeg($maxProximity);
           $query['geocode.latitude'] = array(
             '$gte' => $latitude - $proximityDeg,
@@ -417,6 +417,10 @@
             $resmonth = $MSublet->find($querymonth);
             $resweek = $MSublet->find($query);
             $resday = $MSublet->find($queryday);
+
+            if (isset($_GET['test'])) {
+              var_dump($query);
+            }
 
             $sublets = array_merge(
               process($resmonth, $sortby, $latitude, $longitude, $maxProximity),
