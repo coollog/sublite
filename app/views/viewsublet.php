@@ -166,7 +166,6 @@
     z-index: 999;
     background: rgba(0,0,0,0.8);
     display: none;
-    transition: 0.2s all ease-in-out;
     width: 100%;
     height: 100%;
   }
@@ -210,7 +209,7 @@
   function showPhotoRight() { showPhoto(curPhoto + 1); }
 
   function popPhoto(photo) {
-    $('.pop').show();
+    $('.pop').fadeIn(200, 'easeInOutCubic');
     $('.popphoto img').attr('src', photo);
   }
 
@@ -222,7 +221,7 @@
     $('.photo').click(function() {
       popPhoto($(this).attr('photo'));
     });
-    $('.pop').click(function() { $(this).hide(); });
+    $('.pop').click(function() { $(this).fadeOut(100, 'easeInOutCubic'); });
   });
 </script>
 
