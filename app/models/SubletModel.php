@@ -3,8 +3,8 @@
 
   class SubletModel extends Model {
     function __construct() {
-      $m = new MongoClient($GLOBALS['dburistudenttest']);
-      $db = $m->$GLOBALS['dbnamestudenttest'];
+      $m = new MongoClient($GLOBALS['dburistudent']);
+      $db = $m->$GLOBALS['dbnamestudent'];
       $this->collection = $db->listings;
     }
 
