@@ -182,8 +182,8 @@
     z-index: 999;
   }
   .popphoto img {
-    max-width: 70vw;
-    max-height: 70vh;
+    max-width: 90vw;
+    max-height: 90vh;
   }
 </style>
 
