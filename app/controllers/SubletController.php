@@ -363,7 +363,7 @@
           $query = array(
             'publish' => true,
           );
-          if (strlen($maxProximity) == 0) $maxProximity = 50;
+          if ($maxProximity == 0) $maxProximity = 50;
           $proximityDeg = distanceDeg($maxProximity);
           $query['geocode.latitude'] = array(
             '$gte' => $latitude - $proximityDeg,
