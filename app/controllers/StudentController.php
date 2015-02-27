@@ -318,8 +318,6 @@
       // Params to vars
       extract($data = $this->data($params));
 
-      $this->validate($class >= 1900 and $class <= 2100, 
-        $err, 'invalid class year');
       $this->validate(strlen($photo) > 0, 
         $err, 'must have profile picture');
 
