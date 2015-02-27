@@ -20,7 +20,7 @@
       return $this->collection->find($query, $fields);
     }
     function last($n=1) {
-      return $this->collection->find()->sort(array('_id'=>-1))->limit($n);
+      return $this->collection->find(array('publish' => true))->sort(array('_id'=>-1))->limit($n);
     }
     function getAll() {
       return $this->collection->find();
