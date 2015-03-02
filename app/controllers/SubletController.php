@@ -180,6 +180,7 @@
         $MSublet->save($entry);
 
         $data = $this->data($entry);
+        $data['_id'] = $entry['_id'];
         
         // ANY MODiFICATIONS ON DATA GOES HERE
         $s = $MStudent->getById($entry['student']);
