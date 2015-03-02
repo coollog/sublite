@@ -76,4 +76,11 @@
       return substr($str, 0, $len-3) . '...';
     }
   }
+
+  // Removes a value from the array
+  function array_remove($array, $val) {
+    if(($key = array_search($val, $array)) !== false)
+      unset($array[$key]);
+    return $array;
+  }
 ?>

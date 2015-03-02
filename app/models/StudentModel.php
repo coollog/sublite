@@ -34,6 +34,10 @@
       $entry = $this->getById($id);
       return isset($entry['photo']) ? $entry['photo'] : null;
     }
+    function getEmail($id) {
+      $entry = $this->getById($id);
+      return $entry['email'];
+    }
     function me() {
       return $this->get($_SESSION['email']);
     }
