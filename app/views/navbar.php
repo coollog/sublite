@@ -88,6 +88,7 @@
       <a href="logout.php"><opt>Log Out</opt></a>
 
     <?php } else { ?>
+      <a href="register.php"><opt>Register</opt></a>
       <a href="login.php"><opt>Log In</opt></a>
     <?php } ?>
   </options>
