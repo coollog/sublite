@@ -54,42 +54,47 @@
     color: #ffd800;
   }
 </style>
+<?php
+  $curdir = dirname($_SERVER['REQUEST_URI']);
+  // Various states the user can be in
+  $states = array(
+    "loggedin" => vget('Loggedin') or vget('Loggedinstudent'),
+    "notloggedin" => !vget('Loggedin') and !vget('Loggedinstudent'),
+    "recruiter hascompany" => vget('Loggedin') and vget('Lcompany'),
+    "recruiter nocompany" => vget('Loggedin') and !vget('Lcompany'),
+    "student" => vget('Loggedinstudent'),
+    "student /housing" => vget('Loggedinstudent') and $curdir == '/housing'
+  );
+  // Establish relative paths
+  $path = $GLOBALS['dirpre'] . '../';
+  // Build the menu items and associate them with a state
+  $menu = array(
+    array("List Job", $path."employers/addjob.php", "recruiter hascompany"),
+    array("Manage", $path."employers/home.php", "recruiter hascompany"),
+    array("Messages", $path."employers/messages.php", "recruiter hascompany"),
 
+    array("Search For Housing", $path."housing/search.php", "student"),
+    array("Search For Jobs", $path."jobs/search.php", "student"),
+    array("Add Sublet", $path."housing/addsublet.php", "student /housing"),
+    array("Manage", $path."housing/home.php", "student"),
+    array("Messages", "messages.php", "student"),
+
+    array("Register", "register.php", "notloggedin"),
+    array("Log In", "login.php", "notloggedin"),
+    array("Log Out", "logout.php", "loggedin")
+  );
+?>
 <navbar class="blackbar">
   <a href="."><logo>SubLite</logo></a><beta>beta</beta>
   <options class="right">
-    <?php if (vget('Loggedin')) { ?>
-      <?php if ($_SERVER['REQUEST_URI'] == '/') { ?>
-        <?php if (vget('Lcompany')) { ?>
-          <a href="employers/addjob.php"><opt>List Job</opt></a>
-          <a href="employers/home.php"><opt>Manage</opt></a>
-          <a href="employers/messages.php"><opt>Messages</opt></a>
-        <?php } else { ?>
-          <a href="employers/addcompany.php"><opt>Add Company Profile</opt></a>
-        <?php } ?>
-        <a href="logout.php"><opt>Log Out</opt></a>
-      <?php } else { ?>
-        <?php if (vget('Lcompany')) { ?>
-          <a href="addjob.php"><opt>List Job</opt></a>
-          <a href="home.php"><opt>Manage</opt></a>
-          <a href="messages.php"><opt>Messages</opt></a>
-        <?php } else { ?>
-          <a href="addcompany.php"><opt>Add Company Profile</opt></a>
-        <?php } ?>
-        <a href="logout.php"><opt>Log Out</opt></a>
-      <?php } ?>
-    <?php } elseif (vget('Loggedinstudent')) { ?>
+    <?php
+      foreach ($menu as $opt) {
+        $text = $opt[0];
+        $link = $opt[1];
+        if (!$states[$opt[2]]) continue;
 
-      <a href="<?php echo $GLOBALS['dirpre']; ?>../housing/search.php"><opt>Search For Housing</opt></a>
-      <a href="<?php echo $GLOBALS['dirpre']; ?>../jobs/search.php"><opt>Search For Jobs</opt></a>
-      <a href="<?php echo $GLOBALS['dirpre']; ?>../housing/addsublet.php"><opt>Add Sublet</opt></a>
-      <a href="home.php"><opt>Manage</opt></a>
-      <a href="messages.php"><opt>Messages</opt></a>
-      <a href="logout.php"><opt>Log Out</opt></a>
-
-    <?php } else { ?>
-      <a href="register.php"><opt>Register</opt></a>
-      <a href="login.php"><opt>Log In</opt></a>
-    <?php } ?>
+        echo "<a href=\"$link\"><opt>$text</opt></a>";
+      }
+    ?>
   </options>
 </navbar>
