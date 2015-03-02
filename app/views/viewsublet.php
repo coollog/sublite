@@ -56,7 +56,7 @@
       font-size: 2em;
       line-height: 1.1em;
       font-weight: 700;
-      max-width: 80%;
+      max-width: 75%;
     }
     .subletinfo .address {
       
@@ -157,6 +157,33 @@
   panel.comments {
     background: #fafaf8;
   }
+
+  .pop {
+    position: fixed;
+    left: 0;
+    top: 0;
+    margin: 0; padding: 0;
+    z-index: 999;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    width: 100%;
+    height: 100%;
+  }
+  .poptable {
+    width: 100%;
+    height: 100%;
+    display: table;
+    text-align: center;
+  }
+  .popphoto {
+    display: table-cell;
+    vertical-align: middle;
+    z-index: 999;
+  }
+  .popphoto img {
+    max-width: 90vw;
+    max-height: 90vh;
+  }
 </style>
 
 <script>
@@ -181,10 +208,20 @@
   function showPhotoLeft() { showPhoto(curPhoto - 1); }
   function showPhotoRight() { showPhoto(curPhoto + 1); }
 
+  function popPhoto(photo) {
+    $('.pop').fadeIn(200, 'easeInOutCubic');
+    $('.popphoto img').attr('src', photo);
+  }
+
   $(function() {
     showPhoto(0);
     $('.photocontrolleft').click(function() { showPhotoLeft(); });
     $('.photocontrolright').click(function() { showPhotoRight(); });
+
+    $('.photo').click(function() {
+      popPhoto($(this).attr('photo'));
+    });
+    $('.pop').click(function() { $(this).fadeOut(100, 'easeInOutCubic'); });
   });
 </script>
 
@@ -193,7 +230,7 @@
     $i = 0;
     foreach (vget('photos') as $photo) {
   ?>
-      <div class="photo" index="<?php echo $i; ?>" style="background-image: url('<?php echo $photo; ?>');"></div>
+      <div class="photo" index="<?php echo $i; ?>" style="background-image: url('<?php echo $photo; ?>');" photo="<?php echo $photo; ?>"></div>
   <?php
       $i ++;
     }
@@ -258,9 +295,17 @@
           <div class="studentschool">
             <?php vecho('studentcollege'); ?><?php vecho('studentclass'); ?>
           </div>
-          <a href="newmessage.php?from=<?php vecho('L_id'); ?>&to=<?php vecho('studentid'); ?>&msg=<?php vecho('studentmsg'); ?>" onClick="return confirm('I have read, fully understand, and agree to Sublite’s Terms of Service and Privacy Policy. I agree to contact the owner in good-faith to inquire about the listing.')">
-            <input type="button" class="reverse" value="Contact Owner" />
-          </a>
+          <?php
+            if(!vget('Loggedinstudent')) {
+          ?>
+            <a href="../login.php">
+              <input type="button" class="reverse" value="Contact Owner" />
+            </a>   
+          <?php } else { ?>
+            <a href="newmessage.php?from=<?php vecho('L_id'); ?>&to=<?php vecho('studentid'); ?>&msg=<?php vecho('studentmsg'); ?>" onClick="return confirm('I have read, fully understand, and agree to Sublite’s Terms of Service and Privacy Policy. I agree to contact the owner in good-faith to inquire about the listing.')">
+              <input type="button" class="reverse" value="Contact Owner" />
+            </a>
+          <?php } ?>
         </div>
       </td>
 
@@ -318,3 +363,9 @@
     <i>No comments so far. Be the first to comment!</i>
   </div>
 </panel>
+
+<div class="pop">
+  <div class="poptable">
+    <div class="popphoto"><img src="" /></div>
+  </div>
+</div>

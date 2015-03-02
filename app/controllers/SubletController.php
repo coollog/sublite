@@ -178,7 +178,9 @@
         $data = $this->data($entry);
         
         // ANY MODiFICATIONS ON DATA GOES HERE
-        $me = $MStudent->me();
+        if(isset($_SESSION['loggedinstudent'])) {
+          $me = $MStudent->me();
+        }
 
         $s = $MStudent->getById($entry['student']);
 
@@ -193,13 +195,15 @@
         require_once($GLOBALS['dirpre'].'../housing/schools.php');
         $data['studentcollege'] = $S->nameOf($s['email']);
         $data['studentbio'] = isset($s['bio']) ?
-          $data['bio'] : 'Welcome to my profile!';
-        $data['studentmsg'] = 
-          "Hi ".$data['studentname'].",%0A%0A".
-          "I am writing to inquire about your listing '".$data['title']."' (http://sublite.net/housing/sublet.php?id=".$entry['_id'].").%0A%0A".
-          "Best,%0A".
-          $me['name'];
-
+          $s['bio'] : 'Welcome to my profile!';
+        if(isset($_SESSION['loggedinstudent'])) {
+          $data['studentmsg'] = 
+            "Hi ".$data['studentname'].",%0A%0A".
+            "I am writing to inquire about your listing '".$data['title']."' (http://sublite.net/housing/sublet.php?id=".$entry['_id'].").%0A%0A".
+            "Best,%0A".
+            $me['name'];
+        }
+        
         $data['address'] = 
           $data['address'].', '.$data['city'].', '.$data['state'];
         if (count($data['photos']) == 0)

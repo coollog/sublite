@@ -5,7 +5,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <?php
       // Facebook meta tags
-      if (vget('firstname')) { // is recruiter profile
+      if (vget('price')) { // is sublet
+        $name = vget('studentname');
+        $city = vget('city');
+        $state = vget('state');
+        $title = vget('title');
+        $summary = vget('summary');
+        $school = vget('studentschool');
+        echo '<meta property="og:title" content="' . $title . ' in ' . $city . 
+          ', ' . $state . ' | ' . $name . ', ' . $school . '" />';
+        echo '<meta property="og:description" content="' . $summary . '" />';
+        foreach(vget('photos') as $photourl) {
+          echo '<meta property="og:image" content="' . $photourl . '" />';
+        }
+      }
+      elseif (vget('firstname')) { // is recruiter profile
         $name = $viewVars['firstname'] . ' '. $viewVars['lastname'];
         echo '<meta property="og:title" content="' . $name . ' on SubLite" />';
         $photo = vget('photo');
