@@ -441,6 +441,10 @@
             $this->render('subletsearchresults', array(
               'sublets' => $sublets, 'delay' => $delay
             ));
+
+            // Send email notification of search to us
+            $this->sendrequestreport("Search for sublets:", $sublets);
+
             return;
           }
         }

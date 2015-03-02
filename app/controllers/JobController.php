@@ -384,6 +384,10 @@
 
         if ($showSearch) $this->render('searchform', $data);
         $this->render('searchresults', array('jobs' => $jobs, 'showCompany' => $showCompany));
+
+        // Send email notification of search to us
+        $this->sendrequestreport("Search for jobs:", $jobs);
+
         return;
       }
 
