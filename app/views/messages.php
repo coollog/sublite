@@ -125,7 +125,7 @@
           <td class="pp"><profpic style="background-image: url('<?php echo $m['frompic'] ?>');"></profpic></td>
           <td><data>
             <name><?php echo $m['fromname']; ?></name><time><?php echo $m['time']; ?></time>
-            <text><?php echo $m['msg']; ?></text>
+            <text><?php echo autolink($m['msg']); ?></text>
           </data></td>
         </tr></table></a>
       <?php } ?>
@@ -137,7 +137,7 @@
             <td class="pp"><profpic style="background-image: url('<?php echo $m['frompic'] ?>');"></profpic></td>
             <td><data>
               <name><?php echo $m['fromname']; ?></name><time><?php echo $m['time']; ?></time>
-              <text><?php echo $m['msg']; ?></text>
+              <text><?php echo autolink($m['msg']); ?></text>
             </data></td>
           </tr></table>
         <?php } ?>
