@@ -170,9 +170,10 @@
       $this->validate(isset($_GET['id']) and 
         ($entry = $MSublet->get($_GET['id'])) != NULL, 
         $err, 'unknown sublet');
-      $this->validate(
-        $entry['publish'] or $entry['student'] == $_SESSION['_id'], 
-        $err, 'access denied');
+      if ($this->isValid())
+        $this->validate(
+          $entry['publish'] or $entry['student'] == $_SESSION['_id'], 
+          $err, 'access denied');
 
       // Code
       if ($this->isValid()) {
