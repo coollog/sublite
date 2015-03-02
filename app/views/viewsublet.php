@@ -297,7 +297,7 @@
             <?php vecho('studentcollege'); ?><?php vecho('studentclass'); ?>
           </div>
           <?php if(!vget('Loggedinstudent')) { ?>
-            <br /><i>You must <a href="../login.php">login</a> or <a href="../login.php">register</a> to contact the owner.</i>
+            <br /><i>You must <a href="../login.php">login</a> or <a href="../register.php">register</a> to contact the owner.</i>
           <?php } else { ?>
             <a href="newmessage.php?from=<?php vecho('L_id'); ?>&to=<?php vecho('studentid'); ?>&msg=<?php vecho('studentmsg'); ?>" onClick="return confirm('I have read, fully understand, and agree to Sublite’s Terms of Service and Privacy Policy. I agree to contact the owner in good-faith to inquire about the listing.')">
               <input type="button" class="reverse" value="Contact Owner" />
