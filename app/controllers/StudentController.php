@@ -10,12 +10,13 @@
       $gender = $data['gender'];
       $class = clean($data['class']);
       $school = clean($data['school']);
+      $bio = isset($data['bio']) ? clean($data['bio']) : '';
       $photo = '';
       if(isset($data['photo'])) {
         $photo = clean($data['photo']);
       }
       $data = array(
-        'gender' => $gender,
+        'gender' => $gender, 'bio' => $bio,
         'name' => $name, 'class' => $class, 'school' => $school,
         'photo' => $photo
       );
@@ -271,8 +272,6 @@
 
           $this->validate($pass == $pass2, $err, 'password mismatch');
           $this->validate(strlen($name) > 0, $err, 'name empty');
-          $this->validate($class >= 1900 and $class <= 2100, 
-            $err, 'invalid class year');
           $this->validate(strlen($photo) > 0, 
             $err, 'must have profile picture');
 
@@ -287,6 +286,7 @@
             $entry['time'] = time();
             $entry['gender'] = $gender;
             $entry['photo'] = $photo;
+            $entry['bio'] = $bio;
             $MStudent->save($entry);
 
             $params['email'] = $email;
@@ -318,8 +318,6 @@
       // Params to vars
       extract($data = $this->data($params));
 
-      $this->validate($class >= 1900 and $class <= 2100, 
-        $err, 'invalid class year');
       $this->validate(strlen($photo) > 0, 
         $err, 'must have profile picture');
 

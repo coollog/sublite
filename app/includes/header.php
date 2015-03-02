@@ -37,4 +37,5 @@
   require_once($GLOBALS['dirpre'].'includes/functions/hash_equals.php');
   require_once($GLOBALS['dirpre'].'includes/functions/geocode.php');
   require_once($GLOBALS['dirpre'].'includes/functions/sendgmail.php');
+  require_once($GLOBALS['dirpre'].'includes/functions/lib_autolink.php');
 ?>

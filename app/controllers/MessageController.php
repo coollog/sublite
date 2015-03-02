@@ -52,35 +52,46 @@
       global $params, $MMessage;
       // Params to vars
 
+      // Some helper functions
+      function getName($p) {
+        global $MStudent, $MRecruiter;
+        if ($MStudent->exists($p)) {
+          $name = $MStudent->getName($p);
+        } else if ($MRecruiter->IDexists($p)) {
+          $name = $MRecruiter->getName($p);
+        } else {
+          $name = 'Nonexistent';
+        }
+        return $name;
+      }
+      function getEmail($p) {
+        global $MStudent, $MRecruiter;
+        if ($MStudent->exists($p)) {
+          $name = $MStudent->getEmail($p);
+        } else if ($MRecruiter->IDexists($p)) {
+          $name = $MRecruiter->getEmail($p);
+        } else {
+          $name = 'Nonexistent';
+        }
+        return $name;
+      }
+
+      // Processes message data
       function viewData($entry=NULL) {
         global $MMessage;
         $messages = array_reverse(iterator_to_array($MMessage->findByParticipant($_SESSION['_id']->{'$id'})));
 
-        function getName($p) {
-          global $MStudent, $MRecruiter;
-          if ($MStudent->exists($p)) {
-            $name = $MStudent->getName($p);
-          } else if ($MRecruiter->IDexists($p)) {
-            $name = $MRecruiter->getName($p);
-          } else {
-            $name = 'Nonexistent';
-          }
-          return $name;
-        }
         function setFromNamePic(&$reply, $from) {
           global $MStudent, $MRecruiter;
           $reply['fromname'] = getName($from);
           if ($MStudent->exists($from)) {
-            $reply['fromname'] = $MStudent->getName($from);
             $Photo = $MStudent->getPhoto($from);
             if ($Photo == '' or $Photo == 'defaultpic.png' or $Photo == 'noprofilepic.png')
               $Photo = $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
             $reply['frompic'] = $Photo;
           } else if ($MRecruiter->IDexists($from)) {
-            $reply['fromname'] = $MRecruiter->getName($from);
             $reply['frompic'] = $MRecruiter->getPhoto($from);
           } else {
-            $reply['fromname'] = 'Nonexistent';
             $reply['frompic'] = 'Nonexistent';
           }
           if ($reply['frompic'] == 'assets/gfx/defaultpic.png')
@@ -151,6 +162,8 @@
         $this->render('messages', viewData()); return;
       }
 
+      /* ACTUALLY SEND MESSAGES */
+
       // Validations
       $this->startValidations();
       $this->validate(MongoId::isValid($id = $_GET['id']) and 
@@ -160,7 +173,6 @@
         $this->validate(in_array($myid = $_SESSION['_id']->{'$id'}, $entry['participants']),
           $err, 'permission denied');
 
-      // Code
       if ($this->isValid()) {
         // Set replies to read
         for ($i = 0; $i < count($entry['replies']); $i ++) {
@@ -178,7 +190,42 @@
         $this->validate(strlen($msg) > 0, $err, 'message empty');
 
         if ($this->isValid()) {
-          $entry = $MMessage->reply($entry['_id']->{'$id'}, $myid, $msg);
+          // Send the message
+          $msgid = $entry['_id']->{'$id'};
+          $from = $myid;
+          $fromname = getName($from);
+          $tos = array_remove($entry['participants'], $from);
+          $entry = $MMessage->reply($msgid, $from, $msg);
+
+          $emails = array();
+          foreach ($tos as $to) {
+            $emails[] = getEmail($to);
+          }
+
+          // Notify recipients by email
+          $link = "http://sublite.net/housing/messages.php?id=$msgid";
+          $message = "
+            $fromname has sent you a message on SubLite:
+            <br /><br />
+            $msg
+            <br /><br />
+            ---
+            <br />
+            Reply to this message <a href='$link'>on SubLite</a>.
+          ";
+          sendgmail($emails, array("info@sublite.net", "SubLite, LLC."), "Message from $fromname | SubLite", $message);
+
+          // Notify us of the message
+          $toemails = implode(', ', $emails);
+          $fromemail = getEmail($from);
+          $message = "
+            <b>$fromemail</b> has sent a message to <b>$toemails</b>:
+            <br /><br />
+            $msg
+            <br /><br />
+            msgid: $msgid
+          ";
+          sendgmail(array('tony.jiang@yale.edu', 'qingyang.chen@gmail.com'), "info@sublite.net", 'Message sent on SubLite!', $message);
 
           $this->render('messages', viewData($entry));
           return;
