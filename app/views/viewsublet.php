@@ -260,7 +260,7 @@
                 margin: 0;
               }
             </style>
-            <div class="fb-like" data-href="https://sublite.net/housing/sublet.php?id=<?php vecho('_id'); ?>" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true" style="margin: 0; display: block;"></div>
+            <div class="fb-like" data-href="https://sublite.net/housing/sublet.php?id=<?php vecho('_id'); ?>" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true" style="z-index: 2;"></div>
           </div>
           <div class="details">
             <div class="detail"><table>
