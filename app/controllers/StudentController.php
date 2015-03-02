@@ -185,7 +185,7 @@
       $message = "
         <h1 style=\"padding: 0.5em 0; margin: 1em 0; background: #000; color: #ffd800; text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4); text-align: center;\">Welcome to SubLite!</h1>
 
-        SubLite is a subletting and internship platform exclusively for students. We want to ensure a safe and secure experience for you. We also want to make sure you are connected directly with recruiters when searching for jobs. That’s why we need you to click on the link below to verify your email address.
+        SubLite is a subletting and internship platform exclusively for students. We want to ensure a safe and secure experience for you. We also want to make sure you are connected directly with recruiters when searching for jobs. That&rsquo;s why we need you to click on the link below to verify your email address.
 
         <br /><br />
         <a href='$link'>$link</a>
