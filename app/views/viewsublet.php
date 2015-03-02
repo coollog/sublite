@@ -254,6 +254,14 @@
         </div>
 
         <div class="section2">
+          <div style="float: right;">
+            <style>
+              iframe {
+                margin: 0;
+              }
+            </style>
+            <div class="fb-like" data-href="https://sublite.net/housing/sublet.php?id=<?php vecho('_id'); ?>" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true" style="margin: 0; display: block;"></div>
+          </div>
           <div class="details">
             <div class="detail"><table>
               <tr><td class="detailpng" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/sublet/room.png');"></td></tr>
