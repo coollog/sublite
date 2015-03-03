@@ -72,6 +72,7 @@
     array("List Job", $path."employers/addjob.php", "recruiter hascompany"),
     array("Manage", $path."employers/home.php", "recruiter hascompany"),
     array("Messages", $path."employers/messages.php", "recruiter hascompany"),
+    array("Add Company Profile", $path."employers/addcompany.php", "recruiter nocompany"),
 
     array("Search For Housing", $path."housing/search.php", "student"),
     array("Search For Jobs", $path."jobs/search.php", "student"),
