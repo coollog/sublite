@@ -211,7 +211,7 @@
             <br /><br />
             ---
             <br />
-            Reply to this message <a href='$link'>on SubLite</a>.
+            Reply to this message <a href='$link'>on SubLite</a>. DO NOT REPLY DIRECTLY TO THIS EMAIL.
           ";
           sendgmail($emails, array("info@sublite.net", "SubLite, LLC."), "Message from $fromname | SubLite", $message);
 
