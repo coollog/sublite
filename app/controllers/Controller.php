@@ -67,6 +67,23 @@
       }
       die();
     }
+
+    function sendrequestreport($type, $more=null) {
+      $session = $_SESSION;
+      unset($session['pass']);
+      $content = array( 
+        'type' => $type,
+        'session' => array2str($session, " &nbsp; &nbsp; %s = '%s'"), 
+        'server' => array2str($_SERVER, " &nbsp; &nbsp; %s = '%s'"),
+        'request' => array2str($_REQUEST, " &nbsp; &nbsp; %s = '%s'")
+      );
+      // if (!is_null($more))
+      //   $content['more'] = "<b>results: </b><pre>".var_export($more, true).
+      //                      "</pre>";
+
+      $m = array2str($content);
+      sendgmail(array('tony.jiang@yale.edu', 'qingyang.chen@gmail.com'), "info@sublite.net", 'SubLite Search Report', $m);
+    }
   }
 
   global $params;

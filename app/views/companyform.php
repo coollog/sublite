@@ -1,7 +1,10 @@
 <panel class="form">
   <div class="content">
     <headline><?php vecho('headline'); ?> Company Profile</headline>
-    <form method="post">
+    <?php if (vget('submitname') == 'add') { ?>
+      <i>This form auto-saves, so you may return to finish the form later.</i>
+    <?php } ?>
+    <form method="post" id="company">
       <?php 
         if (vget('_id') !== null) {
           $id = vget('_id');
@@ -15,7 +18,7 @@
       <?php vpartial('industryselect'); ?>
 
       <div class="form-slider"><label for="size">Company size*: </label>
-      <select id="size" name = "size" required>
+      <select id="size" name="size" required>
         <?php vecho('size', '<option selected="selected">{var}</option>'); ?>
         <option>1-49 employees</option>
         <option>50-299 employees</option>
@@ -100,5 +103,68 @@
 </panel>
 
 <script>
-  formunloadmsg("Are you sure you wish to leave this page? Unsaved changes will be lost.");
+  <?php if (vget('submitname') == 'add') { ?>
+    formunloadfunction(function() { saveForm('#company') });
+  <?php } else { ?>
+    formunloadmsg("Are you sure you wish to leave this page? Unsaved changes will be lost.");
+  <?php } ?>
+
+  function saveForm(form) {
+    var inputData = {};
+    $(form).find('input:not(:checkbox)').each(function() {
+      inputData[$(this).attr('name')] = $(this).val();
+    });
+    var textareaData = {};
+    $(form).find('textarea').each(function() {
+      textareaData[$(this).attr('name')] = $(this).val();
+    });
+    var selectData = {};
+    $(form).find('select').each(function() {
+      selectData[$(this).attr('name')] = $(this).val();
+    });
+    var checkboxData = [];
+    $(form).find('input:checked').each(function() {
+      checkboxData.push({
+        name: $(this).attr('name'),
+        val: $(this).val()
+      });
+    });
+
+    var formData = {
+      'input': inputData,
+      'textarea': textareaData,
+      'checkbox': checkboxData,
+      'select': selectData
+    };
+    localStorage.setItem('form'+form, JSON.stringify(formData));
+  }
+  function loadForm(form) {
+    var formData = JSON.parse(localStorage.getItem('form'+form));
+
+    var inputData = formData['input'];
+    for (var name in inputData) {
+      $(form).find('input[name='+name+']').val(inputData[name]);
+    }
+    var textareaData = formData['textarea'];
+    for (var name in textareaData) {
+      $(form).find('textarea[name='+name+']').val(textareaData[name]);
+    }
+    var selectData = formData['select'];
+    for (var name in selectData) {
+      var val = selectData[name];
+      $(form).find('select[name='+name+']').find("option")
+        .filter(function() { return $(this).val() == val; })
+        .prop('selected', true);
+    }
+    var checkboxData = formData['checkbox'];
+    for (var i = 0; i < checkboxData.length; i ++) {
+      var name = checkboxData[i].name, val = checkboxData[i].val;
+      // Fix [] error in selector
+      name = name.replace('[]', '\\[\\]');
+      $(form).find('input[name='+name+']')
+        .filter(function() { return $(this).val() == val; })
+        .prop('checked', true);
+    }
+  }
+  <?php if (vget('submitname') == 'add') echo "loadForm('#company');"; ?>
 </script>
