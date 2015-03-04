@@ -51,6 +51,20 @@
       $stats = $this->getStats();
       return $stats['industriesbyjobs'];
     }
+
+    function recordSearch($type) {
+      $email = $_SESSION['email'];
+      $data = $_REQUEST;
+
+      $entry = $this->get('searches');
+      $entry[time()] = array(
+        'email' => $email,
+        'type' => $type,
+        'data' => $data
+      );
+
+      $this->save($entry);
+    }
   }
 
   $MApp = new AppModel();

@@ -446,8 +446,8 @@
             // $this->sendrequestreport("Search for sublets:", $sublets);
 
             // Save search to db
-            global $MStats;
-            $MStats->recordSearch('sublets');
+            global $MApp;
+            $MApp->recordSearch('sublets');
 
             return;
           }

@@ -12,15 +12,6 @@
       $this->db = $m->$GLOBALS['dbname'];
     }
 
-    function save($data) {
-      $this->collection->save($data);
-      return $data['_id'];
-    }
-
-    function get($id) {
-      return $this->collection->findOne(array('_id' => $id));
-    }
-
     function countRecruiters() {
       return $this->db->recruiters->count();
     }
@@ -114,16 +105,6 @@
     function countUniversities() {
       require_once($GLOBALS['dirpre'].'../housing/schools.php');
       return count($S->LUT);
-    }
-
-    function recordSearch($type) {
-      $entry = $this->get('searches');
-      $entry[] = array(
-        'type' => $type,
-        'searcher' => $_SESSION['email'],
-        'data' => $_REQUEST
-      );
-      $this->save($entry);
     }
   }
 
