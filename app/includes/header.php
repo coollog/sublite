@@ -17,6 +17,7 @@
   require_once($GLOBALS['dirpre'].'models/MessageModel.php');
   require_once($GLOBALS['dirpre'].'models/StatsModel.php');
   require_once($GLOBALS['dirpre'].'models/SubletModel.php');
+  require_once($GLOBALS['dirpre'].'controllers/AppController.php');
   require_once($GLOBALS['dirpre'].'controllers/MigrationsController.php');
   require_once($GLOBALS['dirpre'].'controllers/CompanyController.php');
   require_once($GLOBALS['dirpre'].'controllers/JobController.php');
