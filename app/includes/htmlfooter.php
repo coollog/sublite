@@ -15,10 +15,10 @@
     </style>
     <footer class="blackbar">
       <options class="left">
-        <a href="https://sublite.net/housing/team.php"><opt>The Team</opt></a>
-        <a href="faq.php"><opt>FAQ</opt></a>
-        <a href="privacy.php"><opt>Privacy</opt></a>
-        <a href="terms.php"><opt>Terms of Service</opt></a>
+        <a href="<?php echo $GLOBALS['dirpre']; ?>../team.php"><opt>The Team</opt></a>
+        <a href="<?php echo $GLOBALS['dirpre']; ?>../faq.php"><opt>FAQ</opt></a>
+        <a href="<?php echo $GLOBALS['dirpre']; ?>../privacy.php"><opt>Privacy</opt></a>
+        <a href="<?php echo $GLOBALS['dirpre']; ?>../terms.php"><opt>Terms of Service</opt></a>
       </options>
       <options class="right">
         <opt>
