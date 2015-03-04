@@ -386,7 +386,11 @@
         $this->render('searchresults', array('jobs' => $jobs, 'showCompany' => $showCompany));
 
         // Send email notification of search to us
-        $this->sendrequestreport("Search for jobs:", $jobs);
+        // $this->sendrequestreport("Search for jobs:", $jobs);
+
+        // Save search to db
+        global $MStats;
+        $MStats->recordSearch('jobs');
 
         return;
       }

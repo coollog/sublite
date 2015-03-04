@@ -13,6 +13,7 @@
       width: 100%;
       height: 100%;
       position: absolute;
+      cursor: pointer;
       transition: 0.5s all ease-in-out;
     }
     .photocontrol {

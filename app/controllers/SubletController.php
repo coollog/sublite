@@ -443,7 +443,11 @@
             ));
 
             // Send email notification of search to us
-            $this->sendrequestreport("Search for sublets:", $sublets);
+            // $this->sendrequestreport("Search for sublets:", $sublets);
+
+            // Save search to db
+            global $MStats;
+            $MStats->recordSearch('sublets');
 
             return;
           }
