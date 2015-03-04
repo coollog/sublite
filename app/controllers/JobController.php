@@ -389,8 +389,8 @@
         // $this->sendrequestreport("Search for jobs:", $jobs);
 
         // Save search to db
-        global $MStats;
-        $MStats->recordSearch('jobs');
+        global $MApp;
+        $MApp->recordSearch('jobs');
 
         return;
       }
