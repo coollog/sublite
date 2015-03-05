@@ -51,8 +51,8 @@
       $this->validate(
         $data['enddate'] >= $data['startdate'],
         $err, 'invalid dates');
-      $this->validate(count($data['photos']) >= 4, 
-        $err, 'must upload at least 4 photos');
+      $this->validate(count($data['photos']) >= 1, 
+        $err, 'must upload at least 1 photo');
     }
 
     function manage() {
