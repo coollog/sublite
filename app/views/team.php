@@ -8,10 +8,12 @@
   .membername {
     font-size: 2em;
     font-weight: bold;
+    color: #035d75;
   }
 
   .memberposition {
     font-weight: bold;
+    color: #035d75;
   }
 
   .memberimage {
@@ -25,11 +27,10 @@
   }
   .memberbox p {
     line-height: 1.3em;
-    color: #035d75;
   }
 
   .memberbio {
-    font-size: 0.9em;
+    font-size: 1em;
     min-height: 300px;
   }
 </style>

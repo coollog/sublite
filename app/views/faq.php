@@ -41,6 +41,8 @@
 
       <subheadline>Can I share an internship listing with a friend not registered on SubLite?</subheadline>
 
+      While you need to be a verified student with a .edu email to search housing and internship listings, you can share each with the listing’s url. Anyone who has the url will see the information although they won’t be able to interact with other registered users.
+
       <br /><br />
       <headline class="small">Housing</headline>
 

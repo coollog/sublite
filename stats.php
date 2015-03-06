@@ -5,5 +5,6 @@
   $CStats->nojobs();
   $CStats->students();
   $CStats->missingrecruiter();
+  $CStats->recruiterbydate();
   require_once($GLOBALS['dirpre'].'includes/footer.php');
 ?>

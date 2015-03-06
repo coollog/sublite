@@ -85,6 +85,28 @@
       echo '</textarea>';
 
     }
+    function recruiterbydate() {
+      global $MRecruiter, $MCompany;
+
+      $recruiters = $MRecruiter->find()->sort(array('_id'=>-1));
+
+      $rs = array();
+      foreach ($recruiters as $r) {
+        $email = $r['email'];
+        $company = $r['company'];
+        if (MongoId::isValid($company))
+          $company = $MCompany->getName($company);
+        $date = fdate($r['_id']->getTimestamp());
+        $rs[] = "\"$email\",\"$company\",\"$date\"";
+      }
+
+      echo '<br />Recruiters with date of joining:<br />
+        <textarea style="width:800px; height: 200px;">';
+      foreach ($rs as $r) {
+        echo "$r\n";
+      }
+      echo '</textarea>';
+    }
   }
 
   $CStats = new StatsController();
