@@ -256,12 +256,7 @@
 
         <div class="section2">
           <div style="float: right;">
-            <style>
-              iframe {
-                margin: 0;
-              }
-            </style>
-            <div class="fb-like" data-href="https://sublite.net/housing/sublet.php?id=<?php vecho('_id'); ?>" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true" style="z-index: 2;"></div>
+            <?php vpartial('fb', array('route' => 'housing/sublet.php?id='.vget('_id'))); ?>
           </div>
           <div class="details">
             <div class="detail"><table>

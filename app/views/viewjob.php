@@ -94,6 +94,9 @@
       echo vlinkto('<input type="button" class="button" value="Login or register to apply for this opening!" />', 'index');
     }
     ?>
+    <br /><br />
+    <?php vpartial('fb', array('route' => 'jobs/job.php?id='.vget('_id'))); ?>
+
     <div class="jobinfo">
       <table class="jobtable">
         <tr>
@@ -204,6 +207,9 @@
         </tr>
       </table>
     </div>
+
+    <?php vpartial('fb', array('route' => 'jobs/job.php?id='.vget('_id'))); ?>
+    <br /><br />
     <?php
       if(vget('Loggedinstudent') || vget('Loggedin')) {
     ?>
