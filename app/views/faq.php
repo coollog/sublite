@@ -41,7 +41,8 @@
 
       <subheadline>Can I share an internship listing with a friend not registered on SubLite?</subheadline>
 
-
+      <br />
+      <br />
       <headline class="small">Housing</headline>
 
       <subheadline>Who can create SubLite accounts?</subheadline>
