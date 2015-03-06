@@ -256,7 +256,7 @@
 
         <div class="section2">
           <div style="float: right;">
-            <?php vpartial('fb', array('route' => 'housing/sublet.php?id='.vget('_id'))); ?>
+            <?php vpartial('fb', array('route' => 'housing/sublet.php?id='.vget('id'))); ?>
           </div>
           <div class="details">
             <div class="detail"><table>

@@ -95,7 +95,7 @@
     }
     ?>
     <br /><br />
-    <?php vpartial('fb', array('route' => 'jobs/job.php?id='.vget('_id'))); ?>
+    <?php vpartial('fb', array('route' => 'jobs/job.php?id='.vget('id'))); ?>
 
     <div class="jobinfo">
       <table class="jobtable">
@@ -208,7 +208,7 @@
       </table>
     </div>
 
-    <?php vpartial('fb', array('route' => 'jobs/job.php?id='.vget('_id'))); ?>
+    <?php vpartial('fb', array('route' => 'jobs/job.php?id='.vget('id'))); ?>
     <br /><br />
     <?php
       if(vget('Loggedinstudent') || vget('Loggedin')) {
