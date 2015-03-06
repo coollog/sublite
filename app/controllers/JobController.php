@@ -238,6 +238,7 @@
         $MJob->save($entry, false);
 
         $data = $this->data($entry);
+        $data['_id'] = $entry['_id'];
         $data['salarytype'] = ($data['salarytype'] == 'total') ?
                               $data['duration'].' weeks' : $data['salarytype'];
         
