@@ -53,11 +53,14 @@
       <subheadline>How do I reserve a sublet?</subheadline>
       Once you find a sublet that you like, contact the host and work out a deal!
 
-      <subheadline>How do I contact the host?
+      <subheadline>How do I contact the host?</subheadline>
       Every sublet listing page has a profile card beneath the photos with a button to Contact Owner.
 
-      <subheadline>If my space is no longer available, how do I take it down?</subheadline>
-      <subheadline>Can I hide my listing so I can reuse it next year?</subheadline>
+      <subheadline>
+        If my space is no longer available, how do I take it down?
+        <br />
+        Can I hide my listing so I can reuse it next year?
+      </subheadline>
       Absolutely. We know that students may want to sublet the same space year after year. To make your life easier, we created a “publish-unpublish” function. You can unpublish your listing anytime by going to <a href="<?php vecho('dirpre'); ?>../housing/Manage.php">Manage</a>, clicking a listing to access its editing page, and unchecking the Publish? option. Next year when you’re ready to sublet again, simply check Publish? again to reactivate. You can also make edits to your listings anytime.
 
       <subheadline>What legal issues should I consider before hosting on SubLite?</subheadline>
