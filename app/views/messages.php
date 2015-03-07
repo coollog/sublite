@@ -34,18 +34,23 @@
     display: block;
   }
 
-  table.iblock {
+  .iblockwrapper {
     padding: 20px 40px;
-    display: table;
-    width: 100%;
     cursor: pointer;
     color: #000;
   }
-  table.iblock.current {
+  .iblockwrapper:hover {
     background: #fff;
   }
-  table.iblock.unread {
+  .iblockwrapper.current {
+    background: #fff;
+  }
+  .iblockwrapper.unread {
     border-left: 4px solid #f33;
+  }
+  table.iblock {
+    display: table;
+    width: 100%;
   }
   table.iblock profpic {
     width: 80px;
@@ -54,9 +59,6 @@
   }
   table.iblock .pp {
     width: 80px;
-  }
-  table.iblock:hover {
-    background: #fff;
   }
   profpic {
     background: transparent no-repeat center center;
@@ -80,11 +82,13 @@
     display: block;
   }
 
-  table.mblock {
+  .mblockwrapper {
     padding: 20px 40px;
+    border-bottom: 1px solid #eee;
+  }
+  table.mblock {
     display: table;
     width: 100%;
-    border-bottom: 1px solid #eee;
   }
   table.mblock profpic {
     width: 100px;
@@ -121,36 +125,44 @@
         <none>No messages so far.</none>
       <?php } ?>
       <?php foreach (vget('messages') as $m) { ?>
-        <a href="?id=<?php echo $m['_id']; ?>"><table class="iblock <?php if ($m['current']) echo 'current'; ?> <?php if (!$m['read']) echo 'unread'; ?>"><tr>
-          <td class="pp"><profpic style="background-image: url('<?php echo $m['frompic'] ?>');"></profpic></td>
-          <td><data>
-            <name><?php echo $m['fromname']; ?></name><time><?php echo $m['time']; ?></time>
-            <text><?php echo nl2br(autolink($m['msg'])); ?></text>
-          </data></td>
-        </tr></table></a>
+        <a href="?id=<?php echo $m['_id']; ?>">
+          <div class="iblockwrapper <?php if ($m['current']) echo 'current'; ?> <?php if (!$m['read']) echo 'unread'; ?>">
+            <table class="iblock"><tr>
+              <td class="pp"><profpic style="background-image: url('<?php echo $m['frompic'] ?>');"></profpic></td>
+              <td><data>
+                <name><?php echo $m['fromname']; ?></name><time><?php echo $m['time']; ?></time>
+                <text><?php echo autolink($m['msg']); ?></text>
+              </data></td>
+            </tr></table>
+          </div>
+        </a>
       <?php } ?>
     </td>
     <td class="mright">
       <?php if (!is_null(vget('current'))) { ?>
         <?php foreach (vget('current') as $m) { ?>
-          <table class="mblock"><tr>
-            <td class="pp"><profpic style="background-image: url('<?php echo $m['frompic'] ?>');"></profpic></td>
-            <td><data>
-              <name><?php echo $m['fromname']; ?></name><time><?php echo $m['time']; ?></time>
-              <text><?php echo nl2br(autolink($m['msg'])); ?></text>
-            </data></td>
-          </tr></table>
+          <div class="mblockwrapper">
+            <table class="mblock"><tr>
+              <td class="pp"><profpic style="background-image: url('<?php echo $m['frompic'] ?>');"></profpic></td>
+              <td><data>
+                <name><?php echo $m['fromname']; ?></name><time><?php echo $m['time']; ?></time>
+                <text><?php echo nl2br(autolink($m['msg'])); ?></text>
+              </data></td>
+            </tr></table>
+          </div>
         <?php } ?>
-        <table class="mblock">
-          <td class="pp"><profpic style="background-image: url('asdf');"></profpic></td>
-          <td><data>
-            <form method="post" action="?id=<?php vecho('currentid'); ?>">
-              <textarea id="msg" name="msg" required maxlength="2000" placeholder="Write Your Message:"><?php vecho('msg'); ?></textarea>
-              <?php vnotice(); ?>
-              <right><input type="submit" name="reply" value="Send" /></right>
-            </form>
-          </data></td>
-        </table>
+        <div class="mblockwrapper">
+          <table class="mblock">
+            <td class="pp"><profpic style="background-image: url('asdf');"></profpic></td>
+            <td><data>
+              <form method="post" action="?id=<?php vecho('currentid'); ?>">
+                <textarea id="msg" name="msg" required maxlength="2000" placeholder="Write Your Message:"><?php vecho('msg'); ?></textarea>
+                <?php vnotice(); ?>
+                <right><input type="submit" name="reply" value="Send" /></right>
+              </form>
+            </data></td>
+          </table>
+        </div>
       <?php } ?>
     </td>
   </tr></table>
