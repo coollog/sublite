@@ -12,7 +12,7 @@
   .search {
     height: 100%;
     display: table;
-    background: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/sublet/searchmap.png') no-repeat center center;
+    background: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/sublet/searchmap.jpg') no-repeat center center;
     background-size: cover;
   }
   .search .content {
