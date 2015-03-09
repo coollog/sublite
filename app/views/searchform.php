@@ -57,7 +57,7 @@
 </panel>
 <panel class="search">
   <div class="content">
-    <form method="post">
+    <form method="get">
       <input type="hidden" id="recruiter" name="recruiter" value="<?php vecho('recruiter'); ?>" />
 
       <div class="form-slider"><label for="title">Job Title:</label><input type="text" id="title" name="title" value="<?php vecho('title'); ?>" /></div>

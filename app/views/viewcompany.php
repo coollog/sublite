@@ -155,7 +155,7 @@
       </table>
     </div>
 
-    <a href="search.php?company=<?php vecho('name'); ?>"><input type="button" value="View Job Listings" /></a>
+    <a href="search.php?bycompany=<?php vecho('name'); ?>"><input type="button" value="View Job Listings" /></a>
 
     <?php if (vget('isme')) { ?>
       <br /><br />

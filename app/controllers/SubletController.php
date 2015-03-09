@@ -278,6 +278,7 @@
       global $CStudent; $CStudent->requireLogin();
 
       global $params;
+      $params = $_REQUEST;
       global $MSublet, $MStudent;
 
       // process without sorting/filtering
@@ -333,7 +334,7 @@
       // Predefined searches
       $showSearch = true;
 
-      if ($showSearch and !isset($_POST['search'])) {
+      if ($showSearch and !isset($params['search'])) {
         // If not searching for anything, then return last 6 entries
         $res = $MSublet->last(6);
         $sublets = array();

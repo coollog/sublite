@@ -30,7 +30,7 @@
   }
 </style>
 <panel class="search">
-  <form method="post">
+  <form method="get">
     <div class="form-slider"><label for="location">Where do you want to sublet? </label><input type="text" id="location" name="location" value="<?php vecho('location'); ?>" required /></div>
 
     <div class="sliderlabel">Max distance to search (mi): </div>

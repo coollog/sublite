@@ -207,6 +207,10 @@
           $message = "
             $fromname has sent you a message on SubLite:
             <br /><br />
+            View the message on SubLite: <a href='$link'>$link</a>
+            <br />
+            ---
+            <br /><br />
             $msg
             <br /><br />
             ---

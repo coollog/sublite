@@ -295,6 +295,7 @@
       $this->requireLogin();
 
       global $params;
+      $params = $_REQUEST;
       global $MJob, $MStudent, $MCompany, $MRecruiter;
 
       // Function for processing results and showing them
@@ -315,19 +316,19 @@
       // Predefined searches
       $showSearch = true;
       $showCompany = null;
-      if (isset($_GET['recruiter'])) {
+      if (isset($_GET['byrecruiter'])) {
         $params = $this->dataSearchEmpty();
-        $params['recruiter'] = $_GET['recruiter'];
+        $params['recruiter'] = $_GET['byrecruiter'];
         $showSearch = false;
       }
-      if (isset($_GET['company'])) {
+      if (isset($_GET['bycompany'])) {
         $params = $this->dataSearchEmpty();
-        $params['company'] = $_GET['company'];
-        $showCompany = $MCompany->getByName($_GET['company']);
+        $params['company'] = $_GET['bycompany'];
+        $showCompany = $MCompany->getByName($_GET['bycompany']);
         $showSearch = false;
       }
 
-      if ($showSearch and !isset($_POST['search'])) {
+      if ($showSearch and !isset($params['search'])) {
         // If not searching for anything, then return last 5 entries
         $res = $MJob->last(5);
         $jobs = process($res);
