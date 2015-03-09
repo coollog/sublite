@@ -332,7 +332,7 @@
         "Pool" => "pool",
         "Rooftop Access" => "rooftop",
         "Yard" => "fence",
-        "In-Building Mailboxes" => "mail",
+        "In-Building Mailboxes" => "mailboxes",
         "Laundry Machines" => "laundry",
         "Wi-Fi" => "wifi",
         "Cable" => "cable",
