@@ -350,8 +350,8 @@
             <tr><td class="amenityname"><?php echo $amenity; ?></td></tr>
           </table>
         </div>
-        $amenitiesn ++;
     <?php
+        $amenitiesn ++;
       }
       if ($amenitiesn == 0) {
     ?>
