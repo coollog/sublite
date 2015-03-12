@@ -332,7 +332,7 @@
         "Pool" => "pool",
         "Rooftop Access" => "rooftop",
         "Yard" => "fence",
-        "In-Building Mailboxes" => "mailboxes",
+        "In-Building Mailboxes" => "mail",
         "Laundry Machines" => "laundry",
         "Wi-Fi" => "wifi",
         "Cable" => "cable",
@@ -340,6 +340,7 @@
         "Sports Fields" => "ball"
       );
       foreach (vget('amenities') as $amenity) {
+        if (!isset($amenities[$amenity])) continue;
         $png = $amenities[$amenity];
     ?>
         <div class="amenity">
