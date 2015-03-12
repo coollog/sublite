@@ -339,6 +339,7 @@
         "Wheelchair Accessibility" => "handicap",
         "Sports Fields" => "ball"
       );
+      $amenitiesn = 0;
       foreach (vget('amenities') as $amenity) {
         if (!isset($amenities[$amenity])) continue;
         $png = $amenities[$amenity];
@@ -349,9 +350,10 @@
             <tr><td class="amenityname"><?php echo $amenity; ?></td></tr>
           </table>
         </div>
-    <?php  
+        $amenitiesn ++;
+    <?php
       }
-      if (count(vget('amenities')) == 0) {
+      if ($amenitiesn == 0) {
     ?>
         <i>No amenities reported.</i>
     <?php
