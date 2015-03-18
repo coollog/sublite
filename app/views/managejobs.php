@@ -22,7 +22,6 @@
 <panel class="jobs">
   <div class="content">
     <headline>Manage Job Listings</headline>
-    <div>(Analytics Under Construction)</div>
     <?php
       function jobBlock($job) {
         $title = $job['title'];
@@ -53,6 +52,8 @@
         $totalViewCount += $job['stats']['views'];
         $totalApplyCount += $job['stats']['clicks'];
       }
+      echo '<div style="font-size: 16px;">You have a total of <b>' . $totalViewCount . "</b> views on your listings and <b>"
+        . $totalApplyCount . '</b> clicks on the "Apply Now" button.</div>';
       foreach ($jobs as $job) {
         echo vlinkto(jobBlock($job), 'editjob', array('id' => $job['_id']->{'$id'}));
       }
