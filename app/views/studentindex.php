@@ -288,8 +288,8 @@
   <div class="content">
     <div class="stat"><num><?php vecho('users'); ?></num><type>users</type></div>
     <div class="stat"><num><?php vecho('universities'); ?></num><type>universities</type></div>
-    <div class="stat"><num><?php vecho('listings'); ?></num><type>listings</type></div>
-    <div class="stat"><num><?php vecho('cities'); ?></num><type>cities</type></div>
+    <div class="stat"><num><?php vecho('jobs'); ?></num><type>jobs</type></div>
+    <div class="stat"><num><?php vecho('sublets'); ?></num><type>sublets</type></div>
     <div class="stat"><num><?php vecho('companies'); ?></num><type>companies</type></div>
   </div>
 </panel>

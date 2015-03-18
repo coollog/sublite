@@ -58,13 +58,13 @@
       global $MApp;
       $stats = $MApp->getStats();
       $users = $stats['recruiters'] + $stats['students'];
-      $listings = $stats['jobs'] + $stats['sublets'];
 
       $r = isset($_GET['r']) ? $_GET['r'] : null;
 
       $this->render('studentindex', array(
         'users' => $users,
-        'listings' => $listings,
+        'jobs' => $stats['jobs'],
+        'sublets' => $stats['sublets'],
         'universities' => $stats['universities'],
         'cities' => $stats['cities'],
         'companies' => $stats['companies'],
