@@ -6,7 +6,8 @@
     vertical-align: top;
   }
   .search form {
-    display: none;
+    height: 0;
+    opacity: 0;
   }
   .collapse {
   }
@@ -62,6 +63,9 @@
 </panel>
 
 <script>
+  setTimeout(function() {
+    $('.search form').css('height', 'auto').css('opacity', 1).hide();
+  }, 500);
   $('.collapse').click(function () {
     scrollTo('.search');
     $('.search form').slideToggle(300, 'easeInOutCubic', function () {

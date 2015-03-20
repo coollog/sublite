@@ -56,7 +56,7 @@
   .results {
     width: 75%;
   <?php if (is_null(vget('recent'))) { ?>
-    padding: 20px;
+    padding: 0;
   <?php } ?>
     display: inline-block;
     box-sizing: border-box;
@@ -277,6 +277,8 @@
 <?php } ?>
 
 <panel class="results">
+  <?php if (vget('showSearch')) vpartial('subletsearchform', vget('data')); ?>
+
   <?php if (!is_null(vget('recent'))) { ?>
     <div class="content">
       <headline>Recent Listings</headline>

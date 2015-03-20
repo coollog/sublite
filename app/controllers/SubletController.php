@@ -443,11 +443,11 @@
 
             $delay = round((microtime(true) - $starttime) * 1000, 0);
 
-            if ($showSearch) $this->render('subletsearchform', $data);
             $this->render('subletsearchresults', array(
               'sublets' => $sublets, 'delay' => $delay, 
               'latitude' => $latitude, 'longitude' => $longitude,
-              'maxProximity' => $maxProximity
+              'maxProximity' => $maxProximity, 'showSearch' => $showSearch,
+              'data' => $data
             ));
 
             // Send email notification of search to us
@@ -463,7 +463,7 @@
       }
 
       $this->error($err);
-      $this->render('subletsearchform', $data);
+      $this->render('partials/subletsearchform', $data);
     }
   }
   $CSublet = new SubletController();
