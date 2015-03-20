@@ -374,7 +374,7 @@
       width: 100%;
     }
   </style>
-  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDORLARDVNHaHBSLZ0UG-1EGABk-IH2uq0"></script>
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyDORLARDVNHaHBSLZ0UG-1EGABk-IH2uq0&sensor=false"></script>
   <script type="text/javascript">
     function initialize() {
       var myLatlng = new google.maps.LatLng(<?php vecho('latitude'); ?>, <?php vecho('longitude'); ?>);
