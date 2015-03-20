@@ -210,7 +210,7 @@
       var mapOptions = {
         center: searchzone,
         /*adjust number to change starting zoom size*/
-        zoom: Math.round(13 - <?php vecho('maxProximity') ?> / 50 * 3),
+        zoom: Math.round(14 - <?php vecho('maxProximity') ?> / 50 * 2),
         styles: styles
       };
 
