@@ -317,7 +317,7 @@
 <panel class="summary">
   <div class="content">
     <subheadline>Summary</subheadline>
-    <?php vecho('summary'); ?>
+    <?php echo nl2br(vget('summary')); ?>
   </div>
 </panel>
 
