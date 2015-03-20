@@ -207,6 +207,8 @@
             $me['name'];
         }
         
+        $data['latitude'] = $data['geocode']['latitude'];
+        $data['longitude'] = $data['geocode']['longitude'];
         $data['address'] = 
           $data['address'].', '.$data['city'].', '.$data['state'];
         if (count($data['photos']) == 0)

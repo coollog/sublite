@@ -367,6 +367,64 @@
     <i>No comments so far. Be the first to comment!</i>
   </div>
 </panel>
+<panel class="map" style="padding: 0;">
+  <style type="text/css">
+    #map-canvas{
+      height: 300px;
+      width: 100%;
+    }
+  </style>
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDORLARDVNHaHBSLZ0UG-1EGABk-IH2uq0"></script>
+  <script type="text/javascript">
+    function initialize() {
+      var myLatlng = new google.maps.LatLng(<?php vecho('latitude'); ?>, <?php vecho('longitude'); ?>);
+
+      var styles = [
+        {
+          stylers: [
+            { hue: "#035d75" },
+            { saturation: -10 }
+          ]
+        },{
+          featureType: "road",
+          elementType: "geometry",
+          stylers: [
+            { lightness: 10},
+            { visibility: "simplified" }
+          ]
+        },{
+          featureType: "road.local",
+          elementType: "labels",
+          stylers: [
+            { visibility: "off" }
+          ]
+        }
+      ];
+
+      var mapOptions = {
+        center: myLatlng,
+        /*adjust number to change starting zoom size*/
+        zoom: 15,
+        styles: styles
+      };
+
+      var map = new google.maps.Map(document.getElementById('map-canvas'),
+          mapOptions);
+
+      //set icon for marker
+      var houseicon = '<?php echo $GLOBALS['dirpre']; ?>assets/gfx/map/marker.png';
+
+      var marker = new google.maps.Marker({
+        position: myLatlng,
+        map: map,
+        icon: houseicon
+      });
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+  </script>
+  <div id="map-canvas"></div>
+</panel>
 
 <div class="pop">
   <div class="poptable">
