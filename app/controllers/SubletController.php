@@ -297,6 +297,10 @@
 
         $sublet['proximity'] = isset($sublet['proximity']) ? $sublet['proximity'] : null;
 
+        $sublet['summary'] = strmax($sublet['summary'], 100);
+        $sublet['latitude'] = $sublet['geocode']['latitude'];
+        $sublet['longitude'] = $sublet['geocode']['longitude'];
+
         return $sublet;
       }
 
@@ -321,12 +325,11 @@
         }
         switch ($sortby) {
           case 'proximityIncreasing':
-            function sorter($a, $b) {
+            usort($sublets, function ($a, $b) {
               if ($a['proximity'] < $b['proximity']) return -1;
               if ($a['proximity'] > $b['proximity']) return 1;
               return 0;
-            }
-            usort($sublets, 'sorter');
+            });
             break;
         }
         
@@ -442,7 +445,9 @@
 
             if ($showSearch) $this->render('subletsearchform', $data);
             $this->render('subletsearchresults', array(
-              'sublets' => $sublets, 'delay' => $delay
+              'sublets' => $sublets, 'delay' => $delay, 
+              'latitude' => $latitude, 'longitude' => $longitude,
+              'maxProximity' => $maxProximity
             ));
 
             // Send email notification of search to us

@@ -68,4 +68,8 @@
 
     require($GLOBALS['dirpre']."views/partials/$page.php");
   }
+
+  function jsecho($str) {
+    echo str_replace(array("\r", "\n"), '', $str);
+  }
 ?>

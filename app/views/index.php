@@ -160,11 +160,6 @@
 
 <script>
   $(function() {
-    function scrollTo(q) {
-      $('html, body').finish().animate({
-        scrollTop: $(q).offset().top
-      }, 200);
-    }
     function getStep(q) {
       return parseInt($(q).find('.bignum').html());
     }

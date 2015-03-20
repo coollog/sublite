@@ -1,32 +1,14 @@
 <style>
   .search {
-    width: 24%;
+    width: 100%;
     padding: 20px;
-    display: inline-block;
     box-sizing: border-box;
     vertical-align: top;
-    float: left;
   }
-
-  .form-slider label {
-    position: static !important;
-    display: block !important;
-    text-align: left;
+  .search form {
+    display: none;
   }
-  .sliderlabel {
-    /*text-align: left;*/
-  }
-
-  @media (min-width: 1000px) {
-    .form-half1, .form-half2 {
-      width: 100%;
-    }
-  }
-  @media (max-width: 1000px) {
-    .search {
-      display: block;
-      width: 100%;
-    }
+  .collapse {
   }
 </style>
 <panel class="search">
@@ -76,4 +58,17 @@
     <?php vnotice(); ?>
     <input type="submit" name="search" value="Search" />
   </form>
+  <input type="button" class="collapse" value="Show Filters" />
 </panel>
+
+<script>
+  $('.collapse').click(function () {
+    scrollTo('.search');
+    $('.search form').slideToggle(300, 'easeInOutCubic', function () {
+      if ($($('.collapse')).val() == 'Show Filters')
+        $($('.collapse')).val('Hide Filters');
+      else
+        $($('.collapse')).val('Show Filters');
+    });
+  });
+</script>
