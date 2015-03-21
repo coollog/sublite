@@ -148,10 +148,10 @@
       overflow-y: visible;
     }
     .subletblock {
-      width: 40vw;
+      width: 400px;
     }
     .subletlink {
-      width: 40vw;
+      width: 400px;
     }
   }
   @media (max-width: 900px) {
