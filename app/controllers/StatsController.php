@@ -107,6 +107,27 @@
       }
       echo '</textarea>';
     }
+    function subletsended2014() {
+      global $MSublet, $MStudent;
+
+      $sublets = $MSublet->find(array('enddate' => array('$lte', strtotime('1/1/2015'))));
+
+      $ss = array();
+      foreach ($sublets as $s) {
+        $id = $s['_id'];
+        $student = $MStudent->getById($s['student']);
+        $name = $student['name'];
+        $email = $student['email'];
+        $ss[] = "\"$email\",\"$name\",\"$id\"";
+      }
+
+      echo '<br />Sublets with end dates before 1/1/2015:<br />
+        <textarea style="width:800px; height: 200px;">';
+      foreach ($ss as $s) {
+        echo "$s\n";
+      }
+      echo '</textarea>';
+    }
   }
 
   $CStats = new StatsController();

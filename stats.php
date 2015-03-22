@@ -7,5 +7,6 @@
   $CStats->students();
   $CStats->missingrecruiter();
   $CStats->recruiterbydate();
+  $CStats->subletsended2014();
   require_once($GLOBALS['dirpre'].'includes/footer.php');
 ?>
