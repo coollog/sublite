@@ -110,7 +110,7 @@
     function subletsended2014() {
       global $MSublet, $MStudent;
 
-      $sublets = $MSublet->find(array('enddate' => array('$lte', strtotime('1/1/2015'))));
+      $sublets = $MSublet->find(array('enddate' => array('$lte' => strtotime('1/1/2015'))));
 
       $ss = array();
       foreach ($sublets as $s) {
