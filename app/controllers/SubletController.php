@@ -31,6 +31,7 @@
       }
       $publish = $data['publish'];
       $comments = $data['comments'];
+      $commented = isset($data['commented']);
 
       return array(
         'student' => $student, 'address' => $address, 'gender' => $gender,
@@ -40,7 +41,8 @@
         'roomtype' => $roomtype, 'buildingtype' => $buildingtype, 
         'photos' => $photos,
         'amenities' => $amenities, 'publish' => $publish, 
-        'comments' => $comments, 'pricetype' => $pricetype
+        'comments' => $comments, 'commented' => $commented,
+        'pricetype' => $pricetype
       );
     }
 
@@ -168,7 +170,7 @@
       // Validations
       $this->startValidations();
       $this->validate(isset($_GET['id']) and 
-        ($entry = $MSublet->get($_GET['id'])) != NULL, 
+        ($entry = $MSublet->get($id = $_GET['id'])) != NULL, 
         $err, 'unknown sublet');
       if ($this->isValid())
         $this->validate(
@@ -177,6 +179,32 @@
 
       // Code
       if ($this->isValid()) {
+        if (isset($_POST['addcomment'])) {
+          function dataComment($data) {
+            $comment = clean($data['comment']);
+
+            return array('comment' => $comment);
+          }
+
+          global $params;
+          extract($data = dataComment($params));
+
+          array_unshift($entry['comments'], array(
+            'time' => time(),
+            'commenter' => $_SESSION['_id'], 'comment' => $comment
+          ));
+          $entry['commented'] = true;
+
+          // Notify us of the comment
+          $commenter = $_SESSION['email'];
+          $message = "
+            <b>$commenter</b> has commented on <a href=\"http://sublite.net/housing/sublet.php?id=$id\">$id</a>:
+            <br /><br />
+            $comment
+          ";
+          sendgmail(array('tony.jiang@yale.edu', 'qingyang.chen@gmail.com'), "info@sublite.net", 'Comment posted on SubLite!', $message);
+        }
+
         $entry['stats']['views']++;
         $MSublet->save($entry);
 
@@ -218,6 +246,17 @@
         switch ($data['gender']) {
           case 'male': $data['gender'] = 'Male only'; break;
           case 'female': $data['gender'] = 'Female only'; break;
+        }
+
+        for ($i = 0; $i < count($data['comments']); $i ++) {
+          $comment = $data['comments'][$i];
+          $commenter = $MStudent->getById($comment['commenter']);
+          $data['comments'][$i] = array(
+            'name' => $commenter['name'],
+            'photo' => $commenter['photo'],
+            'time' => timeAgo($comment['time']),
+            'text' => $comment['comment']
+          );
         }
 
         $this->render('viewsublet', $data);

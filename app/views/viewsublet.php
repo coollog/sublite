@@ -224,6 +224,10 @@
       popPhoto($(this).attr('photo'));
     });
     $('.pop').click(function() { $(this).fadeOut(100, 'easeInOutCubic'); });
+
+    <?php if (vget('commented')) { ?>
+      scrollTo('.comments');
+    <?php } ?>
   });
 </script>
 
@@ -364,7 +368,87 @@
 <panel class="comments">
   <div class="content">
     <subheadline>Comments</subheadline>
-    <i>No comments so far. Be the first to comment!</i>
+    <form method="post">
+      <?php if (count(vget('comments')) == 0) { ?>
+        <i>No comments so far. Be the first to comment!</i><br />
+      <?php } else { ?>
+
+        <style>
+          .comment {
+            border-bottom: 1px solid #eee;
+            padding: 20px;
+          }
+          .comment:last-of-type {
+            border-bottom: 0;
+            padding-bottom: 0;
+          }
+          table.commentblock {
+            display: table;
+            width: 100%;
+          }
+          table.commentblock td {
+            vertical-align: top;
+          }
+          table.commentblock profpic {
+            width: 80px;
+            height: 80px;
+            border-radius: 40px;
+          }
+          table.commentblock .pp {
+            width: 80px;
+          }
+          profpic {
+            background: transparent no-repeat center center;
+            background-size: cover;
+            display: block;
+          }
+          name {
+            font-size: 1.2em;
+            color: #035d75;
+            font-weight: 700;
+          }
+          time {
+            opacity: 0.5;
+            margin-left: 1em;
+          }
+          data {
+            display: block;
+            margin-left: 2em;
+          }
+          text {
+            display: block;
+          }
+        </style>
+        <?php
+          foreach (vget('comments') as $comment) {
+            extract($comment);
+        ?>
+          <div class="comment">
+            <table class="commentblock"><tr>
+              <td class="pp"><profpic style="background-image: url('<?php echo $photo ?>');"></profpic></td>
+              <td><data>
+                <name><?php echo $name; ?></name><time><?php echo $time ?></time>
+                <text><?php echo $text; ?></text>
+              </data></td>
+            </tr></table>
+          </div>
+        <?php } ?>
+
+      <?php } ?>
+      <br />
+      <?php if(!vget('Loggedinstudent')) { ?>
+        <i>You must <a href="../login.php">login</a> or <a href="../register.php">register</a> to comment.</i>
+      <?php } else { ?>
+
+        <textarea id="comment" name="comment" required maxlength="2000" placeholder="Write Your Comment:"><?php vecho('comment'); ?></textarea>
+        <?php vnotice(); ?>
+        <right>
+          <?php vpartial('fb', array('route' => 'housing/sublet.php?id='.vget('_id'))); ?>
+          &nbsp; <input type="submit" name="addcomment" value="Comment" />
+        </right>
+
+      <?php } ?>
+    </form>
   </div>
 </panel>
 <panel class="map" style="padding: 0;">
