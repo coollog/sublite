@@ -208,7 +208,7 @@
         $entry['stats']['views']++;
         $MSublet->save($entry);
 
-        $data = $this->data($entry);
+        $data = $entry;
         $data['_id'] = $entry['_id'];
         
         // ANY MODiFICATIONS ON DATA GOES HERE
