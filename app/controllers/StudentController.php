@@ -164,7 +164,8 @@
             <br /><br /><br />
             <i>Thanks again!<br />
             Team SubLite</i>";
-          sendgmail($referrer['email'], array("info@sublite.net", "Yuanling Yuan - SubLite, LLC."), 'SubLite - Successful Referral!', $message);
+          sendgmail($referrer['email'], array("info@sublite.net", 
+            "SubLite, LLC."), 'SubLite - Successful Referral!', $message);
         }
 
         $this->render('studentregisterfinish', array(
@@ -332,6 +333,98 @@
 
       $this->error($err);
       $this->render('studentform', $data);
+    }
+
+    function dataChangePass($data) {
+      $pass = $data['pass'];
+      $pass2 = $data['pass2'];
+      return array(
+        'pass' => $pass, 'pass2' => $pass2
+      );
+    }
+    function changePass() {
+      global $params, $MStudent;
+
+      // Validations
+      $this->startValidations();
+      $this->validate(
+          isset($_GET['id']) and isset($_GET['code']) and 
+          ($entry = $MStudent->getByID($id = $_GET['id'])) != NULL and
+          $entry['pass'] == $_GET['code'], 
+        $err, 'permission denied');
+
+      if ($this->isValid()) {
+        if (!isset($_POST['change'])) { $this->render('changepass'); return; }
+
+        extract($data = $this->dataChangePass($params));
+
+        $this->validate($pass == $pass2, $err, 'password mismatch');
+
+        if ($this->isValid()) {
+          $entry['pass'] = md5($pass);
+          $MStudent->save($entry);
+
+          $params['email'] = $entry['email'];
+          $_POST['login'] = true; $this->login();
+          return;
+        }
+
+        $this->error($err);
+        $this->render('changepass', $data);
+        return;
+      }
+
+      $this->error($err);
+      $this->render('notice');
+    }
+
+    function dataForgotPass($data) {
+      $email = strtolower($data['email']);
+
+      return array(
+        'email' => $email
+      );
+    }
+    function forgotPass() {
+      global $params, $MStudent;
+
+      if (!isset($_POST['forgot'])) { $this->render('forgotpass'); return; }
+
+      extract($data = $this->dataForgotPass($params));
+
+      // Validations
+      $this->startValidations();
+      $this->validate(($entry = $MStudent->get($email)) != NULL, 
+        $err, 'no account found');
+      $this->validate(isset($entry['pass']),
+        $err, 'account has not been confirmed yet. to resend a confirmation email, <a href="register.php">register</a> your email address again.');
+
+      if ($this->isValid()) {
+        $id = $entry['_id'];
+        $name = $entry['name'];
+        $pass = $entry['pass'];
+        $link = "http://sublite.net/changepass.php?id=$id&code=$pass";
+
+        $msg = "Hi $name!
+                <br /><br />
+                Below please find the link to reset your password. Thanks for using SubLite!
+                <br /><br />
+                Change your password here: <a href=\"$link\">$link</a>
+                <br /><br />
+                If you did not request this password reset, please contact us at <a href=\"mailto:info@sublite.net\">info@sublite.net</a>.
+                <br /><br />
+                Best,<br />
+                The SubLite Team";
+        sendgmail($email, array("info@sublite.net", 
+          "SubLite, LLC."), 'SubLite Student Account Password Reset', $msg);
+
+        $this->success('A link to reset your password has been sent to your email. If you do not receive it in the next hour, check your spam folder or whitelist info@sublite.net. <a href="mailto: info@sublite.net">Contact us</a> if you have any further questions.');
+        $this->render('forgotpass');
+        return;
+      }
+
+      $this->error($err);
+      $this->render('forgotpass', $data);
     }
 
     function whereto() {
