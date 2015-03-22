@@ -12,7 +12,7 @@
   .search {
     height: 100%;
     display: table;
-    background: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/sublet/searchmap.png') no-repeat center center;
+    background: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/sublet/searchmap.jpg') no-repeat center center;
     background-size: cover;
   }
   .search .content {
@@ -41,7 +41,7 @@
   <div class="content">
     <div class="tagline">Select Location &amp; Date</div>
 
-    <form method="post" style="width: 300px;">
+    <form method="get" style="width: 300px;">
       <div class="form-slider"><label for="location">Address </label><input type="text" id="location" name="location" value="<?php vecho('location'); ?>" /></div>
 
       <div class="form-slider startdate"><label for="startdate">From </label><input class="datepicker" type="text" id="startdate" name="startdate" value="<?php vecho('startdate'); ?>" /></div>

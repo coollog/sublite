@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <?php
       // Facebook meta tags
@@ -93,6 +94,7 @@
     <script src="<?php echo $GLOBALS['dirpre']; ?>assets/js/jquery.slidinglabels.min.js"></script>
     <?php require_once($GLOBALS['dirpre'].'assets/jqueryui/jquery-uimincss.php'); ?>
 
+    <?php require_once($GLOBALS['dirpre'].'assets/js/mainjs.php'); ?>
     <?php require_once($GLOBALS['dirpre'].'assets/js/formjs.php'); ?>
     <?php require_once($GLOBALS['dirpre'].'assets/css/maincss.php'); ?>
     <?php require_once($GLOBALS['dirpre'].'assets/css/formcss.php'); ?>

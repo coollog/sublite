@@ -135,7 +135,8 @@
                 <br /><br />
                 Best,<br />
                 The SubLite Team";
-        sendgmail(array($email), 'yuanling.yuan@yale.edu', 'SubLite Employers Account Approved!', $msg);
+        sendgmail(array($email), array("info@sublite.net", 
+          "SubLite, LLC."), 'SubLite Employers Account Approved!', $msg);
         
         echo 'Approved and automatic notification email sent!';
         return;
@@ -300,7 +301,8 @@
                 <br /><br />
                 Best,<br />
                 The SubLite Team";
-        sendgmail($email, 'yuanling.yuan@yale.edu', 'SubLite Recruiter Account Password Reset', $msg);
+        sendgmail($email, array("info@sublite.net", 
+          "SubLite, LLC."), 'SubLite Recruiter Account Password Reset', $msg);
 
         $this->success('A link to reset your password has been sent to your email. If you do not receive it in the next hour, check your spam folder or whitelist info@sublite.net. <a href="mailto: info@sublite.net">Contact us</a> if you have any further questions.');
         $this->render('forgotpass');

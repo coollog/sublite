@@ -56,7 +56,9 @@
       $email = $_SESSION['email'];
       $data = $_REQUEST;
 
-      $entry = $this->get('searches');
+      if (($entry = $this->get('searches')) == NULL)
+        $entry = array();
+      $entry['_id'] = 'searches';
       $entry[time()] = array(
         'email' => $email,
         'type' => $type,

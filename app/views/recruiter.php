@@ -42,7 +42,7 @@
       <?php } ?>
     </div>
 
-    <a href="search.php?recruiter=<?php vecho('recruiterid'); ?>"><input type="button" value="View Job Listings" /></a>
+    <a href="search.php?byrecruiter=<?php vecho('recruiterid'); ?>"><input type="button" value="View Job Listings" /></a>
 
     <?php if (vget('isme')) { ?>
       <br /><br />

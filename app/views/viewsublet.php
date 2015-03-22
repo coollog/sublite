@@ -224,6 +224,10 @@
       popPhoto($(this).attr('photo'));
     });
     $('.pop').click(function() { $(this).fadeOut(100, 'easeInOutCubic'); });
+
+    <?php if (vget('commented')) { ?>
+      scrollTo('.comments');
+    <?php } ?>
   });
 </script>
 
@@ -256,12 +260,7 @@
 
         <div class="section2">
           <div style="float: right;">
-            <style>
-              iframe {
-                margin: 0;
-              }
-            </style>
-            <div class="fb-like" data-href="https://sublite.net/housing/sublet.php?id=<?php vecho('_id'); ?>" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true" style="z-index: 2;"></div>
+            <?php vpartial('fb', array('route' => 'housing/sublet.php?id='.vget('_id'))); ?>
           </div>
           <div class="details">
             <div class="detail"><table>
@@ -322,7 +321,7 @@
 <panel class="summary">
   <div class="content">
     <subheadline>Summary</subheadline>
-    <?php vecho('summary'); ?>
+    <?php echo nl2br(vget('summary')); ?>
   </div>
 </panel>
 
@@ -344,7 +343,9 @@
         "Wheelchair Accessibility" => "handicap",
         "Sports Fields" => "ball"
       );
+      $amenitiesn = 0;
       foreach (vget('amenities') as $amenity) {
+        if (!isset($amenities[$amenity])) continue;
         $png = $amenities[$amenity];
     ?>
         <div class="amenity">
@@ -353,9 +354,10 @@
             <tr><td class="amenityname"><?php echo $amenity; ?></td></tr>
           </table>
         </div>
-    <?php  
+    <?php
+        $amenitiesn ++;
       }
-      if (count(vget('amenities')) == 0) {
+      if ($amenitiesn == 0) {
     ?>
         <i>No amenities reported.</i>
     <?php
@@ -366,8 +368,146 @@
 <panel class="comments">
   <div class="content">
     <subheadline>Comments</subheadline>
-    <i>No comments so far. Be the first to comment!</i>
+    <form method="post">
+      <?php if (count(vget('comments')) == 0) { ?>
+        <i>No comments so far. Be the first to comment!</i><br />
+      <?php } else { ?>
+
+        <style>
+          .comment {
+            border-bottom: 1px solid #eee;
+            padding: 20px;
+          }
+          .comment:last-of-type {
+            border-bottom: 0;
+            padding-bottom: 0;
+          }
+          table.commentblock {
+            display: table;
+            width: 100%;
+          }
+          table.commentblock td {
+            vertical-align: top;
+          }
+          table.commentblock profpic {
+            width: 80px;
+            height: 80px;
+            border-radius: 40px;
+          }
+          table.commentblock .pp {
+            width: 80px;
+          }
+          profpic {
+            background: transparent no-repeat center center;
+            background-size: cover;
+            display: block;
+          }
+          name {
+            font-size: 1.2em;
+            color: #035d75;
+            font-weight: 700;
+          }
+          time {
+            opacity: 0.5;
+            margin-left: 1em;
+          }
+          data {
+            display: block;
+            margin-left: 2em;
+          }
+          text {
+            display: block;
+          }
+        </style>
+        <?php
+          foreach (vget('comments') as $comment) {
+            extract($comment);
+        ?>
+          <div class="comment">
+            <table class="commentblock"><tr>
+              <td class="pp"><profpic style="background-image: url('<?php echo $photo ?>');"></profpic></td>
+              <td><data>
+                <name><?php echo $name; ?></name><time><?php echo $time ?></time>
+                <text><?php echo $text; ?></text>
+              </data></td>
+            </tr></table>
+          </div>
+        <?php } ?>
+
+      <?php } ?>
+      <br />
+      <?php if(!vget('Loggedinstudent')) { ?>
+        <i>You must <a href="../login.php">login</a> or <a href="../register.php">register</a> to comment.</i>
+      <?php } else { ?>
+
+        <textarea id="comment" name="comment" required maxlength="2000" placeholder="Write Your Comment:"><?php vecho('comment'); ?></textarea>
+        <?php vnotice(); ?>
+        <right>
+          <?php vpartial('fb', array('route' => 'housing/sublet.php?id='.vget('_id'))); ?>
+          &nbsp; <input type="submit" name="addcomment" value="Comment" />
+        </right>
+
+      <?php } ?>
+    </form>
   </div>
+</panel>
+<panel class="map" style="padding: 0;">
+  <style type="text/css">
+    #map-canvas{
+      height: 300px;
+      width: 100%;
+    }
+  </style>
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyDORLARDVNHaHBSLZ0UG-1EGABk-IH2uq0&sensor=false"></script>
+  <script type="text/javascript">
+    function initialize() {
+      var myLatlng = new google.maps.LatLng(<?php vecho('latitude'); ?>, <?php vecho('longitude'); ?>);
+
+      var styles = [
+        {
+          stylers: [
+            { hue: "#035d75" },
+            { saturation: -10 }
+          ]
+        },{
+          featureType: "road",
+          elementType: "geometry",
+          stylers: [
+            { lightness: 10},
+            { visibility: "simplified" }
+          ]
+        },{
+          featureType: "road.local",
+          elementType: "labels",
+          stylers: [
+            { visibility: "off" }
+          ]
+        }
+      ];
+
+      var mapOptions = {
+        center: myLatlng,
+        /*adjust number to change starting zoom size*/
+        zoom: 15,
+        styles: styles
+      };
+
+      var map = new google.maps.Map(document.getElementById('map-canvas'),
+          mapOptions);
+
+      //set icon for marker
+      var houseicon = '<?php echo $GLOBALS['dirpre']; ?>assets/gfx/map/marker.png';
+
+      var marker = new google.maps.Marker({
+        position: myLatlng,
+        map: map,
+        icon: houseicon
+      });
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+  </script>
+  <div id="map-canvas"></div>
 </panel>
 
 <div class="pop">

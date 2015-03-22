@@ -31,6 +31,7 @@
       }
       $publish = $data['publish'];
       $comments = $data['comments'];
+      $commented = isset($data['commented']);
 
       return array(
         'student' => $student, 'address' => $address, 'gender' => $gender,
@@ -40,7 +41,8 @@
         'roomtype' => $roomtype, 'buildingtype' => $buildingtype, 
         'photos' => $photos,
         'amenities' => $amenities, 'publish' => $publish, 
-        'comments' => $comments, 'pricetype' => $pricetype
+        'comments' => $comments, 'commented' => $commented,
+        'pricetype' => $pricetype
       );
     }
 
@@ -51,8 +53,8 @@
       $this->validate(
         $data['enddate'] >= $data['startdate'],
         $err, 'invalid dates');
-      $this->validate(count($data['photos']) >= 4, 
-        $err, 'must upload at least 4 photos');
+      $this->validate(count($data['photos']) >= 1, 
+        $err, 'must upload at least 1 photo');
     }
 
     function manage() {
@@ -168,7 +170,7 @@
       // Validations
       $this->startValidations();
       $this->validate(isset($_GET['id']) and 
-        ($entry = $MSublet->get($_GET['id'])) != NULL, 
+        ($entry = $MSublet->get($id = $_GET['id'])) != NULL, 
         $err, 'unknown sublet');
       if ($this->isValid())
         $this->validate(
@@ -177,6 +179,32 @@
 
       // Code
       if ($this->isValid()) {
+        if (isset($_POST['addcomment'])) {
+          function dataComment($data) {
+            $comment = clean($data['comment']);
+
+            return array('comment' => $comment);
+          }
+
+          global $params;
+          extract($data = dataComment($params));
+
+          array_unshift($entry['comments'], array(
+            'time' => time(),
+            'commenter' => $_SESSION['_id'], 'comment' => $comment
+          ));
+          $entry['commented'] = true;
+
+          // Notify us of the comment
+          $commenter = $_SESSION['email'];
+          $message = "
+            <b>$commenter</b> has commented on <a href=\"http://sublite.net/housing/sublet.php?id=$id\">$id</a>:
+            <br /><br />
+            $comment
+          ";
+          sendgmail(array('tony.jiang@yale.edu', 'qingyang.chen@gmail.com'), "info@sublite.net", 'Comment posted on SubLite!', $message);
+        }
+
         $entry['stats']['views']++;
         $MSublet->save($entry);
 
@@ -207,6 +235,8 @@
             $me['name'];
         }
         
+        $data['latitude'] = $data['geocode']['latitude'];
+        $data['longitude'] = $data['geocode']['longitude'];
         $data['address'] = 
           $data['address'].', '.$data['city'].', '.$data['state'];
         if (count($data['photos']) == 0)
@@ -216,6 +246,17 @@
         switch ($data['gender']) {
           case 'male': $data['gender'] = 'Male only'; break;
           case 'female': $data['gender'] = 'Female only'; break;
+        }
+
+        for ($i = 0; $i < count($data['comments']); $i ++) {
+          $comment = $data['comments'][$i];
+          $commenter = $MStudent->getById($comment['commenter']);
+          $data['comments'][$i] = array(
+            'name' => $commenter['name'],
+            'photo' => $commenter['photo'],
+            'time' => timeAgo($comment['time']),
+            'text' => $comment['comment']
+          );
         }
 
         $this->render('viewsublet', $data);
@@ -278,6 +319,7 @@
       global $CStudent; $CStudent->requireLogin();
 
       global $params;
+      $params = $_REQUEST;
       global $MSublet, $MStudent;
 
       // process without sorting/filtering
@@ -293,6 +335,10 @@
           $sublet['address'] .= ', '.$sublet['state'];
 
         $sublet['proximity'] = isset($sublet['proximity']) ? $sublet['proximity'] : null;
+
+        $sublet['summary'] = strmax($sublet['summary'], 100);
+        $sublet['latitude'] = $sublet['geocode']['latitude'];
+        $sublet['longitude'] = $sublet['geocode']['longitude'];
 
         return $sublet;
       }
@@ -318,12 +364,11 @@
         }
         switch ($sortby) {
           case 'proximityIncreasing':
-            function sorter($a, $b) {
+            usort($sublets, function ($a, $b) {
               if ($a['proximity'] < $b['proximity']) return -1;
               if ($a['proximity'] > $b['proximity']) return 1;
               return 0;
-            }
-            usort($sublets, 'sorter');
+            });
             break;
         }
         
@@ -333,7 +378,7 @@
       // Predefined searches
       $showSearch = true;
 
-      if ($showSearch and !isset($_POST['search'])) {
+      if ($showSearch and !isset($params['search'])) {
         // If not searching for anything, then return last 6 entries
         $res = $MSublet->last(6);
         $sublets = array();
@@ -437,9 +482,11 @@
 
             $delay = round((microtime(true) - $starttime) * 1000, 0);
 
-            if ($showSearch) $this->render('subletsearchform', $data);
             $this->render('subletsearchresults', array(
-              'sublets' => $sublets, 'delay' => $delay
+              'sublets' => $sublets, 'delay' => $delay, 
+              'latitude' => $latitude, 'longitude' => $longitude,
+              'maxProximity' => $maxProximity, 'showSearch' => $showSearch,
+              'data' => $data
             ));
 
             // Send email notification of search to us
@@ -455,7 +502,7 @@
       }
 
       $this->error($err);
-      $this->render('subletsearchform', $data);
+      $this->render('partials/subletsearchform', $data);
     }
   }
   $CSublet = new SubletController();

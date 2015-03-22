@@ -33,12 +33,6 @@
 </style>
 <script>
   $(function() {
-    function scrollTo(q) {
-      $('html, body').finish().animate({
-        scrollTop: $(q).offset().top
-      }, 200);
-    }
-
     $('.searchScroll').click(function() {
       scrollTo('.search');
     });
@@ -57,7 +51,7 @@
 </panel>
 <panel class="search">
   <div class="content">
-    <form method="post">
+    <form method="get">
       <input type="hidden" id="recruiter" name="recruiter" value="<?php vecho('recruiter'); ?>" />
 
       <div class="form-slider"><label for="title">Job Title:</label><input type="text" id="title" name="title" value="<?php vecho('title'); ?>" /></div>

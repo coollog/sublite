@@ -11,7 +11,7 @@
     $s = str_replace('–', '-', $s);
     $s = str_replace('—', '-', $s); //by the way these are 2 different dashes
     $s = str_replace('…', '...', $s);
-    $s = trim(htmlspecialchars(Encoding::toUTF8($s), ENT_NOQUOTES));
+    $s = trim(htmlspecialchars(Encoding::toUTF8($s), ENT_QUOTES));
     return $s;
   }
   function idcmp($id1, $id2) {
