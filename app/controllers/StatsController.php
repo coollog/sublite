@@ -135,7 +135,7 @@
       $students = $MStudent->getAll();
       foreach ($students as $student) {
         $email = $student['email'];
-        require_once($GLOBALS['dirpre'].'../housing/schools.php');
+        require($GLOBALS['dirpre'].'../housing/schools.php');
         if (!$S->hasSchoolOf($email)) {
           $domain = $S->getDomain($email);
           if (!in_array($domain, $domains)) {
