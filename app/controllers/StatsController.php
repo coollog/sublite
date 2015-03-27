@@ -130,7 +130,7 @@
       echo '</textarea>';
     }
     function unknownschools() {
-      global $MStudent;
+      global $MStudent, $S;
 
       $domains = array();
       $students = $MStudent->getAll();
