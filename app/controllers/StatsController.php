@@ -128,8 +128,31 @@
       }
       echo '</textarea>';
     }
+    function unknownschools() {
+      global $MStudent;
+      require_once($GLOBALS['dirpre'].'../housing/schools.php');
+
+      $domains = array();
+      $students = $MStudent->find();
+      foreach ($students as $student) {
+        $email = $student['email'];
+        if (!$S->hasSchoolOf($email)) {
+          $domain = $S->getDomain($email);
+          if (!in_array($domain, $domains)) {
+            $domains[] = $domain;
+          }
+        }
+      }
+      $count = count($domains);
+
+      echo "<br />Unknown Schools ($count): <br />
+        <textarea style=\"width:800px; height: 200px;\">";
+      foreach ($domains as $d) {
+        echo "$d\n";
+      }
+      echo '</textarea>';
+    }
   }
 
   $CStats = new StatsController();
-
 ?>
