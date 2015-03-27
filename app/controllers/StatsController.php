@@ -1,5 +1,6 @@
 <?php
   require_once($GLOBALS['dirpre'].'controllers/Controller.php');
+  require_once($GLOBALS['dirpre'].'../housing/schools.php');
 
   class StatsController extends Controller {
     function update() {
@@ -135,7 +136,6 @@
       $students = $MStudent->getAll();
       foreach ($students as $student) {
         $email = $student['email'];
-        require($GLOBALS['dirpre'].'../housing/schools.php');
         if (!$S->hasSchoolOf($email)) {
           $domain = $S->getDomain($email);
           if (!in_array($domain, $domains)) {
