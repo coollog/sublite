@@ -47,7 +47,7 @@
       $me['photo'] = $photo;
 
       if (strlen($me['school']) == 0) {
-        require_once($GLOBALS['dirpre'].'../housing/schools.php');
+        global $S;
         $me['school'] = $S->nameOf($me['email']);
       }
 
@@ -132,7 +132,7 @@
       $this->startValidations();
       $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL), 
         $err, 'invalid email');
-      require_once($GLOBALS['dirpre'].'../housing/schools.php');
+      global $S;
       $this->validate($S->verify($email), $err, 'email must be .edu');
       $this->validate(($entry = $MStudent->get($email)) == NULL or !isset($entry['pass']),
         $err, 'email already in use, please log in instead');

@@ -103,7 +103,7 @@
       return count($cities);
     }
     function countUniversities() {
-      require_once($GLOBALS['dirpre'].'../housing/schools.php');
+      global $S;
       return count($S->LUT);
     }
   }

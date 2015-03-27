@@ -222,7 +222,7 @@
           $s['school'] : 'Undergraduate';
         $data['studentpic'] = isset($s['photo']) ?
           $s['photo'] : $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
-        require_once($GLOBALS['dirpre'].'../housing/schools.php');
+        global $S;
         $data['studentcollege'] = $S->nameOf($s['email']);
         $data['studentbio'] = isset($s['bio']) ?
           $s['bio'] : 'Welcome to my profile!';
