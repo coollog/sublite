@@ -402,7 +402,7 @@
         $longitude = $geocode['longitude'];
         $startdate = strtotime($startdate);
         $enddate = strtotime($enddate);
-        $maxProximity = (int)$proximity;
+        $maxProximity = $proximity == null ? 50 : (int)$proximity;
         $minPrice = (float)$price0;
         $maxPrice = (float)$price1;
         $minOccupancy = (int)$occupancy;
@@ -415,7 +415,6 @@
           $query = array(
             'publish' => true,
           );
-          if ($maxProximity == 0) $maxProximity = 50;
           $proximityDeg = distanceDeg($maxProximity);
           $query['geocode.latitude'] = array(
             '$gte' => $latitude - $proximityDeg,
