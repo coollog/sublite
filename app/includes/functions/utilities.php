@@ -83,4 +83,9 @@
       unset($array[$key]);
     return $array;
   }
+
+  // Gets random float 0 to 1
+  function rand01() {
+    return mt_rand() / mt_getrandmax();
+  }
 ?>

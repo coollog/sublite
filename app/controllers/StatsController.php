@@ -1,6 +1,5 @@
 <?php
   require_once($GLOBALS['dirpre'].'controllers/Controller.php');
-  require_once($GLOBALS['dirpre'].'../housing/schools.php');
 
   class StatsController extends Controller {
     function update() {

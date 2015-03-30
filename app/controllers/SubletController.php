@@ -337,8 +337,8 @@
         $sublet['proximity'] = isset($sublet['proximity']) ? $sublet['proximity'] : null;
 
         $sublet['summary'] = strmax($sublet['summary'], 100);
-        $sublet['latitude'] = $sublet['geocode']['latitude'];
-        $sublet['longitude'] = $sublet['geocode']['longitude'];
+        $sublet['latitude'] = $sublet['geocode']['latitude'] + rand01() * 0.000001 - 0.0000005;
+        $sublet['longitude'] = $sublet['geocode']['longitude'] + rand01() * 0.000001 - 0.0000005;
 
         return $sublet;
       }
