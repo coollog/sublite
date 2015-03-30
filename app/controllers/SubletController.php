@@ -466,7 +466,7 @@
             $queryday = array_merge($query, array('pricetype' => 'day'));
             if (strlen($price0) > 0) $queryday['price']['$gte'] /= 30;
             if (strlen($price1) > 0) $queryday['price']['$lte'] /= 30;
-            $resmonth = $MSublet->find($query);
+            $resmonth = $MSublet->find($querymonth);
             $resweek = $MSublet->find($queryweek);
             $resday = $MSublet->find($queryday);
 
