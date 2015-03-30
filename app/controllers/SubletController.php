@@ -459,14 +459,14 @@
             // Performing search
             $starttime = microtime(true);
 
-            $querymonth = array_merge($query, array('pricetype' => 'month'));
-            if (strlen($price0) > 0) $querymonth['price']['$gte'] *= 4.35;
-            if (strlen($price1) > 0) $querymonth['price']['$lte'] *= 4.35;
+            $queryweek = array_merge($query, array('pricetype' => 'week'));
+            if (strlen($price0) > 0) $queryweek['price']['$gte'] *= 4.35;
+            if (strlen($price1) > 0) $queryweek['price']['$lte'] *= 4.35;
             $queryday = array_merge($query, array('pricetype' => 'day'));
             if (strlen($price0) > 0) $queryday['price']['$gte'] /= 30;
             if (strlen($price1) > 0) $queryday['price']['$lte'] /= 30;
-            $resmonth = $MSublet->find($querymonth);
-            $resweek = $MSublet->find($query);
+            $resmonth = $MSublet->find($query);
+            $resweek = $MSublet->find($queryweek);
             $resday = $MSublet->find($queryday);
 
             if (isset($_GET['test'])) {
