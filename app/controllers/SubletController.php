@@ -459,6 +459,7 @@
             // Performing search
             $starttime = microtime(true);
 
+            $querymonth = array_merge($query, array('pricetype' => 'month'));
             $queryweek = array_merge($query, array('pricetype' => 'week'));
             if (strlen($price0) > 0) $queryweek['price']['$gte'] /= 4.35;
             if (strlen($price1) > 0) $queryweek['price']['$lte'] /= 4.35;
