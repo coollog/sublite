@@ -338,7 +338,7 @@
 
         $sublet['summary'] = strmax($sublet['summary'], 100);
 
-        $offset = 0.0001
+        $offset = 0.0001;
         $sublet['latitude'] = $sublet['geocode']['latitude'] + rand01() * $offset - $offset/2;
         $sublet['longitude'] = $sublet['geocode']['longitude'] + rand01() * $offset - $offset/2;
 
