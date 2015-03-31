@@ -460,6 +460,7 @@
             $res = $MSublet->find($query);
             
             $sublets = array();
+            $res = process($res, $sortby, $latitude, $longitude, $maxProximity);
             foreach ($res as $sublet) {
               $price = $sublet['price'];
               switch ($sublet['pricetype']) {
@@ -470,8 +471,6 @@
               if (strlen($price1) > 0 and $price > $price1) continue;
               $sublets[] = $sublet;
             }
-
-            $sublets = process($sublets, $sortby, $latitude, $longitude, $maxProximity);
 
             $delay = round((microtime(true) - $starttime) * 1000, 0);
 
