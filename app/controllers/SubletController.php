@@ -428,12 +428,6 @@
             '$gte' => $longitude - $proximityDeg,
             '$lte' => $longitude + $proximityDeg
           );
-          if (strlen($price0) > 0) {
-            $query['price']['$gte'] = $minPrice;
-          }
-          if (strlen($price1) > 0) {
-            $query['price']['$lte'] = $maxPrice;
-          }
           if (strlen($occupancy) > 0) {
             $query['occupancy'] = array('$gte' => $minOccupancy);
           }
@@ -463,26 +457,21 @@
             // Performing search
             $starttime = microtime(true);
 
-            $querymonth = array_merge($query, array('pricetype' => 'month'));
-            $queryweek = array_merge($query, array('pricetype' => 'week'));
-            if (strlen($price0) > 0) $queryweek['price']['$gte'] /= 4.35;
-            if (strlen($price1) > 0) $queryweek['price']['$lte'] /= 4.35;
-            $queryday = array_merge($query, array('pricetype' => 'day'));
-            if (strlen($price0) > 0) $queryday['price']['$gte'] /= 30;
-            if (strlen($price1) > 0) $queryday['price']['$lte'] /= 30;
-            $resmonth = $MSublet->find($querymonth);
-            $resweek = $MSublet->find($queryweek);
-            $resday = $MSublet->find($queryday);
-
-            if (isset($_GET['test'])) {
-              var_dump($query);
+            $res = $MSublet->find($query);
+            
+            $sublets = [];
+            foreach ($res as $sublet) {
+              $price = $sublet['price'];
+              switch ($sublet['pricetype']) {
+                case 'week': $price *= 4.35; break;
+                case 'day': $price *= 30; break;
+              }
+              if (strlen($price0) > 0 and $price < $price0) continue;
+              if (strlen($price1) > 0 and $price > $price1) continue;
+              $sublets[] = $sublet;
             }
 
-            $sublets = array_merge(
-              process($resmonth, $sortby, $latitude, $longitude, $maxProximity),
-              process($resweek, $sortby, $latitude, $longitude, $maxProximity),
-              process($resday, $sortby, $latitude, $longitude, $maxProximity)
-            );
+            $sublets = process($sublets, $sortby, $latitude, $longitude, $maxProximity);
 
             $delay = round((microtime(true) - $starttime) * 1000, 0);
 
