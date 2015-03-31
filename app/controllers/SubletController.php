@@ -12,7 +12,7 @@
       $geocode = geocode("$address, $city, $state");
       $startdate = $data['startdate'];
       $enddate = $data['enddate'];
-      $price = clean($data['price']);
+      $price = cleanfloat($data['price']);
       $pricetype = clean($data['pricetype']);
       $title = clean($data['title']);
       $summary = clean($data['summary']);
