@@ -459,7 +459,7 @@
 
             $res = $MSublet->find($query);
             
-            $sublets = [];
+            $sublets = array();
             foreach ($res as $sublet) {
               $price = $sublet['price'];
               switch ($sublet['pricetype']) {
