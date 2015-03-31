@@ -179,6 +179,8 @@
 
       // Code
       if ($this->isValid()) {
+        $data = array('commented' => false);
+
         if (isset($_POST['addcomment'])) {
           function dataComment($data) {
             $comment = clean($data['comment']);
@@ -193,7 +195,7 @@
             'time' => time(),
             'commenter' => $_SESSION['_id'], 'comment' => $comment
           ));
-          $entry['commented'] = true;
+          $data['commented'] = true;
 
           // Notify us of the comment
           $commenter = $_SESSION['email'];
@@ -208,7 +210,7 @@
         $entry['stats']['views']++;
         $MSublet->save($entry);
 
-        $data = $entry;
+        $data = array_merge($entry, $data);
         $data['_id'] = $entry['_id'];
         
         // ANY MODiFICATIONS ON DATA GOES HERE
