@@ -74,8 +74,8 @@
     array("Messages", $path."employers/messages.php", "recruiter hascompany"),
     array("Add Company Profile", $path."employers/addcompany.php", "recruiter nocompany"),
 
-    array("Search For Housing", $path."housing/search.php", "student"),
-    array("Search For Jobs", $path."jobs/search.php", "student"),
+    array("Housing", $path."housing/search.php", "student"),
+    array("Jobs", $path."jobs/search.php", "student"),
     array("Add Sublet", $path."housing/addsublet.php", "student /housing"),
     array("Manage", $path."housing/home.php", "student"),
     array("Messages", "messages.php", "student"),
