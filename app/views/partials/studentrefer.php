@@ -183,7 +183,7 @@
       email: '<?php vecho('email'); ?>',
       r: "<?php vecho('id'); ?>",
     };
-    $.ajax({
+    $.post({
       url: 'refer.php',
       data: data,
       success: function(data) {
