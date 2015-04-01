@@ -229,7 +229,7 @@
             <br /><br />
             msgid: $msgid
           ";
-          sendgmail('sublite@googlegroups.com', "info@sublite.net", 'Message sent on SubLite!', $message);
+          sendgmail(array('tony.jiang@yale.edu', 'qingyang.chen@gmail.com'), "info@sublite.net", 'Message sent on SubLite!', $message);
 
           $this->render('messages', viewData($entry));
           return;
