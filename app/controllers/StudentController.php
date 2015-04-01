@@ -224,7 +224,7 @@
 
           Hey there!
           <br /><br />
-          Check out SubLite, a free website that's helping me find summer opportunities and housing. It was founded by Yale students last year and more than 4,000 students have already started using it.
+          Check out SubLite, a free website that's helping me find summer opportunities and housing. It was founded by Yale students last year and more than 5,000 students have already started using it.
           <br /><br />
           The link is www.sublite.net?r=$r!
           <br /><br />
