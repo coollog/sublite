@@ -294,7 +294,12 @@
 <panel class="why">
   <div class="content">
     <headline style="color: #035d75;">Why SubLite?</headline>
-    <div style="font-size: 1em; margin-top: -20px; margin-bottom: 20px;">We know you are working hard to network and get top grades for the best summer experience.<br>Finding jobs and housing can be a painstaking process. Living in a foreign city over the summer by yourself can be daunting. But it doesn't have to be.</div>
+    <div style="font-size: 1em; margin-top: -20px; margin-bottom: 20px;">
+      We know you are working hard to network and get top grades for the best summer experience.<br />
+      Finding jobs and housing can be a painstaking process.<br />
+      Living in a foreign city over the summer by yourself can be daunting.<br />
+      But it doesn't have to be.
+    </div>
     <table class="whys"><tr>
       <td class="whycell"><incell>
         <div class="whyimg whyimg1">
@@ -304,9 +309,9 @@
       </incell></td>
       <td class="whycell"><incell>
         <div class="whyimg whyimg2">
-          <div class="whyroll"><div class="cell">Filter housing by amenities, price, dates, and browse among jobs based on the company's culture.</div></div>
+          <div class="whyroll"><div class="cell">Meet up with other students working in your area and get all your questions answered in our hub-based forums.</div></div>
         </div>
-        <div class="whytext">Connect and meet-up with other students</div>
+        <div class="whytext">Connect with Other Students</div>
       </incell></td>
       <td class="whycell"><incell>
         <div class="whyimg whyimg3">
