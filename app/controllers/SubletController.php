@@ -13,6 +13,7 @@
       $startdate = $data['startdate'];
       $enddate = $data['enddate'];
       $price = cleanfloat($data['price']);
+      if (!isset($pricetype)) $pricetype = '';
       $pricetype = clean($data['pricetype']);
       $title = clean($data['title']);
       $summary = clean($data['summary']);
@@ -47,6 +48,8 @@
     }
 
     function validateData($data, &$err) {
+      $this->validate($data['pricetype'] != '',
+        $err, 'must select a price type');
       $this->validate($data['price'] >= 0, $err, 'price cannot be negative');
       $this->validate($data['occupancy'] > 0,
         $err, 'occupancy must be positive');
