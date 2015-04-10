@@ -222,12 +222,23 @@
           // Notify us of the message
           $toemails = implode(', ', $emails);
           $fromemail = getEmail($from);
+          $prevmsgs = '';
+          $replies = $entry['replies'];
+          foreach ($entry['replies'] as $reply) {
+            $fromemail = getEmail($reply['from']);
+            $msg = $reply['msg'];
+            $prevmsgs .= "<b>$fromname</b>: <br />$msg<br />";
+          }
           $message = "
             <b>$fromemail</b> has sent a message to <b>$toemails</b>:
             <br /><br />
             $msg
             <br /><br />
             msgid: $msgid
+            <br /><br />
+            The thread:
+            <br /><br />
+            $prevmsgs
           ";
           sendgmail(array('tony.jiang@yale.edu', 'qingyang.chen@gmail.com'), "info@sublite.net", 'Message sent on SubLite!', $message);
 
