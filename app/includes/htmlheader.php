@@ -91,10 +91,11 @@
     <?php
       if (vget('search')) {
         if (vget('search') == 'housing') {
+          $data = vget('data');
     ?>
           <title>
             Search for Sublets, Rentals, and Other Housing
-            <?php if (vget('data')) echo ' - '.vget('data')['location']; ?>
+            <?php if ($data) echo ' - '.$data['location']; ?>
           </title>
     <?php
         }
