@@ -223,11 +223,11 @@
           $toemails = implode(', ', $emails);
           $fromemail = getEmail($from);
           $prevmsgs = '';
-          $replies = $entry['replies'];
+          $replies = array_reverse($entry['replies']);
           foreach ($entry['replies'] as $reply) {
             $fromemail = getEmail($reply['from']);
             $msg = $reply['msg'];
-            $prevmsgs .= "<b>$fromname</b>: <br />$msg<br />";
+            $prevmsgs .= "<b>$fromemail</b>: <br />$msg<br />";
           }
           $message = "
             <b>$fromemail</b> has sent a message to <b>$toemails</b>:
