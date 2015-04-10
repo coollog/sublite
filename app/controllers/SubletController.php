@@ -394,7 +394,7 @@
         }
 
         $this->render('subletsearchstart', $this->dataSearchSetup());
-        $this->render('subletsearchresults', array('sublets' => $sublets, 'recent' => true));
+        $this->render('subletsearchresults', array('sublets' => $sublets, 'recent' => true, 'search' => 'housing'));
         return; 
       }
       
@@ -481,7 +481,7 @@
               'sublets' => $sublets, 'delay' => $delay, 
               'latitude' => $latitude, 'longitude' => $longitude,
               'maxProximity' => $maxProximity, 'showSearch' => $showSearch,
-              'data' => $data
+              'data' => $data, 'search' => 'housing'
             ));
 
             // Send email notification of search to us
@@ -497,7 +497,7 @@
       }
 
       $this->error($err);
-      $this->render('partials/subletsearchform', $data);
+      $this->render('partials/subletsearchform', array_merge($data, array('search' => 'housing')));
     }
   }
   $CSublet = new SubletController();

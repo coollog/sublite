@@ -338,7 +338,7 @@
         $jobs = process($res);
 
         $this->render('searchform', $this->dataSearchSetup());
-        $this->render('searchresults', array('jobs' => $jobs, 'recent' => true));
+        $this->render('searchresults', array('jobs' => $jobs, 'recent' => true, 'search' => 'jobs'));
         return; 
       }
       
@@ -389,7 +389,7 @@
         $jobs = process($res);
 
         if ($showSearch) $this->render('searchform', $data);
-        $this->render('searchresults', array('jobs' => $jobs, 'showCompany' => $showCompany));
+        $this->render('searchresults', array('jobs' => $jobs, 'showCompany' => $showCompany, 'search' => 'jobs'));
 
         // Send email notification of search to us
         // $this->sendrequestreport("Search for jobs:", $jobs);
@@ -402,7 +402,7 @@
       }
 
       $this->error($err);
-      $this->render('searchform', $data);
+      $this->render('searchform', array_merge($data, array('search' => 'jobs')));
     }
   }
   $CJob = new JobController();

@@ -70,7 +70,6 @@
         <meta property="og:description" content="Attract the New Generation Talent with your Company's Unique Personality." />
         <meta property="og:image:width" content="1677" />
         <meta property="og:image:height" content="1118" />
-        <title>SubLite &ndash; Find internships and rent housing and sublets!</title>
     <?php
       }
       else { // default
@@ -89,6 +88,24 @@
       $url .= $_SERVER['HTTP_HOST'] . htmlspecialchars($_SERVER['REQUEST_URI']);
       echo '<meta property="og:url" content="' . $url . '" />';
     ?>
+    <?php
+      if (vget('search')) {
+        if (vget('search') == 'housing') {
+    ?>
+          <title>
+            Search for Sublets, Rentals, and Other Housing
+            <?php if (vget('data')) echo ' - '.vget('data')['location']; ?>
+          </title>
+    <?php
+        }
+        if (vget('search') == 'jobs') {
+    ?>
+          <title>Search for Jobs and Internships</title>
+    <?php
+        }
+      }
+    ?>
+
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="SubLite" />
 
