@@ -94,14 +94,14 @@
           $data = vget('data');
     ?>
           <title>
-            Search for Sublets, Rentals, and Other Housing
+            SubLite &ndash; Search for Sublets, Rentals, and Other Housing
             <?php if ($data) echo ' - '.$data['location']; ?>
           </title>
     <?php
         }
         if (vget('search') == 'jobs') {
     ?>
-          <title>Search for Jobs and Internships</title>
+          <title>SubLite &ndash; Search for Jobs and Internships</title>
     <?php
         }
       }
