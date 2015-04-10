@@ -321,7 +321,7 @@
     }
 
     function search() {
-      global $CStudent; $CStudent->requireLogin();
+      // global $CStudent; $CStudent->requireLogin();
 
       global $params;
       $params = $_REQUEST;

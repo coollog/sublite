@@ -80,6 +80,8 @@
     array("Manage", $path."housing/home.php", "student"),
     array("Messages", "messages.php", "student"),
 
+    array("Search Housing", $path."housing/search.php", "notloggedin"),
+    array("Search Jobs", $path."jobs/search.php", "notloggedin"),
     array("Register", "register.php", "notloggedin"),
     array("Log In", "login.php", "notloggedin"),
     array("Log Out", "logout.php", "loggedin")

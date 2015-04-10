@@ -296,7 +296,7 @@
     }
 
     function search() {
-      $this->requireLogin();
+      // $this->requireLogin();
 
       global $params;
       $params = $_REQUEST;

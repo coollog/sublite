@@ -39,7 +39,16 @@
       return $entry['email'];
     }
     function me() {
-      return $this->get($_SESSION['email']);
+      if (isset($_SESSION['loggedinstudent']))
+        return $this->get($_SESSION['email']);
+      else {
+        return array(
+          'email' => 'guest',
+          'name' => 'guest',
+          'gender' => ''
+        );
+      }
+        
     }
 
     function login($email, $pass) {

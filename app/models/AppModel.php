@@ -53,6 +53,8 @@
     }
 
     function recordSearch($type) {
+      if (!isset($_SESSION['loggedinstudent'])) return;
+      
       $email = $_SESSION['email'];
       $data = $_REQUEST;
 
