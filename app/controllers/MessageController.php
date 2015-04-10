@@ -224,7 +224,7 @@
           $fromemail = getEmail($from);
           $prevmsgs = '';
           $replies = array_reverse($entry['replies']);
-          foreach ($entry['replies'] as $reply) {
+          foreach ($replies as $reply) {
             $fromemail = getEmail($reply['from']);
             $msg = $reply['msg'];
             $prevmsgs .= "<b>$fromemail</b>: <br />$msg<br />";
