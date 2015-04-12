@@ -225,9 +225,9 @@
           $prevmsgs = '';
           $replies = array_reverse($entry['replies']);
           foreach ($replies as $reply) {
-            $fromemail = getEmail($reply['from']);
-            $msg = $reply['msg'];
-            $prevmsgs .= "<b>$fromemail</b>: <br />$msg<br />";
+            $pfromemail = getEmail($reply['from']);
+            $pmsg = $reply['msg'];
+            $prevmsgs .= "<b>$pfromemail</b>: <br />$pmsg<br />";
           }
           $message = "
             <b>$fromemail</b> has sent a message to <b>$toemails</b>:
