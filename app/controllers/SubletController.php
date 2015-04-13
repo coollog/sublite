@@ -221,7 +221,7 @@
         if ($s == NULL) {
           $entry['publish'] = false;
           $MSublet->save($entry);
-          $this->error($'this listing is no longer available');
+          $this->error('this listing is no longer available');
           $this->render('notice');
           return
         }
