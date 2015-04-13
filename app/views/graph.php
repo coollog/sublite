@@ -3,6 +3,9 @@
 Students:<br />
 <canvas id="chart1" width="800" height="400"></canvas>
 <br />
+Students by Day:<br />
+<canvas id="chart3" width="800" height="400"></canvas>
+<br />
 Messages:<br />
 <canvas id="chart2" width="800" height="400"></canvas>
 
@@ -118,9 +121,46 @@ Messages:<br />
     ]
   };
 
+  var data3 = {
+    labels: [
+      <?php
+        $data = vget('studentsday');
+        $n = 0;
+        foreach ($data as $label => $count) {
+          $label = date('M d, y', ($label+1)*3600*24);
+          if ($n % (int)(count($data)/30) == 0) echo "'$label',";
+          else echo "'',";
+          $n ++;
+        }
+      ?>
+    ],
+    datasets: [
+      {
+        label: "Students By Day",
+        fillColor: "rgba(220,220,220,0.2)",
+        strokeColor: "rgba(220,220,220,1)",
+        pointColor: "rgba(220,220,220,1)",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(220,220,220,1)",
+        data: [
+          <?php
+            $data = vget('studentsday');
+            foreach ($data as $count) {
+              echo "'$count',";
+            }
+          ?>
+        ]
+      }
+    ]
+  };
+
   var ctx1 = $("#chart1").get(0).getContext("2d");
   var chart1 = new Chart(ctx1).Line(data1, options);
 
   var ctx2 = $("#chart2").get(0).getContext("2d");
   var chart2 = new Chart(ctx2).Line(data2, options);
+
+  var ctx3 = $("#chart3").get(0).getContext("2d");
+  var chart3 = new Chart(ctx3).Line(data3, options);
 </script>

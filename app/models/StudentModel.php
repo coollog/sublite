@@ -19,6 +19,9 @@
     function getAll() {
       return $this->collection->find();
     }
+    function getAllwTime() {
+      return $this->collection->find(array('time' => array('$exists' => true)));
+    }
     function getById($id) {
       return $this->collection->findOne(array('_id' => new MongoId($id)));
     }

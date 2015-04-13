@@ -153,6 +153,8 @@
     }
     function graph() {
       global $MStudent;
+
+      // All students by month
       $studentsdata = array();
       $students = $MStudent->getAll();
       foreach ($students as $student) {
@@ -162,6 +164,18 @@
       }
       ksort($studentsdata);
 
+      // Students by day
+      $studentsdaydata = array();
+      $students = $MStudent->getAllwTime();
+      foreach ($students as $student) {
+        $time = (int)($student['time']/3600/24);
+        if (!isset($studentsdaydata[$time])) $studentsdaydata[$time] = 1;
+        else $studentsdaydata[$time] ++;
+      }
+      array_splice($studentsdaydata, 0, -100);
+      ksort($studentsdaydata);
+
+      // Messages
       global $MMessage;
       $msgdata = array();
       $msgs = $MMessage->getAll();
@@ -176,6 +190,7 @@
 
       $this->render('graph', array(
         'students' => $studentsdata,
+        'studentsday' => $studentsdaydata,
         'msgs' => $msgdata
       ));
     }

@@ -218,6 +218,13 @@
         
         // ANY MODiFICATIONS ON DATA GOES HERE
         $s = $MStudent->getById($entry['student']);
+        if ($s == NULL) {
+          $entry['publish'] = false;
+          $MSublet->save($entry);
+          $this->error($'this listing is no longer available');
+          $this->render('notice');
+          return
+        }
 
         $data['studentname'] = $s['name'];
         $data['studentid'] = $s['_id']->{'$id'};
