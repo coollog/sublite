@@ -43,6 +43,9 @@
     function get($id) {
       return $this->collection->findOne(array('_id' => new MongoId($id)));
     }
+    function getAll() {
+      return $this->collection->find();
+    }
     
     function exists($id) {
       return ($this->get($id) !== NULL);

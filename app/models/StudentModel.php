@@ -38,6 +38,9 @@
       $entry = $this->getById($id);
       return $entry['email'];
     }
+    function last($n=1) {
+      return $this->collection->find()->sort(array('_id'=>-1))->limit($n);
+    }
     function me() {
       if (isset($_SESSION['loggedinstudent']))
         return $this->get($_SESSION['email']);

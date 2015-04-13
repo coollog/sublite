@@ -148,6 +148,8 @@
           $entry['confirm'] = $confirm;
         }
         $entry['stats'] = array('referrals' => array());
+        $entry['time'] = time();
+
         $id = $MStudent->save($entry);
 
         // Handle referrals

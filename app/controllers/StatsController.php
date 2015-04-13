@@ -151,6 +151,34 @@
       }
       echo '</textarea>';
     }
+    function graph() {
+      global $MStudent;
+      $studentsdata = array();
+      $students = $MStudent->getAll();
+      foreach ($students as $student) {
+        $time = (int)($student['_id']->getTimestamp()/3600/24/30.2);
+        if (!isset($studentsdata[$time])) $studentsdata[$time] = 1;
+        else $studentsdata[$time] ++;
+      }
+      ksort($studentsdata);
+
+      global $MMessage;
+      $msgdata = array();
+      $msgs = $MMessage->getAll();
+      foreach ($msgs as $msg) {
+        foreach ($msg['replies'] as $reply) {
+          $time = (int)($reply['time']/3600/24);
+          if (!isset($msgdata[$time])) $msgdata[$time] = 1;
+          else $msgdata[$time] ++;
+        }
+      }
+      ksort($msgdata);
+
+      $this->render('graph', array(
+        'students' => $studentsdata,
+        'msgs' => $msgdata
+      ));
+    }
   }
 
   $CStats = new StatsController();
