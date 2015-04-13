@@ -223,7 +223,7 @@
           $MSublet->save($entry);
           $this->error('this listing is no longer available');
           $this->render('notice');
-          return
+          return;
         }
 
         $data['studentname'] = $s['name'];
