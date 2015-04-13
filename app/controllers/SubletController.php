@@ -13,7 +13,7 @@
       $startdate = $data['startdate'];
       $enddate = $data['enddate'];
       $price = cleanfloat($data['price']);
-      if (!isset($pricetype)) $pricetype = '';
+      if (!isset($data['pricetype'])) $data['pricetype'] = '';
       $pricetype = clean($data['pricetype']);
       $title = clean($data['title']);
       $summary = clean($data['summary']);
