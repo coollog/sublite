@@ -13,6 +13,7 @@
   }
 </style>
 <panel class="search">
+  <?php vnotice(); ?>
   <form method="get">
     <div class="form-slider"><label for="location">Where do you want to sublet? </label><input type="text" id="location" name="location" value="<?php vecho('location'); ?>" required /></div>
 
