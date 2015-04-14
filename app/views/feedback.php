@@ -5,6 +5,7 @@
       <?php vnotice(); ?>
       <div class="form-slider"><label for="name">Name</label><input type="text" id="name" name="name" value="<?php vecho('Lname'); ?>" required /></div>
       <div class="form-slider"><label for="email">Email</label><input type="email" id="email" name="email" value="<?php vecho('Lemail'); ?>" required /></div>
+      <br />
       <left>Please describe the bug (what you did, what the bug was, what were you trying to do) or write your feedback:</left>
       <div class="form-slider"><textarea id="feedback" name="feedback" required><?php vecho('feedback'); ?></textarea></div>
       <br>
