@@ -102,10 +102,10 @@
 
           if ($this->isValid()) {
             $_SESSION['loggedinstudent'] = true;
+            $_SESSION['_id'] = $entry['_id'];
             $_SESSION['email'] = $email;
             $_SESSION['pass'] = $pass;
-            $_SESSION['name'] = $name;
-            $_SESSION['_id'] = $entry['_id'];
+            $_SESSION['name'] = $entry['name'];
             
             // $this->redirect('home');
             // $this->redirect('search');

@@ -15,7 +15,7 @@
     if (isset($_SESSION['loggedinstudent'])) {
       if (isset($_SESSION['name'])) $name = $_SESSION['name'];
       else $name = '';
-      
+
       $viewVars = array_merge($viewVars, array(
         'Loggedinstudent' => true,
         'L_id' => $_SESSION['_id'],
