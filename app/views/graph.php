@@ -121,21 +121,35 @@ Messages:<br />
   var chart3 = new Chart(ctx3).Line(data3, options);
 </script>
 
-<?php if (isset($_GET['map'])) { ?>
+<?php if (vget('searchcities')) { ?>
   <br />
-  Search Map:<br />
+  Search Cities:<br />
   <canvas id="chart4" width="800" height="400"></canvas>
   <script>
     var data4 = {
-      labels: ["January", "February", "March", "April", "May", "June", "July"],
+      labels: [
+      <?php
+        $data = vget('searchcities');
+        foreach ($data as $label => $count) {
+          echo "'$label',";
+        }
+      ?>
+      ],
       datasets: [
         {
-            label: "My First dataset",
-            fillColor: "rgba(220,220,220,0.5)",
-            strokeColor: "rgba(220,220,220,0.8)",
-            highlightFill: "rgba(220,220,220,0.75)",
-            highlightStroke: "rgba(220,220,220,1)",
-            data: [65, 59, 80, 81, 56, 55, 40]
+          label: "Cities",
+          fillColor: "rgba(220,220,220,0.5)",
+          strokeColor: "rgba(220,220,220,0.8)",
+          highlightFill: "rgba(220,220,220,0.75)",
+          highlightStroke: "rgba(220,220,220,1)",
+          data: [
+            <?php
+              $data = vget('searchcities');
+              foreach ($data as $count) {
+                echo "'$count',";
+              }
+            ?>
+          ]
         }
       ]
     };

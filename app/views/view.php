@@ -15,6 +15,10 @@
     if (isset($_SESSION['loggedinstudent'])) {
       if (isset($_SESSION['name'])) $name = $_SESSION['name'];
       else $name = '';
+      if (isset($_SESSION['_id'])) {
+        Controller::redirect($GLOBALS['dirpre'] . '../logout.php');
+        return;
+      }
 
       $viewVars = array_merge($viewVars, array(
         'Loggedinstudent' => true,

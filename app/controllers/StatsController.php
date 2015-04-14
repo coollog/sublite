@@ -188,11 +188,29 @@
       }
       ksort($msgdata);
 
-      $this->render('graph', array(
+      $data = array(
         'students' => $studentsdata,
         'studentsday' => $studentsdaydata,
         'msgs' => $msgdata
-      ));
+      );
+
+      if (isset($_GET['cities'])) {
+        // Searches
+        global $MApp;
+        $searchdata = array();
+        $searches = $MApp->getSearches();
+        array_splice($searches, 0, -100);
+        foreach ($searches as $time => $search) {
+          if ($time == '_id' or $search['type'] != 'sublets') continue;
+          
+          $city = getCity($search['data']['location']);
+          if (!isset($searchdata[$city])) $searchdata[$city] = 1;
+          else $searchdata[$city] ++;
+        }
+        $data['searchcities'] = $searchdata;
+      }
+
+      $this->render('graph', $data);
     }
   }
 
