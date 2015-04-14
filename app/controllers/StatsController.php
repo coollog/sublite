@@ -199,7 +199,7 @@
         global $MApp;
         $searchdata = array();
         $searches = $MApp->getSearches();
-        array_splice($searches, 0, -100);
+        array_splice($searches, 0, -$_GET['cities']);
         foreach ($searches as $time => $search) {
           if ($time == '_id' or $search['type'] != 'sublets') continue;
 
