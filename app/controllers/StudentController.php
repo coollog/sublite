@@ -106,7 +106,6 @@
             $_SESSION['email'] = $email;
             $_SESSION['pass'] = $pass;
             $_SESSION['name'] = $entry['name'];
-            var_dump($_SESSION); exit();
             
             // $this->redirect('home');
             // $this->redirect('search');
