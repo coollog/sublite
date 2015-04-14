@@ -198,14 +198,22 @@
         // Searches
         global $MApp;
         $searchdata = array();
-        $searches = $MApp->getSearches();
+        $entry = $MApp->getSearches();
+        $searches = $entry;
         array_splice($searches, 0, -$_GET['cities']);
         foreach ($searches as $time => $search) {
           if ($time == '_id' or $search['type'] != 'sublets') continue;
 
-          $location = $search['data']['location'];
-          // var_dump(geocodeJSON($search['data']['location'])); echo '<br /><br />';
-          $city = getCity($location);
+          if (!isset($search['city'])) {
+            $location = $search['data']['location'];
+            $city = getCity($location);
+
+            // Save cities so don't need to recurl in the future
+            $entry['time']['city'] = $city;
+            $MApp->save($entry);
+          } else
+            $city = $search['city'];
+
           if (!isset($searchdata[$city])) $searchdata[$city] = 1;
           else $searchdata[$city] ++;
         }
