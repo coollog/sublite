@@ -7,6 +7,7 @@
 		curl_setopt($ch, CURLOPT_URL, $details_url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		$response = json_decode(curl_exec($ch), true);
+		curl_close($ch);
 
 		// If Status Code is ZERO_RESULTS, OVER_QUERY_LIMIT, REQUEST_DENIED or INVALID_REQUEST
 		if ($response['status'] != 'OK') {
