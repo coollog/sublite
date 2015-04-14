@@ -199,7 +199,7 @@
         global $MApp;
         $searchdata = array();
         $entry = $MApp->getSearches();
-        $searches = array_slice($entry, 0, -$_GET['cities'], true);
+        $searches = array_slice($entry, -$_GET['cities'], NULL, true);
         foreach ($searches as $time => $search) {
           echo "$time=><br />";
           if ($time != '_id' and !isset($search['type'])) {
