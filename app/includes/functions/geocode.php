@@ -1,7 +1,7 @@
 <?php
 	function geocodeJSON($string, $attempts=0) {
 		$string = str_replace (" ", "+", urlencode($string));
-		$details_url = "http://maps.googleapis.com/maps/api/geocode/json?address=".$string."&sensor=false";
+		$details_url = "http://maps.googleapis.com/maps/api/geocode/json?address=".$string."&sensor=false&key=AIzaSyDORLARDVNHaHBSLZ0UG-1EGABk-IH2uq0";
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $details_url);
