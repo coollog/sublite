@@ -11,7 +11,6 @@
 
 		// If Status Code is ZERO_RESULTS, OVER_QUERY_LIMIT, REQUEST_DENIED or INVALID_REQUEST
 		if ($response['status'] != 'OK') {
-			echo $response['status'];
 			return null;
 		}
 		return $response;
