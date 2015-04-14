@@ -13,11 +13,15 @@
       $viewVars['Loggedin'] = false;
     }
     if (isset($_SESSION['loggedinstudent'])) {
+      if (isset($_SESSION['name'])) $name = $_SESSION['name'];
+      else $name = '';
+      
       $viewVars = array_merge($viewVars, array(
         'Loggedinstudent' => true,
         'L_id' => $_SESSION['_id'],
         'Lemail' => $_SESSION['email'],
-        'Lpass' => $_SESSION['pass']
+        'Lpass' => $_SESSION['pass'],
+        'Lname' => $name
       ));
     } else {
       $viewVars['Loggedinstudent'] = false;

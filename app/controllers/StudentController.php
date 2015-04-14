@@ -104,6 +104,7 @@
             $_SESSION['loggedinstudent'] = true;
             $_SESSION['email'] = $email;
             $_SESSION['pass'] = $pass;
+            $_SESSION['name'] = $name;
             $_SESSION['_id'] = $entry['_id'];
             
             // $this->redirect('home');

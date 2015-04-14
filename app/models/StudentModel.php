@@ -49,8 +49,8 @@
         return $this->get($_SESSION['email']);
       else {
         return array(
-          'email' => 'guest',
-          'name' => 'guest',
+          'email' => '',
+          'name' => '',
           'gender' => ''
         );
       }

@@ -19,6 +19,7 @@
         <a href="<?php echo $GLOBALS['dirpre']; ?>../faq.php"><opt>FAQ</opt></a>
         <a href="<?php echo $GLOBALS['dirpre']; ?>../privacy.php"><opt>Privacy</opt></a>
         <a href="<?php echo $GLOBALS['dirpre']; ?>../terms.php"><opt>Terms of Service</opt></a>
+        <a href="<?php echo $GLOBALS['dirpre']; ?>../feedback.php"><opt>Report a Bug/Feedback</opt></a>
       </options>
       <options class="right">
         <opt>
