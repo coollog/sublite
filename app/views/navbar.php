@@ -60,7 +60,8 @@
   $states = array(
     "loggedin" => vget('Loggedin') or vget('Loggedinstudent'),
     "notloggedin" => !vget('Loggedin') and !vget('Loggedinstudent'),
-    "notloggedin !/employers" => !vget('Loggedin') and !vget('Loggedinstudent') and $curdir != '/employers',
+    "notloggedin !/employers" => !vget('Loggedin') and !vget('Loggedinstudent') and $curdir != '/employers',,
+    "notloggedin /employers" => !vget('Loggedin') and !vget('Loggedinstudent') and $curdir == '/employers',
     "recruiter hascompany" => vget('Loggedin') and vget('Lcompany'),
     "recruiter nocompany" => vget('Loggedin') and !vget('Lcompany'),
     "student" => vget('Loggedinstudent'),
@@ -84,6 +85,7 @@
     array("Search Housing", $path."housing/search.php", "notloggedin !/employers"),
     array("Search Jobs", $path."jobs/search.php", "notloggedin !/employers"),
     array("List Sublet", $path."register.php", "notloggedin !/employers"),
+    array("List Job", $path."register.php", "notloggedin /employers"),
     array("Register", "register.php", "notloggedin"),
     array("Log In", "login.php", "notloggedin"),
     array("Log Out", "logout.php", "loggedin")
