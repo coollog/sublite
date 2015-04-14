@@ -1,7 +1,7 @@
 <?php
 	function geocodeJSON($string, $attempts=0) {
 		$string = str_replace (" ", "+", urlencode($string));
-		$details_url = "http://maps.googleapis.com/maps/api/geocode/json?address=".$string."&sensor=false&key=AIzaSyBir2K0y4wPMmcMNKElShQFlb95fvvYd8E";
+		$details_url = "https://maps.googleapis.com/maps/api/geocode/json?address=".$string."&sensor=false&key=AIzaSyBir2K0y4wPMmcMNKElShQFlb95fvvYd8E";
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $details_url);
@@ -11,7 +11,6 @@
 
 		// If Status Code is ZERO_RESULTS, OVER_QUERY_LIMIT, REQUEST_DENIED or INVALID_REQUEST
 		if ($response['status'] != 'OK') {
-			var_dump($response);
 			if ($response['status'] == 'OVER_QUERY_LIMIT' && $attempts < 3) {
 				sleep(2);
 				return geocodeJSON($string, $attempts + 1);
