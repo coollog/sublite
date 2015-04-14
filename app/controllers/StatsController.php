@@ -201,7 +201,6 @@
         $entry = $MApp->getSearches();
         $searches = array_slice($entry, -$_GET['cities'], NULL, true);
         foreach ($searches as $time => $search) {
-          echo "$time=><br />";
           if ($time != '_id' and !isset($search['type'])) {
             unset($entry[$time]);
             $MApp->save($entry);
