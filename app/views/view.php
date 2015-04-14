@@ -16,7 +16,7 @@
       if (isset($_SESSION['name'])) $name = $_SESSION['name'];
       else $name = '';
       if (isset($_SESSION['_id'])) {
-        Controller::redirect($GLOBALS['dirpre'] . '../logout.php');
+        Controller::redirect($GLOBALS['dirpre'] . '../logout');
         return;
       }
 
