@@ -212,7 +212,7 @@
           }
           if ($time == '_id' or !isset($search['type']) or $search['type'] != 'sublets') continue;
 
-          if (!isset($search['city'])) {
+          if (!isset($search['city']) or $search['city'] == null) {
             $location = $search['data']['location'];
             $city = getCity($location);
             // Save cities so don't need to recurl in the future
