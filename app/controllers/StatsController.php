@@ -208,7 +208,7 @@
           $city = getCity($location);
           if ($city == null) {
             echo "$location";
-            var_dump(geocodeJSON($location));
+            var_dump(geocode($location));
             echo "<br />";
           }
           if (!isset($searchdata[$city])) $searchdata[$city] = 1;
