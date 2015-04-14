@@ -204,6 +204,7 @@
           if ($time != '_id' and !isset($search['type'])) {
             unset($entry[$time]);
             $MApp->save($entry);
+            continue;
           }
           if ($time == '_id' or !isset($search['type']) or $search['type'] != 'sublets') continue;
 
