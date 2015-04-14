@@ -200,9 +200,9 @@
         $searchdata = array();
         $entry = $MApp->getSearches();
         $searches = $entry;
-        var_dump($entry);
         array_splice($searches, 0, -$_GET['cities']);
         foreach ($searches as $time => $search) {
+          echo "$time=><br />";
           if ($time != '_id' and !isset($search['type'])) {
             unset($entry[$time]);
             $MApp->save($entry);
@@ -212,7 +212,6 @@
           if (!isset($search['city'])) {
             $location = $search['data']['location'];
             $city = getCity($location);
-            echo "$time<br />";
             // Save cities so don't need to recurl in the future
             $entry[strval($time)]['city'] = $city;
             $MApp->save($entry);
