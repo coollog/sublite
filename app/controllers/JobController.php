@@ -166,6 +166,7 @@
       // Code
       if ($this->isValid()) {
         $data['applicants'] = array();
+        $data['viewers'] = array();
         $data['stats'] = array('views' => 0, 'clicks' => 0);
         $id = $MJob->save($data);
         $this->redirect('job', array('id' => $id));
@@ -234,7 +235,13 @@
 
       // Code
       if ($this->isValid()) {
-        $entry['stats']['views']++;
+        $entry['stats']['viewers']++;
+        // if(isset($_SESSION['loggedinstudent'])) {
+        //   $entry['viewers'][] = array($_SESSION['_id'], new MongoDate());
+        // }
+        // else {
+        //   $entry['viewers'][] = array('', new MongoDate());
+        // }
         $MJob->save($entry, false);
 
         $data = $this->data($entry);
