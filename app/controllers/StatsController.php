@@ -202,7 +202,7 @@
         array_splice($searches, 0, -100);
         foreach ($searches as $time => $search) {
           if ($time == '_id' or $search['type'] != 'sublets') continue;
-          echo $search['data']['location'] . '<br />';
+          var_dump(geocode($search['data']['location'])); echo '<br />';
           $city = getCity($search['data']['location']);
           if (!isset($searchdata[$city])) $searchdata[$city] = 1;
           else $searchdata[$city] ++;
