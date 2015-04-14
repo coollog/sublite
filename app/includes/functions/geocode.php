@@ -11,7 +11,7 @@
 
 		// If Status Code is ZERO_RESULTS, OVER_QUERY_LIMIT, REQUEST_DENIED or INVALID_REQUEST
 		if ($response['status'] != 'OK') {
-			echo $response['status'];
+			var_dump($response);
 			if ($response['status'] == 'OVER_QUERY_LIMIT' && $attempts < 3) {
 				sleep(2);
 				return geocodeJSON($string, $attempts + 1);
