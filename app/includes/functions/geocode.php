@@ -1,5 +1,5 @@
 <?php
-	function geocodeJSON($string) {
+	function geocodeJSON($string, $attempts=0) {
 		$string = str_replace (" ", "+", urlencode($string));
 		$details_url = "http://maps.googleapis.com/maps/api/geocode/json?address=".$string."&sensor=false";
 
@@ -11,6 +11,10 @@
 
 		// If Status Code is ZERO_RESULTS, OVER_QUERY_LIMIT, REQUEST_DENIED or INVALID_REQUEST
 		if ($response['status'] != 'OK') {
+			if ($response['status'] == 'OVER_QUERY_LIMIT' && $attempts < 3) {
+				sleep(2);
+				return geocodeJSON($string, $attempts + 1);
+			}
 			return null;
 		}
 		return $response;
