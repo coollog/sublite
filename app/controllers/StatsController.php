@@ -202,14 +202,14 @@
         $searches = $entry;
         array_splice($searches, 0, -$_GET['cities']);
         foreach ($searches as $time => $search) {
-          if ($time == '_id' or $search['type'] != 'sublets') continue;
+          if ($time == '_id' or !isset($search['type']) or $search['type'] != 'sublets') continue;
 
           if (!isset($search['city'])) {
             $location = $search['data']['location'];
             $city = getCity($location);
 
             // Save cities so don't need to recurl in the future
-            $entry['time']['city'] = $city;
+            $entry[$time]['city'] = $city;
             $MApp->save($entry);
           } else
             $city = $search['city'];
