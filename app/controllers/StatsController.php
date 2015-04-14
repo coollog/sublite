@@ -207,9 +207,9 @@
           if (!isset($search['city'])) {
             $location = $search['data']['location'];
             $city = getCity($location);
-
+            echo "$time<br />";
             // Save cities so don't need to recurl in the future
-            $entry[$time]['city'] = $city;
+            $entry[strval($time)]['city'] = $city;
             $MApp->save($entry);
           } else
             $city = $search['city'];
