@@ -410,7 +410,7 @@
 
       $this->startValidations();
 
-      $this->validate(!is_null($geocode = geocode($location)), $err, 'invalid location');
+      $this->validate(!is_null($geocode = geocode($location)), $err, 'invalid location or daily search limit reached (come back tomorrow)');
       if ($this->isValid()) {
         $latitude = $geocode['latitude'];
         $longitude = $geocode['longitude'];
