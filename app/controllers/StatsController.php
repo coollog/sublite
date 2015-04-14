@@ -202,6 +202,10 @@
         $searches = $entry;
         array_splice($searches, 0, -$_GET['cities']);
         foreach ($searches as $time => $search) {
+          if ($time != '_id' and !isset($search['type'])) {
+            unset($entry[$time]);
+            $MApp->save($entry);
+          }
           if ($time == '_id' or !isset($search['type']) or $search['type'] != 'sublets') continue;
 
           if (!isset($search['city'])) {
