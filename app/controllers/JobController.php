@@ -236,12 +236,12 @@
       // Code
       if ($this->isValid()) {
         $entry['stats']['viewers']++;
-        // if(isset($_SESSION['loggedinstudent'])) {
-        //   $entry['viewers'][] = array($_SESSION['_id'], new MongoDate());
-        // }
-        // else {
-        //   $entry['viewers'][] = array('', new MongoDate());
-        // }
+        if(isset($_SESSION['loggedinstudent'])) {
+          $entry['viewers'][] = array($_SESSION['_id'], new MongoDate());
+        }
+        else {
+          $entry['viewers'][] = array('', new MongoDate());
+        }
         $MJob->save($entry, false);
 
         $data = $this->data($entry);
