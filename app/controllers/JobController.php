@@ -235,7 +235,7 @@
 
       // Code
       if ($this->isValid()) {
-        $entry['stats']['viewers']++;
+        $entry['stats']['views']++;
         if(isset($_SESSION['loggedinstudent'])) {
           $entry['viewers'][] = array($_SESSION['_id'], new MongoDate());
         }
