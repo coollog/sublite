@@ -151,6 +151,18 @@
       }
       echo '</textarea>';
     }
+    function cumulative() {
+      global $MJob;
+
+      $views = 0; $clicks = 0;
+      $jobs = $MJob->getAll();
+      foreach ($jobs as $job) {
+        $views += $job['stats']['views'];
+        $clicks += $job['stats']['clicks'];
+      }
+
+      echo "<br />Jobs views: $views<br />Jobs clicks: $clicks<br />";
+    }
     function graph() {
       global $MStudent;
 
