@@ -37,6 +37,9 @@
 
     // TODO? See if URL is actually valid
     function isValidURL($url) {
+      if (filter_var($url, FILTER_VALIDATE_EMAIL)) {
+        return true;
+      }
       // filter_var is pretty weak so we use other tests
       if (!preg_match('`^((https?:\/\/)*[\w\-]+\.[\w\-]+)`',
         $url)) return false;  
@@ -70,7 +73,8 @@
       }
       $requirements = clean($data['requirements']);
       $link = clean($data['link']);
-      if (!preg_match('`^(https?:\/\/)`', $link)) $link = "http://$link";
+      if (!filter_var($link, FILTER_VALIDATE_EMAIL) &&
+        !preg_match('`^(https?:\/\/)`', $link)) $link = "http://$link";
       return array(
         'title' => $title, 'deadline' => $deadline, 'duration' => $duration,
         'desc' => $desc, 'geocode' => $geocode,
