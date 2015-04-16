@@ -45,6 +45,12 @@
       $entry = $this->get($id);
       if($entry !== NULL) {
         ++$entry['stats']['clicks'];
+        if(isset($_SESSION['loggedinstudent'])) {
+          $entry['applicants'][] = array($_SESSION['_id'], new MongoDate());
+        }
+        else {
+          $entry['applicants'][] = array('', new MongoDate());
+        }
         $this->save($entry, false);
         return $entry['stats']['clicks'];
       }
