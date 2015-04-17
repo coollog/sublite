@@ -256,7 +256,6 @@
         die('permission denied');
     }
     function messages() {
-      echo 'hi'; die();
       global $MMessage, $CMessage;
       $msgs = $MMessage->getAll();
 
