@@ -287,7 +287,8 @@
             'email' => $email,
             'time' => $time,
             'read' => $read,
-            'msg' => $msg
+            'msg' => $msg,
+            'to' => $to
           );
         }
         $rlist = array_reverse($rlist);
