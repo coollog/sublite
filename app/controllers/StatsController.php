@@ -264,7 +264,7 @@
         $replies = $m['replies'];
         if (count($replies) == 0) continue;
 
-        $lasttime = $replies[count($replies) - 1];
+        $lasttime = $replies[count($replies) - 1]['time'];
         $rlist = array();
         foreach ($replies as $r) {
           $from = $r['from'];
