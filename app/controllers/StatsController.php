@@ -241,6 +241,41 @@
 
       $this->render('graph', $data);
     }
+    function messages() {
+      echo 'hi'; die();
+      global $MMessage, $CMessage;
+      $msgs = $MMessage->getAll();
+
+      $mlist = array();
+      foreach ($msgs as $m) {
+        $replies = $m['replies'];
+        if (count($replies) == 0) continue;
+
+        $lasttime = $replies[count($replies) - 1];
+        $rlist = array();
+        foreach ($replies as $r) {
+          $from = $r['from'];
+          $time = $r['time'];
+          $read = $r['read'];
+          $msg = $r['msg'];
+          $name = $CMessage->getName($from);
+          $email = $CMessage->getEmail($from);
+          $time = date("r", $time);
+          $rlist[] = array(
+            'name' => $name,
+            'email' => $email,
+            'time' => $time,
+            'read' => $read,
+            'msg' => $msg
+          );
+        }
+        $rlist = array_reverse($rlist);
+        $mlist[$lasttime] = $rlist;
+      }
+      ksort($mlist);
+
+      $this->render('messagestats', array('mlist' => $mlist));
+    }
   }
 
   $CStats = new StatsController();
