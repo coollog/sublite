@@ -252,7 +252,7 @@
         'yuanling.yuan@yale.edu',
         'shirley.guo@yale.edu'
       );
-      if (!in_array($_SESSION['Lemail'], $admins))
+      if (!in_array($_SESSION['email'], $admins))
         die('permission denied');
     }
     function messages() {
