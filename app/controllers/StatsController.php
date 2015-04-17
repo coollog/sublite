@@ -241,6 +241,20 @@
 
       $this->render('graph', $data);
     }
+
+    function requireLogin() {
+      global $CJob;
+      $CJob->requireLogin();
+      $admins = array(
+        'tony.jiang@yale.edu',
+        'michelle.chan@yale.edu',
+        'qingyang.chen@yale.edu',
+        'yuanling.yuan@yale.edu',
+        'shirley.guo@yale.edu'
+      );
+      if (!in_array($_SESSION['Lemail'], $admins))
+        die('permission denied');
+    }
     function messages() {
       echo 'hi'; die();
       global $MMessage, $CMessage;
