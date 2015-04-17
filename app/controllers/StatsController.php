@@ -265,9 +265,17 @@
         if (count($replies) == 0) continue;
 
         $lasttime = $replies[count($replies) - 1]['time'];
+        $participants = $m['participants'];
         $rlist = array();
         foreach ($replies as $r) {
           $from = $r['from'];
+          $to = array();
+          foreach ($participants as $p) {
+            if ($p !== $from) $to[] = array(
+              'name' => $CMessage->getName($p),
+              'email' => $CMessage->getEmail($p)
+            );
+          }
           $time = $r['time'];
           $read = $r['read'];
           $msg = $r['msg'];
@@ -286,6 +294,7 @@
         $mlist[$lasttime] = $rlist;
       }
       ksort($mlist);
+      $mlist = array_reverse($mlist);
 
       $this->render('messagestats', array('mlist' => $mlist));
     }

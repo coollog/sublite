@@ -20,9 +20,15 @@
           $time = $r['time'];
           $msg = $r['msg'];
           $read = $r['read'] ? '' : 'unread';
+          $to = '';
+          foreach ($r['to'] as $t) {
+            $name = $t['name'];
+            $email = $t['email'];
+            $to .= "$name ($email) ";
+          }
       ?>
           <div class="reply <?php echo $read; ?>">
-            <?php echo $name; ?> - <?php echo $email; ?> | <?php echo $time; ?>
+            <?php echo $name; ?> (<?php echo $email; ?>) to <?php echo $to; ?> | <?php echo $time; ?>
             <br />
             <?php echo $msg; ?>
           </div>
