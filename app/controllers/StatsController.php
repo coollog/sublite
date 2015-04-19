@@ -271,11 +271,13 @@
           $from = $r['from'];
           $to = array();
           foreach ($participants as $p) {
-            echo "p: $p, from: $from<br />";
-            if ($p != $from) $to[] = array(
-              'name' => $CMessage->getName($p),
-              'email' => $CMessage->getEmail($p)
-            );
+            if ($p != $from) {
+              echo "p: $p, from: $from<br />";
+              $to[] = array(
+                'name' => $CMessage->getName($p),
+                'email' => $CMessage->getEmail($p)
+              );
+            }
           }
           $time = $r['time'];
           $read = $r['read'];
