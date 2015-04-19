@@ -99,7 +99,7 @@
         echo vlinkto(jobBlock($job), 'job', array('id' => $job['_id']->{'$id'}));
       }
       if (count($jobs) == 0) {
-        echo "No jobs matching your query. Try reducing your filters.";
+        echo "No jobs matching your query. Stay posted! New jobs are being added regularly.";
       }
     ?>
   </div>
