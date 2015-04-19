@@ -9,6 +9,7 @@
   .thread .reply {
     display: none;
     padding: 1em;
+    border: 1px solid #ccc;
   }
   .brief {
     cursor: pointer;
@@ -33,8 +34,9 @@
             $participants[] = "$pname ($pemail)";
           }
           $participants = implode(", ", $participants);
+          $lasttime = $m['lasttime'];
         ?>
-        <?php echo $count; ?> messages between <?php echo $participants; ?>
+        <?php echo $count; ?> messages between <?php echo $participants; ?> | <?php echo $lasttime; ?>
       </div>
       <?php
         foreach ($m['replies'] as $r) {
