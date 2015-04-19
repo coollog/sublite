@@ -94,7 +94,7 @@
       // Params to vars
 
       // Processes message data
-      function viewData($entry=NULL) {
+      function viewData($c, $entry=NULL) {
         global $MMessage;
         $messages = array_reverse(iterator_to_array($MMessage->findByParticipant($_SESSION['_id']->{'$id'})));
 
@@ -110,7 +110,7 @@
           }
           if (!$reply['read']) $unread ++;
 
-          $this->setFromNamePic($reply, $from);
+          $c->setFromNamePic($reply, $from);
           
           if (strcmp($m['_id'], $entry['_id']) == 0) $reply['current'] = true;
           else $reply['current'] = false;
@@ -129,15 +129,15 @@
           $currentreplies = $entry['replies'];
           $current = array();
           foreach ($currentreplies as $m) {
-            $this->setFromNamePic($m, $m['from']);
+            $c->setFromNamePic($m, $m['from']);
             $m['time'] = timeAgo($m['time']);
             array_push($current, $m);
           }
 
-          $to = 'Message To: ' . $this->getName($entry['participants'][0]);
+          $to = 'Message To: ' . $c->getName($entry['participants'][0]);
           foreach ($entry['participants'] as $p) {
             if (strcmp($p, $_SESSION['_id']) != 0) {
-              $to = 'Message To: ' . getName($p);
+              $to = 'Message To: ' . $c->getName($p);
             }
           }
           $currentid = $entry['_id'];
@@ -159,7 +159,7 @@
       }
       
       if (!isset($_GET['id'])) {
-        $this->render('messages', viewData()); return;
+        $this->render('messages', viewData($this)); return;
       }
 
       /* ACTUALLY SEND MESSAGES */
@@ -182,7 +182,7 @@
         $MMessage->save($entry);
 
         if (!isset($_POST['reply'])) {
-          $this->render('messages', viewData($entry)); return;
+          $this->render('messages', viewData($this, $entry)); return;
         }
 
         extract($data = $this->data($params));
@@ -242,7 +242,7 @@
           ";
           sendgmail(array('tony.jiang@yale.edu', 'qingyang.chen@gmail.com'), "info@sublite.net", 'Message sent on SubLite!', $message);
 
-          $this->render('messages', viewData($entry));
+          $this->render('messages', viewData($this, $entry));
           return;
         }
 
