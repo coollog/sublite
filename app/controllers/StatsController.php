@@ -272,7 +272,7 @@
           $to = array();
           foreach ($participants as $p) {
             echo "p: $p, from: $from<br />";
-            if ($p != $from->{'$id'}) $to[] = array(
+            if ($p != $from) $to[] = array(
               'name' => $CMessage->getName($p),
               'email' => $CMessage->getEmail($p)
             );
