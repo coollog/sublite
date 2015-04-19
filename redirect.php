@@ -6,7 +6,9 @@
     header("Location: mailto:" . $_GET['url']);
   }
   else {
-    header("Location: " . $_GET['url']);
+    $link = $_GET['url'];
+    if (!preg_match('`^(https?:\/\/)`', $_GET['url'])) $link = "http://" . $link;
+    header("Location: " . $link);
   }
   require_once($GLOBALS['dirpre'].'includes/footer.php');
 ?>
