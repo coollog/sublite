@@ -25,6 +25,7 @@
     <div class="thread">
       <div class="brief">
         <?php
+          $count = count($m['replies']);
           $participants = array();
           foreach ($m['participants'] as $p) {
             $pname = $p['name'];
