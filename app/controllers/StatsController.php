@@ -250,7 +250,9 @@
         'michelle.chan@yale.edu',
         'qingyang.chen@yale.edu',
         'yuanling.yuan@yale.edu',
-        'shirley.guo@yale.edu'
+        'shirley.guo@yale.edu',
+        'tony.chen@yale.edu',
+        'alisa.melekhina@law.upenn.edu'
       );
       if (!in_array($_SESSION['email'], $admins))
         die('permission denied');
