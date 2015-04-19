@@ -266,13 +266,20 @@
 
         $lasttime = $replies[count($replies) - 1]['time'];
         $participants = $m['participants'];
+        $plist = array();
+        foreach ($participants as $p) {
+          $plist[] = array(
+            'name' => $CMessage->getName($p),
+            'email' => $CMessage->getEmail($p)
+          );
+        }
+
         $rlist = array();
         foreach ($replies as $r) {
           $from = $r['from'];
           $to = array();
           foreach ($participants as $p) {
             if ($p != $from) {
-              echo "p: $p, from: $from<br />";
               $to[] = array(
                 'name' => $CMessage->getName($p),
                 'email' => $CMessage->getEmail($p)
@@ -295,7 +302,11 @@
           );
         }
         $rlist = array_reverse($rlist);
-        $mlist[$lasttime] = $rlist;
+        $mlist[$lasttime] = array(
+          'participants' => $plist,
+          'lasttime' => date("r", $lasttime),
+          'replies' => $rlist
+        );
       }
       ksort($mlist);
       $mlist = array_reverse($mlist);

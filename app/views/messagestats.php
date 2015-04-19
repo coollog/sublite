@@ -1,9 +1,19 @@
 <style>
   .thread {
     border: 1px solid #666;
+    padding: 1em;
   }
   .reply.unread {
     background: #ccc;
+  }
+  .thread .reply {
+    display: none;
+    padding: 1em;
+  }
+  .brief {
+    cursor: pointer;
+    background: #f8dd00;
+    padding: 1em;
   }
 </style>
 
@@ -13,8 +23,20 @@
   foreach ($mlist as $m) {
 ?>
     <div class="thread">
+      <div class="brief">
+        <?php
+          $participants = array();
+          foreach ($m['participants'] as $p) {
+            $pname = $p['name'];
+            $pemail = $p['email'];
+            $participants[] = "$pname ($pemail)";
+          }
+          $participants = implode(", ", $participants);
+        ?>
+        <?php echo $count; ?> messages between <?php echo $participants; ?>
+      </div>
       <?php
-        foreach ($m as $r) {
+        foreach ($m['replies'] as $r) {
           $name = $r['name'];
           $email = $r['email'];
           $time = $r['time'];
@@ -22,15 +44,18 @@
           $read = $r['read'] ? '' : 'unread';
           $to = '';
           foreach ($r['to'] as $t) {
-            $name = $t['name'];
-            $email = $t['email'];
-            $to .= "$name ($email) ";
+            $toname = $t['name'];
+            $toemail = $t['email'];
+            $to .= "$toname ($toemail) ";
           }
       ?>
           <div class="reply <?php echo $read; ?>">
-            <?php echo $name; ?> (<?php echo $email; ?>) to <?php echo $to; ?> | <?php echo $time; ?>
-            <br />
-            <?php echo $msg; ?>
+            <div class="info">
+              <?php echo $name; ?> (<?php echo $email; ?>) to <?php echo $to; ?> | <?php echo $time; ?>
+            </div>
+            <div class="msg">
+              <?php echo $msg; ?>
+            </div>
           </div>
       <?php
         }
@@ -39,3 +64,11 @@
 <?php
   }
 ?>
+
+<script>
+  $(function() {
+    $('.brief').click(function() {
+      $(this).parent().find('.reply').slideToggle(200);
+    });
+  });
+</script>
