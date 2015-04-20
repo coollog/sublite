@@ -65,12 +65,15 @@
     "recruiter hascompany" => vget('Loggedin') and vget('Lcompany'),
     "recruiter nocompany" => vget('Loggedin') and !vget('Lcompany'),
     "student" => vget('Loggedinstudent'),
-    "student /housing" => vget('Loggedinstudent') and $curdir == '/housing'
+    "student /housing" => vget('Loggedinstudent') and $curdir == '/housing',
+    "all" => true
   );
   // Establish relative paths
   $path = $GLOBALS['dirpre'] . '../';
   // Build the menu items and associate them with a state
   $menu = array(
+    array("Blog", "https://sublite.wordpress.com/", "all"),
+
     array("List Job", $path."employers/addjob.php", "recruiter hascompany"),
     array("Manage", $path."employers/home.php", "recruiter hascompany"),
     array("Messages", $path."employers/messages.php", "recruiter hascompany"),
