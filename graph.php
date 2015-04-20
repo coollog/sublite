@@ -1,6 +1,7 @@
 <?php
-  $GLOBALS['dirpre'] = '../app/';
+  $GLOBALS['dirpre'] = 'app/';
   require_once($GLOBALS['dirpre'].'includes/header.php');
-  Controller::redirect('../index');
+  $CJob->requireLogin();
+  $CStats->graph();
   require_once($GLOBALS['dirpre'].'includes/footer.php');
 ?>

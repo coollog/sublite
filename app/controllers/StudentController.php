@@ -47,7 +47,7 @@
       $me['photo'] = $photo;
 
       if (strlen($me['school']) == 0) {
-        require_once($GLOBALS['dirpre'].'../housing/schools.php');
+        global $S;
         $me['school'] = $S->nameOf($me['email']);
       }
 
@@ -102,9 +102,10 @@
 
           if ($this->isValid()) {
             $_SESSION['loggedinstudent'] = true;
+            $_SESSION['_id'] = $entry['_id'];
             $_SESSION['email'] = $email;
             $_SESSION['pass'] = $pass;
-            $_SESSION['_id'] = $entry['_id'];
+            $_SESSION['name'] = $entry['name'];
             
             // $this->redirect('home');
             // $this->redirect('search');
@@ -132,7 +133,7 @@
       $this->startValidations();
       $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL), 
         $err, 'invalid email');
-      require_once($GLOBALS['dirpre'].'../housing/schools.php');
+      global $S;
       $this->validate($S->verify($email), $err, 'email must be .edu');
       $this->validate(($entry = $MStudent->get($email)) == NULL or !isset($entry['pass']),
         $err, 'email already in use, please log in instead');
@@ -148,6 +149,8 @@
           $entry['confirm'] = $confirm;
         }
         $entry['stats'] = array('referrals' => array());
+        $entry['time'] = time();
+
         $id = $MStudent->save($entry);
 
         // Handle referrals
@@ -224,7 +227,7 @@
 
           Hey there!
           <br /><br />
-          Check out SubLite, a free website that's helping me find summer opportunities and housing. It was founded by Yale students last year and more than 4,000 students have already started using it.
+          Check out SubLite, a free website that's helping me find summer opportunities and housing. It was founded by Yale students last year and more than 5,000 students have already started using it.
           <br /><br />
           The link is www.sublite.net?r=$r!
           <br /><br />

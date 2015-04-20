@@ -19,6 +19,9 @@
     function getAll() {
       return $this->collection->find();
     }
+    function getAllwTime() {
+      return $this->collection->find(array('time' => array('$exists' => true)));
+    }
     function getById($id) {
       return $this->collection->findOne(array('_id' => new MongoId($id)));
     }
@@ -38,8 +41,20 @@
       $entry = $this->getById($id);
       return $entry['email'];
     }
+    function last($n=1) {
+      return $this->collection->find()->sort(array('_id'=>-1))->limit($n);
+    }
     function me() {
-      return $this->get($_SESSION['email']);
+      if (isset($_SESSION['loggedinstudent']))
+        return $this->get($_SESSION['email']);
+      else {
+        return array(
+          'email' => '',
+          'name' => '',
+          'gender' => ''
+        );
+      }
+        
     }
 
     function login($email, $pass) {

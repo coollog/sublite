@@ -204,7 +204,7 @@
         <div class="tagline">Student Recruitment, Reimagined.</div>
         <div class="slogan">Attract the New Generation Talent with your Company's Unique Personality.</div>
         <a href="register.php">
-          <input type="button" class="registerlogin" value="Register" />
+          <input type="button" class="registerlogin" value="Get Started" />
         </a>
         <div class="switch"><a href="../jobs">switch to STUDENT</a></div>
       </div>

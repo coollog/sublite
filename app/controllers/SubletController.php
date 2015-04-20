@@ -12,7 +12,8 @@
       $geocode = geocode("$address, $city, $state");
       $startdate = $data['startdate'];
       $enddate = $data['enddate'];
-      $price = clean($data['price']);
+      $price = cleanfloat($data['price']);
+      if (!isset($data['pricetype'])) $data['pricetype'] = '';
       $pricetype = clean($data['pricetype']);
       $title = clean($data['title']);
       $summary = clean($data['summary']);
@@ -47,6 +48,8 @@
     }
 
     function validateData($data, &$err) {
+      $this->validate($data['pricetype'] != '',
+        $err, 'must select a price type');
       $this->validate($data['price'] >= 0, $err, 'price cannot be negative');
       $this->validate($data['occupancy'] > 0,
         $err, 'occupancy must be positive');
@@ -179,6 +182,8 @@
 
       // Code
       if ($this->isValid()) {
+        $data = array('commented' => false);
+
         if (isset($_POST['addcomment'])) {
           function dataComment($data) {
             $comment = clean($data['comment']);
@@ -193,7 +198,7 @@
             'time' => time(),
             'commenter' => $_SESSION['_id'], 'comment' => $comment
           ));
-          $entry['commented'] = true;
+          $data['commented'] = true;
 
           // Notify us of the comment
           $commenter = $_SESSION['email'];
@@ -208,11 +213,18 @@
         $entry['stats']['views']++;
         $MSublet->save($entry);
 
-        $data = $this->data($entry);
+        $data = array_merge($entry, $data);
         $data['_id'] = $entry['_id'];
         
         // ANY MODiFICATIONS ON DATA GOES HERE
         $s = $MStudent->getById($entry['student']);
+        if ($s == NULL) {
+          $entry['publish'] = false;
+          $MSublet->save($entry);
+          $this->error('this listing is no longer available');
+          $this->render('notice');
+          return;
+        }
 
         $data['studentname'] = $s['name'];
         $data['studentid'] = $s['_id']->{'$id'};
@@ -222,7 +234,7 @@
           $s['school'] : 'Undergraduate';
         $data['studentpic'] = isset($s['photo']) ?
           $s['photo'] : $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
-        require_once($GLOBALS['dirpre'].'../housing/schools.php');
+        global $S;
         $data['studentcollege'] = $S->nameOf($s['email']);
         $data['studentbio'] = isset($s['bio']) ?
           $s['bio'] : 'Welcome to my profile!';
@@ -316,7 +328,7 @@
     }
 
     function search() {
-      global $CStudent; $CStudent->requireLogin();
+      // global $CStudent; $CStudent->requireLogin();
 
       global $params;
       $params = $_REQUEST;
@@ -337,8 +349,10 @@
         $sublet['proximity'] = isset($sublet['proximity']) ? $sublet['proximity'] : null;
 
         $sublet['summary'] = strmax($sublet['summary'], 100);
-        $sublet['latitude'] = $sublet['geocode']['latitude'];
-        $sublet['longitude'] = $sublet['geocode']['longitude'];
+
+        $offset = 0.0001;
+        $sublet['latitude'] = $sublet['geocode']['latitude'] + rand01() * $offset - $offset/2;
+        $sublet['longitude'] = $sublet['geocode']['longitude'] + rand01() * $offset - $offset/2;
 
         return $sublet;
       }
@@ -387,7 +401,7 @@
         }
 
         $this->render('subletsearchstart', $this->dataSearchSetup());
-        $this->render('subletsearchresults', array('sublets' => $sublets, 'recent' => true));
+        $this->render('subletsearchresults', array('sublets' => $sublets, 'recent' => true, 'search' => 'housing'));
         return; 
       }
       
@@ -396,13 +410,13 @@
 
       $this->startValidations();
 
-      $this->validate(!is_null($geocode = geocode($location)), $err, 'invalid location');
+      $this->validate(!is_null($geocode = geocode($location)), $err, 'invalid location or daily search limit reached (come back tomorrow)');
       if ($this->isValid()) {
         $latitude = $geocode['latitude'];
         $longitude = $geocode['longitude'];
         $startdate = strtotime($startdate);
         $enddate = strtotime($enddate);
-        $maxProximity = (int)$proximity;
+        $maxProximity = $proximity == null ? 50 : (int)$proximity;
         $minPrice = (float)$price0;
         $maxPrice = (float)$price1;
         $minOccupancy = (int)$occupancy;
@@ -415,7 +429,6 @@
           $query = array(
             'publish' => true,
           );
-          if ($maxProximity == 0) $maxProximity = 50;
           $proximityDeg = distanceDeg($maxProximity);
           $query['geocode.latitude'] = array(
             '$gte' => $latitude - $proximityDeg,
@@ -425,12 +438,6 @@
             '$gte' => $longitude - $proximityDeg,
             '$lte' => $longitude + $proximityDeg
           );
-          if (strlen($price0) > 0) {
-            $query['price']['$gte'] = $minPrice;
-          }
-          if (strlen($price1) > 0) {
-            $query['price']['$lte'] = $maxPrice;
-          }
           if (strlen($occupancy) > 0) {
             $query['occupancy'] = array('$gte' => $minOccupancy);
           }
@@ -460,25 +467,20 @@
             // Performing search
             $starttime = microtime(true);
 
-            $querymonth = array_merge($query, array('pricetype' => 'month'));
-            if (strlen($price0) > 0) $querymonth['price']['$gte'] *= 4.35;
-            if (strlen($price1) > 0) $querymonth['price']['$lte'] *= 4.35;
-            $queryday = array_merge($query, array('pricetype' => 'day'));
-            if (strlen($price0) > 0) $queryday['price']['$gte'] /= 30;
-            if (strlen($price1) > 0) $queryday['price']['$lte'] /= 30;
-            $resmonth = $MSublet->find($querymonth);
-            $resweek = $MSublet->find($query);
-            $resday = $MSublet->find($queryday);
-
-            if (isset($_GET['test'])) {
-              var_dump($query);
+            $res = $MSublet->find($query);
+            
+            $sublets = array();
+            $res = process($res, $sortby, $latitude, $longitude, $maxProximity);
+            foreach ($res as $sublet) {
+              $price = $sublet['price'];
+              switch ($sublet['pricetype']) {
+                case 'week': $price *= 4.35; break;
+                case 'day': $price *= 30; break;
+              }
+              if (strlen($price0) > 0 and $price < $price0) continue;
+              if (strlen($price1) > 0 and $price > $price1) continue;
+              $sublets[] = $sublet;
             }
-
-            $sublets = array_merge(
-              process($resmonth, $sortby, $latitude, $longitude, $maxProximity),
-              process($resweek, $sortby, $latitude, $longitude, $maxProximity),
-              process($resday, $sortby, $latitude, $longitude, $maxProximity)
-            );
 
             $delay = round((microtime(true) - $starttime) * 1000, 0);
 
@@ -486,7 +488,7 @@
               'sublets' => $sublets, 'delay' => $delay, 
               'latitude' => $latitude, 'longitude' => $longitude,
               'maxProximity' => $maxProximity, 'showSearch' => $showSearch,
-              'data' => $data
+              'data' => $data, 'search' => 'housing'
             ));
 
             // Send email notification of search to us
@@ -502,7 +504,7 @@
       }
 
       $this->error($err);
-      $this->render('partials/subletsearchform', $data);
+      $this->render('partials/subletsearchform', array_merge($data, array('search' => 'housing')));
     }
   }
   $CSublet = new SubletController();

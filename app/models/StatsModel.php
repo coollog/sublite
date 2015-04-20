@@ -77,10 +77,7 @@
         'pass' => array('$exists' => false)
       ), array('email' => true));
     }
-    function countCities() {
-      $jobs = $this->db->jobs->find();
-      $sublets = $this->dbstudent->listings->find();
-
+    function getCities($dojobs=false) {
       $cities = array();
 
       function addCity(&$cities, $doc) {
@@ -89,21 +86,29 @@
         else
           $city = getCity($doc['location']);
         if ($city != null) {
-          if (!in_array($city, $cities))
-            array_push($cities, $city);
+          if (isset($cities[$city])) $cities[$city] ++;
+          else $cities[$city] = 1;
         }
       }
+
+      $sublets = $this->dbstudent->listings->find();
       foreach ($sublets as $doc) {
         addCity($cities, $doc);
       }
-      foreach ($jobs as $doc) {
-        addCity($cities, $doc);
+      if ($dojobs) {
+        $jobs = $this->db->jobs->find();
+        foreach ($jobs as $doc) {
+          addCity($cities, $doc);
+        }
       }
 
-      return count($cities);
+      return $cities;
+    }
+    function countCities() {
+      return count($this->getCities());
     }
     function countUniversities() {
-      require_once($GLOBALS['dirpre'].'../housing/schools.php');
+      global $S;
       return count($S->LUT);
     }
   }

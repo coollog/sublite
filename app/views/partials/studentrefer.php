@@ -184,6 +184,7 @@
       r: "<?php vecho('id'); ?>",
     };
     $.ajax({
+      type: "POST",
       url: 'refer.php',
       data: data,
       success: function(data) {

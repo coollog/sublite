@@ -89,6 +89,25 @@
       $url .= $_SERVER['HTTP_HOST'] . htmlspecialchars($_SERVER['REQUEST_URI']);
       echo '<meta property="og:url" content="' . $url . '" />';
     ?>
+    <?php
+      if (vget('search')) {
+        if (vget('search') == 'housing') {
+          $data = vget('data');
+    ?>
+          <title>
+            SubLite &ndash; Search for Sublets, Rentals, and Other Housing
+            <?php if ($data) echo ' - '.$data['location']; ?>
+          </title>
+    <?php
+        }
+        if (vget('search') == 'jobs') {
+    ?>
+          <title>SubLite &ndash; Search for Jobs and Internships</title>
+    <?php
+        }
+      }
+    ?>
+
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="SubLite" />
 

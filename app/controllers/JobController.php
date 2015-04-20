@@ -75,6 +75,7 @@
       $link = clean($data['link']);
       if (!filter_var($link, FILTER_VALIDATE_EMAIL) &&
         !preg_match('`^(https?:\/\/)`', $link)) $link = "http://$link";
+      
       return array(
         'title' => $title, 'deadline' => $deadline, 'duration' => $duration,
         'desc' => $desc, 'geocode' => $geocode,
@@ -248,7 +249,7 @@
         }
         $MJob->save($entry, false);
 
-        $data = $this->data($entry);
+        $data = $entry;
         $data['_id'] = $entry['_id'];
         $data['salarytype'] = ($data['salarytype'] == 'total') ?
                               $data['duration'].' weeks' : $data['salarytype'];
@@ -303,7 +304,7 @@
     }
 
     function search() {
-      $this->requireLogin();
+      // $this->requireLogin();
 
       global $params;
       $params = $_REQUEST;
@@ -345,7 +346,7 @@
         $jobs = process($res);
 
         $this->render('searchform', $this->dataSearchSetup());
-        $this->render('searchresults', array('jobs' => $jobs, 'recent' => true));
+        $this->render('searchresults', array('jobs' => $jobs, 'recent' => true, 'search' => 'jobs'));
         return; 
       }
       
@@ -396,7 +397,7 @@
         $jobs = process($res);
 
         if ($showSearch) $this->render('searchform', $data);
-        $this->render('searchresults', array('jobs' => $jobs, 'showCompany' => $showCompany));
+        $this->render('searchresults', array('jobs' => $jobs, 'showCompany' => $showCompany, 'search' => 'jobs'));
 
         // Send email notification of search to us
         // $this->sendrequestreport("Search for jobs:", $jobs);
@@ -409,7 +410,7 @@
       }
 
       $this->error($err);
-      $this->render('searchform', $data);
+      $this->render('searchform', array_merge($data, array('search' => 'jobs')));
     }
   }
   $CJob = new JobController();

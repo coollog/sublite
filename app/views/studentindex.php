@@ -43,7 +43,7 @@
   }
   panel.main .banner .slogan {
     color: #fff;
-    line-height: 1.1em;
+    line-height: 1.2em;
     font-size: 1.6em;
     letter-spacing: 1px;
     margin-top: 0.75em;
@@ -269,9 +269,12 @@
     <div class="banner">
       <div class="content">
         <div class="tagline">One-Stop Shop for a Great Summer!</div>
-        <div class="slogan">Find summer internships and safe, student-only summer housing with SubLite! Verify your ".edu" email address to get started! It's completely free!</div>
+        <div class="slogan">
+          Find reliable summer housing, cool internships, and meet other university students in your area this summer with SubLite!
+          <div style="font-size: 0.7em;"><br />Verify your ".edu" email address to get started! It's completely free!</div>
+        </div>
         <a href="register.php<?php if (!is_null($r = vget('r'))) echo "?r=$r"; ?>">
-          <input type="button" class="registerlogin" value="Register" />
+          <input type="button" class="registerlogin" value="Get Started" />
         </a>
         <div class="switch"><a href="../employers">switch to RECRUITER</a></div>
       </div>
@@ -291,7 +294,12 @@
 <panel class="why">
   <div class="content">
     <headline style="color: #035d75;">Why SubLite?</headline>
-    <div style="font-size: 1em; margin-top: -20px; margin-bottom: 20px;">We know you are working hard to network and get top grades for the best summer experience.<br>Finding jobs and housing can be a painstaking process, but it doesn't have to be.</div>
+    <div style="font-size: 1em; margin-top: -20px; margin-bottom: 20px;">
+      We know you are working hard to network and get top grades for the best summer experience.<br />
+      Finding jobs and housing can be a painstaking process.<br />
+      Living in a foreign city over the summer by yourself can be daunting.<br />
+      But it doesn't have to be.
+    </div>
     <table class="whys"><tr>
       <td class="whycell"><incell>
         <div class="whyimg whyimg1">
@@ -301,9 +309,9 @@
       </incell></td>
       <td class="whycell"><incell>
         <div class="whyimg whyimg2">
-          <div class="whyroll"><div class="cell">Filter housing by amenities, price, dates, and browse among jobs based on the company's culture.</div></div>
+          <div class="whyroll"><div class="cell">Meet up with other students working in your area and get all your questions answered in our hub-based forums.</div></div>
         </div>
-        <div class="whytext">Criteria you care about</div>
+        <div class="whytext">Connect with Other Students</div>
       </incell></td>
       <td class="whycell"><incell>
         <div class="whyimg whyimg3">

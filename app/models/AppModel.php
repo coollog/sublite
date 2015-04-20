@@ -52,7 +52,13 @@
       return $stats['industriesbyjobs'];
     }
 
+    function getSearches() {
+      return $this->get('searches');
+    }
+
     function recordSearch($type) {
+      if (!isset($_SESSION['loggedinstudent'])) return;
+      
       $email = $_SESSION['email'];
       $data = $_REQUEST;
 

@@ -55,31 +55,40 @@
   }
 </style>
 <?php
-  $curdir = dirname($_SERVER['REQUEST_URI']);
+  $curdir = dirname($_SERVER['REQUEST_URI'] . '/.');
   // Various states the user can be in
   $states = array(
     "loggedin" => vget('Loggedin') or vget('Loggedinstudent'),
     "notloggedin" => !vget('Loggedin') and !vget('Loggedinstudent'),
+    "notloggedin !/employers" => !vget('Loggedin') and !vget('Loggedinstudent') and $curdir != '/employers',
+    "notloggedin /employers" => !vget('Loggedin') and !vget('Loggedinstudent') and $curdir == '/employers',
     "recruiter hascompany" => vget('Loggedin') and vget('Lcompany'),
     "recruiter nocompany" => vget('Loggedin') and !vget('Lcompany'),
     "student" => vget('Loggedinstudent'),
-    "student /housing" => vget('Loggedinstudent') and $curdir == '/housing'
+    "student /housing" => vget('Loggedinstudent') and $curdir == '/housing',
+    "all" => true
   );
   // Establish relative paths
   $path = $GLOBALS['dirpre'] . '../';
   // Build the menu items and associate them with a state
   $menu = array(
+    array("Blog", "https://sublite.wordpress.com/", "all"),
+
     array("List Job", $path."employers/addjob.php", "recruiter hascompany"),
     array("Manage", $path."employers/home.php", "recruiter hascompany"),
     array("Messages", $path."employers/messages.php", "recruiter hascompany"),
     array("Add Company Profile", $path."employers/addcompany.php", "recruiter nocompany"),
 
-    array("Search For Housing", $path."housing/search.php", "student"),
-    array("Search For Jobs", $path."jobs/search.php", "student"),
+    array("Housing", $path."housing/search.php", "student"),
+    array("Jobs", $path."jobs/search.php", "student"),
     array("Add Sublet", $path."housing/addsublet.php", "student /housing"),
     array("Manage", $path."housing/home.php", "student"),
     array("Messages", "messages.php", "student"),
 
+    array("Search Housing", $path."housing/search.php", "notloggedin !/employers"),
+    array("Search Jobs", $path."jobs/search.php", "notloggedin !/employers"),
+    array("List Sublet", $path."register.php", "notloggedin !/employers"),
+    array("List Job", $path."register.php", "notloggedin /employers"),
     array("Register", "register.php", "notloggedin"),
     array("Log In", "login.php", "notloggedin"),
     array("Log Out", "logout.php", "loggedin")

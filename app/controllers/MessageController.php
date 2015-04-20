@@ -46,57 +46,57 @@
         'msg' => $msg
       );
     }
+
+    // Some helper functions
+    function getName($p) {
+      global $MStudent, $MRecruiter;
+      if ($MStudent->exists($p)) {
+        $name = $MStudent->getName($p);
+      } else if ($MRecruiter->IDexists($p)) {
+        $name = $MRecruiter->getName($p);
+      } else {
+        $name = 'Nonexistent';
+      }
+      return $name;
+    }
+    function getEmail($p) {
+      global $MStudent, $MRecruiter;
+      if ($MStudent->exists($p)) {
+        $name = $MStudent->getEmail($p);
+      } else if ($MRecruiter->IDexists($p)) {
+        $name = $MRecruiter->getEmail($p);
+      } else {
+        $name = 'Nonexistent';
+      }
+      return $name;
+    }
+    function setFromNamePic(&$reply, $from) {
+      global $MStudent, $MRecruiter;
+      $reply['fromname'] = $this->getName($from);
+      if ($MStudent->exists($from)) {
+        $Photo = $MStudent->getPhoto($from);
+        if ($Photo == '' or $Photo == 'defaultpic.png' or $Photo == 'noprofilepic.png')
+          $Photo = $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
+        $reply['frompic'] = $Photo;
+      } else if ($MRecruiter->IDexists($from)) {
+        $reply['frompic'] = $MRecruiter->getPhoto($from);
+      } else {
+        $reply['frompic'] = 'Nonexistent';
+      }
+      if ($reply['frompic'] == 'assets/gfx/defaultpic.png')
+        $reply['frompic'] = $GLOBALS['dirpre'].$reply['frompic'];
+    }
+
     function reply() {
       global $CJob; $CJob->requireLogin();
       
       global $params, $MMessage;
       // Params to vars
 
-      // Some helper functions
-      function getName($p) {
-        global $MStudent, $MRecruiter;
-        if ($MStudent->exists($p)) {
-          $name = $MStudent->getName($p);
-        } else if ($MRecruiter->IDexists($p)) {
-          $name = $MRecruiter->getName($p);
-        } else {
-          $name = 'Nonexistent';
-        }
-        return $name;
-      }
-      function getEmail($p) {
-        global $MStudent, $MRecruiter;
-        if ($MStudent->exists($p)) {
-          $name = $MStudent->getEmail($p);
-        } else if ($MRecruiter->IDexists($p)) {
-          $name = $MRecruiter->getEmail($p);
-        } else {
-          $name = 'Nonexistent';
-        }
-        return $name;
-      }
-
       // Processes message data
-      function viewData($entry=NULL) {
+      function viewData($c, $entry=NULL) {
         global $MMessage;
         $messages = array_reverse(iterator_to_array($MMessage->findByParticipant($_SESSION['_id']->{'$id'})));
-
-        function setFromNamePic(&$reply, $from) {
-          global $MStudent, $MRecruiter;
-          $reply['fromname'] = getName($from);
-          if ($MStudent->exists($from)) {
-            $Photo = $MStudent->getPhoto($from);
-            if ($Photo == '' or $Photo == 'defaultpic.png' or $Photo == 'noprofilepic.png')
-              $Photo = $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
-            $reply['frompic'] = $Photo;
-          } else if ($MRecruiter->IDexists($from)) {
-            $reply['frompic'] = $MRecruiter->getPhoto($from);
-          } else {
-            $reply['frompic'] = 'Nonexistent';
-          }
-          if ($reply['frompic'] == 'assets/gfx/defaultpic.png')
-            $reply['frompic'] = $GLOBALS['dirpre'].$reply['frompic'];
-        }
 
         $replies = array();
         $unread = 0;
@@ -110,7 +110,7 @@
           }
           if (!$reply['read']) $unread ++;
 
-          setFromNamePic($reply, $from);
+          $c->setFromNamePic($reply, $from);
           
           if (strcmp($m['_id'], $entry['_id']) == 0) $reply['current'] = true;
           else $reply['current'] = false;
@@ -129,15 +129,15 @@
           $currentreplies = $entry['replies'];
           $current = array();
           foreach ($currentreplies as $m) {
-            setFromNamePic($m, $m['from']);
+            $c->setFromNamePic($m, $m['from']);
             $m['time'] = timeAgo($m['time']);
             array_push($current, $m);
           }
 
-          $to = 'Message To: ' . getName($entry['participants'][0]);
+          $to = 'Message To: ' . $c->getName($entry['participants'][0]);
           foreach ($entry['participants'] as $p) {
             if (strcmp($p, $_SESSION['_id']) != 0) {
-              $to = 'Message To: ' . getName($p);
+              $to = 'Message To: ' . $c->getName($p);
             }
           }
           $currentid = $entry['_id'];
@@ -159,7 +159,7 @@
       }
       
       if (!isset($_GET['id'])) {
-        $this->render('messages', viewData()); return;
+        $this->render('messages', viewData($this)); return;
       }
 
       /* ACTUALLY SEND MESSAGES */
@@ -182,7 +182,7 @@
         $MMessage->save($entry);
 
         if (!isset($_POST['reply'])) {
-          $this->render('messages', viewData($entry)); return;
+          $this->render('messages', viewData($this, $entry)); return;
         }
 
         extract($data = $this->data($params));
@@ -193,13 +193,13 @@
           // Send the message
           $msgid = $entry['_id']->{'$id'};
           $from = $myid;
-          $fromname = getName($from);
+          $fromname = $this->getName($from);
           $tos = array_remove($entry['participants'], $from);
           $entry = $MMessage->reply($msgid, $from, $msg);
 
           $emails = array();
           foreach ($tos as $to) {
-            $emails[] = getEmail($to);
+            $emails[] = $this->getEmail($to);
           }
 
           // Notify recipients by email
@@ -221,17 +221,28 @@
 
           // Notify us of the message
           $toemails = implode(', ', $emails);
-          $fromemail = getEmail($from);
+          $fromemail = $this->getEmail($from);
+          $prevmsgs = '';
+          $replies = array_reverse($entry['replies']);
+          foreach ($replies as $reply) {
+            $pfromemail = $this->getEmail($reply['from']);
+            $pmsg = $reply['msg'];
+            $prevmsgs .= "<b>$pfromemail</b>: <br />$pmsg<br />";
+          }
           $message = "
             <b>$fromemail</b> has sent a message to <b>$toemails</b>:
             <br /><br />
             $msg
             <br /><br />
             msgid: $msgid
+            <br /><br />
+            The thread:
+            <br /><br />
+            $prevmsgs
           ";
           sendgmail(array('tony.jiang@yale.edu', 'qingyang.chen@gmail.com'), "info@sublite.net", 'Message sent on SubLite!', $message);
 
-          $this->render('messages', viewData($entry));
+          $this->render('messages', viewData($this, $entry));
           return;
         }
 

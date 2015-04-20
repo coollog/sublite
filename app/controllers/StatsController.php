@@ -3,11 +3,14 @@
 
   class StatsController extends Controller {
     function update() {
-      global $MApp;
+      global $MApp, $MStats;
 
-      $countCities = isset($_GET['cities']);
-
-      $stats = $MApp->updateStats($countCities);
+      $stats = $MApp->updateStats();
+      if (isset($_GET['cities'])) {
+        $cities = $MStats->getCities();
+        asort($cities);
+        echo '<pre>'; var_dump($cities); echo '</pre>';
+      }
 
       echo 'Updated stats! Next time use ?cities to also update cities count (may take a while).<br /><pre>';
       var_dump($stats); echo '</pre>';
@@ -107,8 +110,215 @@
       }
       echo '</textarea>';
     }
+    function subletsended2014() {
+      global $MSublet, $MStudent;
+
+      $sublets = $MSublet->find(array('enddate' => array('$lte' => strtotime('1/1/2015'))));
+
+      $ss = array();
+      foreach ($sublets as $s) {
+        $id = $s['_id'];
+        $student = $MStudent->getById($s['student']);
+        $name = $student['name'];
+        $email = $student['email'];
+        $ss[] = "\"$email\",\"$name\",\"$id\"";
+      }
+
+      echo '<br />Sublets with end dates before 1/1/2015:<br />
+        <textarea style="width:800px; height: 200px;">';
+      foreach ($ss as $s) {
+        echo "$s\n";
+      }
+      echo '</textarea>';
+    }
+    function unknownschools() {
+      global $MStudent, $S;
+
+      $domains = array();
+      $students = $MStudent->getAll();
+      foreach ($students as $student) {
+        $email = $student['email'];
+        if (!$S->hasSchoolOf($email)) {
+          $domain = $S->getDomain($email);
+          if (!in_array($domain, $domains)) {
+            $domains[] = $domain;
+          }
+        }
+      }
+      $count = count($domains);
+
+      echo "<br />Unknown Schools ($count): <br />
+        <textarea style=\"width:800px; height: 200px;\">";
+      foreach ($domains as $d) {
+        echo "$d\n";
+      }
+      echo '</textarea>';
+    }
+    function cumulative() {
+      global $MJob;
+
+      $views = 0; $clicks = 0;
+      $jobs = $MJob->getAll();
+      foreach ($jobs as $job) {
+        $views += $job['stats']['views'];
+        $clicks += $job['stats']['clicks'];
+      }
+
+      echo "<br />Jobs views: $views<br />Jobs clicks: $clicks<br />";
+    }
+    function graph() {
+      global $MStudent;
+
+      // All students by month
+      $studentsdata = array();
+      $students = $MStudent->getAll();
+      foreach ($students as $student) {
+        $time = (int)($student['_id']->getTimestamp()/3600/24/30.2);
+        if (!isset($studentsdata[$time])) $studentsdata[$time] = 1;
+        else $studentsdata[$time] ++;
+      }
+      ksort($studentsdata);
+
+      // Students by day
+      $studentsdaydata = array();
+      $students = $MStudent->getAllwTime();
+      foreach ($students as $student) {
+        $time = (int)($student['time']/3600/24);
+        if (!isset($studentsdaydata[$time])) $studentsdaydata[$time] = 1;
+        else $studentsdaydata[$time] ++;
+      }
+      array_splice($studentsdaydata, 0, -100);
+      ksort($studentsdaydata);
+
+      // Messages
+      global $MMessage;
+      $msgdata = array();
+      $msgs = $MMessage->getAll();
+      foreach ($msgs as $msg) {
+        foreach ($msg['replies'] as $reply) {
+          $time = (int)($reply['time']/3600/24);
+          if (!isset($msgdata[$time])) $msgdata[$time] = 1;
+          else $msgdata[$time] ++;
+        }
+      }
+      ksort($msgdata);
+
+      $data = array(
+        'students' => $studentsdata,
+        'studentsday' => $studentsdaydata,
+        'msgs' => $msgdata
+      );
+
+      if (isset($_GET['cities'])) {
+        // Searches
+        global $MApp;
+
+        $searchdata = array();
+
+        $entry = $MApp->getSearches();
+        $searches = array_slice($entry, -$_GET['cities'], NULL, true);
+
+        foreach ($searches as $time => $search) {
+          echo "$time=>";
+          if ($time != '_id' and !isset($search['type'])) {
+            unset($entry[$time]);
+            $MApp->save($entry);
+            continue;
+          }
+          if ($time == '_id' or !isset($search['type']) or $search['type'] != 'sublets') continue;
+
+          if (!isset($search['city']) or $search['city'] == null) {
+            $location = $search['data']['location'];
+            $city = getCity($location);
+            // Save cities so don't need to recurl in the future
+            $entry[$time]['city'] = $city;
+            $MApp->save($entry);
+          } else
+            $city = $search['city'];
+
+          if (!isset($searchdata[$city])) $searchdata[$city] = 1;
+          else $searchdata[$city] ++;
+        }
+        $data['searchcities'] = $searchdata;
+      }
+
+      $this->render('graph', $data);
+    }
+
+    function requireLogin() {
+      global $CJob;
+      $CJob->requireLogin();
+      $admins = array(
+        'tony.jiang@yale.edu',
+        'michelle.chan@yale.edu',
+        'qingyang.chen@yale.edu',
+        'yuanling.yuan@yale.edu',
+        'shirley.guo@yale.edu',
+        'tony.chen@yale.edu',
+        'alisa.melekhina@law.upenn.edu'
+      );
+      if (!in_array($_SESSION['email'], $admins))
+        die('permission denied');
+    }
+    function messages() {
+      global $MMessage, $CMessage;
+      $msgs = $MMessage->getAll();
+
+      $mlist = array();
+      foreach ($msgs as $m) {
+        $replies = $m['replies'];
+        if (count($replies) == 0) continue;
+
+        $lasttime = $replies[count($replies) - 1]['time'];
+        $participants = $m['participants'];
+        $plist = array();
+        foreach ($participants as $p) {
+          $plist[] = array(
+            'name' => $CMessage->getName($p),
+            'email' => $CMessage->getEmail($p)
+          );
+        }
+
+        $rlist = array();
+        foreach ($replies as $r) {
+          $from = $r['from'];
+          $to = array();
+          foreach ($participants as $p) {
+            if ($p != $from) {
+              $to[] = array(
+                'name' => $CMessage->getName($p),
+                'email' => $CMessage->getEmail($p)
+              );
+            }
+          }
+          $time = $r['time'];
+          $read = $r['read'];
+          $msg = $r['msg'];
+          $name = $CMessage->getName($from);
+          $email = $CMessage->getEmail($from);
+          $time = date("r", $time);
+          $rlist[] = array(
+            'name' => $name,
+            'email' => $email,
+            'time' => $time,
+            'read' => $read,
+            'msg' => $msg,
+            'to' => $to
+          );
+        }
+        $rlist = array_reverse($rlist);
+        $mlist[$lasttime] = array(
+          'participants' => $plist,
+          'lasttime' => date("r", $lasttime),
+          'replies' => $rlist
+        );
+      }
+      ksort($mlist);
+      $mlist = array_reverse($mlist);
+
+      $this->render('messagestats', array('mlist' => $mlist));
+    }
   }
 
   $CStats = new StatsController();
-
 ?>

@@ -14,14 +14,17 @@
     $s = trim(htmlspecialchars(Encoding::toUTF8($s), ENT_QUOTES));
     return $s;
   }
+  function cleanfloat($s) {
+    return str2float(clean($s));
+  }
   function idcmp($id1, $id2) {
     return strval($id1) == strval($id2);
   }
   function str2int($str) { 
-    return filter_var($str, FILTER_SANITIZE_NUMBER_INT);
+    return (int)filter_var($str, FILTER_SANITIZE_NUMBER_INT);
   }
   function str2float($str) {
-    return filter_var($str, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+    return (float)filter_var($str, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
   }
   function keywords2mregex($str) {
     $regex = "";
@@ -82,5 +85,10 @@
     if(($key = array_search($val, $array)) !== false)
       unset($array[$key]);
     return $array;
+  }
+
+  // Gets random float 0 to 1
+  function rand01() {
+    return mt_rand() / mt_getrandmax();
   }
 ?>

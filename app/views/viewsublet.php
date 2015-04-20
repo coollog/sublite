@@ -225,7 +225,7 @@
     });
     $('.pop').click(function() { $(this).fadeOut(100, 'easeInOutCubic'); });
 
-    <?php if (vget('commented')) { ?>
+    <?php if (vget('commented')) {?>
       scrollTo('.comments');
     <?php } ?>
   });
