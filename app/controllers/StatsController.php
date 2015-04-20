@@ -3,7 +3,7 @@
 
   class StatsController extends Controller {
     function update() {
-      global $MApp;
+      global $MApp, $MStats;
 
       $stats = $MApp->updateStats();
       if (isset($_GET['cities'])) {
