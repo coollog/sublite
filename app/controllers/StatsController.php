@@ -5,9 +5,12 @@
     function update() {
       global $MApp;
 
-      $countCities = isset($_GET['cities']);
-
-      $stats = $MApp->updateStats($countCities);
+      $stats = $MApp->updateStats();
+      if (isset($_GET['cities'])) {
+        $cities = $MStats->getCities();
+        asort($cities);
+        echo '<pre>'; var_dump($cities); echo '</pre>';
+      }
 
       echo 'Updated stats! Next time use ?cities to also update cities count (may take a while).<br /><pre>';
       var_dump($stats); echo '</pre>';
