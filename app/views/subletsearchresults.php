@@ -291,7 +291,7 @@
             echo subletBlock($sublet);
           }
           if (count($sublets) == 0) {
-            echo "No sublets matching your query. Try reducing your filters.";
+            echo "No sublets matching your query. But don't fret! New sublets are being added regularly.";
           }
         ?>
       </div>

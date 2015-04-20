@@ -70,6 +70,7 @@
         <meta property="og:description" content="Attract the New Generation Talent with your Company's Unique Personality." />
         <meta property="og:image:width" content="1677" />
         <meta property="og:image:height" content="1118" />
+        <title>SubLite &ndash; Find internships and housing and sublets for rent!</title>
     <?php
       }
       else { // default
@@ -81,7 +82,7 @@
         <meta property="og:description" content="Find summer internships and safe, student-only summer housing with SubLite! Verify your &quot;.edu&quot; email address to get started! It's completely free!" />
         <meta property="og:image:width" content="1000" />
         <meta property="og:image:height" content="1000" />
-        <title>SubLite &ndash; Find internships and rent housing and sublets!</title>
+        <title>SubLite &ndash; Find internships and housing and sublets for rent!</title>
     <?php
       }
       $url = !empty($_SERVER['HTTPS']) ? 'https://' : 'http://';
