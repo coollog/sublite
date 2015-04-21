@@ -177,7 +177,7 @@
         $err, 'unknown sublet');
       if ($this->isValid())
         $this->validate(
-          $entry['publish'] or $entry['student'] == $_SESSION['_id'], 
+          $entry['publish'] or (isset($_SESSION['_id']) and $entry['student'] == $_SESSION['_id']), 
           $err, 'access denied');
 
       // Code
