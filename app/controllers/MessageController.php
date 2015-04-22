@@ -175,8 +175,8 @@
 
       if ($this->isValid()) {
         // Set replies to read
-        $repliesn = count($entry['replies'];
-        for ($i = 0; $i < $repliesn); $i ++) {
+        $repliesn = count($entry['replies']);
+        for ($i = 0; $i < $repliesn; $i ++) {
           if (strcmp($entry['replies'][$i]['from'], $_SESSION['_id']) != 0)
             $entry['replies'][$i]['read'] = true;
         }
