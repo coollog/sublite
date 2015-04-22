@@ -67,6 +67,9 @@
       <br />
       <input type="checkbox" name="terms" id="terms" value="agree" required /> <label for="terms">I have read, fully understand, and agree to SubLite&rsquo;s <a href="terms.php">Terms of Service</a>. I represent and warrant that I have permission to list this property, and that the description is accurate and not misleading. I will negotiate the terms of the stay with potential guests in good-faith.</label>
 
+      <br />
+      Remember to share your listing on social media such as Facebook!
+
       <?php vnotice(); ?>
 
       <right>
