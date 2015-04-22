@@ -5,7 +5,7 @@
     text-transform: uppercase;
     text-shadow: 2px 2px #035d75;
     line-height: 1em;
-    margin-bottom: 2em;
+    margin-bottom: .2em;
     font-family: 'BebasNeue', sans-serif;
     font-weight: bold;
   }
