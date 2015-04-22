@@ -175,7 +175,8 @@
 
       if ($this->isValid()) {
         // Set replies to read
-        for ($i = 0; $i < count($entry['replies']); $i ++) {
+        $repliesn = count($entry['replies'];
+        for ($i = 0; $i < $repliesn); $i ++) {
           if (strcmp($entry['replies'][$i]['from'], $_SESSION['_id']) != 0)
             $entry['replies'][$i]['read'] = true;
         }
@@ -188,6 +189,8 @@
         extract($data = $this->data($params));
         // Validations
         $this->validate(strlen($msg) > 0, $err, 'message empty');
+        $replylast = $entry['replies'][$repliesn-1];
+        $this->validate($msg != $replylast['msg'] or (time() - $replylast['time']) > 30);
 
         if ($this->isValid()) {
           // Send the message
@@ -245,7 +248,7 @@
           $this->render('messages', viewData($this, $entry));
           return;
         }
-
+        $this->render('messages', viewData($this, $entry)); return;
       }
       
       $this->error($err);
