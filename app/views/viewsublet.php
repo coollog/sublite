@@ -548,7 +548,8 @@
   <div class="poptable">
     <div class="popcell">
       <div class="popsharetext">
-        Share your listing on social media such as Facebook groups to advertise your listing! Copy and paste the link below into posts:
+        Share your listing on social media such as Facebook groups to advertise your listing!
+        <br />Copy and paste the link below into posts:
         <br /><br />
           <copy>www.sublite.net/housing/sublet.php?id=<?php vecho('_id'); ?></copy>
         <br />
