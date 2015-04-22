@@ -181,6 +181,7 @@
     display: table-cell;
     vertical-align: middle;
     z-index: 999;
+    text-align: center;
   }
   .popphoto img {
     max-width: 90vw;
@@ -191,6 +192,7 @@
     width: 600px;
     padding: 50px;
     background: #fff;
+    display: inline-block;
   }
   copy {
     display: block;
