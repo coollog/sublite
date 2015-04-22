@@ -35,7 +35,7 @@
       <input type="button" name="housing" value="Housing" />
     </a>
     <a href="">
-      <input type="button" name="social" value="Social" style="background: #999;" />
+      <input type="button" name="social" value="Social (soon)" style="background: #999;" />
     </a>
   </div>
 </panel>
