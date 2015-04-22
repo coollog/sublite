@@ -248,7 +248,7 @@
     <?php } ?>
   });
 </script>
-
+<?php var_dump(vget('mine')); ?>
 <panel class="main">
   <?php
     $i = 0;
