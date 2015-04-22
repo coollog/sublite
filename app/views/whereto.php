@@ -14,6 +14,9 @@
     margin: 10px;
     padding: .5em 40px;
     height: 3em;
+    color: #035d75;
+    text-transform: uppercase;
+    box-shadow: 2px 2px 0px #035d75;
   }
   .whereto .content {
     padding-top: 30vh;
