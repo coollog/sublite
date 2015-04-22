@@ -177,7 +177,7 @@
     display: table;
     text-align: center;
   }
-  .popphoto {
+  .popphoto, .popcell {
     display: table-cell;
     vertical-align: middle;
     z-index: 999;
@@ -187,10 +187,14 @@
     max-height: 90vh;
   }
   .popsharetext {
-    width: 400px;
-    height: 300px;
+    max-width: 100vw;
+    width: 600px;
     padding: 50px;
     background: #fff;
+  }
+  copy {
+    display: block;
+    font-weight: bold;
   }
 </style>
 
@@ -223,7 +227,7 @@
 
   function showShare() {
     if (!localStorage.hideShare) {
-      $('.popShare').fadeIn(200, 'easeInOutCubic');
+      $('.popshare').fadeIn(200, 'easeInOutCubic');
     }
   }
   function hideShare(hide) {
@@ -248,7 +252,7 @@
     <?php } ?>
   });
 </script>
-<?php var_dump(vget('mine')); ?>
+
 <panel class="main">
   <?php
     $i = 0;
@@ -535,15 +539,17 @@
 </div>
 <div class="popshare">
   <div class="poptable">
-    <div class="popsharetext">
-      Share your listing on social media such as Facebook groups to advertise your listing! Copy and paste the link below into posts:
-      <copy>www.sublite.net/housing/sublet.php?id=<?php vecho('_id'); ?></copy>
+    <div class="popcell">
+      <div class="popsharetext">
+        Share your listing on social media such as Facebook groups to advertise your listing! Copy and paste the link below into posts:
+        <copy>www.sublite.net/housing/sublet.php?id=<?php vecho('_id'); ?></copy>
 
-      or Like and Share below:
-      <?php vpartial('fb', array('route' => 'housing/sublet.php?id='.vget('_id'))); ?>
-
-      <input type="button" value="Sounds good!" />
-      <input type="button" value="Don't show this again." />
+        or Like and Share below:
+        <?php vpartial('fb', array('route' => 'housing/sublet.php?id='.vget('_id'))); ?>
+        <br />
+        <input type="button" value="Sounds good!" />
+        <input type="button" value="Don't show this again." />
+      </div>
     </div>
   </div>
 </div>
