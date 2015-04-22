@@ -14,11 +14,10 @@
     margin: 10px;
   }
   .whereto .content {
-    display: table-cell;
-    vertical-align: middle;
+    padding-top: 30vh;
   }
   .whereto {
-    height: 80vh;
+    height: 100%;
     display: table;
     background: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/whereto.jpg') no-repeat center center;
     background-size: cover;
