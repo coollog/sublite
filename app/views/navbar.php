@@ -56,7 +56,6 @@
 </style>
 <?php
   $curdir = dirname($_SERVER['REQUEST_URI'] . '/.');
-  var_dump($curdir);
   // Various states the user can be in
   $states = array(
     "loggedin" => vget('Loggedin') or vget('Loggedinstudent'),
@@ -66,7 +65,7 @@
     "recruiter hascompany" => vget('Loggedin') and vget('Lcompany'),
     "recruiter nocompany" => vget('Loggedin') and !vget('Lcompany'),
     "student" => vget('Loggedinstudent'),
-    "student /housing" => vget('Loggedinstudent') and $curdir == '/housing',
+    "student /housing" => vget('Loggedinstudent') and preg_match($curdir, '/^\/housing/',
     "all" => true
   );
   // Establish relative paths
