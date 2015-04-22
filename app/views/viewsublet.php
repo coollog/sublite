@@ -243,7 +243,7 @@
   $(function() {
     <?php if (vget('mine')) echo 'showShare();'; ?>
     $('#hideshare').click(function() { hideShare(); });
-    $('.popsharetext').click(function(e) { e.preventDefault(); });
+    $('.popsharetext').click(function(e) { e.stopPropagation(); });
 
     showPhoto(0);
     $('.photocontrolleft').click(function() { showPhotoLeft(); });
@@ -549,12 +549,12 @@
     <div class="popcell">
       <div class="popsharetext">
         Share your listing on social media such as Facebook groups to advertise your listing! Copy and paste the link below into posts:
-        <br />
-          <copy>www.sublite.net/housing/sublet.php?id=<?php vecho('_id'); ?></copy>
         <br /><br />
+          <copy>www.sublite.net/housing/sublet.php?id=<?php vecho('_id'); ?></copy>
+        <br />
         or Like and Share below: <br /><br />
         <?php vpartial('fb', array('route' => 'housing/sublet.php?id='.vget('_id'))); ?>
-        <br /><br />
+        <br /><br /><br />
         <input type="button" id="soundsgood" value="Sounds good!" />
         <input type="button" id="hideshare" style="background: #999;" value="Don't show this again." />
       </div>
