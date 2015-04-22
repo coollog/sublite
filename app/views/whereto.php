@@ -12,6 +12,7 @@
   .whereto input[type=button] {
     width: 200px;
     margin: 10px;
+    padding: 20px 40px;
   }
   .whereto .content {
     padding-top: 30vh;
@@ -28,10 +29,10 @@
   <div class="content">
     <div class="tagline">Find Your Perfect Summer</div>
 
-    <a href="/jobs">
+    <a href="/jobs/search.php">
       <input type="button" name="internships" value="Internships" />
     </a>
-    <a href="/housing">
+    <a href="/housing/search.php">
       <input type="button" name="housing" value="Housing" />
     </a>
     <a href="">
