@@ -118,7 +118,6 @@
       $ss = array();
       foreach ($sublets as $s) {
         $id = $s['_id'];
-        var_dump($id);
         $student = $MStudent->getById($s['student']);
         $name = $student['name'];
         $email = $student['email'];
