@@ -65,7 +65,7 @@
     "recruiter hascompany" => vget('Loggedin') and vget('Lcompany'),
     "recruiter nocompany" => vget('Loggedin') and !vget('Lcompany'),
     "student" => vget('Loggedinstudent'),
-    "student /housing" => vget('Loggedinstudent') and preg_match($curdir, '/^\/housing/'),
+    "student /housing" => vget('Loggedinstudent') and preg_match('/^\/housing/', $curdir),
     "all" => true
   );
   // Establish relative paths
