@@ -56,6 +56,7 @@
 </style>
 <?php
   $curdir = dirname($_SERVER['REQUEST_URI'] . '/.');
+  var_dump($curdir);
   // Various states the user can be in
   $states = array(
     "loggedin" => vget('Loggedin') or vget('Loggedinstudent'),
