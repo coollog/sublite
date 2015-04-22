@@ -5,15 +5,20 @@
     text-transform: uppercase;
     text-shadow: 2px 2px #035d75;
     line-height: 1em;
-    margin-bottom: -0.2em;
+    margin-bottom: 2em;
     font-family: 'BebasNeue', sans-serif;
     font-weight: bold;
   }
   .whereto input[type=button] {
-    width: 150px;
+    width: 200px;
+  }
+  .whereto .content {
+    display: table-cell;
+    vertical-align: middle;
   }
   .whereto {
-    height: 100%;
+    height: 90vh;
+    display: table;
     background: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/whereto.jpg') no-repeat center center;
     background-size: cover;
   }
