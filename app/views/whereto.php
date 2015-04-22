@@ -11,13 +11,14 @@
   }
   .whereto input[type=button] {
     width: 200px;
+    margin: 10px;
   }
   .whereto .content {
     display: table-cell;
     vertical-align: middle;
   }
   .whereto {
-    height: 90vh;
+    height: 80vh;
     display: table;
     background: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/whereto.jpg') no-repeat center center;
     background-size: cover;
@@ -29,10 +30,10 @@
     <div class="tagline">Find Your Perfect Summer</div>
 
     <a href="/jobs">
-      <input type="button" name="internships" value="Internships" /> &nbsp;
+      <input type="button" name="internships" value="Internships" />
     </a>
     <a href="/housing">
-      <input type="button" name="housing" value="Housing" /> &nbsp;
+      <input type="button" name="housing" value="Housing" />
     </a>
     <a href="">
       <input type="button" name="social" value="Social" style="background: #999;" />
