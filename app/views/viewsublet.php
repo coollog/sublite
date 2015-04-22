@@ -226,19 +226,24 @@
     $('.pop').fadeIn(200, 'easeInOutCubic');
     $('.popphoto img').attr('src', photo);
   }
+  function hidePop() {
+    $('.pop, .popshare').fadeOut(100, 'easeInOutCubic');
+  }
 
   function showShare() {
     if (!localStorage.hideShare) {
       $('.popshare').fadeIn(200, 'easeInOutCubic');
     }
   }
-  function hideShare(hide) {
-    localStorage.hideShare = hide;
-    $('.popshare').fadeOut(100, 'easeInOutCubic');
+  function hideShare() {
+    localStorage.hideShare = true;
+    hidePop();
   }
 
   $(function() {
     <?php if (vget('mine')) echo 'showShare();'; ?>
+    $('#hideshare').click(function() { hideShare(); });
+    $('.popsharetext').click(function(e) { e.preventDefault(); });
 
     showPhoto(0);
     $('.photocontrolleft').click(function() { showPhotoLeft(); });
@@ -247,7 +252,7 @@
     $('.photo').click(function() {
       popPhoto($(this).attr('photo'));
     });
-    $('.pop').click(function() { $(this).fadeOut(100, 'easeInOutCubic'); });
+    $('.pop, .popshare, #soundsgood').click(function() { hidePop(); });
 
     <?php if (vget('commented')) {?>
       scrollTo('.comments');
@@ -544,13 +549,14 @@
     <div class="popcell">
       <div class="popsharetext">
         Share your listing on social media such as Facebook groups to advertise your listing! Copy and paste the link below into posts:
-        <copy>www.sublite.net/housing/sublet.php?id=<?php vecho('_id'); ?></copy>
-
-        or Like and Share below:
-        <?php vpartial('fb', array('route' => 'housing/sublet.php?id='.vget('_id'))); ?>
         <br />
-        <input type="button" value="Sounds good!" />
-        <input type="button" value="Don't show this again." />
+          <copy>www.sublite.net/housing/sublet.php?id=<?php vecho('_id'); ?></copy>
+        <br /><br />
+        or Like and Share below: <br /><br />
+        <?php vpartial('fb', array('route' => 'housing/sublet.php?id='.vget('_id'))); ?>
+        <br /><br />
+        <input type="button" id="soundsgood" value="Sounds good!" />
+        <input type="button" id="hideshare" style="background: #999;" value="Don't show this again." />
       </div>
     </div>
   </div>
