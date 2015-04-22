@@ -38,7 +38,6 @@
   }
   options {
     font-size: 1.5em;
-    padding-top: 10px;
     margin-bottom: -5px;
     min-height: 30px;
     box-sizing: border-box;
@@ -49,6 +48,7 @@
     transition: all 0.1s ease-in-out;
     display: inline-block;
     color: #fff;
+    margin-top: 10px;
   }
   opt:hover {
     color: #ffd800;
