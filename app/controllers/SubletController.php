@@ -215,6 +215,7 @@
 
         $data = array_merge($entry, $data);
         $data['_id'] = $entry['_id'];
+        $data['mine'] = isset($_SESSION['_id']) and $entry['student'] == $_SESSION['_id'];
         
         // ANY MODiFICATIONS ON DATA GOES HERE
         $s = $MStudent->getById($entry['student']);

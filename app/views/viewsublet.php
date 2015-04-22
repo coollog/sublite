@@ -160,7 +160,7 @@
     background: #fafaf8;
   }
 
-  .pop {
+  .pop, .popshare {
     position: fixed;
     left: 0;
     top: 0;
@@ -185,6 +185,12 @@
   .popphoto img {
     max-width: 90vw;
     max-height: 90vh;
+  }
+  .popsharetext {
+    width: 400px;
+    height: 300px;
+    padding: 50px;
+    background: #fff;
   }
 </style>
 
@@ -215,7 +221,19 @@
     $('.popphoto img').attr('src', photo);
   }
 
+  function showShare() {
+    if (!localStorage.hideShare) {
+      $('.popShare').fadeIn(200, 'easeInOutCubic');
+    }
+  }
+  function hideShare(hide) {
+    localStorage.hideShare = hide;
+    $('.popshare').fadeOut(100, 'easeInOutCubic');
+  }
+
   $(function() {
+    <?php if (vget('mine')) echo 'showShare();'; ?>
+
     showPhoto(0);
     $('.photocontrolleft').click(function() { showPhotoLeft(); });
     $('.photocontrolright').click(function() { showPhotoRight(); });
@@ -230,7 +248,7 @@
     <?php } ?>
   });
 </script>
-
+<?php var_dump(vget('mine')); ?>
 <panel class="main">
   <?php
     $i = 0;
@@ -513,5 +531,19 @@
 <div class="pop">
   <div class="poptable">
     <div class="popphoto"><img src="" /></div>
+  </div>
+</div>
+<div class="popshare">
+  <div class="poptable">
+    <div class="popsharetext">
+      Share your listing on social media such as Facebook groups to advertise your listing! Copy and paste the link below into posts:
+      <copy>www.sublite.net/housing/sublet.php?id=<?php vecho('_id'); ?></copy>
+
+      or Like and Share below:
+      <?php vpartial('fb', array('route' => 'housing/sublet.php?id='.vget('_id'))); ?>
+
+      <input type="button" value="Sounds good!" />
+      <input type="button" value="Don't show this again." />
+    </div>
   </div>
 </div>
