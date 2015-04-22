@@ -12,7 +12,8 @@
   .whereto input[type=button] {
     width: 200px;
     margin: 10px;
-    padding: 20px 40px;
+    padding: .5em 40px;
+    height: 3em;
   }
   .whereto .content {
     padding-top: 30vh;
