@@ -18,6 +18,9 @@
     text-transform: uppercase;
     box-shadow: 2px 2px 0px #035d75;
   }
+  .whereto input[type=button]:hover {
+    color: #fff;
+  }
   .whereto .content {
     padding-top: 30vh;
   }
