@@ -60,8 +60,8 @@
   $states = array(
     "loggedin" => vget('Loggedin') or vget('Loggedinstudent'),
     "notloggedin" => !vget('Loggedin') and !vget('Loggedinstudent'),
-    "notloggedin !/employers" => !vget('Loggedin') and !vget('Loggedinstudent') and $curdir != '/employers',
-    "notloggedin /employers" => !vget('Loggedin') and !vget('Loggedinstudent') and $curdir == '/employers',
+    "notloggedin !/employers" => !vget('Loggedin') and !vget('Loggedinstudent') and !preg_match('/^\/employers/', $curdir),
+    "notloggedin /employers" => !vget('Loggedin') and !vget('Loggedinstudent') and preg_match('/^\/employers/', $curdir),
     "recruiter hascompany" => vget('Loggedin') and vget('Lcompany'),
     "recruiter nocompany" => vget('Loggedin') and !vget('Lcompany'),
     "student" => vget('Loggedinstudent'),
