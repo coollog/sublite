@@ -219,9 +219,6 @@
           $data['mine'] = $entry['student'] == $_SESSION['_id'];
         else
           $data['mine'] = false;
-        if (isset($_GET['test'])) {
-          var_dump($data);
-        }
         
         // ANY MODiFICATIONS ON DATA GOES HERE
         $s = $MStudent->getById($entry['student']);
