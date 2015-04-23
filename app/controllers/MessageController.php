@@ -189,8 +189,10 @@
         extract($data = $this->data($params));
         // Validations
         $this->validate(strlen($msg) > 0, $err, 'message empty');
-        $replylast = $entry['replies'][$repliesn-1];
-        $this->validate($msg != $replylast['msg'] or (time() - $replylast['time']) > 10, $err, 'message sent');
+        if ($repliesn > 0) {
+          $replylast = $entry['replies'][$repliesn-1];
+          $this->validate($msg != $replylast['msg'] or (time() - $replylast['time']) > 10, $err, 'message sent');
+        }
 
         if ($this->isValid()) {
           // Send the message
