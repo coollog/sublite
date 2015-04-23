@@ -217,8 +217,8 @@
         $data['_id'] = $entry['_id'];
         $data['mine'] = isset($_SESSION['_id']) and $entry['student'] == $_SESSION['_id'];
         if (isset($_GET['test'])) {
-          var_dump($entry);
-          var_dump($data);
+          var_dump($entry['student']);
+          var_dump($_SESSION['_id']);
         }
         
         // ANY MODiFICATIONS ON DATA GOES HERE
