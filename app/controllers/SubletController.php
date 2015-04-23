@@ -221,7 +221,7 @@
           var_dump($_SESSION['_id']);
           var_dump($entry['student'] == $_SESSION['_id']);
           var_dump(isset($_SESSION['_id']) and $entry['student'] == $_SESSION['_id']);
-          var_dump($data['mine']);
+          var_dump($data);
         }
         
         // ANY MODiFICATIONS ON DATA GOES HERE
