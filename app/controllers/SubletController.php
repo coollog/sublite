@@ -215,12 +215,12 @@
 
         $data = array_merge($entry, $data);
         $data['_id'] = $entry['_id'];
-        $data['mine'] = isset($_SESSION['_id']) and ($entry['student']->{'$id'} == $_SESSION['_id']->{'$id'});
+        if (isset($_SESSION['_id']))
+          $data['mine'] = $entry['student'] == $_SESSION['_id'];
+        else
+          $data['mine'] = false;
         if (isset($_GET['test'])) {
-          var_dump($entry['student']);
-          var_dump($_SESSION['_id']);
-          var_dump($entry['student'] == $_SESSION['_id']);
-          var_dump(isset($_SESSION['_id']) and $entry['student'] == $_SESSION['_id']);
+          var_dump(isset($_SESSION['_id']) and );
           var_dump($data);
         }
         
