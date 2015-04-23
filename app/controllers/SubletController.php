@@ -220,6 +220,7 @@
           var_dump($entry['student']);
           var_dump($_SESSION['_id']);
           var_dump($entry['student'] == $_SESSION['_id']);
+          var_dump(isset($_SESSION['_id']) and $entry['student'] == $_SESSION['_id']);
         }
         
         // ANY MODiFICATIONS ON DATA GOES HERE
