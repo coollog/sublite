@@ -215,7 +215,7 @@
 
         $data = array_merge($entry, $data);
         $data['_id'] = $entry['_id'];
-        $data['mine'] = isset($_SESSION['_id']) and $entry['student'] == $_SESSION['_id'];
+        $data['mine'] = isset($_SESSION['_id']) and ($entry['student'] == $_SESSION['_id']);
         if (isset($_GET['test'])) {
           var_dump($entry['student']);
           var_dump($_SESSION['_id']);
