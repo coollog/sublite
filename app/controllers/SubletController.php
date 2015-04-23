@@ -220,7 +220,6 @@
         else
           $data['mine'] = false;
         if (isset($_GET['test'])) {
-          var_dump(isset($_SESSION['_id']) and );
           var_dump($data);
         }
         
