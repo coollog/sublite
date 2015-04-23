@@ -231,12 +231,12 @@
   }
 
   function showShare() {
-    if (!localStorage.hideShare) {
+    if (!localStorage.hideShare<?php vecho('_id'); ?>) {
       $('.popshare').fadeIn(200, 'easeInOutCubic');
     }
   }
   function hideShare() {
-    localStorage.hideShare = true;
+    localStorage.hideShare<?php vecho('_id'); ?> = true;
     hidePop();
   }
 
