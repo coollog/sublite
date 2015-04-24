@@ -60,9 +60,7 @@
     text-shadow: 2px 2px #035d75;
     line-height: 1em;
   }
-  panel.main .registerlogin {
-    font-size: 1.5em;
-    color: #035d75;
+  panel .registerlogin {
     border-radius: 5px;
   }
 
@@ -262,19 +260,19 @@
         <div class="whyimg whyimg1">
         </div>
         <headline>Hubs</headline>
-        insert text here
+        Find out who's going to be where you are this summer - don't go through your summer alone.
       </incell></td>
       <td class="whycell"><incell>
         <div class="whyimg whyimg2">
         </div>
         <headline>Forums</headline>
-        insert text here
+        Socialize and connect with your fellow students - get info on the best places to eat or just chat!
       </incell></td>
       <td class="whycell"><incell>
         <div class="whyimg whyimg3">
         </div>
         <headline>Meetups</headline>
-        insert text here
+        Take the conversations face-to-face by scheduling meetups through our streamlined meetup organizer!
       </incell></td>
     </tr></table>
   </div>
