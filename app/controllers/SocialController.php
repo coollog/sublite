@@ -32,14 +32,14 @@
           sendgmail(array('tony.jiang@yale.edu', 'qingyang.chen@gmail.com'), "info@sublite.net", 'Social Hub Sign Up', $message);
 
           $this->success('Thanks for signing up! We will notify you when our social hubs feature is ready to use! Stay tuned!');
-          $this->render('socialindex', array('signedup' => true));
+          $this->render('socialindex', array('hubs' => true, 'signedup' => true));
           return;
         }
         
         $this->error($err);
       }
 
-      $this->render('socialindex');
+      $this->render('socialindex', array('hubs' => true));
     }
   }
 

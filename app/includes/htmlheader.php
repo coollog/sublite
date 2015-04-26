@@ -106,6 +106,11 @@
     <?php
         }
       }
+      if (vget('hubs')) {
+    ?>
+        <title>SubLite &ndash; Meet and Socialize with Students Working in Your City</title>
+    <?php
+      }
     ?>
 
     <meta property="og:type" content="website" />
