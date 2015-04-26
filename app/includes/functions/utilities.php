@@ -91,4 +91,18 @@
   function rand01() {
     return mt_rand() / mt_getrandmax();
   }
+
+  // Check if is admin
+  function checkAdmin() {
+    $admins = array(
+      'tony.jiang@yale.edu',
+      'michelle.chan@yale.edu',
+      'qingyang.chen@yale.edu',
+      'yuanling.yuan@yale.edu',
+      'shirley.guo@yale.edu',
+      'tony.chen@yale.edu',
+      'alisa.melekhina@law.upenn.edu'
+    );
+    return isset($_SESSION['email']) and in_array($_SESSION['email'], $admins);
+  }
 ?>

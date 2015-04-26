@@ -248,16 +248,7 @@
     function requireLogin() {
       global $CJob;
       $CJob->requireLogin();
-      $admins = array(
-        'tony.jiang@yale.edu',
-        'michelle.chan@yale.edu',
-        'qingyang.chen@yale.edu',
-        'yuanling.yuan@yale.edu',
-        'shirley.guo@yale.edu',
-        'tony.chen@yale.edu',
-        'alisa.melekhina@law.upenn.edu'
-      );
-      if (!in_array($_SESSION['email'], $admins))
+      if (!checkAdmin())
         die('permission denied');
     }
     function messages() {
