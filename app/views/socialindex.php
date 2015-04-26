@@ -60,6 +60,89 @@
     text-shadow: 2px 2px #035d75;
     line-height: 1em;
   }
+  panel.why .whys {
+    width: 100%;
+    text-align: center;
+  }
+  panel.why incell {
+    display: inline-block;
+    width: 200px;
+    text-align: center;
+  }
+  panel.why .whyimg {
+    width: 200px;
+    height: 200px;
+    border-radius: 100px;
+    background: #abcdef no-repeat center center;;
+    background-size: 150%;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 15px;
+  }
+  panel.why .whyimg1 { background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/why1.jpg'); }
+  panel.why .whyimg2 { background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/why2.jpg'); }
+  panel.why .whyimg3 { background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/why3.jpg'); }
+  panel.why .whyroll {
+    width: 100%;
+    height: 100%;
+    background: rgba(30, 80, 95, 0.8);
+    display: table;
+    color: #fff;
+    opacity: 0;
+    transition: all 0.1s ease-in-out;
+    border-radius: 50%;
+    font-size: 1em;
+  }
+  panel.why .whyroll:hover {
+    opacity: 1;
+  }
+  panel.why .whyroll .cell {
+    padding: 20px;
+  }
+  panel.why .whytext {
+    text-transform: uppercase;
+    font-size: 0.8em;
+    font-weight: 700;
+    line-height: 1.1em;
+  }
+  panel.backedby {
+    background-color: #ffd800;
+  }
+  panel.backedby .content {
+    position: relative;
+  }
+  panel.backedby .backedlogo {
+    background: transparent no-repeat center center;
+    background-size: contain;
+    height: 150px;
+    width: 15%;
+    display: inline-block;
+    vertical-align: top;
+  }
+  panel.backedby .backedlogo1 {
+    background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/upenn.png');
+  }
+  panel.backedby .backedlogo2 {
+    background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/yale.png');
+    background-size: 80%;
+  }
+  panel.backedby .line1 {
+    font-size: 2em;
+    color: #035d75;
+    line-height: 1.2em;
+  }
+  panel.backedby .line2 {
+    font-size: 2.5em;
+    line-height: 1.1em;
+  }
+  panel.backedby .backedtext {
+    margin-top: 20px;
+    width: 60%;
+    display: inline-block;
+    font-family: 'BebasNeue', sans-serif;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
 
   #cityform {
     width: 50%;
