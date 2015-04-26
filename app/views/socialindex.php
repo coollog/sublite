@@ -11,9 +11,6 @@
     box-sizing: border-box;
   }
 
-  input[type=email] {
-    padding: 0.5em 0px 0.5em 0.5em;
-  }
   .registerboxbutton {
     float: left;
     display: inline-block;
@@ -60,6 +57,10 @@
     text-shadow: 2px 2px #035d75;
     line-height: 1em;
   }
+  panel .registerlogin {
+    border-radius: 5px;
+  }
+
   panel.why .whys {
     width: 100%;
     text-align: center;
@@ -70,11 +71,10 @@
     text-align: center;
   }
   panel.why .whyimg {
-    width: 200px;
+    width: 200;
     height: 200px;
-    border-radius: 100px;
-    background: #abcdef no-repeat center center;;
-    background-size: 150%;
+    background: #ffffff no-repeat center center;;
+    background-size: 100%;
     position: relative;
     overflow: hidden;
     margin-bottom: 15px;
@@ -82,17 +82,6 @@
   panel.why .whyimg1 { background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/hubs.png'); }
   panel.why .whyimg2 { background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/forums.png'); }
   panel.why .whyimg3 { background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/meetups.png'); }
-  panel.why .whyroll {
-    width: 100%;
-    height: 100%;
-    background: rgba(30, 80, 95, 0.8);
-    display: table;
-    color: #fff;
-    opacity: 0;
-    transition: all 0.1s ease-in-out;
-    border-radius: 50%;
-    font-size: 1em;
-  }
   panel.why .whyroll:hover {
     opacity: 1;
   }
@@ -101,12 +90,17 @@
   }
   panel.why .whytext {
     text-transform: uppercase;
-    font-size: 0.8em;
+    font-size: 1.25em;
     font-weight: 700;
     line-height: 1.1em;
   }
+  panel.why .whycell headline {
+    margin-bottom: 0.25em;
+  }
   panel.backedby {
     background-color: #ffd800;
+    padding-top: 75px;
+    padding-bottom: 75px;
   }
   panel.backedby .content {
     position: relative;
@@ -136,7 +130,6 @@
     line-height: 1.1em;
   }
   panel.backedby .backedtext {
-    margin-top: 20px;
     width: 60%;
     display: inline-block;
     font-family: 'BebasNeue', sans-serif;
