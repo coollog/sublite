@@ -5,7 +5,7 @@
     background-position: center 0;
     /*background-attachment: fixed;*/
     display: table;
-    height: 100%;
+    height: 90vh;
     padding-bottom: 0;
     position: relative;
     box-sizing: border-box;
@@ -60,171 +60,25 @@
     text-shadow: 2px 2px #035d75;
     line-height: 1em;
   }
-  panel .registerlogin {
-    border-radius: 5px;
+
+  #cityform {
+    width: 50%;
+  }
+  #citylabel {
+    color: #fff;
+    text-shadow: 2px 2px #035d75;
   }
 
-  panel.why .whys {
-    width: 100%;
-    text-align: center;
-  }
-  panel.why incell {
-    display: inline-block;
-    width: 200px;
-    text-align: center;
-  }
-  panel.why .whyimg {
-    width: 200;
-    height: 200px;
-    background: #ffffff no-repeat center center;;
-    background-size: 100%;
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 15px;
-  }
-  panel.why .whyimg1 { background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/hubs.png'); }
-  panel.why .whyimg2 { background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/forums.png'); }
-  panel.why .whyimg3 { background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/meetups.png'); }
-  panel.why .whyroll:hover {
-    opacity: 1;
-  }
-  panel.why .whyroll .cell {
-    padding: 20px;
-  }
-  panel.why .whytext {
-    text-transform: uppercase;
-    font-size: 1.25em;
-    font-weight: 700;
-    line-height: 1.1em;
-  }
-  panel.why .whycell headline {
-    margin-bottom: 0.25em;
-  }
-  panel.backedby {
-    background-color: #ffd800;
-    padding-top: 75px;
-    padding-bottom: 75px;
-  }
-  panel.backedby .content {
-    position: relative;
-  }
-  panel.backedby .backedlogo {
-    background: transparent no-repeat center center;
-    background-size: contain;
-    height: 150px;
-    width: 15%;
-    display: inline-block;
-    vertical-align: top;
-  }
-  panel.backedby .backedlogo1 {
-    background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/upenn.png');
-  }
-  panel.backedby .backedlogo2 {
-    background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/yale.png');
-    background-size: 80%;
-  }
-  panel.backedby .line1 {
-    font-size: 2em;
-    color: #035d75;
-    line-height: 1.2em;
-  }
-  panel.backedby .line2 {
-    font-size: 2.5em;
-    line-height: 1.1em;
-  }
-  panel.backedby .backedtext {
-    width: 60%;
-    display: inline-block;
-    font-family: 'BebasNeue', sans-serif;
-    text-transform: uppercase;
-    font-weight: bold;
-  }
-
-  panel.how {
-    background: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/how.jpg') no-repeat center center;
-    background-size: cover;
-    background-attachment: fixed;
-    min-height: 300px;
-  }
-  panel.how .headline {
-    color: #ffd800;
-  }
-  panel.how .steps {
-    width: 100%;
-    border-spacing: 10px;
-    border-collapse: separate;
-  }
-  panel.how .step {
+  .success, .error {
     background: #fff;
-    -webkit-transform: skew(10deg);
-     -moz-transform: skew(10deg);
-       -o-transform: skew(10deg);
-    height: 3em;
-    padding: 10px;
-    cursor: pointer;
-    font-weight: 700;
-    width: 16%;
-  }
-  panel.how .step table {
-    -webkit-transform: skew(-10deg);
-     -moz-transform: skew(-10deg);
-       -o-transform: skew(-10deg);    
-  }
-  panel.how .step.active {
-    background: #ffd800;
-  }
-  panel.how .step.active .bignum {
-    color: #035d75;
-  }
-  panel.how .bignum {
-    font-size: 2em;
-    color: #ffd800;
-  }
-  panel.how .steptext {
-    text-align: left;
-    padding-left: 10px;
-  }
-  panel.how .desc {
-    text-align: left;
-    background: rgba(255, 216, 0, 0.8);
-    padding: 20px 40px;
-    display: none;
-    font-size: 1em;
   }
 </style>
 
 <script>
   $(function() {
-    function getStep(q) {
-      return parseInt($(q).find('.bignum').html());
-    }
-    var step = null;
-    $('panel.how .step').hover(function() {
-      $(this).addClass('active');
-    }, function() {
-      if (step != getStep(this)) {
-        $(this).removeClass('active');
-      }
-    }).click(function() {
-      scrollTo(this);
-      if (step == getStep(this)) {
-        $(this).removeClass('active');
-        step = null;
-        $('.desc').slideUp(200, 'easeInOutCubic');
-      } else {
-        $('panel.how .step').removeClass('active');
-        $(this).addClass('active');
-        step = getStep(this);
-        $('.desc').each(function() {
-          if ($(this).attr('num') == step)
-            $(this).slideDown(200, 'easeInOutCubic');
-          else
-            $(this).slideUp(200, 'easeInOutCubic');
-        });
-      }
-    }).hover(function() {
-      if (step == null) $(this).click();
-    }, function() {});
+    $('.signup').click(function() {
+      scrollTo('.main');
+    });
 
     $('.arrow-down').click(function() {
       scrollTo('panel.why');
@@ -240,9 +94,25 @@
         <div class="slogan">
           Get your questions answered and make new friends this summer!
         </div>
-          <a href="register.php">
-            <input type="button" class="registerlogin" value="Sign up now" />
-          </a>
+        <?php
+          if (vget('Loggedinstudent')) {
+        ?>
+            <?php vnotice(); ?>
+            <?php if (!vget('signedup')) { ?>
+              <form id="cityform" method="post">
+                <div id="citylabel">Where will you be this summer?</div>
+                <div class="form-slider">
+                  <label for="city">(eg. New York, Boston, San Francisco)</label>
+                  <input type="text" id="city" name="city" required />
+                </div>
+                <input type="submit" name="signup" value="Sign up now" />
+              </form>
+            <?php } ?>
+        <?php 
+          } else {
+            echo vlinkto('<input type="button" class="button" value="Login or register to sign up for the social hubs!" />', $GLOBALS['dirpre'].'../register');
+          } 
+        ?>
       </div>
     </div>
   </div>
@@ -251,22 +121,21 @@
 <panel class="why">
   <div class="content">
     <headline style="color: #035d75;">Why Join the Social Hub?</headline>
-    <div style="font-size: 1em; margin-top: -20px; margin-bottom: 20px;">
-      Getting a good internship doesn't guarantee a good summer. Find students of the same university,<br/ >
-      interests, or company working in your area and have fun with them! Here are the main features:
-    </div>
+    <form style="font-size: 1em; margin-top: -20px; margin-bottom: 20px;">
+      Getting a good internship doesn't guarantee a good summer. Meet other students working in the same city and have fun with them! Here are the main features:
+    </form>
     <table class="whys"><tr>
       <td class="whycell"><incell>
         <div class="whyimg whyimg1">
         </div>
         <headline>Hubs</headline>
-        Find out who's going to be where you are this summer - don't go through your summer alone.
+        Find out who's going to be where you are this summer &mdash; don't go through your summer alone.
       </incell></td>
       <td class="whycell"><incell>
         <div class="whyimg whyimg2">
         </div>
         <headline>Forums</headline>
-        Socialize and connect with your fellow students - get info on the best places to eat or just chat!
+        Socialize and connect with your fellow students &dash; get info on the best places to eat or just chat!
       </incell></td>
       <td class="whycell"><incell>
         <div class="whyimg whyimg3">
@@ -280,8 +149,8 @@
 <panel class="backedby">
   <div class="content" style="position: relative;">
     <div class="backedtext">
-      <div class="line2">Subscribe to us to get more information</div>
-      <input type="button" class="registerlogin" value="Sign up now" />
+      <div class="line2">Sign up to get more information</div>
+      <input type="button" class="signup" value="Sign up now" />
     </div>
   </div>
 </panel>

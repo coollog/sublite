@@ -83,15 +83,15 @@
     array("Jobs", $path."jobs/search.php", "student"),
     array("Add Sublet", $path."housing/addsublet.php", "student /housing"),
     array("Manage", $path."housing/home.php", "student"),
-    array("Messages", "messages.php", "student"),
+    array("Messages", $path."messages.php", "student"),
 
     array("Search Housing", $path."housing/search.php", "notloggedin !/employers"),
     array("Search Jobs", $path."jobs/search.php", "notloggedin !/employers"),
     array("List Sublet", $path."register.php", "notloggedin !/employers"),
     array("List Job", $path."register.php", "notloggedin /employers"),
-    array("Register", "register.php", "notloggedin"),
-    array("Log In", "login.php", "notloggedin"),
-    array("Log Out", "logout.php", "loggedin")
+    array("Sign Up", $path."register.php", "notloggedin"),
+    array("Log In", $path."login.php", "notloggedin"),
+    array("Log Out", $path."logout.php", "loggedin")
   );
 ?>
 <navbar class="blackbar">

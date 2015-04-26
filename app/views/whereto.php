@@ -42,8 +42,8 @@
     <a href="/housing/search.php">
       <input type="button" name="housing" value="Housing" />
     </a>
-    <a href="">
-      <input type="button" name="social" value="Social (soon)" style="background: #999;" />
+    <a href="/hubs">
+      <input type="button" name="social" value="Social (Soon)" />
     </a>
   </div>
 </panel>
