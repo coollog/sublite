@@ -211,7 +211,7 @@
         <div class="whyimg whyimg2">
         </div>
         <headline>Forums</headline>
-        Socialize and connect with your fellow students &dash; get info on the best places to eat or just chat!
+        Socialize and connect with your fellow students &mdash; get info on the best places to eat or just chat!
       </incell></td>
       <td class="whycell"><incell>
         <div class="whyimg whyimg3">
