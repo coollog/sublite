@@ -123,14 +123,14 @@
     function register() {
       // Setup after-login redirect
       if (isset($_GET['test'])) {
-        $noredirect = array('', '/index.php')
+        $noredirect = array('', '/index.php');
         // $thispage = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         // $lastpage = $_SERVER['HTTP_REFERER'];
         // if ($thispage != $lastpage)
         //   setcookie('loginredirect', $lastpage, time() + 300);
         // }
       }
-      
+
       if (!isset($_POST['register'])) { $this->render('studentregister'); return; }
 
       global $params, $MStudent;
