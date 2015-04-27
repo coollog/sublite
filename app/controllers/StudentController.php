@@ -84,6 +84,8 @@
           if ($thispage != $lastpage) {
             setcookie('loginredirect', $lastpage, time() + 300);
           }
+        } else {
+          unset($_COOKIE['loginredirect']);
         }
       }
     }
