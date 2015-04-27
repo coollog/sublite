@@ -88,9 +88,9 @@
         $lastpagepath = preg_replace("/https:\/\/$_SERVER[HTTP_HOST]/", '', $lastpage);
         if ($thispage != $lastpage) {
           if (!in_array($lastpagepath, $noredirect)) {
-              setcookie('loginredirect', $lastpage, time() + 300);
+            setcookie('loginredirect', $lastpage, time() + 300);
           } else {
-            unset($_COOKIE['loginredirect']);
+            setcookie('loginredirect', '', time() - 3600);
           }
         }
       }
