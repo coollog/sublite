@@ -172,8 +172,10 @@
         }
 
         // Setup after-login redirect
-        echo $_SERVER['HTTPREFERER'];
-        // setcookie('loginredirect', $lastpage, time() + 300);
+        if (isset($_GET['test']) {
+          echo $_SERVER['HTTPREFERER'];
+          setcookie('loginredirect', $lastpage, time() + 300);
+        }
 
         $this->render('studentregisterfinish', array(
           'id' => $id, 'email' => $email
