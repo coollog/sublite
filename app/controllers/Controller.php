@@ -58,6 +58,9 @@
 
       require_once($GLOBALS['dirpre'].'includes/htmlfooter.php'); 
     }
+    function redirectURL($url) {
+      header("Location: $url");
+    }
     function redirect($page, $params = NULL) {
       if ($params == NULL)
         header("Location: $page.php");

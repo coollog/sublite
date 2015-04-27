@@ -72,7 +72,31 @@
       ));
     }
 
+    function loginRedirectSetup() {
+      // Setup after-login redirect
+      if (isset($_SERVER['HTTP_REFERER'])) {
+        $noredirect = array('', '/index.php');
+        if (!in_array($_SERVER['REQUEST_URI'], $noredirect)) {
+          $thispage = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+          $lastpage = $_SERVER['HTTP_REFERER'];
+          echo "set redirect to $lastpage";
+          if ($thispage != $lastpage)
+            setcookie('loginredirect', $lastpage, time() + 300);
+          }
+        }
+      }
+    }
+    function loginRedirect() {
+      if (isset($_COOKIE['loginredirect'])) {
+        $this->redirectURL($_COOKIE['loginredirect']);
+      } else {
+        $this->redirect('whereto');
+      }
+    }
+
     function login() {
+      $this->loginRedirectSetup();
+
       if (!isset($_POST['login'])) { $this->render('studentlogin'); return; }
       
       global $params, $MStudent;
@@ -109,7 +133,7 @@
             
             // $this->redirect('home');
             // $this->redirect('search');
-            $this->redirect('whereto');
+            $this->loginRedirect();
 
             return;
           }
@@ -121,18 +145,7 @@
     }
 
     function register() {
-      // Setup after-login redirect
-      if (isset($_GET['test'])) {
-        if (isset($_SERVER['HTTP_REFERER'])) {
-          $noredirect = array('', '/index.php');
-          echo $_SERVER['HTTP_REFERER'];
-          // $thispage = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-          // $lastpage = $_SERVER['HTTP_REFERER'];
-          // if ($thispage != $lastpage)
-          //   setcookie('loginredirect', $lastpage, time() + 300);
-          // }
-        }
-      }
+      $this->loginRedirectSetup();
 
       if (!isset($_POST['register'])) { $this->render('studentregister'); return; }
 
