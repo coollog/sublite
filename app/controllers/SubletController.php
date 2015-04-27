@@ -398,6 +398,7 @@
         $showMore = isset($_GET['showMore']);
         if ($showMore) {
           $_SESSION['showMore'] += 6;
+          $showMore = $_SESSION['showMore'];
         } else $_SESSION['showMore'] = 6;
 
         $res = $MSublet->last($_SESSION['showMore']);

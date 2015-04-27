@@ -298,7 +298,7 @@
   <?php if (!is_null(vget('recent'))) { ?>
       <a href="?showMore">Show More</a>
       <?php if (vget('showMore')) { ?>
-        <script>scrollTo('.results');</script>
+        <script>scrollTo('.subletblock::nth-child(<?php vecho('showMore'); ?>)');</script>
       <?php } ?>
     </div>
   <?php } ?>
