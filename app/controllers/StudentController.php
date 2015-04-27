@@ -124,6 +124,7 @@
       // Setup after-login redirect
       if (isset($_GET['test'])) {
         $noredirect = array('', '/index.php');
+        echo $_SERVER['HTTP_REFERER'];
         // $thispage = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         // $lastpage = $_SERVER['HTTP_REFERER'];
         // if ($thispage != $lastpage)
