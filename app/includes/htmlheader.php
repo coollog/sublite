@@ -72,7 +72,17 @@
         <meta property="og:image:height" content="1118" />
     <?php
       }
-      else { // default
+      else if (vget('hubs')) {
+        $title = "SubLite &ndash; Meet and Socialize with Students Working in Your City";
+    ?>
+        <meta property="og:title" content="<?php echo $title; ?>" />
+        <meta property="og:image" content="https://sublite.net/app/assets/gfx/socialmain.jpg" />
+        <meta property="og:description" content="Get your questions answered and make new friends this summer!" />
+        <meta property="og:image:width" content="1677" />
+        <meta property="og:image:height" content="1118" />
+        <title><?php echo $title; ?></title>
+    <?php
+      } else { // default
     ?>
         <meta property="og:title" content="SubLite &ndash; Your One-Stop Shop for a Great Summer!" />
         <meta property="og:image" content="https://sublite.net/app/assets/gfx/studentmain.jpg" />
@@ -103,10 +113,6 @@
           <title>SubLite &ndash; Search for Jobs and Internships</title>
     <?php
         }
-      } else if (vget('hubs')) {
-    ?>
-        <title>SubLite &ndash; Meet and Socialize with Students Working in Your City</title>
-    <?php
       } else {
     ?>
         <title>SubLite &ndash; Find internships and housing and sublets for rent!</title>
