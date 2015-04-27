@@ -80,7 +80,7 @@
           $thispage = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
           $lastpage = $_SERVER['HTTP_REFERER'];
           echo "set redirect to $lastpage";
-          if ($thispage != $lastpage)
+          if ($thispage != $lastpage) {
             setcookie('loginredirect', $lastpage, time() + 300);
           }
         }
