@@ -79,7 +79,7 @@
         $domain = "https://$_SERVER[HTTP_HOST]";
         $thispage = "$domain$_SERVER[REQUEST_URI]";
         $lastpage = $_SERVER['HTTP_REFERER'];
-        $lastpagepath = preg_replace("/https://$_SERVER[HTTP_HOST]/", '', $lastpage);
+        $lastpagepath = preg_replace("/https:\/\/$_SERVER[HTTP_HOST]/", '', $lastpage);
         echo "lastpagepath: $lastpagepath";
         if (!in_array($lastpagepath, $noredirect)) {
           echo "set redirect to $lastpage";
