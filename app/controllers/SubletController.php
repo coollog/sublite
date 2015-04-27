@@ -395,7 +395,8 @@
 
       if ($showSearch and !isset($params['search'])) {
         // If not searching for anything, then return last 6 entries
-        if (isset($_GET['showMore'])) {
+        $showMore = isset($_GET['showMore']);
+        if ($showMore) {
           $_SESSION['showMore'] += 6;
         } else $_SESSION['showMore'] = 6;
 
@@ -406,7 +407,7 @@
         }
 
         $this->render('subletsearchstart', $this->dataSearchSetup());
-        $this->render('subletsearchresults', array('sublets' => $sublets, 'recent' => true, 'search' => 'housing'));
+        $this->render('subletsearchresults', array('sublets' => $sublets, 'recent' => true, 'search' => 'housing', 'showMore' => $showMore));
         return; 
       }
       
