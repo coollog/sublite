@@ -42,7 +42,7 @@
     <a href="/housing/search.php">
       <input type="button" name="housing" value="Housing" />
     </a>
-    <a href="/hubs">
+    <a href="/hubs/start.php">
       <input type="button" name="social" value="Social (Soon)" />
     </a>
   </div>
