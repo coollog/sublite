@@ -171,6 +171,10 @@
             "SubLite, LLC."), 'SubLite - Successful Referral!', $message);
         }
 
+        // Setup after-login redirect
+        echo $_SERVER['HTTPREFERER'];
+        // setcookie('loginredirect', $lastpage, time() + 300);
+
         $this->render('studentregisterfinish', array(
           'id' => $id, 'email' => $email
         ));
