@@ -296,6 +296,7 @@
         ?>
       </div>
   <?php if (!is_null(vget('recent'))) { ?>
+      <a href="?showMore">Show More</a>
     </div>
   <?php } ?>
 </panel>

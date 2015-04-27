@@ -395,7 +395,11 @@
 
       if ($showSearch and !isset($params['search'])) {
         // If not searching for anything, then return last 6 entries
-        $res = $MSublet->last(6);
+        if (isset($_GET['showMore'])) {
+          $_SESSION['showMore'] += 6;
+        } else $_SESSION['showMore'] = 6;
+
+        $res = $MSublet->last($_SESSION['showMore']);
         $sublets = array();
         foreach ($res as $sublet) {
           $sublets[] = processRaw($sublet);
