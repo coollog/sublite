@@ -173,7 +173,7 @@
 
         // Setup after-login redirect
         if (isset($_GET['test'])) {
-          echo $_SERVER['HTTPREFERER'];
+          echo $_SERVER['HTTP_REFERER'];
           setcookie('loginredirect', $lastpage, time() + 300);
         }
 
