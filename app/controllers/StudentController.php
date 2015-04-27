@@ -75,7 +75,8 @@
     function loginRedirectSetup() {
       // Setup after-login redirect
       if (isset($_SERVER['HTTP_REFERER'])) {
-        $noredirect = array('', '/index.php');
+        $noredirect = array('', '/index.php', '/');
+        echo "req uri: " . $_SERVER['REQUEST_URI'];
         if (!in_array($_SERVER['REQUEST_URI'], $noredirect)) {
           $thispage = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
           $lastpage = $_SERVER['HTTP_REFERER'];
