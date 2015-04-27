@@ -105,7 +105,7 @@
     }
 
     function login() {
-      $this->loginRedirectSetup();
+      if (!isset($_GET['whereto']) $this->loginRedirectSetup();
 
       if (!isset($_POST['login'])) { $this->render('studentlogin'); return; }
       
@@ -330,7 +330,8 @@
             $MStudent->save($entry);
 
             $params['email'] = $email;
-            $_POST['login'] = true; $this->login();
+            $_POST['login'] = true; $_GET['whereto'] = true;
+              $this->login();
             return;
           }
 
