@@ -75,11 +75,18 @@
     function loginRedirectSetup() {
       // Setup after-login redirect
       if (isset($_SERVER['HTTP_REFERER'])) {
-        $noredirect = array('', '/index.php', '/');
+        $noredirect = array(
+          '', 
+          '/index.php', 
+          '/', 
+          '/register.php',
+          '/login.php'
+        );
         $domain = "https://$_SERVER[HTTP_HOST]";
         $thispage = "$domain$_SERVER[REQUEST_URI]";
         $lastpage = $_SERVER['HTTP_REFERER'];
         $lastpagepath = preg_replace("/https:\/\/$_SERVER[HTTP_HOST]/", '', $lastpage);
+        echo "lastpagepath: $lastpagepath";
         if (!in_array($lastpagepath, $noredirect)) {
           if ($thispage != $lastpage) {
             setcookie('loginredirect', $lastpage, time() + 300);
