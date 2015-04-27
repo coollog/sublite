@@ -105,7 +105,7 @@
     }
 
     function login() {
-      if (!isset($_GET['whereto']) $this->loginRedirectSetup();
+      if (!isset($_GET['whereto'])) $this->loginRedirectSetup();
 
       if (!isset($_POST['login'])) { $this->render('studentlogin'); return; }
       
