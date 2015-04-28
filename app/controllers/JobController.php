@@ -344,7 +344,8 @@
         // If not searching for anything, then return last 6 entries
         $showMore = isset($_GET['showMore']);
         if ($showMore) {
-          $_SESSION['showMoreJobs'] += 6;
+          if (isset($_SESSION['showMoreJobs'])) $_SESSION['showMoreJobs'] += 6;
+          else $_SESSION['showMoreJobs'] = 12;
           $showMore = $_SESSION['showMoreJobs'];
         } else $_SESSION['showMoreJobs'] = 6;
 
