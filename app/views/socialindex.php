@@ -166,9 +166,11 @@
   <div class="cell">
     <div class="banner">
       <div class="content">
-        <div class="tagline">Sign up for the social hub!</div>
+        <div class="tagline">Join the exclusive social hubs!</div>
         <div class="slogan">
           Get your questions answered and make new friends this summer!
+          <br />
+          Pre-registration ends on 5/8!
         </div>
         <?php
           if (vget('Loggedinstudent')) {
