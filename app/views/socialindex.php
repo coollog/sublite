@@ -45,7 +45,7 @@
     margin-bottom: -0.2em;
     font-family: 'BebasNeue', sans-serif;
     font-weight: bold;
-    font-size: 7em;
+    font-size: 6.5em;
   }
   panel.main .banner .slogan {
     color: #fff;
