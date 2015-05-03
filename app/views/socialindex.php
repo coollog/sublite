@@ -166,9 +166,9 @@
   <div class="cell">
     <div class="banner">
       <div class="content">
-        <div class="tagline">Join the exclusive social hubs!</div>
+        <div class="tagline">Join the social hubs!</div>
         <div class="slogan">
-          Get your questions answered and make new friends this summer!
+          Meet other students working in the same city as you are!
           <br />
           Pre-registration ends on 5/8!
         </div>
@@ -200,7 +200,7 @@
   <div class="content">
     <headline style="color: #035d75;">Why Join the Social Hub?</headline>
     <form style="font-size: 1em; margin-top: -20px; margin-bottom: 20px;">
-      Getting a good internship doesn't guarantee a good summer. Meet other students working in the same city and have fun with them! Here are the main features:
+      Getting a good internship doesn't guarantee a good summer. Meet other students working in your city and have fun with them! Here are the main features:
     </form>
     <table class="whys"><tr>
       <td class="whycell"><incell>

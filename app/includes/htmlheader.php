@@ -168,5 +168,7 @@
          fjs.parentNode.insertBefore(js, fjs);
        }(document, 'script', 'facebook-jssdk'));
     </script>
+
+    <?php if (vget('Loggedinstudent')) vpartial('socialdropdown'); ?>
     
     <?php require_once($GLOBALS['dirpre'].'views/navbar.php'); ?>
