@@ -36,7 +36,7 @@
   <div class="sdinfo">Where will you be this summer?</div>
   <form id="sdcityform" method="post" action="hubs/start.php">
     <div class="form-slider">
-      <label for="sdcity">(eg. New York, Boston, San Francisco)</label>
+      <label for="sdcity">(eg. New York City, Boston, San Francisco)</label>
       <input type="text" id="sdcity" name="city" required />
     </div>
     <div class="sdbutton">

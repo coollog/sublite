@@ -180,7 +180,7 @@
               <form id="cityform" method="post">
                 <div id="citylabel">Where will you be this summer?</div>
                 <div class="form-slider">
-                  <label for="city">(eg. New York, Boston, San Francisco)</label>
+                  <label for="city">(eg. New York City, Boston, San Francisco)</label>
                   <input type="text" id="city" name="city" required />
                 </div>
                 <input type="submit" name="signup" value="Sign up now" />
