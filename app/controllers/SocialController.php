@@ -41,6 +41,10 @@
 
       $this->render('socialindex', array('hubs' => true));
     }
+
+    function hub() {
+      $this->render('socialhub');
+    }
   }
 
   $CSocial = new SocialController();
