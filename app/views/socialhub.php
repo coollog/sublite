@@ -163,6 +163,7 @@
   .meetup {
     border-bottom: 1px solid #ddd;
     text-align: left;
+    padding: 10px 0;
   }
   .meetup name {
     font-size: 2em;
@@ -188,6 +189,10 @@
   .meetup info {
     float: right;
     display: inline-block;
+  }
+
+  templates {
+    display: none;
   }
 </style>
 
@@ -246,28 +251,7 @@
 </panel>
 <panel class="tabframe" name="meetups">
   <content>
-    <div class="meetup">
-      <name>Cherry Blossom Festival and Parade</name>
-      <table class="info">
-        <tr>
-          <td class="l" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/hubs/calendar.png');"></td>
-          <td>
-            <datetime>Sunday Apr 19, 9:00 AM - Friday May 1, 6:00 PM</datetime>
-          </td>
-        </tr>
-        <tr>
-          <td class="l" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/hubs/place.png');"></td>
-          <td>
-            <place>
-              Union Bank<br />
-              1675 Post Street, San Francisco, CA
-            </place>
-          </td>
-        </tr>
-      </table>
-      <button class="smallbutton">RSVP</button>
-      <info>23 Going &nbsp; &nbsp; 5 Comments</info>
-    </div>
+    
   </content>
 </panel>
 <panel class="tabframe" name="members">
@@ -275,6 +259,58 @@
 
   </content>
 </panel>
+
+<templates>
+  <template for="meetup">
+    <div class="meetup">
+      <name>{name}</name>
+      <table class="info">
+        <tr>
+          <td class="l" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/hubs/calendar.png');"></td>
+          <td>
+            <datetime>{datetime}</datetime>
+          </td>
+        </tr>
+        <tr>
+          <td class="l" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/hubs/place.png');"></td>
+          <td>
+            <place>{place}</place>
+          </td>
+        </tr>
+      </table>
+      <button class="smallbutton">RSVP</button>
+      <info>{going} Going &nbsp; &nbsp; {comments} Comments</info>
+    </div>
+  </template>
+</templates>
+<script>
+  var Meetup = {
+    setup: function () {
+      // Read in template
+      this.template = $('template[for=meetup]').html();
+    },
+    addMeetup: function (json) {
+      var newHTML = this.template;
+      for (var key in json) {
+        newHTML = newHTML.replace('{'+key+'}', json[key]);
+      }
+      $('.tabframe[name=meetups] content').append(newHTML);
+      console.log(newHTML);
+    },
+    clearMeetups: function () {
+      $('.meetups .content').html('');
+    }
+  }
+  Meetup.setup();
+  Meetup.addMeetup({
+    name: 'Cherry Blossom Festival and Parade',
+    datetime: 'Sunday Apr 19, 9:00 AM - Friday May 1, 6:00 PM',
+    place: 'Union Bank<br />1675 Post Street, San Francisco, CA',
+    going: 23,
+    comments: 5
+  });
+</script>
+
 
 <script>
   // Tabulation
