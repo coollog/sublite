@@ -33,13 +33,13 @@
   require_once($GLOBALS['dirpre'].'controllers/StatsController.php');
   require_once($GLOBALS['dirpre'].'controllers/SubletController.php');
   require_once($GLOBALS['dirpre'].'controllers/SocialController.php');
-  require_once($GLOBALS['dirpre'].'models/AppModel.php');
-  require_once($GLOBALS['dirpre'].'models/CompanyModel.php');
-  require_once($GLOBALS['dirpre'].'models/JobModel.php');
-  require_once($GLOBALS['dirpre'].'models/RecruiterModel.php');
-  require_once($GLOBALS['dirpre'].'models/StudentModel.php');
-  require_once($GLOBALS['dirpre'].'models/MessageModel.php');
-  require_once($GLOBALS['dirpre'].'models/StatsModel.php');
-  require_once($GLOBALS['dirpre'].'models/SubletModel.php');
-  require_once($GLOBALS['dirpre'].'models/SocialModel.php');
+  // require_once($GLOBALS['dirpre'].'models/AppModel.php');
+  // require_once($GLOBALS['dirpre'].'models/CompanyModel.php');
+  // require_once($GLOBALS['dirpre'].'models/JobModel.php');
+  // require_once($GLOBALS['dirpre'].'models/RecruiterModel.php');
+  // require_once($GLOBALS['dirpre'].'models/StudentModel.php');
+  // require_once($GLOBALS['dirpre'].'models/MessageModel.php');
+  // require_once($GLOBALS['dirpre'].'models/StatsModel.php');
+  // require_once($GLOBALS['dirpre'].'models/SubletModel.php');
+  // require_once($GLOBALS['dirpre'].'models/SocialModel.php');
 ?>

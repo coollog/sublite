@@ -35,6 +35,12 @@
   button:hover {
     opacity: 0.5;
   }
+  button.smallbutton {
+    font-size: 1em;
+    line-height: 1.5em;
+    letter-spacing: 0;
+    padding: 0 20px;
+  }
   .banner {
     height: 33vh;
     min-height: 200px;
@@ -153,6 +159,36 @@
     margin-left: 50px;
     /*display: none;*/
   }
+
+  .meetup {
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
+  .meetup name {
+    font-size: 2em;
+    line-height: 1.5em;
+  }
+  .meetup .info {
+    margin: 20px 0;
+  }
+  .meetup .l {
+    background: transparent no-repeat center center;
+    background-size: auto 80%;
+    width: 20%;
+    min-width: 100px;
+    height: 50px;
+  }
+  .meetup datetime {
+    display: block;
+  }
+  .meetup place {
+    font-size: 0.9em;
+    display: block;
+  }
+  .meetup info {
+    float: right;
+    display: inline-block;
+  }
 </style>
 
 <panel class="banner">
@@ -210,7 +246,28 @@
 </panel>
 <panel class="tabframe" name="meetups">
   <content>
-
+    <div class="meetup">
+      <name>Cherry Blossom Festival and Parade</name>
+      <table class="info">
+        <tr>
+          <td class="l" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/hubs/calendar.png');"></td>
+          <td>
+            <datetime>Sunday Apr 19, 9:00 AM - Friday May 1, 6:00 PM</datetime>
+          </td>
+        </tr>
+        <tr>
+          <td class="l" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/hubs/place.png');"></td>
+          <td>
+            <place>
+              Union Bank<br />
+              1675 Post Street, San Francisco, CA
+            </place>
+          </td>
+        </tr>
+      </table>
+      <button class="smallbutton">RSVP</button>
+      <info>23 Going &nbsp; &nbsp; 5 Comments</info>
+    </div>
   </content>
 </panel>
 <panel class="tabframe" name="members">
