@@ -102,6 +102,9 @@
     height: 100%;
     overflow-x: hidden;
   }
+  .postsframe[type=popular] {
+    display: none;
+  }
   .posts {
     height: 100%;
     overflow: visible;
@@ -125,7 +128,7 @@
     width: 15%;
     vertical-align: top;
   }
-  .posts pic {
+  .posts pic, .member pic {
     width: 80px;
     height: 80px;
     border-radius: 40px;
@@ -157,7 +160,7 @@
   }
   .posts .replies {
     margin-left: 50px;
-    /*display: none;*/
+    display: none;
   }
 
   .meetup {
@@ -191,6 +194,24 @@
     display: inline-block;
   }
 
+  .member {
+    margin: 10px 40px;
+    text-align: left;
+  }
+  .member .l {
+    width: 15%;
+    min-width: 120px;
+    text-align: center;
+  }
+  .member name {
+    font-size: 1.4em;
+    display: block;
+  }
+  .member info {
+    color: #888;
+    display: block;
+  }
+
   templates {
     display: none;
   }
@@ -215,7 +236,7 @@
     </tab><tab for="meetups">
       Meet-Ups
     </tab><tab for="members">
-      Members
+      Members (<membercount></membercount>)
     </tab>
   </content>
 </panel>
@@ -223,44 +244,34 @@
 <panel class="tabframe" name="forum">
   <content>
     <subtabs>
-      <subtab class="focus">Most Recent</subtab> | <subtab>Most Popular</subtab>
+      <subtab type="recent" class="focus">Most Recent</subtab> | <subtab type="popular">Most Popular</subtab>
     </subtabs>
-    <div class="postsframe">
-      <div class="posts">
-        <table class="post" index="1"><tr>
-          <td class="l"><pic style="background-image: url('../app/assets/gfx/why1.jpg');"></pic></td>
-          <td class="r">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            <info>By Annie C. from Yale in NYC, 3 hrs ago</info>
-            <likes>9</likes><replies>9</replies>
-          </td>
-        </tr></table>
-        <div class="replies" for="1">
-          <table class="post" index="2"><tr>
-            <td class="l"><pic style="background-image: url('../app/assets/gfx/why1.jpg');"></pic></td>
-            <td class="r">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-              <info>By Annie C. from Yale in NYC, 3 hrs ago</info>
-              <likes>9</likes><replies>9</replies>
-            </td>
-          </tr></table>
-        </div>
-      </div>
-    </div>
+    <div class="postsframe" type="recent"><div class="posts"></div></div>
+    <div class="postsframe" type="popular"><div class="posts"></div></div>
   </content>
 </panel>
 <panel class="tabframe" name="meetups">
-  <content>
-    
-  </content>
+  <content></content>
 </panel>
 <panel class="tabframe" name="members">
   <content>
-
+    <subtabs><membercount></membercount> Members</subtabs>
+    <div class="members"></div>
   </content>
 </panel>
 
 <templates>
+  <template for="post">
+    <table class="post" index="{id}"><tr>
+      <td class="l"><pic style="background-image: url('{pic}');"></pic></td>
+      <td class="r">
+        {text}
+        <info>By {name} from {hub}, {time}</info>
+        <likes>{likes}</likes><replies>{replies}</replies>
+      </td>
+    </tr></table>
+    <div class="replies" for="{id}"></div>
+  </template>
   <template for="meetup">
     <div class="meetup">
       <name>{name}</name>
@@ -282,35 +293,135 @@
       <info>{going} Going &nbsp; &nbsp; {comments} Comments</info>
     </div>
   </template>
+  <template for="members">
+    <table class="member"><tr>
+      <td class="l">
+        <pic style="background-image: url('{pic}');"></pic>
+      </td>
+      <td>
+        <name>{name}</name>
+        <info>
+          {school}<br />
+          {joined}
+        </info>
+      </td>
+    </tr></table>
+  </template>
 </templates>
 <script>
-  var Meetup = {
+  var Posts = {
+    setup: function () {
+      // Read in template
+      this.template = $('template[for=post]').html();
+    },
+    add: function (type, json, parentid) {
+      var newHTML = this.template;
+      for (var key in json) {
+        toreplace = '{'+key+'}';
+        while (newHTML.indexOf(toreplace) > -1)
+          newHTML = newHTML.replace(toreplace, json[key]);
+      }
+      if (typeof parentid == 'undefined')
+        $('.postsframe[type='+type+'] .posts').append(newHTML);
+      else
+        $('.postsframe[type='+type+'] .replies[for='+parentid+']').append(newHTML);
+    },
+    clear: function (type) {
+      $('.postsframe[type='+type+'] .posts').html('');
+    }
+  }
+  var Meetups = {
     setup: function () {
       // Read in template
       this.template = $('template[for=meetup]').html();
     },
-    addMeetup: function (json) {
+    add: function (json) {
       var newHTML = this.template;
       for (var key in json) {
-        newHTML = newHTML.replace('{'+key+'}', json[key]);
+        toreplace = '{'+key+'}';
+        while (newHTML.indexOf(toreplace) > -1)
+          newHTML = newHTML.replace(toreplace, json[key]);
       }
       $('.tabframe[name=meetups] content').append(newHTML);
-      console.log(newHTML);
     },
-    clearMeetups: function () {
-      $('.meetups .content').html('');
+    clear: function () {
+      $('.tabframe[name=meetups] content').html('');
     }
   }
-  Meetup.setup();
-  Meetup.addMeetup({
+  var Members = {
+    setup: function () {
+      // Read in template
+      this.template = $('template[for=members]').html();
+      this.updateCount(0);
+    },
+    add: function (json) {
+      var newHTML = this.template;
+      for (var key in json) {
+        toreplace = '{'+key+'}';
+        while (newHTML.indexOf(toreplace) > -1)
+          newHTML = newHTML.replace(toreplace, json[key]);
+      }
+      $('.members').append(newHTML);
+      this.updateCount(this.membercount + 1);
+    },
+    clear: function () {
+      $('.members').html('');
+      this.updateCount(0);
+    },
+    updateCount: function (count) {
+      this.membercount = count;
+      $('membercount').html(this.membercount);
+    }
+  }
+
+  Posts.setup();
+  Meetups.setup();
+  Members.setup();
+
+  Posts.add('recent', {
+    id: 1,
+    pic: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why1.jpg',
+    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+    name: 'Annie C.',
+    hub: 'Yale in NYC',
+    time: '3 hrs ago',
+    likes: 9,
+    replies: 20
+  });
+  Posts.add('recent', {
+    id: 2,
+    pic: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why1.jpg',
+    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+    name: 'Annie C.',
+    hub: 'Yale in NYC',
+    time: '3 hrs ago',
+    likes: 9,
+    replies: 20
+  }, 1);
+  Posts.add('popular', {
+    id: 1,
+    pic: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why1.jpg',
+    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+    name: 'Annie C.',
+    hub: 'Yale in NYC',
+    time: '3 hrs ago',
+    likes: 9,
+    replies: 20
+  });
+  Meetups.add({
     name: 'Cherry Blossom Festival and Parade',
     datetime: 'Sunday Apr 19, 9:00 AM - Friday May 1, 6:00 PM',
     place: 'Union Bank<br />1675 Post Street, San Francisco, CA',
     going: 23,
     comments: 5
   });
+  Members.add({
+    name: 'Random Person',
+    pic: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why2.jpg',
+    school: 'Yale University',
+    joined: 'Member, 5/17/2015'
+  });
 </script>
-
 
 <script>
   // Tabulation
@@ -344,22 +455,35 @@
 
   // Posts tabbing
 
-  var postsleft = 0;
   $('.post').click(function() {
-    var myindex = $(this).attr('index'),
-        replies = '.replies[for='+myindex+']';
-    if ($(replies).length) {
+    var postsleft,
+        myindex = $(this).attr('index'),
+        replies = $(this).parent().children('.replies[for='+myindex+']');
+
+    if (replies.length && replies.html().length) {
       var mytab = $(this).parent().css('marginLeft');
       postsleft = -parseInt(mytab);
-      if (!$(replies).is(":visible")) {
+      if (!replies.is(":visible")) {
         postsleft = -50 - parseInt(mytab);
       }
       var op = this;
-      $(replies).slideToggle('100', 'easeInOutCubic', function() {
+      replies.slideToggle('100', 'easeInOutCubic', function() {
         scrollTo(op);
       });
-      $('.posts').css('left', postsleft+'px');
+      var posts = $(this).parent();
+      while (!posts.hasClass('posts'))
+        posts = posts.parent();
+      posts.css('left', postsleft+'px');
     }
 
+  });
+  $('.tabframe subtab').click(function() {
+    if (!$(this).hasClass('focus')) {
+      var type = $(this).attr('type');
+      $('.postsframe').hide();
+      $('.postsframe[type='+type+']').show();
+      $('.tabframe subtab').removeClass('focus');
+      $(this).addClass('focus');
+    }
   });
 </script>
