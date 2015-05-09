@@ -4,6 +4,7 @@
   }
   panel {
     padding: 0;
+    background: #fff;
   }
   panel, navbar, footer {
     min-width: 600px;
@@ -235,6 +236,7 @@
   }
   meetupview .details hub {
     display: block;
+    cursor: pointer;
   }
   meetupview .details pic {
     width: 60px;
@@ -254,11 +256,31 @@
   meetupview .tabframe[name=description] {
     text-align: left;
   }
+
+  viewframe {
+    width: 100%;
+    display: block;
+    overflow: hidden;
+    position: relative;
+  }
+  newview {
+    position: relative;
+    width: 100%;
+  }
+  view {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    top: 0;
+  }
+  view, newview {
+  }
 </style>
 
-<view>
-
-</view>
+<viewframe>
+  <view></view>
+  <newview></newview>
+</viewframe>
 
 <viewtemplates>
   <viewtemplate name="hub">
@@ -281,7 +303,7 @@
         </tab><tab for="meetups">
           Meet-Ups
         </tab><tab for="members">
-          Members (<membercount></membercount>)
+          Members (<membercount>0</membercount>)
         </tab>
       </content>
     </panel>
@@ -300,7 +322,7 @@
     </panel>
     <panel class="tabframe" name="members">
       <content>
-        <subtabs><membercount></membercount> Members</subtabs>
+        <subtabs><membercount>0</membercount> Members</subtabs>
         <div class="members"></div>
       </content>
     </panel>
@@ -313,7 +335,7 @@
       <panel class="details">
         <content>
           <name>{name}</name>
-          <hub>{hub}</hub>
+          <hub><a>{hub}</a></hub>
           <table class="info">
             <tr>
               <td class="l" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/hubs/calendar.png');"></td>
@@ -346,11 +368,11 @@
 
       <panel class="tabs">
         <content class="nopadding">
-          <tab for="members">
-            Going (<membercount></membercount>)
+          <tab for="members" class="focus">
+            Going (<membercount>0</membercount>)
           </tab><tab for="description">
             Description
-          </tab><tab for="forum" class="focus">
+          </tab><tab for="forum">
             Comments
           </tab>
         </content>
@@ -358,7 +380,7 @@
 
       <panel class="tabframe" name="members">
         <content>
-          <subtabs><membercount></membercount> Members</subtabs>
+          <subtabs><membercount>0</membercount> Going</subtabs>
           <div class="members"></div>
         </content>
       </panel>
@@ -396,22 +418,24 @@
         while (newHTML.indexOf(toreplace) > -1)
           newHTML = newHTML.replace(toreplace, json[key]);
       }
-      $('view').html(newHTML);
+
+      var oldHTML = $('view').html();
+      if (oldHTML.length) {
+        $('view').css('position', 'absolute');
+        $('newview').css('left', '100%').html(newHTML).animate({
+          left: '0%'
+        }, 500, 'easeOutCubic', function() {
+          $('view').html(newHTML).css('position', 'relative');
+          $('newview').html('');
+          afterRender();
+          addTestContent(); // remove this
+        });
+      } else {
+        $('view').html(newHTML);
+        addTestContent(); // remove this
+      }
     }
   };
-
-  Views.setup();
-  // Views.render('hub');
-  Views.render('meetup', {
-    banner: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why3.jpg',
-    name: "Let's Go Party in New York!",
-    hub: 'Yale University in New York City',
-    datetime: 'Tuesday Aug 15, 9:00 PM - 11:00 PM',
-    place: 'General Assembly<br />1933 S. Broadway, 11th Floor, Los Angeles, 900007, CA',
-    host: 'Name of Person',
-    hostpic: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why3.jpg',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-  });
 </script>
 
 <templates>
@@ -480,6 +504,7 @@
         $('.postsframe[type='+type+'] .posts').append(newHTML);
       else
         $('.postsframe[type='+type+'] .replies[for='+parentid+']').append(newHTML);
+      afterRender();
     },
     clear: function (type) {
       $('.postsframe[type='+type+'] .posts').html('');
@@ -499,6 +524,7 @@
           newHTML = newHTML.replace(toreplace, json[key]);
       }
       $('.tabframe[name=meetups] content').append(newHTML);
+      afterRender();
     },
     clear: function () {
       $('.tabframe[name=meetups] content').html('');
@@ -520,6 +546,7 @@
       }
       $('.members').append(newHTML);
       this.updateCount(this.membercount + 1);
+      afterRender();
     },
     clear: function () {
       $('.members').html('');
@@ -530,116 +557,143 @@
       $('membercount').html(this.membercount);
     }
   }
+</script>
 
+<script>
+  function afterRender() {
+    // Tabulation
+
+    function getTabframe(tab) {
+      var name = $(tab).attr('for');
+      return '.tabframe[name='+name+']';
+    }
+    function closeTab(tab) {
+      $(tab).removeClass('focus');
+      $(getTabframe(tab)).hide();
+    }
+    function openTab(tab) {
+      $(tab).addClass('focus');
+      $(getTabframe(tab)).show();
+    }
+
+    $('tab').click(function() {
+      var me = this;
+      $('tab').each(function() {
+        if (this != me) {
+          closeTab(this);
+        }
+      });
+      openTab(me);
+    });
+    $('tab').each(function() {
+      if ($(this).hasClass('focus'))
+        openTab(this);
+    });
+
+    // Posts tabbing
+
+    $('.post').click(function() {
+      var postsleft,
+          myindex = $(this).attr('index'),
+          replies = $(this).parent().children('.replies[for='+myindex+']');
+
+      if (replies.length && replies.html().length) {
+        var mytab = $(this).parent().css('marginLeft');
+        postsleft = -parseInt(mytab);
+        if (!replies.is(":visible")) {
+          postsleft = -50 - parseInt(mytab);
+        }
+        var op = this;
+        replies.slideToggle('100', 'easeInOutCubic', function() {
+          scrollTo(op);
+        });
+        var posts = $(this).parent();
+        while (!posts.hasClass('posts'))
+          posts = posts.parent();
+        posts.css('left', postsleft+'px');
+      }
+    });
+    $('.tabframe[name=forum] subtab').click(function() {
+      if (!$(this).hasClass('focus')) {
+        var type = $(this).attr('type');
+        $('.postsframe').hide();
+        $('.postsframe[type='+type+']').show();
+        $('.tabframe[name=forum] subtab').removeClass('focus');
+        $(this).addClass('focus');
+      }
+    });
+
+    // Meetup view switching
+    $('.meetup button').click(function (e) {
+      e.preventDefault();
+      Views.render('meetup', {
+        banner: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why3.jpg',
+        name: "Let's Go Party in New York!",
+        hub: 'Yale University in New York City',
+        datetime: 'Tuesday Aug 15, 9:00 PM - 11:00 PM',
+        place: 'General Assembly<br />1933 S. Broadway, 11th Floor, Los Angeles, 900007, CA',
+        host: 'Name of Person',
+        hostpic: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why3.jpg',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+      });
+    });
+    $('meetupview .details hub').click(function (e) {
+      e.preventDefault();
+      Views.render('hub');
+    });
+  }
+
+  function addTestContent() {
+    Posts.add('recent', {
+      id: 1,
+      pic: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why1.jpg',
+      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+      name: 'Annie C.',
+      hub: 'Yale in NYC',
+      time: '3 hrs ago',
+      likes: 9,
+      replies: 20
+    });
+    Posts.add('recent', {
+      id: 2,
+      pic: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why1.jpg',
+      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+      name: 'Annie C.',
+      hub: 'Yale in NYC',
+      time: '3 hrs ago',
+      likes: 9,
+      replies: 20
+    }, 1);
+    Posts.add('popular', {
+      id: 1,
+      pic: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why1.jpg',
+      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+      name: 'Annie C.',
+      hub: 'Yale in NYC',
+      time: '3 hrs ago',
+      likes: 9,
+      replies: 20
+    });
+    Meetups.add({
+      name: 'Cherry Blossom Festival and Parade',
+      datetime: 'Sunday Apr 19, 9:00 AM - Friday May 1, 6:00 PM',
+      place: 'Union Bank<br />1675 Post Street, San Francisco, CA',
+      going: 23,
+      comments: 5
+    });
+    Members.add({
+      name: 'Random Person',
+      pic: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why2.jpg',
+      school: 'Yale University',
+      joined: 'Member, 5/17/2015'
+    });
+  }
+
+  Views.setup();
+  
   Posts.setup();
   Meetups.setup();
   Members.setup();
 
-  Posts.add('recent', {
-    id: 1,
-    pic: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why1.jpg',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    name: 'Annie C.',
-    hub: 'Yale in NYC',
-    time: '3 hrs ago',
-    likes: 9,
-    replies: 20
-  });
-  Posts.add('recent', {
-    id: 2,
-    pic: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why1.jpg',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    name: 'Annie C.',
-    hub: 'Yale in NYC',
-    time: '3 hrs ago',
-    likes: 9,
-    replies: 20
-  }, 1);
-  Posts.add('popular', {
-    id: 1,
-    pic: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why1.jpg',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    name: 'Annie C.',
-    hub: 'Yale in NYC',
-    time: '3 hrs ago',
-    likes: 9,
-    replies: 20
-  });
-  Meetups.add({
-    name: 'Cherry Blossom Festival and Parade',
-    datetime: 'Sunday Apr 19, 9:00 AM - Friday May 1, 6:00 PM',
-    place: 'Union Bank<br />1675 Post Street, San Francisco, CA',
-    going: 23,
-    comments: 5
-  });
-  Members.add({
-    name: 'Random Person',
-    pic: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why2.jpg',
-    school: 'Yale University',
-    joined: 'Member, 5/17/2015'
-  });
-</script>
-
-<script>
-  // Tabulation
-
-  function getTabframe(tab) {
-    var name = $(tab).attr('for');
-    return '.tabframe[name='+name+']';
-  }
-  function closeTab(tab) {
-    $(tab).removeClass('focus');
-    $(getTabframe(tab)).hide();
-  }
-  function openTab(tab) {
-    $(tab).addClass('focus');
-    $(getTabframe(tab)).show();
-  }
-
-  $('tab').click(function() {
-    var me = this;
-    $('tab').each(function() {
-      if (this != me) {
-        closeTab(this);
-      }
-    });
-    openTab(me);
-  });
-  $('tab').each(function() {
-    if ($(this).hasClass('focus'))
-      openTab(this);
-  });
-
-  // Posts tabbing
-
-  $('.post').click(function() {
-    var postsleft,
-        myindex = $(this).attr('index'),
-        replies = $(this).parent().children('.replies[for='+myindex+']');
-
-    if (replies.length && replies.html().length) {
-      var mytab = $(this).parent().css('marginLeft');
-      postsleft = -parseInt(mytab);
-      if (!replies.is(":visible")) {
-        postsleft = -50 - parseInt(mytab);
-      }
-      var op = this;
-      replies.slideToggle('100', 'easeInOutCubic', function() {
-        scrollTo(op);
-      });
-      var posts = $(this).parent();
-      while (!posts.hasClass('posts'))
-        posts = posts.parent();
-      posts.css('left', postsleft+'px');
-    }
-  });
-  $('.tabframe[name=forum] subtab').click(function() {
-    if (!$(this).hasClass('focus')) {
-      var type = $(this).attr('type');
-      $('.postsframe').hide();
-      $('.postsframe[type='+type+']').show();
-      $('.tabframe[name=forum] subtab').removeClass('focus');
-      $(this).addClass('focus');
-    }
-  });
+  Views.render('hub');
 </script>
