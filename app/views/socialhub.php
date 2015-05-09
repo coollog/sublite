@@ -535,7 +535,7 @@
       // Read in template
       this.template = $('template[for=members]').html();
       $('template[for=members]').remove();
-      this.updateCount(0);
+      this.updateCount();
     },
     add: function (json) {
       var newHTML = this.template;
@@ -545,16 +545,16 @@
           newHTML = newHTML.replace(toreplace, json[key]);
       }
       $('.members').append(newHTML);
-      this.updateCount(this.membercount + 1);
+      this.updateCount();
       afterRender();
     },
     clear: function () {
       $('.members').html('');
-      this.updateCount(0);
+      this.updateCount();
     },
-    updateCount: function (count) {
-      this.membercount = count;
-      $('membercount').html(this.membercount);
+    updateCount: function () {
+      var n = $('.member').length;
+      $('membercount').html(n);
     }
   }
 </script>
@@ -576,7 +576,7 @@
       $(getTabframe(tab)).show();
     }
 
-    $('tab').click(function() {
+    $('tab').off("click").click(function() {
       var me = this;
       $('tab').each(function() {
         if (this != me) {
@@ -592,7 +592,7 @@
 
     // Posts tabbing
 
-    $('.post').click(function() {
+    $('.post').off("click").click(function() {
       var postsleft,
           myindex = $(this).attr('index'),
           replies = $(this).parent().children('.replies[for='+myindex+']');
@@ -613,7 +613,7 @@
         posts.css('left', postsleft+'px');
       }
     });
-    $('.tabframe[name=forum] subtab').click(function() {
+    $('.tabframe[name=forum] subtab').off("click").click(function() {
       if (!$(this).hasClass('focus')) {
         var type = $(this).attr('type');
         $('.postsframe').hide();
@@ -624,8 +624,7 @@
     });
 
     // Meetup view switching
-    $('.meetup button').click(function (e) {
-      e.preventDefault();
+    $('.meetup button').off("click").click(function () {
       Views.render('meetup', {
         banner: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why3.jpg',
         name: "Let's Go Party in New York!",
@@ -637,8 +636,7 @@
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
       });
     });
-    $('meetupview .details hub').click(function (e) {
-      e.preventDefault();
+    $('meetupview .details hub').off("click").click(function () {
       Views.render('hub');
     });
   }
@@ -690,7 +688,7 @@
   }
 
   Views.setup();
-  
+
   Posts.setup();
   Meetups.setup();
   Members.setup();
