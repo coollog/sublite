@@ -41,6 +41,13 @@
     letter-spacing: 0;
     padding: 0 20px;
   }
+  button.gray {
+    background: #b4a8a8;
+  }
+  button.half {
+    width: 46%;
+    margin-right: 2%;
+  }
   .banner {
     height: 33vh;
     min-height: 200px;
@@ -128,7 +135,7 @@
     width: 15%;
     vertical-align: top;
   }
-  .posts pic, .member pic {
+  pic {
     width: 80px;
     height: 80px;
     border-radius: 40px;
@@ -172,20 +179,20 @@
     font-size: 2em;
     line-height: 1.5em;
   }
-  .meetup .info {
+  .meetup .info, meetupview .details .info {
     margin: 20px 0;
   }
-  .meetup .l {
+  .meetup .l, meetupview .details .l {
     background: transparent no-repeat center center;
     background-size: auto 80%;
     width: 20%;
     min-width: 100px;
     height: 50px;
   }
-  .meetup datetime {
+  .meetup datetime, meetupview .details datetime {
     display: block;
   }
-  .meetup place {
+  .meetup place, meetupview .details place {
     font-size: 0.9em;
     display: block;
   }
@@ -214,6 +221,35 @@
 
   templates, viewtemplates {
     display: none;
+  }
+
+  meetupview .details content {
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 0;
+  }
+  meetupview .details name {
+    font-size: 2em;
+    line-height: 1.2em;
+    display: block;
+  }
+  meetupview .details hub {
+    display: block;
+  }
+  meetupview .details pic {
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
+    margin: 0 auto;
+  }
+  meetupview .goingornot {
+    text-align: left;
+  }
+  meetupview .goingornot areyou {
+    font-size: 1.7em;
+    line-height: 1.5em;
+    margin-bottom: .5em;
+    display: block;
   }
 </style>
 
@@ -266,6 +302,78 @@
       </content>
     </panel>
   </viewtemplate>
+
+  <viewtemplate name="meetup">
+    <meetupview>
+      <panel class="banner"></panel>
+
+      <panel class="details">
+        <content>
+          <name>Let's Go Party in New York!</name>
+          <hub>Yale University in New York City</hub>
+          <table class="info">
+            <tr>
+              <td class="l" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/hubs/calendar.png');"></td>
+              <td>
+                <datetime>Tuesday Aug 15, 9:00 PM - 11:00 PM</datetime>
+              </td>
+            </tr>
+            <tr>
+              <td class="l" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/hubs/place.png');"></td>
+              <td>
+                <place>General Assembly<br />1933 S. Broadway, 11th Floor, Los Angeles, 900007, CA</place>
+              </td>
+            </tr>
+            <tr>
+              <td class="l"><pic style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why3.jpg');"></pic></td>
+              <td>
+                Hosted by Name of Person
+              </td>
+            </tr>
+          </table>
+        </content>
+      </panel>
+
+      <panel class="goingornot">
+        <content>
+          <areyou>Are you going?</areyou>
+          <button class="half">Yes</button><button class="gray half">No</button>
+        </content>
+      </panel>
+
+      <panel class="tabs">
+        <content class="nopadding">
+          <tab for="members">
+            Going (<membercount></membercount>)
+          </tab><tab for="description">
+            Description
+          </tab><tab for="forum" class="focus">
+            Comments
+          </tab>
+        </content>
+      </panel>
+
+      <panel class="tabframe" name="members">
+        <content>
+          <subtabs><membercount></membercount> Members</subtabs>
+          <div class="members"></div>
+        </content>
+      </panel>
+      <panel class="tabframe" name="description">
+        <content></content>
+      </panel>
+      <panel class="tabframe" name="forum">
+        <content>
+          <subtabs>
+            <subtab type="recent" class="focus">Most Recent</subtab> | <subtab type="popular">Most Popular</subtab>
+          </subtabs>
+          <div class="postsframe" type="recent"><div class="posts"></div></div>
+          <div class="postsframe" type="popular"><div class="posts"></div></div>
+        </content>
+      </panel>
+    </viewtemplate>
+    </meetupview>
+  </viewtemplate>
 </viewtemplates>
 <script>
   var Views = {
@@ -284,7 +392,8 @@
   };
 
   Views.setup();
-  Views.render('hub');
+  // Views.render('hub');
+  Views.render('meetup');
 </script>
 
 <templates>
@@ -505,7 +614,6 @@
         posts = posts.parent();
       posts.css('left', postsleft+'px');
     }
-
   });
   $('.tabframe[name=forum] subtab').click(function() {
     if (!$(this).hasClass('focus')) {
