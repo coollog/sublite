@@ -251,6 +251,9 @@
     margin-bottom: .5em;
     display: block;
   }
+  meetupview .tabframe[name=description] {
+    text-align: left;
+  }
 </style>
 
 <view>
@@ -305,29 +308,29 @@
 
   <viewtemplate name="meetup">
     <meetupview>
-      <panel class="banner"></panel>
+      <panel class="banner" style="background-image: url('{banner}');"></panel>
 
       <panel class="details">
         <content>
-          <name>Let's Go Party in New York!</name>
-          <hub>Yale University in New York City</hub>
+          <name>{name}</name>
+          <hub>{hub}</hub>
           <table class="info">
             <tr>
               <td class="l" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/hubs/calendar.png');"></td>
               <td>
-                <datetime>Tuesday Aug 15, 9:00 PM - 11:00 PM</datetime>
+                <datetime>{datetime}</datetime>
               </td>
             </tr>
             <tr>
               <td class="l" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/hubs/place.png');"></td>
               <td>
-                <place>General Assembly<br />1933 S. Broadway, 11th Floor, Los Angeles, 900007, CA</place>
+                <place>{place}</place>
               </td>
             </tr>
             <tr>
-              <td class="l"><pic style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why3.jpg');"></pic></td>
+              <td class="l"><pic style="background-image: url('{hostpic}');"></pic></td>
               <td>
-                Hosted by Name of Person
+                Hosted by {host}
               </td>
             </tr>
           </table>
@@ -360,7 +363,7 @@
         </content>
       </panel>
       <panel class="tabframe" name="description">
-        <content></content>
+        <content>{description}</content>
       </panel>
       <panel class="tabframe" name="forum">
         <content>
@@ -386,14 +389,29 @@
         $(this).remove();
       });
     },
-    render: function (name) {
-      $('view').html(this.templates[name]);
+    render: function (name, json) {
+      var newHTML = this.templates[name];
+      for (var key in json) {
+        toreplace = '{'+key+'}';
+        while (newHTML.indexOf(toreplace) > -1)
+          newHTML = newHTML.replace(toreplace, json[key]);
+      }
+      $('view').html(newHTML);
     }
   };
 
   Views.setup();
   // Views.render('hub');
-  Views.render('meetup');
+  Views.render('meetup', {
+    banner: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why3.jpg',
+    name: "Let's Go Party in New York!",
+    hub: 'Yale University in New York City',
+    datetime: 'Tuesday Aug 15, 9:00 PM - 11:00 PM',
+    place: 'General Assembly<br />1933 S. Broadway, 11th Floor, Los Angeles, 900007, CA',
+    host: 'Name of Person',
+    hostpic: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why3.jpg',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+  });
 </script>
 
 <templates>
