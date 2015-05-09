@@ -212,53 +212,80 @@
     display: block;
   }
 
-  templates {
+  templates, viewtemplates {
     display: none;
   }
 </style>
 
-<panel class="banner">
-  <content>
-    <name>New York City Area Hub</name>
-  </content>
-</panel>
+<view>
 
-<panel>
-  <content>
-    <button class="joinhub">Join Hub</button>
-  </content>
-</panel>
+</view>
 
-<panel class="tabs">
-  <content class="nopadding">
-    <tab for="forum" class="focus">
-      Forum
-    </tab><tab for="meetups">
-      Meet-Ups
-    </tab><tab for="members">
-      Members (<membercount></membercount>)
-    </tab>
-  </content>
-</panel>
+<viewtemplates>
+  <viewtemplate name="hub">
+    <panel class="banner">
+      <content>
+        <name>New York City Area Hub</name>
+      </content>
+    </panel>
 
-<panel class="tabframe" name="forum">
-  <content>
-    <subtabs>
-      <subtab type="recent" class="focus">Most Recent</subtab> | <subtab type="popular">Most Popular</subtab>
-    </subtabs>
-    <div class="postsframe" type="recent"><div class="posts"></div></div>
-    <div class="postsframe" type="popular"><div class="posts"></div></div>
-  </content>
-</panel>
-<panel class="tabframe" name="meetups">
-  <content></content>
-</panel>
-<panel class="tabframe" name="members">
-  <content>
-    <subtabs><membercount></membercount> Members</subtabs>
-    <div class="members"></div>
-  </content>
-</panel>
+    <panel>
+      <content>
+        <button class="joinhub">Join Hub</button>
+      </content>
+    </panel>
+
+    <panel class="tabs">
+      <content class="nopadding">
+        <tab for="forum" class="focus">
+          Forum
+        </tab><tab for="meetups">
+          Meet-Ups
+        </tab><tab for="members">
+          Members (<membercount></membercount>)
+        </tab>
+      </content>
+    </panel>
+
+    <panel class="tabframe" name="forum">
+      <content>
+        <subtabs>
+          <subtab type="recent" class="focus">Most Recent</subtab> | <subtab type="popular">Most Popular</subtab>
+        </subtabs>
+        <div class="postsframe" type="recent"><div class="posts"></div></div>
+        <div class="postsframe" type="popular"><div class="posts"></div></div>
+      </content>
+    </panel>
+    <panel class="tabframe" name="meetups">
+      <content></content>
+    </panel>
+    <panel class="tabframe" name="members">
+      <content>
+        <subtabs><membercount></membercount> Members</subtabs>
+        <div class="members"></div>
+      </content>
+    </panel>
+  </viewtemplate>
+</viewtemplates>
+<script>
+  var Views = {
+    templates: {},
+    setup: function () {
+      var templates = this.templates;
+      $('viewtemplate').each(function() {
+        var name = $(this).attr('name');
+        templates[name] = $(this).html();
+        $(this).remove();
+      });
+    },
+    render: function (name) {
+      $('view').html(this.templates[name]);
+    }
+  };
+
+  Views.setup();
+  Views.render('hub');
+</script>
 
 <templates>
   <template for="post">
@@ -313,6 +340,7 @@
     setup: function () {
       // Read in template
       this.template = $('template[for=post]').html();
+      $('template[for=post]').remove();
     },
     add: function (type, json, parentid) {
       var newHTML = this.template;
@@ -334,6 +362,7 @@
     setup: function () {
       // Read in template
       this.template = $('template[for=meetup]').html();
+      $('template[for=meetup]').remove();
     },
     add: function (json) {
       var newHTML = this.template;
@@ -352,6 +381,7 @@
     setup: function () {
       // Read in template
       this.template = $('template[for=members]').html();
+      $('template[for=members]').remove();
       this.updateCount(0);
     },
     add: function (json) {
@@ -477,12 +507,12 @@
     }
 
   });
-  $('.tabframe subtab').click(function() {
+  $('.tabframe[name=forum] subtab').click(function() {
     if (!$(this).hasClass('focus')) {
       var type = $(this).attr('type');
       $('.postsframe').hide();
       $('.postsframe[type='+type+']').show();
-      $('.tabframe subtab').removeClass('focus');
+      $('.tabframe[name=forum] subtab').removeClass('focus');
       $(this).addClass('focus');
     }
   });
