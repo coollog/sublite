@@ -447,6 +447,8 @@
   </viewtemplate>
 </viewtemplates>
 <script>
+  // Controller for the views templates
+
   var Views = {
     templates: {},
     setup: function () {
@@ -552,6 +554,8 @@
   </template>
 </templates>
 <script>
+  // Controllers for the tab templates
+
   var Posts = {
     setup: function () {
       // Read in template
@@ -625,6 +629,8 @@
 </script>
 
 <script>
+  // Function to holistically prepare new renders
+
   function afterRender() {
     // Tabulation
 
@@ -763,6 +769,8 @@
     });
   }
 
+  // Actual code to set everything up for the first time
+  
   Views.setup();
 
   Posts.setup();
