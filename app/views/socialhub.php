@@ -411,7 +411,9 @@
         $(this).remove();
       });
     },
-    render: function (name, json) {
+    // Changes the view with json to replace {var} and back=true meaning
+    //  slide view from left instead
+    render: function (name, json, back) {
       var newHTML = this.templates[name];
       for (var key in json) {
         toreplace = '{'+key+'}';
@@ -421,11 +423,28 @@
 
       var oldHTML = $('view').html();
       if (oldHTML.length) {
-        $('view').css('position', 'absolute');
-        $('newview').css('left', '100%').html(newHTML).animate({
-          left: '0%'
-        }, 500, 'easeOutCubic', function() {
-          $('view').html(newHTML).css('position', 'relative');
+        var viewPos = {
+          viewStart: '0%',
+          viewEnd: '-100%',
+          newviewStart: '100%',
+          newviewEnd: '0%'
+        };
+        if (typeof back !== 'undefined') {
+          viewPos = {
+            viewstart: '0%',
+            viewEnd: '100%',
+            newviewStart: '-100%',
+            newviewEnd: '0%'
+          };
+        }
+        $('view').css('position', 'absolute')
+                 .css('left', viewPos.viewStart)
+                 .animate({ left: viewPos.viewEnd },
+                 500, 'easeOutCubic');
+        $('newview').css('left', viewPos.newviewStart).html(newHTML)
+                    .animate({ left: viewPos.newviewEnd }, 
+                    500, 'easeOutCubic', function() {
+          $('view').html(newHTML).css('position', 'relative').css('left', '0');
           $('newview').html('');
           afterRender();
           addTestContent(); // remove this
@@ -637,7 +656,7 @@
       });
     });
     $('meetupview .details hub').off("click").click(function () {
-      Views.render('hub');
+      Views.render('hub', {}, true);
     });
   }
 
