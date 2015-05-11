@@ -129,8 +129,12 @@
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>-->
     <script src="<?php echo $GLOBALS['dirpre']; ?>assets/delete/jquery-1.11.3.min.js"></script>
     <script src="<?php echo $GLOBALS['dirpre']; ?>assets/delete/jquery-ui.min.js"></script>
-    <script src="<?php echo $GLOBALS['dirpre']; ?>assets/js/jquery.slidinglabels.min.js"></script>
     <?php require_once($GLOBALS['dirpre'].'assets/jqueryui/jquery-uimincss.php'); ?>
+
+    <!-- PLUGINS -->
+    <script src="<?php echo $GLOBALS['dirpre']; ?>assets/js/jquery.slidinglabels.min.js"></script>
+    <script src="<?php echo $GLOBALS['dirpre']; ?>assets/js/jquery.timepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="<?php echo $GLOBALS['dirpre']; ?>assets/css/jquery.timepicker.css">
 
     <?php require_once($GLOBALS['dirpre'].'assets/js/mainjs.php'); ?>
     <?php require_once($GLOBALS['dirpre'].'assets/js/formjs.php'); ?>

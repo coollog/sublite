@@ -17,6 +17,10 @@
     height: 100%;
     max-width: 800px;
   }
+  headline {
+    margin: 0;
+    line-height: 1.5em;
+  }
   .nopadding {
     padding: 0;
   }
@@ -28,10 +32,14 @@
     border: 0;
     transition: all 0.10s ease-in-out;
     cursor: pointer;
-    font-size: 2em;
-    line-height: 1.5em;
+    font-size: 1.5em;
+    line-height: 2em;
     letter-spacing: 1px;
     outline: none;
+  }
+  button.joinhub {
+    font-size: 2em;
+    line-height: 1.5em;
   }
   button:hover {
     opacity: 0.5;
@@ -83,6 +91,7 @@
   .tabframe {
     background: #f3f3f2;
     display: none;
+    text-align: left;
   }
   .tabframe content {
     background: #faf9f9;
@@ -202,6 +211,13 @@
     display: inline-block;
   }
 
+  .createmeetup {
+
+  }
+  .createmeetup input {
+    display: block;
+  }
+
   .member {
     margin: 10px 40px;
     text-align: left;
@@ -304,6 +320,8 @@
           Meet-Ups
         </tab><tab for="members">
           Members (<membercount>0</membercount>)
+        </tab><tab for="createmeetup" style="display: none;">
+          Create Meet-Up
         </tab>
       </content>
     </panel>
@@ -318,7 +336,35 @@
       </content>
     </panel>
     <panel class="tabframe" name="meetups">
-      <content></content>
+      <content>
+        <button id="createmeetup">Create a Meet-Up</button>
+        <br /><br />
+        <div class="meetups"></div>
+      </content>
+    </panel>
+    <panel class="tabframe" name="createmeetup">
+      <content>
+        <headline>Create a Meet-Up</headline>
+        <form>
+          <notice></notice>
+          Title:
+          <input type="text" name="title" />
+          Start Date:
+          <input class="datepicker" type="text" name="startdate" />
+          Start Time:
+          <input class="timepicker" type="time" name="starttime" />
+          End Date:
+          <input class="datepicker" type="text" name="enddate" />
+          End Time:
+          <input class="timepicker" type="time" name="endtime" />
+          Location Name:
+          <input type="text" name="locationname" />
+          Location Address:
+          <input type="text" name="locationaddress" />
+          <notice></notice>
+          <right><button>Create</button></right>
+        </form>
+      </content>
     </panel>
     <panel class="tabframe" name="members">
       <content>
@@ -486,7 +532,7 @@
           </td>
         </tr>
       </table>
-      <button class="smallbutton">RSVP</button>
+      <button class="smallbutton">More</button>
       <info>{going} Going &nbsp; &nbsp; {comments} Comments</info>
     </div>
   </template>
@@ -542,11 +588,11 @@
         while (newHTML.indexOf(toreplace) > -1)
           newHTML = newHTML.replace(toreplace, json[key]);
       }
-      $('.tabframe[name=meetups] content').append(newHTML);
+      $('.meetups').append(newHTML);
       afterRender();
     },
     clear: function () {
-      $('.tabframe[name=meetups] content').html('');
+      $('.meetups').html('');
     }
   }
   var Members = {
@@ -657,6 +703,17 @@
     });
     $('meetupview .details hub').off("click").click(function () {
       Views.render('hub', {}, true);
+    });
+
+    // Meetup creation button
+    $('#createmeetup').off("click").click(function () {
+      $('tab[for=createmeetup]').click();
+    });
+
+    // Form submission
+    $('form').off('submit').submit(function () {
+      console.log(formJSON(this));
+      return false;
     });
   }
 

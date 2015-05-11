@@ -27,6 +27,7 @@
     max-width: 200px;
     text-align: right;
   }
+  input[type=time],
   input[type=number],
   input[type=text],
   input[type=password],
