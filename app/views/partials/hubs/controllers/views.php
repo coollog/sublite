@@ -13,7 +13,7 @@
     },
     // Changes the view with json to replace {var} and back=true meaning
     //  slide view from left instead
-    render: function (name, json, back) {
+    render: function (name, json, back, callback) {
       var newHTML = this.templates[name];
       for (var key in json) {
         toreplace = '{'+key+'}';
@@ -47,12 +47,12 @@
           $('view').html(newHTML).css('position', 'relative').css('left', '0');
           $('newview').html('');
           afterRender();
-          addTestContent(); // remove this
+          if (typeof callback !== 'undefined') callback();
         });
       } else {
         $('view').html(newHTML);
         afterRender();
-        addTestContent(); // remove this
+        if (typeof callback !== 'undefined') callback();
       }
     }
   };

@@ -386,5 +386,7 @@
   Meetups.setup();
   Members.setup();
 
-  Views.render('hub');
+  Views.render('hub', {}, false, function () {
+    addTestContent(); // remove this
+  });
 </script>
