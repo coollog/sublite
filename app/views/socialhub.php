@@ -40,6 +40,7 @@
   button.joinhub {
     font-size: 2em;
     line-height: 1.5em;
+    padding: 0 100px;
   }
   button:hover {
     opacity: 0.5;
@@ -175,8 +176,22 @@
     height: 1em;
     margin: .25em .5em;
   }
-  .posts .replies {
+  .posts .thread {
     margin-left: 50px;
+    display: none;
+  }
+  .posts .reply {
+    margin-top: 1em;
+  }
+  .posts .reply form {
+    margin: 0;
+  }
+  .posts .reply textarea {
+    height: 3em;
+    white-space: pre-wrap;
+    transition: 0.2s all ease-in-out;
+  }
+  .posts .reply button {
     display: none;
   }
 
@@ -515,7 +530,16 @@
         <likes>{likes}</likes><replies>{replies}</replies>
       </td>
     </tr></table>
-    <div class="replies" for="{id}"></div>
+    <div class="thread" for="{id}">
+      <div class="replies"></div>
+      <div class="reply">
+        Write your comment:
+        <form>
+          <textarea name="text"></textarea>
+          <right><button>Reply</button></right>
+        </form>
+      </div>
+    </div>
   </template>
   <template for="meetup">
     <div class="meetup">
@@ -572,7 +596,7 @@
       if (typeof parentid == 'undefined')
         $('.postsframe[type='+type+'] .posts').append(newHTML);
       else
-        $('.postsframe[type='+type+'] .replies[for='+parentid+']').append(newHTML);
+        $('.postsframe[type='+type+'] .thread[for='+parentid+'] .replies').append(newHTML);
       afterRender();
     },
     clear: function (type) {
@@ -666,7 +690,7 @@
     $('.post').off("click").click(function() {
       var postsleft,
           myindex = $(this).attr('index'),
-          replies = $(this).parent().children('.replies[for='+myindex+']');
+          replies = $(this).parent().children('.thread[for='+myindex+']');
 
       if (replies.length && replies.html().length) {
         var mytab = $(this).parent().css('marginLeft');
@@ -693,6 +717,18 @@
         $(this).addClass('focus');
       }
     });
+
+    // Posts replying
+
+    $('.posts .reply textarea').off('blur').off('focus')
+      .focus(function() {
+        $(this).css('height', '10em')
+          .parent().find('button').slideDown(200, 'easeOutCubic');
+      })
+      .blur(function() {
+        $(this).css('height', '3em')
+          .parent().find('button').slideUp(200, 'easeOutCubic');
+      });
 
     // Meetup view switching
     $('.meetup button').off("click").click(function () {
@@ -770,7 +806,7 @@
   }
 
   // Actual code to set everything up for the first time
-  
+
   Views.setup();
 
   Posts.setup();
