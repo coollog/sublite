@@ -60,6 +60,10 @@
       return "{\"status\" : \"fail\", \"data\" : \"\", \"message\" : \"$err\"}";
     }
 
+    function successString($data) {
+      return "{\"status\" : \"success\", \"data\" : \"$data\", \"message\" : \"\"}";
+    }
+
     function api() {
       global $MStudent, $MSocial;
       $name = $_POST['name'];
@@ -85,7 +89,7 @@
         if(!isMember($hub, $id)) return errorString('not member of hub');
       }
 
-      // message-specific stuff
+      // specific stuff
       $success = "{\"status\" : \"success\", \"data\" : \"\", \"message\" : \"\"}";
       $id = $message['id'];
       $pass = $message['pass'];
@@ -93,24 +97,48 @@
       switch ($name) {
         case 'join hub':
           add($hub, $id);
-          return $success;
+          return successString("");
         case 'load posts tab':
           return $success; //TODO supply list of posts
         case 'load events tab':
-          return $success; //TODO supply list of events
+          return successString(json_encode($MSocial->getEvents($id)));
         case 'load members tab':
-          return $success; //TODO supply list of members
+          return successString(json_encode($MSocial->getMembers($id)));
         
+        case 'new post':
+          if (!checkIsSet($message, array('content', 'parentid'), $reterr)) {
+            return $reterr;
+          }
+          $ret = $MSocial->newPost($id, $hub, $message['content'], $message['parentid']);
+          return successString(json_encode($ret));
+        case 'like post':
+          if (!checkIsSet($message, array('postid'), $reterr)) {
+            return $reterr;
+          }
+          $postid = $message['postid'];
+          if ($MSocial->getPostIndex($hub, $postid) == -1) {
+            return errorString("post does not exist");
+          }
+          $MSocial->likePost($hub, $postid, $id);
+          return $success;
+        case 'delete post':
+          if (!checkIsSet($message, array('postid'), $reterr)) {
+            return $reterr;
+          }
+          $postid = $message['postid'];
+          if ($MSocial->getPostIndex($hub, $postid) == -1) {
+            return errorString("post does not exist");
+          }
+          if ($MSocial->getPostAuthor($hub, $postid) != $id) {
+            return errorString("cannot delete someone else's post");
+          }
+          $MSocial->deletePost($hub, $postid, $id);
+          return $success;
+
         //TODO Fill in all of the cases below
         case 'sort most recent':
           return $success;
         case 'sort most popular':
-          return $success;
-        case 'new post':
-          return $success;
-        case 'like post':
-          return $success;
-        case 'delete post':
           return $success;
         case 'create meetup':
           return $success;
@@ -129,7 +157,7 @@
         case 'go to parent hub':
           return $success;
         default:
-          return 'fail\n{"error":"invalid message name"}';          
+          return "{\"status\" : \"fail\", \"data\" : \"\", \"message\" : \"invalid message name\"}";          
       }
     }
   }
