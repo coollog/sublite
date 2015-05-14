@@ -157,7 +157,7 @@
         case 'go to parent hub':
           return $success;
         default:
-          return 'fail\n{"error":"invalid message name"}';          
+          return "{\"status\" : \"fail\", \"data\" : \"\", \"message\" : \"invalid message name\"}";          
       }
     }
   }
