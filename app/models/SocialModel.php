@@ -31,6 +31,36 @@
     function getEvents($hub) {
       return $this->get($hub)['events'];
     }
+    function getEventIndex($hub, $event) {
+      $entry = $this->get($hub);
+      $length = count($entry['events']);
+      for ($i = 0; $i < $length; $i++) {
+        if($entry['events'][$i]['id'] == $post) return $i;
+      }
+      return -1;
+    }
+    function getEventCreator($hub, $event) {
+      $index = $this->getEventIndex($hub, $event);
+      $entry = $this->get($hub);
+      return $entry['events'][$index]['creator'];
+    }
+    function getEventAttendees($hub, $event) {
+      $index = $this->getEventIndex($hub, $event);
+      $entry = $this->get($hub);
+      return $entry['events'][$index]['going'];
+    }
+    function getEventDescription($hub, $event) {
+      $index = $this->getEventIndex($hub, $event);
+      $entry = $this->get($hub);
+      return $entry['events'][$index]['description'];
+    }
+    
+    //TODO Write better
+    function getEventComments($hub, $event) {
+      $index = $this->getEventIndex($hub, $event);
+      $entry = $this->get($hub);
+      return $entry['events'][$index]['comments'];
+    }
     function getMembers($hub) {
       return $this->get($hub)['members'];
     }
@@ -71,12 +101,46 @@
       $this->save($entry, false);
       return "success"; //any suggestions on what to return?
     }
-    function deletePost($hub, $post, $id) {
+    function deletePost($hub, $post) {
       $entry = $this->get($hub);
       $index = $this->getPostIndex($hub, $post);
       unset($entry['posts'][$index]);
       $this->save($entry, false);
       return "success"; //any suggestions on what to return?
+    }
+    function createEvent($id, $hub, $title, $start, $end, $location, $address, $geocode, $description) {
+      $entry = $this->get($hub);
+      $ret = array(
+        'id' => new MongoId(),
+        'creator' => $id,
+        'title' => $title,
+        'starttime' => $start,
+        'endtime' => $end,
+        'location' => $location,
+        'address' => $address,
+        'geocode' => $geocode,
+        'going' => array(),
+        'comments' => array(),
+        'description' => $description;
+      );
+      $entry['events'][] = $ret;
+      $this->save($entry, false);
+      return $ret;
+    }
+    function deleteEvent($hub, $event) {
+      $entry = $this->get($hub);
+      $index = $this->getEventIndex($hub, $event);
+      unset($entry['events'][$index]);
+      $this->save($entry, false);
+      return "success";
+    }
+    function joinEvent($id, $hub, $event) {
+      $entry = $this->get($hub);
+      $index = $this->getEventIndex($hub, $event);
+      $ret = array('date' => time(), 'id' => $id);
+      $entry['events'][$index]['going'][] = $ret;
+      $this->save($entry, false);
+      return $ret;
     }
   }
 

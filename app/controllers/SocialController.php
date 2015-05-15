@@ -56,6 +56,19 @@
       return true;
     }
 
+    function isValidDate($date) {
+      // Check proper formatting
+      if(!preg_match('`[0-9]{1,2}/[0-9]{1,2}/[0-9]{4}`', $date)) {
+        return false;
+      }
+      $ar = explode('/', $date);
+      // Check if date exists
+      if(!checkdate(intval($ar[0]), intval($ar[1]), intval($ar[2])))
+        return false;
+      // Check if date is in the future
+      return strtotime($date) > time();
+    }
+
     function errorString($err) {
       return "{\"status\" : \"fail\", \"data\" : \"\", \"message\" : \"$err\"}";
     }
@@ -111,6 +124,7 @@
           }
           $ret = $MSocial->newPost($id, $hub, $message['content'], $message['parentid']);
           return successString(json_encode($ret));
+
         case 'like post':
           if (!checkIsSet($message, array('postid'), $reterr)) {
             return $reterr;
@@ -121,6 +135,7 @@
           }
           $MSocial->likePost($hub, $postid, $id);
           return $success;
+
         case 'delete post':
           if (!checkIsSet($message, array('postid'), $reterr)) {
             return $reterr;
@@ -132,7 +147,96 @@
           if ($MSocial->getPostAuthor($hub, $postid) != $id) {
             return errorString("cannot delete someone else's post");
           }
-          $MSocial->deletePost($hub, $postid, $id);
+          $MSocial->deletePost($hub, $postid);
+          return $success;
+        case 'create meetup':
+          if (!checkIsSet($message, 
+            array(
+              'eventtitle',
+              'starttime',
+              'endtime',
+              'locationname',
+              'address',
+              'description')
+            , $reterr)) {
+            return $reterr;
+          }
+          if (strlen($message['eventtitle']) > 200) {
+            return errorString("meetup title too long");
+          }
+          if (strlen($message['description']) > 2000) {
+            return errorString("meetup description too long");
+          }
+          if (!$this->isValidDate($date['starttime'])) {
+            return errorString("invalid start date: please check date");
+          }
+          if (!$this->isValidDate($date['endtime'])) {
+            return errorString("invalid end date: please check date");
+          }
+          if(strtotime($data['endtime']) < strtotime($data['starttime'])) {
+            return errorString("invalid date range: end date should be after start date.");
+          }
+          $geocode = geocode($message['address']);
+          $MSocial->createEvent(
+            $id,
+            $hub,
+            $eventtitle,
+            $message['starttime'],
+            $message['endtime'],
+            $message['locationname'],
+            $message['address'],
+            $geocode,
+            $message['description']
+          );
+          return $success;
+        case 'delete meetup':
+          if (!checkIsSet($message, array('event'), $reterr)) {
+            return $reterr;
+          }
+          $event = $message['event'];
+          if ($MSocial->getEventIndex($hub, $event) == -1) {
+            return errorString("event does not exist");
+          }
+          if ($MSocial->getEventCreator($hub, $event) != $id) {
+            return errorString("cannot delete someone else's event");
+          }
+          $MSocial->deleteEvent($hub, $event);
+          return $success;
+        case 'rsvp meetup':
+          if (!checkIsSet($message, array('event'), $reterr)) {
+            return $reterr;
+          }
+          $event = $message['event'];
+          if ($MSocial->getEventIndex($hub, $event) == -1) {
+            return errorString("event does not exist");
+          }
+          $MSocial->joinEvent($id, $hub, $event);
+          return $success;
+        case 'respond to meetup':
+          if (!checkIsSet($message, array('event', 'response'), $reterr)) {
+            return $reterr;
+          }
+          $event = $message['event'];
+          if ($MSocial->getEventIndex($hub, $event) == -1) {
+            return errorString("event does not exist");
+          }
+          if($message['response'] == 'yes') {
+            $MSocial->joinEvent($id, $hub, $event);
+          }
+          return $success;
+        case 'list going':
+          if (!checkIsSet($message, array('event'), $reterr)) {
+            return $reterr;
+          }
+          $event = $message['event'];
+          return $successString(json_encode($MSocial->getEventAttendees($hub, $event)));
+        case 'load event description':
+          if (!checkIsSet($message, array('event'), $reterr)) {
+            return $reterr;
+          }
+          $event = $message['event'];
+          return $successString(json_encode($MSocial->getEventDescription($hub, $event)));
+        case 'go to parent hub':
           return $success;
 
         //TODO Fill in all of the cases below
@@ -140,22 +244,12 @@
           return $success;
         case 'sort most popular':
           return $success;
-        case 'create meetup':
-          return $success;
-        case 'delete meetup':
-          return $success;
-        case 'rsvp meetup':
-          return $success;
-        case 'respond to meetup':
-          return $success;
-        case 'list going':
-          return $success;
-        case 'load event description':
-          return $success;
         case 'load event comments':
-          return $success;
-        case 'go to parent hub':
-          return $success;
+          if (!checkIsSet($message, array('event'), $reterr)) {
+            return $reterr;
+          }
+          $event = $message['event'];
+          //TODO return $successString(json_encode($MSocial->getEventComments($hub, $event)));
         default:
           return "{\"status\" : \"fail\", \"data\" : \"\", \"message\" : \"invalid message name\"}";          
       }
