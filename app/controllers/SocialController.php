@@ -360,7 +360,7 @@
           if ($MSocial->getEventIndex($hub, $event) == -1) {
             return $this->errorString("event does not exist");
           }
-          
+
           $event = $message['event'];
           return $this->successString(json_encode($MSocial->getEventComments($hub, $event)));
 
@@ -375,7 +375,7 @@
       //TODO Write unit tests...
       global $MSocial;
 
-      $_POST['name'] = 'load event description';
+      $_POST['name'] = 'load posts tab';
       $_POST['json'] = '
       {
         "id" : "tony",
@@ -388,9 +388,10 @@
         "address" : "1600 Swag Ave.",
         "description" : "Raaaaave",
         "event" : "5556993122e3c76a0e0041a9",
-        "content" : "yo!!",
+        "content" : "yoyoyoyoyoyoyoyo",
         "comment" : "5556d06122e3c76c0e0041aa",
-        "postid" : "5556920a22e3c7b7000041a8"
+        "postid" : "55578ae722e3c76c0e0041ab",
+        "parentid" : ""
       }';
       echo $this->api() . "<br><br>";
       $entry = $MSocial->get('5556914f172f559e8ece6c89');

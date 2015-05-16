@@ -20,7 +20,7 @@
       $posts = $this->get($hub)['posts'];
       if ($parent == '') {
         foreach ($posts as $post) {
-          if ($post['parent'] == '') {
+          if ($post['parent'] == '' && $post['deleted'] == false) {
             $ret[] = $post;
           }
         }
@@ -35,7 +35,7 @@
         $ret = array_reverse($ret);
       }
       else {
-        //TODO sort by popular
+        //TODO sort by popular and uncomment below
         $ret = array_reverse($ret);
       }
       foreach ($ret as $key => $post) {
@@ -46,7 +46,7 @@
     function getPost($hub, $postid) {
       $posts = $this->get($hub)['posts'];
       foreach ($posts as $post) {
-        if ($post['id'] == $postid) return $post;
+        if ($post['id'] == $postid && $post['deleted'] == false) return $post;
       }
       return '-1';
     }
@@ -54,7 +54,7 @@
       $entry = $this->get($hub);
       if(!$this->validArray($entry['posts'])) return -1;
       foreach ($entry['posts'] as $key => $tmp) {
-        if ($tmp['id'] == $post) return $key;
+        if ($tmp['id'] == $post && $tmp['deleted'] == false) return $key;
       }
       return -1;
     }
@@ -150,7 +150,8 @@
         'from' => $id,
         'date' => time(),
         'content' => $content,
-        'likes' => array()
+        'likes' => array(),
+        'deleted' => false
       );
       $entry['posts'][] = $ret;
       if($parentid != '') {
@@ -194,7 +195,7 @@
         }
       }
       // delete the actual post
-      unset($entry['posts'][$index]);
+      $entry['posts'][$index]['deleted'] = true;
       $this->save($entry, false);
 
       // delete all children
@@ -258,7 +259,7 @@
         'id' => new MongoId(),
         'from' => $id,
         'date' => time(),
-        'content' => $content,
+        'content' => $content
       );
       $entry['events'][$index]['comments'][] = $ret;
       $this->save($entry, false);
