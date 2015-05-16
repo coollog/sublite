@@ -15,11 +15,46 @@
     function get($id) {
       return $this->collection->findOne(array('_id' => new MongoId($id)));
     }
+    function getPosts($hub, $parent, $sortCriterion) {
+      $ret = array();
+      $posts = $this->get($hub)['posts'];
+      if ($parent == '') {
+        foreach ($posts as $post) {
+          if ($post['parent'] == '') {
+            $ret[] = $post;
+          }
+        }
+      }
+      else {
+        $cur = $this->getPost($hub, $parent);
+        foreach ($cur['children'] as $post) {
+          $ret[] = $this->getPost($hub, $post);
+        }
+      }
+      if ($sortCriterion == 'recent') {
+        $ret = array_reverse($ret);
+      }
+      else {
+        //TODO sort by popular
+        $ret = array_reverse($ret);
+      }
+      foreach ($ret as $key => $post) {
+        $ret[$key]['replies'] = $this->getPosts($hub, $post['id'], $sortCriterion);
+      }
+      return $ret;
+    }
+    function getPost($hub, $postid) {
+      $posts = $this->get($hub)['posts'];
+      foreach ($posts as $post) {
+        if ($post['id'] == $postid) return $post;
+      }
+      return '-1';
+    }
     function getPostIndex($hub, $post) {
       $entry = $this->get($hub);
-      $length = count($entry['posts']);
-      for ($i = 0; $i < $length; $i++) {
-        if($entry['posts'][$i]['id'] == $post) return $i;
+      if(!$this->validArray($entry['posts'])) return -1;
+      foreach ($entry['posts'] as $key => $tmp) {
+        if ($tmp['id'] == $post) return $key;
       }
       return -1;
     }
@@ -33,12 +68,21 @@
     }
     function getEventIndex($hub, $event) {
       $entry = $this->get($hub);
-      $length = count($entry['events']);
-      for ($i = 0; $i < $length; $i++) {
-        if($entry['events'][$i]['id'] == $post) return $i;
+      if(!$this->validArray($entry['events'])) return -1;
+      foreach ($entry['events'] as $key => $tmp) {
+        if ($tmp['id'] == $event) return $key;
       }
       return -1;
     }
+    function getEventComment($hub, $event, $comment) {
+      $index = $this->getEventIndex($hub, $event);
+      $comments = $this->get($hub)['events'][$index]['comments'];
+      foreach ($comments as $tmp) {
+        if ($tmp['id'] == $comment) return $tmp;
+      }
+      return '-1';
+    }
+
     function getEventCreator($hub, $event) {
       $index = $this->getEventIndex($hub, $event);
       $entry = $this->get($hub);
@@ -54,8 +98,15 @@
       $entry = $this->get($hub);
       return $entry['events'][$index]['description'];
     }
-    
-    //TODO Write better
+    function getEventCommentIndex($hub, $event, $comment) {
+      $entry = $this->get($hub);
+      $index = $this->getEventIndex($hub, $event);
+      if(!$this->validArray($entry['events'][$index]['comments'])) return -1;
+      foreach ($entry['events'][$index]['comments'] as $key => $tmp) {
+        if ($tmp['id'] == $comment) return $key;
+      }
+      return -1;
+    }
     function getEventComments($hub, $event) {
       $index = $this->getEventIndex($hub, $event);
       $entry = $this->get($hub);
@@ -63,6 +114,16 @@
     }
     function getMembers($hub) {
       return $this->get($hub)['members'];
+    }
+    function isGoing($hub, $event, $student) {
+      $entry = $this->get($hub);
+      $index = $this->getEventIndex($hub, $event);
+      if(is_array($entry['events'][$index]['going']) && count($entry['events'][$index]['going']) > 0) {
+        foreach ($entry['events'][$index]['going'] as $key => & $sub_array) {
+          if($sub_array['id'] == $student) return true;
+        }
+      }
+      return false;
     }
     function isMember($hub, $student) {
       $entry = $this->get($hub);
@@ -81,8 +142,9 @@
     }
     function newPost($id, $hub, $content, $parentid) {
       $entry = $this->get($hub);
+      $curId = new MongoId();
       $ret = array(
-        'id' => new MongoId(),
+        'id' => $curId,
         'parent' => $parentid,
         'children' => array(),
         'from' => $id,
@@ -91,22 +153,54 @@
         'likes' => array()
       );
       $entry['posts'][] = $ret;
+      if($parentid != '') {
+        $parentindex = $this->getPostIndex($hub, $parentid);
+        $entry['posts'][$parentindex]['children'][] = $curId;
+      }
       $this->save($entry, false);
       return $ret;
     }
-    function likePost($hub, $post, $id) {
+    function toggleLikePost($hub, $post, $id) {
       $entry = $this->get($hub);
       $index = $this->getPostIndex($hub, $post);
+      if($this->validArray($entry['posts'][$index]['likes'])) {
+        foreach ($entry['posts'][$index]['likes'] as $key => $value) {
+          if ($value['id'] == $id) {
+            unset($entry['posts'][$index]['likes'][$key]);
+            $this->save($entry, false);
+            return "post $id unliked";
+          }
+        }
+      }
       $entry['posts'][$index]['likes'][] = array('time' => time(), 'id' => $id);
       $this->save($entry, false);
-      return "success"; //any suggestions on what to return?
+      return "post $id liked";
     }
     function deletePost($hub, $post) {
       $entry = $this->get($hub);
       $index = $this->getPostIndex($hub, $post);
+      $ret = $entry['posts'][$index];
+      if ($ret['parent'] != '') {
+        $parentindex = $this->getPostIndex($hub, $ret['parent']);
+        if($parentindex != -1) {
+          foreach ($entry['posts'][$parentindex]['children'] as $key => $val) {
+            if($val == $post) {
+              unset($entry['posts'][$parentindex]['children'][$key]);
+              break;
+            }
+          }
+        }
+      }
       unset($entry['posts'][$index]);
       $this->save($entry, false);
-      return "success"; //any suggestions on what to return?
+
+      // delete all children
+      if (is_array($ret['children']) && count($ret['children']) > 0) {
+        foreach ($ret['children'] as $child) {
+          $this->deletePost($hub, $child->{'$id'});
+        }
+      }
+      return $ret;
     }
     function createEvent($id, $hub, $title, $start, $end, $location, $address, $geocode, $description) {
       $entry = $this->get($hub);
@@ -119,9 +213,9 @@
         'location' => $location,
         'address' => $address,
         'geocode' => $geocode,
-        'going' => array(),
+        'going' => array($id),
         'comments' => array(),
-        'description' => $description;
+        'description' => $description
       );
       $entry['events'][] = $ret;
       $this->save($entry, false);
@@ -130,9 +224,10 @@
     function deleteEvent($hub, $event) {
       $entry = $this->get($hub);
       $index = $this->getEventIndex($hub, $event);
+      $ret = $entry['events'][$index];
       unset($entry['events'][$index]);
       $this->save($entry, false);
-      return "success";
+      return $ret;
     }
     function joinEvent($id, $hub, $event) {
       $entry = $this->get($hub);
@@ -140,7 +235,45 @@
       $ret = array('date' => time(), 'id' => $id);
       $entry['events'][$index]['going'][] = $ret;
       $this->save($entry, false);
+      return "event $id joined";
+    }
+    function leaveEvent($id, $hub, $event) {
+      $entry = $this->get($hub);
+      $index = $this->getEventIndex($hub, $event);
+      foreach ($entry['events'][$index]['going'] as $key => $value) {
+        if ($value['id'] == $id) {
+          unset($entry['events'][$index]['going'][$key]);
+          $this->save($entry, false);
+          return "event $id left";
+        }
+      }
+    }
+    function newEventComment($id, $hub, $event, $content) {
+      $entry = $this->get($hub);
+      $index = $this->getEventIndex($hub, $event);
+      $ret = array(
+        'id' => new MongoId(),
+        'from' => $id,
+        'date' => time(),
+        'content' => $content,
+      );
+      $entry['events'][$index]['comments'][] = $ret;
+      $this->save($entry, false);
       return $ret;
+    }
+    function deleteEventComment($hub, $event, $comment) {
+      $entry = $this->get($hub);
+      $index = $this->getEventIndex($hub, $event);
+      $index2 = $this->getEventCommentIndex($hub, $event, $comment);
+      $ret = $entry['events'][$index]['comments'][$index2];
+      unset($entry['events'][$index]['comments'][$index2]);
+      $this->save($entry, false);
+      return $ret;
+    }
+
+    //Misc
+    function validArray($ar) {
+      return is_array($ar) && count($ar) > 0;
     }
   }
 
