@@ -317,6 +317,7 @@
       }
     }
     function test() {
+      //TODO Write unit tests...
       global $MSocial;
 
       $_POST['name'] = 'load event info';
