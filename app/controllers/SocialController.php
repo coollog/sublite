@@ -99,6 +99,11 @@
       // specific stuff
       $success = "{\"status\" : \"success\", \"data\" : \"\", \"message\" : \"\"}";
       switch ($name) {
+        /* 
+         *
+         * General hub actions (e.g. joining, loading stuff)
+         *
+         */
         case 'join hub':
           if($MSocial->isMember($hub, $id)) {
             return $this->errorString("already is member");
@@ -118,6 +123,12 @@
           return $this->successString(json_encode($MSocial->getMembers($hub)));
         case 'load posts tab':
           return $this->successString(json_encode($MSocial->getPosts($hub, '', 'recent')));
+
+        /* 
+         *
+         * Posts! Sorting/making/liking/deleting them.
+         *
+         */
         case 'sort most recent':
           return $this->successString(json_encode($MSocial->getPosts($hub, '', 'recent')));
         case 'new post':
@@ -148,6 +159,12 @@
           }
           $ret = $MSocial->deletePost($hub, $postid);
           return $this->successString(json_encode($ret));
+
+        /* 
+         *
+         * Events!
+         *
+         */
         case 'load event info':
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
             return $reterr;
@@ -197,7 +214,7 @@
             $geocode,
             $message['description']
           )));
-        case 'delete meetup':
+        case 'delete event':
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
             return $reterr;
           }

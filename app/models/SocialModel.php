@@ -163,6 +163,7 @@
     function toggleLikePost($hub, $post, $id) {
       $entry = $this->get($hub);
       $index = $this->getPostIndex($hub, $post);
+      //Checks if post is already liked
       if($this->validArray($entry['posts'][$index]['likes'])) {
         foreach ($entry['posts'][$index]['likes'] as $key => $value) {
           if ($value['id'] == $id) {
@@ -180,6 +181,7 @@
       $entry = $this->get($hub);
       $index = $this->getPostIndex($hub, $post);
       $ret = $entry['posts'][$index];
+      // delete from parent's children list
       if ($ret['parent'] != '') {
         $parentindex = $this->getPostIndex($hub, $ret['parent']);
         if($parentindex != -1) {
@@ -191,6 +193,7 @@
           }
         }
       }
+      // delete the actual post
       unset($entry['posts'][$index]);
       $this->save($entry, false);
 
