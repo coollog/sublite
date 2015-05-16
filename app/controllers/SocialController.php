@@ -74,6 +74,10 @@
       $name = $_POST['name'];
       $json = $_POST['json'];
       $message = json_decode($json, true);
+      // clean data
+      foreach ($message as $key => $val) {
+        $message[$key] = clean($message[$key]);
+      }
       $reterr = "";
       // make sure id, pass, and hub are set in $message
       if (!$this->checkIsSet($message, array('id', 'pass', 'hub'), $reterr)) {
@@ -375,7 +379,7 @@
       //TODO Write unit tests...
       global $MSocial;
 
-      $_POST['name'] = 'load posts tab';
+      $_POST['name'] = 'create event';
       $_POST['json'] = '
       {
         "id" : "tony",
