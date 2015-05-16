@@ -64,8 +64,9 @@
       return "{\"status\" : \"fail\", \"data\" : \"\", \"message\" : \"$err\"}";
     }
 
-    function successString($data) {
-      return "{\"status\" : \"success\", \"data\" : \"$data\", \"message\" : \"\"}";
+    function successString($data, $message = "") {
+      if($data == "") return "{\"status\" : \"success\", \"data\" : \"\", \"message\" : \"$message\"}";
+      return "{\"status\" : \"success\", \"data\" : $data, \"message\" : \"$message\"}";
     }
 
     function api() {
@@ -105,11 +106,13 @@
          *
          */
         case 'join hub':
+          // Validations
           if($MSocial->isMember($hub, $id)) {
             return $this->errorString("already is member");
           }
+
           $MSocial->add($hub, $id);
-          return $this->successString("");
+          return $success;
         case 'load hub info':
           $entry = $MSocial->get($hub);
           $ret = array(
@@ -132,12 +135,18 @@
         case 'sort most recent':
           return $this->successString(json_encode($MSocial->getPosts($hub, '', 'recent')));
         case 'new post':
+          // Validations
           if (!$this->checkIsSet($message, array('content', 'parentid'), $reterr)) {
             return $reterr;
           }
+          if (strlen($message['content']) > 2000) {
+            return $this->errorString("post too long (exceeds 2000 characters)");
+          }
+
           $ret = $MSocial->newPost($id, $hub, $message['content'], $message['parentid']);
           return $this->successString(json_encode($ret));
         case 'click like':
+          // Validations
           if (!$this->checkIsSet($message, array('postid'), $reterr)) {
             return $reterr;
           }
@@ -145,8 +154,10 @@
           if ($MSocial->getPostIndex($hub, $postid) == -1) {
             return $this->errorString("post does not exist");
           }
-          return $this->successString($MSocial->toggleLikePost($hub, $postid, $id));
+
+          return $this->successString("", $MSocial->toggleLikePost($hub, $postid, $id));
         case 'delete post':
+          // Validations
           if (!$this->checkIsSet($message, array('postid'), $reterr)) {
             return $reterr;
           }
@@ -157,6 +168,7 @@
           if ($MSocial->getPostAuthor($hub, $postid) != $id) {
             return $this->errorString("cannot delete someone else's post");
           }
+
           $ret = $MSocial->deletePost($hub, $postid);
           return $this->successString(json_encode($ret));
 
@@ -166,15 +178,21 @@
          *
          */
         case 'load event info':
+          // Validations
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
             return $reterr;
           }
+          if ($MSocial->getEventIndex($hub, $event) == -1) {
+            return $this->errorString("event does not exist");
+          }
+
           $ret = $MSocial->get($hub);
           $index = $MSocial->getEventIndex($hub, $message['event']);
           unset($ret['events'][$index]['going']);
           unset($ret['events'][$index]['comments']);
           return $this->successString(json_encode($ret['events'][$index]));
         case 'create event':
+          // Validations
           if (!$this->checkIsSet($message, 
             array(
               'eventtitle',
@@ -202,6 +220,7 @@
           // if(strtotime($data['endtime']) < strtotime($data['starttime'])) {
           //   return $this->errorString("invalid date range: end date should be after start date.");
           // }
+
           $geocode = geocode($message['address']);
           return $this->successString(json_encode($MSocial->createEvent(
             $id,
@@ -215,6 +234,7 @@
             $message['description']
           )));
         case 'delete event':
+          // Validations
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
             return $reterr;
           }
@@ -225,8 +245,10 @@
           if ($MSocial->getEventCreator($hub, $event) != $id) {
             return $this->errorString("cannot delete someone else's event");
           }
+
           return $this->successString(json_encode($MSocial->deleteEvent($hub, $event)));
         case 'rsvp event':
+          // Validations
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
             return $reterr;
           }
@@ -237,9 +259,11 @@
           if ($MSocial->isGoing($hub, $event, $id)) {
             return $this->errorString("already RSVP'd");
           }
+
           $MSocial->joinEvent($id, $hub, $event);
-          return $this->successString("joined event $event");
+          return $this->successString("", "joined event $event");
         case 'leave event':
+          // Validations
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
             return $reterr;
           }
@@ -250,9 +274,11 @@
           if (!$MSocial->isGoing($hub, $event, $id)) {
             return $this->errorString("already left event");
           }
+
           $MSocial->leaveEvent($id, $hub, $event);
-          return $this->successString("left event $event");;
+          return $this->successString("", "left event $event");;
         case 'respond to event':
+          // Validations
           if (!$this->checkIsSet($message, array('event', 'response'), $reterr)) {
             return $reterr;
           }
@@ -260,35 +286,59 @@
           if ($MSocial->getEventIndex($hub, $event) == -1) {
             return $this->errorString("event does not exist");
           }
+
           if($message['response'] == 'yes') {
             if ($MSocial->isGoing($hub, $event, $id)) {
               return $this->errorString("already RSVP'd");
             }
             $MSocial->joinEvent($id, $hub, $event);
-            return $this->successString("joined event $event");
+            return $this->successString("", "joined event $event");
           }
-          return $this->successString("did not join event $event");
+          return $this->successString("", "did not join event $event");
         case 'list going':
+          // Validations
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
             return $reterr;
           }
+          $event = $message['event'];
+          if ($MSocial->getEventIndex($hub, $event) == -1) {
+            return $this->errorString("event does not exist");
+          }
+
           $event = $message['event'];
           return $this->successString(json_encode($MSocial->getEventAttendees($hub, $event)));
         case 'load event description':
+          // Validations
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
             return $reterr;
           }
           $event = $message['event'];
-          return $this->successString($MSocial->getEventDescription($hub, $event));
+          if ($MSocial->getEventIndex($hub, $event) == -1) {
+            return $this->errorString("event does not exist");
+          }
+
+          $event = $message['event'];
+          return $this->successString("\"".$MSocial->getEventDescription($hub, $event)."\"");
         case 'new event comment':
+          // Validations
           if (!$this->checkIsSet($message, array('event', 'content'), $reterr)) {
             return $reterr;
           }
+          $event = $message['event'];
+          if ($MSocial->getEventIndex($hub, $event) == -1) {
+            return $this->errorString("event does not exist");
+          }
+
           $ret = $MSocial->newEventComment($id, $hub, $message['event'], $message['content']);
           return $this->successString(json_encode($ret));
         case 'delete event comment':
+          // Validations
           if (!$this->checkIsSet($message, array('event', 'comment'), $reterr)) {
             return $reterr;
+          }
+          $event = $message['event'];
+          if ($MSocial->getEventIndex($hub, $event) == -1) {
+            return $this->errorString("event does not exist");
           }
           $event = $message['event'];
           $comment = $message['comment'];
@@ -298,16 +348,21 @@
           if ($MSocial->getEventComment($hub, $event, $comment)['from'] != $id) {
             return $this->errorString("cannot delete someone else's comment");
           }
+
           $ret = $MSocial->deleteEventComment($hub, $event, $comment);
           return $this->successString(json_encode($ret));
         case 'load event comments':
+          // Validations
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
             return $reterr;
           }
           $event = $message['event'];
+          if ($MSocial->getEventIndex($hub, $event) == -1) {
+            return $this->errorString("event does not exist");
+          }
+          
+          $event = $message['event'];
           return $this->successString(json_encode($MSocial->getEventComments($hub, $event)));
-        case 'go to parent hub':
-          return $success;
 
         //TODO Fill in all of the cases below
         case 'sort most popular':
@@ -320,7 +375,7 @@
       //TODO Write unit tests...
       global $MSocial;
 
-      $_POST['name'] = 'load event info';
+      $_POST['name'] = 'load event description';
       $_POST['json'] = '
       {
         "id" : "tony",
@@ -334,7 +389,8 @@
         "description" : "Raaaaave",
         "event" : "5556993122e3c76a0e0041a9",
         "content" : "yo!!",
-        "comment" : "5556d06122e3c76c0e0041aa"
+        "comment" : "5556d06122e3c76c0e0041aa",
+        "postid" : "5556920a22e3c7b7000041a8"
       }';
       echo $this->api() . "<br><br>";
       $entry = $MSocial->get('5556914f172f559e8ece6c89');

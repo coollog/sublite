@@ -169,13 +169,13 @@
           if ($value['id'] == $id) {
             unset($entry['posts'][$index]['likes'][$key]);
             $this->save($entry, false);
-            return "post $id unliked";
+            return "post $post unliked";
           }
         }
       }
       $entry['posts'][$index]['likes'][] = array('time' => time(), 'id' => $id);
       $this->save($entry, false);
-      return "post $id liked";
+      return "post $post liked";
     }
     function deletePost($hub, $post) {
       $entry = $this->get($hub);
