@@ -134,7 +134,7 @@
     }
 
     // Modifiers
-    function add($hub, $student) {
+    function joinHub($hub, $student) {
       $entry = $this->get($hub);
       $entry['members'][] = array('time' => time(), 'id' => $student);
       $this->save($entry, false);

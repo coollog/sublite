@@ -130,21 +130,25 @@
             return $this->errorString("already is member");
           }
 
-          $MSocial->add($hub, $id);
+          $MSocial->joinHub($hub, $id);
           return $success;
+
         case 'load hub info':
           $entry = $MSocial->get($hub);
           $ret = array(
             'name' => $entry['name'],
             'location' => $entry['location'],
           );
-          return $this->successString(json_encode($ret));
+          return $this->successString($ret);
+
         case 'load events tab':
-          return $this->successString(json_encode($MSocial->getEvents($hub)));
+          return $this->successString($MSocial->getEvents($hub));
+
         case 'load members tab':
-          return $this->successString(json_encode($MSocial->getMembers($hub)));
+          return $this->successString($MSocial->getMembers($hub));
+
         case 'load posts tab':
-          return $this->successString(json_encode($MSocial->getPosts($hub, '', 'recent')));
+          return $this->successString($MSocial->getPosts($hub, '', 'recent'));
 
         /* 
          *
@@ -152,7 +156,8 @@
          *
          */
         case 'sort most recent':
-          return $this->successString(json_encode($MSocial->getPosts($hub, '', 'recent')));
+          return $this->successString($MSocial->getPosts($hub, '', 'recent'));
+
         case 'new post':
           // Validations
           if (!$this->checkIsSet($message, array('content', 'parentid'), $reterr)) {
@@ -163,7 +168,8 @@
           }
 
           $ret = $MSocial->newPost($id, $hub, $message['content'], $message['parentid']);
-          return $this->successString(json_encode($ret));
+          return $this->successString($ret);
+
         case 'click like':
           // Validations
           if (!$this->checkIsSet($message, array('postid'), $reterr)) {
@@ -175,6 +181,7 @@
           }
 
           return $this->successString("", $MSocial->toggleLikePost($hub, $postid, $id));
+
         case 'delete post':
           // Validations
           if (!$this->checkIsSet($message, array('postid'), $reterr)) {
@@ -189,7 +196,7 @@
           }
 
           $ret = $MSocial->deletePost($hub, $postid);
-          return $this->successString(json_encode($ret));
+          return $this->successString($ret);
 
         /* 
          *
@@ -209,7 +216,8 @@
           $index = $MSocial->getEventIndex($hub, $message['event']);
           unset($ret['events'][$index]['going']);
           unset($ret['events'][$index]['comments']);
-          return $this->successString(json_encode($ret['events'][$index]));
+          return $this->successString($ret['events'][$index]);
+
         case 'create event':
           // Validations
           if (!$this->checkIsSet($message, 
@@ -241,7 +249,7 @@
           // }
 
           $geocode = geocode($message['address']);
-          return $this->successString(json_encode($MSocial->createEvent(
+          return $this->successString($MSocial->createEvent(
             $id,
             $hub,
             $message['eventtitle'],
@@ -251,7 +259,8 @@
             $message['address'],
             $geocode,
             $message['description']
-          )));
+          ));
+
         case 'delete event':
           // Validations
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
@@ -265,7 +274,8 @@
             return $this->errorString("cannot delete someone else's event");
           }
 
-          return $this->successString(json_encode($MSocial->deleteEvent($hub, $event)));
+          return $this->successString($MSocial->deleteEvent($hub, $event));
+
         case 'rsvp event':
           // Validations
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
@@ -281,6 +291,7 @@
 
           $MSocial->joinEvent($id, $hub, $event);
           return $this->successString("", "joined event $event");
+
         case 'leave event':
           // Validations
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
@@ -295,7 +306,8 @@
           }
 
           $MSocial->leaveEvent($id, $hub, $event);
-          return $this->successString("", "left event $event");;
+          return $this->successString("", "left event $event");
+
         case 'respond to event':
           // Validations
           if (!$this->checkIsSet($message, array('event', 'response'), $reterr)) {
@@ -314,6 +326,7 @@
             return $this->successString("", "joined event $event");
           }
           return $this->successString("", "did not join event $event");
+
         case 'list going':
           // Validations
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
@@ -325,7 +338,8 @@
           }
 
           $event = $message['event'];
-          return $this->successString(json_encode($MSocial->getEventAttendees($hub, $event)));
+          return $this->successString($MSocial->getEventAttendees($hub, $event));
+
         case 'load event description':
           // Validations
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
@@ -337,7 +351,8 @@
           }
 
           $event = $message['event'];
-          return $this->successString("\"".$MSocial->getEventDescription($hub, $event)."\"");
+          return $this->successString($MSocial->getEventDescription($hub, $event));
+
         case 'new event comment':
           // Validations
           if (!$this->checkIsSet($message, array('event', 'content'), $reterr)) {
@@ -349,7 +364,8 @@
           }
 
           $ret = $MSocial->newEventComment($id, $hub, $message['event'], $message['content']);
-          return $this->successString(json_encode($ret));
+          return $this->successString($ret);
+
         case 'delete event comment':
           // Validations
           if (!$this->checkIsSet($message, array('event', 'comment'), $reterr)) {
@@ -369,7 +385,8 @@
           }
 
           $ret = $MSocial->deleteEventComment($hub, $event, $comment);
-          return $this->successString(json_encode($ret));
+          return $this->successString($ret);
+
         case 'load event comments':
           // Validations
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
@@ -381,11 +398,12 @@
           }
 
           $event = $message['event'];
-          return $this->successString(json_encode($MSocial->getEventComments($hub, $event)));
+          return $this->successString($MSocial->getEventComments($hub, $event));
 
         //TODO Fill in all of the cases below
         case 'sort most popular':
-          return $this->successString(json_encode($MSocial->getPosts($hub, '', 'popular')));
+          return $this->successString($MSocial->getPosts($hub, '', 'popular'));
+          
         default:
           return $this->errorString('invalid message name');
       }
