@@ -49,7 +49,7 @@
     function checkIsSet($message, $fields, &$var) {
       foreach ($fields as $f) {
         if(!isset($message[$f])){
-          $var = "{\"status\" : \"fail\", \"data\" : \"\", \"message\" : \"$f not set\"}";
+          $var = $this->errorString("$f not set");
           return false;
         }
       }
@@ -61,12 +61,21 @@
     }
 
     function errorString($err) {
-      return "{\"status\" : \"fail\", \"data\" : \"\", \"message\" : \"$err\"}";
+      $json = array(
+        'status' => 'fail',
+        'data' => '',
+        'message' => $err
+      );
+      return json_encode($json);
     }
 
-    function successString($data, $message = "") {
-      if($data == "") return "{\"status\" : \"success\", \"data\" : \"\", \"message\" : \"$message\"}";
-      return "{\"status\" : \"success\", \"data\" : $data, \"message\" : \"$message\"}";
+    function successString($data = "", $message = "") {
+      $json = array(
+        'status' => 'success',
+        'data' => $data,
+        'message' => $message
+      );
+      return $json;
     }
 
     function api() {
@@ -74,35 +83,41 @@
       $name = $_POST['name'];
       $json = $_POST['json'];
       $message = json_decode($json, true);
+
       // clean data
       foreach ($message as $key => $val) {
         $message[$key] = clean($message[$key]);
       }
+      
       $reterr = "";
+
       // make sure id, pass, and hub are set in $message
       if (!$this->checkIsSet($message, array('id', 'pass', 'hub'), $reterr)) {
         return $reterr;
       }
       $id = $message['id'];
+      $pass = $message['pass'];
       $hub = $message['hub'];
+
       // make sure password matches
       $email = $MStudent->getEmail($id);
-      if (!$MStudent->login($email, $message['pass'])) {
-        return "{\"status\" : \"fail\", \"data\" : \"\", \"message\" : \"invalid credentials\"}";
+      if (!$MStudent->login($email, $pass)) {
+        return $this->errorString('invalid credentials');
       }
 
       // make sure hub exists
-      if (!$MSocial->get($message['hub'])) {
-        return "{\"status\" : \"fail\", \"data\" : \"\", \"message\" : \"hub doesn't exist\"}";
+      if (!$MSocial->get($hub)) {
+        return $this->errorString("hub doesn't exist");
       }
 
       // if not trying to join/view hub, make sure is member of hub
       if ($name != 'join hub' && $name != 'load hub info') {
-        if(!$MSocial->isMember($hub, $id)) return $this->errorString('not member of hub');
+        if (!$MSocial->isMember($hub, $id))
+          return $this->errorString('not member of hub');
       }
 
       // specific stuff
-      $success = "{\"status\" : \"success\", \"data\" : \"\", \"message\" : \"\"}";
+      $success = $this->successString();
       switch ($name) {
         /* 
          *
@@ -372,7 +387,7 @@
         case 'sort most popular':
           return $this->successString(json_encode($MSocial->getPosts($hub, '', 'popular')));
         default:
-          return "{\"status\" : \"fail\", \"data\" : \"\", \"message\" : \"invalid message name\"}";          
+          return $this->errorString('invalid message name');
       }
     }
     function test() {
