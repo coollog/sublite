@@ -107,5 +107,8 @@
       console.log(formJSON(this));
       return false;
     });
+
+    // Communications setup
+    Comm.afterRender();
   }
 </script>
