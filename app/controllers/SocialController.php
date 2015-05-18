@@ -75,7 +75,7 @@
         'data' => $data,
         'message' => $message
       );
-      return $json;
+      return json_encode($json);
     }
 
     function api() {
