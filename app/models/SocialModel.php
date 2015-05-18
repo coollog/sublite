@@ -47,7 +47,8 @@
       return $ret;
     }
     function getPost($hub, $postid) {
-      $posts = $this->get($hub)['posts'];
+      $thishub = $this->get($hub);
+      $posts = $thishub['posts'];
       foreach ($posts as $post) {
         if ($post['id'] == $postid && $post['deleted'] == false) return $post;
       }
@@ -67,7 +68,8 @@
       return $entry['posts'][$index]['from'];
     }
     function getEvents($hub) {
-      return $this->get($hub)['events'];
+      $thishub = $this->get($hub);
+      return $thishub['events'];
     }
     function getEventIndex($hub, $event) {
       $entry = $this->get($hub);
@@ -79,7 +81,8 @@
     }
     function getEventComment($hub, $event, $comment) {
       $index = $this->getEventIndex($hub, $event);
-      $comments = $this->get($hub)['events'][$index]['comments'];
+      $thishub = $this->get($hub);
+      $comments = $thishub['events'][$index]['comments'];
       foreach ($comments as $tmp) {
         if ($tmp['id'] == $comment) return $tmp;
       }
@@ -116,7 +119,8 @@
       return $entry['events'][$index]['comments'];
     }
     function getMembers($hub) {
-      return $this->get($hub)['members'];
+      $thishub = $this->get($hub);
+      return $thishub['members'];
     }
     function isGoing($hub, $event, $student) {
       $entry = $this->get($hub);
