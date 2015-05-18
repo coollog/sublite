@@ -19,7 +19,8 @@
     }
     function getPosts($hub, $parent, $sortCriterion) {
       $ret = array();
-      $posts = $this->get($hub)['posts'];
+      $thishub = $this->get($hub);
+      $posts = $thishub['posts'];
       if ($parent == '') {
         foreach ($posts as $post) {
           if ($post['parent'] == '' && $post['deleted'] == false) {
