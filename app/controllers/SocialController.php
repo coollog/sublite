@@ -96,6 +96,7 @@
         return $reterr;
       }
       $hub = $message['hub'];
+      $id = $_SESSION['_id'];
 
       // make sure password matches
       if (!$CStudent->loggedIn()) {
@@ -105,12 +106,6 @@
       // make sure hub exists
       if (!$MSocial->get($hub)) {
         return $this->errorString("hub doesn't exist");
-      }
-
-      // if not trying to join/view hub, make sure is member of hub
-      if ($name != 'join hub' && $name != 'load hub info') {
-        if (!$MSocial->isMember($hub, $id))
-          return $this->errorString('not member of hub');
       }
 
       // specific stuff
@@ -156,6 +151,9 @@
           return $this->successString($MSocial->getPosts($hub, '', 'recent'));
 
         case 'new post':
+          if (!$MSocial->isMember($hub, $id))
+            return $this->errorString('not member of hub');
+
           // Validations
           if (!$this->checkIsSet($message, array('content', 'parentid'), $reterr)) {
             return $reterr;
@@ -168,6 +166,9 @@
           return $this->successString($ret);
 
         case 'click like':
+          if (!$MSocial->isMember($hub, $id))
+            return $this->errorString('not member of hub');
+
           // Validations
           if (!$this->checkIsSet($message, array('postid'), $reterr)) {
             return $reterr;
@@ -216,6 +217,9 @@
           return $this->successString($ret['events'][$index]);
 
         case 'create event':
+          if (!$MSocial->isMember($hub, $id))
+            return $this->errorString('not member of hub');
+
           // Validations
           if (!$this->checkIsSet($message, 
             array(
@@ -274,6 +278,9 @@
           return $this->successString($MSocial->deleteEvent($hub, $event));
 
         case 'rsvp event':
+          if (!$MSocial->isMember($hub, $id))
+            return $this->errorString('not member of hub');
+
           // Validations
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
             return $reterr;
@@ -306,6 +313,9 @@
           return $this->successString("", "left event $event");
 
         case 'respond to event':
+          if (!$MSocial->isMember($hub, $id))
+            return $this->errorString('not member of hub');
+
           // Validations
           if (!$this->checkIsSet($message, array('event', 'response'), $reterr)) {
             return $reterr;
@@ -351,6 +361,9 @@
           return $this->successString($MSocial->getEventDescription($hub, $event));
 
         case 'new event comment':
+          if (!$MSocial->isMember($hub, $id))
+            return $this->errorString('not member of hub');
+          
           // Validations
           if (!$this->checkIsSet($message, array('event', 'content'), $reterr)) {
             return $reterr;
