@@ -1,7 +1,7 @@
 <viewtemplate name="hub">
   <panel class="banner">
     <content>
-      <name>New York City Area Hub</name>
+      <name>{name}</name>
     </content>
   </panel>
 
