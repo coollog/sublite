@@ -386,7 +386,9 @@
   Meetups.setup();
   Members.setup();
 
-  Views.render('hub', {}, false, function () {
-    addTestContent(); // remove this
+  Comm.retrieve('hub', '55599b57e4b0f7f6aba42317', function (data) {
+    Views.render('hub', {}, false, function () {
+      addTestContent(); // remove this
+    });
   });
 </script>
