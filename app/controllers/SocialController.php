@@ -380,7 +380,7 @@
           if ($MSocial->getEventCommentIndex($hub, $event, $comment) == -1) {
             return $this->errorString("comment does not exist");
           }
-          if ($MSocial->getEventComment($hub, $event, $comment)['from'] != $id) {
+          if (($MSocial->getEventComment($hub, $event, $comment))['from'] != $id) {
             return $this->errorString("cannot delete someone else's comment");
           }
 
@@ -403,7 +403,7 @@
         //TODO Fill in all of the cases below
         case 'sort most popular':
           return $this->successString($MSocial->getPosts($hub, '', 'popular'));
-          
+
         default:
           return $this->errorString('invalid message name');
       }
