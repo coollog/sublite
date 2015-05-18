@@ -5,21 +5,16 @@
     setup: function (id, pass) {
 
     },
-    parse: function (content) {
+    parse: function (json) {
       // Parse based on the following format (2 lines):
       // MESSAGENAME
       // JSONDATA
-
-      var split = content.split('\n'),
-          name = split[0],
-          json = split[1];
 
       json = JSON.parse(json);
       var status = json.status,
           data = json.data,
           message = json.message;
       return {
-        name: name,
         status: status,
         data: data,
         message: message
