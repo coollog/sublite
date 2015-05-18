@@ -29,8 +29,9 @@
         name: name,
         data: data
       };
+      var c = this;
       $.post(this.apiuri, json, function (data) {
-        data = this.parse(data);
+        data = c.parse(data);
         console.log('received data:', data);
         callback(data);
       });
