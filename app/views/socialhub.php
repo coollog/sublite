@@ -386,7 +386,10 @@
   Meetups.setup();
   Members.setup();
 
-  Comm.retrieve('hub', '55599b57e4b0f7f6aba42317', function (data) {
+  Comm.retrieve('hub', '55599b57e4b0f7f6aba42317', function (err, data) {
+    if (err) {
+      alert(err); return;
+    }
     Views.render('hub', {}, false, function () {
       // addTestContent(); // remove this
     });
