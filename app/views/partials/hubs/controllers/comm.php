@@ -23,6 +23,7 @@
     emit: function (name, data, callback) {
       // Send message via post
 
+      data['hub'] = thishub;
       var json = {
         name: name,
         json: data
@@ -44,9 +45,7 @@
 
       switch (type) {
         case 'hub':
-          this.emit('load hub info', {
-            hub: id
-          }, callback);
+          this.emit('load hub info', {}, callback);
           break;
         case 'meetup':
           break;
@@ -55,7 +54,15 @@
     afterRender: function () {
       // This is where all code to setup interactive communication goes
 
+      // Hubs stuff
 
+      $('.joinhub').click(function () {
+        Comm.emit('join hub', {}, function (err, data) {
+          if (err) { alert(err); return; }
+
+          $('#joinpanel').remove();
+        });
+      });
     }
   };
 </script>

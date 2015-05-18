@@ -14,6 +14,13 @@
     // Changes the view with json to replace {var} and back=true meaning
     //  slide view from left instead
     render: function (name, json, back, callback) {
+      function finishRender(newHTML) {
+        $('view').html(newHTML);
+        if (json.ismember) $('#joinpanel').remove();
+        afterRender();
+        if (typeof callback !== 'undefined') callback();
+      }
+
       var newHTML = this.templates[name];
       for (var key in json) {
         toreplace = '{'+key+'}';
@@ -44,15 +51,12 @@
         $('newview').css('left', viewPos.newviewStart).html(newHTML)
                     .animate({ left: viewPos.newviewEnd }, 
                     500, 'easeOutCubic', function() {
-          $('view').html(newHTML).css('position', 'relative').css('left', '0');
           $('newview').html('');
-          afterRender();
-          if (typeof callback !== 'undefined') callback();
+          $('view').css('position', 'relative').css('left', '0');
+          finishRender(newHTML, json);
         });
       } else {
-        $('view').html(newHTML);
-        afterRender();
-        if (typeof callback !== 'undefined') callback();
+        finishRender(newHTML, json);
       }
     }
   };

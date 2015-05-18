@@ -79,10 +79,15 @@
     }
 
     function api() {
-      global $CStudent, $MStudent, $MSocial;
+      global $CStudent, $MStudent, $MSocial, $S;
       $name = $_POST['name'];
       $json = $_POST['json'];
       $message = $json; // json_decode($json, true);
+
+      // make sure logged in
+      if (!$CStudent->loggedIn()) {
+        return $this->errorString('you must be logged in');
+      }
 
       // clean data
       foreach ($message as $key => $val) {
@@ -97,11 +102,6 @@
       }
       $hub = $message['hub'];
       $id = $_SESSION['_id'];
-
-      // make sure password matches
-      if (!$CStudent->loggedIn()) {
-        return $this->errorString('you must be logged in');
-      }
 
       // make sure hub exists
       if (!$MSocial->get($hub)) {
@@ -130,6 +130,7 @@
           $ret = array(
             'name' => $entry['name'],
             'location' => $entry['location'],
+            'ismember' => $MSocial->isMember($hub, $id)
           );
           return $this->successString($ret);
 
@@ -137,7 +138,23 @@
           return $this->successString($MSocial->getEvents($hub));
 
         case 'load members tab':
-          return $this->successString($MSocial->getMembers($hub));
+          $members = $MSocial->getMembers($hub);
+          $membersinfo = array();
+          foreach ($members as $member) {
+            $student = $MStudent->getById($member['id']);
+            $name = $student['name'];
+            $photo = isset($student['photo']) ? $student['photo'] :
+              $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
+            $school = $S->nameOf($student['email']);
+            $joined = 'Member, '.timeAgo($member['time']);
+            $membersinfo[] = array(
+              'name' => $student['name'],
+              'pic' => $photo,
+              'school' => $school,
+              'joined' => $joined
+            );
+          }
+          return $this->successString($membersinfo);
 
         case 'load posts tab':
           return $this->successString($MSocial->getPosts($hub, '', 'recent'));
@@ -363,7 +380,7 @@
         case 'new event comment':
           if (!$MSocial->isMember($hub, $id))
             return $this->errorString('not member of hub');
-          
+
           // Validations
           if (!$this->checkIsSet($message, array('event', 'content'), $reterr)) {
             return $reterr;

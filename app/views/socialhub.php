@@ -368,17 +368,14 @@
       going: 23,
       comments: 5
     });
-    Members.add({
-      name: 'Random Person',
-      pic: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why2.jpg',
-      school: 'Yale University',
-      joined: 'Member, 5/17/2015'
-    });
     afterRender();
   }
 </script>
 <script>
   // Actual code to set everything up for the first time
+
+  // Config
+  var thishub = '55599b57e4b0f7f6aba42317';
 
   Views.setup();
 
@@ -386,12 +383,37 @@
   Meetups.setup();
   Members.setup();
 
-  Comm.retrieve('hub', '55599b57e4b0f7f6aba42317', function (err, data) {
-    if (err) {
-      alert(err); return;
-    }
+  // Get current hub
+  Comm.retrieve('hub', thishub, function (err, data) {
+    if (err) { alert(err); return; }
+
     Views.render('hub', data, false, function () {
-      // addTestContent(); // remove this
+      // Load posts
+      Comm.emit('load posts tab', {}, function (err, data) {
+        if (err) { alert(err); return; }
+
+        console.log('posts: ', data);
+      });
+      // Load events
+      Comm.emit('load events tab', {}, function (err, data) {
+        if (err) { alert(err); return; }
+
+        console.log('events: ', data);
+      });
+      // Load members
+      Comm.emit('load members tab', {}, function (err, data) {
+        if (err) { alert(err); return; }
+
+        data.forEach(function(student) {
+          Members.add({
+            name: student.name,
+            pic: student.pic,
+            school: student.school,
+            joined: student.joined
+          });
+        });
+        console.log('members: ', data);
+      });
     });
   });
 </script>

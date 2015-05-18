@@ -5,7 +5,7 @@
     </content>
   </panel>
 
-  <panel>
+  <panel id="joinpanel">
     <content>
       <button class="joinhub">Join Hub</button>
     </content>
