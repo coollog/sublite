@@ -79,10 +79,7 @@
     }
 
     function api() {
-      var_dump($_SESSION);
-      die();
-      
-      global $MStudent, $MSocial;
+      global $CStudent, $MStudent, $MSocial;
       $name = $_POST['name'];
       $json = $_POST['json'];
       $message = json_decode($json, true);
@@ -95,17 +92,14 @@
       $reterr = "";
 
       // make sure id, pass, and hub are set in $message
-      if (!$this->checkIsSet($message, array('id', 'pass', 'hub'), $reterr)) {
+      if (!$this->checkIsSet($message, array('hub'), $reterr)) {
         return $reterr;
       }
-      $id = $message['id'];
-      $pass = $message['pass'];
       $hub = $message['hub'];
 
       // make sure password matches
-      $email = $MStudent->getEmail($id);
-      if (!$MStudent->login($email, $pass)) {
-        return $this->errorString('invalid credentials');
+      if (!$CStudent->loggedIn()) {
+        return $this->errorString('you must be logged in');
       }
 
       // make sure hub exists
