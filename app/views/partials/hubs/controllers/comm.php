@@ -2,6 +2,9 @@
   // Interface code for communication
   var Comm = {
     apiuri: '<?php echo $GLOBALS['dirpre']; ?>../hubs/api.php',
+    setup: function (id, pass) {
+
+    },
     parse: function (content) {
       // Parse based on the following format (2 lines):
       // MESSAGENAME
@@ -27,7 +30,7 @@
 
       var json = {
         name: name,
-        data: data
+        json: data
       };
       var c = this;
       $.post(this.apiuri, json, function (data) {

@@ -79,13 +79,13 @@
     }
 
     function api() {
+      var_dump($_SESSION);
+      die();
+      
       global $MStudent, $MSocial;
       $name = $_POST['name'];
       $json = $_POST['json'];
       $message = json_decode($json, true);
-
-      var_dump($_SESSION);
-      die();
 
       // clean data
       foreach ($message as $key => $val) {
