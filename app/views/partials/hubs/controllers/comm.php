@@ -1,7 +1,7 @@
 <script>
   // Interface code for communication
   var Comm = {
-    apiuri: 'api.php',
+    apiuri: '<?php echo $GLOBALS['dirpre']; ?>../hubs/api.php',
     parse: function (content) {
       // Parse based on the following format (2 lines):
       // MESSAGENAME
@@ -29,8 +29,9 @@
         name: name,
         data: data
       };
-      $.post(apiuri, json, function (data) {
+      $.post(this.apiuri, json, function (data) {
         data = this.parse(data);
+        console.log('received data:', data);
         callback(data);
       });
     },
@@ -39,7 +40,7 @@
 
       switch (type) {
         case 'hub':
-          // this.emit(, callback);
+          this.emit('load hub info', callback);
           break;
         case 'meetup':
           break;
@@ -48,7 +49,7 @@
     afterRender: function () {
       // This is where all code to setup interactive communication goes
 
-      
+
     }
   };
 </script>
