@@ -38,6 +38,8 @@
         var mt = $(window).height() - h - $('footer').height();
         if (mt > 0) {
           $('footer').css('margin-top', mt);
+        } else {
+          $('footer').css('margin-top', 0);
         }
       }
 
