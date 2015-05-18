@@ -84,6 +84,9 @@
       $json = $_POST['json'];
       $message = json_decode($json, true);
 
+      var_dump($_SESSION);
+      die();
+
       // clean data
       foreach ($message as $key => $val) {
         $message[$key] = clean($message[$key]);
