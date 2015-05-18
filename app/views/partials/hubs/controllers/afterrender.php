@@ -110,5 +110,7 @@
 
     // Communications setup
     Comm.afterRender();
+
+    repositionFooter();
   }
 </script>
