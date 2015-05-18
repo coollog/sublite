@@ -44,7 +44,9 @@
 
       switch (type) {
         case 'hub':
-          this.emit('load hub info', callback);
+          this.emit('load hub info', {
+            hub: id
+          }, callback);
           break;
         case 'meetup':
           break;
