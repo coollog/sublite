@@ -75,7 +75,7 @@
         'data' => $data,
         'message' => $message
       );
-      return json_encode($json);
+      return $json;
     }
 
     function api() {
@@ -93,24 +93,24 @@
 
       // make sure id, pass, and hub are set in $message
       if (!$this->checkIsSet($message, array('hub'), $reterr)) {
-        echo $reterr;
+        return $reterr;
       }
       $hub = $message['hub'];
 
       // make sure password matches
       if (!$CStudent->loggedIn()) {
-        echo $this->errorString('you must be logged in');
+        return $this->errorString('you must be logged in');
       }
 
       // make sure hub exists
       if (!$MSocial->get($hub)) {
-        echo $this->errorString("hub doesn't exist");
+        return $this->errorString("hub doesn't exist");
       }
 
       // if not trying to join/view hub, make sure is member of hub
       if ($name != 'join hub' && $name != 'load hub info') {
         if (!$MSocial->isMember($hub, $id))
-          echo $this->errorString('not member of hub');
+          return $this->errorString('not member of hub');
       }
 
       // specific stuff
@@ -124,11 +124,11 @@
         case 'join hub':
           // Validations
           if($MSocial->isMember($hub, $id)) {
-            echo $this->errorString("already is member");
+            return $this->errorString("already is member");
           }
 
           $MSocial->joinHub($hub, $id);
-          echo $success;
+          return $success;
 
         case 'load hub info':
           $entry = $MSocial->get($hub);
@@ -136,16 +136,16 @@
             'name' => $entry['name'],
             'location' => $entry['location'],
           );
-          echo $this->successString($ret);
+          return $this->successString($ret);
 
         case 'load events tab':
-          echo $this->successString($MSocial->getEvents($hub));
+          return $this->successString($MSocial->getEvents($hub));
 
         case 'load members tab':
-          echo $this->successString($MSocial->getMembers($hub));
+          return $this->successString($MSocial->getMembers($hub));
 
         case 'load posts tab':
-          echo $this->successString($MSocial->getPosts($hub, '', 'recent'));
+          return $this->successString($MSocial->getPosts($hub, '', 'recent'));
 
         /* 
          *
@@ -153,47 +153,47 @@
          *
          */
         case 'sort most recent':
-          echo $this->successString($MSocial->getPosts($hub, '', 'recent'));
+          return $this->successString($MSocial->getPosts($hub, '', 'recent'));
 
         case 'new post':
           // Validations
           if (!$this->checkIsSet($message, array('content', 'parentid'), $reterr)) {
-            echo $reterr;
+            return $reterr;
           }
           if (strlen($message['content']) > 2000) {
-            echo $this->errorString("post too long (exceeds 2000 characters)");
+            return $this->errorString("post too long (exceeds 2000 characters)");
           }
 
           $ret = $MSocial->newPost($id, $hub, $message['content'], $message['parentid']);
-          echo $this->successString($ret);
+          return $this->successString($ret);
 
         case 'click like':
           // Validations
           if (!$this->checkIsSet($message, array('postid'), $reterr)) {
-            echo $reterr;
+            return $reterr;
           }
           $postid = $message['postid'];
           if ($MSocial->getPostIndex($hub, $postid) == -1) {
-            echo $this->errorString("post does not exist");
+            return $this->errorString("post does not exist");
           }
 
-          echo $this->successString("", $MSocial->toggleLikePost($hub, $postid, $id));
+          return $this->successString("", $MSocial->toggleLikePost($hub, $postid, $id));
 
         case 'delete post':
           // Validations
           if (!$this->checkIsSet($message, array('postid'), $reterr)) {
-            echo $reterr;
+            return $reterr;
           }
           $postid = $message['postid'];
           if ($MSocial->getPostIndex($hub, $postid) == -1) {
-            echo $this->errorString("post does not exist");
+            return $this->errorString("post does not exist");
           }
           if ($MSocial->getPostAuthor($hub, $postid) != $id) {
-            echo $this->errorString("cannot delete someone else's post");
+            return $this->errorString("cannot delete someone else's post");
           }
 
           $ret = $MSocial->deletePost($hub, $postid);
-          echo $this->successString($ret);
+          return $this->successString($ret);
 
         /* 
          *
@@ -203,17 +203,17 @@
         case 'load event info':
           // Validations
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
-            echo $reterr;
+            return $reterr;
           }
           if ($MSocial->getEventIndex($hub, $event) == -1) {
-            echo $this->errorString("event does not exist");
+            return $this->errorString("event does not exist");
           }
 
           $ret = $MSocial->get($hub);
           $index = $MSocial->getEventIndex($hub, $message['event']);
           unset($ret['events'][$index]['going']);
           unset($ret['events'][$index]['comments']);
-          echo $this->successString($ret['events'][$index]);
+          return $this->successString($ret['events'][$index]);
 
         case 'create event':
           // Validations
@@ -226,27 +226,27 @@
               'address',
               'description')
             , $reterr)) {
-            echo $reterr;
+            return $reterr;
           }
           if (strlen($message['eventtitle']) > 200) {
-            echo $this->errorString("event title too long");
+            return $this->errorString("event title too long");
           }
           if (strlen($message['description']) > 2000) {
-            echo $this->errorString("event description too long");
+            return $this->errorString("event description too long");
           }
           //TODO Write time validations like below
           // if (!$this->isValidDate($date['starttime'])) {
-          //   echo $this->errorString("invalid start date: please check date");
+          //   return $this->errorString("invalid start date: please check date");
           // }
           // if (!$this->isValidDate($date['endtime'])) {
-          //   echo $this->errorString("invalid end date: please check date");
+          //   return $this->errorString("invalid end date: please check date");
           // }
           // if(strtotime($data['endtime']) < strtotime($data['starttime'])) {
-          //   echo $this->errorString("invalid date range: end date should be after start date.");
+          //   return $this->errorString("invalid date range: end date should be after start date.");
           // }
 
           $geocode = geocode($message['address']);
-          echo $this->successString($MSocial->createEvent(
+          return $this->successString($MSocial->createEvent(
             $id,
             $hub,
             $message['eventtitle'],
@@ -261,149 +261,149 @@
         case 'delete event':
           // Validations
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
-            echo $reterr;
+            return $reterr;
           }
           $event = $message['event'];
           if ($MSocial->getEventIndex($hub, $event) == -1) {
-            echo $this->errorString("event does not exist");
+            return $this->errorString("event does not exist");
           }
           if ($MSocial->getEventCreator($hub, $event) != $id) {
-            echo $this->errorString("cannot delete someone else's event");
+            return $this->errorString("cannot delete someone else's event");
           }
 
-          echo $this->successString($MSocial->deleteEvent($hub, $event));
+          return $this->successString($MSocial->deleteEvent($hub, $event));
 
         case 'rsvp event':
           // Validations
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
-            echo $reterr;
+            return $reterr;
           }
           $event = $message['event'];
           if ($MSocial->getEventIndex($hub, $event) == -1) {
-            echo $this->errorString("event does not exist");
+            return $this->errorString("event does not exist");
           }
           if ($MSocial->isGoing($hub, $event, $id)) {
-            echo $this->errorString("already RSVP'd");
+            return $this->errorString("already RSVP'd");
           }
 
           $MSocial->joinEvent($id, $hub, $event);
-          echo $this->successString("", "joined event $event");
+          return $this->successString("", "joined event $event");
 
         case 'leave event':
           // Validations
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
-            echo $reterr;
+            return $reterr;
           }
           $event = $message['event'];
           if ($MSocial->getEventIndex($hub, $event) == -1) {
-            echo $this->errorString("event does not exist");
+            return $this->errorString("event does not exist");
           }
           if (!$MSocial->isGoing($hub, $event, $id)) {
-            echo $this->errorString("already left event");
+            return $this->errorString("already left event");
           }
 
           $MSocial->leaveEvent($id, $hub, $event);
-          echo $this->successString("", "left event $event");
+          return $this->successString("", "left event $event");
 
         case 'respond to event':
           // Validations
           if (!$this->checkIsSet($message, array('event', 'response'), $reterr)) {
-            echo $reterr;
+            return $reterr;
           }
           $event = $message['event'];
           if ($MSocial->getEventIndex($hub, $event) == -1) {
-            echo $this->errorString("event does not exist");
+            return $this->errorString("event does not exist");
           }
 
           if($message['response'] == 'yes') {
             if ($MSocial->isGoing($hub, $event, $id)) {
-              echo $this->errorString("already RSVP'd");
+              return $this->errorString("already RSVP'd");
             }
             $MSocial->joinEvent($id, $hub, $event);
-            echo $this->successString("", "joined event $event");
+            return $this->successString("", "joined event $event");
           }
-          echo $this->successString("", "did not join event $event");
+          return $this->successString("", "did not join event $event");
 
         case 'list going':
           // Validations
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
-            echo $reterr;
+            return $reterr;
           }
           $event = $message['event'];
           if ($MSocial->getEventIndex($hub, $event) == -1) {
-            echo $this->errorString("event does not exist");
+            return $this->errorString("event does not exist");
           }
 
           $event = $message['event'];
-          echo $this->successString($MSocial->getEventAttendees($hub, $event));
+          return $this->successString($MSocial->getEventAttendees($hub, $event));
 
         case 'load event description':
           // Validations
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
-            echo $reterr;
+            return $reterr;
           }
           $event = $message['event'];
           if ($MSocial->getEventIndex($hub, $event) == -1) {
-            echo $this->errorString("event does not exist");
+            return $this->errorString("event does not exist");
           }
 
           $event = $message['event'];
-          echo $this->successString($MSocial->getEventDescription($hub, $event));
+          return $this->successString($MSocial->getEventDescription($hub, $event));
 
         case 'new event comment':
           // Validations
           if (!$this->checkIsSet($message, array('event', 'content'), $reterr)) {
-            echo $reterr;
+            return $reterr;
           }
           $event = $message['event'];
           if ($MSocial->getEventIndex($hub, $event) == -1) {
-            echo $this->errorString("event does not exist");
+            return $this->errorString("event does not exist");
           }
 
           $ret = $MSocial->newEventComment($id, $hub, $message['event'], $message['content']);
-          echo $this->successString($ret);
+          return $this->successString($ret);
 
         case 'delete event comment':
           // Validations
           if (!$this->checkIsSet($message, array('event', 'comment'), $reterr)) {
-            echo $reterr;
+            return $reterr;
           }
           $event = $message['event'];
           if ($MSocial->getEventIndex($hub, $event) == -1) {
-            echo $this->errorString("event does not exist");
+            return $this->errorString("event does not exist");
           }
           $event = $message['event'];
           $comment = $message['comment'];
           if ($MSocial->getEventCommentIndex($hub, $event, $comment) == -1) {
-            echo $this->errorString("comment does not exist");
+            return $this->errorString("comment does not exist");
           }
           $gotcomment = $MSocial->getEventComment($hub, $event, $comment);
           if ($gotcomment['from'] != $id) {
-            echo $this->errorString("cannot delete someone else's comment");
+            return $this->errorString("cannot delete someone else's comment");
           }
 
           $ret = $MSocial->deleteEventComment($hub, $event, $comment);
-          echo $this->successString($ret);
+          return $this->successString($ret);
 
         case 'load event comments':
           // Validations
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
-            echo $reterr;
+            return $reterr;
           }
           $event = $message['event'];
           if ($MSocial->getEventIndex($hub, $event) == -1) {
-            echo $this->errorString("event does not exist");
+            return $this->errorString("event does not exist");
           }
 
           $event = $message['event'];
-          echo $this->successString($MSocial->getEventComments($hub, $event));
+          return $this->successString($MSocial->getEventComments($hub, $event));
 
         //TODO Fill in all of the cases below
         case 'sort most popular':
-          echo $this->successString($MSocial->getPosts($hub, '', 'popular'));
+          return $this->successString($MSocial->getPosts($hub, '', 'popular'));
 
         default:
-          echo $this->errorString('invalid message name');
+          return $this->errorString('invalid message name');
       }
     }
     function test() {
