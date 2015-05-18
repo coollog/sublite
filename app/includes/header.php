@@ -33,7 +33,7 @@
   require_once($GLOBALS['dirpre'].'controllers/StatsController.php');
   require_once($GLOBALS['dirpre'].'controllers/SubletController.php');
   require_once($GLOBALS['dirpre'].'controllers/SocialController.php');
-  if (isset(!$_GET['nodb'])) {
+  if (!isset($_GET['nodb'])) {
     require_once($GLOBALS['dirpre'].'models/AppModel.php');
     require_once($GLOBALS['dirpre'].'models/CompanyModel.php');
     require_once($GLOBALS['dirpre'].'models/JobModel.php');
