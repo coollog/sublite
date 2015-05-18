@@ -31,8 +31,8 @@
       };
       var c = this;
       $.post(this.apiuri, json, function (data) {
-        data = c.parse(data);
         console.log('received data:', data);
+        data = c.parse(data);
         callback(data);
       });
     },
