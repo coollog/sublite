@@ -380,7 +380,8 @@
           if ($MSocial->getEventCommentIndex($hub, $event, $comment) == -1) {
             return $this->errorString("comment does not exist");
           }
-          if (($MSocial->getEventComment($hub, $event, $comment))['from'] != $id) {
+          $gotcomment = $MSocial->getEventComment($hub, $event, $comment);
+          if ($gotcomment['from'] != $id) {
             return $this->errorString("cannot delete someone else's comment");
           }
 
