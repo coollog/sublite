@@ -31,7 +31,12 @@
       $.post(this.apiuri, json, function (data) {
         console.log('received data:', data);
         data = c.parse(data);
-        callback(data);
+
+        var err = null;
+        if (data.status == 'fail') err = data.message;
+        data = data.data;
+
+        callback(err, data);
       });
     },
     retrieve: function (type, id, callback) {
