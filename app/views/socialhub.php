@@ -390,7 +390,7 @@
     if (err) {
       alert(err); return;
     }
-    Views.render('hub', {}, false, function () {
+    Views.render('hub', data, false, function () {
       // addTestContent(); // remove this
     });
   });
