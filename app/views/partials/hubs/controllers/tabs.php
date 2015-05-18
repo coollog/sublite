@@ -28,7 +28,7 @@
     },
     add: function (type, json, parentid) {
       var newHTML = Tabs.newHTML(this, json);
-      if (typeof parentid == 'undefined')
+      if (typeof parentid == 'undefined' || parentid == '')
         $('.postsframe[type='+type+'] .posts').append(newHTML);
       else
         $('.postsframe[type='+type+'] .thread[for='+parentid+'] .replies').append(newHTML);

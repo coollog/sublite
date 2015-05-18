@@ -38,21 +38,19 @@
           myindex = $(this).attr('index'),
           replies = $(this).parent().children('.thread[for='+myindex+']');
 
-      if (replies.length && replies.html().length) {
-        var mytab = $(this).parent().css('marginLeft');
-        postsleft = -parseInt(mytab);
-        if (!replies.is(":visible")) {
-          postsleft = -50 - parseInt(mytab);
-        }
-        var op = this;
-        replies.slideToggle('100', 'easeInOutCubic', function() {
-          scrollTo(op);
-        });
-        var posts = $(this).parent();
-        while (!posts.hasClass('posts'))
-          posts = posts.parent();
-        posts.css('left', postsleft+'px');
+      var mytab = $(this).parent().css('marginLeft');
+      postsleft = -parseInt(mytab);
+      if (!replies.is(":visible")) {
+        postsleft = -50 - parseInt(mytab);
       }
+      var op = this;
+      replies.slideToggle('100', 'easeInOutCubic', function() {
+        scrollTo(op);
+      });
+      var posts = $(this).parent();
+      while (!posts.hasClass('posts'))
+        posts = posts.parent();
+      posts.css('left', postsleft+'px');
     });
     $('.tabframe[name=forum] subtab').off("click").click(function() {
       if (!$(this).hasClass('focus')) {
@@ -66,15 +64,18 @@
 
     // Posts replying
 
-    $('.posts .reply textarea').off('blur').off('focus')
+    $('.reply textarea').off('blur').off('focus')
       .focus(function() {
         $(this).css('height', '10em')
           .parent().find('button').slideDown(200, 'easeOutCubic');
       })
-      .blur(function() {
-        $(this).css('height', '3em')
-          .parent().find('button').slideUp(200, 'easeOutCubic');
-      });
+    $('html').click(function() {
+      $('.reply textarea').css('height', '3em')
+        .parent().find('button').slideUp(200, 'easeOutCubic');
+    });
+    $('.reply').click(function(event){
+        event.stopPropagation();
+    });
 
     // Meetup view switching
     $('.meetup button').off("click").click(function () {
@@ -110,5 +111,7 @@
 
     // Communications setup
     Comm.afterRender();
+
+    repositionFooter();
   }
 </script>

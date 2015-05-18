@@ -17,40 +17,63 @@
     function get($id) {
       return $this->collection->findOne(array('_id' => new MongoId($id)));
     }
+    function processPost($post) {
+      global $MStudent;
+      $student = $MStudent->getById($post['from']);
+      $post['pic'] = isset($student['photo']) ? $student['photo'] :
+        $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
+      $post['name'] = $student['name'];
+      $post['date'] = timeAgo($post['date']);
+      $post['id'] = $post['id']->{'$id'};
+      if ($post['parent'] != '')
+        $post['parent'] = $post['parent']->{'$id'};
+
+      return $post;
+    }
     function getPosts($hub, $parent, $sortCriterion) {
       $ret = array();
-      $thishub = $this->get($hub);
-      $posts = $thishub['posts'];
-      if ($parent == '') {
-        foreach ($posts as $post) {
-          if ($post['parent'] == '' && $post['deleted'] == false) {
-            $ret[] = $post;
-          }
-        }
-      }
+
+      if (MongoId::isValid($hub)) $thishub = $this->get($hub);
+      else $thishub = $hub;
+
+      if ($parent == '')
+        $posts = $thishub['posts'];
       else {
-        $cur = $this->getPost($hub, $parent);
-        foreach ($cur['children'] as $post) {
-          $ret[] = $this->getPost($hub, $post);
+        $posts = array();
+        foreach ($parent['children'] as $postid) {
+          $posts[] = $this->getPost($thishub, $postid);
         }
       }
+
+      foreach ($posts as $post) {
+        if (!$post['deleted']) {
+          if (count($post['children']) > 0)
+            $post['children'] = $this->getPosts($hub, $post, $sortCriterion);
+
+          $ret[] = $this->processPost($post);
+        }
+      }
+
       if ($sortCriterion == 'recent') {
         $ret = array_reverse($ret);
-      }
-      else {
+      } else {
         //TODO sort by popular and uncomment below
         $ret = array_reverse($ret);
       }
-      foreach ($ret as $key => $post) {
-        $ret[$key]['replies'] = $this->getPosts($hub, $post['id'], $sortCriterion);
-      }
+      // foreach ($ret as $key => $post) {
+      //   $ret[$key]['replies'] = $this->getPosts($hub, $post['id'], $sortCriterion);
+      // }
       return $ret;
     }
     function getPost($hub, $postid) {
-      $thishub = $this->get($hub);
+      if (MongoId::isValid($hub)) $thishub = $this->get($hub);
+      else $thishub = $hub;
+
       $posts = $thishub['posts'];
       foreach ($posts as $post) {
-        if ($post['id'] == $postid && $post['deleted'] == false) return $post;
+        if ($post['id'] == $postid && $post['deleted'] == false) {
+          return $post;
+        }
       }
       return '-1';
     }
@@ -150,6 +173,7 @@
     function newPost($id, $hub, $content, $parentid) {
       $entry = $this->get($hub);
       $curId = new MongoId();
+      if ($parentid != '') $parentid = new MongoId($parentid);
       $ret = array(
         'id' => $curId,
         'parent' => $parentid,
@@ -166,7 +190,8 @@
         $entry['posts'][$parentindex]['children'][] = $curId;
       }
       $this->save($entry, false);
-      return $ret;
+
+      return $this->processPost($this->getPost($hub, $curId));
     }
     function toggleLikePost($hub, $post, $id) {
       $entry = $this->get($hub);

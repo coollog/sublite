@@ -16,7 +16,11 @@
     render: function (name, json, back, callback) {
       function finishRender(newHTML) {
         $('view').html(newHTML);
+
+        // Process json dynamics
         if (json.ismember) $('#joinpanel').remove();
+        thishubname = json.name;
+
         afterRender();
         if (typeof callback !== 'undefined') callback();
       }

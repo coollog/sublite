@@ -180,18 +180,18 @@
     margin-left: 50px;
     display: none;
   }
-  .posts .reply {
+  .reply {
     margin-top: 1em;
   }
-  .posts .reply form {
+  .reply form {
     margin: 0;
   }
-  .posts .reply textarea {
+  .reply textarea {
     height: 3em;
     white-space: pre-wrap;
     transition: 0.2s all ease-in-out;
   }
-  .posts .reply button {
+  .reply button {
     display: none;
   }
 
@@ -351,16 +351,6 @@
       likes: 9,
       replies: 20
     }, 1);
-    Posts.add('popular', {
-      id: 1,
-      pic: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why1.jpg',
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      name: 'Annie C.',
-      hub: 'Yale in NYC',
-      time: '3 hrs ago',
-      likes: 9,
-      replies: 20
-    });
     Meetups.add({
       name: 'Cherry Blossom Festival and Parade',
       datetime: 'Sunday Apr 19, 9:00 AM - Friday May 1, 6:00 PM',
@@ -375,7 +365,8 @@
   // Actual code to set everything up for the first time
 
   // Config
-  var thishub = '55599b57e4b0f7f6aba42317';
+  var thishub = '55599b57e4b0f7f6aba42317',
+      thishubname = '';
 
   Views.setup();
 
@@ -392,19 +383,41 @@
       Comm.emit('load posts tab', {}, function (err, data) {
         if (err) { alert(err); return; }
 
+        function loadPosts(posts) {
+          posts.forEach(function (post) {
+            console.log('child: ', post);
+            Posts.add('recent', {
+              id: post.id,
+              pic: post.pic,
+              text: post.content,
+              name: post.name,
+              hub: thishubname,
+              time: post.date,
+              likes: post.likes.length,
+              replies: post.children.length
+            }, post.parent);
+            if (post.children.length > 0) {
+              loadPosts(post.children);
+            }
+          });
+        }
+        loadPosts(data);
+
+        afterRender();
         console.log('posts: ', data);
       });
       // Load events
       Comm.emit('load events tab', {}, function (err, data) {
         if (err) { alert(err); return; }
 
+        afterRender();
         console.log('events: ', data);
       });
       // Load members
       Comm.emit('load members tab', {}, function (err, data) {
         if (err) { alert(err); return; }
 
-        data.forEach(function(student) {
+        data.forEach(function (student) {
           Members.add({
             name: student.name,
             pic: student.pic,
@@ -412,6 +425,8 @@
             joined: student.joined
           });
         });
+
+        afterRender();
         console.log('members: ', data);
       });
     });

@@ -32,6 +32,15 @@
       </subtabs>
       <div class="postsframe" type="recent"><div class="posts"></div></div>
       <div class="postsframe" type="popular"><div class="posts"></div></div>
+      <div class="thread" for="">
+        <div class="reply">
+          Write your post:
+          <form>
+            <textarea name="text"></textarea>
+            <right><button>Share</button></right>
+          </form>
+        </div>
+      </div>
     </content>
   </panel>
   <panel class="tabframe" name="meetups">
