@@ -93,7 +93,7 @@
     });
     $('meetupview .details hub').off("click").click(function () {
       Views.render('hub', {}, true, function () {
-        addTestContent(); // remove this
+        // addTestContent(); // remove this
       });
     });
 
