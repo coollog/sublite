@@ -17,18 +17,31 @@
     function get($id) {
       return $this->collection->findOne(array('_id' => new MongoId($id)));
     }
+    function processPost($post) {
+      global $MStudent;
+      $student = $MStudent->getById($post['from']);
+      $post['pic'] = isset($student['photo']) ? $student['photo'] :
+        $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
+      $post['name'] = $student['name'];
+      $post['date'] = timeAgo($post['date']);
+      $post['id'] = $post['id']->{'$id'};
+      if ($post['parent'] != '')
+        $post['parent'] = $post['parent']->{'$id'};
+
+      return $post;
+    }
     function getPosts($hub, $parent, $sortCriterion) {
       $ret = array();
       $thishub = $this->get($hub);
       $posts = $thishub['posts'];
       if ($parent == '') {
         foreach ($posts as $post) {
-          if ($post['parent'] == '' && $post['deleted'] == false) {
-            $ret[] = $post;
+          if ($post['parent'] == '' and $post['deleted'] == false) {
+            $post['children'] = $this->getPosts($hub, $post['id'], $sortCriterion);
+            $ret[] = $this->processPost($post);
           }
         }
-      }
-      else {
+      } else {
         $cur = $this->getPost($hub, $parent);
         foreach ($cur['children'] as $post) {
           $ret[] = $this->getPost($hub, $post);
@@ -50,7 +63,9 @@
       $thishub = $this->get($hub);
       $posts = $thishub['posts'];
       foreach ($posts as $post) {
-        if ($post['id'] == $postid && $post['deleted'] == false) return $post;
+        if ($post['id'] == $postid && $post['deleted'] == false) {
+          return $this->processPost($post);
+        }
       }
       return '-1';
     }
@@ -150,6 +165,7 @@
     function newPost($id, $hub, $content, $parentid) {
       $entry = $this->get($hub);
       $curId = new MongoId();
+      if ($parentid != '') $parentid = new MongoId($parentid);
       $ret = array(
         'id' => $curId,
         'parent' => $parentid,
@@ -166,7 +182,8 @@
         $entry['posts'][$parentindex]['children'][] = $curId;
       }
       $this->save($entry, false);
-      return $ret;
+
+      return $this->getPost($hub, $curId);
     }
     function toggleLikePost($hub, $post, $id) {
       $entry = $this->get($hub);

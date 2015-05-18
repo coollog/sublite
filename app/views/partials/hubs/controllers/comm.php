@@ -63,6 +63,40 @@
           $('#joinpanel').remove();
         });
       });
+
+      // Posts
+
+      $('.reply form').submit(function() {
+        var json = formJSON(this),
+            content = json.text,
+            parentid = $(this).parents('.thread').attr('for');
+        console.log(parentid);
+
+        Comm.emit('new post', {
+          content: content,
+          parentid: parentid
+        }, function (err, data) {
+          if (err) { alert(err); return; }
+
+          Posts.add('recent', {
+            id: data.id,
+            pic: data.pic,
+            text: data.content,
+            name: data.name,
+            hub: thishubname,
+            time: data.date,
+            likes: data.likes.length,
+            replies: data.children.length
+          }, data.parent);
+
+          afterRender();
+        });
+
+        $(this).find('textarea').val('');
+        $('html').click();
+
+        return false;
+      });
     }
   };
 </script>
