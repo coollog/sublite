@@ -386,6 +386,7 @@
         function loadPosts(posts) {
           posts.forEach(function (post) {
             console.log('child: ', post);
+
             Posts.add('recent', {
               id: post.id,
               pic: post.pic,
