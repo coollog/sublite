@@ -97,6 +97,42 @@
 
         return false;
       });
+
+      // Meetups
+
+      $('.tabframe[name=createmeetup] form').submit(function() {
+        var json = formJSON(this);
+        console.log('creating event: ', json);
+
+        var form = this;
+
+        Comm.emit('create event', {
+          eventtitle: json.title,
+          starttime: json.startdate + ' ' + json.starttime,
+          endtime: json.enddate + ' ' + json.endtime,
+          locationname: json.locationname,
+          address: json.address,
+          description: json.description
+        }, function (err, data) {
+          if (err) { $(form).children('notice').html(err); return; }
+
+          Meetups.add({
+            name: data.title,
+            datetime: data.starttime + ' - ' + data.endtime,
+            // 'Sunday Apr 19, 9:00 AM - Friday May 1, 6:00 PM'
+            place: data.location + '<br />' + data.address,
+            // 'Union Bank<br />1675 Post Street, San Francisco, CA',
+            going: data.going.length,
+            comments: data.comments.length
+          });
+
+          afterRender();
+
+          $('tab[for=meetups]').click();
+        });
+
+        return false;
+      });
     }
   };
 </script>

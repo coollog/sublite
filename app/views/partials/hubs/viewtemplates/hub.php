@@ -60,15 +60,17 @@
         Start Date:
         <input class="datepicker" type="text" name="startdate" />
         Start Time:
-        <input class="timepicker" type="time" name="starttime" />
+        <input class="timepicker" type="text" name="starttime" />
         End Date:
         <input class="datepicker" type="text" name="enddate" />
         End Time:
-        <input class="timepicker" type="time" name="endtime" />
+        <input class="timepicker" type="text" name="endtime" />
         Location Name:
         <input type="text" name="locationname" />
         Location Address:
-        <input type="text" name="locationaddress" />
+        <input type="text" name="address" />
+        Description:
+        <textarea name="description"></textarea>
         <notice></notice>
         <right><button>Create</button></right>
       </form>

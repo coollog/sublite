@@ -351,13 +351,6 @@
       likes: 9,
       replies: 20
     }, 1);
-    Meetups.add({
-      name: 'Cherry Blossom Festival and Parade',
-      datetime: 'Sunday Apr 19, 9:00 AM - Friday May 1, 6:00 PM',
-      place: 'Union Bank<br />1675 Post Street, San Francisco, CA',
-      going: 23,
-      comments: 5
-    });
     afterRender();
   }
 </script>
@@ -410,6 +403,16 @@
       // Load events
       Comm.emit('load events tab', {}, function (err, data) {
         if (err) { alert(err); return; }
+
+        data.forEach(function (meetup) {
+          Meetups.add({
+            name: meetup.title,
+            datetime: meetup.starttime + ' - ' + meetup.endtime,
+            place: meetup.location + '<br />' + meetup.address,
+            going: meetup.going.length,
+            comments: meetup.comments.length
+          });
+        });
 
         afterRender();
         console.log('events: ', data);

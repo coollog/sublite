@@ -76,6 +76,10 @@
       $("#locationdiv").css('visibility','visible');
     }
 
+    formSetup();
+  });
+
+  function formSetup() {
     $('form').slidinglabels({ 
       /* these are all optional */ 
       className : 'form-slider', // the class you're wrapping the label & input with -> default = slider 
@@ -139,5 +143,5 @@
         }
       });
     });
-  });
+  }
 </script>

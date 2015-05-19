@@ -112,6 +112,7 @@
     // Communications setup
     Comm.afterRender();
 
+    formSetup();
     repositionFooter();
   }
 </script>
