@@ -46,7 +46,8 @@
       }
 
       foreach ($posts as $post) {
-        if (!$post['deleted']) {
+        $parentid = ($parent == '') ? '' : $parent['id'];
+        if (!$post['deleted'] and $post['parent'] == $parentid) {
           if (count($post['children']) > 0)
             $post['children'] = $this->getPosts($hub, $post, $sortCriterion);
 

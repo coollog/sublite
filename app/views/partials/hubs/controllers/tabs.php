@@ -31,7 +31,7 @@
       if (typeof parentid == 'undefined' || parentid == '')
         $('.postsframe[type='+type+'] .posts').append(newHTML);
       else
-        $('.postsframe[type='+type+'] .thread[for='+parentid+'] .replies').append(newHTML);
+        $('.postsframe[type='+type+'] .thread[for='+parentid+']').children('.replies').append(newHTML);
     },
     clear: function (type) {
       Tabs.clear('.postsframe[type='+type+'] .posts');
