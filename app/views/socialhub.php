@@ -158,6 +158,9 @@
     display: block;
     height: 1.5em;
   }
+  .posts likes:hover {
+    opacity: 0.5;
+  }
   .posts likes:before {
     content: "";
     background: url('<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/hubs/heart.png') no-repeat center center;
@@ -166,6 +169,9 @@
     width: 1.5em;
     height: 1em;
     margin: .25em .5em .25em 0;
+  }
+  .posts likes.liked:before {
+    background-image: url('<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/hubs/heartred.png');
   }
   .posts replies:before {
     content: "";
@@ -329,31 +335,6 @@
 <?php vpartial('hubs/controllers/afterrender'); ?>
 <?php vpartial('hubs/controllers/comm'); ?>
 
-<script>
-  function addTestContent() {
-    Posts.add('recent', {
-      id: 1,
-      pic: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why1.jpg',
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      name: 'Annie C.',
-      hub: 'Yale in NYC',
-      time: '3 hrs ago',
-      likes: 9,
-      replies: 20
-    });
-    Posts.add('recent', {
-      id: 2,
-      pic: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why1.jpg',
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      name: 'Annie C.',
-      hub: 'Yale in NYC',
-      time: '3 hrs ago',
-      likes: 9,
-      replies: 20
-    }, 1);
-    afterRender();
-  }
-</script>
 <script>
   // Actual code to set everything up for the first time
 

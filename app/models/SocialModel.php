@@ -51,6 +51,14 @@
       if ($post['parent'] != '')
         $post['parent'] = $post['parent']->{'$id'};
 
+      $post['liked'] = false;
+      foreach ($post['likes'] as $key => & $sub_array) {
+        if ($sub_array['id'] == $post['from']) {
+          $post['liked'] = true;
+          break;
+        }
+      }
+
       return $post;
     }
     function getHubPosts($hub, $sortCriterion) {
@@ -239,13 +247,13 @@
           if ($value['id'] == $id) {
             unset($entry['posts'][$index]['likes'][$key]);
             $this->save($entry, false);
-            return "post $post unliked";
+            return "unliked";
           }
         }
       }
       $entry['posts'][$index]['likes'][] = array('time' => time(), 'id' => $id);
       $this->save($entry, false);
-      return "post $post liked";
+      return "liked";
     }
     function deletePost($hub, $post) {
       $entry = $this->get($hub);

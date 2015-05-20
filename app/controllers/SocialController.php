@@ -184,7 +184,8 @@
             return $this->errorString("post does not exist");
           }
 
-          return $this->successString("", $MSocial->toggleLikePost($hub, $postid, $id));
+          $ret = $MSocial->toggleLikePost($hub, $postid, $id);
+          return $this->successString($ret, "post $postid $ret");
 
         case 'delete post':
           // Validations

@@ -32,6 +32,10 @@
         $('.postsframe[type='+type+'] .posts').append(newHTML);
       else
         $('.postsframe[type='+type+'] .thread[for='+parentid+']').children('.replies').append(newHTML);
+
+      // Highlight if liked
+      if (json.liked)
+        $('.post[index='+json.id+']').find('likes').addClass('liked');
     },
     clear: function (type) {
       Tabs.clear('.postsframe[type='+type+'] .posts');
@@ -48,7 +52,8 @@
           hub: thishubname,
           time: post.date,
           likes: post.likes.length,
-          replies: post.children.length
+          replies: post.children.length,
+          liked: post.liked
         }, post.parent);
         if (post.children.length > 0) {
           Posts.load(post.children);

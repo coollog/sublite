@@ -74,7 +74,7 @@
         .parent().find('button').slideUp(200, 'easeOutCubic');
     });
     $('.reply').click(function(event){
-        event.stopPropagation();
+      event.stopPropagation();
     });
 
     // Meetup creation button

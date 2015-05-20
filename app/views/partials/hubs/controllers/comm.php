@@ -152,7 +152,7 @@
 
       // Hubs stuff
 
-      $('.joinhub').click(function () {
+      $('.joinhub').off('click').click(function () {
         Comm.emit('join hub', {}, function (err, data) {
           if (err) { alert(err); return; }
 
@@ -162,7 +162,7 @@
 
       // Posts
 
-      $('.reply form').submit(function() {
+      $('.reply form').off('submit').submit(function() {
         var json = formJSON(this),
             content = json.text,
             parentid = $(this).parents('.thread').attr('for');
@@ -186,7 +186,8 @@
             hub: thishubname,
             time: data.date,
             likes: data.likes.length,
-            replies: data.children.length
+            replies: data.children.length,
+            liked: data.liked
           }, data.parent);
 
           afterRender();
@@ -198,9 +199,27 @@
         return false;
       });
 
+      // Liking
+      $('likes').off('click').click(function(event) {
+        var postid = $(this).parents('.post').attr('index'),
+            likes = parseInt($(this).html()),
+            elikes = this;
+
+        Comm.emit('click like', {
+          postid: postid
+        }, function (err, data) {
+          if (err) { alert(err); return; }
+
+          if (data == 'liked') $(elikes).html(likes + 1).addClass('liked');
+          else $(elikes).html(likes - 1).removeClass('liked');
+        });
+
+        event.stopPropagation();
+      });
+
       // Meetups
 
-      $('.tabframe[name=createmeetup] form').submit(function() {
+      $('.tabframe[name=createmeetup] form').off('submit').submit(function() {
         var json = formJSON(this);
         console.log('creating event: ', json);
 
