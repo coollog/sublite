@@ -203,7 +203,11 @@
       if (MongoId::isValid($event)) {
         $event = new MongoId($event);
         $index = $this->getEventIndex($hub, $event);
-        // $posts = $thishub['events'][$index]['comments'];
+        $posts = &$thishub['events'][$index]['comments'];
+        $parentindex = $this->getEventCommentIndex($hub, $event, $parentid);
+      } else {
+        $posts = &$thishub['posts'];
+        $parentindex = $this->getPostIndex($hub, $parentid);
       }
 
       $curId = new MongoId();
@@ -218,40 +222,42 @@
         'likes' => array(),
         'deleted' => false
       );
-      if (MongoId::isValid($event))
-        $thishub['events'][$index]['comments'][] = $ret;
-      else
-        $thishub['posts'][] = $ret;
+      $posts[] = $ret;
 
       // Set links
       if($parentid != '') {
-        if (MongoId::isValid($event)) {
-          $parentindex = $this->getEventCommentIndex($hub, $event, $parentid);
-          $thishub['events'][$index]['comments'][$parentindex]['children'][] = $curId;
-        } else {
-          $parentindex = $this->getPostIndex($hub, $parentid);
-          $thishub['posts'][$parentindex]['children'][] = $curId;
-        }
+        $posts[$parentindex]['children'][] = $curId;
       }
 
       $this->save($thishub, false);
 
       return $this->processPost($ret);
     }
-    function toggleLikePost($hub, $post, $id) {
+    function toggleLikePost($hub, $postid, $id, $event=null) {
       $entry = $this->get($hub);
-      $index = $this->getPostIndex($hub, $post);
+
+      if (MongoId::isValid($event)) {
+        $event = new MongoId($event);
+        $index = $this->getEventIndex($hub, $event);
+        $postindex = $this->getEventCommentIndex($hub, $event, $postid);
+        $post = &$entry['events'][$index]['comments'][$postindex];
+      } else {
+        $index = $this->getPostIndex($hub, $postid);
+        $post = &$entry['posts'][$index];
+      }
+
       //Checks if post is already liked
-      if($this->validArray($entry['posts'][$index]['likes'])) {
-        foreach ($entry['posts'][$index]['likes'] as $key => $value) {
+      if($this->validArray($post['likes'])) {
+        foreach ($post['likes'] as $key => $value) {
           if ($value['id'] == $id) {
-            unset($entry['posts'][$index]['likes'][$key]);
+            unset($post['likes'][$key]);
             $this->save($entry, false);
             return "unliked";
           }
         }
       }
-      $entry['posts'][$index]['likes'][] = array('time' => time(), 'id' => $id);
+      $post['likes'][] = array('time' => time(), 'id' => $id);
+
       $this->save($entry, false);
       return "liked";
     }

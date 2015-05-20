@@ -205,9 +205,13 @@
             likes = parseInt($(this).html()),
             elikes = this;
 
-        Comm.emit('click like', {
+        var emitdata = {
           postid: postid
-        }, function (err, data) {
+        };
+        if ($('meetupview').length > 0)
+          emitdata.event = $('meetupview').attr('for');
+
+        Comm.emit('click like', emitdata, function (err, data) {
           if (err) { alert(err); return; }
 
           if (data == 'liked') $(elikes).html(likes + 1).addClass('liked');

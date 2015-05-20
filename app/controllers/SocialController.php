@@ -180,11 +180,21 @@
             return $reterr;
           }
           $postid = $message['postid'];
-          if ($MSocial->getPostIndex($hub, $postid) == -1) {
-            return $this->errorString("post does not exist");
+
+          // If posting within event
+          if (isset($message['event'])) {
+            $event = $message['event'];
+            if ($MSocial->getEventIndex($hub, $event) == -1) {
+              return $this->errorString("event does not exist");
+            }
+          } else {
+            $event = null;
+            if ($MSocial->getPostIndex($hub, $postid) == -1) {
+              return $this->errorString("post does not exist");
+            }
           }
 
-          $ret = $MSocial->toggleLikePost($hub, $postid, $id);
+          $ret = $MSocial->toggleLikePost($hub, $postid, $id, $event);
           return $this->successString($ret, "post $postid $ret");
 
         case 'delete post':
