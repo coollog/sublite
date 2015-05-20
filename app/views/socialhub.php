@@ -368,53 +368,5 @@
   Members.setup();
 
   // Get current hub
-  Comm.retrieve('hub', thishub, function (err, data) {
-    if (err) { alert(err); return; }
-
-    Views.render('hub', data, false, function () {
-      // Load posts
-      Comm.emit('load posts tab', {}, function (err, data) {
-        if (err) { alert(err); return; }
-
-        Posts.load(data);
-
-        afterRender();
-        console.log('posts: ', data);
-      });
-      // Load events
-      Comm.emit('load events tab', {}, function (err, data) {
-        if (err) { alert(err); return; }
-
-        data.forEach(function (meetup) {
-          Meetups.add({
-            id: meetup.id,
-            name: meetup.title,
-            datetime: meetup.starttime + ' - ' + meetup.endtime,
-            place: meetup.location + '<br />' + meetup.address,
-            going: meetup.going.length,
-            comments: meetup.comments.length,
-          });
-        });
-
-        afterRender();
-        console.log('events: ', data);
-      });
-      // Load members
-      Comm.emit('load members tab', {}, function (err, data) {
-        if (err) { alert(err); return; }
-
-        data.forEach(function (student) {
-          Members.add({
-            name: student.name,
-            pic: student.pic,
-            school: student.school,
-            joined: student.joined
-          });
-        });
-
-        afterRender();
-        console.log('members: ', data);
-      });
-    });
-  });
+  Comm.retrieve('hub', thishub, function () {});
 </script>
