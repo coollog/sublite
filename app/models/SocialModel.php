@@ -13,6 +13,30 @@
       return $data['_id']->{'$id'};
     }
 
+    // Processors
+    function membersInfo($members, $title='Member') {
+      global $MStudent, $S;
+
+      $membersinfo = array();
+      foreach ($members as $member) {
+        if (MongoId::isValid($member)) {
+          $id = $member;
+          $joined = $title;
+        } else {
+          $id = $member['id'];
+          $joined = "$title, ".timeAgo($member['time']);
+        }
+        $student = $MStudent->getById($id);
+        $membersinfo[] = array(
+          'name' => $student['name'],
+          'pic' => $student['photo'],
+          'school' => $S->nameOf($student['email']),
+          'joined' => $joined
+        );
+      }
+      return $membersinfo;
+    }
+
     // Accessors
     function get($id) {
       return $this->collection->findOne(array('_id' => new MongoId($id)));
@@ -20,8 +44,7 @@
     function processPost($post) {
       global $MStudent;
       $student = $MStudent->getById($post['from']);
-      $post['pic'] = isset($student['photo']) ? $student['photo'] :
-        $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
+      $post['pic'] = $student['photo'];
       $post['name'] = $student['name'];
       $post['date'] = timeAgo($post['date']);
       $post['id'] = $post['id']->{'$id'};
@@ -30,30 +53,29 @@
 
       return $post;
     }
-    function getPosts($hub, $parent, $sortCriterion) {
+    function getHubPosts($hub, $sortCriterion) {
+      $thishub = $this->get($hub);
+      return $this->getPosts($thishub['posts'], $thishub['posts'], '', $sortCriterion);
+    }
+    function getPosts($masterposts, $posts, $parent, $sortCriterion) {
       $ret = array();
-
-      if (MongoId::isValid($hub)) $thishub = $this->get($hub);
-      else $thishub = $hub;
-
-      if ($parent == '')
-        $posts = $thishub['posts'];
-      else {
-        $posts = array();
-        foreach ($parent['children'] as $postid) {
-          $posts[] = $this->getPost($thishub, $postid);
-        }
-      }
 
       foreach ($posts as $post) {
         $parentid = ($parent == '') ? '' : $parent['id'];
         if (!$post['deleted'] and $post['parent'] == $parentid) {
-          if (count($post['children']) > 0)
-            $post['children'] = $this->getPosts($hub, $post, $sortCriterion);
+          if (count($post['children']) > 0) {
+            $children = array();
+            foreach ($post['children'] as $postid) {
+              $children[] = $this->getPost($masterposts, $postid);
+            }
+            $post['children'] = $this->getPosts($masterposts, $children, $post, $sortCriterion);
+          }
 
           $ret[] = $this->processPost($post);
         }
       }
+
+      // NOTE: SORT BY MOST RECENT/MOST POPULAR CHILD POST!!!
 
       if ($sortCriterion == 'recent') {
         $ret = array_reverse($ret);
@@ -61,17 +83,10 @@
         //TODO sort by popular and uncomment below
         $ret = array_reverse($ret);
       }
-      // foreach ($ret as $key => $post) {
-      //   $ret[$key]['replies'] = $this->getPosts($hub, $post['id'], $sortCriterion);
-      // }
       return $ret;
     }
-    function getPost($hub, $postid) {
-      if (MongoId::isValid($hub)) $thishub = $this->get($hub);
-      else $thishub = $hub;
-
-      $posts = $thishub['posts'];
-      foreach ($posts as $post) {
+    function getPost($masterposts, $postid) {
+      foreach ($masterposts as $post) {
         if ($post['id'] == $postid && $post['deleted'] == false) {
           return $post;
         }
@@ -93,6 +108,8 @@
     }
     function getEvents($hub) {
       $thishub = $this->get($hub);
+      for ($i = 0; $i < count($thishub['events']); $i ++)
+        $thishub['events'][$i]['id'] = $thishub['events'][$i]['id']->{'$id'};
       return $thishub['events'];
     }
     function getEventIndex($hub, $event) {
@@ -137,10 +154,11 @@
       }
       return -1;
     }
-    function getEventComments($hub, $event) {
+    function getEventComments($hub, $event, $sortCriterion='recent') {
       $index = $this->getEventIndex($hub, $event);
-      $entry = $this->get($hub);
-      return $entry['events'][$index]['comments'];
+      $thishub = $this->get($hub);
+      $comments = $thishub['events'][$index]['comments'];
+      return $this->getPosts($comments, $comments, '', $sortCriterion);
     }
     function getMembers($hub) {
       $thishub = $this->get($hub);
@@ -171,8 +189,15 @@
       $this->save($entry, false);
       return $entry['members'];
     }
-    function newPost($id, $hub, $content, $parentid) {
-      $entry = $this->get($hub);
+    function newPost($id, $hub, $content, $parentid, $event=null) {
+      $thishub = $this->get($hub);
+      // $posts = $thishub['posts'];
+      if (MongoId::isValid($event)) {
+        $event = new MongoId($event);
+        $index = $this->getEventIndex($hub, $event);
+        // $posts = $thishub['events'][$index]['comments'];
+      }
+
       $curId = new MongoId();
       if ($parentid != '') $parentid = new MongoId($parentid);
       $ret = array(
@@ -185,14 +210,25 @@
         'likes' => array(),
         'deleted' => false
       );
-      $entry['posts'][] = $ret;
-      if($parentid != '') {
-        $parentindex = $this->getPostIndex($hub, $parentid);
-        $entry['posts'][$parentindex]['children'][] = $curId;
-      }
-      $this->save($entry, false);
+      if (MongoId::isValid($event))
+        $thishub['events'][$index]['comments'][] = $ret;
+      else
+        $thishub['posts'][] = $ret;
 
-      return $this->processPost($this->getPost($hub, $curId));
+      // Set links
+      if($parentid != '') {
+        if (MongoId::isValid($event)) {
+          $parentindex = $this->getEventCommentIndex($hub, $event, $parentid);
+          $thishub['events'][$index]['comments'][$parentindex]['children'][] = $curId;
+        } else {
+          $parentindex = $this->getPostIndex($hub, $parentid);
+          $thishub['posts'][$parentindex]['children'][] = $curId;
+        }
+      }
+
+      $this->save($thishub, false);
+
+      return $this->processPost($ret);
     }
     function toggleLikePost($hub, $post, $id) {
       $entry = $this->get($hub);
@@ -239,6 +275,11 @@
       }
       return $ret;
     }
+
+    function processEvent($event) {
+      $event['id'] = $event['id']->{'$id'};
+      return $event;
+    }
     function createEvent($id, $hub, $title, $start, $end, $location, $address, $geocode, $description) {
       $entry = $this->get($hub);
       $ret = array(
@@ -256,7 +297,7 @@
       );
       $entry['events'][] = $ret;
       $this->save($entry, false);
-      return $ret;
+      return $this->processEvent($ret);
     }
     function deleteEvent($hub, $event) {
       $entry = $this->get($hub);

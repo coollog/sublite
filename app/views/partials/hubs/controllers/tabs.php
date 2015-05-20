@@ -35,6 +35,25 @@
     },
     clear: function (type) {
       Tabs.clear('.postsframe[type='+type+'] .posts');
+    },
+    load: function (posts) {
+      posts.forEach(function (post) {
+        console.log('child: ', post);
+
+        Posts.add('recent', {
+          id: post.id,
+          pic: post.pic,
+          text: post.content,
+          name: post.name,
+          hub: thishubname,
+          time: post.date,
+          likes: post.likes.length,
+          replies: post.children.length
+        }, post.parent);
+        if (post.children.length > 0) {
+          Posts.load(post.children);
+        }
+      });
     }
   }
   var Meetups = {

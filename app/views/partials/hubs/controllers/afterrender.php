@@ -77,27 +77,6 @@
         event.stopPropagation();
     });
 
-    // Meetup view switching
-    $('.meetup button').off("click").click(function () {
-      Views.render('meetup', {
-        banner: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why3.jpg',
-        name: "Let's Go Party in New York!",
-        hub: 'Yale University in New York City',
-        datetime: 'Tuesday Aug 15, 9:00 PM - 11:00 PM',
-        place: 'General Assembly<br />1933 S. Broadway, 11th Floor, Los Angeles, 900007, CA',
-        host: 'Name of Person',
-        hostpic: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why3.jpg',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-      }, false, function () {
-        addTestContent(); // remove this
-      });
-    });
-    $('meetupview .details hub').off("click").click(function () {
-      Views.render('hub', {}, true, function () {
-        // addTestContent(); // remove this
-      });
-    });
-
     // Meetup creation button
     $('#createmeetup').off("click").click(function () {
       $('tab[for=createmeetup]').click();

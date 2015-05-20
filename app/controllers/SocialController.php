@@ -139,25 +139,11 @@
 
         case 'load members tab':
           $members = $MSocial->getMembers($hub);
-          $membersinfo = array();
-          foreach ($members as $member) {
-            $student = $MStudent->getById($member['id']);
-            $name = $student['name'];
-            $photo = isset($student['photo']) ? $student['photo'] :
-              $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
-            $school = $S->nameOf($student['email']);
-            $joined = 'Member, '.timeAgo($member['time']);
-            $membersinfo[] = array(
-              'name' => $student['name'],
-              'pic' => $photo,
-              'school' => $school,
-              'joined' => $joined
-            );
-          }
+          $membersinfo = $MSocial->membersInfo($members);
           return $this->successString($membersinfo);
 
         case 'load posts tab':
-          return $this->successString($MSocial->getPosts($hub, '', 'recent'));
+          return $this->successString($MSocial->getHubPosts($hub, 'recent'));
 
         /* 
          *
@@ -165,7 +151,7 @@
          *
          */
         case 'sort most recent':
-          return $this->successString($MSocial->getPosts($hub, '', 'recent'));
+          return $this->successString($MSocial->getHubPosts($hub, 'recent'));
 
         case 'new post':
           if (!$MSocial->isMember($hub, $id))
@@ -179,7 +165,10 @@
             return $this->errorString("post too long (exceeds 2000 characters)");
           }
 
-          $ret = $MSocial->newPost($id, $hub, $message['content'], $message['parentid']);
+          // If posting within event
+          $event = isset($message['event']) ? $message['event'] : null;
+
+          $ret = $MSocial->newPost($id, $hub, $message['content'], $message['parentid'], $event);
           return $this->successString($ret);
 
         case 'click like':
@@ -223,15 +212,29 @@
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
             return $reterr;
           }
-          if ($MSocial->getEventIndex($hub, $event) == -1) {
+          if (($index = $MSocial->getEventIndex($hub, $message['event'])) == -1) {
             return $this->errorString("event does not exist");
           }
 
           $ret = $MSocial->get($hub);
-          $index = $MSocial->getEventIndex($hub, $message['event']);
-          unset($ret['events'][$index]['going']);
-          unset($ret['events'][$index]['comments']);
-          return $this->successString($ret['events'][$index]);
+          $event = $ret['events'][$index];
+
+          // Get host name and pic
+          global $MStudent;
+          $student = $MStudent->getById($event['creator']);
+          $event['hostname'] = $student['name'];
+          $event['hostphoto'] = $student['photo'];
+
+          // Check if is creator
+          $event['iscreator'] = ($event['creator'] == $_SESSION['_id']);
+
+          // Check if is going
+          $event['isgoing'] = (in_array($_SESSION['_id'], $event['going']));
+
+          unset($event['going']);
+          unset($event['comments']);
+
+          return $this->successString($event);
 
         case 'create event':
           if (!$MSocial->isMember($hub, $id))
@@ -362,7 +365,11 @@
           }
 
           $event = $message['event'];
-          return $this->successString($MSocial->getEventAttendees($hub, $event));
+
+          $attendees = $MSocial->getEventAttendees($hub, $event);
+          $attendeesinfo = $MSocial->membersInfo($attendees, 'Going');
+
+          return $this->successString($attendeesinfo);
 
         case 'load event description':
           // Validations
@@ -416,6 +423,8 @@
           return $this->successString($ret);
 
         case 'load event comments':
+          // NEED TO ADD AN OPTION FOR LOADING POPULAR AS WELL
+
           // Validations
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
             return $reterr;
@@ -430,7 +439,7 @@
 
         //TODO Fill in all of the cases below
         case 'sort most popular':
-          return $this->successString($MSocial->getPosts($hub, '', 'popular'));
+          return $this->successString($MSocial->getHubPosts($hub, 'popular'));
 
         default:
           return $this->errorString('invalid message name');

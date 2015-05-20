@@ -23,7 +23,10 @@
       return $this->collection->find(array('time' => array('$exists' => true)));
     }
     function getById($id) {
-      return $this->collection->findOne(array('_id' => new MongoId($id)));
+      $student = $this->collection->findOne(array('_id' => new MongoId($id)));
+      $student['photo'] = isset($student['photo']) ? $student['photo'] :
+        $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
+      return $student;
     }
     function getID($email) {
       if (is_null($entry = $this->get($email))) return $entry;
@@ -35,7 +38,8 @@
     }
     function getPhoto($id) {
       $entry = $this->getById($id);
-      return isset($entry['photo']) ? $entry['photo'] : null;
+      return isset($entry['photo']) ? $entry['photo'] :
+        $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
     }
     function getEmail($id) {
       $entry = $this->getById($id);

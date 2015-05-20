@@ -45,9 +45,10 @@
 
       switch (type) {
         case 'hub':
-          this.emit('load hub info', {}, callback);
+          this.emit('load hub info', { hub: id }, callback);
           break;
         case 'meetup':
+          this.emit('load event info', { event: id }, callback);
           break;
       }
     },
@@ -72,10 +73,14 @@
             parentid = $(this).parents('.thread').attr('for');
         console.log(parentid);
 
-        Comm.emit('new post', {
+        var emitdata = {
           content: content,
           parentid: parentid
-        }, function (err, data) {
+        };
+        if ($('meetupview').length > 0)
+          emitdata.event = $('meetupview').attr('for');
+
+        Comm.emit('new post', emitdata, function (err, data) {
           if (err) { alert(err); return; }
 
           Posts.add('recent', {
@@ -117,6 +122,7 @@
           if (err) { $(form).children('notice').html(err); return; }
 
           Meetups.add({
+            id: data.id,
             name: data.title,
             datetime: data.starttime + ' - ' + data.endtime,
             // 'Sunday Apr 19, 9:00 AM - Friday May 1, 6:00 PM'
@@ -132,6 +138,61 @@
         });
 
         return false;
+      });
+
+      // Meetup view switching
+
+      $('.meetup button').off("click").click(function () {
+        var eventid = $(this).parent().attr('for');
+
+        Comm.retrieve('meetup', eventid, function (err, data) {
+          if (err) { alert(err); return; }
+
+          Views.render('meetup', {
+            banner: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why3.jpg',
+            name: data.title,
+            hub: thishubname,
+            datetime: data.starttime + ' - ' + data.endtime,
+            place: data.location + '<br />' + data.address,
+            host: data.hostname,
+            hostpic: data.hostphoto,
+            description: data.description,
+            id: eventid,
+            iscreator: data.iscreator,
+            isgoing: data.isgoing
+          }, false, function () {
+            // Load comments
+            Comm.emit('load event comments', { event: eventid }, function (err, data) {
+              if (err) { alert(err); return; }
+
+              Posts.load(data);
+
+              afterRender();
+              console.log('comments: ', data);
+            });
+            // Load going
+            Comm.emit('list going', { event: eventid }, function (err, data) {
+              if (err) { alert(err); return; }
+
+              data.forEach(function (student) {
+                Members.add({
+                  name: student.name,
+                  pic: student.pic,
+                  school: student.school,
+                  joined: student.joined
+                });
+              });
+
+              afterRender();
+              console.log('going: ', data);
+            });
+          });
+        });
+      });
+      $('meetupview .details hub').off("click").click(function () {
+        Views.render('hub', {}, true, function () {
+          // addTestContent(); // remove this
+        });
       });
     }
   };

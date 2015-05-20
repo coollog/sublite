@@ -1,5 +1,5 @@
 <viewtemplate name="meetup">
-  <meetupview>
+  <meetupview for="{id}">
     <panel class="banner" style="background-image: url('{banner}');"></panel>
 
     <panel class="details">
@@ -64,6 +64,15 @@
         </subtabs>
         <div class="postsframe" type="recent"><div class="posts"></div></div>
         <div class="postsframe" type="popular"><div class="posts"></div></div>
+        <div class="thread" for="">
+          <div class="reply">
+            Write your post:
+            <form>
+              <textarea name="text"></textarea>
+              <right><button>Share</button></right>
+            </form>
+          </div>
+        </div>
       </content>
     </panel>
   </viewtemplate>

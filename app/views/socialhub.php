@@ -376,26 +376,7 @@
       Comm.emit('load posts tab', {}, function (err, data) {
         if (err) { alert(err); return; }
 
-        function loadPosts(posts) {
-          posts.forEach(function (post) {
-            console.log('child: ', post);
-
-            Posts.add('recent', {
-              id: post.id,
-              pic: post.pic,
-              text: post.content,
-              name: post.name,
-              hub: thishubname,
-              time: post.date,
-              likes: post.likes.length,
-              replies: post.children.length
-            }, post.parent);
-            if (post.children.length > 0) {
-              loadPosts(post.children);
-            }
-          });
-        }
-        loadPosts(data);
+        Posts.load(data);
 
         afterRender();
         console.log('posts: ', data);
@@ -406,11 +387,12 @@
 
         data.forEach(function (meetup) {
           Meetups.add({
+            id: meetup.id,
             name: meetup.title,
             datetime: meetup.starttime + ' - ' + meetup.endtime,
             place: meetup.location + '<br />' + meetup.address,
             going: meetup.going.length,
-            comments: meetup.comments.length
+            comments: meetup.comments.length,
           });
         });
 

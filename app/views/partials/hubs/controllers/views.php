@@ -21,6 +21,8 @@
         if (json.ismember) $('#joinpanel').remove();
         thishubname = json.name;
 
+        if (json.isgoing) $('.goingornot').remove();
+
         afterRender();
         if (typeof callback !== 'undefined') callback();
       }
@@ -40,7 +42,7 @@
           newviewStart: '100%',
           newviewEnd: '0%'
         };
-        if (typeof back !== 'undefined') {
+        if (back) {
           viewPos = {
             viewstart: '0%',
             viewEnd: '100%',
