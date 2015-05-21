@@ -44,6 +44,8 @@
           Description
         </tab><tab for="forum">
           Comments
+        </tab><tab for="edit">
+          Edit<!-- maybe have this be icon? -->
         </tab>
       </content>
     </panel>
@@ -73,6 +75,11 @@
             </form>
           </div>
         </div>
+      </content>
+    </panel>
+    <panel class="tabframe" name="edit">
+      <content>
+        <button id="deletemeetup">Delete Meet-Up</button>
       </content>
     </panel>
   </viewtemplate>

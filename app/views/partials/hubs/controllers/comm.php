@@ -268,6 +268,20 @@
       $('meetupview .details hub').off("click").click(function () {
         Comm.retrieve('hub', thishub, function () {});
       });
+
+      // Meetup editing
+
+      $('#deletemeetup').off('click').click(function () {
+        if (confirm('Deleting a meet-up is permanent. Continue?')) {
+          var eventid = $('meetupview').attr('for');
+
+          Comm.emit('delete event', { event: eventid }, function (err, data) {
+            if (err) { alert(err); return; }
+
+            Comm.retrieve('hub', thishub, function () {});
+          });
+        }
+      });
     }
   };
 </script>

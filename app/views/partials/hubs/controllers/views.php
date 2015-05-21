@@ -23,6 +23,8 @@
 
         if (json.isgoing) $('.goingornot').remove();
 
+        if (!json.iscreator) $('tab[for=edit]').remove();
+
         afterRender();
         if (typeof callback !== 'undefined') callback();
       }
