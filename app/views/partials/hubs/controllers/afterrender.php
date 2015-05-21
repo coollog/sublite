@@ -33,21 +33,22 @@
 
     // Posts tabbing
 
-    $('.post').off("click").click(function() {
-      var postsleft,
-          myindex = $(this).attr('index'),
-          replies = $(this).parent().children('.thread[for='+myindex+']');
+    $('replies').off("click").click(function() {
+      var post = $(this).parents('.post'),
+          postsleft,
+          myindex = post.attr('index'),
+          replies = post.parent().children('.thread[for='+myindex+']');
 
-      var mytab = $(this).parent().css('marginLeft');
+      var mytab = post.parent().css('marginLeft');
       postsleft = -parseInt(mytab);
       if (!replies.is(":visible")) {
         postsleft = -50 - parseInt(mytab);
       }
-      var op = this;
+      var op = post[0];
       replies.slideToggle('100', 'easeInOutCubic', function() {
-        scrollTo(op);
+        if (replies.is(":visible")) scrollTo(op);
       });
-      var posts = $(this).parent();
+      var posts = post.parent();
       while (!posts.hasClass('posts'))
         posts = posts.parent();
       posts.css('left', postsleft+'px');

@@ -134,11 +134,7 @@
     line-height: 1.5em;
     padding: 10px 0;
     border-bottom: 1px solid #ddd;
-    cursor: pointer;
     width: 500px;
-  }
-  .posts .post:hover {
-    opacity: 0.8;
   }
   .posts .l {
     min-width: 100px;
@@ -160,6 +156,7 @@
   }
   .posts likes:hover {
     opacity: 0.5;
+    cursor: pointer;
   }
   .posts likes:before {
     content: "";
@@ -172,6 +169,10 @@
   }
   .posts likes.liked:before {
     background-image: url('<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/hubs/heartred.png');
+  }
+  .posts replies:hover {
+    opacity: 0.5;
+    cursor: pointer;
   }
   .posts replies:before {
     content: "";
