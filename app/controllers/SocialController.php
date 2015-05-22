@@ -39,11 +39,28 @@
         $this->error($err);
       }
 
-      $this->render('socialindex', array('hubs' => true));
+      $vdata = array(
+        'hubs' => true
+      );
+
+      global $MStudent;
+      $me = $MStudent->me();
+      if (isset($me['hubs']['myhub'])) {
+        $vdata['myhub'] = $me['hubs']['myhub'];
+      }
+
+      $this->render('socialindex', $vdata);
     }
 
     function hub() {
-      $this->render('socialhub');
+      if (!isset($_GET['id']))
+        $this->redirect('start');
+
+      $hubid = $_GET['id'];
+
+      $this->render('socialhub', array(
+        'hub' => $hubid
+      ));
     }
     function admin() {
       $this->render('socialadmin');
@@ -130,6 +147,7 @@
 
         case 'load hub info':
           $entry = $MSocial->get($hub);
+
           $ret = array(
             'name' => $entry['name'],
             'location' => $entry['location'],

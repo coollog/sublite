@@ -35,6 +35,7 @@
 
     // Accessors
     function get($id) {
+      if (!MongoId::isValid($id)) return null;
       return $this->collection->findOne(array('_id' => new MongoId($id)));
     }
     function processPost($post) {

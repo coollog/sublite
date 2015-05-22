@@ -140,7 +140,7 @@
   #cityform {
     width: 50%;
   }
-  #citylabel {
+  .whitetext {
     color: #fff;
     text-shadow: 2px 2px #035d75;
   }
@@ -175,10 +175,35 @@
         <?php
           if (vget('Loggedinstudent')) {
         ?>
+            <?php if (vget('myhub')) { ?>
+              <div id="tohub">
+                <a href="hub.php?id=<?php vecho('myhub'); ?>">
+                  <input type="button" value="Take me to my hub" />
+                </a>
+                <div class="whitetext">
+                  <br /><br />
+                  <big>&mdash; OR &mdash;</big>
+                  <br /><br />
+                  <input id="switchhub" type="button" value="Switch to another city" />
+                  <style>
+                    #cityform {
+                      display: none;
+                    }
+                  </style>
+                  <script>
+                    $('#switchhub').click(function () {
+                      $('#cityform').show();
+                      $(this).hide();
+                    });
+                  </script>
+                </div>
+              </div>
+            <?php } ?>
+
             <?php vnotice(); ?>
             <?php if (!vget('signedup')) { ?>
               <form id="cityform" method="post">
-                <div id="citylabel">Where will you be this summer?</div>
+                <div class="whitetext">Where will you be this summer?</div>
                 <div class="form-slider">
                   <label for="city">(eg. New York City, Boston, San Francisco)</label>
                   <input type="text" id="city" name="city" required />

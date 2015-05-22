@@ -152,7 +152,8 @@
   }
   .posts info {
     display: block;
-    height: 1.5em;
+    height: 2em;
+    font-size: 0.8em;
   }
   .posts likes:hover {
     opacity: 0.5;
@@ -344,7 +345,7 @@
 
   // Config
   var myid = null,
-      thishub = '55599b57e4b0f7f6aba42317',
+      thishub = '<?php vecho('hub'); ?>',
       thishubname = '';
 
   Views.setup();
