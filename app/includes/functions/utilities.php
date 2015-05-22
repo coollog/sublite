@@ -39,28 +39,32 @@
     $difference = time() - $time;
     $periods = array(
       'y' => 31536000,
-      'w' => 604800, 
+      'w' => 604800,
       'd' => 86400,
       'h' => 3600,
       'm' => 60,
       's' => 1
     );
 
-    $retval = '';
-    foreach ($periods as $key => $value) {
-      if ($difference >= $value) {
-        $time = floor($difference/$value);
-        $difference %= $value;
-        $retval .= ($retval ? ' ' : '').$time;
-        $retval .= $key;
-        $granularity --;
+    if ($difference > $periods['w']) {
+      return date('M j, Y', $time);
+    } else {
+      $retval = '';
+      foreach ($periods as $key => $value) {
+        if ($difference >= $value) {
+          $time = floor($difference/$value);
+          $difference %= $value;
+          $retval .= ($retval ? ' ' : '').$time;
+          $retval .= $key;
+          $granularity --;
+        }
+        if ($granularity <= 0) { break; }
       }
-      if ($granularity <= 0) { break; }
+      if ($retval == '') {
+        return 'Just now.';
+      } else
+        return $retval . ' ago';
     }
-    if ($retval == '') {
-      return 'Just now.';
-    } else
-      return $retval . ' ago';
   }
 
   function array2str($arr, $format="<b>%s</b> = '%s'", $sep="<br />\n") {
@@ -101,7 +105,10 @@
       'yuanling.yuan@yale.edu',
       'shirley.guo@yale.edu',
       'tony.chen@yale.edu',
-      'alisa.melekhina@law.upenn.edu'
+      'alisa.melekhina@law.upenn.edu',
+      'alex.croxford@yale.edu',
+      'julie.slama@yale.edu',
+      'joel.deleon@yale.edu'
     );
     return isset($_SESSION['email']) and in_array($_SESSION['email'], $admins);
   }

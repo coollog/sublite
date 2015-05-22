@@ -14,6 +14,24 @@
     // Changes the view with json to replace {var} and back=true meaning
     //  slide view from left instead
     render: function (name, json, back, callback) {
+      function finishRender(newHTML) {
+        $('view').html(newHTML);
+
+        // Process json dynamics
+        if (json.ismember) $('#joinpanel').remove();
+        thishubname = json.name;
+
+        if (json.isgoing) {
+          $('.goingornot').hide();
+          $('#leavemeetupdiv').show();
+        }
+
+        if (!json.iscreator) $('tab[for=edit]').remove();
+
+        afterRender();
+        if (typeof callback !== 'undefined') callback();
+      }
+
       var newHTML = this.templates[name];
       for (var key in json) {
         toreplace = '{'+key+'}';
@@ -29,7 +47,7 @@
           newviewStart: '100%',
           newviewEnd: '0%'
         };
-        if (typeof back !== 'undefined') {
+        if (back) {
           viewPos = {
             viewstart: '0%',
             viewEnd: '100%',
@@ -44,15 +62,12 @@
         $('newview').css('left', viewPos.newviewStart).html(newHTML)
                     .animate({ left: viewPos.newviewEnd }, 
                     500, 'easeOutCubic', function() {
-          $('view').html(newHTML).css('position', 'relative').css('left', '0');
           $('newview').html('');
-          afterRender();
-          if (typeof callback !== 'undefined') callback();
+          $('view').css('position', 'relative').css('left', '0');
+          finishRender(newHTML, json);
         });
       } else {
-        $('view').html(newHTML);
-        afterRender();
-        if (typeof callback !== 'undefined') callback();
+        finishRender(newHTML, json);
       }
     }
   };

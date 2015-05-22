@@ -45,6 +45,9 @@
     function hub() {
       $this->render('socialhub');
     }
+    function admin() {
+      $this->render('socialadmin');
+    }
 
     function checkIsSet($message, $fields, &$var) {
       foreach ($fields as $f) {
@@ -79,10 +82,15 @@
     }
 
     function api() {
-      global $CStudent, $MStudent, $MSocial;
+      global $CStudent, $MStudent, $MSocial, $S;
       $name = $_POST['name'];
       $json = $_POST['json'];
       $message = $json; // json_decode($json, true);
+
+      // make sure logged in
+      if (!$CStudent->loggedIn()) {
+        return $this->errorString('you must be logged in');
+      }
 
       // clean data
       foreach ($message as $key => $val) {
@@ -96,21 +104,11 @@
         return $reterr;
       }
       $hub = $message['hub'];
-
-      // make sure password matches
-      if (!$CStudent->loggedIn()) {
-        return $this->errorString('you must be logged in');
-      }
+      $id = $_SESSION['_id'];
 
       // make sure hub exists
       if (!$MSocial->get($hub)) {
         return $this->errorString("hub doesn't exist");
-      }
-
-      // if not trying to join/view hub, make sure is member of hub
-      if ($name != 'join hub' && $name != 'load hub info') {
-        if (!$MSocial->isMember($hub, $id))
-          return $this->errorString('not member of hub');
       }
 
       // specific stuff
@@ -135,6 +133,8 @@
           $ret = array(
             'name' => $entry['name'],
             'location' => $entry['location'],
+            'ismember' => $MSocial->isMember($hub, $id),
+            'myid' => $_SESSION['_id']->{'$id'}
           );
           return $this->successString($ret);
 
@@ -142,10 +142,12 @@
           return $this->successString($MSocial->getEvents($hub));
 
         case 'load members tab':
-          return $this->successString($MSocial->getMembers($hub));
+          $members = $MSocial->getMembers($hub);
+          $membersinfo = $MSocial->membersInfo($members);
+          return $this->successString($membersinfo);
 
         case 'load posts tab':
-          return $this->successString($MSocial->getPosts($hub, '', 'recent'));
+          return $this->successString($MSocial->getHubPosts($hub, 'recent'));
 
         /* 
          *
@@ -153,9 +155,12 @@
          *
          */
         case 'sort most recent':
-          return $this->successString($MSocial->getPosts($hub, '', 'recent'));
+          return $this->successString($MSocial->getHubPosts($hub, 'recent'));
 
         case 'new post':
+          if (!$MSocial->isMember($hub, $id))
+            return $this->errorString('not member of hub');
+
           // Validations
           if (!$this->checkIsSet($message, array('content', 'parentid'), $reterr)) {
             return $reterr;
@@ -164,20 +169,37 @@
             return $this->errorString("post too long (exceeds 2000 characters)");
           }
 
-          $ret = $MSocial->newPost($id, $hub, $message['content'], $message['parentid']);
+          // If posting within event
+          $event = isset($message['event']) ? $message['event'] : null;
+
+          $ret = $MSocial->newPost($id, $hub, $message['content'], $message['parentid'], $event);
           return $this->successString($ret);
 
         case 'click like':
+          if (!$MSocial->isMember($hub, $id))
+            return $this->errorString('not member of hub');
+
           // Validations
           if (!$this->checkIsSet($message, array('postid'), $reterr)) {
             return $reterr;
           }
           $postid = $message['postid'];
-          if ($MSocial->getPostIndex($hub, $postid) == -1) {
-            return $this->errorString("post does not exist");
+
+          // If posting within event
+          if (isset($message['event'])) {
+            $event = $message['event'];
+            if ($MSocial->getEventIndex($hub, $event) == -1) {
+              return $this->errorString("event does not exist");
+            }
+          } else {
+            $event = null;
+            if ($MSocial->getPostIndex($hub, $postid) == -1) {
+              return $this->errorString("post does not exist");
+            }
           }
 
-          return $this->successString("", $MSocial->toggleLikePost($hub, $postid, $id));
+          $ret = $MSocial->toggleLikePost($hub, $postid, $id, $event);
+          return $this->successString($ret, "post $postid $ret");
 
         case 'delete post':
           // Validations
@@ -205,17 +227,34 @@
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
             return $reterr;
           }
-          if ($MSocial->getEventIndex($hub, $event) == -1) {
+          if (($index = $MSocial->getEventIndex($hub, $message['event'])) == -1) {
             return $this->errorString("event does not exist");
           }
 
           $ret = $MSocial->get($hub);
-          $index = $MSocial->getEventIndex($hub, $message['event']);
-          unset($ret['events'][$index]['going']);
-          unset($ret['events'][$index]['comments']);
-          return $this->successString($ret['events'][$index]);
+          $event = $ret['events'][$index];
+
+          // Get host name and pic
+          global $MStudent;
+          $student = $MStudent->getById($event['creator']);
+          $event['hostname'] = $student['name'];
+          $event['hostphoto'] = $student['photo'];
+
+          // Check if is creator
+          $event['iscreator'] = ($event['creator'] == $_SESSION['_id']);
+
+          // Check if is going
+          $event['isgoing'] = $MSocial->isGoing($hub, $event['id'], $_SESSION['_id']);
+
+          unset($event['going']);
+          unset($event['comments']);
+
+          return $this->successString($event);
 
         case 'create event':
+          if (!$MSocial->isMember($hub, $id))
+            return $this->errorString('not member of hub');
+
           // Validations
           if (!$this->checkIsSet($message, 
             array(
@@ -274,6 +313,9 @@
           return $this->successString($MSocial->deleteEvent($hub, $event));
 
         case 'rsvp event':
+          if (!$MSocial->isMember($hub, $id))
+            return $this->errorString('not member of hub');
+
           // Validations
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
             return $reterr;
@@ -306,6 +348,9 @@
           return $this->successString("", "left event $event");
 
         case 'respond to event':
+          if (!$MSocial->isMember($hub, $id))
+            return $this->errorString('not member of hub');
+
           // Validations
           if (!$this->checkIsSet($message, array('event', 'response'), $reterr)) {
             return $reterr;
@@ -335,7 +380,11 @@
           }
 
           $event = $message['event'];
-          return $this->successString($MSocial->getEventAttendees($hub, $event));
+
+          $attendees = $MSocial->getEventAttendees($hub, $event);
+          $attendeesinfo = $MSocial->membersInfo($attendees, 'Going');
+
+          return $this->successString($attendeesinfo);
 
         case 'load event description':
           // Validations
@@ -351,6 +400,9 @@
           return $this->successString($MSocial->getEventDescription($hub, $event));
 
         case 'new event comment':
+          if (!$MSocial->isMember($hub, $id))
+            return $this->errorString('not member of hub');
+
           // Validations
           if (!$this->checkIsSet($message, array('event', 'content'), $reterr)) {
             return $reterr;
@@ -386,6 +438,8 @@
           return $this->successString($ret);
 
         case 'load event comments':
+          // NEED TO ADD AN OPTION FOR LOADING POPULAR AS WELL
+
           // Validations
           if (!$this->checkIsSet($message, array('event'), $reterr)) {
             return $reterr;
@@ -400,7 +454,7 @@
 
         //TODO Fill in all of the cases below
         case 'sort most popular':
-          return $this->successString($MSocial->getPosts($hub, '', 'popular'));
+          return $this->successString($MSocial->getHubPosts($hub, 'popular'));
 
         default:
           return $this->errorString('invalid message name');
@@ -431,6 +485,47 @@
       echo $this->api() . "<br><br>";
       $entry = $MSocial->get('5556914f172f559e8ece6c89');
       echo var_dump($entry);
+    }
+
+    function adminapi() {
+      global $MStudent;
+
+      // make sure logged in
+      if (!checkAdmin()) {
+        return $this->errorString('permission denied');
+      }
+
+      $name = $_POST['name'];
+      $json = $_POST['json'];
+
+      switch ($name) {
+        case 'load students':
+          $students = $MStudent->find(array(
+            'hubs' => array('$exists' => true))
+          );
+
+          $ret = array();
+          $counter = 0;
+          foreach ($students as $student) {
+            if (!isset($student['hubs']['geocode']) or 
+                is_null($student['hubs']['geocode'])) {
+              $city = $student['hubs']['city'];
+              $geocode = geocode($city);
+              $student['hubs']['geocode'] = $geocode;
+              
+              if (!is_null($geocode)) $MStudent->save($student);
+            }
+
+            $ret[] = $student;
+          }
+
+          return $this->successString($ret);
+          
+        case '':
+
+      }
+
+      return $this->errorString('invalid message');
     }
   }
 

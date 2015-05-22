@@ -28,13 +28,37 @@
     },
     add: function (type, json, parentid) {
       var newHTML = Tabs.newHTML(this, json);
-      if (typeof parentid == 'undefined')
+      if (typeof parentid == 'undefined' || parentid == '')
         $('.postsframe[type='+type+'] .posts').append(newHTML);
       else
-        $('.postsframe[type='+type+'] .thread[for='+parentid+'] .replies').append(newHTML);
+        $('.postsframe[type='+type+'] .thread[for='+parentid+']').children('.replies').append(newHTML);
+
+      // Highlight if liked
+      if (json.liked)
+        $('.post[index='+json.id+']').find('likes').addClass('liked');
     },
     clear: function (type) {
       Tabs.clear('.postsframe[type='+type+'] .posts');
+    },
+    load: function (posts) {
+      posts.forEach(function (post) {
+        console.log('child: ', post);
+
+        Posts.add('recent', {
+          id: post.id,
+          pic: post.pic,
+          text: post.content,
+          name: post.name,
+          hub: thishubname,
+          time: post.date,
+          likes: post.likes.length,
+          replies: post.children.length,
+          liked: post.liked
+        }, post.parent);
+        if (post.children.length > 0) {
+          Posts.load(post.children);
+        }
+      });
     }
   }
   var Meetups = {
@@ -65,6 +89,49 @@
     updateCount: function () {
       var n = $('.member').length;
       $('membercount').html(n);
+    },
+    load: function (type, id) {
+      switch (type) {
+        case 'hub':
+          Comm.emit('load members tab', {}, function (err, data) {
+            if (err) { alert(err); return; }
+
+            Members.clear();
+            data.forEach(function (student) {
+              Members.add({
+                id: student.id,
+                name: student.name,
+                pic: student.pic,
+                school: student.school,
+                joined: student.joined
+              });
+            });
+
+            afterRender();
+            console.log('members: ', data);
+          });
+          break;
+
+        case 'meetup':
+          Comm.emit('list going', { event: id }, function (err, data) {
+            if (err) { alert(err); return; }
+
+            Members.clear();
+            data.forEach(function (student) {
+              Members.add({
+                id: student.id,
+                name: student.name,
+                pic: student.pic,
+                school: student.school,
+                joined: student.joined
+              });
+            });
+
+            afterRender();
+            console.log('going: ', data);
+          });
+          break;
+      }
     }
   }
 </script>

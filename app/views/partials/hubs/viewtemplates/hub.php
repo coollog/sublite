@@ -5,7 +5,7 @@
     </content>
   </panel>
 
-  <panel>
+  <panel id="joinpanel">
     <content>
       <button class="joinhub">Join Hub</button>
     </content>
@@ -32,6 +32,15 @@
       </subtabs>
       <div class="postsframe" type="recent"><div class="posts"></div></div>
       <div class="postsframe" type="popular"><div class="posts"></div></div>
+      <div class="thread" for="">
+        <div class="reply">
+          Write your post:
+          <form>
+            <textarea name="text"></textarea>
+            <right><button>Share</button></right>
+          </form>
+        </div>
+      </div>
     </content>
   </panel>
   <panel class="tabframe" name="meetups">
@@ -51,15 +60,17 @@
         Start Date:
         <input class="datepicker" type="text" name="startdate" />
         Start Time:
-        <input class="timepicker" type="time" name="starttime" />
+        <input class="timepicker" type="text" name="starttime" />
         End Date:
         <input class="datepicker" type="text" name="enddate" />
         End Time:
-        <input class="timepicker" type="time" name="endtime" />
+        <input class="timepicker" type="text" name="endtime" />
         Location Name:
         <input type="text" name="locationname" />
         Location Address:
-        <input type="text" name="locationaddress" />
+        <input type="text" name="address" />
+        Description:
+        <textarea name="description"></textarea>
         <notice></notice>
         <right><button>Create</button></right>
       </form>

@@ -134,11 +134,7 @@
     line-height: 1.5em;
     padding: 10px 0;
     border-bottom: 1px solid #ddd;
-    cursor: pointer;
     width: 500px;
-  }
-  .posts .post:hover {
-    opacity: 0.8;
   }
   .posts .l {
     min-width: 100px;
@@ -158,6 +154,10 @@
     display: block;
     height: 1.5em;
   }
+  .posts likes:hover {
+    opacity: 0.5;
+    cursor: pointer;
+  }
   .posts likes:before {
     content: "";
     background: url('<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/hubs/heart.png') no-repeat center center;
@@ -166,6 +166,13 @@
     width: 1.5em;
     height: 1em;
     margin: .25em .5em .25em 0;
+  }
+  .posts likes.liked:before {
+    background-image: url('<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/hubs/heartred.png');
+  }
+  .posts replies:hover {
+    opacity: 0.5;
+    cursor: pointer;
   }
   .posts replies:before {
     content: "";
@@ -180,18 +187,18 @@
     margin-left: 50px;
     display: none;
   }
-  .posts .reply {
+  .reply {
     margin-top: 1em;
   }
-  .posts .reply form {
+  .reply form {
     margin: 0;
   }
-  .posts .reply textarea {
+  .reply textarea {
     height: 3em;
     white-space: pre-wrap;
     transition: 0.2s all ease-in-out;
   }
-  .posts .reply button {
+  .reply button {
     display: none;
   }
 
@@ -287,6 +294,9 @@
   meetupview .tabframe[name=description] {
     text-align: left;
   }
+  meetupview #leavemeetupdiv {
+    display: none;
+  }
 
   viewframe {
     width: 100%;
@@ -330,55 +340,12 @@
 <?php vpartial('hubs/controllers/comm'); ?>
 
 <script>
-  function addTestContent() {
-    Posts.add('recent', {
-      id: 1,
-      pic: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why1.jpg',
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      name: 'Annie C.',
-      hub: 'Yale in NYC',
-      time: '3 hrs ago',
-      likes: 9,
-      replies: 20
-    });
-    Posts.add('recent', {
-      id: 2,
-      pic: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why1.jpg',
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      name: 'Annie C.',
-      hub: 'Yale in NYC',
-      time: '3 hrs ago',
-      likes: 9,
-      replies: 20
-    }, 1);
-    Posts.add('popular', {
-      id: 1,
-      pic: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why1.jpg',
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      name: 'Annie C.',
-      hub: 'Yale in NYC',
-      time: '3 hrs ago',
-      likes: 9,
-      replies: 20
-    });
-    Meetups.add({
-      name: 'Cherry Blossom Festival and Parade',
-      datetime: 'Sunday Apr 19, 9:00 AM - Friday May 1, 6:00 PM',
-      place: 'Union Bank<br />1675 Post Street, San Francisco, CA',
-      going: 23,
-      comments: 5
-    });
-    Members.add({
-      name: 'Random Person',
-      pic: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why2.jpg',
-      school: 'Yale University',
-      joined: 'Member, 5/17/2015'
-    });
-    afterRender();
-  }
-</script>
-<script>
   // Actual code to set everything up for the first time
+
+  // Config
+  var myid = null,
+      thishub = '55599b57e4b0f7f6aba42317',
+      thishubname = '';
 
   Views.setup();
 
@@ -386,12 +353,6 @@
   Meetups.setup();
   Members.setup();
 
-  Comm.retrieve('hub', '55599b57e4b0f7f6aba42317', function (err, data) {
-    if (err) {
-      alert(err); return;
-    }
-    Views.render('hub', data, false, function () {
-      // addTestContent(); // remove this
-    });
-  });
+  // Get current hub
+  Comm.retrieve('hub', thishub, function () {});
 </script>

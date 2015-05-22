@@ -1,5 +1,5 @@
 <tabtemplate for="meetup">
-  <div class="meetup">
+  <div class="meetup" for="{id}">
     <name>{name}</name>
     <table class="info">
       <tr>

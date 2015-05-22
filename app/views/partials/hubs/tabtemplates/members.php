@@ -1,5 +1,5 @@
 <tabtemplate for="members">
-  <table class="member"><tr>
+  <table class="member" for="{id}"><tr>
     <td class="l">
       <pic style="background-image: url('{pic}');"></pic>
     </td>
