@@ -169,8 +169,6 @@
         <div class="tagline">Join the social hubs!</div>
         <div class="slogan">
           Meet other students working in the same city as you are!
-          <br />
-          Pre-registration ends on 5/8!
         </div>
         <?php
           if (vget('Loggedinstudent')) {
