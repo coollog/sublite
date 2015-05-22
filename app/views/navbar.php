@@ -92,7 +92,8 @@
     array("List Sublet", $path."register.php", "notloggedin !/employers"),
     array("List Job", $path."register.php", "notloggedin /employers"),
     array("Sign Up", $path."register.php", "notloggedin"),
-    array("Log In", $path."login.php", "notloggedin"),
+    array("Log In", $path."employers/login.php", "notloggedin /employers"),
+    array("Log In", $path."login.php", "notloggedin !/employers"),
     array("Log Out", $path."logout.php", "loggedin")
   );
 ?>
