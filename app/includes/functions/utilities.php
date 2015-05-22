@@ -105,7 +105,10 @@
       'yuanling.yuan@yale.edu',
       'shirley.guo@yale.edu',
       'tony.chen@yale.edu',
-      'alisa.melekhina@law.upenn.edu'
+      'alisa.melekhina@law.upenn.edu',
+      'alex.croxford@yale.edu',
+      'julie.slama@yale.edu',
+      'joel.deleon@yale.edu'
     );
     return isset($_SESSION['email']) and in_array($_SESSION['email'], $admins);
   }

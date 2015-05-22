@@ -45,6 +45,9 @@
     function hub() {
       $this->render('socialhub');
     }
+    function admin() {
+      $this->render('socialadmin');
+    }
 
     function checkIsSet($message, $fields, &$var) {
       foreach ($fields as $f) {
@@ -482,6 +485,47 @@
       echo $this->api() . "<br><br>";
       $entry = $MSocial->get('5556914f172f559e8ece6c89');
       echo var_dump($entry);
+    }
+
+    function adminapi() {
+      global $MStudent;
+
+      // make sure logged in
+      if (!checkAdmin()) {
+        return $this->errorString('permission denied');
+      }
+
+      $name = $_POST['name'];
+      $json = $_POST['json'];
+
+      switch ($name) {
+        case 'load students':
+          $students = $MStudent->find(array(
+            'hubs' => array('$exists' => true))
+          );
+
+          $ret = array();
+          $counter = 0;
+          foreach ($students as $student) {
+            if (!isset($student['hubs']['geocode']) or 
+                is_null($student['hubs']['geocode'])) {
+              $city = $student['hubs']['city'];
+              $geocode = geocode($city);
+              $student['hubs']['geocode'] = $geocode;
+              
+              if (!is_null($geocode)) $MStudent->save($student);
+            }
+
+            $ret[] = $student;
+          }
+
+          return $this->successString($ret);
+          
+        case '':
+
+      }
+
+      return $this->errorString('invalid message');
     }
   }
 

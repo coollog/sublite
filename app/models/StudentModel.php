@@ -13,6 +13,9 @@
       return $data['_id']->{'$id'};
     }
 
+    function find($query) {
+      return $this->collection->find($query);
+    }
     function get($email) {
       return $this->collection->findOne(array('email' => $email));
     }

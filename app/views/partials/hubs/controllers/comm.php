@@ -23,7 +23,9 @@
     emit: function (name, data, callback) {
       // Send message via post
 
-      data['hub'] = thishub;
+      if (typeof thishub != 'undefined') data.hub = thishub;
+      else data.empty = true;
+
       var json = {
         name: name,
         json: data
