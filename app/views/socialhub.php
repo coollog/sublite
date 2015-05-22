@@ -71,7 +71,11 @@
       position: absolute;
       display: block;
       bottom: 0;
+      text-shadow: 0px 0px 4px #000;
     }
+  #myhubpanel {
+    display: none;
+  }
   .tabs {
     background: #f3f3f2;
     font-size: 1.4em;

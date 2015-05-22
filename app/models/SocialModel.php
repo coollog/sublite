@@ -38,6 +38,9 @@
       if (!MongoId::isValid($id)) return null;
       return $this->collection->findOne(array('_id' => new MongoId($id)));
     }
+    function getAll() {
+      return $this->collection->find();
+    }
     function processPost($post) {
       global $MStudent;
       $student = $MStudent->getById($post['from']);
@@ -193,6 +196,13 @@
       $entry = $this->get($hub);
       $entry['members'][] = array('date' => time(), 'id' => $student);
       $this->save($entry, false);
+
+      // Gotta update myhub (current hub)
+      global $MStudent;
+      $s = $MStudent->getById($student);
+      $s['hubs']['myhub'] = $hub;
+      $MStudent->save($s);
+
       return $entry['members'];
     }
     function newPost($id, $hub, $content, $parentid, $event=null) {

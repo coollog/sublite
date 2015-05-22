@@ -136,6 +136,13 @@
           Members.load('hub');
         });
       });
+      $('.myhub').off('click').click(function () {
+        Comm.emit('default hub', {}, function (err, data) {
+          if (err) { alert(err); return; }
+
+          $('#myhubpanel').remove();
+        });
+      });
 
       // Posts
 

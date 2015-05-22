@@ -145,14 +145,27 @@
           $MSocial->joinHub($hub, $id);
           return $success;
 
+        case 'default hub':
+          global $MStudent;
+          $me = $MStudent->me();
+          $me['hubs']['myhub'] = $hub;
+          $MStudent->save($me);
+          
+          return $success;
+
         case 'load hub info':
+          global $MStudent;
+          $me = $MStudent->me();
+
           $entry = $MSocial->get($hub);
 
           $ret = array(
             'name' => $entry['name'],
             'location' => $entry['location'],
+            'banner' => $entry['banner'],
             'ismember' => $MSocial->isMember($hub, $id),
-            'myid' => $_SESSION['_id']->{'$id'}
+            'myid' => $_SESSION['_id']->{'$id'},
+            'myhub' => $me['hubs']['myhub'] == $hub
           );
           return $this->successString($ret);
 
@@ -506,7 +519,7 @@
     }
 
     function adminapi() {
-      global $MStudent;
+      global $MStudent, $MSocial;
 
       // make sure logged in
       if (!checkAdmin()) {
@@ -539,8 +552,36 @@
 
           return $this->successString($ret);
           
-        case '':
+        case 'create hub':
+          $name = $json['name'];
+          $location = geocode($json['location']);
+          $banner = $json['banner'];
 
+          if ($location == null)
+            return $this->errorString('location invalid');
+
+          $hub = array(
+            'name' => $name,
+            'location' => $location,
+            'banner' => $banner,
+            'members' => array(),
+            'posts' => array(),
+            'events' => array()
+          );
+
+          $MSocial->save($hub);
+
+          return $this->successString('hub created');
+
+        case 'load hubs':
+          $hubs = $MSocial->getAll();
+
+          $ret = array();
+          foreach ($hubs as $hub) {
+            $ret[] = $hub;
+          }
+
+          return $this->successString($ret);
       }
 
       return $this->errorString('invalid message');

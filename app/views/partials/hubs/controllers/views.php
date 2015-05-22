@@ -18,7 +18,10 @@
         $('view').html(newHTML);
 
         // Process json dynamics
-        if (json.ismember) $('#joinpanel').remove();
+        if (json.ismember) {
+          $('#joinpanel').remove();
+          if (!json.myhub) $('#myhubpanel').show();
+        }
         thishubname = json.name;
 
         if (json.isgoing) {

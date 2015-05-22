@@ -1,5 +1,5 @@
 <viewtemplate name="hub">
-  <panel class="banner">
+  <panel class="banner" style="background-image: url('{banner}');">
     <content>
       <name>{name}</name>
     </content>
@@ -8,6 +8,11 @@
   <panel id="joinpanel">
     <content>
       <button class="joinhub">Join Hub</button>
+    </content>
+  </panel>
+  <panel id="myhubpanel">
+    <content>
+      <button class="myhub">Set as Default Hub</button>
     </content>
   </panel>
 

@@ -9,13 +9,65 @@
     width: 100%;
     height: 300px;
   }
+  .error, .success {
+    display: none;
+  }
 </style>
 
 <panel class="studentmap">
   <div class="content">
-    <panel class="citymap">
-      <div id="map-canvas"></div>
-    </panel>
+    <div id="map-canvas"></div>
+  </div>
+</panel>
+<panel class="hubs">
+  <div class="content">
+    <headline>Existing Hubs</headline>
+    <div class="thehubs"></div>
+  </div>
+</panel>
+<panel class="addhub">
+  <div class="content">
+    <form>
+      <headline>Create a Hub</headline>
+
+      <div class="error"></div>
+      <div class="success"></div>
+
+      Name of Hub:
+      <input type="text" name="name" />
+      Location of Hub:
+      <input type="text" name="location" />
+      Upload a banner:
+      <?php
+        vpartial('s3single', array(
+          's3name' => 'banner', 
+          's3title' => 'What would you like your banner image to be?*'
+        ));
+      ?>
+
+      <div class="error"></div>
+      <div class="success"></div>
+
+      <input type="submit" value="Create Hub" />
+    </form>
+    <script>
+      $('.addhub form').submit(function() {
+        var json = formJSON(this),
+            form = this;
+
+        Comm.emit('create hub', json, function (err, data) {
+          if (err) { $(form).children('.error').show().html(err); return; }
+
+          $(form).children('.error').hide();
+          $(form).children('.success').show().html(data);
+
+          form.reset();
+          $(form).find('.img').html('');
+        });
+
+        return false;
+      });
+    </script>
   </div>
 </panel>
 
@@ -117,5 +169,19 @@
     });
 
     initialize(locations);
+  });
+
+  Comm.emit('load hubs', {}, function (err, data) {
+    if (err) { alert(err); return; }
+
+    $('.thehubs').html('');
+    data.forEach(function (hub) {
+      $('.thehubs').append(
+        '<a href="hub.php?id='+hub._id.$id+'">' +
+          '<input type="button" value="'+hub.name+' ('+hub.members.length+')" />' +
+        '</a><br />'
+      );
+    });
+
   });
 </script>
