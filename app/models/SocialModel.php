@@ -302,7 +302,7 @@
       $event['id'] = $event['id']->{'$id'};
       return $event;
     }
-    function createEvent($id, $hub, $title, $start, $end, $location, $address, $geocode, $description) {
+    function createEvent($id, $hub, $title, $start, $end, $location, $address, $geocode, $description, $banner) {
       $entry = $this->get($hub);
       $ret = array(
         'id' => new MongoId(),
@@ -317,7 +317,8 @@
           array('id'=>$id, 'date'=>time())
         ),
         'comments' => array(),
-        'description' => $description
+        'description' => $description,
+        'banner' => $banner
       );
       $entry['events'][] = $ret;
       $this->save($entry, false);

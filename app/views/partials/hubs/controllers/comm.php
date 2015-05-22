@@ -93,7 +93,7 @@
             if (err) { alert(err); return; }
 
             Views.render('meetup', {
-              banner: '<?php echo $GLOBALS['dirpre']; ?>../app/assets/gfx/why3.jpg',
+              banner: data.banner,
               name: data.title,
               hub: thishubname,
               datetime: data.starttime + ' - ' + data.endtime,
@@ -219,9 +219,10 @@
           endtime: json.enddate + ' ' + json.endtime,
           locationname: json.locationname,
           address: json.address,
-          description: json.description
+          description: json.description,
+          banner: json.banner
         }, function (err, data) {
-          if (err) { $(form).children('notice').html(err); return; }
+          if (err) { $(form).children('.error').show().html(err); return; }
 
           Meetups.add({
             id: data.id,
@@ -233,6 +234,8 @@
             going: data.going.length,
             comments: data.comments.length
           });
+
+          formReset(form);
 
           afterRender();
 

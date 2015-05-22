@@ -12,6 +12,12 @@
   function formJSON(f) {
     return $(f).serializeObject();
   }
+  function formReset(form) {
+    $(form).children('.error, .success').hide();
+
+    form.reset();
+    $(form).find('.img').html('');
+  }
   $.fn.serializeObject = function() {
     var o = {};
     var a = this.serializeArray();

@@ -295,8 +295,9 @@
               'endtime',
               'locationname',
               'address',
-              'description')
-            , $reterr)) {
+              'description',
+              'banner'
+            ), $reterr)) {
             return $reterr;
           }
           if (strlen($message['eventtitle']) > 200) {
@@ -326,7 +327,8 @@
             $message['locationname'],
             $message['address'],
             $geocode,
-            $message['description']
+            $message['description'],
+            $message['banner']
           ));
 
         case 'delete event':

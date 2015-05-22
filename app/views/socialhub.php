@@ -24,6 +24,9 @@
   .nopadding {
     padding: 0;
   }
+  .error {
+    display: none;
+  }
   button {
     padding: 0 40px;
     color: #fff;
@@ -64,6 +67,7 @@
     padding: 40px;
     background: #ffe no-repeat center center;
     background-size: cover;
+    background-attachment: fixed;
   }
     .banner name {
       font-size: 2em;

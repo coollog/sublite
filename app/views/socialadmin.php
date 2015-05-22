@@ -59,11 +59,8 @@
         Comm.emit('create hub', json, function (err, data) {
           if (err) { $(form).children('.error').show().html(err); return; }
 
-          $(form).children('.error').hide();
+          formReset(form);
           $(form).children('.success').show().html(data);
-
-          form.reset();
-          $(form).find('.img').html('');
         });
 
         return false;

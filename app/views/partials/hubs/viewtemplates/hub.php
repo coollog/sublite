@@ -59,7 +59,7 @@
     <content>
       <headline>Create a Meet-Up</headline>
       <form>
-        <notice></notice>
+        <div class="error"></div>
         Title:
         <input type="text" name="title" />
         Start Date:
@@ -76,7 +76,14 @@
         <input type="text" name="address" />
         Description:
         <textarea name="description"></textarea>
-        <notice></notice>
+        Upload a banner:
+        <?php
+          vpartial('s3single', array(
+            's3name' => 'banner', 
+            's3title' => 'What would you like your banner image to be?*'
+          ));
+        ?>
+        <div class="error"></div>
         <right><button>Create</button></right>
       </form>
     </content>
