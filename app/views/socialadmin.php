@@ -16,6 +16,7 @@
 
 <panel class="studentmap">
   <div class="content">
+    <headline>Where are people at this summer?</headline>
     <div id="map-canvas"></div>
   </div>
 </panel>
