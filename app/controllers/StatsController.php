@@ -119,7 +119,8 @@
       foreach ($sublets as $s) {
         $id = $s['_id'];
         $student = $MStudent->getById($s['student']);
-        $name = $student['name'];
+        if (isset($student['name'])) $name = $student['name'];
+        else $name = 'noname';
         $email = $student['email'];
         $ss[] = "\"$email\",\"$name\",\"$id\"";
       }
