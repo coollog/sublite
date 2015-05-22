@@ -294,6 +294,9 @@
   meetupview .tabframe[name=description] {
     text-align: left;
   }
+  meetupview #leavemeetupdiv {
+    display: none;
+  }
 
   viewframe {
     width: 100%;
@@ -340,7 +343,8 @@
   // Actual code to set everything up for the first time
 
   // Config
-  var thishub = '55599b57e4b0f7f6aba42317',
+  var myid = null,
+      thishub = '55599b57e4b0f7f6aba42317',
       thishubname = '';
 
   Views.setup();

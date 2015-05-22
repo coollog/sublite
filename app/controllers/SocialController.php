@@ -130,7 +130,8 @@
           $ret = array(
             'name' => $entry['name'],
             'location' => $entry['location'],
-            'ismember' => $MSocial->isMember($hub, $id)
+            'ismember' => $MSocial->isMember($hub, $id),
+            'myid' => $_SESSION['_id']->{'$id'}
           );
           return $this->successString($ret);
 
@@ -240,7 +241,7 @@
           $event['iscreator'] = ($event['creator'] == $_SESSION['_id']);
 
           // Check if is going
-          $event['isgoing'] = (in_array($_SESSION['_id'], $event['going']));
+          $event['isgoing'] = $MSocial->isGoing($hub, $event['id'], $_SESSION['_id']);
 
           unset($event['going']);
           unset($event['comments']);

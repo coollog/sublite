@@ -48,6 +48,8 @@
           this.emit('load hub info', { hub: id }, function(err, data) {
             if (err) { alert(err); return; }
 
+            myid = data.myid;
+
             Views.render('hub', data, false, function () {
               // Load posts
               Comm.emit('load posts tab', {}, function (err, data) {
@@ -77,21 +79,7 @@
                 console.log('events: ', data);
               });
               // Load members
-              Comm.emit('load members tab', {}, function (err, data) {
-                if (err) { alert(err); return; }
-
-                data.forEach(function (student) {
-                  Members.add({
-                    name: student.name,
-                    pic: student.pic,
-                    school: student.school,
-                    joined: student.joined
-                  });
-                });
-
-                afterRender();
-                console.log('members: ', data);
-              });
+              Members.load('hub');
             });
 
             callback();
@@ -125,21 +113,7 @@
                 console.log('comments: ', data);
               });
               // Load going
-              Comm.emit('list going', { event: id }, function (err, data) {
-                if (err) { alert(err); return; }
-
-                data.forEach(function (student) {
-                  Members.add({
-                    name: student.name,
-                    pic: student.pic,
-                    school: student.school,
-                    joined: student.joined
-                  });
-                });
-
-                afterRender();
-                console.log('going: ', data);
-              });
+              Members.load('meetup', id);
 
               callback();
             });
@@ -157,6 +131,7 @@
           if (err) { alert(err); return; }
 
           $('#joinpanel').remove();
+          Members.load('hub');
         });
       });
 
@@ -256,6 +231,33 @@
         });
 
         return false;
+      });
+
+      // RSVP
+      $('#notgoing').off('click').click(function () {
+        $('.goingornot').hide();
+      });
+      $('#going').off('click').click(function () {
+        var eventid = $('meetupview').attr('for');
+
+        Comm.emit('rsvp event', { event: eventid }, function (err, data) {
+          if (err) { alert(err); return; }
+
+          $('.goingornot').hide();
+          $('#leavemeetupdiv').show();
+          Members.load('meetup', eventid);
+        });
+      });
+      $('#leavemeetup').off('click').click(function () {
+        var eventid = $('meetupview').attr('for');
+
+        Comm.emit('leave event', { event: eventid }, function (err, data) {
+          if (err) { alert(err); return; }
+
+          $('#leavemeetupdiv').hide();
+          $('.goingornot').show();
+          Members.load('meetup', eventid);
+        });
       });
 
       // Meetup view switching

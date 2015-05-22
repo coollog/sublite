@@ -19,15 +19,11 @@
 
       $membersinfo = array();
       foreach ($members as $member) {
-        if (MongoId::isValid($member)) {
-          $id = $member;
-          $joined = $title;
-        } else {
-          $id = $member['id'];
-          $joined = "$title, ".timeAgo($member['time']);
-        }
+        $id = $member['id'];
+        $joined = "$title, ".timeAgo($member['date']);
         $student = $MStudent->getById($id);
         $membersinfo[] = array(
+          'id' => $id->{'$id'},
           'name' => $student['name'],
           'pic' => $student['photo'],
           'school' => $S->nameOf($student['email']),
@@ -175,9 +171,10 @@
     function isGoing($hub, $event, $student) {
       $entry = $this->get($hub);
       $index = $this->getEventIndex($hub, $event);
-      if(is_array($entry['events'][$index]['going']) && count($entry['events'][$index]['going']) > 0) {
-        foreach ($entry['events'][$index]['going'] as $key => & $sub_array) {
-          if($sub_array['id'] == $student) return true;
+      $going = &$entry['events'][$index]['going'];
+      if(is_array($going) && count($going) > 0) {
+        foreach ($going as $key=>&$sub_array) {
+          if ($sub_array['id'] == $student) return true;
         }
       }
       return false;
@@ -193,7 +190,7 @@
     // Modifiers
     function joinHub($hub, $student) {
       $entry = $this->get($hub);
-      $entry['members'][] = array('time' => time(), 'id' => $student);
+      $entry['members'][] = array('date' => time(), 'id' => $student);
       $this->save($entry, false);
       return $entry['members'];
     }
@@ -256,7 +253,7 @@
           }
         }
       }
-      $post['likes'][] = array('time' => time(), 'id' => $id);
+      $post['likes'][] = array('date' => time(), 'id' => $id);
 
       $this->save($entry, false);
       return "liked";
@@ -305,7 +302,9 @@
         'location' => $location,
         'address' => $address,
         'geocode' => $geocode,
-        'going' => array($id),
+        'going' => array(
+          array('id'=>$id, 'date'=>time())
+        ),
         'comments' => array(),
         'description' => $description
       );
@@ -332,9 +331,10 @@
     function leaveEvent($id, $hub, $event) {
       $entry = $this->get($hub);
       $index = $this->getEventIndex($hub, $event);
-      foreach ($entry['events'][$index]['going'] as $key => $value) {
-        if ($value['id'] == $id) {
-          unset($entry['events'][$index]['going'][$key]);
+      $going = &$entry['events'][$index]['going'];
+      foreach ($going as $key=>&$sub_array) {
+        if ($sub_array['id'] == $id) {
+          unset($going[$key]);
           $this->save($entry, false);
           return "event $id left";
         }

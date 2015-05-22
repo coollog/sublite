@@ -21,7 +21,10 @@
         if (json.ismember) $('#joinpanel').remove();
         thishubname = json.name;
 
-        if (json.isgoing) $('.goingornot').remove();
+        if (json.isgoing) {
+          $('.goingornot').hide();
+          $('#leavemeetupdiv').show();
+        }
 
         if (!json.iscreator) $('tab[for=edit]').remove();
 

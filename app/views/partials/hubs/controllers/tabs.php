@@ -89,6 +89,49 @@
     updateCount: function () {
       var n = $('.member').length;
       $('membercount').html(n);
+    },
+    load: function (type, id) {
+      switch (type) {
+        case 'hub':
+          Comm.emit('load members tab', {}, function (err, data) {
+            if (err) { alert(err); return; }
+
+            Members.clear();
+            data.forEach(function (student) {
+              Members.add({
+                id: student.id,
+                name: student.name,
+                pic: student.pic,
+                school: student.school,
+                joined: student.joined
+              });
+            });
+
+            afterRender();
+            console.log('members: ', data);
+          });
+          break;
+
+        case 'meetup':
+          Comm.emit('list going', { event: id }, function (err, data) {
+            if (err) { alert(err); return; }
+
+            Members.clear();
+            data.forEach(function (student) {
+              Members.add({
+                id: student.id,
+                name: student.name,
+                pic: student.pic,
+                school: student.school,
+                joined: student.joined
+              });
+            });
+
+            afterRender();
+            console.log('going: ', data);
+          });
+          break;
+      }
     }
   }
 </script>
