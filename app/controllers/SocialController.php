@@ -150,12 +150,13 @@
           $me = $MStudent->me();
           $me['hubs']['myhub'] = $hub;
           $MStudent->save($me);
-          
+
           return $success;
 
         case 'load hub info':
           global $MStudent;
           $me = $MStudent->me();
+          $myhub = Isset($me['hubs']['myhub']) ? $me['hubs']['myhub'] : null;
 
           $entry = $MSocial->get($hub);
 
@@ -165,7 +166,7 @@
             'banner' => $entry['banner'],
             'ismember' => $MSocial->isMember($hub, $id),
             'myid' => $_SESSION['_id']->{'$id'},
-            'myhub' => $me['hubs']['myhub'] == $hub
+            'myhub' => $myhub == $hub
           );
           return $this->successString($ret);
 
