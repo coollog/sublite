@@ -310,6 +310,46 @@
 
       $this->render('messagestats', array('mlist' => $mlist));
     }
+    function getMessageParticipants() {
+      global $MMessage, $CMessage;
+      $msgs = $MMessage->getAll();
+
+      $plist = array();
+
+      foreach ($msgs as $m) {
+        $replies = $m['replies'];
+        if (count($replies) == 0) continue;
+
+        $participants = $m['participants'];
+        foreach ($participants as $p) {
+          $name = $CMessage->getName($p);
+          $email = $CMessage->getEmail($p);
+          $type = $CMessage->getType($p);
+
+          if (isset($plist[$email])) {
+            $plist[$email]['count'] ++;
+          } else {
+            $plist[$email] = array(
+              'name' => $name,
+              'count' => 1,
+              'type' => $type
+            );
+          }
+        }
+      }
+
+      $n = count($plist);
+      echo "<br />Message Participants ($n): <br />
+        <textarea style=\"width:800px; height: 200px;\">";
+      foreach ($plist as $email => $data) {
+        $type = $data['type'];
+        $name = $data['name'];
+        $count = $data['count'];
+
+        echo "$email ($type) - $name - sent $count\n";
+      }
+      echo '</textarea>';
+    }
   }
 
   $CStats = new StatsController();
