@@ -32,9 +32,9 @@
 
   <panel class="tabframe" name="forum">
     <content>
-      <subtabs>
+      <!-- <subtabs>
         <subtab type="recent" class="focus">Most Recent</subtab> | <subtab type="popular">Most Popular</subtab>
-      </subtabs>
+      </subtabs> -->
       <div class="postsframe" type="recent"><div class="posts"></div></div>
       <div class="postsframe" type="popular"><div class="posts"></div></div>
       <div class="thread" for="">
