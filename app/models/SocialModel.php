@@ -118,7 +118,7 @@
       $thishub = $this->get($hub);
       for ($i = 0; $i < count($thishub['events']); $i ++)
         $thishub['events'][$i]['id'] = $thishub['events'][$i]['id']->{'$id'};
-      return $thishub['events'];
+      return array_reverse($thishub['events']);
     }
     function getEventIndex($hub, $event) {
       $entry = $this->get($hub);

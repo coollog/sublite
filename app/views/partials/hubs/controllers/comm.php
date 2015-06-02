@@ -209,6 +209,12 @@
 
       $('.tabframe[name=createmeetup] form').off('submit').submit(function() {
         var json = formJSON(this);
+
+        // make sure uploaded banner
+        if ($('input[name=banner]').html().length == 0) {
+          if (!confirm('You have not uploaded a banner. Create event without banner?')) return false;
+        }
+
         console.log('creating event: ', json);
 
         var form = this;
