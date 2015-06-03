@@ -21,16 +21,15 @@
     text-transform: uppercase;
   }
 </style>
+<div class="container">
+  <?php vnotice(); ?>
+  <form method="post" enctype="multipart/form-data">
+    Image (< 10MB): <input type="file" name="upload" />
+    <input type="submit" value="Upload" /><br />
+    <small>(.JPG/.JPEG, .PNG, .GIF only)</small>
+  </form>
+</div>
 <script>
-  $(function() {
-    function resize() {
-      window.parent.$('iframe.S3')
-        .width($('.container').width())
-        .height($('.container').height());
-    }
-    $('.container').resize(resize);
-    resize();
-  });
   function up(url) {
     console.log(url);
     <?php 
@@ -42,12 +41,13 @@
     ?>
   }
   <?php vecho('reply'); ?>
+  
+  function resize() {
+    window.parent.$('iframe.S3')
+      .width($('.container').width())
+      .height($('.container').height());
+  }
+  $('.container').resize(resize);
+  resize();
+  setTimeout(function() { resize(); }, 1000);
 </script>
-<div class="container">
-  <?php vnotice(); ?>
-  <form method="post" enctype="multipart/form-data">
-    Image (< 10MB): <input type="file" name="upload" />
-    <input type="submit" value="Upload" /><br />
-    <small>(.JPG/.JPEG, .PNG, .GIF only)</small>
-  </form>
-</div>

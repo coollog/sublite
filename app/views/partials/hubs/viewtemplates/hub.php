@@ -79,7 +79,7 @@
         Upload a banner:
         <?php
           vpartial('s3single', array(
-            's3name' => 'banner', 
+            's3name' => 'banner',
             's3title' => 'What would you like your banner image to be?*'
           ));
         ?>

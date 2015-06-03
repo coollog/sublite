@@ -97,13 +97,17 @@
               name: data.title,
               hub: thishubname,
               datetime: data.starttime + ' - ' + data.endtime,
+              starttime: data.starttime,
+              endtime: data.endtime,
               place: data.location + '<br />' + data.address,
+              locationname: data.location,
+              address: data.address,
               host: data.hostname,
               hostpic: data.hostphoto,
               description: data.description,
               id: id,
               iscreator: data.iscreator,
-              isgoing: data.isgoing
+              isgoing: data.isgoing,
             }, false, function () {
               // Load comments
               Comm.emit('load event comments', { event: id }, function (err, data) {
@@ -211,7 +215,7 @@
         var json = formJSON(this);
 
         // make sure uploaded banner
-        if ($('input[name=banner]').html().length == 0) {
+        if ($(this).children('input[name=banner]').val().length == 0) {
           if (!confirm('You have not uploaded a banner. Create event without banner?')) return false;
         }
 
@@ -246,6 +250,36 @@
           afterRender();
 
           $('tab[for=meetups]').click();
+        });
+
+        return false;
+      });
+
+      $('.tabframe[name=editmeetup] form').off('submit').submit(function() {
+        var json = formJSON(this);
+
+        // make sure uploaded banner
+        if ($(this).children('input[name=banner]').val().length == 0) {
+          if (!confirm('You have not uploaded a banner. Create event without banner?')) return false;
+        }
+
+        console.log('editing event: ', json);
+
+        var form = this;
+
+        Comm.emit('edit event', {
+          eventid: json.id,
+          eventtitle: json.title,
+          starttime: json.starttime,
+          endtime: json.endtime,
+          locationname: json.locationname,
+          address: json.address,
+          description: json.description,
+          banner: json.banner
+        }, function (err, data) {
+          if (err) { $(form).children('.error').show().html(err); return; }
+
+          Comm.retrieve('meetup', json.id, function () {});
         });
 
         return false;
