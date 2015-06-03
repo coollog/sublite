@@ -585,6 +585,20 @@
           }
 
           return $this->successString($ret);
+
+        /**
+         * JSON in form:
+         *  {
+         *      "students" : [ array of student IDs ]
+         *      "hub" : // String containing the ID of the hub e.g. "55566d01172f559e8ece6c88"
+         *  }
+         */
+        case 'add students to hub':
+        $students = $json['students'];
+        $hub = $json['hub'];
+          foreach ($students as $student) {
+            $MSocial->joinHub($hub, $student);
+          }
       }
 
       return $this->errorString('invalid message');

@@ -68,7 +68,35 @@
     </script>
   </div>
 </panel>
-
+<panel class="addstudent">
+  <div class="content">
+    <headline>Select students to add to hubs!</headline>
+    <form>
+      <?php 
+        global $MStudent, $MSocial;
+        $students = $MStudent->find(array(
+          'hubs' => array('$exists' => true))
+        );
+        foreach($students as $student) {
+          echo '<input type="checkbox" name="student" value="' . $student['_id']
+              . '">' . $student['name'] . ' at <b>' . $student['hubs']['city'] .
+              '</b>. Current hubs: ' .
+              implode(', ', $MSocial->getHubs($student['_id'])) . '<br>';
+        }
+      ?>
+      <br><b>Add these students to hub:</b><br>
+      <?php
+        global $MSocial;
+        $hubs = $MSocial->getAll();
+        foreach ($hubs as $hub) {
+          echo '<input type="radio" name"hub" value"' . $hub['_id'] . '">' .
+          $hub['name'] . "<br>";
+        }
+      ?>
+      <input type="submit" value="Add to Hub" />
+    </form>
+  </div>
+</panel>
 <script src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyDORLARDVNHaHBSLZ0UG-1EGABk-IH2uq0&sensor=false"></script>
 <script>
   function initialize(locations) {
