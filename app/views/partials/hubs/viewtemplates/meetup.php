@@ -45,7 +45,7 @@
           Description
         </tab><tab for="forum">
           Comments
-        </tab><tab for="edit">
+        </tab><tab for="editmeetup">
           Edit<!-- maybe have this be icon? -->
         </tab>
       </content>
@@ -66,9 +66,9 @@
     </panel>
     <panel class="tabframe" name="forum">
       <content>
-        <subtabs>
+        <!-- <subtabs>
           <subtab type="recent" class="focus">Most Recent</subtab> | <subtab type="popular">Most Popular</subtab>
-        </subtabs>
+        </subtabs> -->
         <div class="postsframe" type="recent"><div class="posts"></div></div>
         <div class="postsframe" type="popular"><div class="posts"></div></div>
         <div class="thread" for="">
@@ -82,9 +82,37 @@
         </div>
       </content>
     </panel>
-    <panel class="tabframe" name="edit">
+    <panel class="tabframe" name="editmeetup">
       <content>
-        <button id="deletemeetup">Delete Meet-Up</button>
+        <headline>Edit Meet-Up</headline>
+        <form>
+          <div class="error"></div>
+          <input type="hidden" name="id" value="{id}" />
+          Title:
+          <input type="text" name="title" value="{name}" />
+          Start:
+          <input type="text" name="starttime" value="{starttime}" />
+          End:
+          <input type="text" name="endtime" value="{endtime}" />
+          Location Name:
+          <input type="text" name="locationname" value="{locationname}" />
+          Location Address:
+          <input type="text" name="address" value="{address}" />
+          Description:
+          <textarea name="description">{description}</textarea>
+          Upload a banner:
+          <?php
+            vpartial('s3single', array(
+              's3name' => 'banner',
+              's3title' => 'What would you like your banner image to be?*',
+              's3link' => '{banner}'
+            ));
+          ?>
+          <div class="error"></div>
+          <right><button>Edit</button></right>
+          <br />
+          <right><button id="deletemeetup">Delete Meet-Up</button></right>
+        </form>
       </content>
     </panel>
   </viewtemplate>

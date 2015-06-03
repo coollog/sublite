@@ -283,7 +283,7 @@
 
           return $this->successString($event);
 
-        case 'create event':
+        case 'create event': case 'edit event':
           if (!$MSocial->isMember($hub, $id))
             return $this->errorString('not member of hub');
 
@@ -318,18 +318,36 @@
           // }
 
           $geocode = geocode($message['address']);
-          return $this->successString($MSocial->createEvent(
-            $id,
-            $hub,
-            $message['eventtitle'],
-            $message['starttime'],
-            $message['endtime'],
-            $message['locationname'],
-            $message['address'],
-            $geocode,
-            $message['description'],
-            $message['banner']
-          ));
+
+          if ($name == 'create event') {
+            return $this->successString($MSocial->createEvent(
+              $id,
+              $hub,
+              $message['eventtitle'],
+              $message['starttime'],
+              $message['endtime'],
+              $message['locationname'],
+              $message['address'],
+              $geocode,
+              $message['description'],
+              $message['banner']
+            ));
+          }
+          else if ($name == 'edit event') {
+            return $this->successString($MSocial->editEvent(
+              $id,
+              $hub,
+              $message['eventid'],
+              $message['eventtitle'],
+              $message['starttime'],
+              $message['endtime'],
+              $message['locationname'],
+              $message['address'],
+              $geocode,
+              $message['description'],
+              $message['banner']
+            ));
+          }
 
         case 'delete event':
           // Validations
