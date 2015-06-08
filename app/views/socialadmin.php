@@ -77,6 +77,12 @@
         $students = $MStudent->find(array(
           'hubs' => array( '$exists' => true )
         ));
+
+        function sortStudents($a, $b) {
+          return strcasecmp($a['hubs']['city'], $b['hubs']['city']);
+        }
+        usort($arr, "sortStudents");
+
         foreach($students as $student) {
           echo '<input type="checkbox" name="students" value="' . $student['_id']
               . '">' . $student['name'] . ' at <b>' . $student['hubs']['city'] .
