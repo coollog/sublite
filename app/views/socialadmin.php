@@ -75,10 +75,10 @@
       <?php 
         global $MStudent, $MSocial;
         $students = $MStudent->find(array(
-          'hubs' => array('$exists' => true))
-        );
+          'hubs' => array( '$exists' => true )
+        ));
         foreach($students as $student) {
-          echo '<input type="checkbox" name="student" value="' . $student['_id']
+          echo '<input type="checkbox" name="students" value="' . $student['_id']
               . '">' . $student['name'] . ' at <b>' . $student['hubs']['city'] .
               '</b>. Current hubs: ' .
               implode(', ', $MSocial->getHubs($student['_id'])) . '<br>';
@@ -89,7 +89,7 @@
         global $MSocial;
         $hubs = $MSocial->getAll();
         foreach ($hubs as $hub) {
-          echo '<input type="radio" name"hub" value"' . $hub['_id'] . '">' .
+          echo '<input type="radio" name="hub" value="' . $hub['_id'] . '">' .
           $hub['name'] . "<br>";
         }
       ?>
@@ -97,6 +97,24 @@
     </form>
   </div>
 </panel>
+<script>
+  $('.addstudent form').submit(function() {
+    var json = formJSON(this);console.log(json);
+
+    var emitdata = {
+      students: json.students,
+      hub: json.hub
+    };
+    Comm.emit('add students to hub', emitdata, function (err, data) {
+      if (err) { alert(err); return; }
+
+      alert('added students!');
+      // location.reload();
+    });
+
+    return false;
+  });
+</script>
 <script src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyDORLARDVNHaHBSLZ0UG-1EGABk-IH2uq0&sensor=false"></script>
 <script>
   function initialize(locations) {

@@ -26,12 +26,18 @@
     setup: function () {
       Tabs.setup(this, 'post');
     },
-    add: function (type, json, parentid) {
+    add: function (type, json, parentid, incParentReplies) {
+      // incParentReplies if true increments the replies count of the parent
       var newHTML = Tabs.newHTML(this, json);
       if (typeof parentid == 'undefined' || parentid == '')
         $('.postsframe[type='+type+'] .posts').append(newHTML);
-      else
+      else {
         $('.postsframe[type='+type+'] .thread[for='+parentid+']').children('.replies').append(newHTML);
+        if (incParentReplies) {
+          var replies = $('.postsframe[type='+type+'] .post[index='+parentid+'] replies');
+          replies.html(parseInt(replies.html()) + 1);
+        }
+      }
 
       // Highlight if liked
       if (json.liked)

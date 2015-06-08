@@ -297,7 +297,7 @@
         $confirm = $_REQUEST['id'];
         $email = $_REQUEST['email'];
 
-        $this->validate(($entry = $MStudent->get($email)) != NULL, 
+        $this->validate(($entry = $MStudent->get($email)) != null, 
           $err, 'permission denied');
         $this->validate(isset($entry['confirm']) and $entry['confirm'] == $confirm and !isset($entry['pass']),
           $err, 'invalid confirmation code. your code may have expired. return to the registration page to re-enter your email for a new confirmation link.');

@@ -118,7 +118,7 @@
       $thishub = $this->get($hub);
       for ($i = 0; $i < count($thishub['events']); $i ++)
         $thishub['events'][$i]['id'] = $thishub['events'][$i]['id']->{'$id'};
-      return $thishub['events'];
+      return array_reverse($thishub['events']);
     }
     function getEventIndex($hub, $event) {
       $entry = $this->get($hub);
@@ -188,7 +188,7 @@
       $hubs = $MSocial->getAll();
       $ret = array();
       foreach ($hubs as $hub) {
-        if(in_array($student, $hub['members'])) {
+        if (in_array($student, $hub['members'])) {
           $ret[] = $hub['name'];
         }
       }
@@ -332,6 +332,31 @@
         'banner' => $banner
       );
       $entry['events'][] = $ret;
+      $this->save($entry, false);
+      return $this->processEvent($ret);
+    }
+    function editEvent($id, $hub, $eventid, $title, $start, $end, $location, $address, $geocode, $description, $banner) {
+      $entry = $this->get($hub);
+      $index = $this->getEventIndex($hub, $eventid);
+      $ret = array_merge(
+        $entry['events'][$index],
+        array(
+          'creator' => $id,
+          'title' => $title,
+          'starttime' => $start,
+          'endtime' => $end,
+          'location' => $location,
+          'address' => $address,
+          'geocode' => $geocode,
+          'going' => array(
+            array('id'=>$id, 'date'=>time())
+          ),
+          'comments' => array(),
+          'description' => $description,
+          'banner' => $banner
+        )
+      );
+      $entry['events'][$index] = $ret;
       $this->save($entry, false);
       return $this->processEvent($ret);
     }
