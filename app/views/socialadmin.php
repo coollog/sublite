@@ -74,14 +74,14 @@
     <form>
       <?php 
         global $MStudent, $MSocial;
-        $students = $MStudent->find(array(
+        $students = iterator_to_array($MStudent->find(array(
           'hubs' => array('$exists' => true)
-        ));
+        )));
 
         function sortStudents($a, $b) {
           return strcasecmp($a['hubs']['city'], $b['hubs']['city']);
         }
-        usort(iterator_to_array($students), "sortStudents");
+        usort($students, "sortStudents");
 
         foreach($students as $student) {
           echo '<input type="checkbox" name="students" value="' . $student['_id']
