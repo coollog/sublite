@@ -188,7 +188,7 @@
       $hubs = $MSocial->getAll();
       $ret = array();
       foreach ($hubs as $hub) {
-        if(in_array($student, $hub['members'])) {
+        if (in_array($student, $hub['members'])) {
           $ret[] = $hub['name'];
         }
       }

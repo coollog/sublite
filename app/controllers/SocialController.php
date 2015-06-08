@@ -568,7 +568,7 @@
               if (!is_null($geocode)) $MStudent->save($student);
             }
 
-            $ret[] = $student;
+            if (!is_null($geocode)) $ret[] = $student;
           }
 
           return $this->successString($ret);
