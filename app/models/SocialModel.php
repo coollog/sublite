@@ -183,6 +183,17 @@
       }
       return false;
     }
+    function getHubs($student) {
+      global $MSocial;
+      $hubs = $MSocial->getAll();
+      $ret = array();
+      foreach ($hubs as $hub) {
+        if(in_array($student, $hub['members'])) {
+          $ret[] = $hub['name'];
+        }
+      }
+      return $ret; 
+    }
     function isMember($hub, $student) {
       $entry = $this->get($hub);
       foreach ($entry['members'] as $key => & $sub_array) {
