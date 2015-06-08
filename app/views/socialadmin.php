@@ -74,7 +74,7 @@
     <form>
       <?php 
         global $MStudent, $MSocial;
-        $s = $MStudent->find(array(
+        $students = $MStudent->find(array(
           'hubs' => array('$exists' => true)
         ));
 
