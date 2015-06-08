@@ -81,7 +81,7 @@
         function sortStudents($a, $b) {
           return strcasecmp($a['hubs']['city'], $b['hubs']['city']);
         }
-        usort($arr, "sortStudents");
+        usort($students, "sortStudents");
 
         foreach($students as $student) {
           echo '<input type="checkbox" name="students" value="' . $student['_id']
