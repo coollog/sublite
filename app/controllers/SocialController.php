@@ -559,6 +559,8 @@
           $ret = array();
           $counter = 0;
           foreach ($students as $student) {
+            $inc = true;
+
             if (!isset($student['hubs']['geocode']) or 
                 is_null($student['hubs']['geocode'])) {
               $city = $student['hubs']['city'];
@@ -566,9 +568,10 @@
               $student['hubs']['geocode'] = $geocode;
               
               if (!is_null($geocode)) $MStudent->save($student);
+              else $inc = false;
             }
 
-            if (!is_null($geocode)) $ret[] = $student;
+            if ($inc) $ret[] = $student;
           }
 
           return $this->successString($ret);
@@ -612,11 +615,12 @@
          *  }
          */
         case 'add students to hub':
-        $students = $json['students'];
-        $hub = $json['hub'];
+          $students = $json['students'];
+          $hub = $json['hub'];
           foreach ($students as $student) {
-            $MSocial->joinHub($hub, $student);
+            // $MSocial->joinHub($hub, $student);
           }
+          return $this->successString();
       }
 
       return $this->errorString('invalid message');
