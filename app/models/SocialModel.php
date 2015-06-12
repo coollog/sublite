@@ -184,15 +184,25 @@
       return false;
     }
     function getHubs($student) {
-      global $MSocial;
-      $hubs = $MSocial->getAll();
-      $ret = array();
+      // global $MSocial;
+      // $hubs = $MSocial->getAll();
+      // $ret = array();
+      // foreach ($hubs as $hub) {
+      //   if (in_array($student, $hub['members'])) {
+      //     $ret[] = $hub['name'];
+      //   }
+      // }
+      // return $ret; 
+      global $MStudent;
+      $s = $MStudent->getById($student);
+      if (!isset($s['hubs']['myhub'])) return array();
+      $hub = $s['hubs']['myhub'];
       foreach ($hubs as $hub) {
-        if (in_array($student, $hub['members'])) {
-          $ret[] = $hub['name'];
+        if ($hub['_id'] == $hub) {
+          return array($hub['name']);
         }
       }
-      return $ret; 
+      return array();
     }
     function isMember($hub, $student) {
       $entry = $this->get($hub);
