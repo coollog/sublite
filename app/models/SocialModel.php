@@ -23,7 +23,7 @@
         $joined = "$title, ".timeAgo($member['date']);
         $student = $MStudent->getById($id);
         $membersinfo[] = array(
-          'id' => $id->{'$id'},
+          'id' => $id,
           'name' => $student['name'],
           'pic' => $student['photo'],
           'school' => $S->nameOf($student['email']),
@@ -205,7 +205,7 @@
     // Modifiers
     function joinHub($hub, $student) {
       $entry = $this->get($hub);
-      $entry['members'][] = array('date' => time(), 'id' => $student);
+      $entry['members'][] = array('date' => time(), 'id' => MongoId($student));
       $this->save($entry, false);
 
       // Gotta update myhub (current hub)
