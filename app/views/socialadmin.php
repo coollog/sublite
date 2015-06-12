@@ -84,7 +84,7 @@
         usort($students, "sortStudents");
 
         foreach($students as $student) {
-          echo '<input type="checkbox" name="students[]" value="' . $student['_id']
+          echo '<input type="checkbox" name="students" value="' . $student['_id']
               . '">' . $student['name'] . ' at <b>' . $student['hubs']['city'] .
               '</b>. Current hubs: ' .
               implode(', ', $MSocial->getHubs($student['_id'])) . '<br>';
@@ -106,6 +106,13 @@
 <script>
   $('.addstudent form').submit(function() {
     var json = formJSON(this);console.log(json);
+
+    var students = [];
+    $(this).children('input[type=checkbox]').each(function () {
+      if (this.checked) {
+        students.push($(this).val());
+      }
+    });
 
     var emitdata = {
       students: json.students,
