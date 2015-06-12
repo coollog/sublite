@@ -205,7 +205,7 @@
     // Modifiers
     function joinHub($hub, $student) {
       $entry = $this->get($hub);
-      $entry['members'][] = array('date' => time(), 'id' => MongoId($student));
+      $entry['members'][] = array('date' => time(), 'id' => new MongoId($student));
       $this->save($entry, false);
 
       // Gotta update myhub (current hub)
