@@ -360,6 +360,11 @@
       $this->save($entry, false);
       return $this->processEvent($ret);
     }
+    function isEventOwner($id, $hub, $eventid) {
+      $entry = $this->get($hub);
+      $index = $this->getEventIndex($hub, $eventid);
+      return $entry['events'][$index]['creator'] == $id;
+    }
     function deleteEvent($hub, $event) {
       $entry = $this->get($hub);
       $index = $this->getEventIndex($hub, $event);

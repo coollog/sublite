@@ -115,6 +115,11 @@
         </form>
       </content>
     </panel>
+    <script>
+      if ({iscreator}) {
+        $('.editmeetup').show();
+      }
+    </script>
   </viewtemplate>
   </meetupview>
 </viewtemplate>

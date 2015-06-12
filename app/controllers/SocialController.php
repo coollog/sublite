@@ -286,6 +286,10 @@
         case 'create event': case 'edit event':
           if (!$MSocial->isMember($hub, $id))
             return $this->errorString('not member of hub');
+          if ($name == 'edit event' and
+              !$MSocial->isEventOwner($id, $hub, $message['eventid'])) {
+            return $this->errorString("not owner of event");
+          }
 
           // Validations
           if (!$this->checkIsSet($message, 

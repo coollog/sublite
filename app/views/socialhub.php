@@ -241,6 +241,9 @@
     float: right;
     display: inline-block;
   }
+  .meetup .editmeetup {
+    display: none;
+  }
 
   .createmeetup {
 
