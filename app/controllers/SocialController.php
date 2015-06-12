@@ -622,7 +622,7 @@
           $students = $json['students'];
           $hub = $json['hub'];
           foreach ($students as $student) {
-            // $MSocial->joinHub($hub, $student);
+            $MSocial->joinHub($hub, $student);
           }
           return $this->successString();
       }
