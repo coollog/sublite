@@ -117,7 +117,7 @@
     </panel>
     <script>
       if ({iscreator}) {
-        $('.editmeetup').show();
+        $('.tabframe[name=editmeetup]').show();
       }
     </script>
   </viewtemplate>

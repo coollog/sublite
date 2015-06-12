@@ -241,7 +241,7 @@
     float: right;
     display: inline-block;
   }
-  .meetup .editmeetup {
+  .meetup .tabframe[name=editmeetup] {
     display: none;
   }
 
