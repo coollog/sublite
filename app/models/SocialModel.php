@@ -197,6 +197,9 @@
       $s = $MStudent->getById($student);
       if (!isset($s['hubs']['myhub'])) return array();
       $hub = $s['hubs']['myhub'];
+      
+      global $MSocial;
+      $hubs = $MSocial->getAll();
       foreach ($hubs as $hub) {
         if ($hub['_id'] == $hub) {
           return array($hub['name']);
