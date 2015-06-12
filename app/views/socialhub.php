@@ -241,9 +241,6 @@
     float: right;
     display: inline-block;
   }
-  .meetup .tabframe[name=editmeetup] {
-    display: none;
-  }
 
   .createmeetup {
 
@@ -307,6 +304,9 @@
     text-align: left;
   }
   meetupview #leavemeetupdiv {
+    display: none;
+  }
+  meetupview tab[for=editmeetup], meetupview .tabframe[name=editmeetup] {
     display: none;
   }
 
