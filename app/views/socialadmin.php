@@ -84,7 +84,7 @@
         usort($students, "sortStudents");
 
         foreach($students as $student) {
-          echo '<input type="checkbox" name="students" value="' . $student['_id']
+          echo '<input type="checkbox" name="students[]" value="' . $student['_id']
               . '">' . $student['name'] . ' at <b>' . $student['hubs']['city'] .
               '</b>. Current hubs: ' .
               implode(', ', $MSocial->getHubs($student['_id'])) . '<br>';
