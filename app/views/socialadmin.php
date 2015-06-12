@@ -115,7 +115,7 @@
     });
 
     var emitdata = {
-      students: json.students,
+      students: students,
       hub: json.hub
     };
     Comm.emit('add students to hub', emitdata, function (err, data) {
