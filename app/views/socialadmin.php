@@ -122,7 +122,7 @@
       if (err) { alert(err); return; }
 
       alert('added students!');
-      // location.reload();
+      location.reload();
     });
 
     return false;
