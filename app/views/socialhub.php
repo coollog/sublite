@@ -67,7 +67,7 @@
     padding: 40px;
     background: #ffe no-repeat center center;
     background-size: cover;
-    background-attachment: fixed;
+    background-attachment: scroll;
   }
     .banner name {
       font-size: 2em;
