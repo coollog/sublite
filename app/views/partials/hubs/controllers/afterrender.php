@@ -25,8 +25,13 @@
         }
       });
       openTab(me);
+      
       // This is to make sure iframes load correctly.
-      $('iframe.S3')[0].contentDocument.location.reload(true);
+      var container = $('.container', $('iframe.S3')[0].contentDocument),
+          width = container.width(),
+          height = container.height();
+      $('iframe.S3').width(width).height(height);
+
       console.log('blah');
     });
     $('tab').each(function() {
