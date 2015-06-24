@@ -121,7 +121,9 @@
       } else {
         $('tab[for=editmeetup]').hide();
       }
-      $('.tabframe[name=editmeetup]').hide();
+      $('tab[for=editmeetup').click(function() {
+        $('.iframe')[0].contentDocument.location.reload(true);
+      });
     </script>
   </viewtemplate>
   </meetupview>
