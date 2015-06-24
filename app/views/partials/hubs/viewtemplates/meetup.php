@@ -119,6 +119,8 @@
       if ({iscreator}) {
         // $('.tabframe[name=editmeetup]').show();
         $('tab[for=editmeetup]').show();
+      } else {
+        $('tab[for=editmeetup]').hide();
       }
     </script>
   </viewtemplate>

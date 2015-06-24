@@ -306,7 +306,7 @@
   meetupview #leavemeetupdiv {
     display: none;
   }
-  meetupview tab[for=editmeetup], meetupview .tabframe[name=editmeetup] {
+  meetupview tab[for=editmeetup] {
     display: none;
   }
 
