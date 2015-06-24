@@ -25,6 +25,8 @@
         }
       });
       openTab(me);
+      // This is to make sure iframes load correctly.
+      $('iframe.S3')[0].contentDocument.location.reload(true);
     });
     $('tab').each(function() {
       if ($(this).hasClass('focus'))
@@ -70,11 +72,11 @@
         $(this).css('height', '10em')
           .parent().find('button').slideDown(200, 'easeOutCubic');
       })
-    $('html').click(function() {
+    $('html').off('click').click(function() {
       $('.reply textarea').css('height', '3em')
         .parent().find('button').slideUp(200, 'easeOutCubic');
     });
-    $('.reply').click(function(event){
+    $('.reply').off('click').click(function(event){
       event.stopPropagation();
     });
 

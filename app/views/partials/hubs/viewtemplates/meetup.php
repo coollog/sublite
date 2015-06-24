@@ -123,7 +123,6 @@
       }
       $('tab[for=editmeetup').click(function() {
         $('iframe.S3')[0].contentDocument.location.reload(true);
-        console.log('huh?');
       });
     </script>
   </viewtemplate>
