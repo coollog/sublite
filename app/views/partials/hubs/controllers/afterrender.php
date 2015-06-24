@@ -27,6 +27,7 @@
       openTab(me);
       // This is to make sure iframes load correctly.
       $('iframe.S3')[0].contentDocument.location.reload(true);
+      console.log('blah');
     });
     $('tab').each(function() {
       if ($(this).hasClass('focus'))
