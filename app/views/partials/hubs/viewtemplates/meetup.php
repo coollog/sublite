@@ -122,7 +122,8 @@
         $('tab[for=editmeetup]').hide();
       }
       $('tab[for=editmeetup').click(function() {
-        $('.iframe')[0].contentDocument.location.reload(true);
+        $('iframe.S3')[0].contentDocument.location.reload(true);
+        console.log('huh?');
       });
     </script>
   </viewtemplate>
