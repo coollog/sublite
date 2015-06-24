@@ -117,11 +117,11 @@
     </panel>
     <script>
       if ({iscreator}) {
-        // $('.tabframe[name=editmeetup]').show();
         $('tab[for=editmeetup]').show();
       } else {
         $('tab[for=editmeetup]').hide();
       }
+      $('.tabframe[name=editmeetup]').hide();
     </script>
   </viewtemplate>
   </meetupview>

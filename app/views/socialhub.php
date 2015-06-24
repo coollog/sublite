@@ -309,6 +309,9 @@
   meetupview tab[for=editmeetup] {
     display: none;
   }
+  meetupview .tabframe[for=editmeetup] {
+    display: block;
+  }
 
   viewframe {
     width: 100%;
