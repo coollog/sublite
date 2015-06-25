@@ -621,7 +621,23 @@
         case 'add students to hub':
           $students = $json['students'];
           $hub = $json['hub'];
+          if (!$hub || $hub == '') {
+            return $this->errorString('Please select a hub.');
+          }
           foreach ($students as $student) {
+            $studententry = $MStudent->getById($student);
+            $email = $studententry['email'];
+            $hubentry = $MSocial->get($hub);
+            $hubname = $hubentry['name'];
+            $message = "
+              We're excited to have you. Check out your hub <a href=\"https://sublite.net/hubs/hub.php?id=$hub\">here</a>.
+              <br>
+              Best,
+              <br>
+              <br>
+              Sublite Team 
+            ";
+            sendgmail(array($email), "info@sublite.net", "Welcome to the $hubname social hub on Sublite!", $message);
             $MSocial->joinHub($hub, $student);
           }
           return $this->successString();
