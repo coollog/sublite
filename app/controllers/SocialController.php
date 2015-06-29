@@ -273,7 +273,9 @@
           $event['hostphoto'] = $student['photo'];
 
           // Check if is creator
-          $event['iscreator'] = ($event['creator'] == $_SESSION['_id']);
+          // Also give admins the ability to edit any event
+          $event['iscreator'] = ($event['creator'] == $_SESSION['_id'])
+              || checkAdmin();
 
           // Check if is going
           $event['isgoing'] = $MSocial->isGoing($hub, $event['id'], $_SESSION['_id']);
@@ -284,11 +286,13 @@
           return $this->successString($event);
 
         case 'create event': case 'edit event':
-          if (!$MSocial->isMember($hub, $id))
-            return $this->errorString('not member of hub');
-          if ($name == 'edit event' and
-              !$MSocial->isEventOwner($id, $hub, $message['eventid'])) {
-            return $this->errorString("not owner of event");
+          if (!checkAdmin()) {
+            if (!$MSocial->isMember($hub, $id))
+              return $this->errorString('not member of hub');
+            if ($name == 'edit event' and
+                !$MSocial->isEventOwner($id, $hub, $message['eventid'])) {
+              return $this->errorString("not owner of event");
+            }
           }
 
           // Validations
@@ -630,7 +634,7 @@
             $hubentry = $MSocial->get($hub);
             $hubname = $hubentry['name'];
             $message = "
-              We're excited to have you. Check out your hub <a href=\"https://sublite.net/hubs/hub.php?id=$hub\">here</a>.
+              After the long wait, your hub is finally ready! Check out your hub <a href=\"https://sublite.net/hubs/hub.php?id=$hub\">here</a>. In need of a new place to go out to eat this weekend? Use your hub to ask questions about your city and meet up with other interns! The possibilities are endless; just keep it civil and respectful.
               <br>
               Best,
               <br>
