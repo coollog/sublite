@@ -284,6 +284,7 @@
         foreach ($post['likes'] as $key => $value) {
           if ($value['id'] == $id) {
             unset($post['likes'][$key]);
+            $post['likes'] = array_values($post['likes']);
             $this->save($entry, false);
             return "unliked";
           }
