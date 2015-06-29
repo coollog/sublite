@@ -634,6 +634,9 @@
             $hubentry = $MSocial->get($hub);
             $hubname = $hubentry['name'];
             $message = "
+              Hey there!
+              <br>
+              <br>
               After the long wait, your hub is finally ready! Check out your hub <a href=\"https://sublite.net/hubs/hub.php?id=$hub\">here</a>. In need of a new place to go out to eat this weekend? Use your hub to ask questions about your city and meet up with other interns! The possibilities are endless; just keep it civil and respectful.
               <br>
               Best,
