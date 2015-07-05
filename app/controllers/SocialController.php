@@ -100,6 +100,10 @@
 
     function api() {
       global $CStudent, $MStudent, $MSocial, $S;
+      $kill = false;
+      if ($kill) {
+        return;
+      }
       $name = $_POST['name'];
       $json = $_POST['json'];
       $message = $json; // json_decode($json, true);
