@@ -246,7 +246,7 @@
           if ($MSocial->getPostIndex($hub, $postid) == -1) {
             return $this->errorString("post does not exist");
           }
-          if ($MSocial->getPostAuthor($hub, $postid) != $id) {
+          if (!checkAdmin() && $MSocial->getPostAuthor($hub, $postid) != $id) {
             return $this->errorString("cannot delete someone else's post");
           }
 
@@ -370,7 +370,7 @@
           if ($MSocial->getEventIndex($hub, $event) == -1) {
             return $this->errorString("event does not exist");
           }
-          if ($MSocial->getEventCreator($hub, $event) != $id) {
+          if (!checkAdmin() && $MSocial->getEventCreator($hub, $event) != $id) {
             return $this->errorString("cannot delete someone else's event");
           }
 
@@ -494,7 +494,7 @@
             return $this->errorString("comment does not exist");
           }
           $gotcomment = $MSocial->getEventComment($hub, $event, $comment);
-          if ($gotcomment['from'] != $id) {
+          if (!checkAdmin() && $gotcomment['from'] != $id) {
             return $this->errorString("cannot delete someone else's comment");
           }
 
