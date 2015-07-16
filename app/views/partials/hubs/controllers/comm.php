@@ -176,7 +176,7 @@
             likes: data.likes.length,
             replies: data.children.length,
             liked: data.liked
-          }, data.parent, true);
+          }, data.parent, true, true);
 
           afterRender();
         });

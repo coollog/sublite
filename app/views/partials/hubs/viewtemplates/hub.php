@@ -32,11 +32,10 @@
 
   <panel class="tabframe" name="forum">
     <content>
+      Introduce yourself to the other interns in your area, recommend a restaurant or attraction, write a review for your city, or post anything else you would like to share!
       <!-- <subtabs>
         <subtab type="recent" class="focus">Most Recent</subtab> | <subtab type="popular">Most Popular</subtab>
       </subtabs> -->
-      <div class="postsframe" type="recent"><div class="posts"></div></div>
-      <div class="postsframe" type="popular"><div class="posts"></div></div>
       <div class="thread" for="">
         <div class="reply">
           Write your post:
@@ -46,6 +45,8 @@
           </form>
         </div>
       </div>
+      <div class="postsframe" type="recent"><div class="posts"></div></div>
+      <div class="postsframe" type="popular"><div class="posts"></div></div>
     </content>
   </panel>
   <panel class="tabframe" name="meetups">

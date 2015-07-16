@@ -26,17 +26,23 @@
     setup: function () {
       Tabs.setup(this, 'post');
     },
-    add: function (type, json, parentid, incParentReplies) {
+    add: function (type, json, parentid, incParentReplies, prepend) {
       // incParentReplies if true increments the replies count of the parent
       var newHTML = Tabs.newHTML(this, json);
-      if (typeof parentid == 'undefined' || parentid == '')
-        $('.postsframe[type='+type+'] .posts').append(newHTML);
-      else {
-        $('.postsframe[type='+type+'] .thread[for='+parentid+']').children('.replies').append(newHTML);
+      var replies;
+      if (typeof parentid == 'undefined' || parentid == '') {
+        replies = $('.postsframe[type='+type+'] .posts');
+      } else {
+        replies = $('.postsframe[type='+type+'] .thread[for='+parentid+']').children('.replies');
         if (incParentReplies) {
           var replies = $('.postsframe[type='+type+'] .post[index='+parentid+'] replies');
           replies.html(parseInt(replies.html()) + 1);
         }
+      }
+      if (prepend) {
+        replies.prepend(newHTML);
+      } else {
+        replies.append(newHTML);
       }
 
       // Highlight if liked
