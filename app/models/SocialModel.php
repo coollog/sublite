@@ -59,6 +59,8 @@
         }
       }
 
+      $post['content'] = nl2br(autolink($post['content']));
+
       return $post;
     }
     function getHubPosts($hub, $sortCriterion) {
@@ -95,7 +97,7 @@
     }
     function getPost($masterposts, $postid) {
       foreach ($masterposts as $post) {
-        if ($post['id'] == $postid && $post['deleted'] == false) {
+        if ($post['id'] == $postid && !$post['deleted']) {
           return $post;
         }
       }
@@ -151,7 +153,8 @@
     function getEventDescription($hub, $event) {
       $index = $this->getEventIndex($hub, $event);
       $entry = $this->get($hub);
-      return $entry['events'][$index]['description'];
+      $description = nl2br(autolink($entry['events'][$index]['description']));
+      return $description;
     }
     function getEventCommentIndex($hub, $event, $comment) {
       $entry = $this->get($hub);
