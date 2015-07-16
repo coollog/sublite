@@ -11,7 +11,7 @@
         // Params to vars
         global $params;
         $city = clean($params['city']);
-        
+
         // Validations
         $this->startValidations();
 
@@ -35,7 +35,7 @@
           $this->render('socialindex', array('hubs' => true, 'signedup' => true));
           return;
         }
-        
+
         $this->error($err);
       }
 
@@ -117,7 +117,7 @@
       foreach ($message as $key => $val) {
         $message[$key] = clean($message[$key]);
       }
-      
+
       $reterr = "";
 
       // make sure id, pass, and hub are set in $message
@@ -135,7 +135,7 @@
       // specific stuff
       $success = $this->successString();
       switch ($name) {
-        /* 
+        /*
          *
          * General hub actions (e.g. joining, loading stuff)
          *
@@ -185,7 +185,7 @@
         case 'load posts tab':
           return $this->successString($MSocial->getHubPosts($hub, 'recent'));
 
-        /* 
+        /*
          *
          * Posts! Sorting/making/liking/deleting them.
          *
@@ -253,7 +253,7 @@
           $ret = $MSocial->deletePost($hub, $postid);
           return $this->successString($ret);
 
-        /* 
+        /*
          *
          * Events!
          *
@@ -300,7 +300,7 @@
           }
 
           // Validations
-          if (!$this->checkIsSet($message, 
+          if (!$this->checkIsSet($message,
             array(
               'eventtitle',
               'starttime',
@@ -573,12 +573,12 @@
           foreach ($students as $student) {
             $inc = true;
 
-            if (!isset($student['hubs']['geocode']) or 
+            if (!isset($student['hubs']['geocode']) or
                 is_null($student['hubs']['geocode'])) {
               $city = $student['hubs']['city'];
               $geocode = geocode($city);
               $student['hubs']['geocode'] = $geocode;
-              
+
               if (!is_null($geocode)) $MStudent->save($student);
               else $inc = false;
             }
@@ -587,7 +587,7 @@
           }
 
           return $this->successString($ret);
-          
+
         case 'create hub':
           $name = $json['name'];
           $location = geocode($json['location']);
@@ -634,19 +634,21 @@
           }
           foreach ($students as $student) {
             $studententry = $MStudent->getById($student);
+
+            $name = $studententry['name'];
             $email = $studententry['email'];
+
             $hubentry = $MSocial->get($hub);
             $hubname = $hubentry['name'];
             $message = "
-              Hey there!
+              Hey $name
               <br>
               <br>
               After the long wait, your hub is finally ready! Check out your hub <a href=\"https://sublite.net/hubs/hub.php?id=$hub\">here</a>. In need of a new place to go out to eat this weekend? Use your hub to ask questions about your city and meet up with other interns! The possibilities are endless; just keep it civil and respectful.
-              <br>
+              <br><br>
               Best,
               <br>
-              <br>
-              Sublite Team 
+              Sublite Team
             ";
             sendgmail(array($email), "info@sublite.net", "Welcome to the $hubname social hub on Sublite!", $message);
             $MSocial->joinHub($hub, $student);
