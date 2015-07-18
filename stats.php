@@ -10,5 +10,6 @@
   $CStats->subletsended2014();
   $CStats->unknownschools();
   $CStats->cumulative();
+  $CStats->getMessageParticipants();
   require_once($GLOBALS['dirpre'].'includes/footer.php');
 ?>

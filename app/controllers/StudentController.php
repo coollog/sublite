@@ -72,7 +72,40 @@
       ));
     }
 
+    function loginRedirectSetup() {
+      // Setup after-login redirect
+      if (isset($_SERVER['HTTP_REFERER'])) {
+        $noredirect = array(
+          '', 
+          '/index.php', 
+          '/', 
+          '/register.php',
+          '/login.php'
+        );
+        $domain = "https://$_SERVER[HTTP_HOST]";
+        $thispage = "$domain$_SERVER[REQUEST_URI]";
+        $lastpage = $_SERVER['HTTP_REFERER'];
+        $lastpagepath = preg_replace("/https:\/\/$_SERVER[HTTP_HOST]/", '', $lastpage);
+        if ($thispage != $lastpage) {
+          if (!in_array($lastpagepath, $noredirect)) {
+            setcookie('loginredirect', $lastpage, time() + 300);
+          } else {
+            setcookie('loginredirect', '', time() - 3600);
+          }
+        }
+      }
+    }
+    function loginRedirect() {
+      if (isset($_COOKIE['loginredirect'])) {
+        $this->redirectURL($_COOKIE['loginredirect']);
+      } else {
+        $this->redirect('whereto');
+      }
+    }
+
     function login() {
+      if (!isset($_GET['whereto'])) $this->loginRedirectSetup();
+
       if (!isset($_POST['login'])) { $this->render('studentlogin'); return; }
       
       global $params, $MStudent;
@@ -109,7 +142,7 @@
             
             // $this->redirect('home');
             // $this->redirect('search');
-            $this->redirect('whereto');
+            $this->loginRedirect();
 
             return;
           }
@@ -121,6 +154,8 @@
     }
 
     function register() {
+      $this->loginRedirectSetup();
+
       if (!isset($_POST['register'])) { $this->render('studentregister'); return; }
 
       global $params, $MStudent;
@@ -262,7 +297,7 @@
         $confirm = $_REQUEST['id'];
         $email = $_REQUEST['email'];
 
-        $this->validate(($entry = $MStudent->get($email)) != NULL, 
+        $this->validate(($entry = $MStudent->get($email)) != null, 
           $err, 'permission denied');
         $this->validate(isset($entry['confirm']) and $entry['confirm'] == $confirm and !isset($entry['pass']),
           $err, 'invalid confirmation code. your code may have expired. return to the registration page to re-enter your email for a new confirmation link.');
@@ -294,7 +329,8 @@
             $MStudent->save($entry);
 
             $params['email'] = $email;
-            $_POST['login'] = true; $this->login();
+            $_POST['login'] = true; $_GET['whereto'] = true;
+              $this->login();
             return;
           }
 

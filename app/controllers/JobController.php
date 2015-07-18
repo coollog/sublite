@@ -341,12 +341,19 @@
       }
 
       if ($showSearch and !isset($params['search'])) {
-        // If not searching for anything, then return last 5 entries
-        $res = $MJob->last(5);
+        // If not searching for anything, then return last 6 entries
+        $showMore = isset($_GET['showMore']);
+        if ($showMore) {
+          if (isset($_SESSION['showMoreJobs'])) $_SESSION['showMoreJobs'] += 6;
+          else $_SESSION['showMoreJobs'] = 12;
+          $showMore = $_SESSION['showMoreJobs'];
+        } else $_SESSION['showMoreJobs'] = 6;
+
+        $res = $MJob->last($_SESSION['showMoreJobs']);
         $jobs = process($res);
 
         $this->render('searchform', $this->dataSearchSetup());
-        $this->render('searchresults', array('jobs' => $jobs, 'recent' => true, 'search' => 'jobs'));
+        $this->render('searchresults', array('jobs' => $jobs, 'recent' => true, 'search' => 'jobs', 'showMore' => $showMore));
         return; 
       }
       

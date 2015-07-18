@@ -395,14 +395,21 @@
 
       if ($showSearch and !isset($params['search'])) {
         // If not searching for anything, then return last 6 entries
-        $res = $MSublet->last(6);
+        $showMore = isset($_GET['showMore']);
+        if ($showMore) {
+          if (isset($_SESSION['showMore'])) $_SESSION['showMore'] += 6;
+          else $_SESSION['showMore'] = 12;
+          $showMore = $_SESSION['showMore'];
+        } else $_SESSION['showMore'] = 6;
+
+        $res = $MSublet->last($_SESSION['showMore']);
         $sublets = array();
         foreach ($res as $sublet) {
           $sublets[] = processRaw($sublet);
         }
 
         $this->render('subletsearchstart', $this->dataSearchSetup());
-        $this->render('subletsearchresults', array('sublets' => $sublets, 'recent' => true, 'search' => 'housing'));
+        $this->render('subletsearchresults', array('sublets' => $sublets, 'recent' => true, 'search' => 'housing', 'showMore' => $showMore));
         return; 
       }
       

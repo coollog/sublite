@@ -5,8 +5,8 @@
     background-position: center 0;
     /*background-attachment: fixed;*/
     display: table;
-    height: 90vh;
-    padding-bottom: 0;
+    min-height: 90vh;
+    padding-bottom: 50px;
     position: relative;
     box-sizing: border-box;
   }
@@ -16,7 +16,7 @@
     display: inline-block;
   }
   .arrow-down {
-    width: 0; 
+    width: 0;
     height: 0;
     border-left: 30px solid transparent;
     border-right: 30px solid transparent;
@@ -45,7 +45,7 @@
     margin-bottom: -0.2em;
     font-family: 'BebasNeue', sans-serif;
     font-weight: bold;
-    font-size: 7em;
+    font-size: 6em;
   }
   panel.main .banner .slogan {
     color: #fff;
@@ -140,7 +140,7 @@
   #cityform {
     width: 50%;
   }
-  #citylabel {
+  .whitetext {
     color: #fff;
     text-shadow: 2px 2px #035d75;
   }
@@ -166,28 +166,87 @@
   <div class="cell">
     <div class="banner">
       <div class="content">
-        <div class="tagline">Sign up for the social hub!</div>
+        <div class="tagline">Join the social hubs!</div>
         <div class="slogan">
-          Get your questions answered and make new friends this summer!
+          Meet other students working in the same city as you are!
         </div>
         <?php
           if (vget('Loggedinstudent')) {
         ?>
+            <?php if (vget('myhub')) { ?>
+              <div id="tohub">
+                <a href="hub.php?id=<?php vecho('myhub'); ?>">
+                  <input type="button" value="Take me to my hub" />
+                </a>
+
+                <div class="whitetext">
+                  <br /><br />
+                  <big>&mdash; OR &mdash;</big>
+                  <br /><br />
+            <?php } ?>
+
+            <div class="whitetext">
+              Select a Hub to Join!
+              <br /><br />
+              <?php
+                $hubs = array(
+                  'Boston Area' =>            '555f6ca4d83594206f9970cc',
+                  'Chicago' =>                '557a47b1d83594791f1fd6cb',
+                  'Los Angeles Area' =>       '557a46dcd83594d1231fd6cb',
+                  'Madison' =>                '557a47d6d83594cf231fd6c8',
+                  'New Haven Area' =>         '555f6df3d83594216f9970ca',
+                  'New York City Area' =>     '555f6be8d83594216f9970c9',
+                  'Philadelphia Area' =>      '557a4a62d83594d1231fd6cc',
+                  'San Francisco Bay Area' => '557a4652d83594d3231fd6c9',
+                  'Seattle' =>                '557a4723d835941e321fd6c9',
+                  'Washington DC Area' =>     '557a469bd835947b1f1fd6ca',
+                );
+                foreach ($hubs as $name=>$id) {
+              ?>
+                <a href="hub.php?id=<?php echo $id; ?>">
+                  <input type="button" value="<?php echo $name; ?>" style="margin: 0.1em 0;" />
+                </a>
+              <?php
+                }
+              ?>
+
+              <br /><br />
+              <big>&mdash; OR &mdash;</big>
+              <br /><br />
+            </div>
+
+            <?php if (vget('myhub')) { ?>
+                  <input id="switchhub" type="button" value="Switch to another city" />
+                  <style>
+                    #cityform {
+                      display: none;
+                    }
+                  </style>
+                  <script>
+                    $('#switchhub').click(function () {
+                      $('#cityform').show();
+                      $(this).hide();
+                    });
+                  </script>
+                </div>
+              </div>
+            <?php } ?>
+
             <?php vnotice(); ?>
             <?php if (!vget('signedup')) { ?>
               <form id="cityform" method="post">
-                <div id="citylabel">Where will you be this summer?</div>
+                <div class="whitetext">Where are you this summer?</div>
                 <div class="form-slider">
-                  <label for="city">(eg. New York, Boston, San Francisco)</label>
+                  <label for="city">(eg. New York City, Boston, San Francisco)</label>
                   <input type="text" id="city" name="city" required />
                 </div>
                 <input type="submit" name="signup" value="Sign up now" />
               </form>
             <?php } ?>
-        <?php 
+        <?php
           } else {
             echo vlinkto('<input type="button" class="button" value="Login or register to sign up for the social hubs!" />', $GLOBALS['dirpre'].'../register');
-          } 
+          }
         ?>
       </div>
     </div>
@@ -198,7 +257,7 @@
   <div class="content">
     <headline style="color: #035d75;">Why Join the Social Hub?</headline>
     <form style="font-size: 1em; margin-top: -20px; margin-bottom: 20px;">
-      Getting a good internship doesn't guarantee a good summer. Meet other students working in the same city and have fun with them! Here are the main features:
+      Getting a good internship doesn't guarantee a good summer. Meet other students working in your city and have fun with them! Here are the main features:
     </form>
     <table class="whys"><tr>
       <td class="whycell"><incell>

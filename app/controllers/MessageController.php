@@ -70,6 +70,16 @@
       }
       return $name;
     }
+    function getType($p) {
+      global $MStudent, $MRecruiter;
+      if ($MStudent->exists($p)) {
+        return 'student';
+      } else if ($MRecruiter->IDexists($p)) {
+        return 'recruiter';
+      } else {
+        return 'none';
+      }
+    }
     function setFromNamePic(&$reply, $from) {
       global $MStudent, $MRecruiter;
       $reply['fromname'] = $this->getName($from);

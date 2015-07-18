@@ -9,6 +9,30 @@
       window.onbeforeunload = function() { f(); }
     });
   }
+  function formJSON(f) {
+    return $(f).serializeObject();
+  }
+  function formReset(form) {
+    $(form).children('.error, .success').hide();
+
+    form.reset();
+    $(form).find('.img').html('');
+  }
+  $.fn.serializeObject = function() {
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+      if (o[this.name] !== undefined) {
+        if (!o[this.name].push) {
+          o[this.name] = [o[this.name]];
+        }
+        o[this.name].push(this.value || '');
+      } else {
+        o[this.name] = this.value || '';
+      }
+    });
+    return o;
+  };
 
   $(function() {
 
@@ -58,6 +82,10 @@
       $("#locationdiv").css('visibility','visible');
     }
 
+    formSetup();
+  });
+
+  function formSetup() {
     $('form').slidinglabels({ 
       /* these are all optional */ 
       className : 'form-slider', // the class you're wrapping the label & input with -> default = slider 
@@ -70,15 +98,16 @@
     /* JQUERY UI STUFF */
     $('.datepicker').datepicker({
       onSelect: function(dateText, inst) {
-        $('<style id="nodatepicker">.ui-datepicker { visibility: hidden !important; }</style>').appendTo('body');
-        setTimeout(function() {
-          $('.datepicker').focus().datepicker('hide');
-          setTimeout(function() {
-            $('#nodatepicker').remove();
-          }, 1000);
-        }, 500);
+        // $('<style id="nodatepicker">.ui-datepicker { visibility: hidden !important; }</style>').appendTo('body');
+        // setTimeout(function() {
+        //   $('.datepicker').focus().datepicker('hide');
+        //   setTimeout(function() {
+        //     $('#nodatepicker').remove();
+        //   }, 1000);
+        // }, 500);
       }
     });
+    $('.timepicker').timepicker({ 'scrollDefault': 'now' });
 
     $('.sliderrange').each(function() {
       var min = $(this).attr('min'),
@@ -120,5 +149,5 @@
         }
       });
     });
-  });
+  }
 </script>

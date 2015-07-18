@@ -1,21 +1,31 @@
 <?php
-  $dbuser = getenv('DBUSER');
-  $dbpass = getenv('DBPASS');
   $dbname = 'subliteinternships';
   $dbnamestudent = 'sublite';
-  $dbnamestudenttest = 'sublitetest';
   require_once($GLOBALS['dirpre'].'pass.php');
 
-  $GLOBALS = array_merge($GLOBALS, array(
+  switch ($env) {
+    case 'dev':
+      $dbhost = 'localhost:27017';
+      $dbstudenthost = 'localhost:27017';
+      break;
+
+    default:
+      $dbhost = 'ds051980.mongolab.com:51980';
+      $dbstudenthost = 'ds047057.mongolab.com:47057';
+  }
+
+  $g = array(
     'dbname' => $dbname,
-    'dburi' => "mongodb://$dbuser:$dbpass@ds051980.mongolab.com:51980/$dbname",
     'dbnamestudent' => $dbnamestudent,
-    'dburistudent' => "mongodb://$dbuserstudent:$dbpassstudent@ds047057.mongolab.com:47057/$dbnamestudent",
-    'dbnamestudenttest' => $dbnamestudenttest,
-    'dburistudenttest' => "mongodb://$dbuserstudent:$dbpassstudent@ds063170.mongolab.com:63170/$dbnamestudenttest",
+
+    'dburi' => "mongodb://$dbuser:$dbpass@$dbhost/$dbname",
+    'dburistudent' => "mongodb://$dbuserstudent:$dbpassstudent@$dbstudenthost/$dbnamestudent",
+
     'domain' => "sublite.net/employers",
     'gmailpass' => $gmailpass,
     's3access' => $s3access,
     's3secret' => $s3secret
-  ));
+  );
+
+  $GLOBALS = array_merge($GLOBALS, $g);
 ?>
