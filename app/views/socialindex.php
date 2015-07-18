@@ -209,12 +209,13 @@
               <?php
                 }
               ?>
+
+              <br /><br />
+              <big>&mdash; OR &mdash;</big>
+              <br /><br />
             </div>
 
             <?php if (vget('myhub')) { ?>
-                  <br /><br />
-                  <big>&mdash; OR &mdash;</big>
-                  <br /><br />
                   <input id="switchhub" type="button" value="Switch to another city" />
                   <style>
                     #cityform {
