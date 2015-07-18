@@ -5,7 +5,7 @@
     background-position: center 0;
     /*background-attachment: fixed;*/
     display: table;
-    height: 90vh;
+    min-height: 90vh;
     padding-bottom: 0;
     position: relative;
     box-sizing: border-box;
