@@ -32,8 +32,8 @@
 </style>
 
 <div id="socialdropdown">
-  <div class="sdtitle">Social Hubs is Coming</div>
-  <div class="sdinfo">Where will you be this summer?</div>
+  <div class="sdtitle">Social Hubs is Here</div>
+  <div class="sdinfo">Where are you this summer?</div>
   <form id="sdcityform" method="post" action="hubs/start.php">
     <div class="form-slider">
       <label for="sdcity">(eg. New York City, Boston, San Francisco)</label>
