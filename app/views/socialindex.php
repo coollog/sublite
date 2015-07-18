@@ -16,7 +16,7 @@
     display: inline-block;
   }
   .arrow-down {
-    width: 0; 
+    width: 0;
     height: 0;
     border-left: 30px solid transparent;
     border-right: 30px solid transparent;
@@ -183,6 +183,7 @@
                   <br /><br />
                   <big>&mdash; OR &mdash;</big>
                   <br /><br />
+            <?php } ?>
 
                   Select a Hub to Join!
                   <br /><br />
@@ -208,6 +209,7 @@
                     }
                   ?>
 
+            <?php if (vget('myhub')) { ?>
                   <br /><br />
                   <big>&mdash; OR &mdash;</big>
                   <br /><br />
@@ -230,7 +232,7 @@
             <?php vnotice(); ?>
             <?php if (!vget('signedup')) { ?>
               <form id="cityform" method="post">
-                <div class="whitetext">Where will you be this summer?</div>
+                <div class="whitetext">Where are you this summer?</div>
                 <div class="form-slider">
                   <label for="city">(eg. New York City, Boston, San Francisco)</label>
                   <input type="text" id="city" name="city" required />
@@ -238,10 +240,10 @@
                 <input type="submit" name="signup" value="Sign up now" />
               </form>
             <?php } ?>
-        <?php 
+        <?php
           } else {
             echo vlinkto('<input type="button" class="button" value="Login or register to sign up for the social hubs!" />', $GLOBALS['dirpre'].'../register');
-          } 
+          }
         ?>
       </div>
     </div>
