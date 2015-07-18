@@ -23,8 +23,6 @@
           );
           $MStudent->save($me);
 
-          $closestHub = $MSocial->getClosestHub($city, 50);
-
           $email = $_SESSION['email'];
           $message = "
             <h1>Sign Up for Social Hubs</h1><br />
@@ -33,7 +31,17 @@
           ";
           sendgmail(array('tony.jiang@yale.edu', 'qingyang.chen@gmail.com'), "info@sublite.net", 'Social Hub Sign Up', $message);
 
-          $this->success('Thanks for signing up! We will notify you when your hub is ready to use! Stay tuned!');
+          $successMsg = 'Thanks for signing up! We will notify you when your hub is ready to use! Stay tuned!';
+
+          $closestHub = $MSocial->getClosestHub($city, 50);
+          if ($closestHub) {
+            // Found a close hub.
+            $hubid = $closestHub['_id'];
+            $hubname = $closestHub['name'];
+            $successMsg = "Thanks for signing up! An existing hub is close to the location you mentioned: <br /><br /><a href=\"hub.php?id=$hubid\"><input type=\"button\" value=\"$hubname\" /></a><br /><br />If this hub is not the city you are looking for, we will notify you when your hub is ready to use! Stay tuned!";
+          }
+
+          $this->success($successMsg);
           $this->render('socialindex', array('hubs' => true, 'signedup' => true));
           return;
         }

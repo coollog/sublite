@@ -46,7 +46,6 @@
     }
     function getClosestHub($address, $maxMiles) {
       $geocode = geocode($address);
-      var_dump($geocode);
       $longitude = $geocode['longitude'];
       $latitude = $geocode['latitude'];
       $maxMeters = miles2meters($maxMiles);
