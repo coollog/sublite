@@ -5,7 +5,7 @@
 
     function index() {
       if (isset($_POST['signup'])) {
-        global $CStudent, $MStudent;
+        global $CStudent, $MStudent, $MSocial;
         $CStudent->requireLogin();
 
         // Params to vars
@@ -23,16 +23,19 @@
           );
           $MStudent->save($me);
 
-          $email = $_SESSION['email'];
-          $message = "
-            <h1>Sign Up for Social Hubs</h1><br />
-            <b>Email:</b> $email<br />
-            <b>City:</b> $city
-          ";
-          sendgmail(array('tony.jiang@yale.edu', 'qingyang.chen@gmail.com'), "info@sublite.net", 'Social Hub Sign Up', $message);
+          $closestHub = $MSocial->getClosestHub($city, 50);
+          var_dump($closestHub);
 
-          $this->success('Thanks for signing up! We will notify you when our social hubs feature is ready to use! Stay tuned!');
-          $this->render('socialindex', array('hubs' => true, 'signedup' => true));
+          // $email = $_SESSION['email'];
+          // $message = "
+          //   <h1>Sign Up for Social Hubs</h1><br />
+          //   <b>Email:</b> $email<br />
+          //   <b>City:</b> $city
+          // ";
+          // sendgmail(array('tony.jiang@yale.edu', 'qingyang.chen@gmail.com'), "info@sublite.net", 'Social Hub Sign Up', $message);
+
+          // $this->success('Thanks for signing up! We will notify you when your hub is ready to use! Stay tuned!');
+          // $this->render('socialindex', array('hubs' => true, 'signedup' => true));
           return;
         }
 

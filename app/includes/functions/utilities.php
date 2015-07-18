@@ -1,5 +1,5 @@
 <?php
-  require_once($GLOBALS['dirpre'].'includes/functions/Encoding.php'); 
+  require_once($GLOBALS['dirpre'].'includes/functions/Encoding.php');
   use \ForceUTF8\Encoding;
   // Utility functions
   function clean($s) {
@@ -20,7 +20,7 @@
   function idcmp($id1, $id2) {
     return strval($id1) == strval($id2);
   }
-  function str2int($str) { 
+  function str2int($str) {
     return (int)filter_var($str, FILTER_SANITIZE_NUMBER_INT);
   }
   function str2float($str) {
@@ -34,7 +34,7 @@
     }
     return new MongoRegex("/^$regex.*$/i");
   }
-  
+
   function timeAgo($time, $granularity = 1) {
     $difference = time() - $time;
     $periods = array(
@@ -72,7 +72,7 @@
     $f = $format;
     return implode($sep, array_map(function ($v, $k) {
       global $f;
-      return sprintf($f, $k, $v); 
+      return sprintf($f, $k, $v);
     }, $arr, array_keys($arr)));
   }
 
@@ -111,5 +111,9 @@
       'joel.deleon@yale.edu'
     );
     return isset($_SESSION['email']) and in_array($_SESSION['email'], $admins);
+  }
+
+  function miles2meters($mi) {
+    return $mi * 1609.344;
   }
 ?>

@@ -12,6 +12,9 @@
       $this->collection->save($data);
       return $data['_id']->{'$id'};
     }
+    function collection() {
+      return $this->collection;
+    }
 
     // Processors
     function membersInfo($members, $title='Member') {
@@ -41,6 +44,23 @@
     function getAll() {
       return $this->collection->find();
     }
+    function getClosestHub($address, $maxMiles) {
+      $geocode = geocode($address);
+      var_dump($geocode);
+      $longitude = $geocode['longitude'];
+      $latitude = $geocode['latitude'];
+      $maxMeters = miles2meters($maxMiles);
+
+      return $this->collection->findOne(array('geojson' => array(
+        '$near' => array(
+          '$geometry' => array(
+            'type' => 'Point',
+            'coordinates' => array($longitude, $latitude)
+          ), '$maxDistance' => $maxMeters
+        ),
+      )));
+    }
+
     function processPost($post) {
       global $MStudent;
       $student = $MStudent->getById($post['from']);
@@ -195,7 +215,7 @@
       //     $ret[] = $hub['name'];
       //   }
       // }
-      // return $ret; 
+      // return $ret;
       global $MStudent;
       $s = $MStudent->getById($student);
       if (!isset($s['hubs']['myhub'])) return array();
