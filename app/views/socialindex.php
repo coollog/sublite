@@ -185,29 +185,31 @@
                   <br /><br />
             <?php } ?>
 
-                  Select a Hub to Join!
-                  <br /><br />
-                  <?php
-                    $hubs = array(
-                      'Boston Area' =>            '555f6ca4d83594206f9970cc',
-                      'Chicago' =>                '557a47b1d83594791f1fd6cb',
-                      'Los Angeles Area' =>       '557a46dcd83594d1231fd6cb',
-                      'Madison' =>                '557a47d6d83594cf231fd6c8',
-                      'New Haven Area' =>         '555f6df3d83594216f9970ca',
-                      'New York City Area' =>     '555f6be8d83594216f9970c9',
-                      'Philadelphia Area' =>      '557a4a62d83594d1231fd6cc',
-                      'San Francisco Bay Area' => '557a4652d83594d3231fd6c9',
-                      'Seattle' =>                '557a4723d835941e321fd6c9',
-                      'Washington DC Area' =>     '557a469bd835947b1f1fd6ca',
-                    );
-                    foreach ($hubs as $name=>$id) {
-                  ?>
-                    <a href="hub.php?id=<?php echo $id; ?>">
-                      <input type="button" value="<?php echo $name; ?>" style="margin: 0.1em 0;" />
-                    </a>
-                  <?php
-                    }
-                  ?>
+            <div class="whitetext">
+              Select a Hub to Join!
+              <br /><br />
+              <?php
+                $hubs = array(
+                  'Boston Area' =>            '555f6ca4d83594206f9970cc',
+                  'Chicago' =>                '557a47b1d83594791f1fd6cb',
+                  'Los Angeles Area' =>       '557a46dcd83594d1231fd6cb',
+                  'Madison' =>                '557a47d6d83594cf231fd6c8',
+                  'New Haven Area' =>         '555f6df3d83594216f9970ca',
+                  'New York City Area' =>     '555f6be8d83594216f9970c9',
+                  'Philadelphia Area' =>      '557a4a62d83594d1231fd6cc',
+                  'San Francisco Bay Area' => '557a4652d83594d3231fd6c9',
+                  'Seattle' =>                '557a4723d835941e321fd6c9',
+                  'Washington DC Area' =>     '557a469bd835947b1f1fd6ca',
+                );
+                foreach ($hubs as $name=>$id) {
+              ?>
+                <a href="hub.php?id=<?php echo $id; ?>">
+                  <input type="button" value="<?php echo $name; ?>" style="margin: 0.1em 0;" />
+                </a>
+              <?php
+                }
+              ?>
+            </div>
 
             <?php if (vget('myhub')) { ?>
                   <br /><br />
