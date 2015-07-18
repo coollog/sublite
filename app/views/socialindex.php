@@ -6,7 +6,7 @@
     /*background-attachment: fixed;*/
     display: table;
     min-height: 90vh;
-    padding-bottom: 30px;
+    padding-bottom: 50px;
     position: relative;
     box-sizing: border-box;
   }
