@@ -14,6 +14,7 @@
     height: 100%;
     margin: 0;
     font: 400 14px/1.5em 'Open Sans', sans-serif;
+    background: #000;
   }
   green {
     color: #00B233;
@@ -52,6 +53,7 @@
     width: 100%;
     text-align: center;
     padding: 50px 0;
+    background: #fff;
   }
   .content {
     max-width: 900px;
