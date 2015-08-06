@@ -3,9 +3,7 @@
 
   class SubletModel extends Model {
     function __construct() {
-      $m = new MongoClient($GLOBALS['dburistudent']);
-      $db = $m->$GLOBALS['dbnamestudent'];
-      $this->collection = $db->listings;
+      parent::__construct(parent::DB_STUDENTS, 'listings');
     }
 
     function save($data) {
@@ -28,11 +26,11 @@
     function getByStudent($id) {
       return $this->collection->find(array('student' => new MongoId($id)));
     }
-    
+
     function delete($id) {
-      
+
     }
-    
+
     function exists($id) {
       return ($this->collection->findOne(array('_id' => new MongoId($id))) !== NULL);
     }

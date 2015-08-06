@@ -3,9 +3,7 @@
 
   class StudentModel extends Model {
     function __construct() {
-      $m = new MongoClient($GLOBALS['dburistudent']);
-      $db = $m->$GLOBALS['dbnamestudent'];
-      $this->collection = $db->emails;
+      parent::__construct(parent::DB_STUDENTS, 'emails');
     }
 
     function save($data) {
@@ -61,7 +59,7 @@
           'gender' => ''
         );
       }
-        
+
     }
 
     function login($email, $pass) {
@@ -70,9 +68,9 @@
     }
 
     function delete($id) {
-      
+
     }
-    
+
     function exists($id) {
       return ($this->collection->findOne(array('_id' => new MongoId($id))) !== NULL);
     }

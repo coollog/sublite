@@ -4,9 +4,7 @@
   class SocialModel extends Model {
     // The essentials
     function __construct() {
-      $m = new MongoClient($GLOBALS['dburistudent']);
-      $db = $m->$GLOBALS['dbnamestudent'];
-      $this->collection = $db->hubs;
+      parent::__construct(parent::DB_STUDENTS, 'hubs');
     }
     function save($data) {
       $this->collection->save($data);

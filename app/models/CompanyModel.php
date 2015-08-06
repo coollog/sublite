@@ -3,7 +3,7 @@
 
   class CompanyModel extends Model {
     function __construct() {
-      parent::__construct('companies');
+      parent::__construct(parent::DB_INTERNSHIPS, 'companies');
     }
 
     function save($data) {
@@ -33,9 +33,9 @@
     }
 
     function delete($id) {
-      
+
     }
-    
+
     function exists($id) {
       return ($this->get($id) !== NULL);
     }

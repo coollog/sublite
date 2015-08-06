@@ -3,7 +3,7 @@
 
   class RecruiterModel extends Model {
     function __construct() {
-      parent::__construct('recruiters');
+      parent::__construct(parent::DB_INTERNSHIPS, 'recruiters');
     }
 
     function save($data) {
@@ -50,7 +50,7 @@
     function find($query=array()) {
       return $this->collection->find($query);
     }
-    
+
     function exists($email) {
       return ($this->get($email) !== NULL);
     }

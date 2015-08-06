@@ -3,7 +3,7 @@
 
   class AppModel extends Model {
     function __construct() {
-      parent::__construct('app');
+      parent::__construct(parent::DB_INTERNSHIPS, 'app');
     }
 
     function save($data) {
@@ -58,7 +58,7 @@
 
     function recordSearch($type) {
       if (!isset($_SESSION['loggedinstudent'])) return;
-      
+
       $email = $_SESSION['email'];
       $data = $_REQUEST;
 

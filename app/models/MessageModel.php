@@ -3,7 +3,7 @@
 
   class MessageModel extends Model {
     function __construct() {
-      parent::__construct('message');
+      parent::__construct(parent::DB_INTERNSHIPS, 'message');
     }
 
     function save($data) {
@@ -46,7 +46,7 @@
     function getAll() {
       return $this->collection->find();
     }
-    
+
     function exists($id) {
       return ($this->get($id) !== NULL);
     }

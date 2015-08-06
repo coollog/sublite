@@ -3,7 +3,7 @@
 
   class JobModel extends Model {
     function __construct() {
-      parent::__construct('jobs');
+      parent::__construct(parent::DB_INTERNSHIPS, 'jobs');
     }
 
     function save($data, $setRecruiter=true) {
@@ -34,9 +34,9 @@
     }
 
     function delete($id) {
-      
+
     }
-    
+
     function exists($id) {
       return ($this->get($id) !== NULL);
     }
