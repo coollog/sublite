@@ -3,8 +3,8 @@
 
   class SocialModel extends Model {
     // The essentials
-    function __construct() {
-      parent::__construct(parent::DB_STUDENTS, 'hubs');
+    function __construct($test=false) {
+      parent::__construct(parent::DB_STUDENTS, 'hubs', $test);
     }
     function save($data) {
       $this->collection->save($data);

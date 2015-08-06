@@ -2,8 +2,8 @@
   require_once($GLOBALS['dirpre'].'models/Model.php');
 
   class JobModel extends Model {
-    function __construct() {
-      parent::__construct(parent::DB_INTERNSHIPS, 'jobs');
+    function __construct($test=false) {
+      parent::__construct(parent::DB_INTERNSHIPS, 'jobs', $test);
     }
 
     function save($data, $setRecruiter=true) {

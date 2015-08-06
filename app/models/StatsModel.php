@@ -4,7 +4,7 @@
   class StatsModel extends Model {
     private $dbstudent, $dbinternships;
 
-    function __construct() {
+    function __construct($test=false) {
       // Setup database
       $m = new MongoClient($GLOBALS['dburistudent']);
       $this->dbstudent = $m->$GLOBALS['dbnamestudent'];

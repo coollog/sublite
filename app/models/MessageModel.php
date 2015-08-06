@@ -2,8 +2,8 @@
   require_once($GLOBALS['dirpre'].'models/Model.php');
 
   class MessageModel extends Model {
-    function __construct() {
-      parent::__construct(parent::DB_INTERNSHIPS, 'message');
+    function __construct($test=false) {
+      parent::__construct(parent::DB_INTERNSHIPS, 'message', $test);
     }
 
     function save($data) {

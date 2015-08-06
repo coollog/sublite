@@ -2,8 +2,8 @@
   require_once($GLOBALS['dirpre'].'models/Model.php');
 
   class SubletModel extends Model {
-    function __construct() {
-      parent::__construct(parent::DB_STUDENTS, 'listings');
+    function __construct($test=false) {
+      parent::__construct(parent::DB_STUDENTS, 'listings', $test);
     }
 
     function save($data) {
@@ -37,5 +37,4 @@
   }
 
   $MSublet = new SubletModel();
-
 ?>

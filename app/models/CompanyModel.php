@@ -2,8 +2,8 @@
   require_once($GLOBALS['dirpre'].'models/Model.php');
 
   class CompanyModel extends Model {
-    function __construct() {
-      parent::__construct(parent::DB_INTERNSHIPS, 'companies');
+    function __construct($test=false) {
+      parent::__construct(parent::DB_INTERNSHIPS, 'companies', $test);
     }
 
     function save($data) {

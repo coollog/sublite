@@ -2,8 +2,8 @@
   require_once($GLOBALS['dirpre'].'models/Model.php');
 
   class AppModel extends Model {
-    function __construct() {
-      parent::__construct(parent::DB_INTERNSHIPS, 'app');
+    function __construct($test=false) {
+      parent::__construct(parent::DB_INTERNSHIPS, 'app', $test);
     }
 
     function save($data) {

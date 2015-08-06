@@ -2,8 +2,8 @@
   require_once($GLOBALS['dirpre'].'models/Model.php');
 
   class StudentModel extends Model {
-    function __construct() {
-      parent::__construct(parent::DB_STUDENTS, 'emails');
+    function __construct($test=false) {
+      parent::__construct(parent::DB_STUDENTS, 'emails', $test);
     }
 
     function save($data) {
