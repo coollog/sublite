@@ -603,7 +603,8 @@
 			"friars.providence.edu" => "Providence College",
 			"macaulay.cuny.edu" => "City University of New York Macaulay Honors College",
 			"jsu.edu" => "Jacksonville State University",
-			"yorku.ca" => "York University"
+			"yorku.ca" => "York University",
+			"georgebrown.ca" => "George Brown College"
 		);
 		public function getDomain($email) {
 			$ea = explode('@', $email);
