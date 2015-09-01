@@ -42,7 +42,7 @@
       }
       // filter_var is pretty weak so we use other tests
       if (!preg_match('`^((https?:\/\/)*[\w\-]+\.[\w\-]+)`',
-        $url)) return false;  
+        $url)) return false;
 
       return true;
     }
@@ -57,7 +57,7 @@
       $salarytype = clean($data['salarytype']);
       $salary = clean($data['salary']);
       if ($salarytype != 'other') $salary = str2float($salary);
-      if ($jobtype == 'fulltime') {
+      if ($jobtype == 'fulltime' || $jobtype == 'parttime') {
         $duration = '';
         $enddate = '';
       }
@@ -75,12 +75,12 @@
       $link = clean($data['link']);
       if (!filter_var($link, FILTER_VALIDATE_EMAIL) &&
         !preg_match('`^(https?:\/\/)`', $link)) $link = "http://$link";
-      
+
       return array(
         'title' => $title, 'deadline' => $deadline, 'duration' => $duration,
         'desc' => $desc, 'geocode' => $geocode,
-        'location' => $location, 'requirements' => $requirements, 
-        'link' => $link, 'salary' => $salary, 'company' => $company, 
+        'location' => $location, 'requirements' => $requirements,
+        'link' => $link, 'salary' => $salary, 'company' => $company,
         'salarytype' => $salarytype, 'startdate' => $startdate,
         'enddate' => $enddate, 'jobtype' => $jobtype,
         'locationtype' => $locationtype
@@ -150,21 +150,21 @@
         $this->render('notice'); return;
       }
 
-      if (!isset($_POST['add'])) { 
-        $this->render('jobform', formData(array())); return; 
+      if (!isset($_POST['add'])) {
+        $this->render('jobform', formData(array())); return;
       }
-      
+
       global $params, $MJob, $MRecruiter;
       $me = $MRecruiter->me();
       $params['company'] = $me['company'];
 
       $this->startValidations();
-      $this->validate(isset($params['salarytype']), 
+      $this->validate(isset($params['salarytype']),
         $err, 'must select salary type');
 
       // Params to vars
       extract($data = $this->data($params));
-      
+
       // Validations
       $this->validateData($data, $err);
 
@@ -177,17 +177,17 @@
         $this->redirect('job', array('id' => $id));
         return;
       }
-      
+
       $this->error($err);
       $this->render('jobform', formData($data));
     }
 
     function edit() { // FIX THIS ADD GET INFO LIKE DATA FROM VIEW AND STUFF
       global $CRecruiter; $CRecruiter->requireLogin();
-      
+
       global $params, $MJob, $MRecruiter;
       // Params to vars
-      
+
       // Validations
       $this->startValidations();
       $this->validate(isset($_GET['id']) and MongoId::isValid($id = $_GET['id']) and ($entry = $MJob->get($id)) !== NULL, $err, 'unknown job');
@@ -203,7 +203,7 @@
 
       // Code
       if ($this->isValid()) {
-        if (!isset($_POST['edit'])) { 
+        if (!isset($_POST['edit'])) {
           $this->render('jobform', formData(array_merge($this->data($entry), array('_id' => $id)))); return;
         }
 
@@ -221,11 +221,11 @@
           return;
         }
       }
-      
+
       $this->error($err);
       $this->render('jobform', formData($data, array_merge($data, array('_id' => $id))));
     }
-    
+
     function view() {
       //$this->requireLogin();
       global $MJob;
@@ -234,8 +234,8 @@
 
       // Validations
       $this->startValidations();
-      $this->validate(isset($_GET['id']) and 
-        ($entry = $MJob->get($_GET['id'])) != NULL, 
+      $this->validate(isset($_GET['id']) and
+        ($entry = $MJob->get($_GET['id'])) != NULL,
         $err, 'unknown job');
 
       // Code
@@ -253,9 +253,9 @@
         $data['_id'] = $entry['_id'];
         $data['salarytype'] = ($data['salarytype'] == 'total') ?
                               $data['duration'].' weeks' : $data['salarytype'];
-        
+
         $r = $MRecruiter->getById($entry['recruiter']);
-        
+
         $company = $MCompany->get($entry['company']);
         // var_dump($entry);
         $data['companyname'] = $company['name'];
@@ -282,12 +282,12 @@
 
     function dataSearchSetup() {
       global $MApp;
-      return array('industries' => 
+      return array('industries' =>
         array_merge(array(''), $MApp->getIndustriesByJobs())
       );
     }
     function dataSearchEmpty() {
-      return array('recruiter' => '', 'company' => '', 'title' => '', 
+      return array('recruiter' => '', 'company' => '', 'title' => '',
                    'industry' => '', 'city' => '');
     }
     function dataSearch($data) {
@@ -354,15 +354,15 @@
 
         $this->render('searchform', $this->dataSearchSetup());
         $this->render('searchresults', array('jobs' => $jobs, 'recent' => true, 'search' => 'jobs', 'showMore' => $showMore));
-        return; 
+        return;
       }
-      
+
       // Params to vars
       extract($data = $this->dataSearch($params));
 
       // Validations
       $this->startValidations();
-      $this->validate(strlen($recruiter) == 0 or 
+      $this->validate(strlen($recruiter) == 0 or
                       !is_null($MRecruiter->getByID($recruiter)),
         $err, 'unknown recruiter');
 
@@ -386,9 +386,9 @@
         // Search query building
         $query = array();
 
-        if (strlen($recruiter) > 0) 
+        if (strlen($recruiter) > 0)
           $query['recruiter'] = new MongoId($recruiter);
-        
+
         if (strlen($title) > 0) {
           $query['title'] = array('$regex' => keywords2mregex($title));
         }
