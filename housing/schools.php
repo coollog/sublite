@@ -602,7 +602,8 @@
 			"alumni.duke.edu" => "Duke University Alumni",
 			"friars.providence.edu" => "Providence College",
 			"macaulay.cuny.edu" => "City University of New York Macaulay Honors College",
-			"jsu.edu" => "Jacksonville State University"
+			"jsu.edu" => "Jacksonville State University",
+			"yorku.ca" => "York University"
 		);
 		public function getDomain($email) {
 			$ea = explode('@', $email);
