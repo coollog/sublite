@@ -358,6 +358,8 @@
 			"sfu.ca" => "Simon Fraser University",
 			"student.pravo.hr" => "University of Zagreb Faculty of Law",
 			"mail.utoronto.ca" => "University of Toronto",
+			"utoronto.ca" => "University of Toronto",
+			"rotman.utoronto.ca" => "University of Toronto School of Management",
 			"hunterschools.org" => "Hunter College Campus Schools",
 			"hku.hk" => "Hong Kong University",
 			"columbia.cumc.edu" => "Columbia University Medical Center",
