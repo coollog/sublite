@@ -93,7 +93,7 @@
     ?>
         <a href="../redirect.php?<?php echo "id="; echo $_GET['id']; echo "&url="; vecho('link'); ?>" onClick="return confirm('You have clicked on an external link and are leaving the pages of SubLite.net. We are not responsible for the accuracy or effectiveness of any content outside of SubLite.net.')"><input type="button" value=<?php if(filter_var(vget('link'), FILTER_VALIDATE_EMAIL)) { ?>"Apply by Email"<?php } else { ?>"Apply Now"<?php } ?> /></a>
     <?php } else {
-      echo vlinkto('<input type="button" class="button" value="Login or register to apply for this opening!" />', 'index');
+      echo vlinkto('<input type="button" class="button" value="Login or register to apply for this opening!" />', 'login');
     }
     ?>
     <br /><br />
@@ -217,7 +217,7 @@
     ?>
         <a href="../redirect.php?<?php echo "id="; echo $_GET['id']; echo "&url="; vecho('link'); ?>" onClick="return confirm('You have clicked on an external link and are leaving the pages of SubLite.net. We are not responsible for the accuracy or effectiveness of any content outside of SubLite.net.')"><input type="button" value=<?php if(filter_var(vget('link'), FILTER_VALIDATE_EMAIL)) { ?>"Apply by Email"<?php } else { ?>"Apply Now"<?php } ?> /></a>
     <?php } else {
-      echo vlinkto('<input type="button" class="button" value="Login or register to apply for this opening!" />', 'index');
+      echo vlinkto('<input type="button" class="button" value="Login or register to apply for this opening!" />', 'login');
     }
     ?>
   </div>
