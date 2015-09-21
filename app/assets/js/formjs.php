@@ -41,12 +41,12 @@
     });
 
 
-    if($("#fulltime").is(":checked")){
+    if($("#fulltime, #parttime").is(":checked")){
       $("#durationdiv").hide();
       $("#enddatediv").hide();
     }
 
-    $("#fulltime").click(function(){
+    $("#fulltime, #parttime").click(function(){
       $("#durationdiv").hide(400);
       $("#enddatediv").hide(400);
     });
@@ -69,7 +69,7 @@
         $("#location").prop('required', true);
         $("#locationdiv").css('visibility','visible');
         $("#locationdiv").fadeTo(400, 1);
-        $("#location").val(tmpLocation);      
+        $("#location").val(tmpLocation);
       }
     });
 
@@ -86,14 +86,14 @@
   });
 
   function formSetup() {
-    $('form').slidinglabels({ 
-      /* these are all optional */ 
-      className : 'form-slider', // the class you're wrapping the label & input with -> default = slider 
-      topPosition : '1em', // how far down you want each label to start 
-      leftPosition : '0.5em', // how far left you want each label to start 
-      axis : 'x', // can take 'x' or 'y' for slide direction 
-      speed : 'fast' // can take 'fast', 'slow', or a numeric value 
-    }); 
+    $('form').slidinglabels({
+      /* these are all optional */
+      className : 'form-slider', // the class you're wrapping the label & input with -> default = slider
+      topPosition : '1em', // how far down you want each label to start
+      leftPosition : '0.5em', // how far left you want each label to start
+      axis : 'x', // can take 'x' or 'y' for slide direction
+      speed : 'fast' // can take 'fast', 'slow', or a numeric value
+    });
 
     /* JQUERY UI STUFF */
     $('.datepicker').datepicker({

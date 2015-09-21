@@ -80,9 +80,11 @@
     <headline id="jobtitle"><?php vecho('title'); ?></headline>
     <subheadline id="jobsubtitle">
       <?php
-        if(vget('jobtype') == "internship") echo 'Internship';
-        else {
-          echo 'Full-time Position';
+        $jobtype = vget('jobtype');
+        switch ($jobtype) {
+          case 'internship': echo 'Internship'; break;
+          case 'fulltime': echo 'Full-time Position'; break;
+          case 'parttime': echo 'Part-time Position'; break;
         }
       ?>
     </subheadline>
@@ -91,7 +93,7 @@
     ?>
         <a href="../redirect.php?<?php echo "id="; echo $_GET['id']; echo "&url="; vecho('link'); ?>" onClick="return confirm('You have clicked on an external link and are leaving the pages of SubLite.net. We are not responsible for the accuracy or effectiveness of any content outside of SubLite.net.')"><input type="button" value=<?php if(filter_var(vget('link'), FILTER_VALIDATE_EMAIL)) { ?>"Apply by Email"<?php } else { ?>"Apply Now"<?php } ?> /></a>
     <?php } else {
-      echo vlinkto('<input type="button" class="button" value="Login or register to apply for this opening!" />', 'index');
+      echo vlinkto('<input type="button" class="button" value="Login or register to apply for this opening!" />', 'login');
     }
     ?>
     <br /><br />
@@ -117,12 +119,12 @@
               ?>
                   | <?php echo vlinkto('Create an account to message this recruiter!', 'register'); ?>
               <?php
-                } 
+                }
               ?>
             </div>
           </td>
           <td style="width: 30%;" style="vertical-align: middle;">
-            
+
             <div class="icon" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/deadlineico.png');">
               <div class="cell">
                 <subheadline><?php vecho('deadline'); ?></subheadline>
@@ -132,7 +134,7 @@
             <div class="icon" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/locationico.png');">
               <div class="cell">
                 <subheadline>
-                  <?php 
+                  <?php
                     if(vget('locationtype') == "home") echo 'Work at home!';
                     else {
                       vecho('location');
@@ -143,7 +145,7 @@
               </div>
             </div>
             <div class="icon"
-              <?php 
+              <?php
                 if((!vget('duration') && !vget('startdate'))) {
                   echo 'style="display: none"';
                 }
@@ -160,7 +162,7 @@
                   $enddate = vget('enddate');
                   if($duration) {
                     echo $duration . ' weeks';
-                  } 
+                  }
                   if($startdate) {
                     if($duration) echo ', ';
                     if($startdate && $enddate) {
@@ -215,7 +217,7 @@
     ?>
         <a href="../redirect.php?<?php echo "id="; echo $_GET['id']; echo "&url="; vecho('link'); ?>" onClick="return confirm('You have clicked on an external link and are leaving the pages of SubLite.net. We are not responsible for the accuracy or effectiveness of any content outside of SubLite.net.')"><input type="button" value=<?php if(filter_var(vget('link'), FILTER_VALIDATE_EMAIL)) { ?>"Apply by Email"<?php } else { ?>"Apply Now"<?php } ?> /></a>
     <?php } else {
-      echo vlinkto('<input type="button" class="button" value="Login or register to apply for this opening!" />', 'index');
+      echo vlinkto('<input type="button" class="button" value="Login or register to apply for this opening!" />', 'login');
     }
     ?>
   </div>

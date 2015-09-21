@@ -13,7 +13,7 @@
         $title = vget('title');
         $summary = vget('summary');
         $school = vget('studentschool');
-        echo '<meta property="og:title" content="' . $title . ' in ' . $city . 
+        echo '<meta property="og:title" content="' . $title . ' in ' . $city .
           ', ' . $state . ' | ' . $name . ', ' . $school . '" />';
         echo '<meta property="og:description" content="' . $summary . '" />';
         foreach(vget('photos') as $photourl) {
@@ -156,7 +156,7 @@
     <?php } ?>
   </head>
   <body>
-    
+
     <script>
       window.fbAsyncInit = function() {
         FB.init({
@@ -175,6 +175,4 @@
        }(document, 'script', 'facebook-jssdk'));
     </script>
 
-    <?php if (vget('Loggedinstudent')) vpartial('socialdropdown'); ?>
-    
     <?php require_once($GLOBALS['dirpre'].'views/navbar.php'); ?>

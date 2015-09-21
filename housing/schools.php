@@ -358,6 +358,8 @@
 			"sfu.ca" => "Simon Fraser University",
 			"student.pravo.hr" => "University of Zagreb Faculty of Law",
 			"mail.utoronto.ca" => "University of Toronto",
+			"utoronto.ca" => "University of Toronto",
+			"rotman.utoronto.ca" => "University of Toronto School of Management",
 			"hunterschools.org" => "Hunter College Campus Schools",
 			"hku.hk" => "Hong Kong University",
 			"columbia.cumc.edu" => "Columbia University Medical Center",
@@ -600,7 +602,9 @@
 			"alumni.duke.edu" => "Duke University Alumni",
 			"friars.providence.edu" => "Providence College",
 			"macaulay.cuny.edu" => "City University of New York Macaulay Honors College",
-			"jsu.edu" => "Jacksonville State University"
+			"jsu.edu" => "Jacksonville State University",
+			"yorku.ca" => "York University",
+			"georgebrown.ca" => "George Brown College"
 		);
 		public function getDomain($email) {
 			$ea = explode('@', $email);

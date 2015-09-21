@@ -2,7 +2,7 @@
   <div class="content">
     <headline><?php vecho('headline'); ?> Job Listing</headline>
     <form method="post">
-      <?php 
+      <?php
         if (vget('_id') !== null) {
           $id = vget('_id');
           echo ' &nbsp; ' . vlinkto('<input type="button" value="View Job Listing" /><br /><br />', 'job', array('id' => $id), true);
@@ -12,6 +12,7 @@
       <div class="form-slider"><label for="title">Job Title:</label><input type="text" id="title" name="title" value="<?php vecho('title'); ?>" required /></div>
       <left>
         <input type="radio" name="jobtype" id="fulltime" value="fulltime" <?php vchecked('jobtype', 'fulltime'); ?> required /><label for="fulltime"> Full-time position</label>
+        <input type="radio" name="jobtype" id="parttime" value="parttime" <?php vchecked('jobtype', 'parttime'); ?> required /><label for="parttime"> Part-time position</label>
         <input type="radio" name="jobtype" id="internship" value="internship" <?php vchecked('jobtype', 'internship'); ?> required /><label for="internship"> Internship</label>
       </left>
       <div class="form-slider" id="durationdiv"><label for="duration">Duration (weeks):</label><input type="text" id="duration" name="duration" maxlength="100" value="<?php vecho('duration'); ?>" /></div>
@@ -35,7 +36,7 @@
         <input type="checkbox" name="locationtype" id="locationtype" value="home" <?php vchecked('locationtype', 'home'); ?> /><label for="locationtype"> Work at home job</label>
       </left>
       <div class="form-slider" id="locationdiv"><label for="location">Job Location (Address, City, State):</label><input type="text" id="location" name="location" maxlength="500" value="<?php vecho('location'); ?>" required /></div>
-      <input type="checkbox" name="terms" id="terms" value="agree" required /> <label for="terms">I represent and warrant that I am employed by the company offering the internship, that I have authority or permission to post this internship, and that the description is accurate and not misleading.</label>
+      <input type="checkbox" name="terms" id="terms" value="agree" required /> <label for="terms">I represent and warrant that I am employed by the company offering the job, that I have authority or permission to post this job, and that the description is accurate and not misleading.</label>
       <?php vnotice(); ?>
       <right>
         <input type="submit" name="<?php vecho('submitname'); ?>" value="<?php vecho('submitvalue'); ?>" />
