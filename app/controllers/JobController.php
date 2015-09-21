@@ -174,7 +174,10 @@
         $data['viewers'] = array();
         $data['stats'] = array('views' => 0, 'clicks' => 0);
         $id = $MJob->save($data);
-        $this->redirect('job', array('id' => $id));
+
+        $this->redirect('editapp', array('id' => $id));
+        // This should go after the application form is set up.
+        // $this->redirect('job', array('id' => $id));
         return;
       }
 
