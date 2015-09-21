@@ -3,12 +3,8 @@
   require_once("../../../models/QuestionModel.php");
   class Question {
     public static function getAllVanilla() {
-
       // Issue query to get all questions with vanilla flag on.
-      $query = (new QuestionQuery())->toQuery('vanilla', true);
-      assert(count($query->getQuery()) == 1);
-      assert($query->getQuery()['vanilla'] == true);
-      $results = $query->run();
+      $results = QuestionModel::getAllVanilla();
 
       // Parse and return data from query and make array of questions with data
       return self::parseRawData($results);
@@ -16,47 +12,52 @@
 
     public static function search($text) {
       // Issue query to model
-      $query = new QuestionQuery();
-      $query->toTextQuery($text);
-      $results = $query->run();
+      $results = QuestionModel::getByText($text);
 
       // Create array of question(s) from returned data and return it
       return self::parseRawData($results);
     }
 
-    public static function createCustom() {
+    public static function createCustom($text, $recruiter) {
       // return (call create with custom parameter)
+      return create($text, $recruiter, false);
     }
 
-    public static function createVanilla() {
+    public static function createVanilla($text, $recruiter) {
       // return (call create with vanilla parameter)
+      return create($text, $recruiter, true);
     }
 
     public static function getById($id) {
-      // Ask model to get it
-      
-      // If model can't get it, return null
+      // Ask model to get it. If model can't get it, return null.
+      // If model can get it, parse the raw data and return question.
+      $question = QuestionModel::getById($id);
 
-      // If model can get it, parse the raw data and return question
+      return $question === null ? null : self::parseRawData($question);
     }
 
     public static function delete($id) {
-      // Ask model to delete question by id
-
-      // return whatever the model function returns
+      // Ask model to delete question by id and return whatever the model
+      // function returns
+      return QuestionModel::deleteById($id);
     }
 
     /**
      * // TODO Make this documentation better later
-     * take in ARRAY of raw question data from model and create array of
-     * Question instances.
+     * take in ARRAY or SINGLE of raw question data from model and create array
+     * of Question instances.
      */
     private static function parseRawData($data) {
-      $questions = array();
-      foreach ($data as $rawQuestion) {
-        $questions[] = new Question($rawQuestion);
+      if (is_array($data)) {
+        $questions = array();
+        foreach ($data as $rawQuestion) {
+          $questions[] = new Question($rawQuestion);
+        }
+        return $questions;
       }
-      return $questions;
+
+      // Not an array, so just parse single question.
+      return new Question($data);
     }
 
     private static function create() {
