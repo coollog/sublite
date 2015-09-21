@@ -1,8 +1,8 @@
 <?php
   //TODO Remove this later
-  require_once("../../../models/Model.php");
-  require_once("../../../models/modules/DBQuery.php");
-  require_once("../../../models/QuestionModel.php");
+  require_once($GLOBALS['dirpre']."models/Model.php");
+  require_once($GLOBALS['dirpre']."models/modules/DBQuery.php");
+  require_once($GLOBALS['dirpre']."models/QuestionModel.php");
 
   class Question {
     public static function getAllVanilla() {
