@@ -1,6 +1,9 @@
 <?php
   //TODO Remove this later
+  require_once("../../../models/Model.php");
+  require_once("../../../models/modules/DBQuery.php");
   require_once("../../../models/QuestionModel.php");
+
   class Question {
     public static function getAllVanilla() {
       // Issue query to get all questions with vanilla flag on.
