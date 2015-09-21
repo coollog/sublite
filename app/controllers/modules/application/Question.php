@@ -38,13 +38,13 @@
 
     public static function delete($id) {
       // Ask model to delete question by id and return whatever the model
-      // function returns
+      // function returns.
       return QuestionModel::deleteById($id);
     }
 
     /**
      * // TODO Make this documentation better later
-     * take in ARRAY or SINGLE of raw question data from model and create array
+     * Take in ARRAY or SINGLE of raw question data from model and create array
      * of Question instances.
      */
     private static function parseRawData($data) {
@@ -60,21 +60,39 @@
       return new Question($data);
     }
 
-    private static function create() {
-      // Construct question with parameters
+    private static function create($text, $recruiter, $vanilla) {
+      // Check if question already exists (model function). If so, return
+      // the question.
+      $existingQuestion = QuestionModel::getByExactText($text);
+      if ($existingQuestion !== null) {
+        return self::parseRawData($existingQuestion);
+      }
 
-      // Check if question already exists (model function). If so, return question
+      // Construct question with parameters.
+      $question = new Question(array(
+        'text' => $text,
+        'recruiter' => $recruiter,
+        'vanilla' => $vanilla
+      ));
 
       // Pass (question object or raw data?) to model to store in database with
       // custom flag
+      QuestionModel::insert($question->getData());
 
-      // Return created question
+      // Return created question.
+      return $question;
     }
 
     //**********************
     // non-static functions
     //**********************
 
+    /**
+     * Construct a Question instance by passing in an ass array of the data
+     * for the question.
+     * Cleans and prunes the ass array to be just the data necessary.
+     * See the declaration of $this->data below.
+     */
     public function __construct($data) {
       if (isset($data['_id'])) {
         $this->data['_id'] = clean($data['_id']);
@@ -121,6 +139,4 @@
     // vanilla: (required) whether or not the question is vanilla
     private $data;
   }
-
-  Question::getAllVanilla();
 ?>
