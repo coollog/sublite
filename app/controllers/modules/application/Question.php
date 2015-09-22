@@ -4,6 +4,7 @@
   require_once($GLOBALS['dirpre']."models/modules/DBQuery.php");
   require_once($GLOBALS['dirpre']."models/QuestionModel.php");
 
+  //TODO Add validations
   class Question {
     public static function getAllVanilla() {
       // Issue query to get all questions with vanilla flag on.
@@ -91,7 +92,7 @@
     //**********************
 
     /**
-     * Construct a Question instance by passing in an ass array of the data
+     * Construct a Question instance by passing in an ass. array of the data
      * for the question.
      * Cleans and prunes the ass array to be just the data necessary.
      * See the declaration of $this->data below.
