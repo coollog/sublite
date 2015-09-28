@@ -96,11 +96,13 @@
       $rs = array();
       foreach ($recruiters as $r) {
         $email = $r['email'];
+        $firstname = $r['firstname'];
+        $lastname = $r['lastname'];
         $company = $r['company'];
         if (MongoId::isValid($company))
           $company = $MCompany->getName($company);
         $date = fdate($r['_id']->getTimestamp());
-        $rs[] = "\"$email\",\"$company\",\"$date\"";
+        $rs[] = "\"$email\",\"$firstname\",\"$lastname\",\"$company\",\"$date\"";
       }
 
       echo '<br />Recruiters with date of joining:<br />
