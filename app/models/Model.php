@@ -1,5 +1,10 @@
 <?php
-  class Model {
+  interface ModelInterface {
+    public function __construct($dbType, $collectionName);
+    public function __destruct();
+  }
+
+  class Model implements ModelInterface {
     // Database types that indicate which database a Model connects to.
     const DB_STUDENTS = 0;
     const DB_INTERNSHIPS = 1;

@@ -1,5 +1,15 @@
 <?php
-  class QuestionModel extends Model {
+  interface QuestionModelInterface {
+    public function __construct();
+    public static function getById(MongoId $id);
+    public static function getAllVanilla();
+    public static function getByText($text);
+    public static function getByExactText($text);
+    public static function deleteById(MongoId $id);
+    public static function exists(MongoId $id);
+  }
+
+  class QuestionModel extends Model implements QuestionModelInterface {
     const DB_TYPE = parent::DB_INTERNSHIPS;
 
     protected static $collection;
@@ -8,7 +18,7 @@
       self::$collection = parent::__construct(self::DB_TYPE, 'questions');
     }
 
-    public static function getById($id) {
+    public static function getById(MongoId $id) {
       checkReady();
 
       $query = (new DBQuery(self::$collection))->queryForId($id);
@@ -38,14 +48,14 @@
       return $query->run();
     }
 
-    public static function deleteById($id) {
+    public static function deleteById(MongoId $id) {
       checkReady();
 
       $query = (new DBRemoveQuery(self::$collection))->queryForId($id);
       return $query->run();
     }
 
-    public static function exists($id) {
+    public static function exists(MongoId $id) {
       checkReady();
 
       $query = (new DBQuery(self::$collection))->queryForId($id)->justId();

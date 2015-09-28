@@ -1,38 +1,59 @@
 <?php
   //TODO Remove this later
+  $GLOBALS['dirpre'] = '../../../';
+  date_default_timezone_set('America/New_York');
+  require_once($GLOBALS['dirpre'].'includes/error.php');
+  require_once($GLOBALS['dirpre'].'tests/invariant.php');
   require_once($GLOBALS['dirpre']."models/Model.php");
   require_once($GLOBALS['dirpre']."models/modules/DBQuery.php");
   require_once($GLOBALS['dirpre']."models/QuestionModel.php");
 
+  interface QuestionInterface {
+    public static function getAllVanilla();
+    public static function search($text);
+    public static function createCustom($text, MongoId $recruiter);
+    public static function createVanilla($text, MongoId $recruiter);
+    public static function getById(MongoId $id);
+    public static function delete(MongoId $id);
+
+    public function __construct(array $data);
+    public function getData();
+    public function getId();
+    public function getText();
+    public function getRecruiter();
+    public function getUses();
+    public function getVanilla();
+  }
+
   //TODO Add validations
-  class Question {
+  class Question implements QuestionInterface {
     public static function getAllVanilla() {
       // Issue query to get all questions with vanilla flag on.
       $results = QuestionModel::getAllVanilla();
 
-      // Parse and return data from query and make array of questions with data
+      // Parse and return data from query and make array of questions with data.
       return self::parseRawData($results);
     }
 
     public static function search($text) {
-      // Issue query to model
+      // Issue query to model.
       $results = QuestionModel::getByText($text);
 
-      // Create array of question(s) from returned data and return it
+      // Create array of question(s) from returned data and return it.
       return self::parseRawData($results);
     }
 
-    public static function createCustom($text, $recruiter) {
-      // return (call create with custom parameter)
+    public static function createCustom($text, MongoId $recruiter) {
+      // Return (call create with custom parameter).
       return create($text, $recruiter, false);
     }
 
-    public static function createVanilla($text, $recruiter) {
-      // return (call create with vanilla parameter)
+    public static function createVanilla($text, MongoId $recruiter) {
+      // Return (call create with vanilla parameter).
       return create($text, $recruiter, true);
     }
 
-    public static function getById($id) {
+    public static function getById(MongoId $id) {
       // Ask model to get it. If model can't get it, return null.
       // If model can get it, parse the raw data and return question.
       $question = QuestionModel::getById($id);
@@ -40,7 +61,7 @@
       return $question === null ? null : self::parseRawData($question);
     }
 
-    public static function delete($id) {
+    public static function delete(MongoId $id) {
       // Ask model to delete question by id and return whatever the model
       // function returns.
       return QuestionModel::deleteById($id);
@@ -80,7 +101,7 @@
       ));
 
       // Pass (question object or raw data?) to model to store in database with
-      // custom flag
+      // custom flag.
       QuestionModel::insert($question->getData());
 
       // Return created question.
@@ -97,7 +118,7 @@
      * Cleans and prunes the ass array to be just the data necessary.
      * See the declaration of $this->data below.
      */
-    public function __construct($data) {
+    public function __construct(array $data) {
       if (isset($data['_id'])) {
         $this->data['_id'] = clean($data['_id']);
       }

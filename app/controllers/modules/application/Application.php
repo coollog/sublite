@@ -1,6 +1,17 @@
 <?php
-  class Application {
-    public static function create($recruiter, $job, $questions) {
+  interface ApplicationInterface {
+    public static function create(MongoId $recruiter, MongoId $job, $questions);
+    public static function delete(MongoId $id);
+
+    public function __construct();
+    public function getQuestions();
+    public function getRecruiter();
+  }
+
+  class Application implements ApplicationInterface {
+    public static function create(MongoId $recruiter,
+                                  MongoId $job,
+                                  $questions) {
 
     }
 
