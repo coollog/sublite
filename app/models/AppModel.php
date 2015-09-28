@@ -2,17 +2,21 @@
   require_once($GLOBALS['dirpre'].'models/Model.php');
 
   class AppModel extends Model {
-    function __construct($test=false) {
-      parent::__construct(parent::DB_INTERNSHIPS, 'app', $test);
+    const DB_TYPE = parent::DB_INTERNSHIPS;
+
+    protected static $collection;
+
+    function __construct() {
+      self::$collection = parent::__construct(self::DB_TYPE, 'app');
     }
 
     function save($data) {
-      $this->collection->save($data);
+      self::$collection->save($data);
       return $data['_id'];
     }
 
     function get($id) {
-      return $this->collection->findOne(array('_id' => $id));
+      return self::$collection->findOne(array('_id' => $id));
     }
 
     function updateStats($countCities=false) {

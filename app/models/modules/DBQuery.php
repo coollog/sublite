@@ -1,5 +1,43 @@
 <?php
-  class DBQuery {
+  /**
+   * Contains functions for performing commands on the DB.
+   */
+  class DBExecute {
+    /**
+     * Inserts the document $data into the database. $data must be nonempty.
+     * Returns the document _id, or null if error.
+     */
+    public static function insert($collection, $data) {
+      if (count($data) == 0) {
+        return null;
+      }
+
+      $collection->insert($data);
+      return $data['_id']->{'$id'};
+    }
+
+    // TODO: Unit test this for passing null as the limit would mean no projection.
+    public static function query($collection, $query, $projection = null) {
+      return $collection->find($query, $projection);
+    }
+
+    public static function update($collection, $query, $update) {
+      return $collection->update($query, $update);
+    }
+
+    public static function remove($collection, $query) {
+      return $collection->remove($query);
+    }
+  }
+
+  ////////////////
+  // Below has classes:
+  // DBQuery - performs (query, projection)
+  // DBUpdateQuery - performs (query, $set)
+  // DBRemoveQuery - performs (query) -> remove
+  ////////////////
+
+  class DBQuery extends DBExecute {
     public function __construct($collection) {
       $this->collection = $collection;
     }
@@ -44,9 +82,9 @@
      */
     public function run() {
       if ($this->projection === null) {
-        Model::query($this->collection, $this->query);
+        self::query($this->collection, $this->query);
       } else {
-        Model::query($this->collection, $this->query, $this->projection);
+        self::query($this->collection, $this->query, $this->projection);
       }
     }
 
@@ -57,10 +95,10 @@
       return $this->query;
     }
 
-    private $collection;
+    protected $collection;
 
-    private $query = array();
-    private $projection = null;
+    protected $query = array();
+    protected $projection = null;
   }
 
   class DBUpdateQuery extends DBQuery {
@@ -71,7 +109,8 @@
 
     public function run() {
       // This an update, so run an update, and return success/failure.
-      Model::update($this->collection, $query, array('$set' => $update));
+      self::update(
+        $this->collection, $this->query, array('$set' => $this->update));
     }
 
     /**
@@ -87,7 +126,7 @@
   class DBRemoveQuery extends DBQuery {
     public function run() {
       // Run the remove query, always returns true.
-      Model::remove($this->collection, $query);
+      self::remove($this->collection, $this->query);
     }
   }
 ?>

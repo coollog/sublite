@@ -2,13 +2,18 @@
   require_once($GLOBALS['dirpre'].'models/Model.php');
 
   class RecruiterModel extends Model {
-    function __construct($test=false) {
-      parent::__construct(parent::DB_INTERNSHIPS, 'recruiters', $test);
+    const DB_TYPE = parent::DB_INTERNSHIPS;
+
+    protected static $collection;
+
+    function __construct() {
+      self::$collection =
+        parent::__construct(self::DB_TYPE, 'recruiters');
     }
 
     function save($data) {
       $data['msgs'] = array();
-      $this->collection->save($data);
+      self::$collection->save($data);
       return $data['_id']->{'$id'};
     }
 
@@ -18,13 +23,13 @@
     }
 
     function get($email) {
-      return $this->collection->findOne(array('email' => $email));
+      return self::$collection->findOne(array('email' => $email));
     }
     function getByID($id) {
-      return $this->collection->findOne(array('_id' => new MongoID($id)));
+      return self::$collection->findOne(array('_id' => new MongoID($id)));
     }
     function getByPass($pass) {
-      return $this->collection->findOne(array('pass' => $pass));
+      return self::$collection->findOne(array('pass' => $pass));
     }
     function getCompany($rid) {
       $r = $this->getByID($rid);
@@ -48,14 +53,14 @@
       return $this->get($_SESSION['email']);
     }
     function find($query=array()) {
-      return $this->collection->find($query);
+      return self::$collection->find($query);
     }
 
     function exists($email) {
       return ($this->get($email) !== NULL);
     }
     function IDexists($id) {
-      return ($this->collection->findOne(array('_id' => new MongoId($id))) !== NULL);
+      return (self::$collection->findOne(array('_id' => new MongoId($id))) !== NULL);
     }
   }
 

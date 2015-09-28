@@ -7,7 +7,6 @@
   }
 
   class StudentModelTest extends Test {
-// PUBLIC:
     public static function run() {
       $class = get_called_class();
 
@@ -18,11 +17,12 @@
       });
     }
 
-// PRIVATE:
     private static $MStudentTest;
 
     private static function start() {
-      self::$MStudentTest = new StudentModel(true);
+      Model::test = true;
+
+      self::$MStudentTest = new StudentModel();
     }
   }
 ?>

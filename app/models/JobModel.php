@@ -2,30 +2,34 @@
   require_once($GLOBALS['dirpre'].'models/Model.php');
 
   class JobModel extends Model {
-    function __construct($test=false) {
-      parent::__construct(parent::DB_INTERNSHIPS, 'jobs', $test);
+    const DB_TYPE = parent::DB_INTERNSHIPS;
+
+    protected static $collection;
+
+    function __construct() {
+      self::$collection = parent::__construct(self::DB_TYPE, 'jobs');
     }
 
     function save($data, $setRecruiter=true) {
       if ($setRecruiter) $data['recruiter'] = $_SESSION['_id'];
-      $this->collection->save($data);
+      self::$collection->save($data);
       return $data['_id']->{'$id'};
     }
 
     function get($id) {
-      return $this->collection->findOne(array('_id' => new MongoId($id)));
+      return self::$collection->findOne(array('_id' => new MongoId($id)));
     }
     function getByRecruiter($id) {
-      return $this->collection->find(array('recruiter' => new MongoId($id)));
+      return self::$collection->find(array('recruiter' => new MongoId($id)));
     }
     function getAll() {
-      return $this->collection->find();
+      return self::$collection->find();
     }
     function find($query=array()) {
-      return $this->collection->find($query);
+      return self::$collection->find($query);
     }
     function last($n=1) {
-      return $this->collection->find()->sort(array('_id'=>-1))->limit($n);
+      return self::$collection->find()->sort(array('_id'=>-1))->limit($n);
     }
 
     function owner($id) {

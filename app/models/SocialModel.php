@@ -2,16 +2,20 @@
   require_once($GLOBALS['dirpre'].'models/Model.php');
 
   class SocialModel extends Model {
+    const DB_TYPE = parent::DB_INTERNSHIPS;
+
+    protected static $collection;
+
     // The essentials
-    function __construct($test=false) {
-      parent::__construct(parent::DB_STUDENTS, 'hubs', $test);
+    function __construct() {
+      self::$collection = parent::__construct(self::DB_TYPE, 'hubs');
     }
     function save($data) {
-      $this->collection->save($data);
+      self::$collection->save($data);
       return $data['_id']->{'$id'};
     }
     function collection() {
-      return $this->collection;
+      return self::$collection;
     }
 
     // Processors
@@ -37,10 +41,10 @@
     // Accessors
     function get($id) {
       if (!MongoId::isValid($id)) return null;
-      return $this->collection->findOne(array('_id' => new MongoId($id)));
+      return self::$collection->findOne(array('_id' => new MongoId($id)));
     }
     function getAll() {
-      return $this->collection->find();
+      return self::$collection->find();
     }
     function getClosestHub($address, $maxMiles) {
       $geocode = geocode($address);
@@ -48,7 +52,7 @@
       $latitude = $geocode['latitude'];
       $maxMeters = miles2meters($maxMiles);
 
-      return $this->collection->findOne(array('geojson' => array(
+      return self::$collection->findOne(array('geojson' => array(
         '$near' => array(
           '$geometry' => array(
             'type' => 'Point',

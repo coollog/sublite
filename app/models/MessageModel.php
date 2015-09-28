@@ -2,12 +2,17 @@
   require_once($GLOBALS['dirpre'].'models/Model.php');
 
   class MessageModel extends Model {
+    const DB_TYPE = parent::DB_INTERNSHIPS;
+
+    protected static $collection;
+
     function __construct($test=false) {
-      parent::__construct(parent::DB_INTERNSHIPS, 'message', $test);
+      self::$collection =
+        parent::__construct(self::DB_TYPE, 'message', $test);
     }
 
     function save($data) {
-      $this->collection->save($data);
+      self::$collection->save($data);
       return $data['_id']->{'$id'};
     }
 
@@ -15,7 +20,7 @@
       $data = array(
         'participants' => $participants, 'replies' => array()
       );
-      $this->collection->save($data);
+      self::$collection->save($data);
       return $data['_id']->{'$id'};
     }
 
@@ -24,12 +29,12 @@
       array_push($entry['replies'], array(
         'from' => $from, 'msg' => $msg, 'time' => time(), 'read' => false
       ));
-      $this->collection->save($entry);
+      self::$collection->save($entry);
       return $entry;
     }
 
     function findByParticipant($participant) {
-      return $this->collection->find(array(
+      return self::$collection->find(array(
         'participants' => $participant,
         'replies' => array('$not' => array('$size' => 0))
       ));
@@ -41,10 +46,10 @@
     }
 
     function get($id) {
-      return $this->collection->findOne(array('_id' => new MongoId($id)));
+      return self::$collection->findOne(array('_id' => new MongoId($id)));
     }
     function getAll() {
-      return $this->collection->find();
+      return self::$collection->find();
     }
 
     function exists($id) {

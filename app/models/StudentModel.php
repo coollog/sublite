@@ -2,29 +2,33 @@
   require_once($GLOBALS['dirpre'].'models/Model.php');
 
   class StudentModel extends Model {
-    function __construct($test=false) {
-      parent::__construct(parent::DB_STUDENTS, 'emails', $test);
+    const DB_TYPE = parent::DB_INTERNSHIPS;
+
+    protected static $collection;
+
+    function __construct() {
+      self::$collection = parent::__construct(self::DB_TYPE, 'emails');
     }
 
     function save($data) {
-      $this->collection->save($data);
+      self::$collection->save($data);
       return $data['_id']->{'$id'};
     }
 
     function find($query) {
-      return $this->collection->find($query);
+      return self::$collection->find($query);
     }
     function get($email) {
-      return $this->collection->findOne(array('email' => $email));
+      return self::$collection->findOne(array('email' => $email));
     }
     function getAll() {
-      return $this->collection->find();
+      return self::$collection->find();
     }
     function getAllwTime() {
-      return $this->collection->find(array('time' => array('$exists' => true)));
+      return self::$collection->find(array('time' => array('$exists' => true)));
     }
     function getById($id) {
-      $student = $this->collection->findOne(array('_id' => new MongoId($id)));
+      $student = self::$collection->findOne(array('_id' => new MongoId($id)));
       $student['photo'] = isset($student['photo']) ? $student['photo'] :
         $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
       return $student;
@@ -47,7 +51,7 @@
       return $entry['email'];
     }
     function last($n=1) {
-      return $this->collection->find()->sort(array('_id'=>-1))->limit($n);
+      return self::$collection->find()->sort(array('_id'=>-1))->limit($n);
     }
     function me() {
       if (isset($_SESSION['loggedinstudent']))
@@ -72,10 +76,10 @@
     }
 
     function exists($id) {
-      return ($this->collection->findOne(array('_id' => new MongoId($id))) !== NULL);
+      return (self::$collection->findOne(array('_id' => new MongoId($id))) !== NULL);
     }
     function existsEmail($email) {
-      return ($this->collection->findOne(array('email' => $email)) !== NULL);
+      return (self::$collection->findOne(array('email' => $email)) !== NULL);
     }
   }
 
