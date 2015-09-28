@@ -1,6 +1,8 @@
 <?php
   interface ApplicationInterface {
-    public static function create(MongoId $recruiter, MongoId $job, $questions);
+    public static function create(MongoId $recruiter,
+                                  MongoId $job,
+                                  array $questions);
     public static function delete(MongoId $id);
 
     public function __construct();
@@ -11,7 +13,7 @@
   class Application implements ApplicationInterface {
     public static function create(MongoId $recruiter,
                                   MongoId $job,
-                                  $questions) {
+                                  array $questions) {
 
     }
 
