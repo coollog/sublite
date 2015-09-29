@@ -10,6 +10,7 @@
     function __construct() {
       self::$collection = parent::__construct(self::DB_TYPE, 'hubs');
     }
+
     function save($data) {
       self::$collection->save($data);
       return $data['_id']->{'$id'};

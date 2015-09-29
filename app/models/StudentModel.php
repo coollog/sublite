@@ -4,31 +4,29 @@
   class StudentModel extends Model {
     const DB_TYPE = parent::DB_INTERNSHIPS;
 
-    protected static $collection;
-
     function __construct() {
-      self::$collection = parent::__construct(self::DB_TYPE, 'emails');
+      static::$collection = parent::__construct(self::DB_TYPE, 'emails');
     }
 
     function save($data) {
-      self::$collection->save($data);
+      static::$collection->save($data);
       return $data['_id']->{'$id'};
     }
 
     function find($query) {
-      return self::$collection->find($query);
+      return static::$collection->find($query);
     }
     function get($email) {
-      return self::$collection->findOne(array('email' => $email));
+      return static::$collection->findOne(array('email' => $email));
     }
     function getAll() {
-      return self::$collection->find();
+      return static::$collection->find();
     }
     function getAllwTime() {
-      return self::$collection->find(array('time' => array('$exists' => true)));
+      return static::$collection->find(array('time' => array('$exists' => true)));
     }
     function getById($id) {
-      $student = self::$collection->findOne(array('_id' => new MongoId($id)));
+      $student = static::$collection->findOne(array('_id' => new MongoId($id)));
       $student['photo'] = isset($student['photo']) ? $student['photo'] :
         $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
       return $student;
@@ -51,7 +49,7 @@
       return $entry['email'];
     }
     function last($n=1) {
-      return self::$collection->find()->sort(array('_id'=>-1))->limit($n);
+      return static::$collection->find()->sort(array('_id'=>-1))->limit($n);
     }
     function me() {
       if (isset($_SESSION['loggedinstudent']))
@@ -76,10 +74,10 @@
     }
 
     function exists($id) {
-      return (self::$collection->findOne(array('_id' => new MongoId($id))) !== NULL);
+      return (static::$collection->findOne(array('_id' => new MongoId($id))) !== NULL);
     }
     function existsEmail($email) {
-      return (self::$collection->findOne(array('email' => $email)) !== NULL);
+      return (static::$collection->findOne(array('email' => $email)) !== NULL);
     }
   }
 

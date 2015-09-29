@@ -4,23 +4,21 @@
   class CompanyModel extends Model {
     const DB_TYPE = parent::DB_INTERNSHIPS;
 
-    protected static $collection;
-
     function __construct() {
-      self::$collection =
+      static::$collection =
         parent::__construct(self::DB_TYPE, 'companies');
     }
 
     function save($data) {
-      self::$collection->save($data);
+      static::$collection->save($data);
       return $data['_id']->{'$id'};
     }
 
     function get($id) {
-      return self::$collection->findOne(array('_id' => new MongoId($id)));
+      return static::$collection->findOne(array('_id' => new MongoId($id)));
     }
     function getByName($name) {
-      return self::$collection->findOne(array('name' => $name));
+      return static::$collection->findOne(array('name' => $name));
     }
     function getName($id) {
       $entry = $this->get($id);
@@ -31,10 +29,10 @@
       return $entry['industry'];
     }
     function getAll() {
-      return self::$collection->find();
+      return static::$collection->find();
     }
     function find($query) {
-      return self::$collection->find($query);
+      return static::$collection->find($query);
     }
 
     function delete($id) {

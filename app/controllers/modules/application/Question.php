@@ -1,13 +1,4 @@
 <?php
-  //TODO Remove this later
-  $GLOBALS['dirpre'] = '../../../';
-  date_default_timezone_set('America/New_York');
-  require_once($GLOBALS['dirpre'].'includes/error.php');
-  require_once($GLOBALS['dirpre'].'tests/invariant.php');
-  require_once($GLOBALS['dirpre']."models/Model.php");
-  require_once($GLOBALS['dirpre']."models/modules/DBQuery.php");
-  require_once($GLOBALS['dirpre']."models/QuestionModel.php");
-
   interface QuestionInterface {
     public static function getAllVanilla();
     public static function search($text);
@@ -23,6 +14,7 @@
     public function getRecruiter();
     public function getUses();
     public function getVanilla();
+    public function setId(MongoId $id);
   }
 
   //TODO Add validations
@@ -45,12 +37,12 @@
 
     public static function createCustom($text, MongoId $recruiter) {
       // Return (call create with custom parameter).
-      return create($text, $recruiter, false);
+      return self::create($text, $recruiter, false);
     }
 
     public static function createVanilla($text, MongoId $recruiter) {
       // Return (call create with vanilla parameter).
-      return create($text, $recruiter, true);
+      return self::create($text, $recruiter, true);
     }
 
     public static function getById(MongoId $id) {
@@ -58,7 +50,7 @@
       // If model can get it, parse the raw data and return question.
       $question = QuestionModel::getById($id);
 
-      return $question === null ? null : self::parseRawData($question);
+      return count($question) == 0 ? null : self::parseRawData($question[0]);
     }
 
     public static function delete(MongoId $id) {
@@ -72,8 +64,12 @@
      * Take in ARRAY or SINGLE of raw question data from model and create array
      * of Question instances.
      */
-    private static function parseRawData($data) {
-      if (is_array($data)) {
+    private static function parseRawData(array $data) {
+      if (count($data) == 0) {
+        return array();
+      }
+
+      if (!isAssoc($data)) {
         $questions = array();
         foreach ($data as $rawQuestion) {
           $questions[] = new Question($rawQuestion);
@@ -85,11 +81,11 @@
       return new Question($data);
     }
 
-    private static function create($text, $recruiter, $vanilla) {
+    private static function create($text, MongoId $recruiter, $vanilla) {
       // Check if question already exists (model function). If so, return
       // the question.
       $existingQuestion = QuestionModel::getByExactText($text);
-      if ($existingQuestion !== null) {
+      if (count($existingQuestion) > 0) {
         return self::parseRawData($existingQuestion);
       }
 
@@ -102,7 +98,8 @@
 
       // Pass (question object or raw data?) to model to store in database with
       // custom flag.
-      QuestionModel::insert($question->getData());
+      $id = QuestionModel::insert($question->getData());
+      $question->setId($id);
 
       // Return created question.
       return $question;
@@ -120,10 +117,10 @@
      */
     public function __construct(array $data) {
       if (isset($data['_id'])) {
-        $this->data['_id'] = clean($data['_id']);
+        $this->data['_id'] = new MongoId($data['_id']);
       }
       $this->data['text'] = clean($data['text']);
-      $this->data['recruiter'] = clean($data['recruiter']);
+      $this->data['recruiter'] = new MongoId($data['recruiter']);
       if (isset($data['uses'])) {
         $this->data['uses'] = clean($data['uses']);
       } else {
@@ -153,7 +150,11 @@
     }
 
     public function getVanilla() {
-      return $this->data['text'];
+      return $this->data['vanilla'];
+    }
+
+    public function setId(MongoId $id) {
+      $this->data['_id'] = $id;
     }
 
     // $data is an associative array containing a subset of these keys:

@@ -4,32 +4,30 @@
   class JobModel extends Model {
     const DB_TYPE = parent::DB_INTERNSHIPS;
 
-    protected static $collection;
-
     function __construct() {
-      self::$collection = parent::__construct(self::DB_TYPE, 'jobs');
+      static::$collection = parent::__construct(self::DB_TYPE, 'jobs');
     }
 
     function save($data, $setRecruiter=true) {
       if ($setRecruiter) $data['recruiter'] = $_SESSION['_id'];
-      self::$collection->save($data);
+      static::$collection->save($data);
       return $data['_id']->{'$id'};
     }
 
     function get($id) {
-      return self::$collection->findOne(array('_id' => new MongoId($id)));
+      return static::$collection->findOne(array('_id' => new MongoId($id)));
     }
     function getByRecruiter($id) {
-      return self::$collection->find(array('recruiter' => new MongoId($id)));
+      return static::$collection->find(array('recruiter' => new MongoId($id)));
     }
     function getAll() {
-      return self::$collection->find();
+      return static::$collection->find();
     }
     function find($query=array()) {
-      return self::$collection->find($query);
+      return static::$collection->find($query);
     }
     function last($n=1) {
-      return self::$collection->find()->sort(array('_id'=>-1))->limit($n);
+      return static::$collection->find()->sort(array('_id'=>-1))->limit($n);
     }
 
     function owner($id) {

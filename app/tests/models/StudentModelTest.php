@@ -1,28 +1,31 @@
 <?php
-  abstract Class Test {
-    /**
-     * Implement tests in this function.
-     */
-    abstract protected static function run();
-  }
+  require_once($GLOBALS['dirpre'].'tests/TestFixture.php');
 
-  class StudentModelTest extends Test {
+  class StudentModelTest extends Test implements TestInterface {
     public static function run() {
       $class = get_called_class();
 
-      TEST("$class.save", function() {
-        self::start();
+      TEST($class, "$class.correctCollection", function() {
+        $actualCollection = StudentModel::myCollection();
+        $correctCollection = 'emails';
+        EQ($actualCollection, $correctCollection,
+           "Collection name invalid: $actualCollection");
+      });
+
+      TEST($class, "$class.save", function() {
         $id = self::$MStudentTest->save(array());
         TRUE(self::$MStudentTest->exists($id));
       });
     }
 
-    private static $MStudentTest;
-
-    private static function start() {
-      Model::test = true;
-
+    public static function start() {
       self::$MStudentTest = new StudentModel();
     }
+
+    public static function end() {
+      self::$MStudentTest = null;
+    }
+
+    private static $MStudentTest;
   }
 ?>

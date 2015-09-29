@@ -4,19 +4,17 @@
   class AppModel extends Model {
     const DB_TYPE = parent::DB_INTERNSHIPS;
 
-    protected static $collection;
-
     function __construct() {
-      self::$collection = parent::__construct(self::DB_TYPE, 'app');
+      static::$collection = parent::__construct(self::DB_TYPE, 'app');
     }
 
     function save($data) {
-      self::$collection->save($data);
+      static::$collection->save($data);
       return $data['_id'];
     }
 
     function get($id) {
-      return self::$collection->findOne(array('_id' => $id));
+      return static::$collection->findOne(array('_id' => $id));
     }
 
     function updateStats($countCities=false) {

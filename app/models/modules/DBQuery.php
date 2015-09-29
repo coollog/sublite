@@ -3,30 +3,47 @@
    * Contains functions for performing commands on the DB.
    */
   class DBExecute {
+    public function __construct($collection) {
+      $this->collection = $collection;
+    }
+
     /**
      * Inserts the document $data into the database. $data must be nonempty.
      * Returns the document _id, or null if error.
      */
-    public static function insert($collection, $data) {
+    public static function insert(MongoCollection $collection, array $data) {
       if (count($data) == 0) {
         return null;
       }
 
       $collection->insert($data);
-      return $data['_id']->{'$id'};
+      return $data['_id'];
     }
 
     // TODO: Unit test this for passing null as the limit would mean no projection.
-    public static function query($collection, $query, $projection = null) {
-      return $collection->find($query, $projection);
+    public static function query(MongoCollection $collection,
+                                 array $query,
+                                 array $projection = array()) {
+      return self::cursorToArray($collection->find($query, $projection));
     }
 
-    public static function update($collection, $query, $update) {
+    public static function update(MongoCollection $collection,
+                                  array $query,
+                                  array $update) {
       return $collection->update($query, $update);
     }
 
-    public static function remove($collection, $query) {
+    public static function remove(MongoCollection $collection,
+                                  array $query) {
       return $collection->remove($query);
+    }
+
+    private static function cursorToArray(MongoCursor $cursor) {
+      $docs = [];
+      foreach ($cursor as $doc) {
+        $docs[] = $doc;
+      }
+      return $docs;
     }
   }
 
@@ -38,10 +55,6 @@
   ////////////////
 
   class DBQuery extends DBExecute {
-    public function __construct($collection) {
-      $this->collection = $collection;
-    }
-
     public function toQuery($name, $val) {
       $this->query[$name] = $val;
       return $this;
@@ -72,8 +85,8 @@
     /**
      * Returns single document if found, null if no document with _id $id.
      */
-    public function queryForId($id) {
-      $this->query['_id'] = new MongoId($id);
+    public function queryForId(MongoId $id) {
+      $this->query['_id'] = $id;
       return $this;
     }
 
@@ -81,11 +94,7 @@
      * Run the query and return the results.
      */
     public function run() {
-      if ($this->projection === null) {
-        self::query($this->collection, $this->query);
-      } else {
-        self::query($this->collection, $this->query, $this->projection);
-      }
+      return self::query($this->collection, $this->query, $this->projection);
     }
 
     /**
@@ -98,7 +107,7 @@
     protected $collection;
 
     protected $query = array();
-    protected $projection = null;
+    protected $projection = array();
   }
 
   class DBUpdateQuery extends DBQuery {
@@ -128,5 +137,20 @@
       // Run the remove query, always returns true.
       self::remove($this->collection, $this->query);
     }
+  }
+
+  class DBInsert extends DBExecute {
+    public function setData(array $data) {
+      $this->data = $data;
+      return $this;
+    }
+
+    public function run() {
+      invariant(isset($this->data));
+
+      return self::insert($this->collection, $this->data);
+    }
+
+    private $data;
   }
 ?>

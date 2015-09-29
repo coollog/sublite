@@ -1,10 +1,14 @@
 <?php
+  require_once($GLOBALS['dirpre']."models/modules/DBQuery.php");
+
   class Model {
     // Database types that indicate which database a Model connects to.
     const DB_STUDENTS = 0;
     const DB_INTERNSHIPS = 1;
 
     public static $test = false;
+
+    protected static $collection;
 
     /**
      * Construct singleton to initialize the MongoDB connection.
@@ -22,6 +26,14 @@
       if (self::$test) {
         mongo_ok(self::$collection->drop());
       }
+    }
+
+    public static function myCollection() {
+      if (self::$test) {
+        return substr(self::$collection->getName(), 0, -5);
+      }
+
+      return self::$collection;
     }
 
     protected static function checkReady() {

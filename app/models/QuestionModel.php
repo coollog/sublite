@@ -7,59 +7,70 @@
     public static function getByExactText($text);
     public static function deleteById(MongoId $id);
     public static function exists(MongoId $id);
+    public static function insert(array $data);
   }
 
   class QuestionModel extends Model implements QuestionModelInterface {
     const DB_TYPE = parent::DB_INTERNSHIPS;
 
-    protected static $collection;
-
     public function __construct() {
-      self::$collection = parent::__construct(self::DB_TYPE, 'questions');
+      static::$collection = parent::__construct(self::DB_TYPE, 'questions');
+      mongo_ok(static::$collection->createIndex(array('text' => 'text')));
     }
 
     public static function getById(MongoId $id) {
-      checkReady();
+      self::checkReady();
 
-      $query = (new DBQuery(self::$collection))->queryForId($id);
+      $query = (new DBQuery(static::$collection))->queryForId($id);
       return $query->run();
     }
 
     public static function getAllVanilla() {
-      checkReady();
+      self::checkReady();
 
-      $query = (new DBQuery(self::$collection))->toQuery('vanilla', true);
+      $query = (new DBQuery(static::$collection))->toQuery('vanilla', true);
       invariant(count($query->getQuery()) == 1);
       invariant($query->getQuery()['vanilla'] == true);
       return $query->run();
     }
 
     public static function getByText($text) {
-      checkReady();
+      self::checkReady();
 
-      $query = (new DBQuery(self::$collection))->toTextQuery($text);
+      $query = (new DBQuery(static::$collection))->toTextQuery($text);
       return $query->run();
     }
 
     public static function getByExactText($text) {
-      checkReady();
+      self::checkReady();
 
-      $query = (new DBQuery(self::$collection))->toQuery('text', $text);
+      $query = (new DBQuery(static::$collection))->toQuery('text', $text);
       return $query->run();
     }
 
     public static function deleteById(MongoId $id) {
-      checkReady();
+      self::checkReady();
 
-      $query = (new DBRemoveQuery(self::$collection))->queryForId($id);
+      $query = (new DBRemoveQuery(static::$collection))->queryForId($id);
       return $query->run();
     }
 
     public static function exists(MongoId $id) {
-      checkReady();
+      self::checkReady();
 
-      $query = (new DBQuery(self::$collection))->queryForId($id)->justId();
+      $query = (new DBQuery(static::$collection))->queryForId($id)->justId();
       return $query->run();
+    }
+
+    public static function insert(array $data) {
+      self::checkReady();
+
+      $insert = (new DBInsert(static::$collection))->setData($data);
+
+      $id = $insert->run();
+      invariant($id !== null);
+
+      return $id;
     }
   }
 ?>

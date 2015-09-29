@@ -24,11 +24,13 @@
   }
 
 
-  function TEST($testName, $testFunc) {
+  function TEST($self, $testName, $testFunc) {
+    $self::start();
+
     CONSOLE("Running test *$testName*...");
 
     try {
-      $testFunc();
+      $testFunc($self);
     } catch (Exception $e) {
       $eMsg = $e->getMessage();
       CONSOLE("Test *$testName* {red}FAILED{red}: $eMsg", "<br>");
@@ -36,10 +38,50 @@
     }
 
     CONSOLE("Test *$testName* {green}PASSED{green}!", "<br>");
+
+    $self::end();
   }
 
   function TRUE($truthy, $errorMessage='') {
     invariant($truthy, $errorMessage);
+  }
+  function EQ($val1, $val2, $errorMessage='') {
+    TRUE($val1 == $val2, $errorMessage);
+  }
+  function NEQ($val1, $val2, $errorMessage='') {
+    TRUE($val1 != $val2, $errorMessage);
+  }
+
+  interface TestInterface {
+    /**
+     * Implement tests in this function.
+     */
+    public static function run();
+
+    /**
+     * Initialization code for all tests should go here.
+     */
+    public static function start();
+
+    /**
+     * Wrap-up code for all tests should go here.
+     */
+    public static function end();
+  }
+
+  class Test {
+    /**
+     * Makes a private method usable for testing.
+     */
+    protected static function callPrivateMethod($className,
+                                                $methodName) {
+      $method = new ReflectionMethod($className, $methodName);
+      $method->setAccessible(true);
+
+      $args = func_get_args();
+      array_shift($args); array_shift($args);
+      return $method->invokeArgs(null, $args);
+    }
   }
 ?>
 

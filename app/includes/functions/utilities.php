@@ -3,6 +3,12 @@
   use \ForceUTF8\Encoding;
   // Utility functions
   function clean($s) {
+    if (is_array($s)) {
+      for ($i = 0; $i < count($s); $i ++) {
+        $s[$i] = clean($s[$i]);
+      }
+      return $s;
+    }
     // TODO Replace with preg_replace
     $s = str_replace ('“', '"', $s);
     $s = str_replace ('”', '"', $s);
@@ -115,5 +121,10 @@
 
   function miles2meters($mi) {
     return $mi * 1609.344;
+  }
+
+  // Is $arr associative (vs sequential)?
+  function isAssoc($arr) {
+    return array_keys($arr) !== range(0, count($arr) - 1);
   }
 ?>
