@@ -1,6 +1,15 @@
 <?php
   require_once($GLOBALS['dirpre']."models/modules/DBQuery.php");
 
+  interface ModelInterface {
+    public function __construct($dbType, $collectionName);
+    public function __destruct();
+    public static function myCollection();
+    public static function insert(array $data);
+    public static function deleteById(MongoId $id);
+    public static function getById(MongoId $id);
+  }
+
   class Model {
     // Database types that indicate which database a Model connects to.
     const DB_STUDENTS = 0;
@@ -87,6 +96,31 @@
         trigger_error('Mongodb not available');
       }
       return $m;
+    }
+
+    public static function insert(array $data) {
+      self::checkReady();
+
+      $insert = (new DBInsert(static::$collection))->setData($data);
+
+      $id = $insert->run();
+      invariant($id !== null);
+
+      return $id;
+    }
+
+    public static function deleteById(MongoId $id) {
+      self::checkReady();
+
+      $query = (new DBRemoveQuery(static::$collection))->queryForId($id);
+      return $query->run();
+    }
+
+    public static function getById(MongoId $id) {
+      self::checkReady();
+
+      $query = (new DBQuery(static::$collection))->queryForId($id);
+      return $query->run();
     }
 
     // Stores the db references to retrieve collections.
