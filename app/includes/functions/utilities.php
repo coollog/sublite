@@ -127,4 +127,15 @@
   function isAssoc($arr) {
     return array_keys($arr) !== range(0, count($arr) - 1);
   }
+
+  // Converts sequential array $arr into hash with key as $key and value as each
+  // entry in $arr.
+  function arrayToHashByKey(array $arr, $key) {
+    $hash = array();
+    foreach ($arr as $entry) {
+      $hashKey = $entry[$key];
+      $hash[$hashKey] = $entry;
+    }
+    return $hash;
+  }
 ?>

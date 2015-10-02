@@ -111,9 +111,19 @@
   }
 
   class DBUpdateQuery extends DBQuery {
+    /**
+     * Set individual update field.
+     */
     public function toUpdate($name, $newval) {
       $this->update[$name] = $newval;
       return $this;
+    }
+
+    /**
+     * Set entire update data.
+     */
+    public function setUpdate($update) {
+      $this->update = $update;
     }
 
     public function run() {

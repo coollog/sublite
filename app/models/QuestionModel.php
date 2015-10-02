@@ -12,6 +12,8 @@
 
     public function __construct() {
       static::$collection = parent::__construct(self::DB_TYPE, 'questions');
+
+      // Create necessary indices.
       mongo_ok(static::$collection->createIndex(array('text' => 'text')));
     }
 
