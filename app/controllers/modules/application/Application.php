@@ -1,31 +1,74 @@
 <?php
   interface ApplicationInterface {
-    public static function delete(MongoId $id);
-    public static function updateQuestions(MongoId $recruiter,
-                                           Application $application,
-                                           array $questions);
-
-    public function __construct();
-    public function getJobId();
     public function getQuestions();
-    public function getRecruiter();
+    public function getData();
     public function setQuestions();
   }
 
   interface ApplicationJobInterface {
-    public static function create(MongoId $job, array $questions);
+    /**
+     * Creates an application as the 'application' field in a job document.
+     */
+    public static function createOrUpdate(MongoId $jobId, array $questions);
 
     public function __construct(MongoId $job, array $data);
+    public function getJobId();
+
+    // $data is an associative array containing a subset of these keys:
+    // - array of questions (optional) - saved as list of question ids
   }
 
   interface ApplicationStudentInterface {
-    public static function create(MongoId $job, array $questions, $submitted);
-    public static function edit();
-    public static function delete($id);
+    /**
+     * Student saves application, so create it as a new saved application.
+     * Need to make sure student has not already saved an application for the
+     * job.
+     */
+    public static function save(MongoId $jobId,
+                                MongoId $studentId,
+                                array $questions);
 
+    /**
+     * Student edits a saved application, so just update the question answers.
+     * Make sure the student has permission, and that the application is not
+     * already submitted.
+     */
+    public static function edit(MongoId $applicationId, array $questions);
+
+    /**
+     * Student submits saved application, so mark it as submitted.
+     * Make sure the student has permission.
+     */
+    public static function submitSaved(MongoId $applicationId);
+
+    /**
+     * Student submits a new application (not already saved), so create a
+     * submitted application.
+     */
+    public static function submitNew(MongoId $jobId,
+                                     MongoId $studentId,
+                                     array $questions);
+
+    /**
+     * Deletes a saved application.
+     * Make sure the student has permission, and that the application is not
+     * already submitted.
+     */
+    public static function deleteSaved($id);
+
+    public function __construct(array $data);
     public function getId();
+    public function getJobId();
     public function getStudentId();
     public function setId();
+
+    // $data is an associative array containing a subset of these keys:
+    // - _id (optional)
+    // - job (required)
+    // - student (required)
+    // - array of questions (optional)
+    //   - saved as list of question _id-answer pairs
+    // - submitted? (required)
   }
 
   class Application implements ApplicationInterface {
@@ -70,9 +113,6 @@
   }
 
   class ApplicationJob extends Application implements ApplicationJobInterface {
-    /**
-     * Creates an application as the 'application' field in a job document.
-     */
     public static function createOrUpdate(MongoId $jobId, array $questions) {
       $application = new ApplicationJob($jobId, array(
         'questions' => $questions,
@@ -103,7 +143,7 @@
      * Updates saved student applications to be the new set of $questionsIds.
      */
     private static function updateSavedApplications(MongoId $jobId,
-                                                   array $questionIds) {
+                                                    array $questionIds) {
       // Get the saved applications corresponding to $jobId.
       $saved = ApplicationModel::getSavedForJob($jobId);
 
@@ -135,7 +175,6 @@
       return $this->jobId;
     }
 
-    // - array of questions (optional) - saved as list of question ids
     private $data;
 
     // The _id of the job associated with the application.
@@ -144,22 +183,12 @@
 
   class ApplicationStudent extends Application
                            implements ApplicationStudentInterface {
-    /**
-     * Student saves application, so create it as a new saved application.
-     * Need to make sure student has not already saved an application for the
-     * job.
-     */
     public static function save(MongoId $jobId,
                                 MongoId $studentId,
                                 array $questions) {
       return self::create($jobId, $studentId, $questions, false);
     }
 
-    /**
-     * Student edits a saved application, so just update the question answers.
-     * Make sure the student has permission, and that the application is not
-     * already submitted.
-     */
     public static function edit(MongoId $applicationId, array $questions) {
       $applicationData = ApplicationModel::getById($applicationId);
       $application = new ApplicationStudent($applicationData);
@@ -173,10 +202,6 @@
       ApplicationModel::replaceQuestionsField($applicationId, $newQuestions);
     }
 
-    /**
-     * Student submits saved application, so mark it as submitted.
-     * Make sure the student has permission.
-     */
     public static function submitSaved(MongoId $applicationId) {
       // Mark the application as submitted.
       ApplicationModel::markAsSubmitted($applicationId);
@@ -187,11 +212,9 @@
       self::saveStudentAnswers($application);
     }
 
-    /**
-     * Student submits a new application (not already saved), so create a
-     * submitted application.
-     */
-    public static function submitNew() {
+    public static function submitNew(MongoId $jobId,
+                                     MongoId $studentId,
+                                     array $questions) {
       $application = self::create($jobId, $studentId, $questions, false);
 
       self::saveStudentAnswers($application);
@@ -199,11 +222,6 @@
       return $application;
     }
 
-    /**
-     * Deletes a saved application.
-     * Make sure the student has permission, and that the application is not
-     * already submitted.
-     */
     public static function deleteSaved($id) {
       // Ask model to delete application by id and return whatever the model
       // function returns.
@@ -319,12 +337,6 @@
       $this->data['_id'] = $id;
     }
 
-    // - _id (optional)
-    // - job (required)
-    // - student (required)
-    // - array of questions (optional)
-    //   - saved as list of question _id-answer pairs
-    // - submitted? (required)
     private $data;
   }
 ?>

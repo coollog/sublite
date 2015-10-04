@@ -1,13 +1,19 @@
 <?php
   require_once($GLOBALS['dirpre'].'models/Model.php');
 
-  class JobModel extends Model {
-    const DB_TYPE = parent::DB_INTERNSHIPS;
+  interface JobModelInterface {
+    public function __construct();
 
     /**
      * Gets the 'application' field of a job document. Returns null if the job
      * does not exist or does not have an 'application' field.
      */
+    public static function getApplicationQuestionIds(MongoId $jobId);
+  }
+
+  class JobModel extends Model {
+    const DB_TYPE = parent::DB_INTERNSHIPS;
+
     public static function getApplicationQuestionIds(MongoId $jobId) {
       $questionIds = (new DBQuery(static::$collection))
         ->toQuery('_id', $jobId)->projectField('application')->findOne();
@@ -15,7 +21,7 @@
       return $questionIds['application']['questions'];
     }
 
-    function __construct() {
+    public function __construct() {
       static::$collection = parent::__construct(self::DB_TYPE, 'jobs');
     }
 

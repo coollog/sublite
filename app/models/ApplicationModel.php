@@ -1,11 +1,27 @@
 <?php
   interface ApplicationModelInterface {
     public function __construct();
-    public static function insert(array $data);
 
+    /**
+     * Sets 'submitted' for $appliationId to true.
+     */
+    public static function markAsSubmitted($applicationId);
+
+    /**
+     * Set the job document's application field to $data.
+     */
     public static function setJobApplication(MongoId $jobId, array $data);
-    public static function updateSavedApplications(MongoId $jobId,
-                                                   array $questionIds);
+
+    /**
+     * Retrieves all the saved applications for $jobId.
+     */
+    public static function getSavedForJob(MongoId $jobId);
+
+    /**
+     * Replace the questions field for $applicationId.
+     */
+    public static function replaceQuestionsField(MongoId $applicationId,
+                                                 array $newQuestions);
   }
 
   class ApplicationModel extends Model implements ApplicationModelInterface {
@@ -20,9 +36,6 @@
                                                       'submitted' => 1)));
     }
 
-    /**
-     * Sets 'submitted' for $appliationId to true.
-     */
     public static function markAsSubmitted($applicationId) {
       $update = (new DBUpdate(static::$collection))
         ->toQuery('_id', $application['_id'])
@@ -30,9 +43,6 @@
       $update->run();
     }
 
-    /**
-     * Set the job document's application field to $data.
-     */
     public static function setJobApplication(MongoId $jobId, array $data) {
 
     }

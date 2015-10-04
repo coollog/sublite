@@ -1,6 +1,12 @@
 <?php
   require_once($GLOBALS['dirpre'].'models/Model.php');
 
+  interface StudentModelInterface {
+    public function __construct();
+    public static function getAnswers(MongoId $studentId);
+    public static function replaceAnswers(MongoId $studentId, array $answers);
+  }
+
   class StudentModel extends Model {
     const DB_TYPE = parent::DB_INTERNSHIPS;
 
@@ -13,7 +19,7 @@
       $update = self::queryForId($studentId)->
     }
 
-    function __construct() {
+    public function __construct() {
       static::$collection = parent::__construct(self::DB_TYPE, 'emails');
     }
 

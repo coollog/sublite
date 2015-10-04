@@ -7,6 +7,12 @@
     public static function getById(MongoId $id);
     public static function delete(MongoId $id);
 
+    /**
+     * Construct a Question instance by passing in an ass. array of the data
+     * for the question.
+     * Cleans and prunes the ass array to be just the data necessary.
+     * See the declaration of $this->data below.
+     */
     public function __construct(array $data);
     public function getData();
     public function getId();
@@ -15,6 +21,13 @@
     public function getUses();
     public function getVanilla();
     public function setId(MongoId $id);
+
+    // $data is an associative array containing a subset of these keys:
+    // _id: (optional) corresponds to the mongoID
+    // text: (required) the question text
+    // recruiter: (required) recruiter ID
+    // uses: (optional) an array of app ID's that have used this question
+    // vanilla: (required) whether or not the question is vanilla
   }
 
   //TODO Add validations
@@ -109,12 +122,6 @@
     // non-static functions
     //**********************
 
-    /**
-     * Construct a Question instance by passing in an ass. array of the data
-     * for the question.
-     * Cleans and prunes the ass array to be just the data necessary.
-     * See the declaration of $this->data below.
-     */
     public function __construct(array $data) {
       if (isset($data['_id'])) {
         $this->data['_id'] = new MongoId($data['_id']);
@@ -157,12 +164,6 @@
       $this->data['_id'] = $id;
     }
 
-    // $data is an associative array containing a subset of these keys:
-    // _id: (optional) corresponds to the mongoID
-    // text: (required) the question text
-    // recruiter: (required) recruiter ID
-    // uses: (optional) an array of app ID's that have used this question
-    // vanilla: (required) whether or not the question is vanilla
     private $data;
   }
 ?>
