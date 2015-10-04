@@ -25,9 +25,6 @@
     function get($email) {
       return self::$collection->findOne(array('email' => $email));
     }
-    function getByID($id) {
-      return self::$collection->findOne(array('_id' => new MongoID($id)));
-    }
     function getByPass($pass) {
       return self::$collection->findOne(array('pass' => $pass));
     }

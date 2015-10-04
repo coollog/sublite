@@ -16,7 +16,8 @@
     }
 
     public static function replaceAnswers(MongoId $studentId, array $answers) {
-      $update = self::queryForId($studentId)->
+      $update = (new DBUpdate(static::$collection))->queryForId($studentId)->toUpdate('answers', $answers);
+      $update->run();
     }
 
     public function __construct() {
@@ -40,7 +41,7 @@
     function getAllwTime() {
       return static::$collection->find(array('time' => array('$exists' => true)));
     }
-    function getById($id) {
+    public static function getById($id) {
       $student = static::$collection->findOne(array('_id' => new MongoId($id)));
       $student['photo'] = isset($student['photo']) ? $student['photo'] :
         $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';

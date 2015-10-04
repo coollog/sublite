@@ -2,7 +2,12 @@
   require_once($GLOBALS['dirpre']."models/modules/DBQuery.php");
 
   interface ModelInterface {
+    /**
+     * Construct singleton to initialize the MongoDB connection.
+     * MUST be called on children before using static calls.
+     */
     public function __construct($dbType, $collectionName);
+
     public function __destruct();
     public static function myCollection();
     public static function insert(array $data);
@@ -18,24 +23,6 @@
     public static $test = false;
 
     protected static $collection;
-
-    /**
-     * Construct singleton to initialize the MongoDB connection.
-     * MUST be called on children before using static calls.
-     */
-    public function __construct($dbType, $collectionName) {
-      self::connect($dbType);
-
-      $dbName = self::dbTypeToName($dbType);
-      return self::getCollection($dbType, $collectionName);
-    }
-
-    public function __destruct() {
-      // We drop any testing collections.
-      if (self::$test) {
-        mongo_ok(self::$collection->drop());
-      }
-    }
 
     public static function myCollection() {
       if (self::$test) {
@@ -129,6 +116,20 @@
         trigger_error('Mongodb not available');
       }
       return $m;
+    }
+
+    public function __construct($dbType, $collectionName) {
+      self::connect($dbType);
+
+      $dbName = self::dbTypeToName($dbType);
+      return self::getCollection($dbType, $collectionName);
+    }
+
+    public function __destruct() {
+      // We drop any testing collections.
+      if (self::$test) {
+        mongo_ok(self::$collection->drop());
+      }
     }
 
     // Stores the db references to retrieve collections.

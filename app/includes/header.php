@@ -1,4 +1,6 @@
 <?php
+  require_once($GLOBALS['dirpre'].'includes/functions/utilities.php');
+
   // Configurations and setup
   require_once($GLOBALS['dirpre'].'config.php');
   date_default_timezone_set('America/New_York');
@@ -15,7 +17,6 @@
   header("Cache-Control: post-check=0, pre-check=0", false);
   header("Pragma: no-cache");
 
-  require_once($GLOBALS['dirpre'].'includes/functions/utilities.php');
   require_once($GLOBALS['dirpre'].'includes/functions/hash_equals.php');
   require_once($GLOBALS['dirpre'].'includes/functions/geocode.php');
   require_once($GLOBALS['dirpre'].'includes/functions/sendgmail.php');
