@@ -4,6 +4,15 @@
   class StudentModel extends Model {
     const DB_TYPE = parent::DB_INTERNSHIPS;
 
+    public static function getAnswers(MongoId $studentId) {
+      $query = self::queryForId($studentId)->projectField('answers');
+      return $query->run();
+    }
+
+    public static function replaceAnswers(MongoId $studentId, array $answers) {
+      $update = self::queryForId($studentId)->
+    }
+
     function __construct() {
       static::$collection = parent::__construct(self::DB_TYPE, 'emails');
     }

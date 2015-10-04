@@ -4,6 +4,17 @@
   class JobModel extends Model {
     const DB_TYPE = parent::DB_INTERNSHIPS;
 
+    /**
+     * Gets the 'application' field of a job document. Returns null if the job
+     * does not exist or does not have an 'application' field.
+     */
+    public static function getApplicationQuestionIds(MongoId $jobId) {
+      $questionIds = (new DBQuery(static::$collection))
+        ->toQuery('_id', $jobId)->projectField('application')->findOne();
+
+      return $questionIds['application']['questions'];
+    }
+
     function __construct() {
       static::$collection = parent::__construct(self::DB_TYPE, 'jobs');
     }

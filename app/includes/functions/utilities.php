@@ -130,11 +130,18 @@
 
   // Converts sequential array $arr into hash with key as $key and value as each
   // entry in $arr.
-  function arrayToHashByKey(array $arr, $key) {
+  function arrayToHashByKey(array $arr, $key, $valType = 'value') {
     $hash = array();
-    foreach ($arr as $entry) {
+
+    for ($i = 0; $i < count($arr); $i ++) {
+      $entry = $arr[$i];
+
       $hashKey = $entry[$key];
-      $hash[$hashKey] = $entry;
+
+      switch ($valType) {
+        case 'value': $hash[$hashKey] = $entry; break;
+        case 'index': $hash[$hashKey] = $i; break;
+      }
     }
     return $hash;
   }

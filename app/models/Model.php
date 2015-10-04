@@ -7,7 +7,7 @@
     public static function myCollection();
     public static function insert(array $data);
     public static function deleteById(MongoId $id);
-    public static function getById(MongoId $id);
+    public static function getById(MongoId $id, array $projection);
   }
 
   class Model {
@@ -45,8 +45,41 @@
       return self::$collection;
     }
 
+    public static function insert(array $data) {
+      self::checkReady();
+
+      $insert = (new DBInsert(static::$collection))->setData($data);
+
+      $id = $insert->run();
+      invariant($id !== null);
+
+      return $id;
+    }
+
+    public static function deleteById(MongoId $id) {
+      self::checkReady();
+
+      $query = (new DBRemoveQuery(static::$collection))->queryForId($id);
+      return $query->run();
+    }
+
+    public static function getById(MongoId $id, array $projection = array()) {
+      self::checkReady();
+
+      $query = (new DBQuery(static::$collection))->queryForId($id);
+      foreach ($projection as $field) {
+        $query->projectField($field);
+      }
+
+      return $query->run();
+    }
+
     protected static function checkReady() {
       invariant(isset(self::$collection));
+    }
+
+    protected static function queryForId(MongoId $id) {
+      return (new DBQuery(static::$collection))->queryForId($studentId);
     }
 
     /**
@@ -96,31 +129,6 @@
         trigger_error('Mongodb not available');
       }
       return $m;
-    }
-
-    public static function insert(array $data) {
-      self::checkReady();
-
-      $insert = (new DBInsert(static::$collection))->setData($data);
-
-      $id = $insert->run();
-      invariant($id !== null);
-
-      return $id;
-    }
-
-    public static function deleteById(MongoId $id) {
-      self::checkReady();
-
-      $query = (new DBRemoveQuery(static::$collection))->queryForId($id);
-      return $query->run();
-    }
-
-    public static function getById(MongoId $id) {
-      self::checkReady();
-
-      $query = (new DBQuery(static::$collection))->queryForId($id);
-      return $query->run();
     }
 
     // Stores the db references to retrieve collections.

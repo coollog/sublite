@@ -27,6 +27,12 @@
       return self::cursorToArray($collection->find($query, $projection));
     }
 
+    public static function queryForOne(MongoCollection $collection,
+                                       array $query,
+                                       array $projection = array()) {
+      return $collection->findOne($query, $projection);
+    }
+
     public static function update(MongoCollection $collection,
                                   array $query,
                                   array $update) {
@@ -88,6 +94,14 @@
     public function queryForId(MongoId $id) {
       $this->query['_id'] = $id;
       return $this;
+    }
+
+    /**
+     * Runs the query to just find and return one document.
+     */
+    public function findOne() {
+      return self::queryForOne(
+        $this->colleciton, $this->query, $this->projection);
     }
 
     /**
