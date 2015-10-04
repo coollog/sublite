@@ -34,11 +34,11 @@
     } catch (Exception $e) {
       $eMsg = $e->getMessage();
       CONSOLE("Test *$testName* {red}FAILED{red}: $eMsg", "<br>");
+      $self::end();
       return;
     }
 
     CONSOLE("Test *$testName* {green}PASSED{green}!", "<br>");
-
     $self::end();
   }
 
