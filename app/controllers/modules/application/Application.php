@@ -161,7 +161,16 @@
      * already submitted.
      */
     public static function edit(MongoId $applicationId, array $questions) {
+      $applicationData = ApplicationModel::getById($applicationId);
+      $application = new ApplicationStudent($applicationData);
+      $applicationId = $application->getId();
+      $jobId = $application->getJobId();
 
+      $applicationQuestions = JobModel::getApplicationQuestionIds($jobId);
+      $newQuestions = self::pruneQuestionsByIdSet(
+        $questions, $applicationQuestions);
+
+      ApplicationModel::replaceQuestionsField($applicationId, $newQuestions);
     }
 
     /**
@@ -173,7 +182,7 @@
       ApplicationModel::markAsSubmitted($applicationId);
 
       $applicationData = ApplicationModel::getById($applicationId);
-      $application = new Application($applicationData);
+      $application = new ApplicationStudent($applicationData);
 
       self::saveStudentAnswers($application);
     }
@@ -220,7 +229,8 @@
       }
 
       // Build question-answer pairs.
-      $savedQuestions = self::pruneQuestionsByIdSet($questions, $applicationQuestions);
+      $savedQuestions = self::pruneQuestionsByIdSet(
+        $questions, $applicationQuestions);
 
       // Save the application.
       $application = new ApplicationStudent(array(
