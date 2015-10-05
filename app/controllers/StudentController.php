@@ -56,7 +56,7 @@
 
     function index() {
       global $MApp;
-      $stats = $MApp->getStats();
+      $stats = AppModel::getStats();
       $users = $stats['recruiters'] + $stats['students'];
 
       $r = isset($_GET['r']) ? $_GET['r'] : null;
@@ -76,9 +76,9 @@
       // Setup after-login redirect
       if (isset($_SERVER['HTTP_REFERER'])) {
         $noredirect = array(
-          '', 
-          '/index.php', 
-          '/', 
+          '',
+          '/index.php',
+          '/',
           '/register.php',
           '/login.php'
         );
@@ -107,7 +107,7 @@
       if (!isset($_GET['whereto'])) $this->loginRedirectSetup();
 
       if (!isset($_POST['login'])) { $this->render('studentlogin'); return; }
-      
+
       global $params, $MStudent;
       // Params to vars
       global $email;
@@ -117,7 +117,7 @@
 
       // Validations
       $this->startValidations();
-      $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL), 
+      $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL),
         $err, 'invalid email');
       $this->validate(($entry = $MStudent->get($email)) != NULL,
         $err, 'not registered');
@@ -130,7 +130,7 @@
 
           $err = "Your account has not been confirmed yet. A confirmation email has been sent to <strong>$email</strong>. Check your inbox or spam. The email may take up to 24 hours to show up.";
         } else {
-          $this->validate($MStudent->login($email, $pass), 
+          $this->validate($MStudent->login($email, $pass),
             $err, 'invalid credentials');
 
           if ($this->isValid()) {
@@ -139,7 +139,7 @@
             $_SESSION['email'] = $email;
             $_SESSION['pass'] = $pass;
             $_SESSION['name'] = $entry['name'];
-            
+
             // $this->redirect('home');
             // $this->redirect('search');
             $this->loginRedirect();
@@ -148,7 +148,7 @@
           }
         }
       }
-      
+
       $this->error($err);
       $this->render('studentlogin', $data);
     }
@@ -166,7 +166,7 @@
 
       // Validations
       $this->startValidations();
-      $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL), 
+      $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL),
         $err, 'invalid email');
       global $S;
       $this->validate($S->verify($email), $err, 'email must be .edu');
@@ -202,7 +202,7 @@
             <br /><br /><br />
             <i>Thanks again!<br />
             Team SubLite</i>";
-          sendgmail($referrer['email'], array("info@sublite.net", 
+          sendgmail($referrer['email'], array("info@sublite.net",
             "SubLite, LLC."), 'SubLite - Successful Referral!', $message);
         }
 
@@ -211,7 +211,7 @@
         ));
         return;
       }
-      
+
       $this->error($err);
       $this->render('studentregister', $data);
     }
@@ -231,17 +231,17 @@
         <br /><br /><br />
         <i>Thanks again and welcome aboard!<br />
         Team SubLite</i>";
-      
+
       if (($error = sendgmail($email, array("info@sublite.net", "SubLite, LLC."), 'SubLite Email Confirmation', $message)) !== true) {
         sendgmail('info@sublite.net', 'info@sublite.net', 'Email Confirmation Failed to Send', "Email address: $email<br />Reason: $error");
-      }     
-      
+      }
+
       return $id;
     }
 
     function sendReferral() {
-      if (isset($_REQUEST['emails']) and 
-          isset($_REQUEST['name']) and 
+      if (isset($_REQUEST['emails']) and
+          isset($_REQUEST['name']) and
           isset($_REQUEST['email'])) {
         $emailspre = $_REQUEST['emails'];
         $name = $_REQUEST['name'];
@@ -297,7 +297,7 @@
         $confirm = $_REQUEST['id'];
         $email = $_REQUEST['email'];
 
-        $this->validate(($entry = $MStudent->get($email)) != null, 
+        $this->validate(($entry = $MStudent->get($email)) != null,
           $err, 'permission denied');
         $this->validate(isset($entry['confirm']) and $entry['confirm'] == $confirm and !isset($entry['pass']),
           $err, 'invalid confirmation code. your code may have expired. return to the registration page to re-enter your email for a new confirmation link.');
@@ -311,7 +311,7 @@
 
           $this->validate($pass == $pass2, $err, 'password mismatch');
           $this->validate(strlen($name) > 0, $err, 'name empty');
-          $this->validate(strlen($photo) > 0, 
+          $this->validate(strlen($photo) > 0,
             $err, 'must have profile picture');
 
           if ($this->isValid()) {
@@ -358,7 +358,7 @@
       // Params to vars
       extract($data = $this->data($params));
 
-      $this->validate(strlen($photo) > 0, 
+      $this->validate(strlen($photo) > 0,
         $err, 'must have profile picture');
 
       if ($this->isValid()) {
@@ -387,9 +387,9 @@
       // Validations
       $this->startValidations();
       $this->validate(
-          isset($_GET['id']) and isset($_GET['code']) and 
+          isset($_GET['id']) and isset($_GET['code']) and
           ($entry = $MStudent->getByID($id = $_GET['id'])) != NULL and
-          $entry['pass'] == $_GET['code'], 
+          $entry['pass'] == $_GET['code'],
         $err, 'permission denied');
 
       if ($this->isValid()) {
@@ -433,7 +433,7 @@
 
       // Validations
       $this->startValidations();
-      $this->validate(($entry = $MStudent->get($email)) != NULL, 
+      $this->validate(($entry = $MStudent->get($email)) != NULL,
         $err, 'no account found');
       $this->validate(isset($entry['pass']),
         $err, 'account has not been confirmed yet. to resend a confirmation email, <a href="register.php">register</a> your email address again.');
@@ -454,7 +454,7 @@
                 <br /><br />
                 Best,<br />
                 The SubLite Team";
-        sendgmail($email, array("info@sublite.net", 
+        sendgmail($email, array("info@sublite.net",
           "SubLite, LLC."), 'SubLite Student Account Password Reset', $msg);
 
         $this->success('A link to reset your password has been sent to your email. If you do not receive it in the next hour, check your spam folder or whitelist info@sublite.net. <a href="mailto: info@sublite.net">Contact us</a> if you have any further questions.');
@@ -474,13 +474,13 @@
 
     function view() {
       // $this->requireLogin();
-      
+
       // global $params, $MStudent, $MCompany, $MJob;
-      
+
       // // Validations
       // $this->startValidations();
-      // $this->validate(isset($_GET['id']) and 
-      //   ($entry = $MStudent->getByID($id = $_GET['id'])) != NULL, 
+      // $this->validate(isset($_GET['id']) and
+      //   ($entry = $MStudent->getByID($id = $_GET['id'])) != NULL,
       //   $err, 'unknown Student');
 
       // // Code
@@ -501,7 +501,7 @@
       //   $this->render('Student', $data);
       //   return;
       // }
-      
+
       // $this->error($err);
       // $this->render('notice');
     }
@@ -518,9 +518,9 @@
 
         // Validations
         $this->startValidations();
-        $this->validate(($entry = $MStudent->get($email)) != NULL, 
+        $this->validate(($entry = $MStudent->get($email)) != NULL,
           $err, 'unknown email');
-        $this->validate($entry['pass'] == md5($pass), 
+        $this->validate($entry['pass'] == md5($pass),
           $err, 'invalid password');
 
         if (!$this->isValid()) {
@@ -536,6 +536,5 @@
     }
   }
 
-  $CStudent = new StudentController();
-
+  GLOBALvarSet('CStudent', new StudentController());
 ?>

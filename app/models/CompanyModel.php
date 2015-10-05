@@ -5,20 +5,20 @@
     const DB_TYPE = parent::DB_INTERNSHIPS;
 
     function __construct() {
-      static::$collection =
+      self::$collection =
         parent::__construct(self::DB_TYPE, 'companies');
     }
 
     function save($data) {
-      static::$collection->save($data);
+      self::$collection->save($data);
       return $data['_id']->{'$id'};
     }
 
     function get($id) {
-      return static::$collection->findOne(array('_id' => new MongoId($id)));
+      return self::$collection->findOne(array('_id' => new MongoId($id)));
     }
     function getByName($name) {
-      return static::$collection->findOne(array('name' => $name));
+      return self::$collection->findOne(array('name' => $name));
     }
     function getName($id) {
       $entry = $this->get($id);
@@ -29,10 +29,10 @@
       return $entry['industry'];
     }
     function getAll() {
-      return static::$collection->find();
+      return self::$collection->find();
     }
     function find($query) {
-      return static::$collection->find($query);
+      return self::$collection->find($query);
     }
 
     function delete($id) {
@@ -42,8 +42,9 @@
     function exists($id) {
       return ($this->get($id) !== NULL);
     }
+
+    private static $collection;
   }
 
-  $MCompany = new CompanyModel();
-
+  GLOBALvarSet('MCompany', new CompanyModel());
 ?>

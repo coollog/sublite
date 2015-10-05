@@ -4,8 +4,6 @@
   class SubletModel extends Model {
     const DB_TYPE = parent::DB_INTERNSHIPS;
 
-    protected static $collection;
-
     function __construct() {
       self::$collection = parent::__construct(self::DB_TYPE, 'listings');
     }
@@ -38,7 +36,9 @@
     function exists($id) {
       return (self::$collection->findOne(array('_id' => new MongoId($id))) !== NULL);
     }
+
+    private static $collection;
   }
 
-  $MSublet = new SubletModel();
+  GLOBALvarSet('MSublet', new SubletModel());
 ?>

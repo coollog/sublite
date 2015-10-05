@@ -369,5 +369,5 @@
     }
   }
 
-  $CStats = new StatsController();
+  GLOBALvarSet('CStats', new StatsController());
 ?>

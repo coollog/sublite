@@ -22,14 +22,12 @@
 
     public static $test = false;
 
-    protected static $collection;
-
     public static function myCollection() {
       if (self::$test) {
-        return substr(self::$collection->getName(), 0, -5);
+        return substr(static::$collection->getName(), 0, -5);
       }
 
-      return self::$collection;
+      return static::$collection;
     }
 
     public static function insert(array $data) {
@@ -62,7 +60,7 @@
     }
 
     protected static function checkReady() {
-      invariant(isset(self::$collection));
+      invariant(isset(static::$collection));
     }
 
     protected static function queryForId(MongoId $id) {
@@ -128,7 +126,7 @@
     public function __destruct() {
       // We drop any testing collections.
       if (self::$test) {
-        mongo_ok(self::$collection->drop());
+        mongo_ok(static::$collection->drop());
       }
     }
 

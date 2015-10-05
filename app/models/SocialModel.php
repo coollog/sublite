@@ -4,8 +4,6 @@
   class SocialModel extends Model {
     const DB_TYPE = parent::DB_INTERNSHIPS;
 
-    protected static $collection;
-
     // The essentials
     function __construct() {
       self::$collection = parent::__construct(self::DB_TYPE, 'hubs');
@@ -460,7 +458,9 @@
     function validArray($ar) {
       return is_array($ar) && count($ar) > 0;
     }
+
+    private static $collection;
   }
 
-  $MSocial = new SocialModel();
+  GLOBALvarSet('MSocial', new SocialModel());
 ?>

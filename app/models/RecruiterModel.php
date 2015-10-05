@@ -4,8 +4,6 @@
   class RecruiterModel extends Model {
     const DB_TYPE = parent::DB_INTERNSHIPS;
 
-    protected static $collection;
-
     function __construct() {
       self::$collection =
         parent::__construct(self::DB_TYPE, 'recruiters');
@@ -59,8 +57,9 @@
     function IDexists($id) {
       return (self::$collection->findOne(array('_id' => new MongoId($id))) !== NULL);
     }
+
+    private static $collection;
   }
 
-  $MRecruiter = new RecruiterModel();
-
+  GLOBALvarSet('MRecruiter', new RecruiterModel());
 ?>

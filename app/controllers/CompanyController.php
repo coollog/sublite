@@ -54,7 +54,7 @@
         'name' => $name, 'industry' => $industry, 'size' => $size,
         'desc' => $desc, 'founded' => $founded, 'location' => $location,
         'corevalues' => $corevalues, 'bannerphoto' => $bannerphoto,
-        'logophoto' => $logophoto, 'photos' => $photos, 
+        'logophoto' => $logophoto, 'photos' => $photos,
         'funfacts' => $funfacts,
         'society' => $society, 'socialevent' => $socialevent,
         'colorscheme' => $colorscheme, 'media' => $media,
@@ -66,7 +66,7 @@
     }
     function validateData($data, &$err) {
       $answered = 0;
-      foreach (array('funfacts', 'society', 'socialevent', 'colorscheme', 
+      foreach (array('funfacts', 'society', 'socialevent', 'colorscheme',
                      'media', 'employees', 'perks', 'forfun', 'dessert',
                      'talent', 'dresscode', 'freequestion1', 'freequestion2')
               as $key) {
@@ -80,7 +80,7 @@
         $err, 'must upload logo');
       $this->validate(count($data['photos']) >= 4,
         $err, 'must upload at least 4 additional photos');
-      $this->validate($answered >= 6, 
+      $this->validate($answered >= 6,
         $err, 'must answer at least 6 cultural questions');
     }
 
@@ -92,21 +92,21 @@
       }
 
       global $CRecruiter; $CRecruiter->requireLogin();
-      
+
       global $params, $MCompany, $MRecruiter;
 
       $me = $MRecruiter->me();
-      if (!isset($_POST['add'])) { 
+      if (!isset($_POST['add'])) {
         $this->render('companyform', formData(array(
-          'name' => $me['company']))); return; 
+          'name' => $me['company']))); return;
       }
-      // Params to vars      
+      // Params to vars
       $params['name'] = $me['company'];
       extract($data = $this->data($params));
-      
+
       // Validations
       $this->startValidations();
-      $this->validate(!$this->exists(), 
+      $this->validate(!$this->exists(),
         $err, 'company exists');
       $this->validateData($data, $err);
 
@@ -120,14 +120,14 @@
         $this->redirect('home');
         return;
       }
-      
+
       $this->error($err);
       $this->render('companyform', formData($data));
     }
 
     function edit() { // FIX THIS ADD GET INFO LIKE DATA FROM VIEW AND STUFF
       global $CRecruiter; $CRecruiter->requireLogin();
-      
+
       global $params, $MCompany, $MRecruiter;
       // Params to vars
       $me = $MRecruiter->me();
@@ -136,7 +136,7 @@
 
       // Validations
       $this->startValidations();
-      $this->validate(($entry = $MCompany->get($me['company'])) !== NULL, 
+      $this->validate(($entry = $MCompany->get($me['company'])) !== NULL,
         $err, 'unknown company');
 
       // Code
@@ -148,7 +148,7 @@
             'submitname' => 'edit', 'submitvalue' => 'Save Company'));
         }
 
-        if (!isset($_POST['edit'])) { 
+        if (!isset($_POST['edit'])) {
           $this->render('companyform', formData(array_merge($this->data($entry), array('_id' => $id->{'$id'})))); return;
         }
 
@@ -168,19 +168,19 @@
         $this->error($err);
         $this->render('companyform', formData(array_merge($this->data($data), array('_id' => $id->{'$id'})))); return;
       }
-      
+
       $this->error($err);
       $this->render('notice');
     }
-    
+
     function view() {
       // global $CJob; $CJob->requireLogin();
       global $MCompany;
       global $MRecruiter;
       // Validations
       $this->startValidations();
-      $this->validate(isset($_GET['id']) and 
-        ($entry = $MCompany->get($id = $_GET['id'])) != NULL, 
+      $this->validate(isset($_GET['id']) and
+        ($entry = $MCompany->get($id = $_GET['id'])) != NULL,
         $err, 'unknown company');
 
       // Code
@@ -189,7 +189,7 @@
         $me = $MRecruiter->me();
 
         $data['isme'] = !is_null($me) ? idcmp($id, $me['company']) : false;
-        
+
         $this->render('viewcompany', $data);
         return;
       }
@@ -205,6 +205,5 @@
     }
   }
 
-  $CCompany = new CompanyController();
-
+  GLOBALvarSet('CCompany', new CompanyController());
 ?>
