@@ -423,5 +423,6 @@
       $this->render('searchform', array_merge($data, array('search' => 'jobs')));
     }
   }
-  $CJob = new JobController();
+
+  GLOBALvarSet('CJob', new JobController());
 ?>

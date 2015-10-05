@@ -16,33 +16,33 @@
     }
 
     public static function replaceAnswers(MongoId $studentId, array $answers) {
-      $update = (new DBUpdate(static::$collection))->queryForId($studentId)->toUpdate('answers', $answers);
+      $update = (new DBUpdate(self::$collection))->queryForId($studentId)->toUpdate('answers', $answers);
       $update->run();
     }
 
     public function __construct() {
-      static::$collection = parent::__construct(self::DB_TYPE, 'emails');
+      self::$collection = parent::__construct(self::DB_TYPE, 'emails');
     }
 
     function save($data) {
-      static::$collection->save($data);
+      self::$collection->save($data);
       return $data['_id']->{'$id'};
     }
 
     function find($query) {
-      return static::$collection->find($query);
+      return self::$collection->find($query);
     }
     function get($email) {
-      return static::$collection->findOne(array('email' => $email));
+      return self::$collection->findOne(array('email' => $email));
     }
     function getAll() {
-      return static::$collection->find();
+      return self::$collection->find();
     }
     function getAllwTime() {
-      return static::$collection->find(array('time' => array('$exists' => true)));
+      return self::$collection->find(array('time' => array('$exists' => true)));
     }
     public static function getById($id) {
-      $student = static::$collection->findOne(array('_id' => new MongoId($id)));
+      $student = self::$collection->findOne(array('_id' => new MongoId($id)));
       $student['photo'] = isset($student['photo']) ? $student['photo'] :
         $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
       return $student;
@@ -65,7 +65,7 @@
       return $entry['email'];
     }
     function last($n=1) {
-      return static::$collection->find()->sort(array('_id'=>-1))->limit($n);
+      return self::$collection->find()->sort(array('_id'=>-1))->limit($n);
     }
     function me() {
       if (isset($_SESSION['loggedinstudent']))
@@ -90,13 +90,14 @@
     }
 
     function exists($id) {
-      return (static::$collection->findOne(array('_id' => new MongoId($id))) !== NULL);
+      return (self::$collection->findOne(array('_id' => new MongoId($id))) !== NULL);
     }
     function existsEmail($email) {
-      return (static::$collection->findOne(array('email' => $email)) !== NULL);
+      return (self::$collection->findOne(array('email' => $email)) !== NULL);
     }
+
+    private static $collection;
   }
 
-  $MStudent = new StudentModel();
-
+  GLOBALvarSet('MStudent', new StudentModel());
 ?>

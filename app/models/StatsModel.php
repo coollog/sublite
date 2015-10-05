@@ -113,6 +113,5 @@
     }
   }
 
-  $MStats = new StatsModel();
-
+  GLOBALvarSet('MStats', new StatsModel());
 ?>

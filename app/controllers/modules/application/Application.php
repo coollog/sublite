@@ -2,7 +2,7 @@
   interface ApplicationInterface {
     public function getQuestions();
     public function getData();
-    public function setQuestions();
+    public function setQuestions(array $questions);
   }
 
   class Application implements ApplicationInterface {
@@ -19,7 +19,7 @@
 
       // For all the ids in $questionIds, add an _id-answer pair to questionSet.
       foreach ($questionIds as $questionId) {
-        if (isset($questionsHash[$questionId]) {
+        if (isset($questionsHash[$questionId])) {
           $questionSet[] = $questionsHash[$questionId];
         } else {
           $questionSet[] = array('_id' => $questionId, 'answer' => '');

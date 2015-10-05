@@ -5,16 +5,16 @@
     const DB_TYPE = parent::DB_INTERNSHIPS;
 
     function __construct() {
-      static::$collection = parent::__construct(self::DB_TYPE, 'app');
+      self::$collection = parent::__construct(self::DB_TYPE, 'app');
     }
 
     function save($data) {
-      static::$collection->save($data);
+      self::$collection->save($data);
       return $data['_id'];
     }
 
-    function get($id) {
-      return static::$collection->findOne(array('_id' => $id));
+    static function get($id) {
+      return self::$collection->findOne(array('_id' => $id));
     }
 
     function updateStats($countCities=false) {
@@ -41,9 +41,8 @@
       return $stats;
     }
 
-    function getStats() {
-      global $MStats;
-      return $this->get('stats');
+    static function getStats() {
+      return self::get('stats');
     }
     function getIndustries() {
       $stats = $this->getStats();
@@ -75,8 +74,9 @@
 
       $this->save($entry);
     }
+
+    private static $collection;
   }
 
-  $MApp = new AppModel();
-
+  GLOBALvarSet('MApp', new AppModel());
 ?>

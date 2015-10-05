@@ -22,11 +22,11 @@
 
       // Validations
       $this->startValidations();
-      $this->validate($MRecruiter->IDexists($participants[0]) or 
-                      $MStudent->exists($participants[0]), 
+      $this->validate($MRecruiter->IDexists($participants[0]) or
+                      $MStudent->exists($participants[0]),
         $err, 'invalid sender');
-      $this->validate($MRecruiter->IDexists($participants[1]) or 
-                      $MStudent->exists($participants[1]), 
+      $this->validate($MRecruiter->IDexists($participants[1]) or
+                      $MStudent->exists($participants[1]),
         $err, 'invalid receiver');
 
       // Code
@@ -35,7 +35,7 @@
         $this->redirect('messages', array('id' => $id, 'msg' => $msg));
         return;
       }
-      
+
       $this->error($err);
       $this->render('notice');
     }
@@ -99,7 +99,7 @@
 
     function reply() {
       global $CJob; $CJob->requireLogin();
-      
+
       global $params, $MMessage;
       // Params to vars
 
@@ -121,7 +121,7 @@
           if (!$reply['read']) $unread ++;
 
           $c->setFromNamePic($reply, $from);
-          
+
           if (strcmp($m['_id'], $entry['_id']) == 0) $reply['current'] = true;
           else $reply['current'] = false;
 
@@ -167,7 +167,7 @@
         if (isset($_GET['msg'])) $data['msg'] = $_GET['msg'];
         return $data;
       }
-      
+
       if (!isset($_GET['id'])) {
         $this->render('messages', viewData($this)); return;
       }
@@ -176,8 +176,8 @@
 
       // Validations
       $this->startValidations();
-      $this->validate(MongoId::isValid($id = $_GET['id']) and 
-                      ($entry = $MMessage->get($id)) !== NULL, 
+      $this->validate(MongoId::isValid($id = $_GET['id']) and
+                      ($entry = $MMessage->get($id)) !== NULL,
         $err, 'unknown message');
       if ($this->isValid())
         $this->validate(in_array($myid = $_SESSION['_id']->{'$id'}, $entry['participants']),
@@ -262,12 +262,11 @@
         }
         $this->render('messages', viewData($this, $entry)); return;
       }
-      
+
       $this->error($err);
       $this->render('notice');
     }
   }
 
-  $CMessage = new MessageController();
-
+  GLOBALvarSet('CMessage', new MessageController());
 ?>

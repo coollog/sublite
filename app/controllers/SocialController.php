@@ -670,5 +670,5 @@
     }
   }
 
-  $CSocial = new SocialController();
+  GLOBALvarSet('CSocial', new SocialController());
 ?>

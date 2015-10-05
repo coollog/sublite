@@ -39,7 +39,7 @@
       extract($data = $this->data($params));
 
       $this->startValidations();
-      $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL), 
+      $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL),
         $err, 'invalid email');
 
       if ($this->isValid()) {
@@ -61,6 +61,5 @@
     }
   }
 
-  $CApp = new AppController();
-
+  $GLOBALS['CApp'] = new AppController();
 ?>

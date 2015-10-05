@@ -15,36 +15,36 @@
     const DB_TYPE = parent::DB_INTERNSHIPS;
 
     public static function getApplicationQuestionIds(MongoId $jobId) {
-      $questionIds = (new DBQuery(static::$collection))
+      $questionIds = (new DBQuery(self::$collection))
         ->toQuery('_id', $jobId)->projectField('application')->findOne();
 
       return $questionIds['application']['questions'];
     }
 
     public function __construct() {
-      static::$collection = parent::__construct(self::DB_TYPE, 'jobs');
+      self::$collection = parent::__construct(self::DB_TYPE, 'jobs');
     }
 
     function save($data, $setRecruiter=true) {
       if ($setRecruiter) $data['recruiter'] = $_SESSION['_id'];
-      static::$collection->save($data);
+      self::$collection->save($data);
       return $data['_id']->{'$id'};
     }
 
     function get($id) {
-      return static::$collection->findOne(array('_id' => new MongoId($id)));
+      return self::$collection->findOne(array('_id' => new MongoId($id)));
     }
     function getByRecruiter($id) {
-      return static::$collection->find(array('recruiter' => new MongoId($id)));
+      return self::$collection->find(array('recruiter' => new MongoId($id)));
     }
     function getAll() {
-      return static::$collection->find();
+      return self::$collection->find();
     }
     function find($query=array()) {
-      return static::$collection->find($query);
+      return self::$collection->find($query);
     }
     function last($n=1) {
-      return static::$collection->find()->sort(array('_id'=>-1))->limit($n);
+      return self::$collection->find()->sort(array('_id'=>-1))->limit($n);
     }
 
     function owner($id) {
@@ -77,8 +77,9 @@
         return NULL;
       }
     }
+
+    private static $collection;
   }
 
-  $MJob = new JobModel();
-
+  GLOBALvarSet('MJob', new JobModel());
 ?>

@@ -4,8 +4,6 @@
   class MessageModel extends Model {
     const DB_TYPE = parent::DB_INTERNSHIPS;
 
-    protected static $collection;
-
     function __construct($test=false) {
       self::$collection =
         parent::__construct(self::DB_TYPE, 'message', $test);
@@ -55,8 +53,9 @@
     function exists($id) {
       return ($this->get($id) !== NULL);
     }
+
+    private static $collection;
   }
 
-  $MMessage = new MessageModel();
-
+  GLOBALvarSet('MMessage', new MessageModel());
 ?>
