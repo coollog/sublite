@@ -22,7 +22,7 @@
   require_once($dirpre.'includes/functions/geocode.php');
   require_once($dirpre.'includes/functions/sendgmail.php');
   require_once($dirpre.'includes/functions/lib_autolink.php');
-  require_once($dirpre.'../housing/schools.php');
+  require_once($dirpre.'includes/schools.php');
 
   // Require other header files
   require_once($dirpre.'controllers/AppController.php');
