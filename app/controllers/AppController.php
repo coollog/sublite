@@ -61,5 +61,5 @@
     }
   }
 
-  $GLOBALS['CApp'] = new AppController();
+  GLOBALvarSet('CApp', new AppController());
 ?>

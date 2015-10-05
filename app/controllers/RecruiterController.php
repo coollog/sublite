@@ -321,7 +321,7 @@
       // Validations
       $this->startValidations();
       $this->validate(isset($_GET['id']) and
-        ($entry = $MRecruiter->getByID($id = $_GET['id'])) != NULL,
+        ($entry = $MRecruiter->getByID($id = new MongoId($_GET['id']))) != NULL,
         $err, 'unknown recruiter');
 
       // Code
@@ -345,7 +345,7 @@
           $data['recruiterid'] = $id;
 
           if ($data['photo'] == 'assets/gfx/defaultpic.png')
-            $data['photo'] = $GLOBALS['dirpre'] . $data['photo'];
+            $data['photo'] = $GLOBALS['dirpreFromRoute'] . $data['photo'];
 
           $this->render('recruiter', $data);
           return;

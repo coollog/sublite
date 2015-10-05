@@ -25,7 +25,8 @@
     }
 
     public static function route($route, $callName) {
-      invariant(isset(self::$callMap[$callName]));
+      invariant(isset(self::$callMap[$callName]),
+        "'$callName' is not a registered callName.");
 
       self::$routeMap[$route] = $callName;
     }
@@ -38,6 +39,8 @@
         self::routeNotFound();
         return;
       }
+
+      self::setDirpreFromRoute($uri);
 
       $callName = self::$routeMap[$uri];
       $callFunc = self::$callMap[$callName];
@@ -79,6 +82,16 @@
       }
 
       return $routes;
+    }
+
+    /**
+     * Sets the $GLOBAL[dirpreFromRoute] to be used by paths rendered in HTML so
+     * that browsers retrieve files using correct relative path.
+     */
+    private static function setDirpreFromRoute($uri) {
+      $depth = count(self::routeStringToArray($uri));
+
+      $GLOBALS['dirpreFromRoute'] = str_repeat('../', $depth) . 'app/';
     }
 
     private static $callMap = array();

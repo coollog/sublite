@@ -2,10 +2,10 @@
   require_once($GLOBALS['dirpre'].'models/Model.php');
 
   class SubletModel extends Model {
-    const DB_TYPE = parent::DB_INTERNSHIPS;
+    const DB_TYPE = parent::DB_STUDENTS;
 
     function __construct() {
-      self::$collection = parent::__construct(self::DB_TYPE, 'listings');
+      parent::__construct(self::DB_TYPE, 'listings');
     }
 
     function save($data) {
@@ -37,7 +37,7 @@
       return (self::$collection->findOne(array('_id' => new MongoId($id))) !== NULL);
     }
 
-    private static $collection;
+    protected static $collection;
   }
 
   GLOBALvarSet('MSublet', new SubletModel());

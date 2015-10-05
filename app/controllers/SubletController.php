@@ -234,7 +234,7 @@
         $data['studentschool'] = strlen($s['school']) > 0 ?
           $s['school'] : 'Undergraduate';
         $data['studentpic'] = isset($s['photo']) ?
-          $s['photo'] : $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
+          $s['photo'] : $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
         global $S;
         $data['studentcollege'] = $S->nameOf($s['email']);
         $data['studentbio'] = isset($s['bio']) ?

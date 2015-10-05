@@ -5,7 +5,7 @@
     const DB_TYPE = parent::DB_INTERNSHIPS;
 
     function __construct() {
-      self::$collection = parent::__construct(self::DB_TYPE, 'app');
+      parent::__construct(self::DB_TYPE, 'app');
     }
 
     function save($data) {
@@ -75,7 +75,7 @@
       $this->save($entry);
     }
 
-    private static $collection;
+    protected static $collection;
   }
 
   GLOBALvarSet('MApp', new AppModel());

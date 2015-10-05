@@ -1,6 +1,5 @@
 <?php
   require_once($dirpre.'tests/TestFixture.php');
-  require_once($dirpre.'models/ApplicationModel.php');
   require_once($dirpre.'controllers/modules/application/Application.php');
   require_once($dirpre.'controllers/modules/application/ApplicationStudent.php');
   require_once($dirpre.'controllers/modules/application/ApplicationJob.php');

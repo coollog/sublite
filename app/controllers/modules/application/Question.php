@@ -63,7 +63,7 @@
       // If model can get it, parse the raw data and return question.
       $question = QuestionModel::getById($id);
 
-      return count($question) == 0 ? null : self::parseRawData($question[0]);
+      return $question === null ? null : self::parseRawData($question);
     }
 
     public static function delete(MongoId $id) {

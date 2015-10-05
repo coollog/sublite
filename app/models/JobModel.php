@@ -22,7 +22,7 @@
     }
 
     public function __construct() {
-      self::$collection = parent::__construct(self::DB_TYPE, 'jobs');
+      parent::__construct(self::DB_TYPE, 'jobs');
     }
 
     function save($data, $setRecruiter=true) {
@@ -78,7 +78,7 @@
       }
     }
 
-    private static $collection;
+    protected static $collection;
   }
 
   GLOBALvarSet('MJob', new JobModel());

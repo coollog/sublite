@@ -5,8 +5,7 @@
     const DB_TYPE = parent::DB_INTERNSHIPS;
 
     function __construct($test=false) {
-      self::$collection =
-        parent::__construct(self::DB_TYPE, 'message', $test);
+      parent::__construct(self::DB_TYPE, 'message', $test);
     }
 
     function save($data) {
@@ -54,7 +53,7 @@
       return ($this->get($id) !== NULL);
     }
 
-    private static $collection;
+    protected static $collection;
   }
 
   GLOBALvarSet('MMessage', new MessageModel());

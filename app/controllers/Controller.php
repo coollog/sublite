@@ -49,7 +49,7 @@
       $viewVars['Success'] = isset($success) ? $success : '';
 
       require_once($GLOBALS['dirpre'].'views/view.php');
-      require_once($GLOBALS['dirpre']."views/$view.php");
+      self::requireUsingRoutePath("views/$view.php");
     }
     function finish() {
       if (count(self::$renderQueue) == 0) return;
@@ -63,14 +63,14 @@
         $viewVars = array_merge($viewVars, $vars);
       }
       require_once($GLOBALS['dirpre'].'views/view.php');
-      require_once($GLOBALS['dirpre'].'includes/htmlheader.php');
+      self::requireUsingRoutePath('includes/htmlheader.php');
 
       foreach (self::$renderQueue as $pair) {
         $view = $pair[0]; $vars = $pair[1];
         self::directrender($view, $vars);
       }
 
-      require_once($GLOBALS['dirpre'].'includes/htmlfooter.php');
+      self::requireUsingRoutePath('includes/htmlfooter.php');
 
       $view = ob_get_clean();
       $_SESSION['view'] = $view;
@@ -111,6 +111,14 @@
 
       $m = array2str($content);
       sendgmail(array('tony.jiang@yale.edu', 'qingyang.chen@gmail.com'), "info@sublite.net", 'SubLite Search Report', $m);
+    }
+
+    private static function requireUsingRoutePath($relPath) {
+      $dirpreOrig = $GLOBALS['dirpre'];
+      $GLOBALS['dirpre'] = $GLOBALS['dirpreFromRoute'];
+      global $viewVars;
+      require_once("$dirpreOrig$relPath");
+      $GLOBALS['dirpre'] = $dirpreOrig;
     }
   }
 

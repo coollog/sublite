@@ -38,11 +38,11 @@
       $me = $MStudent->me();
       $me['_id'] = $me['_id']->{'$id'};
 
-      $photo = $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
+      $photo = $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
       if (isset($me['photo']) and !is_null($me['photo'])) {
         $photo = $me['photo'];
         if ($photo == 'nopic.png')
-          $photo = $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
+          $photo = $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
       }
       $me['photo'] = $photo;
 
@@ -85,7 +85,7 @@
         $domain = "https://$_SERVER[HTTP_HOST]";
         $thispage = "$domain$_SERVER[REQUEST_URI]";
         $lastpage = $_SERVER['HTTP_REFERER'];
-        $lastpagepath = preg_replace("/https:\/\/$_SERVER[HTTP_HOST]/", '', $lastpage);
+        $lastpagepath = preg_replace("/https*:\/\/$_SERVER[HTTP_HOST]/", '', $lastpage);
         if ($thispage != $lastpage) {
           if (!in_array($lastpagepath, $noredirect)) {
             setcookie('loginredirect', $lastpage, time() + 300);

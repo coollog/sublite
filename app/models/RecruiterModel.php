@@ -5,8 +5,7 @@
     const DB_TYPE = parent::DB_INTERNSHIPS;
 
     function __construct() {
-      self::$collection =
-        parent::__construct(self::DB_TYPE, 'recruiters');
+      parent::__construct(self::DB_TYPE, 'recruiters');
     }
 
     function save($data) {
@@ -32,7 +31,7 @@
       return $MCompany->get($r['company']);
     }
     function getName($id) {
-      $entry = $this->getById($id);
+      $entry = $this->getById(new MongoId($id));
       return $entry['firstname'] . ' ' . $entry['lastname'];
     }
     function getEmail($id) {
@@ -58,7 +57,7 @@
       return (self::$collection->findOne(array('_id' => new MongoId($id))) !== NULL);
     }
 
-    private static $collection;
+    protected static $collection;
   }
 
   GLOBALvarSet('MRecruiter', new RecruiterModel());

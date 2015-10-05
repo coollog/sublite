@@ -86,7 +86,7 @@
       if ($MStudent->exists($from)) {
         $Photo = $MStudent->getPhoto($from);
         if ($Photo == '' or $Photo == 'defaultpic.png' or $Photo == 'noprofilepic.png')
-          $Photo = $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
+          $Photo = $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
         $reply['frompic'] = $Photo;
       } else if ($MRecruiter->IDexists($from)) {
         $reply['frompic'] = $MRecruiter->getPhoto($from);
@@ -94,7 +94,7 @@
         $reply['frompic'] = 'Nonexistent';
       }
       if ($reply['frompic'] == 'assets/gfx/defaultpic.png')
-        $reply['frompic'] = $GLOBALS['dirpre'].$reply['frompic'];
+        $reply['frompic'] = $GLOBALS['dirpreFromRoute'].$reply['frompic'];
     }
 
     function reply() {

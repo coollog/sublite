@@ -74,10 +74,12 @@
     global $viewVars;
     if ($vars) $viewVars = array_merge($viewVars, $vars);
 
-    require($GLOBALS['dirpre']."views/partials/$page.php");
+    require($GLOBALS['dirpreOrig']."views/partials/$page.php");
   }
 
   function jsecho($str) {
     echo str_replace(array("\r", "\n"), '', $str);
   }
+
+  $GLOBALS['dirpreOrig'] = $GLOBALS['dirpre'];
 ?>

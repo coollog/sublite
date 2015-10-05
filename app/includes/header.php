@@ -47,6 +47,7 @@
   require_once($dirpre.'models/SubletModel.php');
   require_once($dirpre.'models/SocialModel.php');
   require_once($dirpre."models/QuestionModel.php");
+  require_once($dirpre.'models/ApplicationModel.php');
 
   // Other necessary modules.
   require_once($dirpre.'router.php');

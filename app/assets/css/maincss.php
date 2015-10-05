@@ -2,12 +2,12 @@
 <style>
   @font-face {
       font-family: BebasNeue;
-      src: url('<?php echo $GLOBALS['dirpre']; ?>assets/fonts/BebasNeue_Regular.ttf');
+      src: url('<?php echo $GLOBALS['dirpre']; ?>/assets/fonts/BebasNeue_Regular.ttf');
       font-weight: normal;
   }
   @font-face {
       font-family: BebasNeue;
-      src: url('<?php echo $GLOBALS['dirpre']; ?>assets/fonts/BebasNeue_Bold.ttf');
+      src: url('<?php echo $GLOBALS['dirpre']; ?>/assets/fonts/BebasNeue_Bold.ttf');
       font-weight: bold;
   }
   html, body {

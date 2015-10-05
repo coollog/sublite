@@ -5,8 +5,7 @@
     const DB_TYPE = parent::DB_INTERNSHIPS;
 
     function __construct() {
-      self::$collection =
-        parent::__construct(self::DB_TYPE, 'companies');
+      parent::__construct(self::DB_TYPE, 'companies');
     }
 
     function save($data) {
@@ -43,7 +42,7 @@
       return ($this->get($id) !== NULL);
     }
 
-    private static $collection;
+    protected static $collection;
   }
 
   GLOBALvarSet('MCompany', new CompanyModel());

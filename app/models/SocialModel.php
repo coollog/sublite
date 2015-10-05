@@ -6,7 +6,7 @@
 
     // The essentials
     function __construct() {
-      self::$collection = parent::__construct(self::DB_TYPE, 'hubs');
+      parent::__construct(self::DB_TYPE, 'hubs');
     }
 
     function save($data) {
@@ -459,7 +459,7 @@
       return is_array($ar) && count($ar) > 0;
     }
 
-    private static $collection;
+    protected static $collection;
   }
 
   GLOBALvarSet('MSocial', new SocialModel());

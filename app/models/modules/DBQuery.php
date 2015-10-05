@@ -101,7 +101,7 @@
      */
     public function findOne() {
       return self::queryForOne(
-        $this->colleciton, $this->query, $this->projection);
+        $this->collection, $this->query, $this->projection);
     }
 
     /**

@@ -8,7 +8,7 @@
   }
 
   class StudentModel extends Model {
-    const DB_TYPE = parent::DB_INTERNSHIPS;
+    const DB_TYPE = parent::DB_STUDENTS;
 
     public static function getAnswers(MongoId $studentId) {
       $query = self::queryForId($studentId)->projectField('answers');
@@ -21,7 +21,7 @@
     }
 
     public function __construct() {
-      self::$collection = parent::__construct(self::DB_TYPE, 'emails');
+      parent::__construct(self::DB_TYPE, 'emails');
     }
 
     function save($data) {
@@ -44,7 +44,7 @@
     public static function getById($id) {
       $student = self::$collection->findOne(array('_id' => new MongoId($id)));
       $student['photo'] = isset($student['photo']) ? $student['photo'] :
-        $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
+        $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
       return $student;
     }
     function getID($email) {
@@ -58,7 +58,7 @@
     function getPhoto($id) {
       $entry = $this->getById($id);
       return isset($entry['photo']) ? $entry['photo'] :
-        $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
+        $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
     }
     function getEmail($id) {
       $entry = $this->getById($id);
@@ -96,7 +96,7 @@
       return (self::$collection->findOne(array('email' => $email)) !== NULL);
     }
 
-    private static $collection;
+    protected static $collection;
   }
 
   GLOBALvarSet('MStudent', new StudentModel());

@@ -11,7 +11,7 @@
     const DB_TYPE = parent::DB_INTERNSHIPS;
 
     public function __construct() {
-      self::$collection = parent::__construct(self::DB_TYPE, 'questions');
+      parent::__construct(self::DB_TYPE, 'questions');
 
       // Create necessary indices.
       mongo_ok(self::$collection->createIndex(array('text' => 'text')));
@@ -47,6 +47,6 @@
       return $query->run();
     }
 
-    private static $collection;
+    protected static $collection;
   }
 ?>

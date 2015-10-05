@@ -56,7 +56,7 @@
         $query->projectField($field);
       }
 
-      return $query->run();
+      return $query->findOne();
     }
 
     protected static function checkReady() {
@@ -116,21 +116,25 @@
       return $m;
     }
 
+    // Stores the db references to retrieve collections.
+    private static $dbs = array();
+
+    protected static $collection;
+
     public function __construct($dbType, $collectionName) {
       self::connect($dbType);
 
       $dbName = self::dbTypeToName($dbType);
-      return self::getCollection($dbType, $collectionName);
+      static::$collection = self::getCollection($dbType, $collectionName);
     }
 
     public function __destruct() {
       // We drop any testing collections.
       if (self::$test) {
-        mongo_ok(static::$collection->drop());
+        if (isset(static::$collection)) {
+          mongo_ok(static::$collection->drop());
+        }
       }
     }
-
-    // Stores the db references to retrieve collections.
-    private static $dbs = array();
   }
 ?>

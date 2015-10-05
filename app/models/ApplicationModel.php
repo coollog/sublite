@@ -28,7 +28,7 @@
     const DB_TYPE = parent::DB_INTERNSHIPS;
 
     public function __construct() {
-      self::$collection = parent::__construct(self::DB_TYPE, 'jobs');
+      parent::__construct(self::DB_TYPE, 'applications');
 
       // Create necessary indices.
       mongo_ok(self::$collection->createIndex(array('jobid' => 1)));
@@ -43,13 +43,14 @@
       $update->run();
     }
 
+    // **** THIS SHOULD CALL A FUNCTION IN JOBMODEL ****
     public static function setJobApplication(MongoId $jobId, array $data) {
 
     }
 
     public static function getSavedForJob(MongoId $jobId) {
       $query = (new DBQuery(self::$collection))
-        ->toQuery('jobId', $jobId)->toQuery('submitted', false);
+        ->toQuery('jobid', $jobId)->toQuery('submitted', false);
       return $query->run();
     }
 
@@ -61,6 +62,6 @@
       $update->run();
     }
 
-    private static $collection;
+    protected static $collection;
   }
 ?>
