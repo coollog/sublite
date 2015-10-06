@@ -1,8 +1,8 @@
 <?php
-  require_once($dirpre.'tests/TestFixture.php');
-  require_once($dirpre.'controllers/modules/application/Application.php');
-  require_once($dirpre.'controllers/modules/application/ApplicationStudent.php');
-  require_once($dirpre.'controllers/modules/application/ApplicationJob.php');
+  require_once($GLOBALS['dirpre'].'tests/TestFixture.php');
+  require_once($GLOBALS['dirpre'].'controllers/modules/application/Application.php');
+  require_once($GLOBALS['dirpre'].'controllers/modules/application/ApplicationStudent.php');
+  require_once($GLOBALS['dirpre'].'controllers/modules/application/ApplicationJob.php');
 
   class ApplicationTest extends Test implements TestInterface {
     public static function run() {

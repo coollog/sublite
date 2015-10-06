@@ -172,6 +172,9 @@
   Router::register('register', function() {
     GLOBALvarGet('CStudent')->register();
   });
+  Router::register('runtests', function() {
+    require_once($GLOBALS['dirpre'].'tests/runtests.php');
+  });
   Router::register('S3', function() {
     GLOBALvarGet('CS3')->upload();
   });
@@ -293,6 +296,8 @@
   Router::route('/register', 'register');
   Router::route('/housing/register', 'register');
   Router::route('/jobs/register', 'register');
+
+  Router::route('/runtests', 'runtests');
 
   Router::route('/S3', 'S3');
   Router::route('/employers/S3', 'S3');

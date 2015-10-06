@@ -1,5 +1,5 @@
 <?php
-  $GLOBALS['dirpre'] = '../';
+  $GLOBALS['dirpre'] = isset($GLOBALS['dirpre']) ? $GLOBALS['dirpre'] : '../';
   require_once($GLOBALS['dirpre'].'includes/header.php');
 
   Model::$test = true;
