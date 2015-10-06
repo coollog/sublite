@@ -89,6 +89,21 @@
   Router::register('housing/sublet', function() {
     GLOBALvarGet('CSublet')->view();
   });
+  Router::register('hubs/admin', function() {
+    GLOBALvarGet('CSocial')->admin();
+  });
+  Router::register('hubs/adminapi', function() {
+    echo GLOBALvarGet('CSocial')->adminapi();
+  });
+  Router::register('hubs/api', function() {
+    echo GLOBALvarGet('CSocial')->api();
+  });
+  Router::register('hubs/hub', function() {
+    echo GLOBALvarGet('CSocial')->hub();
+  });
+  Router::register('hubs/start', function() {
+    echo GLOBALvarGet('CSocial')->index();
+  });
   Router::register('jobs/job', function() {
     GLOBALvarGet('CJob')->view();
   });
@@ -165,6 +180,13 @@
   Router::route('/housing/sublet', 'housing/sublet');
   Router::route('/housing/addsublet', 'housing/addsublet');
   Router::route('/housing/editsublet', 'housing/editsublet');
+
+  Router::route('/hubs/admin', 'hubs/admin');
+  Router::route('/hubs/adminapi', 'hubs/adminapi');
+  Router::route('/hubs/api', 'hubs/api');
+  Router::route('/hubs/hub', 'hubs/hub');
+  Router::route('/hubs/index', 'backtoindex');
+  Router::route('/hubs/start', 'hubs/start');
 
   Router::route('/jobs/company', 'jobs/company');
   Router::route('/employers/job', 'jobs/job');

@@ -2,7 +2,7 @@
   require_once($GLOBALS['dirpre'].'models/Model.php');
 
   class SocialModel extends Model {
-    const DB_TYPE = parent::DB_INTERNSHIPS;
+    const DB_TYPE = parent::DB_STUDENTS;
 
     // The essentials
     function __construct() {
