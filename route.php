@@ -9,6 +9,12 @@
   Router::register('backtoindex', function() {
     Controller::redirect('../index');
   });
+  Router::register('changepass', function() {
+    GLOBALvarGet('CStudent')->changePass();
+  });
+  Router::register('confirm', function() {
+    GLOBALvarGet('CStudent')->confirm();
+  });
   Router::register('editprofile', function() {
     GLOBALvarGet('CStudent')->edit();
   });
@@ -147,6 +153,11 @@
   Router::route('/housing/index', 'backtoindex');
   Router::route('/jobs', 'backtoindex');
   Router::route('/jobs/index', 'backtoindex');
+  Router::route('/hubs', 'backtoindex');
+  Router::route('/hubs/index', 'backtoindex');
+
+  Router::route('/changepass', 'changepass');
+  Router::route('/confirm', 'confirm');
 
   Router::route('/housing/editprofile', 'editprofile');
   Router::route('/jobs/editprofile', 'editprofile');
@@ -185,7 +196,6 @@
   Router::route('/hubs/adminapi', 'hubs/adminapi');
   Router::route('/hubs/api', 'hubs/api');
   Router::route('/hubs/hub', 'hubs/hub');
-  Router::route('/hubs/index', 'backtoindex');
   Router::route('/hubs/start', 'hubs/start');
 
   Router::route('/jobs/company', 'jobs/company');

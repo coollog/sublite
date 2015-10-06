@@ -1,1 +1,0 @@
-{ "options" : { "create" : "objectlabs-system" }, "indexes" : [ { "v" : 1, "key" : { "_id" : 1 }, "ns" : "sublite.objectlabs-system", "name" : "_id_" } ] }
