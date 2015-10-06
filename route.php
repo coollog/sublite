@@ -76,8 +76,18 @@
   Router::register('employers/S3', function() {
     GLOBALvarGet('CS3')->upload();
   });
+  Router::register('faq', function() {
+    GLOBALvarGet('CApp')->faq();
+  });
+  Router::register('feedback', function() {
+    GLOBALvarGet('CApp')->feedback();
+  });
   Router::register('forgotpass', function() {
     GLOBALvarGet('CStudent')->forgotPass();
+  });
+  Router::register('graph', function() {
+    GLOBALvarGet('CJob')->requireLogin();
+    GLOBALvarGet('CStats')->graph();
   });
   Router::register('home', function() {
     GLOBALvarGet('CStudent')->home();
@@ -131,14 +141,57 @@
   Router::register('messages', function() {
     GLOBALvarGet('CMessage')->reply();
   });
+  Router::register('messagestats', function() {
+    GLOBALvarGet('CStats')->requireLogin();
+    GLOBALvarGet('CStats')->messages();
+  });
+  Router::register('migrate', function() {
+    GLOBALvarGet('CMigrations')->migrate();
+  });
   Router::register('newmessage', function() {
     GLOBALvarGet('CMessage')->add();
+  });
+  Router::register('privacy', function() {
+    GLOBALvarGet('CApp')->privacy();
+  });
+  Router::register('redirect', function() {
+    GLOBALvarGet('MJob')->incrementApply($_GET['id']);
+    if(filter_var($_GET['url'], FILTER_VALIDATE_EMAIL)) {
+      header("Location: mailto:" . $_GET['url']);
+    }
+    else {
+      $link = $_GET['url'];
+      if (!preg_match('`^(https?:\/\/)`', $_GET['url']))
+        $link = "http://" . $link;
+      header("Location: " . $link);
+    }
+  });
+  Router::register('refer', function() {
+    GLOBALvarGet('CStudent')->sendReferral();
   });
   Router::register('register', function() {
     GLOBALvarGet('CStudent')->register();
   });
   Router::register('S3', function() {
     GLOBALvarGet('CS3')->upload();
+  });
+  Router::register('stats', function() {
+    GLOBALvarGet('CJob')->requireLogin();
+    GLOBALvarGet('CStats')->update();
+    GLOBALvarGet('CStats')->nojobs();
+    GLOBALvarGet('CStats')->students();
+    GLOBALvarGet('CStats')->missingrecruiter();
+    GLOBALvarGet('CStats')->recruiterbydate();
+    GLOBALvarGet('CStats')->subletsended2014();
+    GLOBALvarGet('CStats')->unknownschools();
+    GLOBALvarGet('CStats')->cumulative();
+    GLOBALvarGet('CStats')->getMessageParticipants();
+  });
+  Router::register('team', function() {
+    GLOBALvarGet('CApp')->team();
+  });
+  Router::register('terms', function() {
+    GLOBALvarGet('CApp')->terms();
   });
   Router::register('whereto', function() {
     GLOBALvarGet('CStudent')->whereto();
@@ -181,8 +234,13 @@
   Router::route('/employers/recruiter', 'employers/recruiter');
   Router::route('/employers/register', 'employers/register');
 
+  Router::route('/faq', 'faq');
+  Router::route('/feedback', 'feedback');
+
   Router::route('/forgotpass', 'forgotpass');
   Router::route('/jobs/forgotpass', 'forgotpass');
+
+  Router::route('/graph', 'graph');
 
   Router::route('/housing/home', 'home');
   Router::route('/jobs/home', 'home');
@@ -213,6 +271,8 @@
   Router::route('/housing/logout', 'logout');
   Router::route('/jobs/logout', 'logout');
 
+  Router::route('/messagestats', 'messagestats');
+
   Router::route('/messages', 'messages');
   Router::route('/employers/messages', 'messages');
   Router::route('/housing/messages', 'messages');
@@ -222,6 +282,14 @@
   Router::route('/housing/newmessage', 'newmessage');
   Router::route('/jobs/newmessage', 'newmessage');
 
+  Router::route('/migrate', 'migrate');
+
+  Router::route('/privacy', 'privacy');
+
+  Router::route('/redirect', 'redirect');
+
+  Router::route('/refer', 'refer');
+
   Router::route('/register', 'register');
   Router::route('/housing/register', 'register');
   Router::route('/jobs/register', 'register');
@@ -229,6 +297,12 @@
   Router::route('/S3', 'S3');
   Router::route('/employers/S3', 'S3');
   Router::route('/housing/S3', 'S3');
+
+  Router::route('/stats', 'stats');
+
+  Router::route('/team', 'team');
+
+  Router::route('/terms', 'terms');
 
   Router::route('/whereto', 'whereto');
   Router::route('/housing/whereto', 'whereto');
