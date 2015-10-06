@@ -29,6 +29,7 @@
         "'$callName' is not a registered callName.");
 
       self::$routeMap[$route] = $callName;
+      self::$routeMap["$route.php"] = $callName;
     }
 
     public static function run() {

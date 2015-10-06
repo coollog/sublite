@@ -39,7 +39,7 @@
       return $entry['email'];
     }
     function getPhoto($id) {
-      $entry = $this->getById($id);
+      $entry = $this->getById(new MongoId($id));
       return isset($entry['photo']) ? $entry['photo'] : null;
     }
     function me() {

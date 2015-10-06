@@ -12,6 +12,64 @@
   Router::register('editprofile', function() {
     GLOBALvarGet('CStudent')->edit();
   });
+  Router::register('employers/addcompany', function() {
+    GLOBALvarGet('CCompany')->add();
+  });
+  Router::register('employers/addjob', function() {
+    GLOBALvarGet('CJob')->add();
+  });
+  Router::register('employers/approve', function() {
+    GLOBALvarGet('CRecruiter')->approve();
+  });
+  Router::register('employers/changepass', function() {
+    GLOBALvarGet('CRecruiter')->changePass();
+  });
+  Router::register('employers/company', function() {
+    GLOBALvarGet('CCompany')->view();
+  });
+  Router::register('employers/editcompany', function() {
+    GLOBALvarGet('CCompany')->edit();
+  });
+  Router::register('employers/editjob', function() {
+    GLOBALvarGet('CJob')->edit();
+  });
+  Router::register('employers/editprofile', function() {
+    GLOBALvarGet('CRecruiter')->edit();
+  });
+  Router::register('employers/forgotpass', function() {
+    GLOBALvarGet('CRecruiter')->forgotPass();
+  });
+  Router::register('employers/home', function() {
+    GLOBALvarGet('CRecruiter')->home();
+    GLOBALvarGet('CJob')->manage();
+  });
+  Router::register('employers/index', function() {
+    GLOBALvarGet('CRecruiter')->index();
+  });
+  Router::register('employers/login', function() {
+    GLOBALvarGet('CRecruiter')->login();
+  });
+  Router::register('employers/loginregister', function() {
+    GLOBALvarGet('CRecruiter')->register();
+    GLOBALvarGet('CRecruiter')->login();
+  });
+  Router::register('employers/logout', function() {
+    GLOBALvarGet('CRecruiter')->logout();
+  });
+  Router::register('employers/profile', function() {
+    // PROB THINK OF ANOTHER WAY OF REFACTORING THE FOLLOWING CODE
+    if (isset($_SESSION['email'])) echo 'yay!';
+    else echo 'nay...';
+  });
+  Router::register('employers/recruiter', function() {
+    GLOBALvarGet('CRecruiter')->view();
+  });
+  Router::register('employers/register', function() {
+    GLOBALvarGet('CRecruiter')->register();
+  });
+  Router::register('employers/S3', function() {
+    GLOBALvarGet('CS3')->upload();
+  });
   Router::register('forgotpass', function() {
     GLOBALvarGet('CStudent')->forgotPass();
   });
@@ -67,95 +125,82 @@
 
   // Map route to registered functions. Try to have these in alphabetical order,
   // and then in groupings.
-  Router::route('/index.php', 'index');
   Router::route('/index', 'index');
   Router::route('/', 'index');
 
   Router::route('/housing', 'backtoindex');
   Router::route('/housing/index', 'backtoindex');
-  Router::route('/housing/index.php', 'backtoindex');
   Router::route('/jobs', 'backtoindex');
   Router::route('/jobs/index', 'backtoindex');
-  Router::route('/jobs/index.php', 'backtoindex');
 
   Router::route('/housing/editprofile', 'editprofile');
-  Router::route('/housing/editprofile.php', 'editprofile');
   Router::route('/jobs/editprofile', 'editprofile');
-  Router::route('/jobs/editprofile.php', 'editprofile');
+
+  Router::route('/employers/addcompany', 'employers/addcompany');
+  Router::route('/employers/addjob', 'employers/addjob');
+  Router::route('/employers/approve', 'employers/approve');
+  Router::route('/employers/changepass', 'employers/changepass');
+  Router::route('/employers/company', 'employers/company');
+  Router::route('/employers/editcompany', 'employers/editcompany');
+  Router::route('/employers/editjob', 'employers/editjob');
+  Router::route('/employers/editprofile', 'employers/editprofile');
+  Router::route('/employers/forgotpass', 'employers/forgotpass');
+  Router::route('/employers/home', 'employers/home');
+  Router::route('/employers', 'employers/index');
+  Router::route('/employers/index', 'employers/index');
+  Router::route('/employers/login', 'employers/login');
+  Router::route('/employers/loginregister', 'employers/loginregister');
+  Router::route('/employers/logout', 'employers/logout');
+  Router::route('/employers/profile', 'employers/profile');
+  Router::route('/employers/recruiter', 'employers/recruiter');
+  Router::route('/employers/register', 'employers/register');
 
   Router::route('/forgotpass', 'forgotpass');
-  Router::route('/forgotpass.php', 'forgotpass');
   Router::route('/jobs/forgotpass', 'forgotpass');
-  Router::route('/jobs/forgotpass.php', 'forgotpass');
 
   Router::route('/housing/home', 'home');
-  Router::route('/housing/home.php', 'home');
   Router::route('/jobs/home', 'home');
-  Router::route('/jobs/home.php', 'home');
 
   Router::route('/housing/search', 'housing/search');
-  Router::route('/housing/search.php', 'housing/search');
   Router::route('/housing/sublet', 'housing/sublet');
-  Router::route('/housing/sublet.php', 'housing/sublet');
   Router::route('/housing/addsublet', 'housing/addsublet');
-  Router::route('/housing/addsublet.php', 'housing/addsublet');
   Router::route('/housing/editsublet', 'housing/editsublet');
-  Router::route('/housing/editsublet.php', 'housing/editsublet');
 
   Router::route('/jobs/company', 'jobs/company');
-  Router::route('/jobs/company.php', 'jobs/company');
+  Router::route('/employers/job', 'jobs/job');
   Router::route('/jobs/job', 'jobs/job');
-  Router::route('/jobs/job.php', 'jobs/job');
   Router::route('/jobs/recruiter', 'jobs/recruiter');
-  Router::route('/jobs/recruiter.php', 'jobs/recruiter');
+  Router::route('/employers/search', 'jobs/search');
   Router::route('/jobs/search', 'jobs/search');
-  Router::route('/jobs/search.php', 'jobs/search');
 
   Router::route('/login', 'login');
-  Router::route('/login.php', 'login');
   Router::route('/housing/login', 'login');
-  Router::route('/housing/login.php', 'login');
   Router::route('/jobs/login', 'login');
-  Router::route('/jobs/login.php', 'login');
 
   Router::route('/logout', 'logout');
-  Router::route('/logout.php', 'logout');
   Router::route('/housing/logout', 'logout');
-  Router::route('/housing/logout.php', 'logout');
   Router::route('/jobs/logout', 'logout');
-  Router::route('/jobs/logout.php', 'logout');
 
   Router::route('/messages', 'messages');
-  Router::route('/messages.php', 'messages');
+  Router::route('/employers/messages', 'messages');
   Router::route('/housing/messages', 'messages');
-  Router::route('/housing/messages.php', 'messages');
   Router::route('/jobs/messages', 'messages');
-  Router::route('/jobs/messages.php', 'messages');
   Router::route('/newmessage', 'newmessage');
-  Router::route('/newmessage.php', 'newmessage');
+  Router::route('/employers/newmessage', 'newmessage');
   Router::route('/housing/newmessage', 'newmessage');
-  Router::route('/housing/newmessage.php', 'newmessage');
   Router::route('/jobs/newmessage', 'newmessage');
-  Router::route('/jobs/newmessage.php', 'newmessage');
 
   Router::route('/register', 'register');
-  Router::route('/register.php', 'register');
   Router::route('/housing/register', 'register');
-  Router::route('/housing/register.php', 'register');
   Router::route('/jobs/register', 'register');
-  Router::route('/jobs/register.php', 'register');
 
   Router::route('/S3', 'S3');
-  Router::route('/S3.php', 'S3');
+  Router::route('/employers/S3', 'S3');
   Router::route('/housing/S3', 'S3');
-  Router::route('/housing/S3.php', 'S3');
 
   Router::route('/whereto', 'whereto');
-  Router::route('/whereto.php', 'whereto');
   Router::route('/housing/whereto', 'whereto');
-  Router::route('/housing/whereto.php', 'whereto');
   Router::route('/jobs/whereto', 'whereto');
-  Router::route('/jobs/whereto.php', 'whereto');
 
   // Perform the routing.
   Router::run();
