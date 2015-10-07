@@ -125,21 +125,15 @@
     public static function getClaimedByJob(MongoId $jobId) {
       $jobs = processDataArray(ApplicationModel::getClaimed($jobId));
 
-      $statusMap = array(
-        'review' => array(),
-        'rejected' => array(),
-        'accepted' => array()
+      $statusMap = mapDataArrayByField(
+        $jobs,
+        function (ApplicationStudent $each) { return $each->getStatus(); },
+        [
+          self::STATUS_REVIEW => 'review',
+          self::STATUS_REJECTED => 'rejected',
+          self::STATUS_ACCEPTED => 'accepted'
+        ]
       );
-
-      foreach ($jobs as $job) {
-        switch ($job->getStatus()) {
-          case self::STATUS_REVIEW: $key = 'review'; break;
-          case self::STATUS_REJECTED: $key = 'rejected'; break;
-          case self::STATUS_ACCEPTED: $key = 'accepted'; break;
-          default: invariant(false);
-        }
-        $statusMap[$key][] = $job;
-      }
 
       return $statusMap;
     }
@@ -167,12 +161,12 @@
         $questions, $applicationQuestions);
 
       // Save the application.
-      $application = new ApplicationStudent(array(
+      $application = new ApplicationStudent([
         'jobid' => $jobId,
         'studentid' => $studentId,
         'questions' => $savedQuestions,
         'submitted' => $submitted
-      ));
+      ]);
       $id = ApplicationModel::insert($application->getData());
       $application->setId($id);
 
@@ -202,7 +196,7 @@
           $index = $answersHash[$questionId];
           $answers[$index]['ans'] = $newAnswer;
         } else {
-          $answers[] = array('_id' => $questionId, 'ans' => $newAnswer);
+          $answers[] = ['_id' => $questionId, 'ans' => $newAnswer];
         }
       }
 
@@ -210,7 +204,7 @@
     }
 
     private static function processDataArray(array $jobDataArray) {
-      $jobs = array();
+      $jobs = [];
       foreach ($jobDataArray as $jobData) {
         $jobs[] = new ApplicationStudent($jobData);
       }
@@ -231,19 +225,19 @@
         // Process into list of question id-answer pairs.
         foreach ($data['questions'] as $question) {
           $id = new MongoId($question['_id']);
-          $this->data['questions'][$id] = array(
+          $this->data['questions'][$id] = [
             '_id' => $id,
             'answer' => $question['answer']
-          );
+          ];
         }
       }
 
       $this->data['questions'] =
-        isset($data['questions']) ? clean($data['questions']) : array();
+        isset($data['questions']) ? clean($data['questions']) : [];
       $this->data['studentid'] = new MongoId($data['studentid']);
       $this->data['submitted'] = boolval($data['submitted']);
       $this->data['status'] =
-        isset($data['status']) ? intval($data['status']) : array();
+        isset($data['status']) ? intval($data['status']) : [];
     }
 
     public function getId() {

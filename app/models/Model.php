@@ -45,22 +45,21 @@
       self::checkReady();
 
       $query = (new DBRemoveQuery(static::$collection))->queryForId($id);
-      return $query->run();
+      $result = $query->run();
+      return $result['n'];
     }
 
     public static function getById(MongoId $id, array $projection = array()) {
       self::checkReady();
 
-      $query = (new DBQuery(static::$collection))->queryForId($id);
-      foreach ($projection as $field) {
-        $query->projectField($field);
-      }
+      $query = (new DBQuery(static::$collection))
+        ->queryForId($id)->setProjection($projection);
 
       return $query->findOne();
     }
 
     protected static function checkReady() {
-      invariant(isset(static::$collection));
+      invariant(isset(static::$collection), 'collection not set up');
     }
 
     protected static function queryForId(MongoId $id) {
@@ -126,13 +125,16 @@
 
       $dbName = self::dbTypeToName($dbType);
       static::$collection = self::getCollection($dbType, $collectionName);
+      return static::$collection;
     }
 
     public function __destruct() {
       // We drop any testing collections.
       if (self::$test) {
         if (isset(static::$collection)) {
-          mongo_ok(static::$collection->drop());
+          if (endsWith(static::$collection->getName(), '_test')) {
+            mongo_ok(static::$collection->drop());
+          }
         }
       }
     }

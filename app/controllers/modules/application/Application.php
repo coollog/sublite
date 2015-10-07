@@ -12,7 +12,7 @@
      * are not in $questions have an empty answer.
      */
     protected static function pruneQuestionsByIdSet($questions, $questionIds) {
-      $questionSet = array();
+      $questionSet = [];
 
       // Create a hash from _id to the _id-answer pair.
       $questionsHash = arrayToHashByKey($questions, '_id');
@@ -22,7 +22,7 @@
         if (isset($questionsHash[$questionId])) {
           $questionSet[] = $questionsHash[$questionId];
         } else {
-          $questionSet[] = array('_id' => $questionId, 'answer' => '');
+          $questionSet[] = ['_id' => $questionId, 'answer' => ''];
         }
       }
 

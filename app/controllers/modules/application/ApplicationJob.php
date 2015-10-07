@@ -14,9 +14,9 @@
 
   class ApplicationJob extends Application implements ApplicationJobInterface {
     public static function createOrUpdate(MongoId $jobId, array $questions) {
-      $application = new ApplicationJob($jobId, array(
+      $application = new ApplicationJob($jobId, [
         'questions' => $questions,
-      ));
+      ]);
       $setSuccess =
         ApplicationModel::setJobApplication($jobId, $application->getData());
 
@@ -56,7 +56,7 @@
       $this->jobId = $job;
 
       $this->data['questions'] =
-        isset($data['questions']) ? clean($data['questions']) : array();
+        isset($data['questions']) ? clean($data['questions']) : [];
     }
 
     public function getJobId() {

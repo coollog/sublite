@@ -32,6 +32,8 @@
      */
     public function projectField($name);
 
+    public function setProjection(array $projection);
+
     /**
      * Just project _id field.
      */
@@ -160,6 +162,11 @@
       return $this;
     }
 
+    public function setProjection(array $projection) {
+      $this->projection = $projection;
+      return $this;
+    }
+
     public function projectField($name) {
       $this->projection[$name] = true;
       return $this;
@@ -219,7 +226,7 @@
   class DBRemoveQuery extends DBQuery implements DBRemoveQueryInterface {
     public function run() {
       // Run the remove query, always returns true.
-      self::remove($this->collection, $this->query);
+      return self::remove($this->collection, $this->query);
     }
   }
 

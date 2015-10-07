@@ -6,11 +6,25 @@
      * Gets all questions, and returns a map with keys 'vanilla' and 'custom'
      * mapping to an array of their respective questions.
      */
+    // TODO: Unit test
     public static function getAll();
 
     public static function search($text);
     public static function createCustom($text, MongoId $recruiter);
-    public static function createVanilla($text, MongoId $recruiter);
+    public static function createVanilla($text);
+
+    /**
+     * For vanilla questions:
+     *  If no 'uses', then edit the question text and return true.
+     *  Otherwise, return false.
+     * For custom questions:
+     *  If no 'uses', then edit the question text.
+     *  If 'uses', then create new custom.
+     *  Return true.
+     */
+    // TODO: Unit test
+    public static function edit(MongoId $questionId, $text);
+
     public static function getById(MongoId $id);
     public static function delete(MongoId $id);
 
@@ -68,9 +82,44 @@
       return self::create($text, $recruiter);
     }
 
-    public static function createVanilla($text, MongoId $recruiter) {
+    public static function createVanilla($text) {
       // Return (call create with vanilla parameter).
       return self::create($text);
+    }
+
+    /**
+     * For vanilla questions:
+     *  If no 'uses', then edit the question text and return true.
+     *  Otherwise, return false.
+     * For custom questions:
+     *  If no 'uses', then edit the question text.
+     *  If 'uses', then create new custom.
+     *  Return true.
+     */
+    public static function edit(MongoId $questionId, $text) {
+      $question = QuestionModel::getById($questionId, [
+        'vanilla' => 1,
+        'uses' => 1,
+        'recruiter' => 1
+      ]);
+      extract($question);
+
+      // Return false if question text already exists.
+      if (!is_null(QuestionModel::getByExactText($text))) {
+        return false;
+      }
+
+      if (count($uses) > 0) {
+        if ($vanilla) {
+          return false;
+        } else {
+          self::createCustom($text, $recruiter);
+          return true;
+        }
+      }
+
+      QuestionModel::editText($questionId, $text);
+      return true;
     }
 
     public static function getById(MongoId $id) {
@@ -94,11 +143,11 @@
      */
     private static function parseRawData(array $data) {
       if (count($data) == 0) {
-        return array();
+        return [];
       }
 
       if (!isAssoc($data)) {
-        $questions = array();
+        $questions = [];
         foreach ($data as $rawQuestion) {
           $questions[] = new Question($rawQuestion);
         }
@@ -117,17 +166,17 @@
       // Check if question already exists (model function). If so, return
       // the question.
       $existingQuestion = QuestionModel::getByExactText($text);
-      if (count($existingQuestion) > 0) {
+      if (!is_null($existingQuestion)) {
         return self::parseRawData($existingQuestion);
       }
 
       // Construct question with parameters.
       $vanilla = is_null($recruiter);
-      $question = new Question(array(
+      $question = new Question([
         'text' => $text,
         'recruiter' => $recruiter,
         'vanilla' => $vanilla
-      ));
+      ]);
 
       // Pass (question object or raw data?) to model to store in database with
       // custom flag.
@@ -147,11 +196,12 @@
         $this->data['_id'] = new MongoId($data['_id']);
       }
       $this->data['text'] = clean($data['text']);
-      $this->data['recruiter'] = new MongoId($data['recruiter']);
+      $this->data['recruiter'] =
+        isset($data['recruiter']) ? new MongoId($data['recruiter']) : null;
       if (isset($data['uses'])) {
         $this->data['uses'] = clean($data['uses']);
       } else {
-        $this->data['uses'] = array();
+        $this->data['uses'] = [];
       }
       $this->data['vanilla'] = boolval($data['vanilla']);
     }

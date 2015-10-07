@@ -145,4 +145,28 @@
     }
     return $hash;
   }
+
+  /**
+   * Takes an array of data, and splits it into multiple arrays grouped by a
+   * certain field in the data.
+   */
+  function mapDataArrayByField(array $dataArray, $switchFunc, array $keyMap) {
+    $map = [];
+
+    foreach ($keyMap as $key) {
+      $map[$key] = [];
+    }
+
+    foreach ($dataArray as $data) {
+      $key = $keyMap[$switchFunc($data)];
+      $map[$key][] = $data;
+    }
+
+    return $map;
+  }
+
+  function endsWith($haystack, $needle) {
+    // search forward starting from end minus needle length characters
+    return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== FALSE);
+  }
 ?>

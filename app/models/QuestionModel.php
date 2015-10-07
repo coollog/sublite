@@ -2,9 +2,11 @@
   interface QuestionModelInterface {
     public function __construct();
     public static function getAllVanilla();
+    public static function getAll();
     public static function getByText($text);
     public static function getByExactText($text);
     public static function exists(MongoId $id);
+    public static function editText(MongoId $id, $text);
   }
 
   class QuestionModel extends Model implements QuestionModelInterface {
@@ -21,8 +23,13 @@
       self::checkReady();
 
       $query = (new DBQuery(self::$collection))->toQuery('vanilla', true);
-      invariant(count($query->getQuery()) == 1);
-      invariant($query->getQuery()['vanilla'] == true);
+      return $query->run();
+    }
+
+    public static function getAll() {
+      self::checkReady();
+
+      $query = (new DBQuery(self::$collection));
       return $query->run();
     }
 
@@ -37,7 +44,7 @@
       self::checkReady();
 
       $query = (new DBQuery(self::$collection))->toQuery('text', $text);
-      return $query->run();
+      return $query->findOne();
     }
 
     public static function exists(MongoId $id) {
@@ -47,6 +54,14 @@
       return $query->run();
     }
 
+    public static function editText(MongoId $id, $text) {
+      $update = (new DBUpdateQuery(self::$collection))
+        ->queryForId($id)->toUpdate('text', $text);
+      $update->run();
+    }
+
     protected static $collection;
   }
+
+  new QuestionModel();
 ?>

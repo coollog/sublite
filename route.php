@@ -4,7 +4,7 @@
 
   // Register functions to call. Try to have these in alphabetical order.
   Router::register('admin/questions', function() {
-    AdminController::manageQuestions();
+    AdminControllerQuestions::manage();
   });
   Router::register('backtoindex', function() {
     Controller::redirect('../index');
