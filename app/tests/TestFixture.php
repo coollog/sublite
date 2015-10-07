@@ -45,6 +45,9 @@
   function TRUE($truthy, $errorMessage='') {
     invariant($truthy, $errorMessage);
   }
+  function FALSE($truthy, $errorMessage='') {
+    TRUE(!$truthy, $errorMessage);
+  }
   function EQ($val1, $val2, $errorMessage='') {
     TRUE($val1 == $val2, $errorMessage);
   }

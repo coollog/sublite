@@ -8,8 +8,13 @@
     public static function run() {
       $class = get_called_class();
 
-      TEST($class, "$class.", function ($class) {
+      TEST($class, "$class.job.createOrUpdate", function ($class) {
+        // Try to create/update application for nonexistent job
+        FALSE(ApplicationJob::createOrUpdate(new MongoId(), array()));
 
+        // Create job
+
+        //
       });
     }
 
