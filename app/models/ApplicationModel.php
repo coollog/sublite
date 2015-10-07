@@ -22,6 +22,12 @@
      */
     public static function replaceQuestionsField(MongoId $applicationId,
                                                  array $newQuestions);
+
+    /**
+     * Unclaimed means 'status' is unclaimed and 'submitted' is true.
+     */
+    public static function getUnclaimed(MongoId $jobId);
+    public static function getClaimed(MongoId $jobId);
   }
 
   class ApplicationModel extends Model implements ApplicationModelInterface {
@@ -34,6 +40,8 @@
       mongo_ok(self::$collection->createIndex(array('jobid' => 1)));
       mongo_ok(self::$collection->createIndex(array('jobid' => 1,
                                                       'submitted' => 1)));
+      mongo_ok(self::$collection->createIndex(array('status' => 1,
+                                                    'submitted' => 1)));
     }
 
     public static function markAsSubmitted($applicationId) {
@@ -43,9 +51,8 @@
       $update->run();
     }
 
-    // **** THIS SHOULD CALL A FUNCTION IN JOBMODEL ****
     public static function setJobApplication(MongoId $jobId, array $data) {
-
+      JobModel::setApplication($jobId, $data);
     }
 
     public static function getSavedForJob(MongoId $jobId) {
@@ -60,6 +67,19 @@
         ->toQuery('_id', $applicationId)
         ->toUpdate('questions', $newQuestions);
       $update->run();
+    }
+
+    public static function getUnclaimed(MongoId $jobId) {
+      $query = (new DBQuery(self::$collection))
+        ->toQuery('status', ApplicationStudent::STATUS_UNCLAIMED)
+        ->toQuery('submitted', true);
+      return $query->run();
+    }
+
+    public static function getClaimed(MongoId $jobId) {
+      $query = (new DBQuery(self::$collection))
+        ->toNotQuery('status', ApplicationStudent::STATUS_UNCLAIMED);
+      return $query->run();
     }
 
     protected static $collection;

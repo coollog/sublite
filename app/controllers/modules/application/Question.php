@@ -133,7 +133,7 @@
       } else {
         $this->data['uses'] = array();
       }
-      $this->data['vanilla'] = $data['vanilla'] == true;
+      $this->data['vanilla'] = boolval($data['vanilla']);
     }
 
     public function getData() {

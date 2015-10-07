@@ -19,11 +19,12 @@
 	$path = $_GET['p'];
 	$c = countLines($path);
 ?>
+
 <pre>
-<?php
-	foreach ($c as $f=>$l) {
-		echo "$f = $l\r\n";
-	}
-	echo "\r\n".array_sum($c);
-?>
+	<?php
+		foreach ($c as $f=>$l) {
+			echo "$f = $l\r\n";
+		}
+		echo "\r\n".array_sum($c);
+	?>
 </pre>

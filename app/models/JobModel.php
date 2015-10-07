@@ -5,10 +5,17 @@
     public function __construct();
 
     /**
-     * Gets the 'application' field of a job document. Returns null if the job
-     * does not exist or does not have an 'application' field.
+     * Gets the 'application' field of a job document.
+     * Returns null if the job does not exist or does not have an 'application'
+     * field.
      */
     public static function getApplicationQuestionIds(MongoId $jobId);
+
+    /**
+     * Sets the 'application' field of a job document.
+     */
+    public static function setApplicationQuestionIds(MongoId $jobId,
+                                                     array $questionIds);
   }
 
   class JobModel extends Model {
@@ -19,6 +26,13 @@
         ->toQuery('_id', $jobId)->projectField('application')->findOne();
 
       return $questionIds['application']['questions'];
+    }
+
+    public static function setApplicationQuestionIds(MongoId $jobId,
+                                                     array $questionIds) {
+      $update = (new DBUpdateQuery(self::$collection))
+        ->toQuery('_id', $jobId)->toUpdate('application', $questionIds);
+      $update->run();
     }
 
     public function __construct() {

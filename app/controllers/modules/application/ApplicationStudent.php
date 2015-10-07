@@ -31,6 +31,25 @@
                                      array $questions);
 
     /**
+     * Student wishes to delete an application. Cannot delete submitted
+     * applications.
+     */
+    public static function deleteSaved(MongoId $id);
+
+    /**
+     * Get all the unclaimed applications for a job. The applications must be
+     * submitted.
+     */
+    public static function getUnclaimedByJob(MongoId $jobId);
+
+    /**
+     * Get all claimed applications for a job.
+     * Returns a map with keys 'review', 'rejected', and 'accepted', each
+     * mapping to a list of applications corresponding to those statuses.
+     */
+    public static function getClaimedByJob(MongoId $jobId);
+
+    /**
      * Deletes a saved application.
      * Make sure the student has permission, and that the application is not
      * already submitted.
@@ -41,6 +60,8 @@
     public function getId();
     public function getJobId();
     public function getStudentId();
+    public function getStatus();
+    public function isClaimed();
     public function setId(MongoId $id);
 
     // $data is an associative array containing a subset of these keys:
@@ -50,10 +71,17 @@
     // - array of questions (optional)
     //   - saved as list of question _id-answer pairs
     // - submitted? (required)
+    // - status (optional)
   }
 
   class ApplicationStudent extends Application
                            implements ApplicationStudentInterface {
+    // These constants are define what the 'status' field of $data means.
+    const STATUS_UNCLAIMED = 0;
+    const STATUS_REVIEW    = 1;
+    const STATUS_REJECTED  = 2;
+    const STATUS_ACCEPTED  = 3;
+
     public static function save(MongoId $jobId,
                                 MongoId $studentId,
                                 array $questions) {
@@ -93,10 +121,34 @@
       return $application;
     }
 
-    public static function deleteSaved($id) {
-      // Ask model to delete application by id and return whatever the model
-      // function returns.
+    public static function deleteSaved(MongoId $id) {
       return ApplicationModel::deleteById($id);
+    }
+
+    public static function getUnclaimedByJob(MongoId $jobId) {
+      return processDataArray(ApplicationModel::getUnclaimed($jobId));
+    }
+
+    public static function getClaimedByJob(MongoId $jobId) {
+      $jobs = processDataArray(ApplicationModel::getClaimed($jobId));
+
+      $statusMap = array(
+        'review' => array(),
+        'rejected' => array(),
+        'accepted' => array()
+      );
+
+      for ($jobs as $job) {
+        switch ($job->getStatus()) {
+          case self::STATUS_REVIEW: $key = 'review'; break;
+          case self::STATUS_REJECTED: $key = 'rejected'; break;
+          case self::STATUS_ACCEPTED: $key = 'accepted'; break;
+          default: invariant(false);
+        }
+        $statusMap[$key][] = $job;
+      }
+
+      return $statusMap;
     }
 
     /**
@@ -164,6 +216,14 @@
       StudentModel::replaceAnswers($studentId, $answers);
     }
 
+    private static function processDataArray(array $jobDataArray) {
+      $jobs = array();
+      foreach ($jobDataArray as $jobData) {
+        $jobs[] = new ApplicationStudent($jobData);
+      }
+      return $jobs;
+    }
+
     //**********************
     // non-static functions
     //**********************
@@ -188,7 +248,9 @@
       $this->data['questions'] =
         isset($data['questions']) ? clean($data['questions']) : array();
       $this->data['studentid'] = new MongoId($data['studentid']);
-      $this->data['submitted'] = $data['submitted'] === true;
+      $this->data['submitted'] = boolval($data['submitted']);
+      $this->data['status'] =
+        isset($data['status']) ? intval($data['status']) : array();
     }
 
     public function getId() {
@@ -201,6 +263,14 @@
 
     public function getStudentId() {
       return $this->data['studentid'];
+    }
+
+    public function getStatus() {
+      return $this->data['status'];
+    }
+
+    public function isClaimed() {
+      return $this->data['status'] != self::STATUS_UNCLAIMED;
     }
 
     public function setId(MongoId $id) {
