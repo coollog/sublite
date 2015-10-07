@@ -33,6 +33,14 @@
         TRUE(false,
           'TODO: Check to make sure student applications are updated right.');
       });
+
+      TEST($class, "$class.student.saveEditSubmitAndDelete", function($class) {
+        TRUE(false, 'TODO: Write test');
+      });
+
+      TEST($class, "$class.student.getUnclaimedAndClaimed", function($class) {
+        TRUE(false, 'TODO: Write test');
+      });
     }
 
     public static function start() {
