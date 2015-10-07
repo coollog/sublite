@@ -19,7 +19,6 @@
                                   array $update);
     public static function remove(MongoCollection $collection,
                                   array $query);
-    private static function cursorToArray(MongoCursor $cursor);
   }
 
   // DBQuery - performs (query, projection)
@@ -145,7 +144,7 @@
   // DBRemoveQuery - performs (query) -> remove
   ////////////////
 
-  class DBQuery implements DBQueryInterface extends DBExecute {
+  class DBQuery extends DBExecute implements DBQueryInterface {
     public function toQuery($name, $val) {
       $this->query[$name] = $val;
       return $this;
@@ -194,7 +193,7 @@
     protected $projection = array();
   }
 
-  class DBUpdateQuery implements DBUpdateQueryInterface extends DBQuery {
+  class DBUpdateQuery extends DBQuery implements DBUpdateQueryInterface {
     public function toUpdate($name, $newval) {
       $this->update[$name] = $newval;
       return $this;
@@ -217,14 +216,14 @@
     private $update = array();
   }
 
-  class DBRemoveQuery implements DBRemoveQueryInterface extends DBQuery {
+  class DBRemoveQuery extends DBQuery implements DBRemoveQueryInterface {
     public function run() {
       // Run the remove query, always returns true.
       self::remove($this->collection, $this->query);
     }
   }
 
-  class DBInsert implements DBInsertInterface extends DBExecute {
+  class DBInsert extends DBExecute implements DBInsertInterface {
     public function setData(array $data) {
       $this->data = $data;
       return $this;
