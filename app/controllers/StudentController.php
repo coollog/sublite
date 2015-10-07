@@ -51,7 +51,7 @@
         $me['school'] = $S->nameOf($me['email']);
       }
 
-      $this->render('studenthome', $me);
+      $this->render('student/home', $me);
     }
 
     function index() {
@@ -61,7 +61,7 @@
 
       $r = isset($_GET['r']) ? $_GET['r'] : null;
 
-      $this->render('studentindex', array(
+      $this->render('student/index', array(
         'users' => $users,
         'jobs' => $stats['jobs'],
         'sublets' => $stats['sublets'],
@@ -106,7 +106,7 @@
     function login() {
       if (!isset($_GET['whereto'])) $this->loginRedirectSetup();
 
-      if (!isset($_POST['login'])) { $this->render('studentlogin'); return; }
+      if (!isset($_POST['login'])) { $this->render('student/login'); return; }
 
       global $params, $MStudent;
       // Params to vars
@@ -150,13 +150,13 @@
       }
 
       $this->error($err);
-      $this->render('studentlogin', $data);
+      $this->render('student/login', $data);
     }
 
     function register() {
       $this->loginRedirectSetup();
 
-      if (!isset($_POST['register'])) { $this->render('studentregister'); return; }
+      if (!isset($_POST['register'])) { $this->render('student/register'); return; }
 
       global $params, $MStudent;
       // Params to vars
@@ -206,14 +206,14 @@
             "SubLite, LLC."), 'SubLite - Successful Referral!', $message);
         }
 
-        $this->render('studentregisterfinish', array(
+        $this->render('student/registerfinish', array(
           'id' => $id, 'email' => $email
         ));
         return;
       }
 
       $this->error($err);
-      $this->render('studentregister', $data);
+      $this->render('student/register', $data);
     }
 
     function sendConfirm($email) {
@@ -304,7 +304,7 @@
 
         if ($this->isValid()) {
 
-          if (!isset($_POST['register'])) { $this->render('confirm'); return; }
+          if (!isset($_POST['register'])) { $this->render('student/confirm'); return; }
 
           // Params to vars
           extract($data = $this->data($params));
@@ -335,7 +335,7 @@
           }
 
           $this->error($err);
-          $this->render('confirm', $data);
+          $this->render('student/confirm', $data);
           return;
         }
       }
@@ -353,7 +353,7 @@
       // Validations
       $this->startValidations();
 
-      if (!isset($_POST['edit'])) { $this->render('studentform', $this->data($me)); return; }
+      if (!isset($_POST['edit'])) { $this->render('student/form', $this->data($me)); return; }
 
       // Params to vars
       extract($data = $this->data($params));
@@ -366,12 +366,12 @@
         $MStudent->save($me);
 
         $this->success('profile saved');
-        $this->render('studentform', $data);
+        $this->render('student/form', $data);
         return;
       }
 
       $this->error($err);
-      $this->render('studentform', $data);
+      $this->render('student/form', $data);
     }
 
     function dataChangePass($data) {
@@ -469,7 +469,7 @@
     function whereto() {
       $this->requireLogin();
 
-      $this->render('whereto');
+      $this->render('student/whereto');
     }
 
     function view() {
