@@ -40,11 +40,11 @@
       $me = $MRecruiter->me();
       $me['_id'] = $me['_id']->{'$id'};
       $me['company'] = $me['company']->{'$id'};
-      $this->render('home', $me);
+      $this->render('recruiter/home', $me);
     }
 
     function index() {
-      $this->render('index');
+      $this->render('recruiter/index');
     }
 
     function faq() {
@@ -64,7 +64,7 @@
         $this->redirect('home');
         return;
       }
-      if (!isset($_POST['register'])) { $this->render('register'); return; }
+      if (!isset($_POST['register'])) { $this->render('recruiter/register'); return; }
 
       global $params, $MRecruiter;
       // Params to vars
@@ -103,7 +103,7 @@
       }
 
       $this->error($err);
-      $this->render('register', $data);
+      $this->render('recruiter/register', $data);
     }
 
     function approve() {
@@ -147,7 +147,7 @@
 
 
     function login() {
-      if (!isset($_POST['login'])) { $this->render('login'); return; }
+      if (!isset($_POST['login'])) { $this->render('recruiter/login'); return; }
 
       global $params, $MRecruiter;
       // Params to vars
@@ -183,7 +183,7 @@
       }
 
       $this->error($err);
-      $this->render('login', $data);
+      $this->render('recruiter/login', $data);
     }
 
     function edit() {
@@ -191,7 +191,7 @@
 
       global $params, $MRecruiter;
       if (!isset($_POST['edit'])) {
-        $this->render('editprofile',
+        $this->render('recruiter/editprofile',
           $this->data($MRecruiter->me())); return;
       }
 
@@ -212,12 +212,12 @@
         $data['_id'] = new MongoId($id);
         $id = $MRecruiter->save($data);
         $this->success('profile saved');
-        $this->render('editprofile', $data);
+        $this->render('recruiter/editprofile', $data);
         return;
       }
 
       $this->error($err);
-      $this->render('editprofile', $data);
+      $this->render('recruiter/editprofile', $data);
     }
 
 
@@ -347,7 +347,7 @@
           if ($data['photo'] == 'assets/gfx/defaultpic.png')
             $data['photo'] = $GLOBALS['dirpreFromRoute'] . $data['photo'];
 
-          $this->render('recruiter', $data);
+          $this->render('recruiter/profile', $data);
           return;
         }
       }

@@ -132,7 +132,7 @@
       $data = array(
         'jobs' => $MJob->getByRecruiter($_SESSION['_id'])
       );
-      $this->render('managejobs', $data);
+      $this->render('recruiter/jobs/managejobs', $data);
     }
 
     function add() {
@@ -151,7 +151,7 @@
       }
 
       if (!isset($_POST['add'])) {
-        $this->render('jobform', formData(array())); return;
+        $this->render('recruiter/jobs/jobform', formData(array())); return;
       }
 
       global $params, $MJob, $MRecruiter;
@@ -182,7 +182,7 @@
       }
 
       $this->error($err);
-      $this->render('jobform', formData($data));
+      $this->render('recruiter/jobs/jobform', formData($data));
     }
 
     function edit() { // FIX THIS ADD GET INFO LIKE DATA FROM VIEW AND STUFF
@@ -207,7 +207,7 @@
       // Code
       if ($this->isValid()) {
         if (!isset($_POST['edit'])) {
-          $this->render('jobform', formData(array_merge($this->data($entry), array('_id' => $id)))); return;
+          $this->render('recruiter/jobs/jobform', formData(array_merge($this->data($entry), array('_id' => $id)))); return;
         }
 
         $me = $MRecruiter->me();
@@ -220,13 +220,13 @@
           $data = array_merge($entry, $data);
           $id = $MJob->save($data);
           $this->success('job saved');
-          $this->render('jobform', formData(array_merge($data, array('_id' => $id))));
+          $this->render('recruiter/jobs/jobform', formData(array_merge($data, array('_id' => $id))));
           return;
         }
       }
 
       $this->error($err);
-      $this->render('jobform', formData($data, array_merge($data, array('_id' => $id))));
+      $this->render('recruiter/jobs/jobform', formData($data, array_merge($data, array('_id' => $id))));
     }
 
     function view() {
@@ -268,7 +268,7 @@
         $data['recruitername'] = $r['firstname'] . ' ' . $r['lastname'];
         $data['recruiterid'] = $r['_id']->{'$id'};
 
-        $this->render('viewjob', $data);
+        $this->render('jobs/viewjob', $data);
         return;
       }
 
@@ -355,8 +355,8 @@
         $res = $MJob->last($_SESSION['showMoreJobs']);
         $jobs = process($res);
 
-        $this->render('searchform', $this->dataSearchSetup());
-        $this->render('searchresults', array('jobs' => $jobs, 'recent' => true, 'search' => 'jobs', 'showMore' => $showMore));
+        $this->render('jobs/search/form', $this->dataSearchSetup());
+        $this->render('jobs/search/results', array('jobs' => $jobs, 'recent' => true, 'search' => 'jobs', 'showMore' => $showMore));
         return;
       }
 
@@ -406,8 +406,8 @@
         $res = $MJob->find($query);
         $jobs = process($res);
 
-        if ($showSearch) $this->render('searchform', $data);
-        $this->render('searchresults', array('jobs' => $jobs, 'showCompany' => $showCompany, 'search' => 'jobs'));
+        if ($showSearch) $this->render('jobs/search/form', $data);
+        $this->render('jobs/search/results', array('jobs' => $jobs, 'showCompany' => $showCompany, 'search' => 'jobs'));
 
         // Send email notification of search to us
         // $this->sendrequestreport("Search for jobs:", $jobs);
@@ -420,7 +420,7 @@
       }
 
       $this->error($err);
-      $this->render('searchform', array_merge($data, array('search' => 'jobs')));
+      $this->render('jobs/search/form', array_merge($data, array('search' => 'jobs')));
     }
   }
 
