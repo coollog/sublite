@@ -65,12 +65,12 @@
 
     public static function createCustom($text, MongoId $recruiter) {
       // Return (call create with custom parameter).
-      return self::create($text, $recruiter, false);
+      return self::create($text, $recruiter);
     }
 
     public static function createVanilla($text, MongoId $recruiter) {
       // Return (call create with vanilla parameter).
-      return self::create($text, null, true);
+      return self::create($text);
     }
 
     public static function getById(MongoId $id) {
