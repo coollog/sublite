@@ -63,8 +63,6 @@
       return $this->jobId;
     }
 
-    private $data;
-
     // The _id of the job associated with the application.
     private $jobId;
   }

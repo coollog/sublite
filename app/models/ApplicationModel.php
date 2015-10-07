@@ -39,8 +39,11 @@
       // Create necessary indices.
       mongo_ok(self::$collection->createIndex(array('jobid' => 1)));
       mongo_ok(self::$collection->createIndex(array('jobid' => 1,
-                                                      'submitted' => 1)));
-      mongo_ok(self::$collection->createIndex(array('status' => 1,
+                                                    'submitted' => 1)));
+      mongo_ok(self::$collection->createIndex(array('jobid' => 1,
+                                                    'status' => 1)));
+      mongo_ok(self::$collection->createIndex(array('jobid' => 1,
+                                                    'status' => 1,
                                                     'submitted' => 1)));
     }
 
@@ -52,10 +55,17 @@
     }
 
     public static function setJobApplication(MongoId $jobId, array $data) {
-      JobModel::setApplication($jobId, $data);
+      // Check job exists.
+      if (!self::jobExists($jobId)) return false;
+
+      JobModel::setApplicationQuestionIds($jobId, $data);
+      return true;
     }
 
     public static function getSavedForJob(MongoId $jobId) {
+      // Check job exists.
+      if (!self::jobExists($jobId)) return null;
+
       $query = (new DBQuery(self::$collection))
         ->toQuery('jobid', $jobId)->toQuery('submitted', false);
       return $query->run();
@@ -70,16 +80,28 @@
     }
 
     public static function getUnclaimed(MongoId $jobId) {
+      // Check job exists.
+      if (!self::jobExists($jobId)) return null;
+
       $query = (new DBQuery(self::$collection))
+        ->toQuery('jobid', $jobId)
         ->toQuery('status', ApplicationStudent::STATUS_UNCLAIMED)
         ->toQuery('submitted', true);
       return $query->run();
     }
 
     public static function getClaimed(MongoId $jobId) {
+      // Check job exists.
+      if (!self::jobExists($jobId)) return null;
+
       $query = (new DBQuery(self::$collection))
+        ->toQuery('jobid', $jobId)
         ->toNotQuery('status', ApplicationStudent::STATUS_UNCLAIMED);
       return $query->run();
+    }
+
+    private static function jobExists(MongoId $id) {
+      return JobModel::exists($id);
     }
 
     protected static $collection;

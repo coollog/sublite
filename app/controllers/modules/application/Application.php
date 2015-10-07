@@ -44,5 +44,7 @@
     public function setQuestions(array $questions) {
       $this->data['questions'] = $questions;
     }
+
+    protected $data;
   }
 ?>

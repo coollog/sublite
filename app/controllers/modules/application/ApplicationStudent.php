@@ -49,13 +49,6 @@
      */
     public static function getClaimedByJob(MongoId $jobId);
 
-    /**
-     * Deletes a saved application.
-     * Make sure the student has permission, and that the application is not
-     * already submitted.
-     */
-    public static function deleteSaved($id);
-
     public function __construct(array $data);
     public function getId();
     public function getJobId();
@@ -138,7 +131,7 @@
         'accepted' => array()
       );
 
-      for ($jobs as $job) {
+      foreach ($jobs as $job) {
         switch ($job->getStatus()) {
           case self::STATUS_REVIEW: $key = 'review'; break;
           case self::STATUS_REJECTED: $key = 'rejected'; break;
@@ -276,7 +269,5 @@
     public function setId(MongoId $id) {
       $this->data['_id'] = $id;
     }
-
-    private $data;
   }
 ?>
