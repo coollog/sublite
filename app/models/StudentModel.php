@@ -81,7 +81,7 @@
     }
 
     function login($email, $pass) {
-      if (($entry = $this->get($email)) === NULL) return false;
+      if (is_null($entry = $this->get($email))) return false;
       return $entry['pass'] == md5($pass);
     }
 

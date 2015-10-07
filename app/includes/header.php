@@ -36,6 +36,7 @@
   require_once($dirpre.'controllers/StatsController.php');
   require_once($dirpre.'controllers/SubletController.php');
   require_once($dirpre.'controllers/SocialController.php');
+  require_once($dirpre.'controllers/AdminController.php');
 
   require_once($dirpre.'models/AppModel.php');
   require_once($dirpre.'models/CompanyModel.php');

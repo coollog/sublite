@@ -3,8 +3,8 @@
   require_once($dirpre.'includes/header.php');
 
   // Register functions to call. Try to have these in alphabetical order.
-  Router::register('index', function() {
-    GLOBALvarGet('CStudent')->index();
+  Router::register('admin/questions', function() {
+    AdminController::manageQuestions();
   });
   Router::register('backtoindex', function() {
     Controller::redirect('../index');
@@ -120,6 +120,9 @@
   Router::register('hubs/start', function() {
     echo GLOBALvarGet('CSocial')->index();
   });
+  Router::register('index', function() {
+    GLOBALvarGet('CStudent')->index();
+  });
   Router::register('jobs/job', function() {
     GLOBALvarGet('CJob')->view();
   });
@@ -204,6 +207,8 @@
   // and then in groupings.
   Router::route('/index', 'index');
   Router::route('/', 'index');
+
+  Router::route('/admin/questions', 'admin/questions');
 
   Router::route('/housing', 'backtoindex');
   Router::route('/housing/index', 'backtoindex');

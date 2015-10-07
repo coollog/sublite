@@ -62,7 +62,7 @@
     }
 
     function owner($id) {
-      if (($entry = $this->get($id)) === NULL) return NULL;
+      if (is_null($entry = $this->get($id))) return NULL;
       return $entry['recruiter'];
     }
 

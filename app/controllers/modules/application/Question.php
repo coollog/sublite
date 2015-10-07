@@ -1,6 +1,13 @@
 <?php
   interface QuestionInterface {
     public static function getAllVanilla();
+
+    /**
+     * Gets all questions, and returns a map with keys 'vanilla' and 'custom'
+     * mapping to an array of their respective questions.
+     */
+    public static function getAll();
+
     public static function search($text);
     public static function createCustom($text, MongoId $recruiter);
     public static function createVanilla($text, MongoId $recruiter);
@@ -25,7 +32,7 @@
     // $data is an associative array containing a subset of these keys:
     // _id: (optional) corresponds to the mongoID
     // text: (required) the question text
-    // recruiter: (required) recruiter ID
+    // recruiter: (optional) recruiter ID
     // uses: (optional) an array of app ID's that have used this question
     // vanilla: (required) whether or not the question is vanilla
   }
@@ -35,6 +42,14 @@
     public static function getAllVanilla() {
       // Issue query to get all questions with vanilla flag on.
       $results = QuestionModel::getAllVanilla();
+
+      // Parse and return data from query and make array of questions with data.
+      return self::parseRawData($results);
+    }
+
+    public static function getAll() {
+      // Issue query to get all questions with vanilla flag on.
+      $results = QuestionModel::getAll();
 
       // Parse and return data from query and make array of questions with data.
       return self::parseRawData($results);
@@ -55,7 +70,7 @@
 
     public static function createVanilla($text, MongoId $recruiter) {
       // Return (call create with vanilla parameter).
-      return self::create($text, $recruiter, true);
+      return self::create($text, null, true);
     }
 
     public static function getById(MongoId $id) {
@@ -63,7 +78,7 @@
       // If model can get it, parse the raw data and return question.
       $question = QuestionModel::getById($id);
 
-      return $question === null ? null : self::parseRawData($question);
+      return is_null($question) ? null : self::parseRawData($question);
     }
 
     public static function delete(MongoId $id) {
@@ -94,7 +109,11 @@
       return new Question($data);
     }
 
-    private static function create($text, MongoId $recruiter, $vanilla) {
+    /**
+     * If $recruiter is set, vanilla will be false. If $recruiter is null,
+     * vanilla will be true.
+     */
+    private static function create($text, MongoId $recruiter = null) {
       // Check if question already exists (model function). If so, return
       // the question.
       $existingQuestion = QuestionModel::getByExactText($text);
@@ -103,6 +122,7 @@
       }
 
       // Construct question with parameters.
+      $vanilla = is_null($recruiter);
       $question = new Question(array(
         'text' => $text,
         'recruiter' => $recruiter,

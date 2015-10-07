@@ -15,7 +15,7 @@
     }
 
     function login($email, $pass) {
-      if (($entry = $this->get($email)) === NULL) return false;
+      if (is_null($entry = $this->get($email))) return false;
       return hash_equals($entry['pass'], crypt($pass, $entry['pass']));
     }
 

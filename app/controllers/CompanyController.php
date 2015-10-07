@@ -97,7 +97,7 @@
 
       $me = $MRecruiter->me();
       if (!isset($_POST['add'])) {
-        $this->render('companyform', formData(array(
+        $this->render('companies/form', formData(array(
           'name' => $me['company']))); return;
       }
       // Params to vars
@@ -122,7 +122,7 @@
       }
 
       $this->error($err);
-      $this->render('companyform', formData($data));
+      $this->render('companies/form', formData($data));
     }
 
     function edit() { // FIX THIS ADD GET INFO LIKE DATA FROM VIEW AND STUFF
@@ -149,7 +149,7 @@
         }
 
         if (!isset($_POST['edit'])) {
-          $this->render('companyform', formData(array_merge($this->data($entry), array('_id' => $id->{'$id'})))); return;
+          $this->render('companies/form', formData(array_merge($this->data($entry), array('_id' => $id->{'$id'})))); return;
         }
 
         $params['name'] = $entry['name'];
@@ -161,12 +161,12 @@
           $data['_id'] = new MongoId($id);
           $MCompany->save($data);
           $this->success('company saved');
-          $this->render('companyform', formData(array_merge($data, array('_id' => $id->{'$id'}))));
+          $this->render('companies/form', formData(array_merge($data, array('_id' => $id->{'$id'}))));
           return;
         }
 
         $this->error($err);
-        $this->render('companyform', formData(array_merge($this->data($data), array('_id' => $id->{'$id'})))); return;
+        $this->render('companies/form', formData(array_merge($this->data($data), array('_id' => $id->{'$id'})))); return;
       }
 
       $this->error($err);
@@ -190,7 +190,7 @@
 
         $data['isme'] = !is_null($me) ? idcmp($id, $me['company']) : false;
 
-        $this->render('viewcompany', $data);
+        $this->render('companies/viewcompany', $data);
         return;
       }
 

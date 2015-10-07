@@ -169,7 +169,7 @@
       }
 
       if (!isset($_GET['id'])) {
-        $this->render('messages', viewData($this)); return;
+        $this->render('messaging/messages', viewData($this)); return;
       }
 
       /* ACTUALLY SEND MESSAGES */
@@ -193,7 +193,7 @@
         $MMessage->save($entry);
 
         if (!isset($_POST['reply'])) {
-          $this->render('messages', viewData($this, $entry)); return;
+          $this->render('messaging/messages', viewData($this, $entry)); return;
         }
 
         extract($data = $this->data($params));
@@ -257,10 +257,10 @@
           ";
           sendgmail(array('tony.jiang@yale.edu', 'qingyang.chen@gmail.com'), "info@sublite.net", 'Message sent on SubLite!', $message);
 
-          $this->render('messages', viewData($this, $entry));
+          $this->render('messaging/messages', viewData($this, $entry));
           return;
         }
-        $this->render('messages', viewData($this, $entry)); return;
+        $this->render('messaging/messages', viewData($this, $entry)); return;
       }
 
       $this->error($err);
