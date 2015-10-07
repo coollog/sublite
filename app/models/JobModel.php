@@ -71,7 +71,7 @@
     }
 
     function exists($id) {
-      return ($this->get($id) !== NULL);
+      return (self::get($id) !== NULL);
     }
 
     function incrementApply($id) {
