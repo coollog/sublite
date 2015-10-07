@@ -13,8 +13,25 @@
         FALSE(ApplicationJob::createOrUpdate(new MongoId(), array()));
 
         // Create job
+        global $MJob;
+        $jobId = new MongoId($MJob->save(array(), false));
 
-        //
+        // Try to create application for job
+        $oldQuestionId = new MongoId();
+        $oldQuestions = array($oldQuestionId);
+        TRUE(
+          ApplicationJob::createOrUpdate($jobId, $oldQuestions));
+        EQ($MJob::getApplicationQuestionIds($jobId), $oldQuestions);
+
+        // Try to change one question in application for job
+        $newQuestionId = new MongoId();
+        $newQuestions = array($newQuestionId);
+        TRUE(
+          ApplicationJob::createOrUpdate($jobId, $newQuestions));
+        EQ($MJob::getApplicationQuestionIds($jobId), $newQuestions);
+
+        TRUE(false,
+          'TODO: Check to make sure student applications are updated right.');
       });
     }
 
