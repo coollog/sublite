@@ -66,7 +66,7 @@
       $data = array(
         'sublets' => $MSublet->getByStudent($_SESSION['_id'])
       );
-      $this->render('managesublets', $data);
+      $this->render('student/sublets/manage', $data);
     }
 
     function formDataCommon($data) {
@@ -85,7 +85,7 @@
       global $CStudent; $CStudent->requireLogin();
 
       if (!isset($_POST['add'])) {
-        $this->render('subletform', formData(array())); return;
+        $this->render('student/sublets/subletform', formData(array())); return;
       }
 
       global $params, $MSublet, $MStudent;
@@ -112,7 +112,7 @@
       }
 
       $this->error($err);
-      $this->render('subletform', formData($this->formDataCommon($data)));
+      $this->render('student/sublets/subletform', formData($this->formDataCommon($data)));
     }
 
     function edit() {
@@ -137,7 +137,7 @@
       // Code
       if ($this->isValid()) {
         if (!isset($_POST['edit'])) {
-          $this->render('subletform', formData(
+          $this->render('student/sublets/subletform', formData(
             array_merge(
               $this->formDataCommon($this->data($entry)),
               array('_id' => $id)
@@ -157,13 +157,13 @@
           $data = array_merge($entry, $data);
           $id = $MSublet->save($data);
           $this->success('sublet saved');
-          $this->render('subletform', formData(array_merge($this->formDataCommon($data), array('_id' => $id))));
+          $this->render('student/sublets/subletform', formData(array_merge($this->formDataCommon($data), array('_id' => $id))));
           return;
         }
       }
 
       $this->error($err);
-      $this->render('subletform', formData($data, array_merge($this->formDataCommon($data), array('_id' => $id))));
+      $this->render('student/sublets/subletform', formData($data, array_merge($this->formDataCommon($data), array('_id' => $id))));
     }
 
     function view() {
@@ -272,7 +272,7 @@
           );
         }
 
-        $this->render('viewsublet', $data);
+        $this->render('student/sublets/viewsublet', $data);
         return;
       }
 
@@ -408,8 +408,8 @@
           $sublets[] = processRaw($sublet);
         }
 
-        $this->render('subletsearchstart', $this->dataSearchSetup());
-        $this->render('subletsearchresults', array('sublets' => $sublets, 'recent' => true, 'search' => 'housing', 'showMore' => $showMore));
+        $this->render('student/sublets/search/start', $this->dataSearchSetup());
+        $this->render('student/sublets/search/results', array('sublets' => $sublets, 'recent' => true, 'search' => 'housing', 'showMore' => $showMore));
         return;
       }
 
@@ -492,7 +492,7 @@
 
             $delay = round((microtime(true) - $starttime) * 1000, 0);
 
-            $this->render('subletsearchresults', array(
+            $this->render('student/sublets/search/results', array(
               'sublets' => $sublets, 'delay' => $delay,
               'latitude' => $latitude, 'longitude' => $longitude,
               'maxProximity' => $maxProximity, 'showSearch' => $showSearch,
