@@ -14,6 +14,10 @@
     public static function queryForOne(MongoCollection $collection,
                                        array $query,
                                        array $projection = array());
+    public static function queryAndSort(MongoCollection $collection,
+                                        array $query,
+                                        array $projection = array(),
+                                        array $sort = array());
     public static function update(MongoCollection $collection,
                                   array $query,
                                   array $update);
@@ -24,8 +28,12 @@
   // DBQuery - performs (query, projection)
   interface DBQueryInterface {
     public function toQuery($name, $val);
-    public function toTextQuery($text);
     public function toNotQuery($name, $val);
+
+    /**
+     * Run a text search on $text.
+     */
+    public function textSearch($text);
 
     /**
      * Add this field to the projection.
@@ -119,6 +127,14 @@
       return $collection->findOne($query, $projection);
     }
 
+    public static function queryAndSort(MongoCollection $collection,
+                                        array $query,
+                                        array $projection = array(),
+                                        array $sort = array()) {
+      return self::cursorToArray(
+        $collection->find($query, $projection)->sort($sort));
+    }
+
     public static function update(MongoCollection $collection,
                                   array $query,
                                   array $update) {
@@ -152,13 +168,22 @@
       return $this;
     }
 
-    public function toTextQuery($text) {
-      $this->query['$text'] = array('$search' => $text);
-      return $this;
+    public function textSearch($text) {
+      $this->query = [
+        '$text' => ['$search' => $text]
+      ];
+      $this->projection = [
+        'score' => ['$meta' => 'textScore']
+      ];
+      $this->sort = [
+        'score' => ['$meta' => 'textScore']
+      ];
+      // We reverse to have score in descending order.
+      return array_reverse(self::run());
     }
 
     public function toNotQuery($name, $val) {
-      $this->query[$name] = array('$ne' => $val);
+      $this->query[$name] = ['$ne' => $val];
       return $this;
     }
 
@@ -173,7 +198,7 @@
     }
 
     public function projectId() {
-      $this->projection = array();
+      $this->projection = [];
     }
 
     public function queryForId(MongoId $id) {
@@ -187,7 +212,12 @@
     }
 
     public function run() {
-      return self::query($this->collection, $this->query, $this->projection);
+      if (empty($sort)) {
+        return self::query($this->collection, $this->query, $this->projection);
+      } else {
+        return self::queryAndSort(
+          $this->collection, $this->query, $this->projection, $this->sort);
+      }
     }
 
     public function getQuery() {
@@ -196,8 +226,9 @@
 
     protected $collection;
 
-    protected $query = array();
-    protected $projection = array();
+    protected $query = [];
+    protected $projection = [];
+    protected $sort = [];
   }
 
   class DBUpdateQuery extends DBQuery implements DBUpdateQueryInterface {
@@ -220,7 +251,7 @@
       return $this->update;
     }
 
-    private $update = array();
+    private $update = [];
   }
 
   class DBRemoveQuery extends DBQuery implements DBRemoveQueryInterface {

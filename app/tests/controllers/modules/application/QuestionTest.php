@@ -41,10 +41,10 @@
         $text = 'random text haha';
         $recruiterId = new MongoId();
 
-        $question = Question::createVanilla($text, $recruiterId);
+        $question = Question::createVanilla($text);
 
         EQ($question->getText(), $text, "Wrong text");
-        EQ($question->getRecruiter(), $recruiterId, "Wrong recruiter");
+        EQ($question->getRecruiter(), null, "Recruiter should be null");
         EQ($question->getVanilla(), true, "Not vanilla");
         NEQ($question->getId(), null);
 
@@ -68,21 +68,27 @@
       });
 
       TEST($class, "$class.search", function() {
-        $text1 = 'Give an example of where you\'ve been able to use your' .
+        $text1 = 'Give an example of where you\'ve been able to use your ' .
                  'leadership skills.';
         $text2 = 'Where do you see yourself in five years?';
         $text3 = 'What are your salary expectations?';
         $text4 = 'What are your strengths and weaknesses?';
 
-        $id1 = Question::createCustom($text1, new MongoId())->getId();
-        Question::createCustom($text2, new MongoId());
-        Question::createCustom($text3, new MongoId());
-        Question::createCustom($text4, new MongoId());
+        $id = [
+          Question::createCustom($text1, new MongoId())->getId(),
+          Question::createCustom($text2, new MongoId())->getId(),
+          Question::createCustom($text3, new MongoId())->getId(),
+          Question::createCustom($text4, new MongoId())->getId()
+        ];
 
-        $res = Question::search('your');
-        foreach ($res as $q) {
-          echo '<p>' . $res->getText() . '</p>';
-        }
+        $res = Question::search('example years salary strength');
+        EQ(4, count($res));
+
+        $res = Question::search('strengths and weaknesses skills');
+        EQ($id[3], $res[0]->getId());
+
+        $res = Question::search('leadership skills weaknesses');
+        EQ($id[0], $res[0]->getId());
       });
     }
 

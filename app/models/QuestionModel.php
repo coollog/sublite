@@ -36,8 +36,7 @@
     public static function getByText($text) {
       self::checkReady();
 
-      $query = (new DBQuery(self::$collection))->toTextQuery($text);
-      return $query->run();
+      return (new DBQuery(self::$collection))->textSearch($text);
     }
 
     public static function getByExactText($text) {
