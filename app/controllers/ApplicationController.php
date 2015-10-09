@@ -90,10 +90,10 @@
 
       // Update job application questions.
       $questionIds = $params['questionIds'];
-      // $success = ApplicationJob::createOrUpdate($jobId, $questionIds);
+      $success = ApplicationJob::createOrUpdate($jobId, $questionIds);
 
-      if ($success) {
-
+      if (!$success) {
+        echo 'failed';
       }
 
       return true;

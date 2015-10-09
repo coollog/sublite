@@ -253,6 +253,7 @@
         questionIds.push(_id);
       });
       $.post('', {questionIds: questionIds}, function (data) {
+        console.log(data);
         console.log('updated!');
       });
     });
