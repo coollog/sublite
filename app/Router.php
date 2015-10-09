@@ -12,7 +12,19 @@
     public static function route($route, $callName);
 
     /**
+     * Routes a non-full path such that callName is run with the rest of the
+     * requested path.
+     * For example, if you want to route /jobs/view/somemongoid, you would
+     * call routeTree('/jobs/view', '/jobs/view'), and it will pass
+     * ['somemongoid'] when calling the function associated with '/jobs/view'.
+     * However, calling routeTree('/jobs', '/jobs/view') will overwrite the
+     * previous call.
+     */
+    public static function routeTree($route, $callName);
+
+    /**
      * Perform the actual routing after routes are set up.
+     * Tree routes take precedence over exact routes.
      */
     public static function run();
   }
@@ -32,8 +44,52 @@
       self::$routeMap["$route.php"] = $callName;
     }
 
+    public static function routeTree($route, $callName) {
+      invariant(isset(self::$callMap[$callName]),
+        "'$callName' is not a registered callName.");
+
+      $routePath = self::routeStringToArray($route);
+      $lastIndex = count($routePath) - 1;
+      $curNode = &self::$routeTree;
+      foreach ($routePath as $index => $branch) {
+        // If is last in $routePath, place the $callName.
+        if ($index == $lastIndex) {
+          $curNode[$branch] = $callName;
+          break;
+        }
+
+        // If the branch exists:
+        //  If the branch is a leaf, replace with node.
+        //  If the branch is a node, continue.
+        if (!isset($curNode[$branch]) or !is_array($curNode[$branch])) {
+          $curNode[$branch] = [];
+        }
+        $curNode = &$curNode[$branch];
+      }
+    }
+
     public static function run() {
       $uri = self::getUri();
+
+      // First check routeTree.
+      $routePath = self::routeStringToArray($uri);
+      $curNode = self::$routeTree;
+      // Traverse self::$routeTree.
+      $routeIndex = 0;
+      for ($routeIndex = 0; $routeIndex < count($routePath); $routeIndex ++) {
+        $branch = $routePath[$routeIndex];
+        if (!isset($curNode[$branch])) {
+          break;
+        }
+        $curNode = $curNode[$branch];
+      }
+      if (isset($curNode) and !is_array($curNode)) {
+        $restOfRoute = array_slice($routePath, $routeIndex);
+
+        $callName = $curNode;
+        self::call($uri, $callName, $restOfRoute);
+        return;
+      }
 
       if (!isset(self::$routeMap[$uri])) {
         // The route isn't registered, so give 404.
@@ -41,12 +97,18 @@
         return;
       }
 
+      $callName = self::$routeMap[$uri];
+      self::call($uri, $callName);
+    }
+
+    private static function call($uri,
+                                 $callName,
+                                 array $restOfRoute = array()) {
       self::setDirpreFromRoute($uri);
 
-      $callName = self::$routeMap[$uri];
       $callFunc = self::$callMap[$callName];
 
-      $callFunc();
+      $callFunc($restOfRoute);
     }
 
     /**
@@ -97,5 +159,6 @@
 
     private static $callMap = array();
     private static $routeMap = array();
+    private static $routeTree = array();
   }
 ?>
