@@ -3,7 +3,7 @@
     public function __construct();
     public static function getAllVanilla();
     public static function getAll();
-    public static function getByText($text);
+    public static function getCustomByText($text);
     public static function getByExactText($text);
     public static function exists(MongoId $id);
     public static function editText(MongoId $id, $text);
@@ -36,10 +36,11 @@
       return $query->run();
     }
 
-    public static function getByText($text) {
+    public static function getCustomByText($text) {
       self::checkReady();
 
-      return (new DBQuery(self::$collection))->textSearch($text);
+      return (new DBQuery(self::$collection))
+        ->toQuery('vanilla', false)->textSearch($text);
     }
 
     public static function getByExactText($text) {

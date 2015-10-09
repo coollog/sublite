@@ -67,7 +67,7 @@
         NEQ($res, null);
       });
 
-      TEST($class, "$class.search", function() {
+      TEST($class, "$class.searchCustom", function() {
         $text1 = 'Give an example of where you\'ve been able to use your ' .
                  'leadership skills.';
         $text2 = 'Where do you see yourself in five years?';
@@ -81,13 +81,13 @@
           Question::createCustom($text4, new MongoId())->getId()
         ];
 
-        $res = Question::search('example years salary strength');
+        $res = Question::searchCustom('example years salary strength');
         EQ(4, count($res));
 
-        $res = Question::search('strengths and weaknesses skills');
+        $res = Question::searchCustom('strengths and weaknesses skills');
         EQ($id[3], $res[0]->getId());
 
-        $res = Question::search('leadership skills weaknesses');
+        $res = Question::searchCustom('leadership skills weaknesses');
         EQ($id[0], $res[0]->getId());
       });
     }

@@ -169,15 +169,9 @@
     }
 
     public function textSearch($text) {
-      $this->query = [
-        '$text' => ['$search' => $text]
-      ];
-      $this->projection = [
-        'score' => ['$meta' => 'textScore']
-      ];
-      $this->sort = [
-        'score' => ['$meta' => 'textScore']
-      ];
+      $this->query['$text'] = ['$search' => $text];
+      $this->projection['score'] = ['$meta' => 'textScore'];
+      $this->sort['score'] = ['$meta' => 'textScore'];
       // We reverse to have score in descending order.
       return array_reverse(self::run());
     }

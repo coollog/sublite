@@ -1,4 +1,6 @@
 <script>
+  "use strict";
+
   function scrollTo(q, n) {
     var top = $(q).offset().top;
     if (typeof n !== 'undefined') {

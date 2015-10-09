@@ -3,7 +3,7 @@
     background: #fafafa;
   }
 
-  chosenquestiontemplate {
+  questiontemplate {
     display: none;
   }
 
@@ -49,21 +49,73 @@
   #createCustom {
     margin-top: 0.75em;
   }
+
+  #searchText {
+    width: 80%;
+  }
+  #searchCustom {
+    display: inline-block;
+    padding-left: 1em;
+    padding-right: 1em;
+    height: 2.1em;
+    float: right;
+    margin-top: 0.5em;
+  }
+
+  #selected {
+    padding: 1em 0;
+  }
+  .chosen {
+    margin-bottom: 1em;
+  }
 </style>
 
-<chosenquestiontemplate>
-  <question qid="{_id}" vanilla="{vanilla}" style="display: none;">
-    <op class="minus"></op>
+<questiontemplate>
+  <question qid="{_id}" class="vanilla" vanilla="{vanilla}" style="{style}">
+    <op class="{optype}"></op>
     <text>{text}</text>
   </question>
-</chosenquestiontemplate>
+</questiontemplate>
 
 <script>
-  function addQuestion(_id, text, vanilla) {
-    var html = useTemplate('chosenquestiontemplate', {
-      'text': text,
-      '_id': _id,
-      'vanilla': vanilla,
+  function getQuestionFromTemplate(_id, text, elemClass, hide) {
+    var style = '';
+    if (hide) {
+      style = 'display: none;';
+    }
+    var html = useTemplate('questiontemplate', {
+      text: text,
+      _id: _id,
+      class: elemClass,
+      style: style,
+      optype: 'plus',
+    });
+    return html;
+  }
+
+  function addVanillaQuestion(_id, text, hide) {
+    var html;
+    if (hide) {
+      html = getQuestionFromTemplate(_id, text, 'vanilla', true);
+    } else {
+      html = getQuestionFromTemplate(_id, text, 'vanilla');
+    }
+    $('.vanillaList').append(html);
+  }
+
+  function addCustomQuestion(_id, text) {
+    var html = getQuestionFromTemplate(_id, text, 'custom');
+    $('.customList').append(html);
+  }
+
+  function chooseQuestion(_id, text, vanilla) {
+    var html = useTemplate('questiontemplate', {
+      text: text,
+      _id: _id,
+      vanilla: vanilla,
+      class: '',
+      style: 'display: none;',
+      optype: 'minus',
     });
     $('.chosen').append(html);
     $('.chosen question[qid=' + _id + ']').slideDown();
@@ -97,7 +149,6 @@
       $.post('../deletecustom', {
         questionId: _id,
         jobId: '<?php View::echof('jobId'); ?>',
-
       }, function (data) {
         remove(question);
       });
@@ -112,8 +163,8 @@
     });
   }
 
-  $(function() {
-    $('.vanillalist question op.plus').click(function() {
+  function bindQuestionOpClick(listClass, vanilla) {
+    $(listClass + ' question op.plus').click(function() {
       var question = $(this).parent();
       if (question.attr('enabled') === 'false') {
         return;
@@ -121,10 +172,13 @@
       question.attr('enabled', false).slideUp(function () {
         var _id = $(this).attr('qid');
         var text = $(this).children('text').html();
-        addQuestion(_id, text, true);
+        chooseQuestion(_id, text, vanilla);
       });
     });
+  }
 
+  $(function() {
+    // When clicking the plus next to writing own custom question.
     $('#createCustom').click(function() {
       var text = $('#customText').val();
 
@@ -135,49 +189,84 @@
       // Create custom question on backend.
 
       $.post('../createcustom', {text: text}, function (data) {
-        addQuestion(data, text, false);
+        chooseQuestion(data, text, false);
         $('#customText').val('');
         $('#createCustom').attr('enabled', true);
       });
     });
+
+    // When clicking search.
+    $('#searchCustom').click(function() {
+      $('.customList').html('');
+      var search = $('#searchText').val();
+      $.post('../searchcustom', {search: search}, function (data) {
+        data = JSON.parse(data);
+        // Create the custom questions to be able to add to selected.
+        data.forEach(function (questionData) {
+          addCustomQuestion(questionData._id, questionData.text);
+        });
+
+        // When clicking the plus next to custom questions.
+        bindQuestionOpClick('.customList', false);
+
+        $('#searchText').val('');
+      });
+    });
+
+    // Load up vanilla questions.
+    <?php
+      $vanillaQuestions = View::get('vanillaQuestions');
+      foreach ($vanillaQuestions as $question) {
+        $_id = $question['_id'];
+        $text = clean($question['text']);
+        $hide = $question['hide'];
+    ?>
+        addVanillaQuestion('<?php echo $_id ?>',
+                           '<?php echo $text ?>',
+                           <?php echo $hide ?>);
+    <?php
+      }
+    ?>
+
+    // When clicking the plus next to vanilla questions.
+    bindQuestionOpClick('.vanillaList', true);
   });
 </script>
 
 <panel class="form">
   <div class="content">
-    <headline>Create Job Application</headline>
+    <headline><?php View::echof('createEdit'); ?> Job Application</headline>
 
     <form>
       <left>
-        Choose questions to add to the application (recommended):
-        <div class="vanillalist">
-          <?php
-            $vanillaQuestions = View::get('vanillaQuestions');
-            foreach ($vanillaQuestions as $question) {
-          ?>
-              <question qid="<?php echo $question->getId(); ?>" class="vanilla">
-                <op class="plus"></op>
-                <text><?php echo $question->getText(); ?></text>
-              </question>
-          <?php
-            }
-          ?>
-        </div>
+        Choose questions to add to the application (recommended):<br />
+        <br />
+        <div class="vanillaList"></div>
 
-        <subheadline>- or -</subheadline></small><br />
+        <subheadline>- or -</subheadline><br />
+
+        Search for questions other recruiters have written:
+        <searchcustom>
+          <input type="text" id="searchText" />
+          <input type="button" id="searchCustom" value="Search" />
+        </searchcustom>
+        <div class="customList"></div>
+
+        <subheadline>- or -</subheadline><br />
 
         <writeyourown>
           <div class="form-slider">
             <label for="customText">Write your own custom questions:</label>
-            <input type="text" name="custom" id="customText" />
+            <input type="text" id="customText" />
             <op class="plus" id="createCustom"></op>
           </div>
           (Writing your own question may result in lower applications received.)<br />
         </writeyourown>
 
-        Selected questions:
-        <div class="chosen">
-
+        <div id="selected">
+          <subheadline>Selected questions:</subheadline>
+          <i>Select questions to add to your application from above.</i>
+          <div class="chosen"></div>
         </div>
 
         <input type="button" name="addcustom" value="Finish" />

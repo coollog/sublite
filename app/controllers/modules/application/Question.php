@@ -9,7 +9,7 @@
     // TODO: Unit test
     public static function getAll();
 
-    public static function search($text);
+    public static function searchCustom($text);
     public static function createCustom($text, MongoId $recruiter);
     public static function createVanilla($text);
 
@@ -31,7 +31,7 @@
     /**
      * Construct a Question instance by passing in an ass. array of the data
      * for the question.
-     * Cleans and prunes the ass array to be just the data necessary.
+     * Prunes the ass array to be just the data necessary.
      * See the declaration of $this->data below.
      */
     public function __construct(array $data);
@@ -76,9 +76,9 @@
       return self::parseRawData($results);
     }
 
-    public static function search($text) {
+    public static function searchCustom($text) {
       // Issue query to model.
-      $results = QuestionModel::getByText($text);
+      $results = QuestionModel::getCustomByText($text);
 
       // Create array of question(s) from returned data and return it.
       return self::parseRawData($results);
@@ -202,11 +202,11 @@
       if (isset($data['_id'])) {
         $this->data['_id'] = new MongoId($data['_id']);
       }
-      $this->data['text'] = clean($data['text']);
+      $this->data['text'] = $data['text'];
       $this->data['recruiter'] =
         isset($data['recruiter']) ? new MongoId($data['recruiter']) : null;
       if (isset($data['uses'])) {
-        $this->data['uses'] = clean($data['uses']);
+        $this->data['uses'] = $data['uses'];
       } else {
         $this->data['uses'] = [];
       }

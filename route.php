@@ -129,6 +129,9 @@
   Router::register('jobs/deletecustom', function () {
     echo ApplicationController::deleteCustom();
   });
+  Router::register('jobs/searchcustom', function () {
+    echo ApplicationController::searchCustom();
+  });
   Router::register('jobs/editapplication', function (array $restOfRoute) {
     ApplicationController::edit($restOfRoute);
   });
@@ -275,6 +278,7 @@
 
   Router::route('/jobs/createcustom', 'jobs/createcustom');
   Router::route('/jobs/deletecustom', 'jobs/deletecustom');
+  Router::route('/jobs/searchcustom', 'jobs/searchcustom');
   Router::routeTree('/jobs/editapplication', 'jobs/editapplication');
   Router::route('/jobs/company', 'jobs/company');
   Router::route('/employers/job', 'jobs/job');

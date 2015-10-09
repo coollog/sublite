@@ -13,6 +13,11 @@
     public static function setJobApplication(MongoId $jobId, array $data);
 
     /**
+     * Get the job document's application field.
+     */
+    public static function getJobApplication(MongoId $jobId);
+
+    /**
      * Retrieves all the saved applications for $jobId.
      */
     public static function getSavedForJob(MongoId $jobId);
@@ -60,6 +65,13 @@
 
       JobModel::setApplicationQuestionIds($jobId, $data);
       return true;
+    }
+
+    public static function getJobApplication(MongoId $jobId) {
+      // Check job exists.
+      if (!self::jobExists($jobId)) return false;
+
+      return JobModel::getApplicationQuestionIds($jobId);
     }
 
     public static function getSavedForJob(MongoId $jobId) {
