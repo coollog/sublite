@@ -12,6 +12,8 @@
   class ApplicationController extends Controller
                               implements ApplicationControllerInterface {
     public static function edit(array $restOfRoute) {
+      global $params;
+
       if (!isset($restOfRoute[0]) || !MongoId::isValid($restOfRoute[0])) {
         self::error("invalid access");
         self::render('notice');
@@ -24,6 +26,14 @@
       if (!JobModel::exists($jobId)) {
         self::error("nonexistent job");
         self::render('notice');
+        return;
+      }
+
+      // Make sure recruiter has permission to edit the job.
+
+
+      // Process saving of questions.
+      if (self::save($jobId)) {
         return;
       }
 
@@ -69,6 +79,24 @@
         'chosen' => $chosenData,
         'jobId' => $jobId
       ]);
+    }
+
+    /**
+     * Saves the questionIds from client for $jobId.
+     * Returns true if performed.
+     */
+    private static function save(MongoId $jobId) {
+      if (!isset($params['questionIds'])) return false;
+
+      // Update job application questions.
+      $questionIds = $params['questionIds'];
+      // $success = ApplicationJob::createOrUpdate($jobId, $questionIds);
+
+      if ($success) {
+
+      }
+
+      return true;
     }
 
     public static function createCustom() {
@@ -119,7 +147,7 @@
       $questions = Question::searchCustom($search);
       $questionData = self::questionArrayToJson($questions);
 
-      return clean($questionData);
+      return $questionData;
     }
 
     private static function questionArrayToJson(array $questions) {
@@ -127,6 +155,7 @@
       foreach ($questions as $question) {
         $data = $question->getData();
         $data['_id'] = (string)$data['_id'];
+        $data['text'] = clean($data['text']);
         $questionData[] = $data;
       }
       return json_encode($questionData);
