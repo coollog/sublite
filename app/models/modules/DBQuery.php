@@ -193,6 +193,7 @@
 
     public function projectId() {
       $this->projection = [];
+      return $this;
     }
 
     public function queryForId(MongoId $id) {

@@ -54,6 +54,7 @@
     public function getJobId();
     public function getStudentId();
     public function getStatus();
+    public function getQuestions();
     public function isClaimed();
     public function setId(MongoId $id);
 
@@ -82,6 +83,8 @@
     }
 
     public static function edit(MongoId $applicationId, array $questions) {
+      // TODO: Check if application already submitted
+
       $applicationData = ApplicationModel::getById($applicationId);
       $application = new ApplicationStudent($applicationData);
       $applicationId = $application->getId();
@@ -102,13 +105,16 @@
       $application = new ApplicationStudent($applicationData);
 
       self::saveStudentAnswers($application);
+      return true;
     }
 
     public static function submitNew(MongoId $jobId,
                                      MongoId $studentId,
                                      array $questions) {
-      $application = self::create($jobId, $studentId, $questions, false);
-
+      if (ApplicationModel::applicationExists($jobId, $studentId)) {
+        return false;
+      }
+      $application = self::create($jobId, $studentId, $questions, true);
       self::saveStudentAnswers($application);
       return $application;
     }
@@ -226,7 +232,7 @@
           $id = new MongoId($question['_id']);
           $this->data['questions'][(string) $id] = [
             '_id' => $id,
-            'answer' => $question['answer']
+            'ans' => $question['ans']
           ];
         }
       }
@@ -252,6 +258,10 @@
 
     public function getStatus() {
       return $this->data['status'];
+    }
+
+    public function getQuestions() {
+      return $this->data['questions'];
     }
 
     public function isClaimed() {

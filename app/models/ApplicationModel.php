@@ -5,7 +5,12 @@
     /**
      * Sets 'submitted' for $appliationId to true.
      */
-    public static function markAsSubmitted($applicationId);
+    public static function markAsSubmitted(MongoId $applicationId);
+
+    /**
+     * Checks whether $applicationId is marked as submitted.
+     */
+    public static function checkApplicationSubmitted(MongoId $applicationId);
 
     /**
      * Set the job document's application field to $data.
@@ -33,6 +38,12 @@
      */
     public static function getUnclaimed(MongoId $jobId);
     public static function getClaimed(MongoId $jobId);
+
+    /**
+     * Checks whether the student has submitted an application for the job.
+     */
+    public static function applicationExists(MongoId $jobId,
+                                             MongoId $studentId);
   }
 
   class ApplicationModel extends Model implements ApplicationModelInterface {
@@ -50,13 +61,20 @@
       mongo_ok(self::$collection->createIndex(array('jobid' => 1,
                                                     'status' => 1,
                                                     'submitted' => 1)));
+      mongo_ok(self::$collection->createIndex(array('jobid' => 1,
+                                                    'studentid' => 1)));
     }
 
-    public static function markAsSubmitted($applicationId) {
-      $update = (new DBUpdate(self::$collection))
-        ->toQuery('_id', $application['_id'])
+    public static function markAsSubmitted(MongoId $applicationId) {
+      $update = (new DBUpdateQuery(self::$collection))
+        ->toQuery('_id', $applicationId)
         ->toUpdate('submitted', true);
       $update->run();
+    }
+
+    public static function checkApplicationSubmitted(MongoId $applicationId) {
+      $query = (new DBQuery(self::$collection))->toQuery('_id', $applicationId);
+      return $query->findOne()['submitted'];
     }
 
     public static function setJobApplication(MongoId $jobId, array $data) {
@@ -85,7 +103,7 @@
 
     public static function replaceQuestionsField(MongoId $applicationId,
                                                  array $newQuestions) {
-      $update = (new DBUpdate(self::$collection))
+      $update = (new DBUpdateQuery(self::$collection))
         ->toQuery('_id', $applicationId)
         ->toUpdate('questions', $newQuestions);
       $update->run();
@@ -110,6 +128,15 @@
         ->toQuery('jobid', $jobId)
         ->toNotQuery('status', ApplicationStudent::STATUS_UNCLAIMED);
       return $query->run();
+    }
+
+    public static function applicationExists(MongoId $jobId,
+                                             MongoId $studentId) {
+      $query = (new DBQuery(self::$collection))
+        ->toQuery('jobid', $jobId)
+        ->toQuery('studentid', $studentId)
+        ->projectId();
+      return $query->findOne() !== null;
     }
 
     private static function jobExists(MongoId $id) {
