@@ -28,10 +28,10 @@
     opacity: 0.5;
   }
   op.plus {
-    background-image: url('<?php echo $GLOBALS['dirpre']; ?>/assets/gfx/applications/plus.png');
+    background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/applications/plus.png');
   }
   op.minus {
-    background-image: url('<?php echo $GLOBALS['dirpre']; ?>/assets/gfx/applications/minus.png');
+    background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/applications/minus.png');
   }
   question id {
     display: none;
@@ -69,6 +69,7 @@
     margin-bottom: 1em;
   }
 </style>
+<img src="http://globe-views.com/dcim/dreams/photo/photo-06.jpg" width="200px" height="400px">
 
 <questiontemplate>
   <question qid="{_id}" class="vanilla" vanilla="{vanilla}" style="{style}">
@@ -219,11 +220,26 @@
       foreach ($vanillaQuestions as $question) {
         $_id = $question['_id'];
         $text = clean($question['text']);
-        $hide = $question['hide'];
+        $hide = $question['hide'] ? 'true' : 'false';
     ?>
         addVanillaQuestion('<?php echo $_id ?>',
                            '<?php echo $text ?>',
                            <?php echo $hide ?>);
+    <?php
+      }
+    ?>
+
+    // Load up selected questions.
+    <?php
+      $chosen = View::get('chosen');
+      foreach ($chosen as $question) {
+        $_id = $question['_id'];
+        $text = $question['text'];
+        $vanilla = $question['vanilla'];
+    ?>
+        chooseQuestion('<?php echo $_id ?>',
+                       '<?php echo $text ?>',
+                       <?php echo $vanilla ?>);
     <?php
       }
     ?>

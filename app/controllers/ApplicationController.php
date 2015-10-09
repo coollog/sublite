@@ -27,26 +27,27 @@
         return;
       }
 
-      $vanillaQuestions = Question::getAllVanilla(true);
+      $vanillaQuestions = Question::getAllVanilla();
       $vanillaQuestionsData = [];
       $chosenData = [];
 
       // Get existing questions.
       $chosenIds = ApplicationModel::getJobApplication($jobId);
+
+      // Remove any existing from $vanillaQuestions.
+      foreach ($vanillaQuestions as $question) {
+        $id = $question->getId();
+        $data = $question->getData();
+        $data['hide'] = $chosenIds !== null and in_array($id, $chosenIds);
+        $vanillaQuestionsData[] = $data;
+      }
+
       // If no application, we show form to create application.
       // Else, we show form to edit existing application.
       if ($chosenIds === null) {
         $createEdit = 'create';
       } else {
         $createEdit = 'edit';
-
-        // Remove any existing from $vanillaQuestions.
-        foreach ($vanillaQuestions as $question) {
-          $id = $question->getId();
-          $data = $question->getData();
-          $data['hide'] = in_array($id, $chosenIds);
-          $vanillaQuestionsData[] = $data;
-        }
 
         // Get the text for each $chosenIds.
         foreach ($chosenIds as $_id) {
