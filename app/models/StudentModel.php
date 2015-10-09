@@ -16,7 +16,8 @@
     }
 
     public static function replaceAnswers(MongoId $studentId, array $answers) {
-      $update = (new DBUpdate(self::$collection))->queryForId($studentId)->toUpdate('answers', $answers);
+      $update = (new DBUpdateQuery(self::$collection))
+        ->queryForId($studentId)->toUpdate('answers', $answers);
       $update->run();
     }
 

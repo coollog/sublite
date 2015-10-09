@@ -63,7 +63,7 @@
     }
 
     protected static function queryForId(MongoId $id) {
-      return (new DBQuery(static::$collection))->queryForId($studentId);
+      return (new DBQuery(static::$collection))->queryForId($id);
     }
 
     /**
