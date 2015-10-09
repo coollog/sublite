@@ -19,10 +19,13 @@
       mongo_ok(self::$collection->createIndex(array('text' => 'text')));
     }
 
-    public static function getAllVanilla() {
+    public static function getAllVanilla($justText = false) {
       self::checkReady();
 
       $query = (new DBQuery(self::$collection))->toQuery('vanilla', true);
+      if ($justText) {
+        $query->projectField('text');
+      }
       return $query->run();
     }
 

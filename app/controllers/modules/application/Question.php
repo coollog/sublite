@@ -53,9 +53,15 @@
 
   //TODO Add validations
   class Question implements QuestionInterface {
-    public static function getAllVanilla() {
+    public static function getAllVanilla($justText = false) {
       // Issue query to get all questions with vanilla flag on.
-      $results = QuestionModel::getAllVanilla();
+      $results = QuestionModel::getAllVanilla($justText);
+
+      if ($justText) {
+        foreach ($results as &$questionData) {
+          $questionData['vanilla'] = null;
+        }
+      }
 
       // Parse and return data from query and make array of questions with data.
       return self::parseRawData($results);
