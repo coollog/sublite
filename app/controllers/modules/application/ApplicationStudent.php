@@ -110,7 +110,6 @@
       $application = self::create($jobId, $studentId, $questions, false);
 
       self::saveStudentAnswers($application);
-
       return $application;
     }
 
@@ -225,13 +224,12 @@
         // Process into list of question id-answer pairs.
         foreach ($data['questions'] as $question) {
           $id = new MongoId($question['_id']);
-          $this->data['questions'][$id] = [
+          $this->data['questions'][(string) $id] = [
             '_id' => $id,
             'answer' => $question['answer']
           ];
         }
       }
-
       $this->data['questions'] =
         isset($data['questions']) ? clean($data['questions']) : [];
       $this->data['studentid'] = new MongoId($data['studentid']);

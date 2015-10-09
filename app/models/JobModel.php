@@ -24,8 +24,8 @@
     public static function getApplicationQuestionIds(MongoId $jobId) {
       $questionIds = (new DBQuery(self::$collection))
         ->toQuery('_id', $jobId)->projectField('application')->findOne();
-
-      return $questionIds['application']['questions'];
+      return isset($questionIds['application']) ?
+        $questionIds['application']['questions'] : null;
     }
 
     public static function setApplicationQuestionIds(MongoId $jobId,
