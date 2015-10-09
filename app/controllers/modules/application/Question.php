@@ -40,6 +40,7 @@
     public function getText();
     public function getRecruiter();
     public function getUses();
+    public function getUsesCount();
     public function getVanilla();
     public function setId(MongoId $id);
 
@@ -230,6 +231,10 @@
 
     public function getUses() {
       return isset($this->data['uses']) ? $this->data['uses'] : null;
+    }
+
+    public function getUsesCount() {
+      return count($this->getUses());
     }
 
     public function getVanilla() {

@@ -123,6 +123,12 @@
   Router::register('index', function() {
     GLOBALvarGet('CStudent')->index();
   });
+  Router::register('jobs/createcustom', function () {
+    echo ApplicationController::createCustom();
+  });
+  Router::register('jobs/deletecustom', function () {
+    echo ApplicationController::deleteCustom();
+  });
   Router::register('jobs/editapplication', function (array $restOfRoute) {
     ApplicationController::edit($restOfRoute);
   });
@@ -267,6 +273,8 @@
   Router::route('/hubs/hub', 'hubs/hub');
   Router::route('/hubs/start', 'hubs/start');
 
+  Router::route('/jobs/createcustom', 'jobs/createcustom');
+  Router::route('/jobs/deletecustom', 'jobs/deletecustom');
   Router::routeTree('/jobs/editapplication', 'jobs/editapplication');
   Router::route('/jobs/company', 'jobs/company');
   Router::route('/employers/job', 'jobs/job');

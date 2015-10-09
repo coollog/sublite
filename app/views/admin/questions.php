@@ -27,7 +27,7 @@
           </pre>
         </uses>
         <vanilla class="attr">
-          <?php echo $vanilla; ?>
+          <?php echo $vanilla ? 'true' : 'false'; ?>
         </vanilla>
         <?php
           if (count($uses) == 0) {

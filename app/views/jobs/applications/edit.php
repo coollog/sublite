@@ -13,7 +13,7 @@
     background: #fff;
     margin: 1px;
   }
-  question op {
+  op {
     display: inline-block;
     width: 2em;
     height: 2em;
@@ -24,13 +24,13 @@
     cursor: pointer;
     transition: 0.1s all ease-in-out;
   }
-  question op:hover {
+  op:hover {
     opacity: 0.5;
   }
-  question op.plus {
+  op.plus {
     background-image: url('<?php echo $GLOBALS['dirpre']; ?>/assets/gfx/applications/plus.png');
   }
-  question op.minus {
+  op.minus {
     background-image: url('<?php echo $GLOBALS['dirpre']; ?>/assets/gfx/applications/minus.png');
   }
   question id {
@@ -42,46 +42,102 @@
     background: #f1f1f1;
     padding: 0.7em 2em;
   }
+
+  #customText {
+    width: 80%;
+  }
+  #createCustom {
+    margin-top: 0.75em;
+  }
 </style>
 
 <chosenquestiontemplate>
-  <question qid="{_id}">
+  <question qid="{_id}" vanilla="{vanilla}" style="display: none;">
     <op class="minus"></op>
     <text>{text}</text>
   </question>
 </chosenquestiontemplate>
 
 <script>
-  function selectQuestion(_id, text) {
+  function addQuestion(_id, text, vanilla) {
     var html = useTemplate('chosenquestiontemplate', {
       'text': text,
-      '_id': _id
+      '_id': _id,
+      'vanilla': vanilla,
     });
     $('.chosen').append(html);
+    $('.chosen question[qid=' + _id + ']').slideDown();
 
     $('question op.minus').off('click').click(function() {
-      $(this).parent().slideUp(function () {
-        var _id = $(this).attr('qid');
-        unselectQuestion(_id);
-        $(this).remove();
-      });
+      var question = $(this).parent();
+      var vanilla = question.attr('vanilla') === 'true';
+      removeQuestion(question, vanilla);
     });
   }
 
-  function unselectQuestion(_id) {
+  function removeQuestion(question, vanilla) {
+    function remove(question, afterSlide) {
+      question.slideUp(function () {
+        if (typeof afterSlide !== 'undefined') {
+          afterSlide();
+        }
+        $(this).remove();
+      });
+    }
+
+    var _id = question.attr('qid');
+    if (vanilla) {
+      // The question to remove is a vanilla question, so just reshow it the
+      // vanilla list.
+      remove(question, function () {
+        reshowVanilla(_id);
+      });
+    } else {
+      // Custom question removal should call deleteCustom on backend.
+      $.post('../deletecustom', {
+        questionId: _id,
+        jobId: '<?php View::echof('jobId'); ?>',
+
+      }, function (data) {
+        remove(question);
+      });
+    }
+  }
+
+  function reshowVanilla(_id) {
     $('question.vanilla').each(function() {
       if ($(this).attr('qid') == _id) {
-        $(this).slideDown();
+        $(this).attr('enabled', true).slideDown();
       }
     });
   }
 
   $(function() {
-    $('question op.plus').click(function() {
-      $(this).parent().slideUp(function () {
+    $('.vanillalist question op.plus').click(function() {
+      var question = $(this).parent();
+      if (question.attr('enabled') === 'false') {
+        return;
+      }
+      question.attr('enabled', false).slideUp(function () {
         var _id = $(this).attr('qid');
         var text = $(this).children('text').html();
-        selectQuestion(_id, text);
+        addQuestion(_id, text, true);
+      });
+    });
+
+    $('#createCustom').click(function() {
+      var text = $('#customText').val();
+
+      if ($(this).attr('enabled') === 'false' || text == '') {
+        return;
+      }
+      $(this).attr('enabled', false);
+      // Create custom question on backend.
+
+      $.post('../createcustom', {text: text}, function (data) {
+        addQuestion(data, text, false);
+        $('#customText').val('');
+        $('#createCustom').attr('enabled', true);
       });
     });
   });
@@ -94,7 +150,7 @@
     <form>
       <left>
         Choose questions to add to the application (recommended):
-        <div class="questionlist">
+        <div class="vanillalist">
           <?php
             $vanillaQuestions = View::get('vanillaQuestions');
             foreach ($vanillaQuestions as $question) {
@@ -112,8 +168,9 @@
 
         <writeyourown>
           <div class="form-slider">
-            <label for="custom">Write your own custom questions:</label>
-            <input type="text" name="custom" />
+            <label for="customText">Write your own custom questions:</label>
+            <input type="text" name="custom" id="customText" />
+            <op class="plus" id="createCustom"></op>
           </div>
           (Writing your own question may result in lower applications received.)<br />
         </writeyourown>

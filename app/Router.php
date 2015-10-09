@@ -129,7 +129,7 @@
       if (strstr($uri, '?')) $uri = substr($uri, 0, strpos($uri, '?'));
 
       $uri = '/' . trim($uri, '/');
-      return $uri;
+      return strtolower($uri);
     }
 
     /**
