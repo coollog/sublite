@@ -47,14 +47,13 @@
           ApplicationStudent::submitNew($jobId, $secondStudent, $answers);
         TRUE(ApplicationModel::checkApplicationSubmitted(
           $secondApplication->getId()));
-        //var_dump($secondApplication);
 
         // create, save, and delete application
         $thirdStudent = new MongoId();
         $applicationToDelete =
-          ApplicationStudent::save($jobId, $thirdStudent, $answers);
+          ApplicationStudent::save($jobId, $thirdStudent, $answers)->getId();
         TRUE(ApplicationModel::applicationExists($jobId, $thirdStudent));
-        //TRUE(false, 'TODO: Finish this test');
+        TRUE(ApplicationStudent::deleteSaved($applicationToDelete));
       });
 
       TEST($class, "$class.student.getUnclaimedAndClaimed", function($class) {
