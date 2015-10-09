@@ -69,7 +69,6 @@
     margin-bottom: 1em;
   }
 </style>
-<img src="http://globe-views.com/dcim/dreams/photo/photo-06.jpg" width="200px" height="400px">
 
 <questiontemplate>
   <question qid="{_id}" class="vanilla" vanilla="{vanilla}" style="{style}">
@@ -229,6 +228,9 @@
       }
     ?>
 
+    // When clicking the plus next to vanilla questions.
+    bindQuestionOpClick('.vanillaList', true);
+
     // Load up selected questions.
     <?php
       $chosen = View::get('chosen');
@@ -244,8 +246,16 @@
       }
     ?>
 
-    // When clicking the plus next to vanilla questions.
-    bindQuestionOpClick('.vanillaList', true);
+    $('#finish').click(function () {
+      var questionIds = [];
+      $('.chosen').children().each(function() {
+        var _id = $(this).attr('qid');
+        questionIds.push(_id);
+      });
+      $.post('', {questionIds: questionIds}, function (data) {
+        console.log('updated!');
+      });
+    });
   });
 </script>
 
@@ -285,7 +295,7 @@
           <div class="chosen"></div>
         </div>
 
-        <input type="button" name="addcustom" value="Finish" />
+        <input type="button" id="finish" value="Finish" />
       </left>
     </form>
   </div>
