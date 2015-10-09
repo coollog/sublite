@@ -4,8 +4,8 @@
   // Utility functions
   function clean($s) {
     if (is_array($s)) {
-      for ($i = 0; $i < count($s); $i ++) {
-        $s[$i] = clean($s[$i]);
+      foreach ($s as $key => $val) {
+        $s[$key] = clean($s[$key]);
       }
       return $s;
     }
@@ -135,8 +135,7 @@
 
     for ($i = 0; $i < count($arr); $i ++) {
       $entry = $arr[$i];
-
-      $hashKey = $entry[$key];
+      $hashKey = (string) $entry[$key];
 
       switch ($valType) {
         case 'value': $hash[$hashKey] = $entry; break;
