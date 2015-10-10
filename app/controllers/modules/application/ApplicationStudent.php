@@ -36,7 +36,7 @@
      * Student wishes to delete an application. Cannot delete submitted
      * applications.
      */
-    public static function deleteSaved(MongoId $id);
+    public static function deleteSaved(MongoId $applicationId);
 
     /**
      * Get all the unclaimed applications for a job. The applications must be
@@ -121,8 +121,8 @@
       return $application;
     }
 
-    public static function deleteSaved(MongoId $id) {
-      return ApplicationModel::deleteById($id);
+    public static function deleteSaved(MongoId $applicationId) {
+      return ApplicationModel::deleteById($applicationId);
     }
 
     public static function getUnclaimedByJob(MongoId $jobId) {
