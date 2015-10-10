@@ -1,4 +1,6 @@
 <?php
+  require_once($GLOBALS['dirpre'].'controllers/modules/application/Application.php');
+
   interface ApplicationJobInterface {
     /**
      * Creates an application as the 'application' field in a job document.
@@ -56,7 +58,7 @@
       $this->jobId = $job;
 
       $this->data['questions'] =
-        isset($data['questions']) ? clean($data['questions']) : [];
+        isset($data['questions']) ? $data['questions'] : [];
     }
 
     public function getJobId() {

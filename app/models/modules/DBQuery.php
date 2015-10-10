@@ -1,6 +1,6 @@
 <?php
   interface DBExecuteInterface {
-    public function __construct($collection);
+    public function __construct(MongoCollection $collection);
 
     /**
      * Inserts the document $data into the database. $data must be nonempty.
@@ -102,7 +102,7 @@
    * Contains functions for performing commands on the DB.
    */
   class DBExecute implements DBExecuteInterface {
-    public function __construct($collection) {
+    public function __construct(MongoCollection $collection) {
       $this->collection = $collection;
     }
 
@@ -153,6 +153,8 @@
       }
       return $docs;
     }
+
+    protected $collection;
   }
 
   ////////////////
@@ -218,8 +220,6 @@
     public function getQuery() {
       return $this->query;
     }
-
-    protected $collection;
 
     protected $query = [];
     protected $projection = [];

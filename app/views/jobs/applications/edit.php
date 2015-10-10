@@ -12,6 +12,7 @@
     padding: 0.7em 2em;
     background: #fff;
     margin: 1px;
+    position: relative;
   }
   op {
     display: inline-block;
@@ -67,6 +68,19 @@
   }
   .chosen {
     margin-bottom: 1em;
+    cursor: pointer;
+  }
+  .chosen question:before {
+    background: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/applications/updown.png') no-repeat center center;
+    background-size: contain;
+    height: 1em;
+    width: 1em;
+    display: block;
+    position: absolute;
+    left: 0.5em;
+    top: 1em;
+    opacity: 0.5;
+    content: "";
   }
 </style>
 
@@ -178,6 +192,15 @@
   }
 
   $(function() {
+    // Sorting of chosen questions.
+    $('.chosen').sortable({
+      placeholder: 'ui-state-highlight',
+      start: function(e, ui){
+        ui.placeholder.height(ui.item.height());
+      }
+    });
+    $('.chosen').disableSelection();
+
     // When clicking the plus next to writing own custom question.
     $('#createCustom').click(function() {
       var text = $('#customText').val();
@@ -241,19 +264,20 @@
     ?>
         chooseQuestion('<?php echo $_id ?>',
                        '<?php echo $text ?>',
-                       <?php echo $vanilla ?>);
+                       <?php echo $vanilla ? 'true' : 'false'; ?>);
     <?php
       }
     ?>
 
+    // Finish creating/editing application.
     $('#finish').click(function () {
       var questionIds = [];
       $('.chosen').children().each(function() {
         var _id = $(this).attr('qid');
         questionIds.push(_id);
       });
+
       $.post('', {questionIds: questionIds}, function (data) {
-        console.log(data);
         console.log('updated!');
       });
     });
@@ -292,7 +316,7 @@
 
         <div id="selected">
           <subheadline>Selected questions:</subheadline>
-          <i>Select questions to add to your application from above.</i>
+          <i>Select questions from above to add to your application.</i>
           <div class="chosen"></div>
         </div>
 

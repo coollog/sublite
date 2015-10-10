@@ -145,6 +145,15 @@
     return $hash;
   }
 
+  function arrayToSet(array $arr) {
+    $set = [];
+    foreach ($arr as $val) {
+      $val = (string)$val;
+      $set[$val] = true;
+    }
+    return $set;
+  }
+
   /**
    * Takes an array of data, and splits it into multiple arrays grouped by a
    * certain field in the data.

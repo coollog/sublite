@@ -1,4 +1,6 @@
 <?php
+  require_once($GLOBALS['dirpre'].'controllers/modules/application/Application.php');
+
   interface ApplicationStudentInterface {
     /**
      * Student saves application, so create it as a new saved application.

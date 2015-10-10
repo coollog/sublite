@@ -30,6 +30,7 @@
 
     public static function setApplicationQuestionIds(MongoId $jobId,
                                                      array $questionIds) {
+      invariant(isset(self::$collection));
       $update = (new DBUpdateQuery(self::$collection))
         ->toQuery('_id', $jobId)->toUpdate('application', $questionIds);
       $update->run();

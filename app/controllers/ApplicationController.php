@@ -1,6 +1,7 @@
 <?php
   require_once($GLOBALS['dirpre'].'controllers/Controller.php');
   require_once($GLOBALS['dirpre'].'controllers/modules/application/Question.php');
+  require_once($GLOBALS['dirpre'].'controllers/modules/application/ApplicationJob.php');
 
   interface ApplicationControllerInterface {
     public static function edit(array $restOfRoute);
@@ -45,10 +46,13 @@
       $chosenIds = ApplicationModel::getJobApplication($jobId);
 
       // Remove any existing from $vanillaQuestions.
+      if ($chosenIds !== null) {
+        $chosenIdHash = arrayToSet($chosenIds);
+      }
       foreach ($vanillaQuestions as $question) {
-        $id = $question->getId();
+        $id = (string)$question->getId();
         $data = $question->getData();
-        $data['hide'] = $chosenIds !== null and in_array($id, $chosenIds);
+        $data['hide'] = $chosenIds !== null && isset($chosenIdHash[$id]);
         $vanillaQuestionsData[] = $data;
       }
 
@@ -65,6 +69,7 @@
           if ($data === null) continue;
 
           $text = $data['text'];
+          $vanilla = $data['vanilla'];
           $chosenData[] = [
             '_id' => $_id,
             'text' => $text,
@@ -86,15 +91,19 @@
      * Returns true if performed.
      */
     private static function save(MongoId $jobId) {
+      global $params;
+
       if (!isset($params['questionIds'])) return false;
 
-      // Update job application questions.
       $questionIds = $params['questionIds'];
-      $success = ApplicationJob::createOrUpdate($jobId, $questionIds);
 
-      if (!$success) {
-        echo 'failed';
+      // Convert all questionIds to MongoIds.
+      foreach ($questionIds as $index => $val) {
+        $questionIds[$index] = new MongoId($val);
       }
+
+      // Update job application questions.
+      $success = ApplicationJob::createOrUpdate($jobId, $questionIds);
 
       return true;
     }
