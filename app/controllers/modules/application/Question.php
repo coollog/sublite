@@ -1,4 +1,6 @@
 <?php
+  require_once($GLOBALS['dirpre'].'controllers/modules/Schema.php');
+
   interface QuestionInterface {
     public static function getAllVanilla();
 
@@ -53,7 +55,7 @@
   }
 
   //TODO Add validations
-  class Question implements QuestionInterface {
+  class Question extends Schema implements QuestionInterface {
     public static function getAllVanilla($justText = false) {
       // Issue query to get all questions with vanilla flag on.
       $results = QuestionModel::getAllVanilla($justText);
@@ -199,18 +201,18 @@
     //**********************
 
     public function __construct(array $data) {
-      if (isset($data['_id'])) {
-        $this->data['_id'] = new MongoId($data['_id']);
-      }
-      $this->data['text'] = $data['text'];
-      $this->data['recruiter'] =
-        isset($data['recruiter']) ? new MongoId($data['recruiter']) : null;
-      if (isset($data['uses'])) {
-        $this->data['uses'] = $data['uses'];
-      } else {
-        $this->data['uses'] = [];
-      }
-      $this->data['vanilla'] = boolval($data['vanilla']);
+      $schema = [
+        '$optional' => [
+          '_id' => 'notSetId',
+          'recruiter' => 'nullId',
+          'uses' => 'arrayOfIds',
+        ],
+        '$required' => [
+          'text' => 'string',
+          'vanilla' => 'bool'
+        ]
+      ];
+      self::setDataFromSchema($this->data, $data, $schema);
     }
 
     public function getData() {
@@ -245,6 +247,6 @@
       $this->data['_id'] = $id;
     }
 
-    private $data;
+    private $data = [];
   }
 ?>

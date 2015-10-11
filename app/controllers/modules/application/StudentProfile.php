@@ -2,8 +2,10 @@
   require_once($GLOBALS['dirpre'].'controllers/modules/Schema.php');
 
   interface StudentProfileInterface {
-    // $data is an associative array containing a subset of these keys:
-    //
+    public function __construct(MongoId $studentId, array $data);
+    public function getData();
+    public function getStudentId();
+    public function getEducation($index);
   }
 
   class StudentProfile extends Schema implements StudentProfileInterface{
@@ -114,6 +116,11 @@
 
     public function getStudentId() {
       return $this->studentId;
+    }
+
+    public function getEducation($index) {
+      if (!isset($this->data['education'][$index])) return null;
+      return $this->data['education'][$index];
     }
 
     private $studentId;

@@ -39,14 +39,13 @@
 
       TEST($class, "$class.createVanilla", function() {
         $text = 'random text haha';
-        $recruiterId = new MongoId();
 
         $question = Question::createVanilla($text);
 
-        EQ($question->getText(), $text, "Wrong text");
-        EQ($question->getRecruiter(), null, "Recruiter should be null");
-        EQ($question->getVanilla(), true, "Not vanilla");
-        NEQ($question->getId(), null);
+        EQ($text, $question->getText(), "Wrong text");
+        EQ(null, $question->getRecruiter(), "Recruiter should be null");
+        EQ(true, $question->getVanilla(), "Not vanilla");
+        NEQ(null, $question->getId(), "_id not null");
 
         $vanillas = Question::getAllVanilla();
         EQ(count($vanillas), 1, "Wrong vanilla count");

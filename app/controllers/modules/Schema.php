@@ -39,11 +39,16 @@
    *     'string'
    *     'date'
    *     'arrayOfStrings'
+   *     'bool'
+   *     'id'
    *   $optional fields can have types:
-   *     'nullString' - string with default being not set
+   *     'nullString' - string with default being null
    *     'emptyString' - string with default value of ''
-   *     'nullDate' - date with default being not set
+   *     'nullDate' - MongoDate with default being null
+   *     'nullId' - MongoId with default value of null
+   *     'notSetId' - MongoId with default being not set
    *     'arrayOfStrings'
+   *     'arrayOfIds'
    * or be another schema array to define a subdocument.
    */
 
@@ -67,21 +72,21 @@
 
       if (isset($schema['$optional'])) {
         $optional = $schema['$optional'];
-        foreach ($optional as $fieldName => $subScheme) {
+        foreach ($optional as $fieldName => $subSchema) {
           if (isset($inputData[$fieldName])) {
-            if (is_array($subScheme)) {
+            if (is_array($subSchema)) {
               $myField = [];
               self::setDataFromSchema($myField,
                                       $inputData[$fieldName],
-                                      $subScheme);
+                                      $subSchema);
               $myData[$fieldName] = $myField;
             } else {
               $myData[$fieldName] =
-                self::schemaProcessType($inputData[$fieldName]);
+                self::schemaProcessType($inputData[$fieldName], $subSchema);
             }
           } else {
-            $default = self::schemaGetDefault($subScheme);
-            if (!is_null($default)) {
+            $default = self::schemaGetDefault($subSchema);
+            if ($default != 'notSet') {
               $myData[$fieldName] = $default;
             }
           }
@@ -111,9 +116,17 @@
         return null;
       }
       switch ($type) {
-        case 'nullString': case 'nullDate': return null; break;
-        case 'arrayOfStrings': return []; break;
-        case 'emptyString': return ''; break;
+        case 'nullString':
+        case 'nullDate':
+        case 'nullId':
+          return null; break;
+        case 'notSetId':
+          return 'notSet'; break;
+        case 'arrayOfStrings':
+        case 'arrayOfIds':
+          return []; break;
+        case 'emptyString':
+          return ''; break;
         default:
           invariant(false,
                     "Schema::schemaGetDefault() received invalid type '$type'");
@@ -126,10 +139,20 @@
           return (string)$val;
         case 'nullDate': case 'date':
           return new MongoDate($val);
+        case 'nullId': case 'id': case 'notSetId':
+          return new MongoId($val);
+        case 'bool':
+          return boolval($val);
         case 'arrayOfStrings':
           $newVal = [];
           foreach ($val as $item) {
             $newVal[] = (string)$item;
+          }
+          return $newVal;
+        case 'arrayOfIds':
+          $newVal = [];
+          foreach ($val as $item) {
+            $newVal[] = new MongoId($item);
           }
           return $newVal;
         default:

@@ -47,7 +47,11 @@
 
         EQ($studentId, $student->getStudentId());
 
-        var_dump($student->getData());
+        EQ(null, $student->getEducation(1));
+        $education = $student->getEducation(0);
+        $educationStart =
+          $education['dates']['start']->toDateTime()->getTimeStamp();
+        EQ(strtotime('August 2013'), $educationStart);
       });
     }
 
