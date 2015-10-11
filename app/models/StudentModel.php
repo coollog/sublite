@@ -5,6 +5,8 @@
     public function __construct();
     public static function getAnswers(MongoId $studentId);
     public static function replaceAnswers(MongoId $studentId, array $answers);
+    public static function getProfile(MongoId $studentId);
+    public static function setProfile(MongoId $studentId, array $profileData);
   }
 
   class StudentModel extends Model {
@@ -12,12 +14,25 @@
 
     public static function getAnswers(MongoId $studentId) {
       $query = self::queryForId($studentId)->projectField('answers');
-      return $query->run();
+      $studentAnswers = $query->run();
+      return $studentAnswers['answers'];
     }
 
     public static function replaceAnswers(MongoId $studentId, array $answers) {
       $update = (new DBUpdateQuery(self::$collection))
         ->queryForId($studentId)->toUpdate('answers', $answers);
+      $update->run();
+    }
+
+    public static function getProfile(MongoId $studentId) {
+      $query = self::queryForId($studentId)->projectField('profile');
+      $studentProfile = $query->run();
+      return $studentProfile['profile'];
+    }
+
+    public static function setProfile(MongoId $studentId, array $profileData) {
+      $update = (new DBUpdateQuery(self::$collection))
+        ->queryForId($studentId)->toUpdate('profile', $profileData);
       $update->run();
     }
 

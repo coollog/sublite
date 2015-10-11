@@ -9,6 +9,11 @@
   }
 
   class StudentProfile extends Schema implements StudentProfileInterface{
+    public static function createOrUpdate(MongoId $studentId,
+                                          array $profileData) {
+      $profile = new StudentProfile($profileData);
+      StudentModel::setProfile($studentId, $profile->getData());
+    }
 
     //**********************
     // non-static functions
