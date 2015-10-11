@@ -10,6 +10,9 @@
   require_once($GLOBALS['dirpre'].'tests/controllers/modules/application/QuestionTest.php');
   QuestionTest::run();
 
+  require_once($GLOBALS['dirpre'].'tests/controllers/modules/application/StudentProfileTest.php');
+  StudentProfileTest::run();
+
   require_once($GLOBALS['dirpre'].'tests/controllers/modules/application/ApplicationTest.php');
   ApplicationTest::run();
 ?>

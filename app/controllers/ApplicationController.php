@@ -86,28 +86,6 @@
       ]);
     }
 
-    /**
-     * Saves the questionIds from client for $jobId.
-     * Returns true if performed.
-     */
-    private static function save(MongoId $jobId) {
-      global $params;
-
-      if (!isset($params['questionIds'])) return false;
-
-      $questionIds = $params['questionIds'];
-
-      // Convert all questionIds to MongoIds.
-      foreach ($questionIds as $index => $val) {
-        $questionIds[$index] = new MongoId($val);
-      }
-
-      // Update job application questions.
-      $success = ApplicationJob::createOrUpdate($jobId, $questionIds);
-
-      return true;
-    }
-
     public static function createCustom() {
       global $params;
 
@@ -157,6 +135,28 @@
       $questionData = self::questionArrayToJson($questions);
 
       return $questionData;
+    }
+
+    /**
+     * Saves the questionIds from client for $jobId.
+     * Returns true if performed.
+     */
+    private static function save(MongoId $jobId) {
+      global $params;
+
+      if (!isset($params['questionIds'])) return false;
+
+      $questionIds = $params['questionIds'];
+
+      // Convert all questionIds to MongoIds.
+      foreach ($questionIds as $index => $val) {
+        $questionIds[$index] = new MongoId($val);
+      }
+
+      // Update job application questions.
+      $success = ApplicationJob::createOrUpdate($jobId, $questionIds);
+
+      return true;
     }
 
     private static function questionArrayToJson(array $questions) {
