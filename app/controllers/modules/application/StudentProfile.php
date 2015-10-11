@@ -1,10 +1,12 @@
 <?php
+  require_once($GLOBALS['dirpre'].'controllers/modules/Schema.php');
+
   interface StudentProfileInterface {
     // $data is an associative array containing a subset of these keys:
     //
   }
 
-  class StudentProfile {
+  class StudentProfile extends Schema implements StudentProfileInterface{
 
     //**********************
     // non-static functions
@@ -14,95 +16,96 @@
       $this->studentId = $studentId;
       $schema = [
         '$optional' => [
-          'resume' => null,
-          'bio' => '',
-          'interests' => []
+          'resume' => 'nullString',
+          'bio' => 'emptyString',
+          'interests' => 'arrayOfStrings'
         ],
         '$required' => [
           'education' => [
             '$arrayOf' => [
               '$required' => [
-                'school' => true,
-                'class' => true,
-                'degree' => true,
+                'school' => 'string',
+                'class' => 'string',
+                'degree' => 'string',
                 'dates' => [
-                  '$required' => ['start' => true],
-                  '$optional' => ['end' => null]
+                  '$required' => ['start' => 'date'],
+                  '$optional' => ['end' => 'nullDate']
                 ],
               ],
               '$optional' => [
-                'majors' => [],
-                'minors' => [],
-                'gpa' => '',
-                'courses' => []
+                'majors' => 'arrayOfStrings',
+                'minors' => 'arrayOfStrings',
+                'gpa' => 'nullString',
+                'courses' => 'arrayOfStrings'
               ]
             ]
           ],
           'experience' => [
             '$arrayOf' => [
               '$required' => [
-                'title' => true,
-                'company' => true,
+                'title' => 'string',
+                'company' => 'string',
                 'dates' => [
-                  '$required' => ['start' => true],
-                  '$optional' => ['end' => null]
+                  '$required' => ['start' => 'date'],
+                  '$optional' => ['end' => 'nullDate']
                 ],
               ],
               '$optional' => [
-                'location' => null,
-                'summary' => ''
+                'location' => 'nullString',
+                'summary' => 'emptyString'
               ]
             ]
           ],
           'extracurriculars' => [
             '$arrayOf' => [
               '$required' => [
-                'title' => true,
-                'company' => true,
+                'title' => 'string',
+                'organization' => 'string',
                 'dates' => [
-                  '$required' => ['start' => true],
-                  '$optional' => ['end' => null]
+                  '$required' => ['start' => 'date'],
+                  '$optional' => ['end' => 'nullDate']
                 ],
               ],
               '$optional' => [
-                'location' => null,
-                'summary' => ''
+                'location' => 'nullString',
+                'summary' => 'emptyString'
               ]
             ]
           ],
           'awards' => [
             '$arrayOf' => [
               '$required' => [
-                'name' => true
+                'name' => 'string'
               ],
               '$optional' => [
-                'by' => null,
-                'date' => null,
-                'place' => null,
-                'summary' => ''
+                'by' => 'nullString',
+                'date' => 'nullString',
+                'place' => 'nullString',
+                'summary' => 'emptyString'
               ]
             ]
           ],
           'projects' => [
             '$arrayOf' => [
               '$required' => [
-                'name' => true
-                'dates' => [
-                  '$optional' => [
-                    'start' => null,
-                    'end' => null
-                  ]
-                ],
+                'name' => 'string',
               ],
               '$optional' => [
-                'summary' => '',
-                'link' => null
+                'summary' => 'emptyString',
+                'link' => 'nullString',
+                'date' => 'nullDate',
+                'dates' => [
+                  '$optional' => [
+                    'start' => 'date',
+                    'end' => 'nullDate'
+                  ]
+                ]
               ]
             ]
           ]
         ]
       ];
-      $this->setDataFromSchema($this->data, $data, $schema);
+      self::setDataFromSchema($this->data, $data, $schema);
     }
 
     public function getData() {
@@ -111,44 +114,6 @@
 
     public function getStudentId() {
       return $this->studentId;
-    }
-
-    /**
-     * Sets $myData's fields based on $schema, and using data in $inputData.
-     * Schema format:
-     */
-    private function setDataFromSchema(array &$myData,
-                                       array $inputData,
-                                       array $schema) {
-      if (isset($schema['$arrayOf'])) {
-        $subSchema = $schema['$arrayOf'];
-        foreach ($inputData as $item) {
-          $myItem = [];
-          $this->setDataFromSchema($myItem, $item, $subSchema);
-          $myData[] = $myItem;
-        }
-        return;
-      }
-
-      if (isset($schema['$optional'])) {
-        $optional = $schema['$optional'];
-        foreach ($optional as $fieldName => $default) {
-          $myData[$fieldName] =
-            isset($inputData[$fieldName]) ? $inputData[$fieldName] : $default;
-        }
-      }
-      if (isset($schema['$required'])) {
-        $required = $schema['$required'];
-        foreach ($required as $fieldName => $subSchema) {
-          if (is_array($subSchema)) {
-            $myField = [];
-            $this->setDataFromSchema($myField, $inputData[$fieldName], $subSchema);
-            $myData[$fieldName] = $myField;
-          } else {
-            $myData[$fieldName] = $inputData[$fieldName];
-          }
-        }
-      }
     }
 
     private $studentId;
