@@ -22,6 +22,7 @@
       }
 
       $jobId = new MongoId($restOfRoute[0]);
+      $recruiterId = $_SESSION['_id'];
 
       // Make sure job exists.
       if (!JobModel::exists($jobId)) {
@@ -31,7 +32,11 @@
       }
 
       // Make sure recruiter has permission to edit the job.
-
+      if (!JobModel::matchJobRecruiter($jobId, $recruiterId)) {
+        self::error("permission denied");
+        self::render('notice');
+        return;
+      }
 
       // Process saving of questions.
       if (self::save($jobId)) {

@@ -2,6 +2,27 @@
   /**
    * You can define a schema for a module's data using the following class.
    *
+   * For a schema array:
+   *   $optional defines fields that are optional
+   *   $required defines fields that are required
+   *   $arrayOf defines that the field has an array of documents of a subschema
+   * Fields can either be a type:
+   *   $required fields can have types:
+   *     'string'
+   *     'date'
+   *     'arrayOfStrings'
+   *     'bool'
+   *     'id'
+   *   $optional fields can have types:
+   *     'nullString' - string with default being null
+   *     'emptyString' - string with default value of ''
+   *     'nullDate' - MongoDate with default being null
+   *     'nullId' - MongoId with default value of null
+   *     'notSetId' - MongoId with default being not set
+   *     'arrayOfStrings'
+   *     'arrayOfIds'
+   * or be another schema array to define a subdocument.
+   *
    * For example:
    *
    * $schema = [
@@ -29,27 +50,6 @@
    *     ]
    *   ]
    * ];
-   *
-   * For a schema array:
-   *   $optional defines fields that are optional
-   *   $required defines fields that are required
-   *   $arrayOf defines that the field has an array of documents of a subschema
-   * Fields can either be a type:
-   *   $required fields can have types:
-   *     'string'
-   *     'date'
-   *     'arrayOfStrings'
-   *     'bool'
-   *     'id'
-   *   $optional fields can have types:
-   *     'nullString' - string with default being null
-   *     'emptyString' - string with default value of ''
-   *     'nullDate' - MongoDate with default being null
-   *     'nullId' - MongoId with default value of null
-   *     'notSetId' - MongoId with default being not set
-   *     'arrayOfStrings'
-   *     'arrayOfIds'
-   * or be another schema array to define a subdocument.
    */
 
   class Schema {

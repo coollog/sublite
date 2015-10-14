@@ -16,6 +16,12 @@
      */
     public static function setApplicationQuestionIds(MongoId $jobId,
                                                      array $questionIds);
+
+    /**
+     * Checks if job has $jobId and $recruiterId.
+     */
+    public static function matchJobRecruiter(MongoId $jobId,
+                                             MongoId $recruiterId);
   }
 
   class JobModel extends Model {
@@ -34,6 +40,13 @@
       $update = (new DBUpdateQuery(self::$collection))
         ->toQuery('_id', $jobId)->toUpdate('application', $questionIds);
       $update->run();
+    }
+
+    public static function matchJobRecruiter(MongoId $jobId,
+                                             MongoId $recruiterId) {
+      $query = self::queryForId($jobId)
+        ->toQuery('recruiter', $recruiterId)->projectId();
+      return !is_null($query->findOne());
     }
 
     public function __construct() {

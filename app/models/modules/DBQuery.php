@@ -56,6 +56,7 @@
 
     /**
      * Runs the query to just find and return one document.
+     * Returns null if none exists.
      */
     public function findOne();
 
