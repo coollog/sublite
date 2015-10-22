@@ -15,8 +15,8 @@
       $session = $_SESSION;
       unset($session['pass']);
       $m = array2str(array(
-        'errormsg' => $error, 
-        'session' => array2str($session, " &nbsp; &nbsp; %s = '%s'"), 
+        'errormsg' => $error,
+        'session' => array2str($session, " &nbsp; &nbsp; %s = '%s'"),
         'server' => array2str($_SERVER, " &nbsp; &nbsp; %s = '%s'"),
         'request' => array2str($_REQUEST, " &nbsp; &nbsp; %s = '%s'")
       ));
