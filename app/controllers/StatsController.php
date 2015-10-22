@@ -16,7 +16,7 @@
       var_dump($stats); echo '</pre>';
     }
     function nojobs() {
-      global $MRecruiter, $MJob;
+      global $MRecruiter, $MJob, $MCompany;
 
       $r = $MRecruiter->find();
       $j = $MJob->find();
@@ -28,6 +28,7 @@
 
       $emails = array();
       $emailswc = array();
+      $emailswj = array();
       foreach ($r as $recruiter) {
         $id = $recruiter['_id']->{'$id'};
         $rdoc = $MRecruiter->getById($id);
@@ -36,10 +37,24 @@
           if (MongoID::isValid($recruiter['company'])) {
             $emailswc[] = $rdoc['email'];
           }
+        } else {
+          $emailswj[] = $rdoc;
         }
       }
 
-      echo 'Recruiters who have not posted jobs:<br />
+      echo 'Recruiters who have posted jobs:<br />
+        <textarea style="width:800px; height: 400px;">';
+      foreach ($emailswj as $r) {
+        $email = $r['email'];
+        $firstname = $r['firstname'];
+        $lastname = $r['lastname'];
+        $company = $r['company'];
+        if (MongoId::isValid($company))
+          $company = $MCompany->getName($company);
+        echo "\"$email\",\"$firstname\",\"$lastname\",\"$company\"\n";
+      }
+      echo '</textarea>';
+      echo '<br />Recruiters who have not posted jobs:<br />
         <textarea style="width:800px; height: 400px;">';
       foreach ($emails as $email) {
         echo "$email\n";
@@ -105,11 +120,13 @@
       $rs = array();
       foreach ($recruiters as $r) {
         $email = $r['email'];
+        $firstname = $r['firstname'];
+        $lastname = $r['lastname'];
         $company = $r['company'];
         if (MongoId::isValid($company))
           $company = $MCompany->getName($company);
         $date = fdate($r['_id']->getTimestamp());
-        $rs[] = "\"$email\",\"$company\",\"$date\"";
+        $rs[] = "\"$email\",\"$firstname\",\"$lastname\",\"$company\",\"$date\"";
       }
 
       echo '<br />Recruiters with date of joining:<br />
