@@ -77,6 +77,10 @@
         'pass' => array('$exists' => false)
       ), array('email' => true));
     }
+    function getStudentsAll() {
+      return $this->dbstudent->emails
+        ->find(array(), array('email' => true, 'name' => true));
+    }
     function getCities($dojobs=false) {
       $cities = array();
 

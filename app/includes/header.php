@@ -20,7 +20,7 @@
   require_once($GLOBALS['dirpre'].'includes/functions/sendgmail.php');
   require_once($GLOBALS['dirpre'].'includes/functions/lib_autolink.php');
   require_once($GLOBALS['dirpre'].'../housing/schools.php');
-  
+
   // Require other header files
   require_once($GLOBALS['dirpre'].'controllers/AppController.php');
   require_once($GLOBALS['dirpre'].'controllers/MigrationsController.php');
