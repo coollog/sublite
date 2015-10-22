@@ -92,7 +92,7 @@
         <textarea style="width:800px; height: 200px;">';
       foreach ($all as $student) {
         $email = $student['email'];
-        $name = $student['name'];
+        $name = isset($student['name']) ? $student['name'] : '';
         echo "$name,$email\n";
       }
       echo '</textarea>';
