@@ -72,6 +72,7 @@
 
       $c = $MStats->getStudentsConfirmed();
       $u = $MStats->getStudentsUnConfirmed();
+      $all = $MStats->getStudentsAll();
 
       echo '<br />Confirmed students: '.$c->count().'<br />
         <textarea style="width:800px; height: 200px;">';
@@ -85,6 +86,14 @@
       foreach ($u as $student) {
         $email = $student['email'];
         echo "$email\n";
+      }
+      echo '</textarea>';
+      echo '<br />All students: '.$all->count().'<br />
+        <textarea style="width:800px; height: 200px;">';
+      foreach ($all as $student) {
+        $email = $student['email'];
+        $name = $student['email'];
+        echo "$name,$email\n";
       }
       echo '</textarea>';
     }

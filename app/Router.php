@@ -31,12 +31,17 @@
 
   class Router implements RouterInterface {
     public static function register($callName, $callFunc) {
+      $callName = strtolower($callName);
+
       invariant(is_callable($callFunc));
 
       self::$callMap[$callName] = $callFunc;
     }
 
     public static function route($route, $callName) {
+      $route = strtolower($route);
+      $callName = strtolower($callName);
+
       invariant(isset(self::$callMap[$callName]),
         "'$callName' is not a registered callName.");
 
@@ -45,6 +50,9 @@
     }
 
     public static function routeTree($route, $callName) {
+      $route = strtolower($route);
+      $callName = strtolower($callName);
+
       invariant(isset(self::$callMap[$callName]),
         "'$callName' is not a registered callName.");
 

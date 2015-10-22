@@ -2,6 +2,12 @@
   require_once($GLOBALS['dirpre'].'controllers/Controller.php');
 
   class StudentController extends Controller {
+    public static function editStudentProfile() {
+      global $params;
+
+
+      self::render('jobs/student/editprofile', []);
+    }
 
     function data($data) {
       $name = clean($data['name']);

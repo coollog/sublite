@@ -33,6 +33,18 @@
   Router::register('employers/company', function() {
     GLOBALvarGet('CCompany')->view();
   });
+  Router::register('employers/createcustom', function () {
+    echo ApplicationController::createCustom();
+  });
+  Router::register('employers/deletecustom', function () {
+    echo ApplicationController::deleteCustom();
+  });
+  Router::register('employers/searchcustom', function () {
+    echo ApplicationController::searchCustom();
+  });
+  Router::register('employers/editapplication', function (array $restOfRoute) {
+    ApplicationController::edit($restOfRoute);
+  });
   Router::register('employers/editcompany', function() {
     GLOBALvarGet('CCompany')->edit();
   });
@@ -123,17 +135,8 @@
   Router::register('index', function() {
     GLOBALvarGet('CStudent')->index();
   });
-  Router::register('jobs/createcustom', function () {
-    echo ApplicationController::createCustom();
-  });
-  Router::register('jobs/deletecustom', function () {
-    echo ApplicationController::deleteCustom();
-  });
-  Router::register('jobs/searchcustom', function () {
-    echo ApplicationController::searchCustom();
-  });
-  Router::register('jobs/editapplication', function (array $restOfRoute) {
-    ApplicationController::edit($restOfRoute);
+  Router::register('jobs/editprofile', function() {
+    GLOBALvarGet('CStudent')->editStudentProfile();
   });
   Router::register('jobs/job', function() {
     GLOBALvarGet('CJob')->view();
@@ -233,13 +236,16 @@
   Router::route('/confirm', 'confirm');
 
   Router::route('/housing/editprofile', 'editprofile');
-  Router::route('/jobs/editprofile', 'editprofile');
 
   Router::route('/employers/addcompany', 'employers/addcompany');
   Router::route('/employers/addjob', 'employers/addjob');
   Router::route('/employers/approve', 'employers/approve');
   Router::route('/employers/changepass', 'employers/changepass');
   Router::route('/employers/company', 'employers/company');
+  Router::route('/employers/createcustom', 'employers/createcustom');
+  Router::route('/employers/deletecustom', 'employers/deletecustom');
+  Router::route('/employers/searchcustom', 'employers/searchcustom');
+  Router::routeTree('/employers/editapplication', 'employers/editapplication');
   Router::route('/employers/editcompany', 'employers/editcompany');
   Router::route('/employers/editjob', 'employers/editjob');
   Router::route('/employers/editprofile', 'employers/editprofile');
@@ -276,11 +282,8 @@
   Router::route('/hubs/hub', 'hubs/hub');
   Router::route('/hubs/start', 'hubs/start');
 
-  Router::route('/jobs/createcustom', 'jobs/createcustom');
-  Router::route('/jobs/deletecustom', 'jobs/deletecustom');
-  Router::route('/jobs/searchcustom', 'jobs/searchcustom');
-  Router::routeTree('/jobs/editapplication', 'jobs/editapplication');
   Router::route('/jobs/company', 'jobs/company');
+  Router::route('/jobs/editprofile', 'jobs/editprofile');
   Router::route('/employers/job', 'jobs/job');
   Router::route('/jobs/job', 'jobs/job');
   Router::route('/jobs/recruiter', 'jobs/recruiter');

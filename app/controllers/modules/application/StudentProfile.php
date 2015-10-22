@@ -25,7 +25,10 @@
         '$optional' => [
           'resume' => 'nullString',
           'bio' => 'emptyString',
-          'interests' => 'arrayOfStrings'
+          'interests' => 'arrayOfStrings',
+          'phone' => 'nullString',
+          'website' => 'nullString',
+          'preferredname' => 'nullString',
         ],
         '$required' => [
           'education' => [

@@ -13,6 +13,7 @@
   class ApplicationController extends Controller
                               implements ApplicationControllerInterface {
     public static function edit(array $restOfRoute) {
+      global $CRecruiter; $CRecruiter->requireLogin();
       global $params;
 
       if (!isset($restOfRoute[0]) || !MongoId::isValid($restOfRoute[0])) {
