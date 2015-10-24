@@ -93,12 +93,12 @@
       foreach ($all as $student) {
         $email = $student['email'];
         $name = isset($student['name']) ? $student['name'] : '';
-	$last_name = preg_replace('#.*\s([\w-]*)$#', '$1', $name);
-	$first_name = trim(preg_replace('#'.$last_name.'#', '', $name ));
-	if (strlen($first_name) == 0) {
-	  $first_name = $last_name;
-	  $last_name = "";
-	}
+        $last_name = preg_replace('#.*\s([\w-]*)$#', '$1', $name);
+        $first_name = trim(preg_replace('#'.$last_name.'#', '', $name ));
+        if (strlen($first_name) == 0) {
+          $first_name = $last_name;
+          $last_name = "";
+        }
         echo "$first_name,$last_name,$email\n";
       }
       echo '</textarea>';
