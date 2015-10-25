@@ -92,8 +92,16 @@
         <textarea style="width:800px; height: 200px;">';
       foreach ($all as $student) {
         $email = $student['email'];
-        $name = isset($student['name']) ? $student['name'] : '';
-        echo "$name,$email\n";
+        $firstname = 'User';
+        $lastname = '';
+        if (isset($student['name'])) {
+          $name = explode(' ', $student['name']);
+          if ($name[0] != '') {
+            $firstname = $name[0];
+            $lastname = isset($name[1]) ? $name[1] : '';
+          }
+        }
+        echo "$firstname,$lastname,$email\n";
       }
       echo '</textarea>';
     }
