@@ -3,7 +3,7 @@
     public function __construct();
 
     /**
-     * Sets 'submitted' for $appliationId to true.
+     * Sets 'submitted' for $applicationId to true.
      */
     public static function markAsSubmitted(MongoId $applicationId);
 
@@ -40,10 +40,16 @@
     public static function getClaimed(MongoId $jobId);
 
     /**
-     * Checks whether the student has submitted an application for the job.
+     * Checks whether the student has submitted or saved an application for the
+     * job.
      */
     public static function applicationExists(MongoId $jobId,
                                              MongoId $studentId);
+
+    /**
+     * Gets application given a jobId and studentId
+     */
+    public static function getApplication(MongoId $jobId, MongoId $studentId);
   }
 
   class ApplicationModel extends Model implements ApplicationModelInterface {
@@ -139,10 +145,19 @@
       return $query->findOne() !== null;
     }
 
+    public static function getApplication(MongoId $jobId, MongoId $studentId) {
+      $query = (new DBQuery(self::$collection))
+        ->toQuery('jobid', $jobId)
+        ->toQuery('studentid', $studentId)
+        ->projectId();
+    }
+
     private static function jobExists(MongoId $id) {
       return JobModel::exists($id);
     }
 
     protected static $collection;
   }
+
+  new ApplicationModel();
 ?>

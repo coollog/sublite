@@ -135,6 +135,9 @@
   Router::register('jobs/editapplication', function (array $restOfRoute) {
     ApplicationController::edit($restOfRoute);
   });
+  Router::register('jobs/apply', function (array $restOfRoute) {
+    ApplicationController::apply($restOfRoute);
+  });
   Router::register('jobs/job', function() {
     GLOBALvarGet('CJob')->view();
   });
@@ -280,6 +283,7 @@
   Router::route('/jobs/deletecustom', 'jobs/deletecustom');
   Router::route('/jobs/searchcustom', 'jobs/searchcustom');
   Router::routeTree('/jobs/editapplication', 'jobs/editapplication');
+  Router::routeTree('jobs/apply', 'jobs/apply');
   Router::route('/jobs/company', 'jobs/company');
   Router::route('/employers/job', 'jobs/job');
   Router::route('/jobs/job', 'jobs/job');

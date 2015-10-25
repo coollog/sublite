@@ -132,7 +132,7 @@
       $data = array(
         'jobs' => $MJob->getByRecruiter($_SESSION['_id'])
       );
-      $this->render('recruiter/jobs/managejobs', $data);
+      $this->render('jobs/managejobs', $data);
     }
 
     function add() {
@@ -151,7 +151,7 @@
       }
 
       if (!isset($_POST['add'])) {
-        $this->render('recruiter/jobs/jobform', formData(array())); return;
+        $this->render('jobs/jobform', formData(array())); return;
       }
 
       global $params, $MJob, $MRecruiter;
@@ -182,7 +182,7 @@
       }
 
       $this->error($err);
-      $this->render('recruiter/jobs/jobform', formData($data));
+      $this->render('jobs/jobform', formData($data));
     }
 
     function edit() { // FIX THIS ADD GET INFO LIKE DATA FROM VIEW AND STUFF
@@ -207,7 +207,7 @@
       // Code
       if ($this->isValid()) {
         if (!isset($_POST['edit'])) {
-          $this->render('recruiter/jobs/jobform', formData(array_merge($this->data($entry), array('_id' => $id)))); return;
+          $this->render('jobs/jobform', formData(array_merge($this->data($entry), array('_id' => $id)))); return;
         }
 
         $me = $MRecruiter->me();
@@ -220,13 +220,13 @@
           $data = array_merge($entry, $data);
           $id = $MJob->save($data);
           $this->success('job saved');
-          $this->render('recruiter/jobs/jobform', formData(array_merge($data, array('_id' => $id))));
+          $this->render('jobs/jobform', formData(array_merge($data, array('_id' => $id))));
           return;
         }
       }
 
       $this->error($err);
-      $this->render('recruiter/jobs/jobform', formData($data, array_merge($data, array('_id' => $id))));
+      $this->render('jobs/jobform', formData($data, array_merge($data, array('_id' => $id))));
     }
 
     function view() {
