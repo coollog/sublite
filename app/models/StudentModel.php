@@ -15,7 +15,7 @@
     public static function getAnswers(MongoId $studentId) {
       $query = self::queryForId($studentId)->projectField('answers');
       $studentAnswers = $query->run();
-      return $studentAnswers['answers'];
+      return isset($studentAnswers['answers']) ? $studentAnswers['answers'] : [];
     }
 
     public static function replaceAnswers(MongoId $studentId, array $answers) {

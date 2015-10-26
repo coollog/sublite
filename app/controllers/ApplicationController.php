@@ -2,9 +2,11 @@
   require_once($GLOBALS['dirpre'].'controllers/Controller.php');
   require_once($GLOBALS['dirpre'].'controllers/modules/application/Question.php');
   require_once($GLOBALS['dirpre'].'controllers/modules/application/ApplicationJob.php');
+  require_once($GLOBALS['dirpre'].'controllers/modules/application/ApplicationStudent.php');
 
   interface ApplicationControllerInterface {
     public static function edit(array $restOfRoute);
+    public static function apply(array $restOfRoute);
     public static function createCustom();
     public static function deleteCustom();
     public static function searchCustom();
@@ -93,6 +95,84 @@
         'jobId' => $jobId,
         'jobTitle' => $job['title'],
         'jobLocation' => $job['location']
+      ]);
+    }
+
+    public static function apply(array $restOfRoute) {
+      global $params, $MJob, $MCompany, $CStudent;
+
+      $CStudent->requireLogin();
+
+      if (!isset($restOfRoute[0]) || !MongoId::isValid($restOfRoute[0])) {
+        self::error("invalid access");
+        self::render('notice');
+        return;
+      }
+
+      $jobId = new MongoId($restOfRoute[0]);
+      $studentId = new MongoId($_SESSION['_id']);
+      $applicationId = ApplicationModel::getJobApplication($jobId);
+      $questions = ApplicationModel::getJobApplication($jobId);
+
+      // Make sure job exists.
+      if (!JobModel::exists($jobId)) {
+        self::error("nonexistent job");
+        self::render('notice');
+        return;
+      }
+
+      // Make sure application exists.
+      if (!$applicationId) {
+        self::error("This job does not have an application.");
+        self::render('notice');
+        return;
+      }
+
+      if (isset($params['questions'])) {
+        ApplicationStudent::save($jobId, $studentId, $params['questions']);
+        return;
+      }
+      if ($params) {
+        $questions = array();
+        foreach ($params as $id => $answer) {
+          $questions[] = ['_id' => $id, 'answer' => $answer];
+        }
+        ApplicationStudent::save($jobId, $studentId, $questions);
+        $applicationData = ApplicationModel::getApplication($jobId, $studentId);
+
+        ApplicationStudent::submit(new MongoId($applicationData['_id']));
+      }
+
+      $entry = $MJob->get($jobId);
+      $company = $MCompany->get($entry['company']);
+      $questions = array();
+      $submitted = false;
+      if (ApplicationModel::applicationExists($jobId, $studentId)) {
+        $application = new ApplicationStudent(
+          ApplicationModel::getApplication($jobId, $studentId));
+        $submitted = ApplicationModel::checkApplicationSubmitted($application->getId());
+        foreach ($application->getQuestions() as $question) {
+          $questions[] = ['id' => $question['_id'],
+                          'text' => Question::getById(new MongoId($question['_id']))->getText(),
+                          'response' => $question['answer']];
+        }
+      } else {
+        foreach ($entry['application']['questions'] as $questionId) {
+          $reponse = '';
+          $answers = StudentModel::getAnswers($studentId);
+          $response = isset($answers[$questionId]) ? $answers[$questionId] : '';
+          $questions[] = ['id' => $questionId,
+                          'text' => Question::getById($questionId)->getText(),
+                          'response' => ''];
+        }
+      }
+
+      self::render('jobs/applications/apply', [
+        'questions' => $questions,
+        'jobtitle' => $entry['title'],
+        'companytitle' => $company['name'],
+        'jobId' => $jobId,
+        'submitted' => $submitted
       ]);
     }
 

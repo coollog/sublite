@@ -138,6 +138,9 @@
   Router::register('jobs/editprofile', function() {
     GLOBALvarGet('CStudent')->editStudentProfile();
   });
+  Router::register('jobs/apply', function (array $restOfRoute) {
+    ApplicationController::apply($restOfRoute);
+  });
   Router::register('jobs/job', function() {
     GLOBALvarGet('CJob')->view();
   });
@@ -176,8 +179,7 @@
     GLOBALvarGet('MJob')->incrementApply($_GET['id']);
     if(filter_var($_GET['url'], FILTER_VALIDATE_EMAIL)) {
       header("Location: mailto:" . $_GET['url']);
-    }
-    else {
+    } else {
       $link = $_GET['url'];
       if (!preg_match('`^(https?:\/\/)`', $_GET['url']))
         $link = "http://" . $link;
@@ -282,6 +284,8 @@
   Router::route('/hubs/hub', 'hubs/hub');
   Router::route('/hubs/start', 'hubs/start');
 
+  Router::routeTree('/jobs/apply', 'jobs/apply');
+  Router::route('/jobs/apply/index', 'index');
   Router::route('/jobs/company', 'jobs/company');
   Router::route('/jobs/editprofile', 'jobs/editprofile');
   Router::route('/employers/job', 'jobs/job');

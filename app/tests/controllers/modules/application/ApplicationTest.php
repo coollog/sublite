@@ -23,19 +23,19 @@
         $questionId = new MongoId();
         $questions = [$questionId];
         ApplicationJob::createOrUpdate($jobId, $questions);
-        $answers = [['_id' => $questionId, 'ans' => 'swag']];
+        $answers = [['_id' => $questionId, 'answer' => 'swag']];
         $firstApplication =
           ApplicationStudent::save($jobId, $studentId, $answers);
         NEQ(null, $firstApplication);
         $applicationId = $firstApplication->getId();
         NEQ(null, $firstApplication->getQuestions());
-        EQ('swag', $firstApplication->getQuestions()[0]['ans']);
+        EQ('swag', $firstApplication->getQuestions()[0]['answer']);
 
         // edit application
         ApplicationStudent::edit(
-          $applicationId, [['_id' => $questionId, 'ans' => 'qswag']]);
+          $applicationId, [['_id' => $questionId, 'answer' => 'qswag']]);
         $editedApplication = ApplicationModel::getSavedForJob($jobId)[0];
-        EQ('qswag', $editedApplication['questions'][0]['ans']);
+        EQ('qswag', $editedApplication['questions'][0]['answer']);
 
         // submit application
         TRUE(ApplicationStudent::submitSaved($applicationId));

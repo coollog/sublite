@@ -4,8 +4,7 @@
   interface ApplicationStudentInterface {
     /**
      * Student saves application, so create it as a new saved application.
-     * Need to make sure student has not already saved an application for the
-     * job.
+     * If application is already saved, edits it.
      */
     public static function save(MongoId $jobId,
                                 MongoId $studentId,
@@ -22,15 +21,7 @@
      * Student submits saved application, so mark it as submitted.
      * Make sure the student has permission.
      */
-    public static function submitSaved(MongoId $applicationId);
-
-    /**
-     * Student submits a new application (not already saved), so create a
-     * submitted application.
-     */
-    public static function submitNew(MongoId $jobId,
-                                     MongoId $studentId,
-                                     array $questions);
+    public static function submit(MongoId $applicationId);
 
     /**
      * Student wishes to delete an application. Cannot delete submitted
@@ -81,6 +72,10 @@
     public static function save(MongoId $jobId,
                                 MongoId $studentId,
                                 array $questions) {
+      if (ApplicationModel::applicationExists($jobId, $studentId)) {
+        $applicationData = ApplicationModel::getApplication($jobId, $studentId);
+        return self::edit(new MongoId($applicationData['_id']), $questions);
+      }
       return self::create($jobId, $studentId, $questions, false);
     }
 
@@ -97,9 +92,10 @@
         $questions, $applicationQuestions);
 
       ApplicationModel::replaceQuestionsField($applicationId, $newQuestions);
+      return new Application(ApplicationModel::getById($applicationId));
     }
 
-    public static function submitSaved(MongoId $applicationId) {
+    public static function submit(MongoId $applicationId) {
       // Mark the application as submitted.
       ApplicationModel::markAsSubmitted($applicationId);
 
@@ -197,13 +193,13 @@
 
       foreach ($questions as $question) {
         $questionId = $question['_id'];
-        $newAnswer = $question['ans'];
+        $newAnswer = $question['answer'];
 
         if (isset($answersHash[$questionId])) {
           $index = $answersHash[$questionId];
-          $answers[$index]['ans'] = $newAnswer;
+          $answers[$index]['answer'] = $newAnswer;
         } else {
-          $answers[] = ['_id' => $questionId, 'ans' => $newAnswer];
+          $answers[] = ['_id' => $questionId, 'answer' => $newAnswer];
         }
       }
 
@@ -234,7 +230,7 @@
           $id = new MongoId($question['_id']);
           $this->data['questions'][(string) $id] = [
             '_id' => $id,
-            'ans' => $question['ans']
+            'answer' => $question['answer']
           ];
         }
       }
