@@ -1,17 +1,25 @@
 <?php
   require_once($GLOBALS['dirpre'].'controllers/Controller.php');
+  require_once($GLOBALS['dirpre'].'controllers/modules/application/StudentProfile.php');
 
   class StudentController extends Controller {
     public static function editStudentProfile() {
       global $params;
 
+      $studentId = $_SESSION['_id'];
+
       if (isset($params['profile'])) {
         // Save the profile.
-        var_dump($params['profile']);
+        extract($params);
+
+        StudentProfile::createOrUpdate($studentId, $profile);
         return;
       }
 
-      self::render('jobs/student/editprofile', []);
+      $profile = StudentProfile::getProfile($studentId);
+      $profile = $profile === null ? '{}' : json_encode($profile);
+
+      self::render('jobs/student/editprofile', ['profile' => $profile]);
     }
 
     function data($data) {

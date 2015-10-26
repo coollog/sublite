@@ -44,4 +44,8 @@
     e.which = 13;
     $(selector).trigger(e);
   }
+
+  function isArray(arr) {
+    return Object.prototype.toString.call(arr) === '[object Array]';
+  }
 </script>

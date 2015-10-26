@@ -2,6 +2,10 @@
   require_once($GLOBALS['dirpre'].'controllers/modules/Schema.php');
 
   interface StudentProfileInterface {
+    public static function createOrUpdate(MongoId $studentId,
+                                          array $profileData);
+    public static function getProfile(MongoId $studentId);
+
     public function __construct(MongoId $studentId, array $data);
     public function getData();
     public function getStudentId();
@@ -11,8 +15,13 @@
   class StudentProfile extends Schema implements StudentProfileInterface{
     public static function createOrUpdate(MongoId $studentId,
                                           array $profileData) {
-      $profile = new StudentProfile($profileData);
+      $profile = new StudentProfile($studentId, $profileData);
       StudentModel::setProfile($studentId, $profile->getData());
+    }
+    public static function getProfile(MongoId $studentId) {
+      $profile = StudentModel::getProfile($studentId);
+      if ($profile === null) return null;
+      return new StudentProfile($studentId, $profile);
     }
 
     //**********************
@@ -26,6 +35,7 @@
           'resume' => 'nullString',
           'bio' => 'emptyString',
           'interests' => 'arrayOfStrings',
+          'skills' => 'arrayOfStrings',
           'phone' => 'nullString',
           'website' => 'nullString',
           'preferredname' => 'nullString',
@@ -37,10 +47,12 @@
                 'school' => 'string',
                 'class' => 'string',
                 'degree' => 'string',
+                // 'dates.start' => 'date',
+                // 'dates.end' => 'nullDate'
                 'dates' => [
-                  '$required' => ['start' => 'date'],
-                  '$optional' => ['end' => 'nullDate']
-                ],
+                  '$required' => ['start' => 'string'],
+                  '$optional' => ['end' => 'nullString']
+                ]
               ],
               '$optional' => [
                 'majors' => 'arrayOfStrings',
@@ -55,10 +67,12 @@
               '$required' => [
                 'title' => 'string',
                 'company' => 'string',
+                // 'dates.start' => 'date',
+                // 'dates.end' => 'nullDate'
                 'dates' => [
-                  '$required' => ['start' => 'date'],
-                  '$optional' => ['end' => 'nullDate']
-                ],
+                  '$required' => ['start' => 'string'],
+                  '$optional' => ['end' => 'nullString']
+                ]
               ],
               '$optional' => [
                 'location' => 'nullString',
@@ -71,10 +85,12 @@
               '$required' => [
                 'title' => 'string',
                 'organization' => 'string',
+                // 'dates.start' => 'date',
+                // 'dates.end' => 'nullDate'
                 'dates' => [
-                  '$required' => ['start' => 'date'],
-                  '$optional' => ['end' => 'nullDate']
-                ],
+                  '$required' => ['start' => 'string'],
+                  '$optional' => ['end' => 'nullString']
+                ]
               ],
               '$optional' => [
                 'location' => 'nullString',
@@ -103,12 +119,11 @@
               '$optional' => [
                 'summary' => 'emptyString',
                 'link' => 'nullString',
-                'date' => 'nullDate',
+                // 'dates.start' => 'date',
+                // 'dates.end' => 'nullDate'
                 'dates' => [
-                  '$optional' => [
-                    'start' => 'date',
-                    'end' => 'nullDate'
-                  ]
+                  '$required' => ['start' => 'string'],
+                  '$optional' => ['end' => 'nullString']
                 ]
               ]
             ]

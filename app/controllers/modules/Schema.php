@@ -135,7 +135,7 @@
 
     private static function schemaProcessType($val, $type) {
       switch ($type) {
-        case 'nullString': case 'string':
+        case 'nullString': case 'emptyString': case 'string':
           return (string)$val;
         case 'nullDate': case 'date':
           return new MongoDate($val);

@@ -150,17 +150,17 @@
 
   <educationitemtemplate class="hide">
     <item>
-      <h1><field name="school" required class="invalid">{school}</field></h1>
-      <h2>Class of <field name="class" required class="invalid">{class}</field></h2>
-      <field name="degree" required class="invalid">{degree}</field>
+      <h1><field name="school" required {invalid}>{school}</field></h1>
+      <h2>Class of <field name="class" required {invalid}>{class}</field></h2>
+      <field name="degree" required {invalid}>{degree}</field>
       in
       <dynamic name="majors"></dynamic>
       <br />
       <fieldline>
         <strong>Dates Attended: </strong>
-        <field name="dates.start" required class="invalid">{dates.start}</field>
+        <field name="dates.start" required {invalid}>{dates.start}</field>
         to
-        <field name="dates.end" required class="invalid">{dates.end}</field>
+        <field name="dates.end" required {invalid}>{dates.end}</field>
       </fieldline>
       <fieldline>
         <strong>Majors: </strong>
@@ -174,7 +174,7 @@
       </fieldline>
       <fieldline>
         <strong>GPA: </strong>
-        <field name="gpa" required class="invalid">{gpa}</field>
+        <field name="gpa" required {invalid}>{gpa}</field>
       </fieldline>
       <fieldline>
         <strong>Courses: </strong>
@@ -186,60 +186,60 @@
   </educationitemtemplate>
   <experienceitemtemplate class="hide">
     <item>
-      <h1><field name="title" required class="invalid">{title}</field></h1>
-      <h2><field name="company" required class="invalid">{company}</field></h2>
+      <h1><field name="title" required {invalid}>{title}</field></h1>
+      <h2><field name="company" required {invalid}>{company}</field></h2>
       <fade>
-        <field name="dates.start" required class="invalid">{dates.start}</field>
+        <field name="dates.start" required {invalid}>{dates.start}</field>
         to
-        <field name="dates.end" required class="invalid">{dates.end}</field>
+        <field name="dates.end" required {invalid}>{dates.end}</field>
         |
-        <field name="location" required class="invalid">{location}</field>
+        <field name="location" required {invalid}>{location}</field>
       </fade>
       <br /><br />
-      <field name="summary" type="textarea" required class="invalid">{summary}</field>
+      <field name="summary" type="textarea" required {invalid}>{summary}</field>
       <delete></delete>
     </item>
   </experienceitemtemplate>
   <extracurricularsitemtemplate class="hide">
     <item>
-      <h1><field name="title" required class="invalid">{title}</field></h1>
-      <h2><field name="organiation" required class="invalid">{organiation}</field></h2>
+      <h1><field name="title" required {invalid}>{title}</field></h1>
+      <h2><field name="organiation" required {invalid}>{organiation}</field></h2>
       <fade>
-        <field name="dates.start" required class="invalid">{dates.start}</field>
+        <field name="dates.start" required {invalid}>{dates.start}</field>
         to
-        <field name="dates.end" required class="invalid">{dates.end}</field>
+        <field name="dates.end" required {invalid}>{dates.end}</field>
         |
-        <field name="location" required class="invalid">{location}</field>
+        <field name="location" required {invalid}>{location}</field>
       </fade>
       <br /><br />
-      <field name="summary" type="textarea" required class="invalid">{summary}</field>
+      <field name="summary" type="textarea" required {invalid}>{summary}</field>
       <delete></delete>
     </item>
   </extracurricularsitemtemplate>
   <awardsitemtemplate class="hide">
     <item>
-      <h1><field name="name" required class="invalid">{name}</field></h1>
+      <h1><field name="name" required {invalid}>{name}</field></h1>
       <fieldline>
         <strong>Awarded by: </strong>
-        <field name="by" required class="invalid">{by}</field>
+        <field name="by" required {invalid}>{by}</field>
       </fieldline>
       <fade>
-        <field name="date" required class="invalid">{date}</field>
+        <field name="date" required {invalid}>{date}</field>
         |
-        <field name="location" required class="invalid">{location}</field>
+        <field name="location" required {invalid}>{location}</field>
       </fade>
       <br /><br />
-      <field name="summary" type="textarea" required class="invalid">{summary}</field>
+      <field name="summary" type="textarea" required {invalid}>{summary}</field>
       <delete></delete>
     </item>
   </awardsitemtemplate>
   <projectsitemtemplate class="hide">
     <item>
-      <h1><field name="name" required class="invalid">{name}</field></h1>
+      <h1><field name="name" required {invalid}>{name}</field></h1>
       <fade>
-        <field name="dates.start" required class="invalid">{dates.start}</field>
+        <field name="dates.start" required {invalid}>{dates.start}</field>
         to
-        <field name="dates.end" required class="invalid">{dates.end}</field>
+        <field name="dates.end" required {invalid}>{dates.end}</field>
       </fade>
       <br /><br />
       <fieldline>
@@ -247,30 +247,76 @@
         <fields name="links"></fields>
         <addfield name="links"></addfield>
       </fieldline>
-      <field name="summary" type="textarea" required class="invalid">{summary}</field>
+      <field name="summary" type="textarea" required {invalid}>{summary}</field>
       <delete></delete>
     </item>
   </projectsitemtemplate>
 </templates>
 
 <script>
-  var Template = (function() {
-    function makeField(name, val, isRequired) {
+  var Template = {
+    makeField: function (fieldName, val, isRequired) {
       if (isRequired) {
         var required = 'required';
       } else {
         var required = '';
       }
       var data = {
-        name: name,
+        name: fieldName,
         val: val,
         required: required
       };
       var fieldHTML = useTemplate('fieldtemplate', data);
+
+      return fieldHTML;
+    },
+    makeItem: function (sectionName, data, isInvalid) {
+      if (isInvalid) {
+        data.invalid = 'class="invalid"';
+      } else {
+        data.invalid = '';
+      }
+
+      var templateName = sectionName + 'itemtemplate';
+      var itemHTML = useTemplate(templateName, data);
+
+      // Now add field sets.
+      $('body').append(
+        '<div id="_makeItemTemp" style="display:none;">'+itemHTML+'</div>'
+      );
+
+      for (var fieldName in data) {
+        var field = data[fieldName];
+        if (isArray(field)) {
+          field.forEach(function(val) {
+            var fieldHTML = Template.makeField(fieldName, val);
+            $('#_makeItemTemp fields[name='+fieldName+']').append(fieldHTML);
+          });
+        }
+      }
+
+      itemHTML = $('#_makeItemTemp').html();
+      $('#_makeItemTemp').remove();
+
+      return itemHTML;
     }
-  })();
+  };
 
   $(function() {
+    // var profile = {
+    //   interests: ['Tech', 'Finance', 'Consulting'],
+    //   education: [{
+    //     school: 'Yale University',
+    //     class: '2017',
+    //     degree: 'B.S.',
+    //     'dates.start': 'August 2013',
+    //     'dates.end': 'May 2017',
+    //     majors: ['Computer Science', 'Mathematics'],
+    //     minors: ['blah'],
+    //     gpa: 2.5,
+    //     courses: ['Horseriding', 'Neighing', 'Stomping']
+    //   }]
+    // };
     var profile = JSON.parse('<?php View::echof('profile'); ?>');
     setupProfile(profile);
 
@@ -324,10 +370,10 @@
   function addItem() {
     var parent = $(this).parent('section');
     var sectionName = parent.attr('name');
-    var templateName = sectionName + 'itemtemplate';
 
     var data = templateDefaults[sectionName];
-    var itemHTML = useTemplate(templateName, data);
+    var itemHTML = Template.makeItem(sectionName, data, true);
+
     parent.children('items').append(itemHTML);
 
     setupFields();
@@ -367,6 +413,7 @@
         var required = $(self).prop('required');
         var parentId = $(self).attr('parent');
         var parent = $('#' + parentId);
+        var fields = parent.parent('fields');
 
         if (val == '') {
           if (!required) {
@@ -377,8 +424,10 @@
           parent.removeClass('invalid');
           $('#savefail').hide();
         }
+
+        fields.trigger('changed');
+
         parent.show();
-        parent.parent('fields').trigger('changed');
 
         $(self).remove();
       }
@@ -510,7 +559,15 @@
             if (!underFields) {
               var name = $(this).attr('name');
               var val = $(this).html();
-              itemData[name] = val;
+              var splitName = name.split('.');
+              if (splitName.length == 2) {
+                if (!(splitName[0] in itemData)) {
+                  itemData[splitName[0]] = {};
+                }
+                itemData[splitName[0]][splitName[1]] = val;
+              } else {
+                itemData[name] = val;
+              }
             }
           });
 
@@ -556,6 +613,53 @@
       saveProfile(profile);
     });
   }
+
+  function setupProfile(profile) {
+    function addFields(sectionName, fieldName, list) {
+      if (!list) return;
+
+      var selector = 'section[name='+sectionName+'] fields[name='+fieldName+']';
+
+      list.forEach(function (val) {
+        var fieldHTML = Template.makeField(fieldName, val);
+        $(selector).append(fieldHTML);
+      });
+    }
+    function addItems(sectionName, items) {
+      if (!items) return;
+
+      var selector = 'section[name='+sectionName+'] items';
+      var itemsHTML = '';
+
+      items.forEach(function (item) {
+        itemsHTML += Template.makeItem(sectionName, item);
+      });
+
+      $(selector).append(itemsHTML);
+    }
+
+    var name = profile.name;
+    var bio = profile.bio;
+    var interests = profile.interests;
+    var skills = profile.skills;
+
+    $('section[name=student] heading').html(name);
+    $('#input-bio').html(name);
+    addFields('basicinfo', 'interests', interests);
+    addFields('basicinfo', 'skills', skills);
+
+    var sections = [
+      'education',
+      'experience',
+      'extracurriculars',
+      'awards',
+      'projects'
+    ];
+    sections.forEach(function (sectionName) {
+      var section = profile[sectionName];
+      addItems(sectionName, section);
+    });
+  }
 </script>
 
 <panel class="profile">
@@ -574,11 +678,7 @@
 
         <fieldline>
           <strong>Interests: </strong>
-          <fields name="interests">
-            <field name="interests">Tech</field>
-            <field name="interests">Finance</field>
-            <field name="interests">Consulting</field>
-          </fields>
+          <fields name="interests"></fields>
           <addfield name="interests"></addfield>
         </fieldline>
 
@@ -597,47 +697,7 @@
       <section name="education">
         <heading>Education</heading>
         <hr />
-        <items>
-          <item>
-            <h1><field name="school">Columbia University</field></h1>
-            <h2>Class of <field name="school">2017</field></h2>
-            <field name="degree">B.S.</field> in <dynamic name="majors"></dynamic>
-            <br />
-            <fieldline>
-              <strong>Dates Attended: </strong>
-                <field name="dates.start">August 2013</field>
-                to
-                <field name="dates.end">Present</field>
-            </fieldline>
-            <fieldline>
-              <strong>Majors: </strong>
-                <fields name="majors">
-                  <field name="majors">Computer Science</field>
-                  <field name="majors">Mathematics</field>
-                </fields>
-                <addfield name="majors"></addfield>
-            </fieldline>
-            <fieldline>
-              <strong>Minors: </strong>
-                <fields name="minors">
-                  <field name="minors">Blah</field>
-                </fields>
-                <addfield name="minors"></addfield>
-            </fieldline>
-            <fieldline>
-              <strong>GPA: </strong>
-              <field name="gpa" required>4.92</field>
-            </fieldline>
-            <fieldline>
-              <strong>Courses: </strong>
-                <fields name="courses">
-                  <field name="courses">Databases</field>
-                  <field name="courses">Internet Security</field>
-                </fields>
-                <addfield name="courses"></addfield>
-            </fieldline>
-          </item>
-        </items>
+        <items></items>
         <input class="additem" type="button" value="Add Education" />
       </section>
 
