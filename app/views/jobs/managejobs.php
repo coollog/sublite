@@ -94,7 +94,7 @@
       }
     ?>
     <div style="font-size: 16px;">
-      You have a total of <b><?php echo $totalViewCount; ?>"</b> views on your
+      You have a total of <b><?php echo $totalViewCount; ?></b> views on your
       listings and <b><?php echo $totalApplyCount; ?></b> clicks on the
       "Apply Now" button.
     </div>
