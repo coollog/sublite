@@ -35,12 +35,12 @@
 
   #fail {
     color: red;
-    display: none;
+    display: inline-block;
   }
 
   #success {
     color: green;
-    display: none;
+    display: inline-block;
   }
 </style>
 
@@ -51,25 +51,34 @@
       return $.trim($(this).val()) === "";
     });
     if (blankFields.length) {
-      $('#fail').css("display", "inline-block");
-      $('#success').css("display", "none");
+      $('#fail').show();
+      $('#success').hide();
       return false;
     }
     return true;
   }
   $(function() {
     $('.save').click(function () {
-      $('#fail').css("display", "none");
-      $('#success').css("display", "inline-block");
       var questions = [];
+
       $('textarea').each(function() {
-        var question = {_id : $(this).attr('id'), answer : $(this).val()}
+        var question = {_id : $(this).attr('_id'), answer : $(this).val()}
         questions.push(question);
       });
       $.post('', {questions: questions}, function (data) {
+        $('#fail').hide();
+        $('#success').show();
          console.log('saved!');
+         // console.log(data);
       });
     });
+
+    $('input, textarea').keypress(function () {
+      $('#success').hide();
+      $('#hide').hide();
+    });
+
+    $('#success, #fail').hide();
   });
 </script>
 
@@ -83,14 +92,14 @@
         <br />
         <?php
           foreach(View::get('questions') as $question) {
-            $id = $question['id'];
+            $_id = $question['_id'];
             $text = $question['text'];
-            $response = $question['response'];
+            $answer = $question['answer'];
             echo $text . '<br />';
             if (View::get('submitted')) {
-              echo $response . '<br />';
+              echo $answer . '<br />';
             } else {
-              echo "<textarea id=\"$id\" name=\"$id\" required>$response</textarea>";
+              echo "<textarea _id=\"$_id\" name=\"$_id\" required>$answer</textarea>";
             }
           }
         ?>

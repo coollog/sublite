@@ -137,11 +137,11 @@
 
       // Submitting of application.
       if ($params) {
-        $questions = array();
-        foreach ($params as $id => $answer) {
-          $questions[] = ['_id' => $id, 'answer' => $answer];
+        $answers = array();
+        foreach ($params as $_id => $answer) {
+          $answers[] = ['_id' => $_id, 'answer' => $answer];
         }
-        ApplicationStudent::submitNew($jobId, $studentId, $questions);
+        $application = ApplicationStudent::submitNew($jobId, $studentId, $answers);
         $submitted = true;
       }
 
@@ -152,30 +152,42 @@
       $questions = array();
 
       if ($submitted) {
-
+        foreach ($application->getQuestions() as $answer) {
+          $_id = $answer['_id'];
+          $questions[] = [
+            '_id' => $_id,
+            'text' => Question::getTextById($_id),
+            'answer' => $answer['answer']
+          ];
+        }
       } else if (ApplicationModel::applicationExists($jobId, $studentId)) {
         $application = new ApplicationStudent(
           ApplicationModel::getApplication($jobId, $studentId));
         $submitted = ApplicationModel::checkApplicationSubmitted($application->getId());
+
         foreach ($application->getQuestions() as $question) {
-          $questions[] = ['id' => $question['_id'],
-                          'text' => Question::getById(new MongoId($question['_id']))->getText(),
-                          'response' => $question['answer']];
+          $_id = $question['_id'];
+          $questions[] = [
+            '_id' => $_id,
+            'text' => Question::getTextById($_id),
+            'answer' => $question['answer']
+          ];
         }
       } else {
         foreach ($entry['application']['questions'] as $questionId) {
-          // $questionId =
-          $response = '';
+          $answer = '';
           $answers = StudentModel::getAnswers($studentId);
           $answers = arrayToHashByKey($answers, '_id');
           if (isset($answers[$questionId.''])) {
-            $response = $answers[$questionId.'']['answer'];
+            $answer = $answers[$questionId.'']['answer'];
           } else {
-            $response = '';
+            $answer = '';
           }
-          $questions[] = ['id' => $questionId,
-                          'text' => Question::getById($questionId)->getText(),
-                          'response' => $response];
+          $questions[] = [
+            '_id' => $questionId,
+            'text' => Question::getTextById($questionId),
+            'answer' => $answer
+          ];
         }
       }
 

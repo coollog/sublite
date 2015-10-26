@@ -202,8 +202,8 @@
         $questionId = $question['_id'];
         $newAnswer = $question['answer'];
 
-        if (isset($answersHash[$questionId])) {
-          $index = $answersHash[$questionId];
+        if (isset($answersHash[$questionId.''])) {
+          $index = $answersHash[$questionId.''];
           $answers[$index]['answer'] = $newAnswer;
         } else {
           $answers[] = ['_id' => $questionId, 'answer' => $newAnswer];
@@ -237,12 +237,12 @@
           $id = new MongoId($question['_id']);
           $this->data['questions'][(string) $id] = [
             '_id' => $id,
-            'answer' => $question['answer']
+            'answer' => clean($question['answer'])
           ];
         }
+      } else {
+        $this->data['questions'] = [];
       }
-      $this->data['questions'] =
-        isset($data['questions']) ? clean($data['questions']) : [];
       $this->data['studentid'] = new MongoId($data['studentid']);
       $this->data['submitted'] = boolval($data['submitted']);
       $this->data['status'] =

@@ -28,6 +28,7 @@
     public static function edit(MongoId $questionId, $text);
 
     public static function getById(MongoId $id);
+    public static function getTextById(MongoId $id);
     public static function delete(MongoId $id);
 
     /**
@@ -137,6 +138,12 @@
       $question = QuestionModel::getById($id);
 
       return is_null($question) ? null : self::parseRawData($question);
+    }
+
+    public static function getTextById(MongoId $id) {
+      $question = self::getById($id);
+      if (is_null($question)) return null;
+      return $question->getText();
     }
 
     public static function delete(MongoId $id) {
