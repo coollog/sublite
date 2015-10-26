@@ -24,4 +24,24 @@
     }
     return html;
   }
+
+  /**
+   * Calls function 'onEnter' when Enter is pressed on $(selector).
+   */
+  function callOnEnter(selector, onEnter) {
+    $(selector).off('keypress').keypress(function (e) {
+      if (e.which == 13) {
+        onEnter(this);
+      }
+    });
+  }
+
+  /**
+   * Simulates Enter keypress on $(selector).
+   */
+  function triggerEnter(selector) {
+    var e = jQuery.Event('keypress');
+    e.which = 13;
+    $(selector).trigger(e);
+  }
 </script>

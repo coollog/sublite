@@ -48,7 +48,7 @@
       $viewVars['Error'] = isset($error) ? $error : '';
       $viewVars['Success'] = isset($success) ? $success : '';
 
-      require_once($GLOBALS['dirpre'].'views/view.php');
+      require_once($GLOBALS['dirpre'].'views/View.php');
       self::requireUsingRoutePath("views/$view.php");
     }
     function finish() {
@@ -62,7 +62,7 @@
         if ($vars === false) $vars = array();
         $viewVars = array_merge($viewVars, $vars);
       }
-      require_once($GLOBALS['dirpre'].'views/view.php');
+      require_once($GLOBALS['dirpre'].'views/View.php');
       self::requireUsingRoutePath('includes/htmlheader.php');
 
       foreach (self::$renderQueue as $pair) {

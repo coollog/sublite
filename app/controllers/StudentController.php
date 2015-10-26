@@ -5,6 +5,11 @@
     public static function editStudentProfile() {
       global $params;
 
+      if (isset($params['profile'])) {
+        // Save the profile.
+        var_dump($params['profile']);
+        return;
+      }
 
       self::render('jobs/student/editprofile', []);
     }

@@ -92,6 +92,16 @@
     text-align: left;
     display: block;
   }
+  fade {
+    opacity: 0.5;
+    transition: 0.1s all ease-in-out;
+  }
+  fade:hover {
+    opacity: 1;
+  }
+  .hide {
+    display: none;
+  }
 
   /* MISC CLASSES */
   .capitalize {

@@ -1,7 +1,6 @@
 <style>
   panel.profile {
     background: #fafafa;
-
   }
   .content {
     background: white;
@@ -12,7 +11,30 @@
   }
 
   textarea.flexinput {
+    resize: none;
+    overflow: hidden;
+  }
+  .flexinputhidden {
+    display: none;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word; /* future version of deprecated 'word-wrap' */
+  }
+  /**
+   * The styles for 'flexinputcommmon' are applied to both the textarea and the
+   * hidden clone.
+   * These must be the same for both.
+   */
+  .flexinputcommon {
     height: auto;
+  }
+  .flexinputbr {
+    line-height: 3px;
+  }
+
+  section input.smallinput {
+    width: 200px;
+    margin: -0.75em 0 -0.5em 0;
   }
 
   section {
@@ -28,6 +50,26 @@
   }
   section item {
     display: block;
+    margin: 2em 0em;
+    position: relative;
+  }
+  section item delete {
+    position: absolute;
+    background:
+      url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/applications/x.png')
+      no-repeat center center;
+    background-size: contain;
+    width: 2em;
+    height: 2em;
+    display: block;
+    opacity: 0.2;
+    cursor: pointer;
+    transition: 0.1s all ease-in-out;
+    right: 0;
+    top: 0;
+  }
+  section item delete:hover {
+    opacity: 1;
   }
   section item h1 {
     font-size: 1.5em;
@@ -45,13 +87,41 @@
     margin: 0.5em 0;
     display: block;
   }
-  section field {
+  section field, addfield {
     cursor: pointer;
     transition: 0.1s all ease-in-out;
+  }
+  section field.invalid {
+    border-bottom: 2px ridge red;
   }
   section field:hover {
     background: #daebf2;
     padding: 0.5em;
+    border: 0;
+  }
+  section fields field:before {
+    content: ', ';
+  }
+  section fields field:first-child:before {
+    content: none;
+  }
+  section addfield {
+    opacity: 0.3;
+    width: 1.5em;
+    height: 1.5em;
+    margin-bottom: -0.5em;
+    margin-left: 0.5em;
+    background:
+      url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/applications/plus_black.png')
+      no-repeat center center;
+    background-size: contain;
+    display: inline-block;
+    border: dotted 1px #000;
+    width: 4em;
+  }
+  section addfield:hover {
+    opacity: 1;
+    background-color: #daebf2;
   }
 
   input.additem {
@@ -60,82 +130,547 @@
     margin-top: 1em;
     text-transform: none;
   }
+
+  #savefail {
+    display: none;
+  }
 </style>
 
+<templates>
+  <fieldinputtemplate class="hide">
+    <input type="text" class="smallinput" value="{value}" parent="{parent}" {required} />
+  </fieldinputtemplate>
+  <fieldtextareatemplate class="hide">
+    <textarea class="smallinput" parent="{parent}" {required}>{value}</textarea>
+  </fieldtextareatemplate>
+
+  <fieldtemplate class="hide">
+    <field name="{name}" {required}>{val}</field>
+  </fieldtemplate>
+
+  <educationitemtemplate class="hide">
+    <item>
+      <h1><field name="school" required class="invalid">{school}</field></h1>
+      <h2>Class of <field name="class" required class="invalid">{class}</field></h2>
+      <field name="degree" required class="invalid">{degree}</field>
+      in
+      <dynamic name="majors"></dynamic>
+      <br />
+      <fieldline>
+        <strong>Dates Attended: </strong>
+        <field name="dates.start" required class="invalid">{dates.start}</field>
+        to
+        <field name="dates.end" required class="invalid">{dates.end}</field>
+      </fieldline>
+      <fieldline>
+        <strong>Majors: </strong>
+        <fields name="majors"></fields>
+        <addfield name="majors"></addfield>
+      </fieldline>
+      <fieldline>
+        <strong>Minors: </strong>
+        <fields name="minors"></fields>
+        <addfield name="minors"></addfield>
+      </fieldline>
+      <fieldline>
+        <strong>GPA: </strong>
+        <field name="gpa" required class="invalid">{gpa}</field>
+      </fieldline>
+      <fieldline>
+        <strong>Courses: </strong>
+          <fields name="courses"></fields>
+          <addfield name="courses"></addfield>
+      </fieldline>
+      <delete></delete>
+    </item>
+  </educationitemtemplate>
+  <experienceitemtemplate class="hide">
+    <item>
+      <h1><field name="title" required class="invalid">{title}</field></h1>
+      <h2><field name="company" required class="invalid">{company}</field></h2>
+      <fade>
+        <field name="dates.start" required class="invalid">{dates.start}</field>
+        to
+        <field name="dates.end" required class="invalid">{dates.end}</field>
+        |
+        <field name="location" required class="invalid">{location}</field>
+      </fade>
+      <br /><br />
+      <field name="summary" type="textarea" required class="invalid">{summary}</field>
+      <delete></delete>
+    </item>
+  </experienceitemtemplate>
+  <extracurricularsitemtemplate class="hide">
+    <item>
+      <h1><field name="title" required class="invalid">{title}</field></h1>
+      <h2><field name="organiation" required class="invalid">{organiation}</field></h2>
+      <fade>
+        <field name="dates.start" required class="invalid">{dates.start}</field>
+        to
+        <field name="dates.end" required class="invalid">{dates.end}</field>
+        |
+        <field name="location" required class="invalid">{location}</field>
+      </fade>
+      <br /><br />
+      <field name="summary" type="textarea" required class="invalid">{summary}</field>
+      <delete></delete>
+    </item>
+  </extracurricularsitemtemplate>
+  <awardsitemtemplate class="hide">
+    <item>
+      <h1><field name="name" required class="invalid">{name}</field></h1>
+      <fieldline>
+        <strong>Awarded by: </strong>
+        <field name="by" required class="invalid">{by}</field>
+      </fieldline>
+      <fade>
+        <field name="date" required class="invalid">{date}</field>
+        |
+        <field name="location" required class="invalid">{location}</field>
+      </fade>
+      <br /><br />
+      <field name="summary" type="textarea" required class="invalid">{summary}</field>
+      <delete></delete>
+    </item>
+  </awardsitemtemplate>
+  <projectsitemtemplate class="hide">
+    <item>
+      <h1><field name="name" required class="invalid">{name}</field></h1>
+      <fade>
+        <field name="dates.start" required class="invalid">{dates.start}</field>
+        to
+        <field name="dates.end" required class="invalid">{dates.end}</field>
+      </fade>
+      <br /><br />
+      <fieldline>
+        <strong>Links: </strong>
+        <fields name="links"></fields>
+        <addfield name="links"></addfield>
+      </fieldline>
+      <field name="summary" type="textarea" required class="invalid">{summary}</field>
+      <delete></delete>
+    </item>
+  </projectsitemtemplate>
+</templates>
+
 <script>
-  function flexInputResize(me) {
-    $(me).height($(me)[0].scrollHeight);
-    console.log($(me)[0].scrollHeight)
-  }
+  var Template = (function() {
+    function makeField(name, val, isRequired) {
+      if (isRequired) {
+        var required = 'required';
+      } else {
+        var required = '';
+      }
+      var data = {
+        name: name,
+        val: val,
+        required: required
+      };
+      var fieldHTML = useTemplate('fieldtemplate', data);
+    }
+  })();
 
   $(function() {
-    // Set up flexinputs.
-    $('textarea.flexinput')
-      .attr('rows', 1)
-      .keydown(function() {
-        flexInputResize(this);
+    var profile = JSON.parse('<?php View::echof('profile'); ?>');
+    setupProfile(profile);
+
+    setupFlexInput();
+    setupAddItem();
+    setupFields();
+    setupFinish();
+  });
+
+  var templateDefaults = {
+    education: {
+      school: '[School Name]',
+      class: '[Year (eg. 2017)]',
+      degree: '[Degree (eg. BS)]',
+      'dates.start': '[Start (eg. August 2015)]',
+      'dates.end': '[End (eg. May 2019)]',
+      gpa: '[GPA (eg. 3.68)]'
+    },
+    experience: {
+      title: '[Title (eg. Intern)]',
+      company: '[Company Name]',
+      'dates.start': '[Start Date (eg. August 2015)]',
+      'dates.end': '[End Date (eg. May 2019)]',
+      location: '[Location (eg. New York City)]',
+      summary: '[Summary/Description]'
+    },
+    extracurriculars: {
+      title: '[Title (eg. President)]',
+      extracurriculars: '[Organization Name]',
+      'dates.start': '[Start Date (eg. August 2015)]',
+      'dates.end': '[End Date (eg. May 2019)]',
+      location: '[Location (eg. New Haven)]',
+      summary: '[Summary/Description]'
+    },
+    awards: {
+      name: '[Award Name]',
+      by: '[Organization/Competition]',
+      date: '[Date (eg. May 2015)]',
+      location: '[Location (eg. Boston)]',
+      summary: '[Summary/Description]'
+    },
+    projects: {
+      name: '[Project Name]',
+      by: '[Organization/Competition]',
+      'dates.start': '[Start Date (eg. August 2015)]',
+      'dates.end': '[End Date (eg. October 2015)]',
+      location: '[Location (eg. San Francisco)]',
+      summary: '[Summary/Description]'
+    }
+  };
+  function addItem() {
+    var parent = $(this).parent('section');
+    var sectionName = parent.attr('name');
+    var templateName = sectionName + 'itemtemplate';
+
+    var data = templateDefaults[sectionName];
+    var itemHTML = useTemplate(templateName, data);
+    parent.children('items').append(itemHTML);
+
+    setupFields();
+    setupDeleteItem();
+  }
+
+  function setupFlexInput() {
+    var txt = $('textarea.flexinput');
+    var hiddenDiv = $(document.createElement('div'));
+    var content = null;
+    var br = '<br class="flexinputbr">';
+
+    txt.attr('rows', 1);
+    txt.addClass('flexinputcommon');
+
+    hiddenDiv.addClass('flexinputhidden flexinputcommon');
+    $('body').append(hiddenDiv);
+
+    txt.on('keydown', function () {
+      content = $(this).val();
+
+      content = content.replace(/\n/g, '<br>');
+      hiddenDiv.html(content + br + br);
+
+      $(this).css('height', hiddenDiv.height());
+    });
+  }
+
+  function setupAddItem() {
+    $('section .additem').off('click').click(addItem);
+  }
+
+  function setupFields() {
+    function setupSmallInputs() {
+      function finish(self) {
+        var val = $(self).val();
+        var required = $(self).prop('required');
+        var parentId = $(self).attr('parent');
+        var parent = $('#' + parentId);
+
+        if (val == '') {
+          if (!required) {
+            parent.remove();
+          }
+        } else {
+          parent.html(val);
+          parent.removeClass('invalid');
+          $('#savefail').hide();
+        }
+        parent.show();
+        parent.parent('fields').trigger('changed');
+
+        $(self).remove();
+      }
+      callOnEnter('section .smallinput', finish);
+      $('section .smallinput').blur(function () {
+        finish(this);
+      });
+    }
+
+    // Setup each 'field'.
+    function setupField() {
+      $('section field')
+        .removeUniqueId().uniqueId()
+        .off('click').click(function() {
+          // Finish all other smallinputs.
+          triggerEnter('section .smallinput');
+
+          // Get my attributes.
+          var myVal = $(this).html();
+          var myId = $(this).attr('id');
+          var isRequired = typeof $(this).attr('required') !== 'undefined';
+          var isInvalid = $(this).hasClass('invalid');
+          var myType = $(this).attr('type');
+
+          // Set up data for smallinput.
+          if (isInvalid) {
+            myVal = '';
+          }
+          var data = {
+            value: myVal,
+            parent: myId,
+            required: ''
+          };
+          if (isRequired) {
+            data.required = 'required';
+          }
+
+          // Set up smallinput and hide field.
+          if (myType == 'textarea') {
+            var inputHTML = useTemplate('fieldtextareatemplate', data);
+          } else {
+            var inputHTML = useTemplate('fieldinputtemplate', data);
+          }
+          $(this).after(inputHTML).hide();
+          $('section .smallinput[parent='+myId+']').focus();
+
+          setupSmallInputs();
+        });
+    }
+
+    // Setup each 'addfield'.
+    function setupAddField() {
+      $('section addfield')
+        .off('click').click(function() {
+          var fieldName = $(this).attr('name');
+
+          var fieldHTML = Template.makeField(fieldName, '');
+
+          var fields = $(this).parent().children('fields[name='+fieldName+']');
+          fields.append(fieldHTML);
+          setupField();
+          fields.children('field').last().click();
+        });
+    }
+
+    function setupDynamic() {
+      $('section dynamic').each(function () {
+        var fieldsName = $(this).attr('name');
+        var dynamic = $(this);
+
+        $('section fields[name='+fieldsName+']')
+          .off('changed').on('changed', function () {
+            var list = [];
+            $(this).children('field').each(function () {
+              var val = $(this).html();
+              list.push(val);
+            });
+
+            dynamic.html(list.join(', '));
+          });
       });
 
-  });
+      $('section fields').trigger('changed');
+    }
+
+    setupField();
+    setupAddField();
+    setupDynamic();
+  }
+
+  function setupDeleteItem() {
+    $('section delete').off('click').click(function() {
+      $(this).parent().remove();
+      $('#savefail').hide();
+    });
+  }
+
+  function setupFinish() {
+    // Process the fields and get the JSON for the profile.
+    function getProfile() {
+      if ($('section field.invalid').size() > 0) {
+        return null;
+      }
+
+      var data = {};
+
+      // Get the basic info first.
+      var bio = $('#input-bio').val();
+      var interests = [];
+      $('section[name=basicinfo]').each(function() {
+        $(this).find('field[name=interests]').each(function() {
+          var interest = $(this).html();
+          interests.push(interest);
+        });
+      });
+      data.bio = bio;
+      data.interests = interests;
+
+      // Get each section.
+      function getSection(sectionName) {
+        var sectionData = [];
+
+        $('section[name='+sectionName+'] item').each(function() {
+          var itemData = {};
+
+          // Get all single fields.
+          $(this).find('field').each(function() {
+            var underFields = $(this).parent('fields').size() == 1;
+            if (!underFields) {
+              var name = $(this).attr('name');
+              var val = $(this).html();
+              itemData[name] = val;
+            }
+          });
+
+          // Get all field sets.
+          $(this).find('fields').each(function() {
+            var fieldsData = [];
+            var name = $(this).attr('name');
+            $(this).children('field').each(function() {
+              var val = $(this).html();
+              fieldsData.push(val);
+            });
+            itemData[name] = fieldsData;
+          });
+
+          sectionData.push(itemData);
+        });
+
+        return sectionData;
+      }
+      data.education = getSection('education');
+      data.experience = getSection('experience');
+      data.extracurriculars = getSection('extracurriculars');
+      data.awards = getSection('awards');
+      data.projects = getSection('projects');
+
+      return data;
+    }
+
+    // Save the profile.
+    function saveProfile(profile) {
+      $.post('', {profile: profile}, function (data) {
+        console.log('saved!');
+        console.log(data);
+      });
+    }
+
+    $('#save').click(function () {
+      var profile = getProfile();
+      if (profile == null) {
+        $('#savefail').show();
+        return;
+      }
+      saveProfile(profile);
+    });
+  }
 </script>
 
 <panel class="profile">
   <div class="content">
     <headline>Profile for Job Applications</headline>
     <left>
-      <student>
-        <name>Amy Santos</name>
-      </student>
+      <section name="student">
+        <heading>Amy Santos</heading>
+      </section>
 
-      <basicinfo>
-        <div>
-          <label for="input-bio" class="fortextarea">Write a short summary for yourself:</label>
-          <textarea id="input-bio" class="flexinput"></textarea>
-          <input id="done-bio" type="button" value="Done" />
-        </div>
-      </basicinfo>
+      <section name="basicinfo">
+        <heading></heading>
+
+        <label for="input-bio" class="fortextarea">Write a short summary for yourself:</label>
+        <textarea id="input-bio" class="flexinput"></textarea>
+
+        <fieldline>
+          <strong>Interests: </strong>
+          <fields name="interests">
+            <field name="interests">Tech</field>
+            <field name="interests">Finance</field>
+            <field name="interests">Consulting</field>
+          </fields>
+          <addfield name="interests"></addfield>
+        </fieldline>
+
+        <fieldline>
+          <strong>Skills: </strong>
+          <fields name="skills">
+            <field name="skills">Java</field>
+            <field name="skills">Python</field>
+            <field name="skills">Marketing</field>
+            <field name="skills">Entrepreneurship</field>
+          </fields>
+          <addfield name="skills"></addfield>
+        </fieldline>
+      </section name="basicinfo">
 
       <section name="education">
         <heading>Education</heading>
         <hr />
-        <item>
-          <h1><field name="school">Columbia University</field></h1>
-          <h2>Class of <field name="school">2017</field></h2>
-          <field name="degree"></field> in <dynamic name="majors"></dynamic>
-          <br />
-          <fieldline>
-            <strong>Dates Attended: </strong>
-              <field name="dates.start">August 2013</field>
-              to
-              <field name="dates.end">Present</field>
-          </fieldline>
-          <fieldline>
-            <strong>Majors: </strong>
-              <fields name="majors">
-                <field name="majors">Computer Science</field>
-                <field name="majors">Mathematics</field>
-              </fields>
-          </fieldline>
-          <fieldline>
-            <strong>Minors: </strong>
-              <fields name="minors">
-                <field name="minors">Blah</field>
-              </fields>
-          </fieldline>
-          <fieldline>
-            <strong>GPA: </strong>
-              <field name="gpa"></field>
-          </fieldline>
-          <fieldline>
-            <strong>Courses: </strong>
-              <fields name="languages">
-                <field name="languages">Databases</field>
-                <field name="languages">Internet Security</field>
-              </fields>
-          </fieldline>
-        </item>
+        <items>
+          <item>
+            <h1><field name="school">Columbia University</field></h1>
+            <h2>Class of <field name="school">2017</field></h2>
+            <field name="degree">B.S.</field> in <dynamic name="majors"></dynamic>
+            <br />
+            <fieldline>
+              <strong>Dates Attended: </strong>
+                <field name="dates.start">August 2013</field>
+                to
+                <field name="dates.end">Present</field>
+            </fieldline>
+            <fieldline>
+              <strong>Majors: </strong>
+                <fields name="majors">
+                  <field name="majors">Computer Science</field>
+                  <field name="majors">Mathematics</field>
+                </fields>
+                <addfield name="majors"></addfield>
+            </fieldline>
+            <fieldline>
+              <strong>Minors: </strong>
+                <fields name="minors">
+                  <field name="minors">Blah</field>
+                </fields>
+                <addfield name="minors"></addfield>
+            </fieldline>
+            <fieldline>
+              <strong>GPA: </strong>
+              <field name="gpa" required>4.92</field>
+            </fieldline>
+            <fieldline>
+              <strong>Courses: </strong>
+                <fields name="courses">
+                  <field name="courses">Databases</field>
+                  <field name="courses">Internet Security</field>
+                </fields>
+                <addfield name="courses"></addfield>
+            </fieldline>
+          </item>
+        </items>
         <input class="additem" type="button" value="Add Education" />
       </section>
+
+      <section name="experience">
+        <heading>Experience</heading>
+        <hr />
+        <items></items>
+        <input class="additem" type="button" value="Add Experience" />
+      </section>
+      <section name="extracurriculars">
+        <heading>Extracurriculars</heading>
+        <hr />
+        <items></items>
+        <input class="additem" type="button" value="Add Extracurricular" />
+      </section>
+      <section name="awards">
+        <heading>Awards</heading>
+        <hr />
+        <items></items>
+        <input class="additem" type="button" value="Add Award" />
+      </section>
+      <section name="projects">
+        <heading>Projects</heading>
+        <hr />
+        <items></items>
+        <input class="additem" type="button" value="Add Project" />
+      </section>
     </left>
+
+    <div style="margin-top: 4em; line-height: 2em;">
+      <red id="savefail">You must fix the invalid fields (underlined in red).</red>
+      <br />
+      <input id="save" type="button" value="Save" />
+    </div>
   </div>
 </panel>
