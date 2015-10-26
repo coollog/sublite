@@ -84,11 +84,15 @@
         }
       }
 
+      $job = JobModel::getByIdMinimal($jobId);
+
       self::render('jobs/applications/edit', [
         'createEdit' => $createEdit,
         'vanillaQuestions' => $vanillaQuestionsData,
         'chosen' => $chosenData,
-        'jobId' => $jobId
+        'jobId' => $jobId,
+        'jobTitle' => $job['title'],
+        'jobLocation' => $job['location']
       ]);
     }
 

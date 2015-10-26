@@ -64,7 +64,7 @@
   }
 
   #selected {
-    padding: 1em 0;
+    padding-bottom: 1em;
   }
   .chosen {
     margin-bottom: 1em;
@@ -278,7 +278,7 @@
       });
 
       $.post('', {questionIds: questionIds}, function (data) {
-        console.log('updated!');
+        window.location = '../home';
       });
     });
   });
@@ -287,9 +287,19 @@
 <panel class="form">
   <div class="content">
     <headline><?php View::echof('createEdit'); ?> Job Application</headline>
+    <subheadline>
+      <?php View::echof('jobTitle'); ?> |
+      <?php View::echof('jobLocation'); ?>
+    </subheadline>
 
     <form>
       <left>
+        <div id="selected">
+          <subheadline>Selected questions:</subheadline>
+          <i>Select questions from below to add to your application.</i>
+          <div class="chosen"></div>
+        </div>
+
         Choose questions to add to the application (recommended):<br />
         <br />
         <div class="vanillaList"></div>
@@ -314,12 +324,7 @@
           (Writing your own question may result in lower applications received.)<br />
         </writeyourown>
 
-        <div id="selected">
-          <subheadline>Selected questions:</subheadline>
-          <i>Select questions from above to add to your application.</i>
-          <div class="chosen"></div>
-        </div>
-
+        <br /><br />
         <input type="button" id="finish" value="Finish" />
       </left>
     </form>

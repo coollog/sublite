@@ -1,65 +1,97 @@
 <style>
   .jobblock {
     text-align: left;
-    padding: 20px 0;
-    border-bottom: 1px solid #eee;
+    padding: 0.5em 0;
+    border-bottom: 1px solid #ddd;
     color: #000;
-  }
-  .jobblock:hover {
-    opacity: 0.5;
+    width: 100%;
   }
   .jobblock .title {
     font-size: 1.5em;
     color: #03596a;
     line-height: 40px;
   }
-  .jobblock .info {
-    opacity: 0.5;
-    line-height: 40px;
+  .jobblock .buttons {
+    text-align: right;
   }
 </style>
+
+<templates class="hide">
+  <jobtemplate>
+    <table class="jobblock"><tr>
+      <td class="title">{title}</td>
+      <td class="buttons">
+        <a href="editjob.php?id={_id}">
+          <input type="button" value="Edit Job" />
+        </a>
+        <a href="editapplication/{_id}">
+          <input type="button" value="Edit Application" />
+        </a>
+      </td>
+    </tr></table>
+  </jobtemplate>
+  <nojobstemplate>
+    <b style="font-size: 1.5em;">
+      Congratulations! You have completed your company profile and are on
+      your way to recruiting the most talented students. Just take a moment
+      to complete your job listing(s) by clicking the button below and
+      you'll be all set!
+    </b>
+    <br /><br />
+    <a href="addjob">
+      <input type="button" value="List Job" />
+    </a>
+  </nojobstemplate>
+</templates>
+
+<jobData class="hide">
+  <?php
+    $jobs = View::get('jobs');
+    echo json_encode($jobs);
+  ?>
+</jobData>
+
+<script>
+  $(function () {
+    (function setupJobs() {
+      var jobData = JSON.parse($('jobData').html());
+      jobData.forEach(function (job) {
+        var title = job.title;
+        var _id = job._id.$id;
+
+        var data = {
+          _id: _id,
+          title: title
+        }
+        var jobHTML = useTemplate('jobtemplate', data);
+        $('jobs').append(jobHTML);
+      });
+      if (jobData.length == 0) {
+        var noJobsHTML = useTemplate('nojobstemplate', {});
+        $('jobs').html(noJobsHTML);
+      }
+    })();
+  });
+</script>
 
 <panel class="jobs">
   <div class="content">
     <headline>Manage Job Listings</headline>
     <?php
-      function jobBlock($job) {
-        $title = $job['title'];
-        $location = $job['location'];
-        $desc = strmax($job['desc'], 300);
-        $deadline = $job['deadline'];
-        if($job['locationtype'] == 'home') {
-          return "
-          <div class=\"jobblock\">
-            <div class=\"title\">$title | Work at home</div>
-            <div class=\"desc\">$desc</div>
-            <div class=\"info\">Deadline: $deadline</div>
-          </div>
-        ";
-        }
-        return "
-          <div class=\"jobblock\">
-            <div class=\"title\">$title | $location</div>
-            <div class=\"desc\">$desc</div>
-            <div class=\"info\">Deadline: $deadline</div>
-          </div>
-        ";
-      }
-      $jobs = vget('jobs');
       $totalViewCount = 0;
       $totalApplyCount = 0;
       foreach ($jobs as $job) {
         $totalViewCount += $job['stats']['views'];
         $totalApplyCount += $job['stats']['clicks'];
       }
-      echo '<div style="font-size: 16px;">You have a total of <b>' . $totalViewCount . "</b> views on your listings and <b>"
-        . $totalApplyCount . '</b> clicks on the "Apply Now" button.</div>';
-      foreach ($jobs as $job) {
-        echo vlinkto(jobBlock($job), 'editjob', array('id' => $job['_id']->{'$id'}));
-      }
-      if ($jobs->count() == 0) {
-        echo "<b style=\"font-size: 1.5em;\">Congratulations! You have completed your company profile and are on your way to recruiting the most talented students. Just take a moment to complete your job listing(s) by clicking the button below and you'll be all set!</b><br /><br />" . vlinkto('<input type="button" value="List Job" />', 'addjob');
-      }
     ?>
+    <div style="font-size: 16px;">
+      You have a total of <b><?php echo $totalViewCount; ?>"</b> views on your
+      listings and <b><?php echo $totalApplyCount; ?></b> clicks on the
+      "Apply Now" button.
+    </div>
+    <br />
+
+    <jobs></jobs>
   </div>
 </panel>

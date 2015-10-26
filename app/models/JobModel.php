@@ -22,6 +22,9 @@
      */
     public static function matchJobRecruiter(MongoId $jobId,
                                              MongoId $recruiterId);
+
+    public static function getByRecruiter(MongoId $recruiterId);
+    public static function getByIdMinimal(MongoId $jobId);
   }
 
   class JobModel extends Model {
@@ -49,6 +52,17 @@
       return !is_null($query->findOne());
     }
 
+    public static function getByRecruiter(MongoId $recruiterId,
+                                          array $projection = array()) {
+      $query = (new DBQuery(self::$collection))
+        ->toQuery('recruiter', $recruiterId);
+      return $query->run();
+    }
+
+    public static function getByIdMinimal(MongoId $jobId) {
+      return self::getById($jobId, ['title' => true, 'location' => true]);
+    }
+
     public function __construct() {
       parent::__construct(self::DB_TYPE, 'jobs');
     }
@@ -61,9 +75,6 @@
 
     function get($id) {
       return self::$collection->findOne(array('_id' => new MongoId($id)));
-    }
-    function getByRecruiter($id) {
-      return self::$collection->find(array('recruiter' => new MongoId($id)));
     }
     function getAll() {
       return self::$collection->find();

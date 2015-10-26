@@ -135,19 +135,19 @@
   }
 </style>
 
-<templates>
-  <fieldinputtemplate class="hide">
+<templates class="hide">
+  <fieldinputtemplate>
     <input type="text" class="smallinput" value="{value}" parent="{parent}" {required} />
   </fieldinputtemplate>
-  <fieldtextareatemplate class="hide">
+  <fieldtextareatemplate>
     <textarea class="smallinput" parent="{parent}" {required}>{value}</textarea>
   </fieldtextareatemplate>
 
-  <fieldtemplate class="hide">
+  <fieldtemplate>
     <field name="{name}" {required}>{val}</field>
   </fieldtemplate>
 
-  <educationitemtemplate class="hide">
+  <educationitemtemplate>
     <item>
       <h1><field name="school" required {invalid}>{school}</field></h1>
       <h2>Class of <field name="class" required {invalid}>{class}</field></h2>
@@ -183,7 +183,7 @@
       <delete></delete>
     </item>
   </educationitemtemplate>
-  <experienceitemtemplate class="hide">
+  <experienceitemtemplate>
     <item>
       <h1><field name="title" required {invalid}>{title}</field></h1>
       <h2><field name="company" required {invalid}>{company}</field></h2>
@@ -199,7 +199,7 @@
       <delete></delete>
     </item>
   </experienceitemtemplate>
-  <extracurricularsitemtemplate class="hide">
+  <extracurricularsitemtemplate>
     <item>
       <h1><field name="title" required {invalid}>{title}</field></h1>
       <h2><field name="organiation" required {invalid}>{organiation}</field></h2>
@@ -215,7 +215,7 @@
       <delete></delete>
     </item>
   </extracurricularsitemtemplate>
-  <awardsitemtemplate class="hide">
+  <awardsitemtemplate>
     <item>
       <h1><field name="name" required {invalid}>{name}</field></h1>
       <fieldline>
@@ -232,7 +232,7 @@
       <delete></delete>
     </item>
   </awardsitemtemplate>
-  <projectsitemtemplate class="hide">
+  <projectsitemtemplate>
     <item>
       <h1><field name="name" required {invalid}>{name}</field></h1>
       <fade>

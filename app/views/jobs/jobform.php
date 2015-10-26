@@ -27,7 +27,7 @@
         <input type="radio" name="salarytype" id="total" value="total" <?php vchecked('salarytype', 'total'); ?> /><label for="total"> total payment</label>
         <input type="radio" name="salarytype" id="other" value="other" <?php vchecked('salarytype', 'other'); ?> /><label for="other"> other (100 chars max)</label>
       </right>
-      <div class="form-slider"><label for="deadline">Deadline for Application (mm/dd/yyyy):</label><input type="text" id="deadline" name="deadline" value="<?php vecho('deadline'); ?>" required /></div>
+      <div class="form-slider"><label for="deadline">Deadline for Application (mm/dd/yyyy):</label><input class="datepicker" type="text" id="deadline" name="deadline" value="<?php vecho('deadline'); ?>" required /></div>
       <div class="form-slider"><label for="desc">Job Description (2500 chars max):</label><textarea id="desc" name="desc" required maxlength="2500"><?php vecho('desc'); ?></textarea></div>
       <div class="form-slider"><label for="requirements">Requirements (2000 chars max):</label><textarea id="requirements" name="requirements" required maxlength="2000"><?php vecho('requirements'); ?></textarea></div>
       Please input the link to your application form for this job. If you do not have an online application form, please input an email address for students to submit applications to:
