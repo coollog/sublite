@@ -107,7 +107,7 @@
   }
   section addfield {
     opacity: 0.3;
-    width: 1.5em;
+    width: 4em;
     height: 1.5em;
     margin-bottom: -0.5em;
     margin-left: 0.5em;
@@ -117,7 +117,6 @@
     background-size: contain;
     display: inline-block;
     border: dotted 1px #000;
-    width: 4em;
   }
   section addfield:hover {
     opacity: 1;
@@ -253,6 +252,8 @@
   </projectsitemtemplate>
 </templates>
 
+<div id="profileData" class="hide"><?php View::echof('profile'); ?></div>
+
 <script>
   var Template = {
     makeField: function (fieldName, val, isRequired) {
@@ -276,13 +277,21 @@
       } else {
         data.invalid = '';
       }
+      for (var fieldName in data) {
+        var field = data[fieldName];
+        if (isObject(field)) {
+          for (var key in field) {
+            data[fieldName+'.'+key] = field[key];
+          }
+        }
+      }
 
       var templateName = sectionName + 'itemtemplate';
       var itemHTML = useTemplate(templateName, data);
 
       // Now add field sets.
       $('body').append(
-        '<div id="_makeItemTemp" style="display:none;">'+itemHTML+'</div>'
+        '<div id="_makeItemTemp" class="hide">'+itemHTML+'</div>'
       );
 
       for (var fieldName in data) {
@@ -303,21 +312,8 @@
   };
 
   $(function() {
-    // var profile = {
-    //   interests: ['Tech', 'Finance', 'Consulting'],
-    //   education: [{
-    //     school: 'Yale University',
-    //     class: '2017',
-    //     degree: 'B.S.',
-    //     'dates.start': 'August 2013',
-    //     'dates.end': 'May 2017',
-    //     majors: ['Computer Science', 'Mathematics'],
-    //     minors: ['blah'],
-    //     gpa: 2.5,
-    //     courses: ['Horseriding', 'Neighing', 'Stomping']
-    //   }]
-    // };
-    var profile = JSON.parse('<?php View::echof('profile'); ?>');
+    var profileData = $('#profileData').html();
+    var profile = JSON.parse(profileData);
     setupProfile(profile);
 
     setupFlexInput();
@@ -532,19 +528,24 @@
         return null;
       }
 
+      function getFields(sectionName, fieldName) {
+        var list = [];
+        $('section[name='+sectionName+'] field[name='+fieldName+']').each(function() {
+          var val = $(this).html();
+          list.push(val);
+        });
+        return list;
+      }
+
       var data = {};
 
       // Get the basic info first.
       var bio = $('#input-bio').val();
-      var interests = [];
-      $('section[name=basicinfo]').each(function() {
-        $(this).find('field[name=interests]').each(function() {
-          var interest = $(this).html();
-          interests.push(interest);
-        });
-      });
+      var interests = getFields('basicinfo', 'interests');
+      var skills = getFields('basicinfo', 'skills');
       data.bio = bio;
       data.interests = interests;
+      data.skills = skills;
 
       // Get each section.
       function getSection(sectionName) {
@@ -632,6 +633,7 @@
       var itemsHTML = '';
 
       items.forEach(function (item) {
+
         itemsHTML += Template.makeItem(sectionName, item);
       });
 
@@ -644,7 +646,7 @@
     var skills = profile.skills;
 
     $('section[name=student] heading').html(name);
-    $('#input-bio').html(name);
+    $('#input-bio').val(name);
     addFields('basicinfo', 'interests', interests);
     addFields('basicinfo', 'skills', skills);
 
@@ -684,12 +686,7 @@
 
         <fieldline>
           <strong>Skills: </strong>
-          <fields name="skills">
-            <field name="skills">Java</field>
-            <field name="skills">Python</field>
-            <field name="skills">Marketing</field>
-            <field name="skills">Entrepreneurship</field>
-          </fields>
+          <fields name="skills"></fields>
           <addfield name="skills"></addfield>
         </fieldline>
       </section name="basicinfo">

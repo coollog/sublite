@@ -26,7 +26,7 @@
 
     public static function getProfile(MongoId $studentId) {
       $query = self::queryForId($studentId)->projectField('profile');
-      $studentProfile = $query->run();
+      $studentProfile = $query->findOne();
       if (!isset($studentProfile['profile'])) {
         return null;
       }

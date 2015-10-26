@@ -48,4 +48,7 @@
   function isArray(arr) {
     return Object.prototype.toString.call(arr) === '[object Array]';
   }
+  function isObject(arr) {
+    return Object.prototype.toString.call(arr) === '[object Object]';
+  }
 </script>

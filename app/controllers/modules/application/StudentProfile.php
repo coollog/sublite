@@ -19,9 +19,9 @@
       StudentModel::setProfile($studentId, $profile->getData());
     }
     public static function getProfile(MongoId $studentId) {
-      $profile = StudentModel::getProfile($studentId);
-      if ($profile === null) return null;
-      return new StudentProfile($studentId, $profile);
+      $profileData = StudentModel::getProfile($studentId);
+      if ($profileData === null) return null;
+      return new StudentProfile($studentId, $profileData);
     }
 
     //**********************

@@ -16,7 +16,7 @@
         return;
       }
 
-      $profile = StudentProfile::getProfile($studentId);
+      $profile = StudentProfile::getProfile($studentId)->getData();
       $profile = $profile === null ? '{}' : json_encode($profile);
 
       self::render('jobs/student/editprofile', ['profile' => $profile]);
