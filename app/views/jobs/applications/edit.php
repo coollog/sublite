@@ -288,8 +288,13 @@
   <div class="content">
     <headline><?php View::echof('createEdit'); ?> Job Application</headline>
     <subheadline>
-      <?php View::echof('jobTitle'); ?> |
-      <?php View::echof('jobLocation'); ?>
+      <?php
+        View::echof('jobTitle');
+        $location = View::get('jobLocation');
+        if (!empty($location)) {
+          echo " | $location";
+        }
+      ?>
     </subheadline>
 
     <form>

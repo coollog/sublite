@@ -6,10 +6,13 @@
     color: #000;
     width: 100%;
   }
-  .jobblock .title {
+  .jobblock jobtitle {
     font-size: 1.5em;
     color: #03596a;
     line-height: 40px;
+  }
+  .jobblock location {
+    opacity: 0.5;
   }
   .jobblock .buttons {
     text-align: right;
@@ -19,7 +22,10 @@
 <templates class="hide">
   <jobtemplate>
     <table class="jobblock"><tr>
-      <td class="title">{title}</td>
+      <td class="title">
+        <jobtitle>{title}</jobtitle><br />
+        <location>{location}</location>
+      </td>
       <td class="buttons">
         <a href="editjob.php?id={_id}">
           <input type="button" value="Edit Job" />
@@ -56,12 +62,14 @@
     (function setupJobs() {
       var jobData = JSON.parse($('jobData').html());
       jobData.forEach(function (job) {
-        var title = job.title;
         var _id = job._id.$id;
+        var title = job.title;
+        var location = job.location;
 
         var data = {
           _id: _id,
-          title: title
+          title: title,
+          location: location
         }
         var jobHTML = useTemplate('jobtemplate', data);
         $('jobs').append(jobHTML);

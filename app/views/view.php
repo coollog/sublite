@@ -3,8 +3,10 @@
     public static function echof($varName, $format = null, $default = '');
     public static function echoCount($varName);
     public static function get($varName);
-    public static function linkTo(
-      $html, $route, $params = null, $newTab = false);
+    public static function linkTo($html,
+                                  $route,
+                                  $params = null,
+                                  $newTab = false);
   }
 
   // Implement this and have the functions below as class methods.
@@ -18,15 +20,11 @@
     public static function echof($varName, $format = null, $default = '') {
       vecho($varName, $format, $default);
     }
-    public static function linkTo(
-      $html, $route, $params = null, $newTab = false) {
-      if ($newTab) $newTab = 'target="_blank"';
-      else $newTab = '';
-
-      if ($params == NULL) $query = '';
-      else $query = '?' . http_build_query($params);
-
-      return "<a href=\"$route$query\" $newTab>$html</a>";
+    public static function linkTo($html,
+                                  $route,
+                                  $params = null,
+                                  $newTab = false) {
+      return vlinkTo($html, $route, $params = null, $newTab = false);
     }
   }
 
@@ -99,7 +97,7 @@
     if ($params == NULL) $query = '';
     else $query = '?' . http_build_query($params);
 
-    return "<a href=\"$page.php$query\" $newtab>$in</a>";
+    return "<a href=\"$page$query\" $newtab>$in</a>";
   }
   function vpartial($page, $vars = false) {
     global $viewVars;
