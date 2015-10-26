@@ -9,6 +9,7 @@
     public function __construct(MongoId $studentId, array $data);
     public function getData();
     public function getStudentId();
+    public function getResume();
     public function getEducation($index);
   }
 
@@ -139,6 +140,10 @@
 
     public function getStudentId() {
       return $this->studentId;
+    }
+
+    public function getResume() {
+      return $this->data['resume'];
     }
 
     public function getEducation($index) {

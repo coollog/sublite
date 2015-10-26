@@ -529,29 +529,29 @@
       return isset($_SESSION['loggedinstudent']);
     }
     function requireLogin() {
-      if ($this->loggedIn()) {
+      if (self::loggedIn()) {
         global $MStudent;
         // Params to vars
         $email = $_SESSION['email'];
         $pass = $_SESSION['pass'];
 
         // Validations
-        $this->startValidations();
-        $this->validate(($entry = $MStudent->get($email)) != NULL,
+        self::startValidations();
+        self::validate(($entry = $MStudent->get($email)) != NULL,
           $err, 'unknown email');
-        $this->validate($entry['pass'] == md5($pass),
+        self::validate($entry['pass'] == md5($pass),
           $err, 'invalid password');
 
-        if (!$this->isValid()) {
-          $this->logout();
+        if (!self::isValid()) {
+          self::logout();
         }
       } else {
-        $this->logout();
+        self::logout();
       }
     }
     function logout() {
       session_unset();
-      $this->redirect('index');
+      self::redirect('index');
     }
   }
 

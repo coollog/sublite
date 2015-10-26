@@ -3,6 +3,13 @@
     public function __construct();
 
     /**
+     * For $applicationId, sets 'submitted' to true, and 'profile' to
+     * '$studentProfile'.
+     */
+    public static function submitWithStudentProfile(
+      MongoId $applicationId, StudentProfile $studentProfile);
+
+    /**
      * Sets 'submitted' for $applicationId to true.
      */
     public static function markAsSubmitted(MongoId $applicationId);
@@ -71,6 +78,15 @@
                                                     'submitted' => 1)));
       mongo_ok(self::$collection->createIndex(array('jobid' => 1,
                                                     'studentid' => 1)));
+    }
+
+    public static function submitWithStudentProfile(
+      MongoId $applicationId, StudentProfile $studentProfile) {
+      $update = (new DBUpdateQuery(self::$collection))
+        ->toQuery('_id', $applicationId)
+        ->toUpdate('submitted', true)
+        ->toUpdate('profile', $studentProfile->getData());
+      $update->run();
     }
 
     public static function markAsSubmitted(MongoId $applicationId) {

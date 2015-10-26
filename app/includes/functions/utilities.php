@@ -133,10 +133,8 @@
   function arrayToHashByKey(array $arr, $key, $valType = 'value') {
     $hash = array();
 
-    for ($i = 0; $i < count($arr); $i ++) {
-      $entry = $arr[$i];
+    foreach ($arr as $i => $entry) {
       $hashKey = (string) $entry[$key];
-
       switch ($valType) {
         case 'value': $hash[$hashKey] = $entry; break;
         case 'index': $hash[$hashKey] = $i; break;

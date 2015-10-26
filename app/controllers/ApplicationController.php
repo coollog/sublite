@@ -7,6 +7,7 @@
   interface ApplicationControllerInterface {
     public static function edit(array $restOfRoute);
     public static function apply(array $restOfRoute);
+    public static function view(array $restOfRoute);
     public static function createCustom();
     public static function deleteCustom();
     public static function searchCustom();
@@ -99,9 +100,9 @@
     }
 
     public static function apply(array $restOfRoute) {
-      global $params, $MJob, $MCompany, $CStudent;
+      global $params;
 
-      $CStudent->requireLogin();
+      StudentController::requireLogin();
 
       if (!isset($restOfRoute[0]) || !MongoId::isValid($restOfRoute[0])) {
         self::error("invalid access");
@@ -141,8 +142,18 @@
         foreach ($params as $_id => $answer) {
           $answers[] = ['_id' => $_id, 'answer' => $answer];
         }
-        $application = ApplicationStudent::submitNew($jobId, $studentId, $answers);
-        $submitted = true;
+        $application = ApplicationStudent::save($jobId, $studentId, $answers);
+        $applicationId = $application->getId();
+
+        $submitted = ApplicationStudent::submit($applicationId);
+        if ($submitted) {
+          self::redirect("../application/$applicationId");
+        }
+
+        self::error(
+          "You must attach a resume to your profile in order to submit ".
+          "an application."
+        );
       }
 
       $entry = JobModel::getById($jobId);
@@ -151,19 +162,15 @@
 
       $questions = array();
 
-      if ($submitted) {
-        foreach ($application->getQuestions() as $answer) {
-          $_id = $answer['_id'];
-          $questions[] = [
-            '_id' => $_id,
-            'text' => Question::getTextById($_id),
-            'answer' => $answer['answer']
-          ];
-        }
-      } else if (ApplicationModel::applicationExists($jobId, $studentId)) {
+      if (ApplicationModel::applicationExists($jobId, $studentId)) {
         $application = new ApplicationStudent(
           ApplicationModel::getApplication($jobId, $studentId));
+        $applicationId = $application->getId();
         $submitted = ApplicationModel::checkApplicationSubmitted($application->getId());
+
+        if ($submitted) {
+          self::redirect("../application/$applicationId");
+        }
 
         foreach ($application->getQuestions() as $question) {
           $_id = $question['_id'];
@@ -197,6 +204,64 @@
         'companytitle' => $company['name'],
         'jobId' => $jobId,
         'submitted' => $submitted
+      ]);
+    }
+
+    public static function view(array $restOfRoute) {
+      JobController::requireLogin();
+
+      if (!isset($restOfRoute[0]) || !MongoId::isValid($restOfRoute[0])) {
+        self::error("invalid access");
+        self::render('notice');
+        return;
+      }
+
+      $applicationId = new MongoId($restOfRoute[0]);
+      $application = ApplicationStudent::getById($applicationId);
+
+      // Only the student who submitted the application and the recruiter
+      // associated with the job can view the application.
+      $myId = $_SESSION['_id'];
+      $studentId = $application->getStudentId();
+      $jobId = $application->getJobId();
+      $recruiterId = JobModel::getRecruiterId($jobId);
+      if ($studentId != $myId && $recruiterId != $myId) {
+        self::error("permission denied");
+        self::render('notice');
+        return;
+      }
+
+      // Retrieve data for student.
+      $student = StudentModel::getById($studentId, ['name' => 1]);
+      $studentName = $student['name'];
+
+      // Retrieve data on the job.
+      $job = JobModel::getById($jobId);
+      $title = $job['title'];
+      $companyId = $job['company'];
+      $company = CompanyModel::getById($companyId);
+
+      // Set data from application.
+      $profile = $application->getProfile();
+      $questions = $application->getQuestions();
+
+      // Add 'text' to questions to show.
+      $responses = [];
+      foreach ($questions as $question) {
+        $_id = $question['_id'];
+        $responses[] = [
+          '_id' => $_id,
+          'text' => Question::getTextById($_id),
+          'answer' => $question['answer']
+        ];
+      }
+
+      self::render('jobs/applications/view', [
+        'profile' => $profile,
+        'responses' => $responses,
+        'studentname' => $studentName,
+        'jobtitle' => $title,
+        'companytitle' => $company['name']
       ]);
     }
 

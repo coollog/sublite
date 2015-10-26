@@ -69,7 +69,7 @@
         $('#fail').hide();
         $('#success').show();
          console.log('saved!');
-         // console.log(data);
+         console.log(data);
       });
     });
 
@@ -83,13 +83,28 @@
 </script>
 
 <panel class="form">
-  <headline><?php View::echof('jobtitle'); ?></headline>
-  <div class="companyname"><?php View::echof('companytitle'); ?></div>
   <div class="content">
-    <form method="post" onsubmit="return confirm('Are you sure you want to submit? You cannot undo this.');">
+    <headline><?php View::echof('jobtitle'); ?></headline>
+    <div class="companyname"><?php View::echof('companytitle'); ?></div>
+
+    <form method="post"
+          onsubmit="return confirm('Are you sure you want to submit? You cannot undo this.');">
       <left>
-        <div class="jobapplicationtitle">Job Application</div><br />
-        <br />
+        <div class="jobapplicationtitle">Job Application</div>
+        <br /><br />
+
+        <center style="line-height: 2em; font-style: italic;">
+          Your profile and resume will be submitted along with this application.
+          <a href="../editprofile" target="_blank">
+            <input type="button" value="Edit Profile" />
+          </a>
+          <a href="../viewprofile/<?php echo $_SESSION['_id']; ?>" target="_blank">
+            <input type="button" value="View Profile" />
+          </a>
+        </center>
+        <?php vnotice(); ?>
+
+        <br /><br />
         <?php
           foreach(View::get('questions') as $question) {
             $_id = $question['_id'];
@@ -104,6 +119,7 @@
           }
         ?>
         <?php if (!View::get('submitted')) { ?>
+          <?php vnotice(); ?>
           <input type="submit" id="submit" value="Apply Now" />
           <input type="button" id="savebutton" class="save" value="Save" />
           <div id="success">Application Saved!</div>

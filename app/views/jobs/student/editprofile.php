@@ -130,7 +130,7 @@
     text-transform: none;
   }
 
-  #savefail {
+  #savefail, #savesuccess {
     display: none;
   }
 </style>
@@ -418,7 +418,7 @@
         } else {
           parent.html(val);
           parent.removeClass('invalid');
-          $('#savefail').hide();
+          $('#savefail, #savesuccess').hide();
         }
 
         fields.trigger('changed');
@@ -517,7 +517,7 @@
   function setupDeleteItem() {
     $('section delete').off('click').click(function() {
       $(this).parent().remove();
-      $('#savefail').hide();
+      $('#savefail, #savesuccess').hide();
     });
   }
 
@@ -541,9 +541,11 @@
 
       // Get the basic info first.
       var bio = $('#input-bio').val();
+      var resume = $('section[name=basicinfo] field[name=resume]').html();
       var interests = getFields('basicinfo', 'interests');
       var skills = getFields('basicinfo', 'skills');
       data.bio = bio;
+      data.resume = resume;
       data.interests = interests;
       data.skills = skills;
 
@@ -600,8 +602,7 @@
     // Save the profile.
     function saveProfile(profile) {
       $.post('', {profile: profile}, function (data) {
-        console.log('saved!');
-        console.log(data);
+        $('#savesuccess').show();
       });
     }
 
@@ -616,6 +617,22 @@
   }
 
   function setupProfile(profile) {
+    function addField(sectionName, fieldName, val, def) {
+      function requiredDefault(val, def) {
+        if (val) {
+          return val;
+        }
+        return def;
+      }
+
+      var html = requiredDefault(val, def);
+      $('section[name='+sectionName+'] field[name='+fieldName+']').each(function() {
+        $(this).html(html);
+        if (html === def) {
+          $(this).addClass('invalid');
+        }
+      });
+    }
     function addFields(sectionName, fieldName, list) {
       if (!list) return;
 
@@ -642,11 +659,13 @@
 
     var name = profile.name;
     var bio = profile.bio;
+    var resume = profile.resume;
     var interests = profile.interests;
     var skills = profile.skills;
 
     $('section[name=student] heading').html(name);
-    $('#input-bio').val(name);
+    $('#input-bio').val(bio);
+    addField('basicinfo', 'resume', resume, '[Resume]');
     addFields('basicinfo', 'interests', interests);
     addFields('basicinfo', 'skills', skills);
 
@@ -677,6 +696,11 @@
 
         <label for="input-bio" class="fortextarea">Write a short summary for yourself:</label>
         <textarea id="input-bio" class="flexinput"></textarea>
+
+        <fieldline>
+          <strong>Resume: </strong>
+          <field name="resume" required></field>
+        </fieldline>
 
         <fieldline>
           <strong>Interests: </strong>
@@ -726,6 +750,7 @@
 
     <div style="margin-top: 4em; line-height: 2em;">
       <red id="savefail">You must fix the invalid fields (underlined in red).</red>
+      <green id="savesuccess">Profile saved!</green>
       <br />
       <input id="save" type="button" value="Save" />
     </div>

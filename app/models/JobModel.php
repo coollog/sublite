@@ -23,6 +23,7 @@
     public static function matchJobRecruiter(MongoId $jobId,
                                              MongoId $recruiterId);
 
+    public static function getRecruiterId(MongoId $jobId);
     public static function getByRecruiter(MongoId $recruiterId);
     public static function getByIdMinimal(MongoId $jobId);
   }
@@ -50,6 +51,12 @@
       $query = self::queryForId($jobId)
         ->toQuery('recruiter', $recruiterId)->projectId();
       return !is_null($query->findOne());
+    }
+
+    public static function getRecruiterId(MongoId $jobId) {
+      $query = self::queryForId($jobId)->projectField('recruiter');
+      $job = $query->findOne();
+      return $job['recruiter'];
     }
 
     public static function getByRecruiter(MongoId $recruiterId,

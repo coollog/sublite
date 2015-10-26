@@ -84,10 +84,10 @@
     }
     function redirect($page, $params = NULL) {
       if ($params == NULL)
-        header("Location: $page.php");
+        header("Location: $page");
       else {
         $query = http_build_query($params);
-        header("Location: $page.php?$query");
+        header("Location: $page?$query");
       }
       die();
     }

@@ -10,12 +10,12 @@
                                 MongoId $studentId,
                                 array $questions);
 
-    /**
-     * Submits a new application.
-     */
-    public static function submitNew(MongoId $jobId,
-                                     MongoId $studentId,
-                                     array $questions);
+    // /**
+    //  * Submits a new application.
+    //  */
+    // public static function submitNew(MongoId $jobId,
+    //                                  MongoId $studentId,
+    //                                  array $questions);
 
     /**
      * Student edits a saved application, so just update the question answers.
@@ -49,12 +49,18 @@
      */
     public static function getClaimedByJob(MongoId $jobId);
 
+    /**
+     * Retrieves an application by _id.
+     */
+    public static function getById(MongoId $applicationId);
+
     public function __construct(array $data);
     public function getId();
     public function getJobId();
     public function getStudentId();
     public function getStatus();
     public function getQuestions();
+    public function getProfile();
     public function isClaimed();
     public function setId(MongoId $id);
 
@@ -99,30 +105,39 @@
         $questions, $applicationQuestions);
 
       ApplicationModel::replaceQuestionsField($applicationId, $newQuestions);
-      return new Application(ApplicationModel::getById($applicationId));
+      return new ApplicationStudent(ApplicationModel::getById($applicationId));
     }
 
     public static function submit(MongoId $applicationId) {
-      // Mark the application as submitted.
-      ApplicationModel::markAsSubmitted($applicationId);
-
       $applicationData = ApplicationModel::getById($applicationId);
       $application = new ApplicationStudent($applicationData);
+
+      // We need to attach the student profile. If resume is not set, we cannot
+      // submit.
+      $studentId = $application->getStudentId();
+      $studentProfile = StudentProfile::getProfile($studentId);
+      if (is_null($studentProfile) || is_null($studentProfile->getResume())) {
+        return false;
+      }
+
+      // Mark the application as submitted.
+      ApplicationModel::submitWithStudentProfile(
+        $applicationId, $studentProfile);
 
       self::saveStudentAnswers($application);
       return true;
     }
 
-    public static function submitNew(MongoId $jobId,
-                                     MongoId $studentId,
-                                     array $questions) {
-      if (ApplicationModel::applicationExists($jobId, $studentId)) {
-        return false;
-      }
-      $application = self::create($jobId, $studentId, $questions, true);
-      self::saveStudentAnswers($application);
-      return $application;
-    }
+    // public static function submitNew(MongoId $jobId,
+    //                                  MongoId $studentId,
+    //                                  array $questions) {
+    //   if (ApplicationModel::applicationExists($jobId, $studentId)) {
+    //     return false;
+    //   }
+    //   $application = self::create($jobId, $studentId, $questions, true);
+    //   self::saveStudentAnswers($application);
+    //   return $application;
+    // }
 
     public static function deleteSaved(MongoId $applicationId) {
       return ApplicationModel::deleteById($applicationId);
@@ -146,6 +161,12 @@
       );
 
       return $statusMap;
+    }
+
+    public static function getById(MongoId $applicationId) {
+      $applicationData = ApplicationModel::getById($applicationId);
+      if (is_null($applicationData)) return null;
+      return new ApplicationStudent($applicationData);
     }
 
     /**
@@ -243,6 +264,8 @@
       } else {
         $this->data['questions'] = [];
       }
+      $this->data['profile'] =
+        isset($data['profile']) ? $data['profile'] : null;
       $this->data['studentid'] = new MongoId($data['studentid']);
       $this->data['submitted'] = boolval($data['submitted']);
       $this->data['status'] =
@@ -267,6 +290,10 @@
 
     public function getQuestions() {
       return $this->data['questions'];
+    }
+
+    public function getProfile() {
+      return $this->data['profile'];
     }
 
     public function isClaimed() {
