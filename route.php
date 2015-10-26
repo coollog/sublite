@@ -231,6 +231,7 @@
   Router::route('/jobs/index', 'backtoindex');
   Router::route('/hubs', 'backtoindex');
   Router::route('/hubs/index', 'backtoindex');
+  Router::route('/jobs/apply/index', 'index');
 
   Router::route('/changepass', 'changepass');
   Router::route('/confirm', 'confirm');

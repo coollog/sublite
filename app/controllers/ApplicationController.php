@@ -94,9 +94,9 @@
     }
 
     public static function apply(array $restOfRoute) {
-      global $params;
-      global $MJob;
-      global $MCompany;
+      global $params, $MJob, $MCompany, $CStudent;
+
+      $CStudent->requireLogin();
 
       if (!isset($restOfRoute[0]) || !MongoId::isValid($restOfRoute[0])) {
         self::error("invalid access");
@@ -123,19 +123,39 @@
         return;
       }
 
+      if (isset($params['questions'])) {
+        ApplicationStudent::save($jobId, $studentId, $params['questions']);
+        return;
+      }
+      if ($params) {
+        $questions = array();
+        foreach ($params as $id => $answer) {
+          $questions[] = ['_id' => $id, 'answer' => $answer];
+        }
+        ApplicationStudent::save($jobId, $studentId, $questions);
+        $applicationData = ApplicationModel::getApplication($jobId, $studentId);
+
+        ApplicationStudent::submit(new MongoId($applicationData['_id']));
+      }
+
       $entry = $MJob->get($jobId);
       $company = $MCompany->get($entry['company']);
       $questions = array();
-
+      $submitted = false;
       if (ApplicationModel::applicationExists($jobId, $studentId)) {
         $application = new ApplicationStudent(
           ApplicationModel::getApplication($jobId, $studentId));
-        foreach ($entry['application']['questions'] as $questionId) {
-          $questions[] = ['text' => Question::getById($questionId)->getText(),
-                          'response' => $application->getQuestions($questionId)];
+        $submitted = ApplicationModel::checkApplicationSubmitted($application->getId());
+        foreach ($application->getQuestions() as $question) {
+          $questions[] = ['id' => $question['_id'],
+                          'text' => Question::getById(new MongoId($question['_id']))->getText(),
+                          'response' => $question['answer']];
         }
       } else {
         foreach ($entry['application']['questions'] as $questionId) {
+          $reponse = '';
+          $answers = StudentModel::getAnswers($studentId);
+          $response = isset($answers[$questionId]) ? $answers[$questionId] : '';
           $questions[] = ['id' => $questionId,
                           'text' => Question::getById($questionId)->getText(),
                           'response' => ''];
@@ -146,7 +166,8 @@
         'questions' => $questions,
         'jobtitle' => $entry['title'],
         'companytitle' => $company['name'],
-        'jobId' => $jobId
+        'jobId' => $jobId,
+        'submitted' => $submitted
       ]);
     }
 

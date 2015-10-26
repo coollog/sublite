@@ -18,6 +18,7 @@
       $questionsHash = arrayToHashByKey($questions, '_id');
       // For all the ids in $questionIds, add an _id-answer pair to questionSet.
       foreach ($questionIds as $questionId) {
+        $questionId .= '';
         if (isset($questionsHash[$questionId])) {
           $questionSet[] = $questionsHash[$questionId];
         } else {

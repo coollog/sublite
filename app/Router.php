@@ -71,7 +71,13 @@
     public static function run() {
       $uri = self::getUri();
 
-      // First check routeTree.
+      if (isset(self::$routeMap[$uri])) {
+        $callName = self::$routeMap[$uri];
+        self::call($uri, $callName);
+        return;
+      }
+
+      // Next check routeTree.
       $routePath = self::routeStringToArray($uri);
       $curNode = self::$routeTree;
       // Traverse self::$routeTree.
@@ -91,14 +97,8 @@
         return;
       }
 
-      if (!isset(self::$routeMap[$uri])) {
-        // The route isn't registered, so give 404.
-        self::routeNotFound();
-        return;
-      }
-
-      $callName = self::$routeMap[$uri];
-      self::call($uri, $callName);
+      // The route isn't registered, so give 404.
+      self::routeNotFound();
     }
 
     private static function call($uri,

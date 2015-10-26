@@ -78,6 +78,13 @@
       $update->run();
     }
 
+    public static function markAsUnSubmitted(MongoId $applicationId) {
+      $update = (new DBUpdateQuery(self::$collection))
+        ->toQuery('_id', $applicationId)
+        ->toUpdate('submitted', false);
+      $update->run();
+    }
+
     public static function checkApplicationSubmitted(MongoId $applicationId) {
       $query = (new DBQuery(self::$collection))->toQuery('_id', $applicationId);
       return $query->findOne()['submitted'];
@@ -150,6 +157,7 @@
         ->toQuery('jobid', $jobId)
         ->toQuery('studentid', $studentId)
         ->projectId();
+      return $query->findOne();
     }
 
     private static function jobExists(MongoId $id) {
