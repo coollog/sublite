@@ -14,7 +14,7 @@
 
     public static function getAnswers(MongoId $studentId) {
       $query = self::queryForId($studentId)->projectField('answers');
-      $studentAnswers = $query->run();
+      $studentAnswers = $query->findOne();
       return isset($studentAnswers['answers']) ? $studentAnswers['answers'] : [];
     }
 

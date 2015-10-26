@@ -285,7 +285,7 @@
   Router::route('/hubs/start', 'hubs/start');
 
   Router::routeTree('/jobs/apply', 'jobs/apply');
-  Router::route('/jobs/apply/index', 'index');
+  // Router::route('/jobs/apply/index', 'index');
   Router::route('/jobs/company', 'jobs/company');
   Router::route('/jobs/editprofile', 'jobs/editprofile');
   Router::route('/employers/job', 'jobs/job');

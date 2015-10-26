@@ -7,8 +7,19 @@
      */
     public static function createOrUpdate(MongoId $jobId, array $questions);
 
+    /**
+     * Retrieves the application for $jobId.
+     */
+    public static function get(MongoId $jobId);
+
+    /**
+     * Checks application existence.
+     */
+    public static function exists(MongoId $jobId);
+
     public function __construct(MongoId $job, array $data);
     public function getJobId();
+    public function getQuestions();
 
     // $data is an associative array containing a subset of these keys:
     // - array of questions (optional) - saved as list of question ids
@@ -29,6 +40,20 @@
       self::updateSavedApplications($jobId, $application->getData());
 
       return true;
+    }
+
+    public static function get(MongoId $jobId) {
+      $applicationData = ApplicationModel::getJobApplication($jobId);
+      if (is_null($applicationData)) {
+        return null;
+      }
+
+      return new ApplicationJob($jobId, $applicationData);
+    }
+
+    public static function exists(MongoId $jobId) {
+      $applicationData = ApplicationModel::getJobApplication($jobId);
+      return !is_null($applicationData);
     }
 
     /**
@@ -63,6 +88,10 @@
 
     public function getJobId() {
       return $this->jobId;
+    }
+
+    public function getQuestions() {
+      return $this->data['questions'];
     }
 
     // The _id of the job associated with the application.

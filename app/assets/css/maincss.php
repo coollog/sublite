@@ -99,7 +99,7 @@
   fade:hover {
     opacity: 1;
   }
-  .hide {
+  .hide, templates {
     display: none;
   }
 

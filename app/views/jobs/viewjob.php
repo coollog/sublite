@@ -19,13 +19,13 @@
     font-family: 'BebasNeue', sans-serif;
     font-weight: bold;
   }
-  panel.main .button {
+  panel.main .apply {
     font-size: 1.5em;
     color: #035d75;
     text-transform: uppercase;
     box-shadow: 2px 2px 0px #035d75;
   }
-  panel.main .button:hover {
+  panel.main .apply:hover {
     color: #fff;
   }
   .jobinfo {
@@ -65,6 +65,52 @@
   }
 </style>
 
+<templates>
+  <applytemplate>
+    <?php
+      if(vget('Loggedinstudent') || vget('Loggedin')) {
+        $_id = View::get('_id');
+
+        $buttonText = "Apply Now";
+        $onClick = "";
+
+        $hasApplication = View::get('hasApplication');
+        if ($hasApplication) {
+          $href = "apply/$_id";
+        } else {
+          $link = View::get('link');
+          $isEmail = filter_var($link, FILTER_VALIDATE_EMAIL);
+          if ($isEmail) {
+            $buttonText = "Apply by Email";
+          }
+          $href = "../redirect?id=$_id&url=$link";
+          $onClick = "onClick='return clickApply();'";
+        }
+    ?>
+        <a href="<?php echo $href; ?>" <?php echo $onClick; ?>>
+          <input type="button" value="<?php echo $buttonText; ?>" />
+        </a>
+    <?php } else {
+      echo vlinkto(
+        '<input type="button" class="apply"
+        value="Login or register to apply for this opening!" />',
+        'login');
+    }
+    ?>
+  </applytemplate>
+</templates>
+
+<script>
+  function clickApply() {
+    return confirm(
+      'You have clicked on an external link and are leaving the pages of SubLite.net. We are not responsible for the accuracy or effectiveness of any content outside of SubLite.net.');
+  }
+  $(function() {
+    var applyHTML = useTemplate('applytemplate', {});
+    $('apply').html(applyHTML);
+  });
+</script>
+
 <panel class="main">
   <div class="cell">
     <div class="banner">
@@ -88,14 +134,9 @@
         }
       ?>
     </subheadline>
-    <?php
-      if(vget('Loggedinstudent') || vget('Loggedin')) {
-    ?>
-        <a href="../redirect.php?<?php echo "id="; echo $_GET['id']; echo "&url="; vecho('link'); ?>" onClick="return confirm('You have clicked on an external link and are leaving the pages of SubLite.net. We are not responsible for the accuracy or effectiveness of any content outside of SubLite.net.')"><input type="button" value=<?php if(filter_var(vget('link'), FILTER_VALIDATE_EMAIL)) { ?>"Apply by Email"<?php } else { ?>"Apply Now"<?php } ?> /></a>
-    <?php } else {
-      echo vlinkto('<input type="button" class="button" value="Login or register to apply for this opening!" />', 'login');
-    }
-    ?>
+
+    <apply></apply>
+
     <br /><br />
     <?php vpartial('fb', array('route' => 'jobs/job.php?id='.vget('_id'))); ?>
 
@@ -212,13 +253,7 @@
 
     <?php vpartial('fb', array('route' => 'jobs/job.php?id='.vget('_id'))); ?>
     <br /><br />
-    <?php
-      if(vget('Loggedinstudent') || vget('Loggedin')) {
-    ?>
-        <a href="../redirect.php?<?php echo "id="; echo $_GET['id']; echo "&url="; vecho('link'); ?>" onClick="return confirm('You have clicked on an external link and are leaving the pages of SubLite.net. We are not responsible for the accuracy or effectiveness of any content outside of SubLite.net.')"><input type="button" value=<?php if(filter_var(vget('link'), FILTER_VALIDATE_EMAIL)) { ?>"Apply by Email"<?php } else { ?>"Apply Now"<?php } ?> /></a>
-    <?php } else {
-      echo vlinkto('<input type="button" class="button" value="Login or register to apply for this opening!" />', 'login');
-    }
-    ?>
+
+    <apply></apply>
   </div>
 </panel>

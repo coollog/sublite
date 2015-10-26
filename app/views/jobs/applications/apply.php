@@ -47,10 +47,10 @@
 <script>
   function checkform () {
     var errors = "";
-    var $blankFields = $('textarea').filter(function () {
-        return $.trim($(this).val()) === "";
+    var blankFields = $('textarea').filter(function () {
+      return $.trim($(this).val()) === "";
     });
-    if ($blankFields.length) {
+    if (blankFields.length) {
       $('#fail').css("display", "inline-block");
       $('#success').css("display", "none");
       return false;

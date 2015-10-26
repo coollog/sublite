@@ -135,7 +135,7 @@
   }
 </style>
 
-<templates class="hide">
+<templates>
   <fieldinputtemplate>
     <input type="text" class="smallinput" value="{value}" parent="{parent}" {required} />
   </fieldinputtemplate>

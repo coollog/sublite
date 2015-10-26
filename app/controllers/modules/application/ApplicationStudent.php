@@ -11,6 +11,13 @@
                                 array $questions);
 
     /**
+     * Submits a new application.
+     */
+    public static function submitNew(MongoId $jobId,
+                                     MongoId $studentId,
+                                     array $questions);
+
+    /**
      * Student edits a saved application, so just update the question answers.
      * Make sure the student has permission, and that the application is not
      * already submitted.

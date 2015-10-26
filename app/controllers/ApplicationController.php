@@ -110,9 +110,8 @@
       }
 
       $jobId = new MongoId($restOfRoute[0]);
-      $studentId = new MongoId($_SESSION['_id']);
-      $applicationId = ApplicationModel::getJobApplication($jobId);
-      $questions = ApplicationModel::getJobApplication($jobId);
+      $studentId = $_SESSION['_id'];
+      $application = ApplicationJob::get($jobId);
 
       // Make sure job exists.
       if (!JobModel::exists($jobId)) {
@@ -122,32 +121,39 @@
       }
 
       // Make sure application exists.
-      if (!$applicationId) {
+      if (is_null($application)) {
         self::error("This job does not have an application.");
         self::render('notice');
         return;
       }
 
+      // Saving of application.
       if (isset($params['questions'])) {
         ApplicationStudent::save($jobId, $studentId, $params['questions']);
         return;
       }
+
+      $submitted = false;
+
+      // Submitting of application.
       if ($params) {
         $questions = array();
         foreach ($params as $id => $answer) {
           $questions[] = ['_id' => $id, 'answer' => $answer];
         }
-        ApplicationStudent::save($jobId, $studentId, $questions);
-        $applicationData = ApplicationModel::getApplication($jobId, $studentId);
-
-        ApplicationStudent::submit(new MongoId($applicationData['_id']));
+        ApplicationStudent::submitNew($jobId, $studentId, $questions);
+        $submitted = true;
       }
 
-      $entry = $MJob->get($jobId);
-      $company = $MCompany->get($entry['company']);
+      $entry = JobModel::getById($jobId);
+      $companyId = $entry['company'];
+      $company = CompanyModel::getById($companyId);
+
       $questions = array();
-      $submitted = false;
-      if (ApplicationModel::applicationExists($jobId, $studentId)) {
+
+      if ($submitted) {
+
+      } else if (ApplicationModel::applicationExists($jobId, $studentId)) {
         $application = new ApplicationStudent(
           ApplicationModel::getApplication($jobId, $studentId));
         $submitted = ApplicationModel::checkApplicationSubmitted($application->getId());
@@ -158,12 +164,18 @@
         }
       } else {
         foreach ($entry['application']['questions'] as $questionId) {
-          $reponse = '';
+          // $questionId =
+          $response = '';
           $answers = StudentModel::getAnswers($studentId);
-          $response = isset($answers[$questionId]) ? $answers[$questionId] : '';
+          $answers = arrayToHashByKey($answers, '_id');
+          if (isset($answers[$questionId.''])) {
+            $response = $answers[$questionId.'']['answer'];
+          } else {
+            $response = '';
+          }
           $questions[] = ['id' => $questionId,
                           'text' => Question::getById($questionId)->getText(),
-                          'response' => ''];
+                          'response' => $response];
         }
       }
 

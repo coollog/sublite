@@ -22,6 +22,8 @@
      */
     public static function getJobApplication(MongoId $jobId);
 
+    public static function hasJobApplication(MongoId $jobId);
+
     /**
      * Retrieves all the saved applications for $jobId.
      */
@@ -100,9 +102,13 @@
 
     public static function getJobApplication(MongoId $jobId) {
       // Check job exists.
-      if (!self::jobExists($jobId)) return false;
+      if (!self::jobExists($jobId)) return null;
 
       return JobModel::getApplicationQuestionIds($jobId);
+    }
+
+    public static function hasJobApplication(MongoId $jobId) {
+      return self::getJobApplication($jobId) !== null;
     }
 
     public static function getSavedForJob(MongoId $jobId) {

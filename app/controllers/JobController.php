@@ -1,5 +1,6 @@
 <?php
   require_once($GLOBALS['dirpre'].'controllers/Controller.php');
+  require_once($GLOBALS['dirpre'].'controllers/modules/application/ApplicationJob.php');
 
   class JobController extends Controller {
     // TODO Decide some upper bound for duration
@@ -255,6 +256,9 @@
         $MJob->save($entry, false);
 
         $data = $entry;
+
+        $data['hasApplication'] = isset($data['application']);
+
         $data['_id'] = $entry['_id'];
         $data['salarytype'] = ($data['salarytype'] == 'total') ?
                               $data['duration'].' weeks' : $data['salarytype'];
@@ -262,7 +266,7 @@
         $r = $MRecruiter->getById($entry['recruiter']);
 
         $company = $MCompany->get($entry['company']);
-        // var_dump($entry);
+
         $data['companyname'] = $company['name'];
         $data['companybanner'] = $company['bannerphoto'];
         $data['companyid'] = $company['_id']->{'$id'};

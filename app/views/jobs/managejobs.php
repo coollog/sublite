@@ -6,6 +6,13 @@
     color: #000;
     width: 100%;
   }
+  .jobblock .title {
+    cursor: pointer;
+    transition: 0.1s all ease-in-out;
+  }
+  .jobblock .title:hover {
+    opacity: 0.5;
+  }
   .jobblock jobtitle {
     font-size: 1.5em;
     color: #03596a;
@@ -19,12 +26,14 @@
   }
 </style>
 
-<templates class="hide">
+<templates>
   <jobtemplate>
     <table class="jobblock"><tr>
       <td class="title">
-        <jobtitle>{title}</jobtitle><br />
-        <location>{location}</location>
+        <a href="../jobs/job?id={_id}" target="_blank">
+          <jobtitle>{title}</jobtitle><br />
+          <location>{location}</location>
+        </a>
       </td>
       <td class="buttons">
         <a href="editjob.php?id={_id}">
