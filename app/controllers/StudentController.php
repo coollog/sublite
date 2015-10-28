@@ -99,12 +99,10 @@
       foreach ($rawApps as $rawApp) {
         $application = new ApplicationStudent($rawApp);
         $job = JobModel::getByIdMinimal($application->getJobId());
-        // Title, location,
         $data = [
           'title' => $job['title'],
           'location' => $job['location'],
           'jobId' => $application->getJobId(),
-          'applicationId' => $application->getId(),
           'submitted' => $application->isSubmitted()
         ];
         $applications[] = $data;

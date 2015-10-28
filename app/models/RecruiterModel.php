@@ -26,7 +26,7 @@
       return self::$collection->findOne(array('pass' => $pass));
     }
     function getCompany($rid) {
-      $r = $this->getByID($rid);
+      $r = self::getByID($rid);
       global $MCompany;
       return $MCompany->get($r['company']);
     }
