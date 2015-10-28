@@ -73,6 +73,30 @@
       $this->render('student/home', $me);
     }
 
+    function manage() {
+      global $MStudent;
+      $studentId = new MongoId($MStudent->me()['_id']->{'$id'});
+      $rawApps = ApplicationModel::getApplicationsByStudentId($studentId);
+      $applications = [];
+      foreach ($rawApps as $rawApp) {
+        $application = new ApplicationStudent($rawApp);
+        $job = JobModel::getByIdMinimal($application->getJobId());
+        // Title, location,
+        $data = [
+          'title' => $job['title'],
+          'location' => $job['location'],
+          'jobId' => $application->getJobId(),
+          'applicationId' => $application->getId(),
+          'submitted' => $application->isSubmitted()
+        ];
+        $applications[] = $data;
+      }
+      $applications = [
+        'applications' => $applications
+      ];
+      $this->render('jobs/home', $applications);
+    }
+
     function index() {
       global $MApp;
       $stats = AppModel::getStats();

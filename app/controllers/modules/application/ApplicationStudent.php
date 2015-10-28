@@ -61,6 +61,7 @@
     public function getStatus();
     public function getQuestions();
     public function getProfile();
+    public function isSubmitted();
     public function isClaimed();
     public function setId(MongoId $id);
 
@@ -294,6 +295,10 @@
 
     public function getProfile() {
       return $this->data['profile'];
+    }
+
+    public function isSubmitted() {
+      return $this->data['submitted'];
     }
 
     public function isClaimed() {

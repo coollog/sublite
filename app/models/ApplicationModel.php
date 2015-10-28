@@ -59,6 +59,11 @@
      * Gets application given a jobId and studentId
      */
     public static function getApplication(MongoId $jobId, MongoId $studentId);
+
+    /**
+     * Gets all applications for a given student.
+     */
+    public static function getApplicationsByStudentId(MongoId $studentId);
   }
 
   class ApplicationModel extends Model implements ApplicationModelInterface {
@@ -180,6 +185,12 @@
         ->toQuery('studentid', $studentId)
         ->projectId();
       return $query->findOne();
+    }
+
+    public static function getApplicationsByStudentId(MongoId $studentId) {
+      $query = (new DBQuery(self::$collection))
+        ->toQuery('studentid', $studentId);
+      return $query->run();
     }
 
     private static function jobExists(MongoId $id) {
