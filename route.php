@@ -138,6 +138,9 @@
   Router::register('jobs/editprofile', function() {
     GLOBALvarGet('CStudent')->editStudentProfile();
   });
+  Router::register('jobs/viewprofile', function () {
+    GLOBALvarGet('CStudent')->viewStudentProfile();
+  });
   Router::register('jobs/application', function (array $restOfRoute) {
     ApplicationController::view($restOfRoute);
   });
@@ -295,6 +298,7 @@
   Router::route('/jobs/company', 'jobs/company');
   Router::route('/jobs/editprofile', 'jobs/editprofile');
   Router::route('/jobs/home', 'jobs/home');
+  Router::route('/jobs/viewprofile', 'jobs/viewprofile');
   Router::route('/employers/job', 'jobs/job');
   Router::route('/jobs/job', 'jobs/job');
   Router::route('/jobs/recruiter', 'jobs/recruiter');

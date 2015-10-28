@@ -21,12 +21,7 @@
   }
 </style>
 
-<responsesData class="hide">
-  <?php echo json_encode(View::get('responses')); ?>
-</responsesData>
-<profileData class="hide">
-  <?php echo json_encode(View::get('profile')); ?>
-</profileData>
+<textarea id="responsesData" class="hide"><?php View::echof('responses'); ?></textarea>
 
 <templates>
   <responsetemplate>
@@ -39,8 +34,7 @@
 
 <script>
   $(function () {
-    var responsesData = JSON.parse($('responsesData').html());
-    var profileData = JSON.parse($('profileData').html());
+    var responsesData = JSON.parse($('#responsesData').html());
 
     (function setupResponses() {
       var responsesHTML = '';

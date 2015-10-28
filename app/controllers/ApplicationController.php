@@ -219,6 +219,12 @@
       $applicationId = new MongoId($restOfRoute[0]);
       $application = ApplicationStudent::getById($applicationId);
 
+      if (is_null($application)) {
+        self::error("nonexistent application");
+        self::render('notice');
+        return;
+      }
+
       // Only the student who submitted the application and the recruiter
       // associated with the job can view the application.
       $myId = $_SESSION['_id'];
@@ -257,11 +263,13 @@
       }
 
       self::render('jobs/applications/view', [
-        'profile' => $profile,
-        'responses' => $responses,
+        'responses' => toJSON($responses),
         'studentname' => $studentName,
         'jobtitle' => $title,
         'companytitle' => $company['name']
+      ]);
+      self::render('jobs/student/studentprofile', [
+        'profile' => toJSON($profile)
       ]);
     }
 

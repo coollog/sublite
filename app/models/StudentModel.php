@@ -71,7 +71,7 @@
       else return $entry['_id'];
     }
     function getName($id) {
-      $entry = $this->getById($id);
+      $entry = self::getById($id);
       return $entry['name'];
     }
     function getPhoto($id) {

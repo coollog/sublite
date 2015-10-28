@@ -98,7 +98,7 @@
           <a href="../editprofile" target="_blank">
             <input type="button" value="Edit Profile" />
           </a>
-          <a href="../viewprofile/<?php echo $_SESSION['_id']; ?>" target="_blank">
+          <a href="../viewprofile" target="_blank">
             <input type="button" value="View Profile" />
           </a>
         </center>

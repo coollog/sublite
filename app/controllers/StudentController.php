@@ -16,10 +16,28 @@
         return;
       }
 
-      $profile = StudentProfile::getProfile($studentId)->getData();
-      $profile = $profile === null ? '{}' : json_encode($profile);
+      $profile = toJSON(self::getStudentProfile($studentId));
 
       self::render('jobs/student/editprofile', ['profile' => $profile]);
+    }
+
+    public static function viewStudentProfile() {
+      $studentId = $_SESSION['_id'];
+      $profile = toJSON(self::getStudentProfile($studentId));
+
+      self::render('jobs/student/studentprofile', ['profile' => $profile]);
+    }
+
+    private static function getStudentProfile(MongoId $studentId) {
+      $name = StudentModel::getName($studentId);
+
+      $profile = StudentProfile::getProfile($studentId)->getData();
+      if (is_null($profile)) {
+        $profile = [];
+      }
+      $profile['name'] = $name;
+
+      return $profile;
     }
 
     function data($data) {

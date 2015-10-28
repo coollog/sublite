@@ -62,7 +62,7 @@
 <jobData class="hide">
   <?php
     $jobs = View::get('jobs');
-    echo json_encode($jobs);
+    echo toJSON($jobs);
   ?>
 </jobData>
 
