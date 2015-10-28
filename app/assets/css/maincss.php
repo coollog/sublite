@@ -96,7 +96,7 @@
     opacity: 0.5;
     transition: 0.1s all ease-in-out;
   }
-  fade:hover {
+  fade:not(.nohover):hover {
     opacity: 1;
   }
   .hide, templates {

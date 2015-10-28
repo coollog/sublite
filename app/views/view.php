@@ -7,6 +7,7 @@
                                   $route,
                                   $params = null,
                                   $newTab = false);
+    public static function partial($page, $vars = false);
   }
 
   // Implement this and have the functions below as class methods.
@@ -25,6 +26,9 @@
                                   $params = null,
                                   $newTab = false) {
       return vlinkTo($html, $route, $params = null, $newTab = false);
+    }
+    public static function partial($page, $vars = false) {
+      vpartial($page, $vars);
     }
   }
 

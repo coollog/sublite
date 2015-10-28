@@ -175,4 +175,8 @@
     // search forward starting from end minus needle length characters
     return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== FALSE);
   }
+
+  function toJSON($arr) {
+    return clean(json_encode($arr));
+  }
 ?>
