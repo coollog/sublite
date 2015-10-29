@@ -164,6 +164,7 @@
         questionId: _id,
         jobId: '<?php View::echof('jobId'); ?>',
       }, function (data) {
+        console.log(data);
         remove(question);
       });
     }
@@ -212,6 +213,7 @@
       // Create custom question on backend.
 
       $.post('../createcustom', {text: text}, function (data) {
+        console.log(data);
         chooseQuestion(data, text, false);
         $('#customText').val('');
         $('#createCustom').attr('enabled', true);
@@ -223,6 +225,7 @@
       $('.customList').html('');
       var search = $('#searchText').val();
       $.post('../searchcustom', {search: search}, function (data) {
+        console.log(data);
         data = JSON.parse(data);
         // Create the custom questions to be able to add to selected.
         data.forEach(function (questionData) {
@@ -278,6 +281,7 @@
       });
 
       $.post('', {questionIds: questionIds}, function (data) {
+        console.log(data);
         window.location = '../home';
       });
     });

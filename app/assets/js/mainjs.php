@@ -32,6 +32,7 @@
    */
   var Templates = {
     templateHTML: {},
+    error: "We're sorry, something went wrong here. Try refreshing the page.",
 
     init: function () {
       var self = this;
@@ -49,6 +50,7 @@
 
     use: function (templateName, data) {
       var html = this.templateHTML[templateName];
+      if (!isObject(data)) return this.error;
       for (var key in data) {
         var value = data[key];
         var re = new RegExp('{' + key + '}', 'g');

@@ -122,13 +122,23 @@
              value="Back" />
     </fade>
   </unlockconfirmtemplate>
+
+  <claimedtemplate>
+    <subtabs>
+      <subtab type="inreview" class="focus">In Review</subtab> |
+      <subtab type="accepted">Accepted</subtab> |
+      <subtab type="rejected">Rejected</subtab>
+    </subtabs>
+  </claimedtemplate>
+
+  <creditstemplate>
+
+  </creditstemplate>
 </templates>
 
 <script>
   function loadContent(id, callback) {
-    switch (id) {
-      case 'tabunclaimed': var route = 'ajax/unclaimed'; break;
-    }
+    var route = 'ajax/' + id;
     $.post(route, callback);
   }
 
@@ -182,6 +192,12 @@
 
     $('unlockconfirm').hide();
   }
+  function setupClaimed(data) {
+
+  }
+  function setupCredits(data) {
+
+  }
 
   function getHTMLSetup(id, data) {
     switch (id) {
@@ -194,8 +210,12 @@
         var setup = setupUnclaimed;
         break;
       case 'claimed':
+        var html = Templates.use('claimedtemplate', data);
+        var setup = setupClaimed;
         break;
       case 'credits':
+        var html = Templates.use('creditstemplate', data);
+        var setup = setupCredits;
         break;
     }
     return {html: html, setup: setup};
@@ -284,15 +304,6 @@
   </content>
 </panel>
 
-<panel class="tabframe" name="unclaimed">
-  <content></content>
-</panel>
-<panel class="tabframe" name="claimed">
-  <content>
-    <subtabs>
-      <subtab type="inreview" class="focus">In Review</subtab> |
-      <subtab type="accepted">Accepted</subtab> |
-      <subtab type="rejected">Rejected</subtab>
-    </subtabs>
-  </content>
-</panel>
+<panel class="tabframe" name="unclaimed"><content></content></panel>
+<panel class="tabframe" name="claimed"><content></content></panel>
+<panel class="tabframe" name="credits"><content></content></panel>

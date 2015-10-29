@@ -34,13 +34,13 @@
     GLOBALvarGet('CCompany')->view();
   });
   Router::register('employers/createcustom', function () {
-    echo ApplicationController::createCustom();
+    echo ApplicationControllerAJAX::createCustom();
   });
   Router::register('employers/deletecustom', function () {
-    echo ApplicationController::deleteCustom();
+    echo ApplicationControllerAJAX::deleteCustom();
   });
   Router::register('employers/searchcustom', function () {
-    echo ApplicationController::searchCustom();
+    echo ApplicationControllerAJAX::searchCustom();
   });
   Router::register('employers/editapplication', function (array $restOfRoute) {
     ApplicationController::edit($restOfRoute);
@@ -90,6 +90,15 @@
   });
   Router::register('employers/viewapplicants', function (array $restOfRoute) {
     ApplicationController::applicants($restOfRoute);
+  });
+  Router::register('employers/viewapplicants/tabunclaimed', function() {
+    ApplicationControllerAJAX::applicantsTabUnclaimed();
+  });
+  Router::register('employers/viewapplicants/tabclaimed', function() {
+    ApplicationControllerAJAX::applicantsTabClaimed();
+  });
+  Router::register('employers/viewapplicants/tabcredits', function() {
+    ApplicationControllerAJAX::applicantsTabCredits();
   });
   Router::register('faq', function() {
     GLOBALvarGet('CApp')->faq();
@@ -274,6 +283,12 @@
   Router::route('/employers/recruiter', 'employers/recruiter');
   Router::route('/employers/register', 'employers/register');
   Router::routeTree('/employers/viewapplicants', 'employers/viewapplicants');
+  Router::route('/employers/viewapplicants/ajax/tabunclaimed',
+                'employers/viewapplicants/tabunclaimed');
+  Router::route('/employers/viewapplicants/ajax/tabclaimed',
+                'employers/viewapplicants/tabclaimed');
+  Router::route('/employers/viewapplicants/ajax/tabcredits',
+                'employers/viewapplicants/tabcredits');
 
   Router::route('/faq', 'faq');
   Router::route('/feedback', 'feedback');
