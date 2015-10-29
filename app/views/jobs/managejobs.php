@@ -23,27 +23,35 @@
   }
   .jobblock .buttons {
     text-align: right;
+    margin: 1em 0;
+    display: none;
+  }
+  .jobblock .buttons input {
+    padding: 0 1.5em;
   }
 </style>
 
 <templates>
   <jobtemplate>
-    <table class="jobblock"><tr>
-      <td class="title">
+    <div class="jobblock">
+      <div class="title">
         <a href="../jobs/job?id={_id}" target="_blank">
           <jobtitle>{title}</jobtitle><br />
           <location>{location}</location>
         </a>
-      </td>
-      <td class="buttons">
-        <a href="editjob.php?id={_id}">
+      </div>
+      <div class="buttons">
+        <a href="editjob?id={_id}">
           <input type="button" value="Edit Job" />
         </a>
         <a href="editapplication/{_id}">
           <input type="button" value="Edit Application" />
         </a>
-      </td>
-    </tr></table>
+        <a href="viewapplicants/{_id}">
+          <input type="button" value="View Applicants" />
+        </a>
+      </div>
+    </div>
   </jobtemplate>
   <nojobstemplate>
     <b style="font-size: 1.5em;">
@@ -52,10 +60,6 @@
       to complete your job listing(s) by clicking the button below and
       you'll be all set!
     </b>
-    <br /><br />
-    <a href="addjob">
-      <input type="button" value="List Job" />
-    </a>
   </nojobstemplate>
 </templates>
 
@@ -67,6 +71,14 @@
 </jobData>
 
 <script>
+  function setupJobHover() {
+    $('.jobblock').hover(function () {
+      $(this).children('.buttons').finish().slideDown(200, 'easeInOutCubic');
+    }, function () {
+      $(this).children('.buttons').finish().slideUp(200, 'easeInOutCubic');
+    })
+  }
+
   $(function () {
     (function setupJobs() {
       var jobData = JSON.parse($('jobData').html());
@@ -86,6 +98,8 @@
       if (jobData.length == 0) {
         var noJobsHTML = useTemplate('nojobstemplate', {});
         $('jobs').html(noJobsHTML);
+      } else {
+        setupJobHover();
       }
     })();
   });
@@ -110,5 +124,9 @@
     <br />
 
     <jobs></jobs>
+    <br /><br />
+    <a href="addjob">
+      <input type="button" value="List Job" />
+    </a>
   </div>
 </panel>

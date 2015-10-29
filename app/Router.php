@@ -74,6 +74,8 @@
         }
         $curNode = &$curNode[$branch];
       }
+
+      self::route("$route/index", "backtoindex");
     }
 
     public static function run() {

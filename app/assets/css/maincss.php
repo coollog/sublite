@@ -77,6 +77,10 @@
     font-family: 'BebasNeue', sans-serif;
     font-weight: bold;
   }
+  .headline {
+    font-size: 1.5em;
+    margin-bottom: 2em;
+  }
   subheadline {
     display: block;
     font-size: 1.3em;

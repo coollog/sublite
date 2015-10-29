@@ -5,9 +5,30 @@
   require_once($GLOBALS['dirpre'].'controllers/modules/application/ApplicationStudent.php');
 
   interface ApplicationControllerInterface {
+    /**
+     * Recruiter viewing applicants for a job.
+     */
+    public static function applicants(array $restOfRoute);
+
+    /**
+     * Recruiter editing an application for a job.
+     */
     public static function edit(array $restOfRoute);
+
+    /**
+     * Student applying to a job.
+     */
     public static function apply(array $restOfRoute);
+
+    /**
+     * Recruiter and student viewing an application.
+     * Recruiters have extra functionality to report an application.
+     */
     public static function view(array $restOfRoute);
+
+    /**
+     * AJAX calls made while editing an application.
+     */
     public static function createCustom();
     public static function deleteCustom();
     public static function searchCustom();
@@ -15,37 +36,41 @@
 
   class ApplicationController extends Controller
                               implements ApplicationControllerInterface {
-    public static function edit(array $restOfRoute) {
-      global $CRecruiter; $CRecruiter->requireLogin();
-      global $params;
+    public static function applicants(array $restOfRoute) {
+      RecruiterController::requireLogin();
 
-      if (!isset($restOfRoute[0]) || !MongoId::isValid($restOfRoute[0])) {
-        self::error("invalid access");
-        self::render('notice');
-        return;
-      }
-
-      $jobId = new MongoId($restOfRoute[0]);
-      $recruiterId = $_SESSION['_id'];
+      $jobId = self::getIdFromRoute($restOfRoute);
+      if (is_null($jobId)) return;
 
       // Make sure job exists.
-      if (!JobModel::exists($jobId)) {
-        self::error("nonexistent job");
-        self::render('notice');
-        return;
-      }
+      // Make sure recruiter owns the job.
+      if (!self::checkJobExists($jobId)) return;
+      if (!self::ownsJob($jobId)) return;
 
+      $job = JobModel::getByIdMinimal($jobId);
+
+      self::render('jobs/applications/applicants', [
+        'jobid' => $jobId,
+        'jobtitle' => $job['title'],
+        'joblocation' => $job['location']
+      ]);
+    }
+
+    public static function edit(array $restOfRoute) {
+      RecruiterController::requireLogin();
+
+      global $params;
+
+      $jobId = self::getIdFromRoute($restOfRoute);
+      if (is_null($jobId)) return;
+
+      // Make sure job exists.
       // Make sure recruiter has permission to edit the job.
-      if (!JobModel::matchJobRecruiter($jobId, $recruiterId)) {
-        self::error("permission denied");
-        self::render('notice');
-        return;
-      }
+      if (!self::checkJobExists($jobId)) return;
+      if (!self::ownsJob($jobId)) return;
 
       // Process saving of questions.
-      if (self::save($jobId)) {
-        return;
-      }
+      if (self::save($jobId)) return;
 
       $vanillaQuestions = Question::getAllVanilla();
       $vanillaQuestionsData = [];
@@ -104,22 +129,14 @@
 
       StudentController::requireLogin();
 
-      if (!isset($restOfRoute[0]) || !MongoId::isValid($restOfRoute[0])) {
-        self::error("invalid access");
-        self::render('notice');
-        return;
-      }
+      $jobId = self::getIdFromRoute($restOfRoute);
+      if (is_null($jobId)) return;
 
-      $jobId = new MongoId($restOfRoute[0]);
       $studentId = $_SESSION['_id'];
       $application = ApplicationJob::get($jobId);
 
       // Make sure job exists.
-      if (!JobModel::exists($jobId)) {
-        self::error("nonexistent job");
-        self::render('notice');
-        return;
-      }
+      if (!self::checkJobExists()) return;
 
       // Make sure application exists.
       if (is_null($application)) {
@@ -210,13 +227,9 @@
     public static function view(array $restOfRoute) {
       JobController::requireLogin();
 
-      if (!isset($restOfRoute[0]) || !MongoId::isValid($restOfRoute[0])) {
-        self::error("invalid access");
-        self::render('notice');
-        return;
-      }
+      $applicationId = self::getIdFromRoute($restOfRoute);
+      if (is_null($applicationId)) return;
 
-      $applicationId = new MongoId($restOfRoute[0]);
       $application = ApplicationStudent::getById($applicationId);
 
       if (is_null($application)) {
@@ -355,6 +368,31 @@
         $questionData[] = $data;
       }
       return json_encode($questionData);
+    }
+
+    /**
+     * Checks if $jobId is a job, and if not, error.
+     */
+    private static function checkJobExists(MongoId $jobId) {
+      if (!JobModel::exists($jobId)) {
+        self::error("nonexistent job");
+        self::render('notice');
+        return false;
+      }
+      return true;
+    }
+
+    /**
+     * Checks if the recruiters owns $jobId, and if not, error.
+     */
+    private static function ownsJob(MongoId $jobId) {
+      $recruiterId = $_SESSION['_id'];
+      if (!JobModel::matchJobRecruiter($jobId, $recruiterId)) {
+        self::error("permission denied");
+        self::render('notice');
+        return false;
+      }
+      return true;
     }
   }
 ?>

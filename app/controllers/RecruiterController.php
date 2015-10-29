@@ -360,31 +360,31 @@
       return isset($_SESSION['loggedin']);
     }
     function requireLogin() {
-      if ($this->loggedIn()) {
+      if (self::loggedIn()) {
         global $MRecruiter;
         // Params to vars
         $email = $_SESSION['email'];
         $pass = $_SESSION['pass'];
 
         // Validations
-        $this->startValidations();
-        $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL),
+        self::startValidations();
+        self::validate(filter_var($email, FILTER_VALIDATE_EMAIL),
           $err, 'invalid email');
-        $this->validate(($entry = $MRecruiter->get($email)) != NULL,
+        self::validate(($entry = $MRecruiter->get($email)) != NULL,
           $err, 'unknown email');
-        $this->validate(hash_equals($entry['pass'], crypt($pass, $entry['pass'])),
+        self::validate(hash_equals($entry['pass'], crypt($pass, $entry['pass'])),
           $err, 'invalid password');
 
-        if (!$this->isValid()) {
-          $this->logout();
+        if (!self::isValid()) {
+          self::logout();
         }
       } else {
-        $this->logout();
+        self::logout();
       }
     }
     function logout() {
       session_unset();
-      $this->redirect('index');
+      self::redirect('index');
     }
   }
 

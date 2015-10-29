@@ -75,18 +75,24 @@
     font-weight: 700;
     outline: none;
   }
+  input[type=button].smallbutton {
+    padding: 0 1em;
+    font-size: 1em;
+    font-weight: normal;
+    height: 2.5em;
+  }
   input[type=submit].reverse,
   input[type=button].reverse {
     background: #035d75;
     color: #fff;
   }
-  input[type=submit]:hover,
-  input[type=button]:hover {
+  input[type=submit]:enabled:hover,
+  input[type=button]:enabled:hover {
     background: #035d75;
     color: #fff;
   }
-  input[type=submit].reverse:hover,
-  input[type=button].reverse:hover {
+  input[type=submit].reverse:enabled:hover,
+  input[type=button].reverse:enabled:hover {
     background: #fff;
     color: #000;
   }

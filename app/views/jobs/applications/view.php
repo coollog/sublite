@@ -3,10 +3,6 @@
     margin-top: -20px;
     font-size: 1.5em;
   }
-  .headline {
-    font-size: 1.5em;
-    margin: 2em 0;
-  }
 
   response, text, answer {
     display: block;
@@ -55,7 +51,7 @@
     <headline><?php View::echof('jobtitle'); ?></headline>
     <div class="companyname"><?php View::echof('companytitle'); ?></div>
 
-    <left>
+    <left style="margin-top: 2em;">
       <div class="headline">
         Job application from: <b><?php View::echof('studentname'); ?></b>
       </div>

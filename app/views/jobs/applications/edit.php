@@ -132,7 +132,7 @@
       optype: 'minus',
     });
     $('.chosen').append(html);
-    $('.chosen question[qid=' + _id + ']').slideDown();
+    $('.chosen question[qid=' + _id + ']').slideDown(200, 'easeInOutCubic');
 
     $('question op.minus').off('click').click(function() {
       var question = $(this).parent();
@@ -172,7 +172,7 @@
   function reshowVanilla(_id) {
     $('question.vanilla').each(function() {
       if ($(this).attr('qid') == _id) {
-        $(this).attr('enabled', true).slideDown();
+        $(this).attr('enabled', true).slideDown(200, 'easeInOutCubic');
       }
     });
   }

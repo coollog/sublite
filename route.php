@@ -7,7 +7,7 @@
     AdminControllerQuestions::manage();
   });
   Router::register('backtoindex', function() {
-    Controller::redirect('../index');
+    Controller::redirect("..");
   });
   Router::register('changepass', function() {
     GLOBALvarGet('CStudent')->changePass();
@@ -87,6 +87,9 @@
   });
   Router::register('employers/S3', function() {
     GLOBALvarGet('CS3')->upload();
+  });
+  Router::register('employers/viewapplicants', function (array $restOfRoute) {
+    ApplicationController::applicants($restOfRoute);
   });
   Router::register('faq', function() {
     GLOBALvarGet('CApp')->faq();
@@ -267,6 +270,7 @@
   Router::route('/employers/profile', 'employers/profile');
   Router::route('/employers/recruiter', 'employers/recruiter');
   Router::route('/employers/register', 'employers/register');
+  Router::routeTree('/employers/viewapplicants', 'employers/viewapplicants');
 
   Router::route('/faq', 'faq');
   Router::route('/feedback', 'feedback');
@@ -292,7 +296,6 @@
 
   Router::routeTree('/jobs/application', 'jobs/application');
   Router::routeTree('/jobs/apply', 'jobs/apply');
-  // Router::route('/jobs/apply/index', 'index');
   Router::route('/jobs/company', 'jobs/company');
   Router::route('/jobs/editprofile', 'jobs/editprofile');
   Router::route('/jobs/viewprofile', 'jobs/viewprofile');

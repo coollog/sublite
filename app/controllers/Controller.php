@@ -5,6 +5,19 @@
     public static $renderQueue = array();
 
     /**
+     * Retrieves the _id portion of the route.
+     * If it's not there, errors and returns null.
+     */
+    protected static function getIdFromRoute(array $restOfRoute) {
+      if (!isset($restOfRoute[0]) || !MongoId::isValid($restOfRoute[0])) {
+        self::error("invalid access");
+        self::render('notice');
+        return null;
+      }
+      return new MongoId($restOfRoute[0]);
+    }
+
+    /**
      * Initialization includes:
      * 1) Rendering the buffer if it exists.
      */
