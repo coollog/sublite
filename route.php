@@ -150,6 +150,9 @@
   Router::register('jobs/apply', function (array $restOfRoute) {
     ApplicationController::apply($restOfRoute);
   });
+  Router::register('jobs/home', function() {
+    GLOBALvarGet('CStudent')->manage();
+  });
   Router::register('jobs/job', function() {
     GLOBALvarGet('CJob')->view();
   });
@@ -281,7 +284,6 @@
   Router::route('/graph', 'graph');
 
   Router::route('/housing/home', 'home');
-  Router::route('/jobs/home', 'home');
 
   Router::route('/housing/search', 'housing/search');
   Router::route('/housing/sublet', 'housing/sublet');
@@ -298,6 +300,7 @@
   Router::routeTree('/jobs/apply', 'jobs/apply');
   Router::route('/jobs/company', 'jobs/company');
   Router::route('/jobs/editprofile', 'jobs/editprofile');
+  Router::route('/jobs/home', 'jobs/home');
   Router::route('/jobs/viewprofile', 'jobs/viewprofile');
   Router::route('/employers/job', 'jobs/job');
   Router::route('/jobs/job', 'jobs/job');
