@@ -175,7 +175,7 @@
         $application = new ApplicationStudent(
           ApplicationModel::getApplication($jobId, $studentId));
         $applicationId = $application->getId();
-        $submitted = ApplicationModel::checkApplicationSubmitted($application->getId());
+        $submitted = ApplicationModel::checkSubmitted($application->getId());
 
         if ($submitted) {
           self::redirect("../application/$applicationId");

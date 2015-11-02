@@ -100,6 +100,9 @@
   Router::register('employers/viewapplicants/tabcredits', function() {
     ApplicationControllerAJAX::applicantsTabCredits();
   });
+  Router::register('employers/viewapplicants/moveapplications', function() {
+    ApplicationControllerAJAX::moveApplications();
+  });
   Router::register('faq', function() {
     GLOBALvarGet('CApp')->faq();
   });
@@ -289,6 +292,8 @@
                 'employers/viewapplicants/tabclaimed');
   Router::route('/employers/viewapplicants/ajax/tabcredits',
                 'employers/viewapplicants/tabcredits');
+  Router::route('/employers/viewapplicants/ajax/moveapplications',
+                'employers/viewapplicants/moveapplications');
 
   Router::route('/faq', 'faq');
   Router::route('/feedback', 'feedback');

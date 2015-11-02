@@ -5,6 +5,14 @@
 
   interface ApplicationControllerAJAXInterface {
     /**
+     * Calls made on viewing applicants interface.
+     */
+    public static function applicantsTabUnclaimed();
+    public static function applicantsTabClaimed();
+    public static function applicantsTabCredits();
+    public static function moveApplications();
+
+    /**
      * Calls made while editing an application.
      */
     public static function createCustom();
@@ -17,6 +25,7 @@
     implements ApplicationControllerAJAXInterface {
 
     public static function applicantsTabUnclaimed() {
+      RecruiterController::requireLogin();
 
     }
 
@@ -59,10 +68,38 @@
     }
 
     public static function applicantsTabCredits() {
+      RecruiterController::requireLogin();
 
     }
 
+    public static function moveApplications() {
+      RecruiterController::requireLogin();
+
+      global $params;
+
+      $selected = MongoIdArray($params['selected']);
+      $to = $params['to'];
+      $recruiterId = $_SESSION['_id'];
+
+      // Make sure all selected are owned.
+      foreach ($selected as $applicationId) {
+        if (!ApplicationModel::isOwned($recruiterId, $applicationId)) {
+          echo toJSON(['error' => 'permission denied']);
+          return;
+        }
+      }
+
+      // Mark new status.
+      foreach ($selected as $applicationId) {
+        ApplicationStudent::changeStatus($applicationId, $to);
+      }
+
+      echo toJSON(['error' => null]);
+    }
+
     public static function createCustom() {
+      RecruiterController::requireLogin();
+
       global $params;
 
       $text = $params['text'];
@@ -74,6 +111,8 @@
     }
 
     public static function deleteCustom() {
+      RecruiterController::requireLogin();
+
       global $params;
 
       $questionId = new MongoId($params['questionId']);
@@ -103,6 +142,8 @@
     }
 
     public static function searchCustom() {
+      RecruiterController::requireLogin();
+
       global $params;
 
       $search = $params['search'];

@@ -39,13 +39,13 @@
 
         // submit application
         TRUE(ApplicationStudent::submitSaved($applicationId));
-        TRUE(ApplicationModel::checkApplicationSubmitted($applicationId));
+        TRUE(ApplicationModel::checkSubmitted($applicationId));
 
         // submit new application
         $secondStudent = new MongoId();
         $secondApplication =
           ApplicationStudent::submitNew($jobId, $secondStudent, $answers);
-        TRUE(ApplicationModel::checkApplicationSubmitted(
+        TRUE(ApplicationModel::checkSubmitted(
           $secondApplication->getId()));
 
         // create, save, and delete application

@@ -17,7 +17,7 @@
     /**
      * Checks whether $applicationId is marked as submitted.
      */
-    public static function checkApplicationSubmitted(MongoId $applicationId);
+    public static function checkSubmitted(MongoId $applicationId);
 
     /**
      * Set the job document's application field to $data.
@@ -64,6 +64,17 @@
      * Gets all applications for a given student.
      */
     public static function getApplicationsByStudentId(MongoId $studentId);
+
+    /**
+     * Changes the 'status' of the application.
+     */
+    public static function changeStatus(MongoId $applicationId, $status);
+
+    /**
+     * Checks if the application is owned by the recruiter.
+     */
+    public static function isOwned(MongoId $recruiterId,
+                                   MongoId $applicationId);
   }
 
   class ApplicationModel extends Model implements ApplicationModelInterface {
@@ -88,7 +99,7 @@
     public static function submitWithStudentProfile(
       MongoId $applicationId, StudentProfile $studentProfile) {
       $update = (new DBUpdateQuery(self::$collection))
-        ->toQuery('_id', $applicationId)
+        ->queryForId($applciationId)
         ->toUpdate('submitted', true)
         ->toUpdate('profile', $studentProfile->getData());
       $update->run();
@@ -96,20 +107,20 @@
 
     public static function markAsSubmitted(MongoId $applicationId) {
       $update = (new DBUpdateQuery(self::$collection))
-        ->toQuery('_id', $applicationId)
+        ->queryForId($applciationId)
         ->toUpdate('submitted', true);
       $update->run();
     }
 
     public static function markAsUnSubmitted(MongoId $applicationId) {
       $update = (new DBUpdateQuery(self::$collection))
-        ->toQuery('_id', $applicationId)
+        ->queryForId($applciationId)
         ->toUpdate('submitted', false);
       $update->run();
     }
 
-    public static function checkApplicationSubmitted(MongoId $applicationId) {
-      $query = (new DBQuery(self::$collection))->toQuery('_id', $applicationId);
+    public static function checkSubmitted(MongoId $applicationId) {
+      $query = (new DBQuery(self::$collection))->queryForId($applciationId);
       return $query->findOne()['submitted'];
     }
 
@@ -144,7 +155,7 @@
     public static function replaceQuestionsField(MongoId $applicationId,
                                                  array $newQuestions) {
       $update = (new DBUpdateQuery(self::$collection))
-        ->toQuery('_id', $applicationId)
+        ->queryForId($applciationId)
         ->toUpdate('questions', $newQuestions);
       $update->run();
     }
@@ -193,8 +204,29 @@
       return $query->run();
     }
 
+    public static function changeStatus(MongoId $applicationId, $status) {
+      $update = (new DBUpdateQuery(self::$collection))
+        ->queryForId($applicationId)
+        ->toUpdate('status', $status);
+      $update->run();
+    }
+
+    public static function isOwned(MongoId $recruiterId,
+                                   MongoId $applicationId) {
+      $jobId = self::getJob($applicationId);
+      return JobModel::matchJobRecruiter($jobId, $recruiterId);
+    }
+
     private static function jobExists(MongoId $id) {
       return JobModel::exists($id);
+    }
+
+    private static function getJob(MongoId $applicationId) {
+      $query = (new DBQuery(self::$collection))
+        ->queryForId($applicationId)
+        ->projectField('jobid');
+      $application = $query->findOne();
+      return $application['jobid'];
     }
 
     protected static $collection;

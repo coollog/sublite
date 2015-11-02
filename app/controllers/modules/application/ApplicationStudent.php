@@ -50,6 +50,11 @@
     public static function getClaimedByJob(MongoId $jobId);
 
     /**
+     * Marks new status on applicationId. Status is string representation.
+     */
+    public static function changeStatus(MongoId $applicationId, $status);
+
+    /**
      * Retrieves an application by _id.
      */
     public static function getById(MongoId $applicationId);
@@ -163,6 +168,17 @@
       );
 
       return $statusMap;
+    }
+
+    public static function changeStatus(MongoId $applicationId, $status) {
+      $statusHash = [
+        'unclaimed' => self::STATUS_UNCLAIMED,
+        'review' => self::STATUS_REVIEW,
+        'rejected' => self::STATUS_REJECTED,
+        'accepted' => self::STATUS_ACCEPTED,
+        'reported' => self::STATUS_REPORTED
+      ];
+      ApplicationModel::changeStatus($applicationId, $statusHash[$status]);
     }
 
     public static function getById(MongoId $applicationId) {

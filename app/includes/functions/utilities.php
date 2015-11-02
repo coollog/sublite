@@ -181,7 +181,14 @@
     return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== FALSE);
   }
 
-  function toJSON($arr) {
+  function toJSON(array $arr) {
     return strip_tags(json_encode($arr));
+  }
+
+  function MongoIdArray(array $arr) {
+    foreach ($arr as &$_id) {
+      $_id = new MongoId($_id);
+    }
+    return $arr;
   }
 ?>
