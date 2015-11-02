@@ -9,8 +9,6 @@
     }
 
     function payNew() {
-      if (!isset($_POST['stripeToken'])) { $this->render('applicationpayment'); return; }
-
       //params: # of apps recruiter buys, id of recruiter, credit card information
       global $params, $MRecruiter;
 
