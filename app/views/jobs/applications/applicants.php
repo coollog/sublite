@@ -57,6 +57,9 @@
     subtab.focus, subtab:hover {
       color: #000;
     }
+    subtabframe {
+      display: none;
+    }
 
   unlockchoose, unlockconfirm {
     display: block;
@@ -171,9 +174,9 @@
 
   <claimedtemplate>
     <subtabs>
-      <subtab type="inreview" class="focus">In Review</subtab> |
-      <subtab type="accepted">Accepted</subtab> |
-      <subtab type="rejected">Rejected</subtab>
+      <subtab for="review" class="focus">In Review</subtab> |
+      <subtab for="accepted">Accepted</subtab> |
+      <subtab for="rejected">Rejected</subtab>
     </subtabs>
 
     <input class="moveToButton smallbutton reverse" to="review" type="button"
@@ -184,7 +187,28 @@
            value="Move to Rejected" />
     <nonetomove>Click on applications to select them!</nonetomove>
 
-    <applicantList></applicantList>
+    <applicantList>
+      <subtabframe for="review">
+        <br />
+        You do not have any unlocked applications that still need review.
+        Check the <a href="#" onclick="$('tab[for=unclaimed]').click()">New</a>
+        tab to see if you have any new applications that need to be unlocked!
+      </subtabframe>
+      <subtabframe for="accepted">
+        <br />
+        You do not have any applications in this folder.
+        You can move applications here using the buttons above.
+        This is simply for organization.
+        Students will NOT be notified.
+      </subtabframe>
+      <subtabframe for="rejected">
+        <br />
+        You do not have any applications in this folder.
+        You can move applications here using the buttons above.
+        This is simply for organization.
+        Students will NOT be notified.
+      </subtabframe>
+    </applicantList>
   </claimedtemplate>
   <applicanttemplate>
     <applicant applicationId="{_id}">
@@ -216,6 +240,44 @@
       console.log(data);
       data = JSON.parse(data);
       callback(data);
+    });
+  }
+  function setupSubtabs(callOnOpen) {
+    function getSubtabFrame(subtab) {
+      var name = $(subtab).attr('for');
+      return 'subtabframe[for='+name+']';
+    }
+    function showSubtabFrame(subtabframe) {
+      $(subtabframe).show();
+    }
+    function hideSubtabFrame(subtabframe) {
+      $(subtabframe).hide();
+    }
+    function closeSubtab(subtab) {
+      $(subtab).removeClass('focus');
+      hideSubtabFrame(getSubtabFrame(subtab));
+    }
+    function openSubtab(subtab) {
+      $(subtab).addClass('focus');
+      showSubtabFrame(getSubtabFrame(subtab));
+      if (typeof callOnOpen !== 'undefined') {
+        callOnOpen(subtab);
+      }
+    }
+
+    $('subtab').off('click').click(function() {
+      var me = this;
+      $('subtab').each(function() {
+        if (this != me) {
+          closeSubtab(this);
+        }
+      });
+      openSubtab(me);
+    });
+    $('subtab').each(function() {
+      if ($(this).hasClass('focus')) {
+        openSubtab(this);
+      }
     });
   }
 
@@ -280,13 +342,23 @@
       return _idList;
     }
 
-    var applicantListHTML = '';
-    data['review'].forEach(function (application) {
-      application['_id'] = application['_id'].$id;
-      var html = Templates.use('applicanttemplate', application);
-      applicantListHTML += html;
-    });
-    $('.tabframe[name=claimed] applicantList').html(applicantListHTML);
+    (function loadApplicantList(data) {
+      function getApplicationHTML(application) {
+        application['_id'] = application['_id'].$id;
+        var html = Templates.use('applicanttemplate', application);
+        return html;
+      }
+
+      for (var status in data) {
+        var html = '';
+        data[status].forEach(function (application) {
+          html += getApplicationHTML(application);
+        });
+        if (html == '') continue;
+        $('.tabframe[name=claimed] applicantList subtabframe[for='+status+']')
+          .html(html);
+      }
+    })(data);
 
     (function setupApplicant() {
       $('applicantList applicant').click(function() {
@@ -320,6 +392,13 @@
 
       $('nonetomove').hide();
     })();
+
+    setupSubtabs(function (me) {
+      var name = $(me).attr('for');
+      $('.moveToButton').show();
+      $('.moveToButton[to='+name+']').hide();
+      console.log(name);
+    });
   }
   function setupCredits(data) {
 
