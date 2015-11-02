@@ -57,6 +57,11 @@
       return (self::$collection->findOne(array('_id' => new MongoId($id))) !== NULL);
     }
 
+    function getPaymentInfo($id) {
+      $entry = self::getById($id);
+      return $entry['paymentInfo'];
+    }
+
     protected static $collection;
   }
 
