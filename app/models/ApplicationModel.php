@@ -49,6 +49,11 @@
     public static function getClaimed(MongoId $jobId);
 
     /**
+     * Gets all applications by $jobId, but project only 'status'.
+     */
+    public static function getStatusesByJob(MongoId $jobId);
+
+    /**
      * Checks whether the student has submitted or saved an application for the
      * job.
      */
@@ -99,7 +104,7 @@
     public static function submitWithStudentProfile(
       MongoId $applicationId, StudentProfile $studentProfile) {
       $update = (new DBUpdateQuery(self::$collection))
-        ->queryForId($applciationId)
+        ->queryForId($applicationId)
         ->toUpdate('submitted', true)
         ->toUpdate('profile', $studentProfile->getData());
       $update->run();
@@ -107,20 +112,20 @@
 
     public static function markAsSubmitted(MongoId $applicationId) {
       $update = (new DBUpdateQuery(self::$collection))
-        ->queryForId($applciationId)
+        ->queryForId($applicationId)
         ->toUpdate('submitted', true);
       $update->run();
     }
 
     public static function markAsUnSubmitted(MongoId $applicationId) {
       $update = (new DBUpdateQuery(self::$collection))
-        ->queryForId($applciationId)
+        ->queryForId($applicationId)
         ->toUpdate('submitted', false);
       $update->run();
     }
 
     public static function checkSubmitted(MongoId $applicationId) {
-      $query = (new DBQuery(self::$collection))->queryForId($applciationId);
+      $query = (new DBQuery(self::$collection))->queryForId($applicationId);
       return $query->findOne()['submitted'];
     }
 
@@ -155,7 +160,7 @@
     public static function replaceQuestionsField(MongoId $applicationId,
                                                  array $newQuestions) {
       $update = (new DBUpdateQuery(self::$collection))
-        ->queryForId($applciationId)
+        ->queryForId($applicationId)
         ->toUpdate('questions', $newQuestions);
       $update->run();
     }
@@ -178,6 +183,13 @@
       $query = (new DBQuery(self::$collection))
         ->toQuery('jobid', $jobId)
         ->toNotQuery('status', ApplicationStudent::STATUS_UNCLAIMED);
+      return $query->run();
+    }
+
+    public static function getStatusesByJob(MongoId $jobId) {
+      $query = (new DBQuery(self::$collection))
+        ->toQuery('jobid', $jobId)
+        ->projectField('status');
       return $query->run();
     }
 

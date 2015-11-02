@@ -41,10 +41,19 @@
 
       $job = JobModel::getByIdMinimal($jobId);
 
+      // Get the counts
+      $counts = ApplicationStudent::getClaimedUnclaimedCounts($jobId);
+      $claimedcount = $counts['claimed'];
+      $unclaimedcount = $counts['unclaimed'];
+      // $creditcount = ;
+
       self::render('jobs/applications/applicants', [
         'jobId' => $jobId,
         'jobTitle' => $job['title'],
-        'jobLocation' => $job['location']
+        'jobLocation' => $job['location'],
+        'unclaimedcount' => $unclaimedcount,
+        'claimedcount' => $claimedcount,
+        // 'creditcount' => $creditcount
       ]);
     }
 
@@ -128,7 +137,7 @@
       $application = ApplicationJob::get($jobId);
 
       // Make sure job exists.
-      if (!self::checkJobExists()) return;
+      if (!self::checkJobExists($jobId)) return;
 
       // Make sure application exists.
       if (is_null($application)) {

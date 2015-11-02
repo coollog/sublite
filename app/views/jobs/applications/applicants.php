@@ -28,6 +28,7 @@
       height: 100%;
       display: inline-block;
       box-sizing: border-box;
+      transition: 0.1s all ease-in-out;
     }
     tab.focus, tab:hover {
       background: #faf9f9;
@@ -53,6 +54,7 @@
     }
     subtab {
       cursor: pointer;
+      transition: 0.1s all ease-in-out;
     }
     subtab.focus, subtab:hover {
       color: #000;
@@ -121,7 +123,7 @@
 <templates>
   <unclaimedtemplate>
     <div class="headline">
-      Your job has <b>20</b> new applicants!
+      Your job has <b>{count}</b> new applicants!
     </div>
 
     <h2>Insight</h2>
@@ -134,14 +136,7 @@
     To view these applications, you must unlock them with <i>Credit</i>.
     <br /><br />
     <unlockchoose>
-      <input type="button" class="smallbutton unlockbutton" count="1"
-             value="Unlock 1 Application" /><br />
-      <input type="button" class="smallbutton unlockbutton" count="5"
-             value="Unlock 5 Applications" /><br />
-      <input type="button" class="smallbutton unlockbutton" count="20"
-             value="Unlock 20 Applications" /><br />
-      <input type="button" class="smallbutton unlockbutton" count="20"
-             value="Unlock All Applications" /><br />
+      <unlockbuttons></unlockbuttons>
       <subheadline>- or -</subheadline>
       <fade class="nohover">How many applications to unlock?</fade>
       <input id="unlockcustom" type="number"
@@ -171,6 +166,10 @@
              value="Back" />
     </fade>
   </unlockconfirmtemplate>
+  <unlockbuttontemplate>
+    <input type="button" class="smallbutton unlockbutton" count="{count}"
+           value="Unlock {text} Application{s}" /><br />
+  </unlockbuttontemplate>
 
   <claimedtemplate>
     <subtabs>
@@ -314,27 +313,58 @@
       }
     });
 
-    $('.unlockbutton').off('click').click(function () {
-      var count = strToInt($(this).attr('count'));
-      var oldCredits = 204;
-      var newCredits = oldCredits - count;
+    (function setupUnlockButtons() {
+      var unclaimedCount = <?php View::echof('unclaimedcount'); ?>;
+      var unlockCounts = [1, 5, 20, 50, 100];
 
-      var data = {
-        count: count,
-        oldCredits: oldCredits,
-        newCredits: newCredits
-      };
-      var unlockConfirmHTML = Templates.use('unlockconfirmtemplate', data);
+      function getUnlockButtonHTML(count) {
+        var showS = count > 1;
+        if (count == unclaimedCount) {
+          var text = 'All';
+          showS = true;
+        } else {
+          var text = count;
+        }
+        var data = {
+          text: text,
+          count: count,
+          s: showS ? 's' : ''
+        };
+        return Templates.use('unlockbuttontemplate', data);
+      }
 
-      showUnlockConfirm(unlockConfirmHTML);
-    });
+      var unlockButtonsHTML = '';
+      unlockCounts.forEach(function (count) {
+        if (count >= unclaimedCount) return;
+        unlockButtonsHTML += getUnlockButtonHTML(count);
+      });
+      unlockButtonsHTML += getUnlockButtonHTML(unclaimedCount);
+      $('unlockbuttons').html(unlockButtonsHTML);
+
+      $('.unlockbutton').off('click').click(function () {
+        var count = strToInt($(this).attr('count'));
+
+        // TODO: Change this to actual credit count.
+        var oldCredits = 204;
+        var newCredits = oldCredits - count;
+
+        var data = {
+          count: count,
+          oldCredits: oldCredits,
+          newCredits: newCredits
+        };
+        var unlockConfirmHTML = Templates.use('unlockconfirmtemplate', data);
+
+        showUnlockConfirm(unlockConfirmHTML);
+      });
+    })();
 
     $('unlockconfirm').hide();
   }
   function setupClaimed(data) {
     function getSelectedApplicants() {
       var _idList = [];
-      $('applicantList applicant').each(function() {
+      $('applicantList applicant').filter(':visible').each(function() {
         if ($(this).hasClass('selected')) {
           _idList.push($(this).attr('applicationId'));
         }
@@ -350,13 +380,17 @@
       }
 
       for (var status in data) {
-        var html = '';
-        data[status].forEach(function (application) {
-          html += getApplicationHTML(application);
-        });
-        if (html == '') continue;
-        $('.tabframe[name=claimed] applicantList subtabframe[for='+status+']')
-          .html(html);
+        switch (status) {
+          case 'review': case 'rejected': case 'accepted':
+            var html = '';
+            data[status].forEach(function (application) {
+              html += getApplicationHTML(application);
+            });
+            if (html == '') continue;
+            $('.tabframe[name=claimed] applicantList subtabframe[for='+status+']')
+              .html(html);
+            break;
+        }
       }
     })(data);
 
@@ -413,14 +447,17 @@
           var html = Templates.use('unclaimedtemplate', data);
         }
         var setup = setupUnclaimed;
+        $('unclaimedcount').html(data.count);
         break;
       case 'claimed':
         var html = Templates.use('claimedtemplate', data);
         var setup = setupClaimed;
+        $('claimedcount').html(data.count);
         break;
       case 'credits':
         var html = Templates.use('creditstemplate', data);
         var setup = setupCredits;
+        $('creditcount').html(data.count);
         break;
     }
     return {html: html, setup: setup};
@@ -510,11 +547,11 @@
 <panel class="tabs">
   <content class="nopadding">
     <tab for="unclaimed" class="focus">
-      New (<unclaimedcount>0</unclaimedcount>)
+      New (<unclaimedcount><?php View::echof('unclaimedcount'); ?></unclaimedcount>)
     </tab><tab for="claimed">
-      Applicants (<claimedcount>0</claimedcount>)
+      Applicants (<claimedcount><?php View::echof('claimedcount'); ?></claimedcount>)
     </tab><tab for="credits">
-      Credits (<creditcount>0</creditcount>)
+      Credits (<creditcount><?php View::echof('creditcount'); ?></creditcount>)
     </tab>
   </content>
 </panel>

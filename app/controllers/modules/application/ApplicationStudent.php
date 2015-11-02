@@ -170,15 +170,34 @@
       return $statusMap;
     }
 
-    public static function changeStatus(MongoId $applicationId, $status) {
-      $statusHash = [
-        'unclaimed' => self::STATUS_UNCLAIMED,
-        'review' => self::STATUS_REVIEW,
-        'rejected' => self::STATUS_REJECTED,
-        'accepted' => self::STATUS_ACCEPTED,
-        'reported' => self::STATUS_REPORTED
+    public static function getClaimedUnclaimedCounts(MongoId $jobId) {
+      $applications = ApplicationModel::getStatusesByJob($jobId);
+
+      $unclaimedCount = 0;
+      $claimedCount = 0;
+
+      foreach ($applications as $application) {
+        switch ($application['status']) {
+          case self::STATUS_UNCLAIMED:
+            $unclaimedCount ++;
+            break;
+          case self::STATUS_REVIEW:
+          case self::STATUS_ACCEPTED:
+          case self::STATUS_REJECTED:
+            $claimedCount ++;
+            break;
+        }
+      }
+
+      return [
+        'unclaimed' => $unclaimedCount,
+        'claimed' => $claimedCount
       ];
-      ApplicationModel::changeStatus($applicationId, $statusHash[$status]);
+    }
+
+    public static function changeStatus(MongoId $applicationId, $status) {
+      ApplicationModel::changeStatus($applicationId,
+                                     self::$statusHash[$status]);
     }
 
     public static function getById(MongoId $applicationId) {
@@ -259,6 +278,14 @@
       }
       return $jobs;
     }
+
+    private static $statusHash = [
+      'unclaimed' => self::STATUS_UNCLAIMED,
+      'review' => self::STATUS_REVIEW,
+      'rejected' => self::STATUS_REJECTED,
+      'accepted' => self::STATUS_ACCEPTED,
+      'reported' => self::STATUS_REPORTED
+    ];
 
     //**********************
     // non-static functions

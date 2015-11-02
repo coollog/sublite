@@ -371,8 +371,8 @@
 
       // Validations
       $this->startValidations();
-      $this->validate(strlen($recruiter) == 0 or
-                      !is_null($MRecruiter->getByID($recruiter)),
+      $this->validate(!MongoId::isValid($recruiter) or
+                      !is_null(RecruiterModel::getById(new MongoId($recruiter))),
         $err, 'unknown recruiter');
 
       // Code

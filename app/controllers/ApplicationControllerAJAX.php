@@ -27,6 +27,19 @@
     public static function applicantsTabUnclaimed() {
       RecruiterController::requireLogin();
 
+      $jobId = new MongoId($_POST['jobId']);
+
+      // Make sure job exists.
+      // Make sure recruiter owns the job.
+      if (!self::checkJobExists($jobId)) return;
+      if (!self::ownsJob($jobId)) return;
+
+      // Get the unclaimed applications.
+      $unclaimed = ApplicationStudent::getUnclaimedByJob($jobId);
+
+      echo toJSON([
+        'count' => count($unclaimed)
+      ]);
     }
 
     public static function applicantsTabClaimed() {
@@ -44,8 +57,10 @@
 
       // Retrieve just _id, name, school, and date for each.
       $applicationList = [];
+      $count = 0;
       foreach ($claimed as $status => &$claimedList) {
         $applicationList[$status] = [];
+        $count += count($claimedList);
 
         foreach ($claimedList as $application) {
           $applicationId = $application->getId();
@@ -64,6 +79,7 @@
         }
       }
 
+      $applicationList['count'] = count($count);
       echo toJSON($applicationList);
     }
 
