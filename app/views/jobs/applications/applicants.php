@@ -430,18 +430,27 @@
     Templates.init();
 
     (function setupTabs() {
+      // Tracks which tabs have been loaded already.
+      var loaded = {};
+
       function getTabframe(tab) {
         var name = $(tab).attr('for');
         return '.tabframe[name='+name+']';
       }
-      function showTabFrame(tabframe) {
-        $(tabframe).show().children('content').html('Loading...');
-
+      function showTabFrame(tabframe, reload) {
         var name = $(tabframe).attr('name');
+        $(tabframe).show();
+
+        // If already loaded, don't reload unless opening self again.
+        if (!reload && name in loaded) return;
+
+        $(tabframe).children('content').html('Loading...');
         loadContent('tab' + name, {}, function (data) {
           var htmlSetup = getHTMLSetup(name, data);
           $(tabframe).children('content').html(htmlSetup.html);
           htmlSetup.setup(data);
+
+          loaded[name] = true;
         });
       }
       function hideTabFrame(tabframe) {
@@ -452,8 +461,9 @@
         hideTabFrame(getTabframe(tab));
       }
       function openTab(tab) {
+        var reload = $(tab).hasClass('focus');
         $(tab).addClass('focus');
-        showTabFrame(getTabframe(tab));
+        showTabFrame(getTabframe(tab), reload);
       }
 
       $('tab').off("click").click(function() {
