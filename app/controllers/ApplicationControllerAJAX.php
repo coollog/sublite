@@ -134,7 +134,9 @@
       $recruiterId = $_SESSION['_id'];
 
       // Subtract away credits.
-
+      $credits = RecruiterModel::getCredits($recruiterId);
+      if ($credits < $count) return;
+      RecruiterModel::setCredits($recruiterId, $credits - $count);
 
       ApplicationModel::claim($jobId, $count);
 

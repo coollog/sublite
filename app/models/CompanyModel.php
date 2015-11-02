@@ -27,9 +27,6 @@
       $entry = $this->get($id);
       return $entry['industry'];
     }
-    function getAll() {
-      return self::$collection->find();
-    }
     function find($query) {
       return self::$collection->find($query);
     }

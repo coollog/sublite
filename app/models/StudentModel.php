@@ -66,9 +66,6 @@
     function get($email) {
       return self::$collection->findOne(array('email' => $email));
     }
-    function getAll() {
-      return self::$collection->find();
-    }
     function getAllwTime() {
       return self::$collection->find(array('time' => array('$exists' => true)));
     }

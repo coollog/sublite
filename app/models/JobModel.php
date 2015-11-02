@@ -83,9 +83,6 @@
     function get($id) {
       return self::$collection->findOne(array('_id' => new MongoId($id)));
     }
-    function getAll() {
-      return self::$collection->find();
-    }
     function find($query=array()) {
       return self::$collection->find($query);
     }

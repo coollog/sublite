@@ -1,8 +1,32 @@
 <?php
   require_once($GLOBALS['dirpre'].'models/Model.php');
 
-  class RecruiterModel extends Model {
+  interface RecruiterModelInterface {
+    public static function getCredits(MongoId $recruiterId);
+    public static function setCredits(MongoId $recruiterId, $count);
+  }
+
+  class RecruiterModel extends Model implements RecruiterModelInterface {
     const DB_TYPE = parent::DB_INTERNSHIPS;
+
+    public static function getCredits(MongoId $recruiterId) {
+      $query = (new DBQuery(self::$collection))
+        ->queryForId($recruiterId)->projectField('credits');
+      $recruiter = $query->findOne();
+      return $recruiter['credits'];
+    }
+
+    public static function setCredits(MongoId $recruiterId, $count) {
+      $update = (new DBUpdateQuery(self::$collection))
+        ->queryForId($recruiterId)->toUpdate('credits', $count);
+      $update->run();
+    }
+
+    public static function subtractCredits(MongoId $recruiterId, $count) {
+      $update = (new DBUpdateQuery(self::$collection))
+        ->queryForId($recruiterId)->toAdd('credits', -$count);
+      $update->run();
+    }
 
     function __construct() {
       parent::__construct(self::DB_TYPE, 'recruiters');

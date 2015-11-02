@@ -42,9 +42,6 @@
       if (!MongoId::isValid($id)) return null;
       return self::$collection->findOne(array('_id' => new MongoId($id)));
     }
-    function getAll() {
-      return self::$collection->find();
-    }
     function getClosestHub($address, $maxMiles) {
       $geocode = geocode($address);
       $longitude = $geocode['longitude'];

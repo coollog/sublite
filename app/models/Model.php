@@ -13,6 +13,7 @@
     public static function insert(array $data);
     public static function deleteById(MongoId $id);
     public static function getById(MongoId $id, array $projection);
+    public static function getAll();
   }
 
   class Model {
@@ -56,6 +57,10 @@
         ->queryForId($id)->setProjection($projection);
 
       return $query->findOne();
+    }
+
+    public static function getAll() {
+      return (new DBQuery(static::$collection))->run();
     }
 
     protected static function checkReady() {

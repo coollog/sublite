@@ -73,6 +73,9 @@
     font-weight: bold;
   }
 
+  creditsenough {
+    display: block;
+  }
   nonetomove, unlockingtoomany, creditsnotenough {
     display: block;
     color: red;
@@ -163,7 +166,7 @@
       Your new <i>Credits</i> will be
       <count>{oldCredits} - {count} = {newCredits}</count>.
     </creditsenough>
-    <creditsnotenough>
+    <creditsnotenough class="hide">
       You do not have enough credits!
       To purchase more credits, click on the
       <a href="#" onclick="$('tab[for=credits]').click()">Credits</a> tab.

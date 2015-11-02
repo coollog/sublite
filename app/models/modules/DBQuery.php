@@ -63,12 +63,17 @@
 
   interface DBUpdateQueryInterface {
     /**
-     * Set individual update field.
+     * Set individual $set field.
      */
     public function toUpdate($name, $newval);
 
+    /*
+     * Set individual $inc field.
+     */
+    public function toAdd($name, $addval);
+
     /**
-     * Set entire update data.
+     * Set entire $set data.
      */
     public function setUpdate($update);
 
@@ -216,13 +221,25 @@
       return $this;
     }
 
+    public function toAdd($name, $addval) {
+      $this->inc[$name] = $addval;
+      return $this;
+    }
+
     public function setUpdate($update) {
       $this->update = $update;
     }
 
     public function run() {
       // This an update, so run an update, and return success/failure.
-      self::update(array('$set' => $this->update));
+      $data = [];
+      if (!empty($this->update)) {
+        $data['$set'] = $this->update;
+      }
+      if (!empty($this->inc)) {
+        $data['$inc'] = $this->inc;
+      }
+      self::update($data);
     }
 
     public function getUpdate() {
@@ -230,6 +247,7 @@
     }
 
     private $update = [];
+    private $inc = [];
   }
 
   class DBRemoveQuery extends DBQuery implements DBRemoveQueryInterface {

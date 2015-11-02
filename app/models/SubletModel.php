@@ -22,9 +22,6 @@
     function last($n=1) {
       return $this->find(array('publish' => true))->sort(array('_id'=>-1))->limit($n);
     }
-    function getAll() {
-      return self::$collection->find();
-    }
     function getByStudent($id) {
       return self::$collection->find(array('student' => new MongoId($id)));
     }

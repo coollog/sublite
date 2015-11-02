@@ -312,12 +312,14 @@
       $counts = ApplicationStudent::getClaimedUnclaimedCounts($jobId);
       $claimedCount = $counts['claimed'];
       $unclaimedCount = $counts['unclaimed'];
-      // $creditcount = ;
+
+      $recruiterId = $_SESSION['_id'];
+      $creditcount = RecruiterModel::getCredits($recruiterId);
 
       return [
         'claimedcount' => $claimedCount,
         'unclaimedcount' => $unclaimedCount,
-        'creditcount' => 0 // TODO: CHANGE THIS
+        'creditcount' => $creditcount
       ];
     }
 
