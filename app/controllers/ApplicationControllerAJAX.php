@@ -13,14 +13,49 @@
   }
 
   class ApplicationControllerAJAX
-    extends Controller implements ApplicationControllerAJAXInterface {
+    extends ApplicationController
+    implements ApplicationControllerAJAXInterface {
 
     public static function applicantsTabUnclaimed() {
 
     }
 
     public static function applicantsTabClaimed() {
+      RecruiterController::requireLogin();
 
+      $jobId = new MongoId($_POST['jobId']);
+
+      // Make sure job exists.
+      // Make sure recruiter owns the job.
+      if (!self::checkJobExists($jobId)) return;
+      if (!self::ownsJob($jobId)) return;
+
+      // Get the claimed applications.
+      $claimed = ApplicationStudent::getClaimedByJob($jobId);
+
+      // Retrieve just _id, name, school, and date for each.
+      $applicationList = [];
+      foreach ($claimed as $status => &$claimedList) {
+        $applicationList[$status] = [];
+
+        foreach ($claimedList as $application) {
+          $applicationId = $application->getId();
+          $time = $applicationId->getTimestamp();
+          $date = fdatelong($time);
+
+          $studentId = $application->getStudentId();
+          $student = StudentModel::getByIdMinimal($studentId);
+
+          $applicationList[$status][] = [
+            '_id' => $applicationId,
+            'name' => $student['name'],
+            'school' => $student['school'],
+            'date' => $date
+          ];
+        }
+      }
+
+      echo toJSON($applicationList);
     }
 
     public static function applicantsTabCredits() {

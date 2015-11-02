@@ -7,6 +7,11 @@
     public static function replaceAnswers(MongoId $studentId, array $answers);
     public static function getProfile(MongoId $studentId);
     public static function setProfile(MongoId $studentId, array $profileData);
+
+    /**
+     * Retrieves just email, name, and school name.
+     */
+    public static function getByIdMinimal(MongoId $studentId);
   }
 
   class StudentModel extends Model {
@@ -37,6 +42,13 @@
       $update = (new DBUpdateQuery(self::$collection))
         ->queryForId($studentId)->toUpdate('profile', $profileData);
       $update->run();
+    }
+
+    public static function getByIdMinimal(MongoId $studentId) {
+      global $S;
+      $student = self::getById($studentId, ['email' => true, 'name' => true]);
+      $student['school'] = $S->nameOf($student['email']);
+      return $student;
     }
 
     public function __construct() {

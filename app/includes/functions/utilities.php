@@ -83,6 +83,7 @@
   }
 
   function fdate($timestamp) { return date('n/j/y', $timestamp); }
+  function fdatelong($timestamp) { return date('F j, Y', $timestamp); }
 
   function strmax($str, $len) {
     if (strlen($str) > $len) {
@@ -164,7 +165,11 @@
     }
 
     foreach ($dataArray as $data) {
-      $key = $keyMap[$switchFunc($data)];
+      $keyMapKey = $switchFunc($data);
+
+      if (!isset($keyMap[$keyMapKey])) continue;
+
+      $key = $keyMap[$keyMapKey];
       $map[$key][] = $data;
     }
 
@@ -177,6 +182,6 @@
   }
 
   function toJSON($arr) {
-    return clean(json_encode($arr));
+    return strip_tags(json_encode($arr));
   }
 ?>

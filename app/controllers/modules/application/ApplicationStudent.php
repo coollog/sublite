@@ -82,6 +82,7 @@
     const STATUS_REVIEW    = 1;
     const STATUS_REJECTED  = 2;
     const STATUS_ACCEPTED  = 3;
+    const STATUS_REPORTED  = 4;
 
     public static function save(MongoId $jobId,
                                 MongoId $studentId,
@@ -145,11 +146,11 @@
     }
 
     public static function getUnclaimedByJob(MongoId $jobId) {
-      return processDataArray(ApplicationModel::getUnclaimed($jobId));
+      return self::processDataArray(ApplicationModel::getUnclaimed($jobId));
     }
 
     public static function getClaimedByJob(MongoId $jobId) {
-      $jobs = processDataArray(ApplicationModel::getClaimed($jobId));
+      $jobs = self::processDataArray(ApplicationModel::getClaimed($jobId));
 
       $statusMap = mapDataArrayByField(
         $jobs,
@@ -270,7 +271,7 @@
       $this->data['studentid'] = new MongoId($data['studentid']);
       $this->data['submitted'] = boolval($data['submitted']);
       $this->data['status'] =
-        isset($data['status']) ? intval($data['status']) : [];
+        isset($data['status']) ? intval($data['status']) : 0;
     }
 
     public function getId() {

@@ -42,9 +42,9 @@
       $job = JobModel::getByIdMinimal($jobId);
 
       self::render('jobs/applications/applicants', [
-        'jobid' => $jobId,
-        'jobtitle' => $job['title'],
-        'joblocation' => $job['location']
+        'jobId' => $jobId,
+        'jobTitle' => $job['title'],
+        'jobLocation' => $job['location']
       ]);
     }
 
@@ -279,6 +279,31 @@
     }
 
     /**
+     * Checks if $jobId is a job, and if not, error.
+     */
+    protected static function checkJobExists(MongoId $jobId) {
+      if (!JobModel::exists($jobId)) {
+        self::error("nonexistent job");
+        self::render('notice');
+        return false;
+      }
+      return true;
+    }
+
+    /**
+     * Checks if the recruiters owns $jobId, and if not, error.
+     */
+    protected static function ownsJob(MongoId $jobId) {
+      $recruiterId = $_SESSION['_id'];
+      if (!JobModel::matchJobRecruiter($jobId, $recruiterId)) {
+        self::error("permission denied");
+        self::render('notice');
+        return false;
+      }
+      return true;
+    }
+
+    /**
      * Saves the questionIds from client for $jobId.
      * Returns true if performed.
      */
@@ -297,31 +322,6 @@
       // Update job application questions.
       $success = ApplicationJob::createOrUpdate($jobId, $questionIds);
 
-      return true;
-    }
-
-    /**
-     * Checks if $jobId is a job, and if not, error.
-     */
-    private static function checkJobExists(MongoId $jobId) {
-      if (!JobModel::exists($jobId)) {
-        self::error("nonexistent job");
-        self::render('notice');
-        return false;
-      }
-      return true;
-    }
-
-    /**
-     * Checks if the recruiters owns $jobId, and if not, error.
-     */
-    private static function ownsJob(MongoId $jobId) {
-      $recruiterId = $_SESSION['_id'];
-      if (!JobModel::matchJobRecruiter($jobId, $recruiterId)) {
-        self::error("permission denied");
-        self::render('notice');
-        return false;
-      }
       return true;
     }
   }

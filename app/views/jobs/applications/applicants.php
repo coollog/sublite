@@ -67,6 +67,52 @@
   unlockconfirm count {
     font-weight: bold;
   }
+
+  nonetomove {
+    display: block;
+    color: red;
+  }
+  applicantList {
+    display: block;
+    position: relative;
+  }
+  applicantList info {
+    display: table-cell;
+  }
+  applicantList applicant {
+    display: table;
+    table-layout: fixed;
+    box-sizing: border-box;
+    width: 100%;
+    background: white;
+    padding: 2em;
+    margin-top: 2em;
+    box-shadow: 1px 1px 1px #ccc;
+    cursor: pointer;
+    transition: 0.1s all ease-in-out;
+  }
+  applicantList applicant:hover {
+    opacity: 0.5;
+  }
+  applicantList applicant.selected {
+    background: #daebf2;
+  }
+  applicantList applicant name {
+    font-size: 2em;
+    line-height: 1.2em;
+    font-weight: bold;
+    display: block;
+  }
+  applicantList applicant school {
+    font-size: 1.5em;
+    line-height: 1.5em;
+    display: block;
+  }
+  applicantList applicant buttons {
+    display: table-cell;
+    vertical-align: bottom;
+    text-align: right;
+  }
 </style>
 
 <templates>
@@ -129,7 +175,31 @@
       <subtab type="accepted">Accepted</subtab> |
       <subtab type="rejected">Rejected</subtab>
     </subtabs>
+
+    <input class="moveToButton smallbutton reverse" to="review" type="button"
+           value="Move to In Review" />
+    <input class="moveToButton smallbutton reverse" to="accepted" type="button"
+           value="Move to Accepted" />
+    <input class="moveToButton smallbutton reverse" to="rejected" type="button"
+           value="Move to Rejected" />
+    <nonetomove>Click on applications to select them!</nonetomove>
+
+    <applicantList></applicantList>
   </claimedtemplate>
+  <applicanttemplate>
+    <applicant applicationId="{_id}">
+      <info>
+        <name>{name}</name>
+        <school>{school}</school>
+        <fade class="nohover">Applied on <date>{date}</date></fade>
+      </info>
+      <buttons>
+        <a href="../../jobs/application/{_id}" target="_blank">
+          <input type="button" value="View" />
+        </a>
+      </buttons>
+    </applicant>
+  </applicanttemplate>
 
   <creditstemplate>
 
@@ -137,9 +207,16 @@
 </templates>
 
 <script>
-  function loadContent(id, callback) {
+  function loadContent(id, data, callback) {
     var route = 'ajax/' + id;
-    $.post(route, callback);
+    data.jobId = '<?php View::echof('jobId'); ?>';
+
+    $.post(route, data, function (data) {
+      console.log("'" + route + "' returned with:");
+      console.log(data);
+      data = JSON.parse(data);
+      callback(data);
+    });
   }
 
   function setupUnclaimed(data) {
@@ -193,7 +270,56 @@
     $('unlockconfirm').hide();
   }
   function setupClaimed(data) {
+    function getSelectedApplicants() {
+      var _idList = [];
+      $('applicantList applicant').each(function() {
+        if ($(this).hasClass('selected')) {
+          _idList.push($(this).attr('applicationId'));
+        }
+      });
+      return _idList;
+    }
 
+    var applicantListHTML = '';
+    data['review'].forEach(function (application) {
+      application['_id'] = application['_id'].$id;
+      var html = Templates.use('applicanttemplate', application);
+      applicantListHTML += html;
+    });
+    $('.tabframe[name=claimed] applicantList').html(applicantListHTML);
+
+    (function setupApplicant() {
+      $('applicantList applicant').click(function() {
+        $(this).toggleClass('selected');
+        $('nonetomove').hide();
+      });
+    })();
+
+    (function setupMoveTo() {
+      $('.moveToButton').each(function() {
+        $(this).click(function() {
+          var selected = getSelectedApplicants();
+          if (selected.length == 0) {
+            $('nonetomove').show();
+            return;
+          }
+
+          var to = $(this).attr('to');
+          var data = {
+            selected: selected,
+            to: to
+          };
+          $('.tabframe[name=claimed]')
+            .show().children('content').html('Loading...');
+
+          loadContent('moveapplications', data, function() {
+            $('tab[for=claimed]').click();
+          });
+        });
+      });
+
+      $('nonetomove').hide();
+    })();
   }
   function setupCredits(data) {
 
@@ -230,12 +356,12 @@
         return '.tabframe[name='+name+']';
       }
       function showTabFrame(tabframe) {
-        $(tabframe).children('content').html('Loading...');
+        $(tabframe).show().children('content').html('Loading...');
 
         var name = $(tabframe).attr('name');
-        loadContent('tab' + name, function (data) {
+        loadContent('tab' + name, {}, function (data) {
           var htmlSetup = getHTMLSetup(name, data);
-          $(tabframe).show().children('content').html(htmlSetup.html);
+          $(tabframe).children('content').html(htmlSetup.html);
           htmlSetup.setup(data);
         });
       }
@@ -274,18 +400,18 @@
       <div class="headline">
         Viewing job applicants for:
         <b>
-          <?php View::echof('jobtitle'); ?> |
-          <?php View::echof('joblocation'); ?>
+          <?php View::echof('jobTitle'); ?> |
+          <?php View::echof('jobLocation'); ?>
         </b>
       </div>
 
       <a href="../home">
         <input type="button" value="See All Jobs" />
       </a>
-      <a href="../editjob?id=<?php View::echof('jobid'); ?>">
+      <a href="../editjob?id=<?php View::echof('jobId'); ?>">
         <input type="button" value="Edit Job" />
       </a>
-      <a href="../editapplication/<?php View::echof('jobid'); ?>">
+      <a href="../editapplication/<?php View::echof('jobId'); ?>">
         <input type="button" value="Edit Application" />
       </a>
     </left>
