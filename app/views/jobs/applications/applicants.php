@@ -73,7 +73,7 @@
     font-weight: bold;
   }
 
-  nonetomove {
+  nonetomove, unlockingtoomany, creditsnotenough {
     display: block;
     color: red;
   }
@@ -123,7 +123,7 @@
 <templates>
   <unclaimedtemplate>
     <div class="headline">
-      Your job has <b>{count}</b> new applicants!
+      Your job has <b>{unclaimedcount}</b> new applicants!
     </div>
 
     <h2>Insight</h2>
@@ -144,6 +144,9 @@
       <input id="unlockcustombutton" type="button" count="0"
              class="smallbutton nohover unlockbutton"
              value="Unlock 0 Applications" disabled />
+      <unlockingtoomany class="hide">
+        You are trying to unlock too many applications!
+      </unlockingtoomany>
     </unlockchoose>
     <unlockconfirm></unlockconfirm>
   </unclaimedtemplate>
@@ -154,17 +157,26 @@
     <a href="#" onclick="$('tab[for=claimed]').click()">Applicants</a> tab.
   </unclaimednonetemplate>
   <unlockconfirmtemplate>
-    You are about to unlock <count>{count}</count> applications at
-    <i>1 Credit per application</i>.<br />
-    Your new <i>Credits</i> will be
-    <count>{oldCredits} - {count} = {newCredits}</count>.
-    <br /><br />
-    <input id="unlockconfirmbutton" type="button" class="smallbutton"
-           value="Confirm" />
-    <fade>
-      <input id="unlockback" type="button" class="reverse smallbutton"
-             value="Back" />
-    </fade>
+    You are about to unlock <count id="countToUnlock">{count}</count>
+    applications at <i>1 Credit per application</i>.<br />
+    <creditsenough>
+      Your new <i>Credits</i> will be
+      <count>{oldCredits} - {count} = {newCredits}</count>.
+    </creditsenough>
+    <creditsnotenough>
+      You do not have enough credits!
+      To purchase more credits, click on the
+      <a href="#" onclick="$('tab[for=credits]').click()">Credits</a> tab.
+    </creditsnotenough>
+    <br />
+    <unlocking>
+      <input id="unlockconfirmbutton" type="button" class="smallbutton"
+             value="Confirm" />
+      <fade>
+        <input id="unlockback" type="button" class="reverse smallbutton"
+               value="Back" />
+      </fade>
+    </unlocking>
   </unlockconfirmtemplate>
   <unlockbuttontemplate>
     <input type="button" class="smallbutton unlockbutton" count="{count}"
@@ -282,7 +294,17 @@
 
   function setupUnclaimed(data) {
     function confirmUnlock() {
-      console.log('confirmed unlock!');
+      var count = parseInt($('#countToUnlock').html());
+
+      var data = {
+        jobId: '<?php View::echof('jobId'); ?>',
+        count: count
+      };
+      $('unlocking').html('Unlocking...');
+      loadContent('claimapplications', data, function (data) {
+        $('tab[for=unclaimed]').click();
+        // $('tab[for=claimed]').click();
+      });
     }
 
     function hideUnlockConfirm() {
@@ -306,11 +328,13 @@
       var text = 'Unlock ' + count + ' Applications';
 
       button.val(text).attr('count', count);
-      if (count == 0) {
+      if (count <= 0) {
         button.addClass('nohover').prop('disabled', true);
       } else {
         button.removeClass('nohover').prop('disabled', false);
       }
+
+      $('unlockingtoomany').hide();
     });
 
     (function setupUnlockButtons() {
@@ -343,9 +367,13 @@
 
       $('.unlockbutton').off('click').click(function () {
         var count = strToInt($(this).attr('count'));
+        if (count > unclaimedCount) {
+          $('unlockingtoomany').show();
+          return;
+        }
 
         // TODO: Change this to actual credit count.
-        var oldCredits = 204;
+        var oldCredits = <?php View::echof('creditcount'); ?>;
         var newCredits = oldCredits - count;
 
         var data = {
@@ -356,6 +384,14 @@
         var unlockConfirmHTML = Templates.use('unlockconfirmtemplate', data);
 
         showUnlockConfirm(unlockConfirmHTML);
+
+        if (oldCredits < count) {
+          // Credits not enough.
+          $('creditsnotenough').show();
+          $('creditsenough').hide();
+          $('#unlockconfirmbutton').remove();
+          return;
+        }
       });
     })();
 
@@ -441,25 +477,25 @@
   function getHTMLSetup(id, data) {
     switch (id) {
       case 'unclaimed':
-        if (data.count == 0) {
+        if (data.unclaimedcount == 0) {
           var html = Templates.use('unclaimednonetemplate', data);
         } else {
           var html = Templates.use('unclaimedtemplate', data);
         }
         var setup = setupUnclaimed;
-        $('unclaimedcount').html(data.count);
         break;
       case 'claimed':
         var html = Templates.use('claimedtemplate', data);
         var setup = setupClaimed;
-        $('claimedcount').html(data.count);
         break;
       case 'credits':
         var html = Templates.use('creditstemplate', data);
         var setup = setupCredits;
-        $('creditcount').html(data.count);
         break;
     }
+    $('unclaimedcount').html(data.unclaimedcount);
+    $('claimedcount').html(data.claimedcount);
+    $('creditcount').html(data.creditcount);
     return {html: html, setup: setup};
   }
 

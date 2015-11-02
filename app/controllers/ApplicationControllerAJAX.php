@@ -11,6 +11,7 @@
     public static function applicantsTabClaimed();
     public static function applicantsTabCredits();
     public static function moveApplications();
+    public static function claimApplications();
 
     /**
      * Calls made while editing an application.
@@ -34,12 +35,10 @@
       if (!self::checkJobExists($jobId)) return;
       if (!self::ownsJob($jobId)) return;
 
-      // Get the unclaimed applications.
-      $unclaimed = ApplicationStudent::getUnclaimedByJob($jobId);
+      // Get the counts.
+      $countsHash = self::getCountsHash($jobId);
 
-      echo toJSON([
-        'count' => count($unclaimed)
-      ]);
+      echo toJSON($countsHash);
     }
 
     public static function applicantsTabClaimed() {
@@ -79,12 +78,24 @@
         }
       }
 
-      $applicationList['count'] = count($count);
-      echo toJSON($applicationList);
+      // Get the counts.
+      $countsHash = self::getCountsHash($jobId);
+
+      $data = array_merge($applicationList, $countsHash);
+      echo toJSON($data);
     }
 
     public static function applicantsTabCredits() {
       RecruiterController::requireLogin();
+
+      $jobId = new MongoId($_POST['jobId']);
+
+      // Make sure job exists.
+      // Make sure recruiter owns the job.
+      if (!self::checkJobExists($jobId)) return;
+      if (!self::ownsJob($jobId)) return;
+
+      $countsHash = self::getCountsHash($jobId);
 
     }
 
@@ -109,6 +120,23 @@
       foreach ($selected as $applicationId) {
         ApplicationStudent::changeStatus($applicationId, $to);
       }
+
+      echo toJSON(['error' => null]);
+    }
+
+    public static function claimApplications() {
+      RecruiterController::requireLogin();
+
+      global $params;
+
+      $jobId = new MongoId($params['jobId']);
+      $count = intval($params['count']);
+      $recruiterId = $_SESSION['_id'];
+
+      // Subtract away credits.
+
+
+      ApplicationModel::claim($jobId, $count);
 
       echo toJSON(['error' => null]);
     }

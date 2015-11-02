@@ -6,29 +6,19 @@
      * Inserts the document $data into the database. $data must be nonempty.
      * Returns the document _id, or null if error.
      */
-    public static function insert(MongoCollection $collection, array $data);
+    public function insert(array $data);
 
-    public static function query(MongoCollection $collection,
-                                 array $query,
-                                 array $projection = array());
-    public static function queryForOne(MongoCollection $collection,
-                                       array $query,
-                                       array $projection = array());
-    public static function queryAndSort(MongoCollection $collection,
-                                        array $query,
-                                        array $projection = array(),
-                                        array $sort = array());
-    public static function update(MongoCollection $collection,
-                                  array $query,
-                                  array $update);
-    public static function remove(MongoCollection $collection,
-                                  array $query);
+    public function query();
+    public function queryForOne();
+    public function update(array $update);
+    public function remove();
   }
 
   // DBQuery - performs (query, projection)
   interface DBQueryInterface {
     public function toQuery($name, $val);
     public function toNotQuery($name, $val);
+    public function limit($n);
 
     /**
      * Run a text search on $text.
@@ -103,50 +93,6 @@
    * Contains functions for performing commands on the DB.
    */
   class DBExecute implements DBExecuteInterface {
-    public function __construct(MongoCollection $collection) {
-      $this->collection = $collection;
-    }
-
-    public static function insert(MongoCollection $collection, array $data) {
-      if (count($data) == 0) {
-        return null;
-      }
-
-      $collection->insert($data);
-      return $data['_id'];
-    }
-
-    public static function query(MongoCollection $collection,
-                                 array $query,
-                                 array $projection = array()) {
-      return self::cursorToArray($collection->find($query, $projection));
-    }
-
-    public static function queryForOne(MongoCollection $collection,
-                                       array $query,
-                                       array $projection = array()) {
-      return $collection->findOne($query, $projection);
-    }
-
-    public static function queryAndSort(MongoCollection $collection,
-                                        array $query,
-                                        array $projection = array(),
-                                        array $sort = array()) {
-      return self::cursorToArray(
-        $collection->find($query, $projection)->sort($sort));
-    }
-
-    public static function update(MongoCollection $collection,
-                                  array $query,
-                                  array $update) {
-      return $collection->update($query, $update);
-    }
-
-    public static function remove(MongoCollection $collection,
-                                  array $query) {
-      return $collection->remove($query);
-    }
-
     private static function cursorToArray(MongoCursor $cursor) {
       $docs = [];
       foreach ($cursor as $doc) {
@@ -155,7 +101,49 @@
       return $docs;
     }
 
+    public function __construct(MongoCollection $collection) {
+      $this->collection = $collection;
+    }
+
+    public function insert(array $data) {
+      if (count($data) == 0) {
+        return null;
+      }
+
+      $this->collection->insert($data);
+      return $data['_id'];
+    }
+
+    public function query() {
+      $cursor = $this->collection->find($this->query, $this->projection);
+
+      if (!empty($this->sort)) {
+        $cursor->sort($this->sort);
+      }
+      if (isset($this->limit)) {
+        $cursor->limit($this->limit);
+      }
+
+      return self::cursorToArray($cursor);
+    }
+
+    public function queryForOne() {
+      return $this->collection->findOne($this->query, $this->projection);
+    }
+
+    public function update(array $update) {
+      return $this->collection->update($this->query, $update);
+    }
+
+    public function remove() {
+      return $this->collection->remove($this->query);
+    }
+
     protected $collection;
+    protected $query = [];
+    protected $projection = [];
+    protected $sort = [];
+    protected $limit;
   }
 
   ////////////////
@@ -184,6 +172,11 @@
       return $this;
     }
 
+    public function limit($n) {
+      $this->limit = $n;
+      return $this;
+    }
+
     public function setProjection(array $projection) {
       $this->projection = $projection;
       return $this;
@@ -195,7 +188,7 @@
     }
 
     public function projectId() {
-      $this->projection = [];
+      $this->projection = ['_nonexistent' => 1];
       return $this;
     }
 
@@ -205,26 +198,16 @@
     }
 
     public function findOne() {
-      return self::queryForOne(
-        $this->collection, $this->query, $this->projection);
+      return self::queryForOne();
     }
 
     public function run() {
-      if (empty($sort)) {
-        return self::query($this->collection, $this->query, $this->projection);
-      } else {
-        return self::queryAndSort(
-          $this->collection, $this->query, $this->projection, $this->sort);
-      }
+      return self::query();
     }
 
     public function getQuery() {
       return $this->query;
     }
-
-    protected $query = [];
-    protected $projection = [];
-    protected $sort = [];
   }
 
   class DBUpdateQuery extends DBQuery implements DBUpdateQueryInterface {
@@ -239,8 +222,7 @@
 
     public function run() {
       // This an update, so run an update, and return success/failure.
-      self::update(
-        $this->collection, $this->query, array('$set' => $this->update));
+      self::update(array('$set' => $this->update));
     }
 
     public function getUpdate() {
@@ -253,7 +235,7 @@
   class DBRemoveQuery extends DBQuery implements DBRemoveQueryInterface {
     public function run() {
       // Run the remove query, always returns true.
-      return self::remove($this->collection, $this->query);
+      return self::remove();
     }
   }
 
@@ -266,7 +248,7 @@
     public function run() {
       invariant(isset($this->data));
 
-      return self::insert($this->collection, $this->data);
+      return self::insert($this->data);
     }
 
     private $data;

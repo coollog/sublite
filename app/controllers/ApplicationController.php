@@ -41,20 +41,16 @@
 
       $job = JobModel::getByIdMinimal($jobId);
 
-      // Get the counts
-      $counts = ApplicationStudent::getClaimedUnclaimedCounts($jobId);
-      $claimedcount = $counts['claimed'];
-      $unclaimedcount = $counts['unclaimed'];
-      // $creditcount = ;
+      // Get the counts.
+      $countsHash = self::getCountsHash($jobId);
 
-      self::render('jobs/applications/applicants', [
+      $data = array_merge([
         'jobId' => $jobId,
         'jobTitle' => $job['title'],
-        'jobLocation' => $job['location'],
-        'unclaimedcount' => $unclaimedcount,
-        'claimedcount' => $claimedcount,
-        // 'creditcount' => $creditcount
-      ]);
+        'jobLocation' => $job['location']
+      ], $countsHash);
+
+      self::render('jobs/applications/applicants', $data);
     }
 
     public static function edit(array $restOfRoute) {
@@ -310,6 +306,19 @@
         return false;
       }
       return true;
+    }
+
+    protected static function getCountsHash(MongoId $jobId) {
+      $counts = ApplicationStudent::getClaimedUnclaimedCounts($jobId);
+      $claimedCount = $counts['claimed'];
+      $unclaimedCount = $counts['unclaimed'];
+      // $creditcount = ;
+
+      return [
+        'claimedcount' => $claimedCount,
+        'unclaimedcount' => $unclaimedCount,
+        'creditcount' => 0 // TODO: CHANGE THIS
+      ];
     }
 
     /**

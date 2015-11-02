@@ -80,6 +80,11 @@
      */
     public static function isOwned(MongoId $recruiterId,
                                    MongoId $applicationId);
+
+    /**
+     * Changes 'status' of $count applications under $jobId to 'review'.
+     */
+    public static function claim(MongoId $jobId, $count);
   }
 
   class ApplicationModel extends Model implements ApplicationModelInterface {
@@ -227,6 +232,18 @@
                                    MongoId $applicationId) {
       $jobId = self::getJob($applicationId);
       return JobModel::matchJobRecruiter($jobId, $recruiterId);
+    }
+
+    public static function claim(MongoId $jobId, $count) {
+      $query = (new DBQuery(self::$collection))
+        ->toQuery('jobid', $jobId)
+        ->projectId()
+        ->limit($count);
+      $applications = $query->run();
+      foreach ($applications as $application) {
+        $applicationId = $application['_id'];
+        self::changeStatus($applicationId, ApplicationStudent::STATUS_REVIEW);
+      }
     }
 
     private static function jobExists(MongoId $id) {
