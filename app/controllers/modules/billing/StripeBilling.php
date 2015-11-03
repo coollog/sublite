@@ -28,9 +28,15 @@
 
     public static function addCard($customerId, $token) {
       $customer = \Stripe\Customer::retrieve($customerId);
-      $customer->sources->create([
+      $card = $customer->sources->create([
         'source' => $token
       ]);
+      return [
+        'cardId' => $card->id,
+        'last4' => $card->last4,
+        'expMonth' => $card->exp_month,
+        'expYear' => $card->exp_year
+      ];
     }
 
     public static function removeCard($customerId, $cardId) {

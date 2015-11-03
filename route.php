@@ -27,13 +27,13 @@
   Router::register('employers/approve', function() {
     GLOBALvarGet('CRecruiter')->approve();
   });
-  Router::register('employers/ajax/buycredits', function() {
+  Router::register('employers/buycredits', function() {
     PaymentControllerAJAX::buyCredits();
   });
-  Router::register('employers/ajax/addcard', function() {
+  Router::register('employers/addcard', function() {
     PaymentControllerAJAX::addPaymentInfo();
   });
-  Router::register('employers/ajax/removecard', function() {
+  Router::register('employers/removecard', function() {
     PaymentControllerAJAX::removePaymentInfo();
   });
   Router::register('employers/changepass', function() {

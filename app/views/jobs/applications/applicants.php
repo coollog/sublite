@@ -76,7 +76,7 @@
   creditsenough {
     display: block;
   }
-  nonetomove, unlockingtoomany, creditsnotenough, invalidamount {
+  nonetomove, unlockingtoomany, creditsnotenough, invalidamount, paymentadderror {
     display: block;
     color: red;
   }
@@ -127,6 +127,16 @@
   }
   paymentamount, paymentcredits {
     font-weight: bold;
+  }
+  paymentinfo {
+    background: white;
+    box-shadow: 1px 1px 1px #ccc;
+    box-sizing: border-box;
+    display: block;
+    padding: 1em;
+    margin-top: 1em;
+    cursor: pointer;
+    transition: 0.1s all ease-in-out;
   }
 </style>
 
@@ -260,12 +270,60 @@
         You have to input a positive number of credits.
       </invalidamount>
 
-      <paymentselect>
-
-      </paymentselect>
+      <paymentselect></paymentselect>
+      <form id="paymentadd">
+        Credit Card Information:
+        <div class="form-slider">
+          <label for="cardnumber">Card Number:</label>
+          <input type="text" id="cardnumber" data-stripe="number" />
+        </div>
+        <div class="form-slider">
+          <label for="cardcvc">CVC:</label>
+          <input type="text" id="cardcvc" data-stripe="cvc" />
+        </div>
+        <div class="form-slider">
+          <label for="cardexp">Expiration (MM/YYYY):</label>
+          <input type="text" id="cardexp" data-stripe="exp" />
+        </div>
+        Billing Information:
+        <div class="form-slider">
+          <label for="billingname">Full Name:</label>
+          <input type="text" id="billingname" data-stripe="name" />
+        </div>
+        <div class="form-slider">
+          <label for="billingaddress_line1">Address Line 1:</label>
+          <input type="text" id="billingaddress_line1"
+                 data-stripe="address_line1" />
+        </div>
+        <div class="form-slider">
+          <label for="billingaddress_line2">Address Line 2:</label>
+          <input type="text" id="billingaddress_line2"
+                 data-stripe="address_line2" />
+        </div>
+        <div class="form-slider">
+          <label for="billingaddress_city">City:</label>
+          <input type="text" id="billingaddress_city"
+                 data-stripe="address_city" />
+        </div>
+        <div class="form-slider">
+          <label for="billingaddress_state">State:</label>
+          <input type="text" id="billingaddress_state"
+                 data-stripe="address_state" />
+        </div>
+        <div class="form-slider">
+          <label for="billingaddress_zip">Zip Code:</label>
+          <input type="text" id="billingaddress_zip"
+                 data-stripe="address_zip" />
+        </div>
+        <center>
+          <input id="addcreditcard" type="button" value="Add Credit Card" />
+        </center>
+        <paymentadderror></paymentadderror>
+      </form>
 
       You will be charged $<paymentamount>0</paymentamount> to purchase
-      <paymentcredits>0</paymentcredits> credits.<br />
+      <paymentcredits>0</paymentcredits> credits.
+      <br /><br />
       <input id="confirmpurchase" type="button" value="Confirm Purchase"
              disabled />
     </paymentform>
@@ -273,6 +331,12 @@
     <!-- <h2>Add Payment Information</h2>
      -->
   </creditstemplate>
+  <paymentinfotemplate>
+    <paymentinfo cardid="{cardId}">
+      <b>Card: </b>Ending in {last4}<br />
+      <b>Exp: </b>{expMonth}/{expYear}
+    </paymentinfo>
+  </paymentinfotemplate>
 </templates>
 
 <script>
@@ -520,6 +584,30 @@
       });
     }
 
+    function addCard(cardId, last4, expMonth, expYear) {
+      var html = Templates.use('paymentinfo', {
+        cardId: cardId,
+        last4: last4,
+        expMonth: expMonth,
+        expYear: expYear
+      });
+      $('paymentselect').append(html);
+    }
+
+    function processToken(status, response) {
+      $('#addcreditcard').prop('disabled', false);
+
+      if (response.error) {
+        $('paymentadderror').html(response.error.message).show();
+        return;
+      }
+
+      var token = response.id;
+      $.post('../ajax/addcard', { token: token }, function (data) {
+        addCard(data.cardId, data.last4, data.expMonth, data.expYear);
+      });
+    }
+
     $('#buycreditsbutton').off('click').click(function () {
       $('paymentform').slideDown(200, 'easeInOutCubic');
       $(this).slideUp(200, 'easeInOutCubic');
@@ -552,6 +640,14 @@
       // var cardId = ;
 
       buy(cardId, credits);
+    });
+
+    $('#addcreditcard').off('click').click(function () {
+      var $form = $('paymentform');
+
+      $(this).prop('disabled', true);
+
+      Stripe.card.createToken($form, processToken);
     });
   }
 

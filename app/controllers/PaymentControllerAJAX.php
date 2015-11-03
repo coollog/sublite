@@ -26,9 +26,9 @@
       // Add card info.
       $token = $params['token'];
 
-      StripeBilling::addCard($customerId, $token);
+      $card = StripeBilling::addCard($customerId, $token);
 
-      return self::ajaxSuccess();
+      echo toJSON($card);
     }
 
     public static function removePaymentInfo() {
