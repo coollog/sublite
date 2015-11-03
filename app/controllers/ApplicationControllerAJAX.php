@@ -98,7 +98,14 @@
 
       $countsHash = self::getCountsHash($jobId);
 
-      $data = array_merge([], $countsHash);
+      // Get cards.
+      $recruiterId = $_SESSION['_id'];
+      $customerId = RecruiterModel::getCustomerId($recruiterId);
+      $cards = StripeBilling::getCards($customerId);
+
+      $data = array_merge([
+        'cards' => $cards
+      ], $countsHash);
       echo toJSON($data);
     }
 

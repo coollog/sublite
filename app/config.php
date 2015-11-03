@@ -14,7 +14,7 @@
       $dbstudenthost = 'ds047057.mongolab.com:47057';
   }
 
-  $g = array(
+  $g = [
     'dbname' => $dbname,
     'dbnamestudent' => $dbnamestudent,
 
@@ -24,20 +24,17 @@
     'domain' => "sublite.net/employers",
     'gmailpass' => $gmailpass,
     's3access' => $s3access,
-    's3secret' => $s3secret
-  );
+    's3secret' => $s3secret,
+    'stripe' => [
+      'secret_key'      => $stripeSecret,
+      'publishable_key' => $stripePublic
+    ]
+  ];
 
   $GLOBALS = array_merge($GLOBALS, $g);
 
 
   // Config Stripe.
-
   require_once('stripe/init.php');
-
-  $stripe = array(
-    "secret_key"      => "sk_test_wNJGSrwbxKLnmSE6UArhnSqb",
-    "publishable_key" => "pk_test_ESBSVzQl2DxjcS7QcGPuVjVw"
-  );
-
-  \Stripe\Stripe::setApiKey($stripe['secret_key']);
+  \Stripe\Stripe::setApiKey($GLOBALS['stripe']['secret_key']);
 ?>

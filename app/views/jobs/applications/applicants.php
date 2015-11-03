@@ -76,7 +76,12 @@
   creditsenough {
     display: block;
   }
-  nonetomove, unlockingtoomany, creditsnotenough, invalidamount, paymentadderror {
+  nonetomove,
+  unlockingtoomany,
+  creditsnotenough,
+  invalidamount,
+  paymentadderror,
+  selectpayment {
     display: block;
     color: red;
   }
@@ -137,6 +142,39 @@
     margin-top: 1em;
     cursor: pointer;
     transition: 0.1s all ease-in-out;
+    position: relative;
+  }
+  paymentinfo.selected {
+    background: #daebf2;
+  }
+  paymentinfo deleteme {
+    width: 2em;
+    height: 2em;
+    position: absolute;
+    background:
+      url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/applications/x.png')
+      no-repeat center center;
+    background-size: contain;
+    display: block;
+    opacity: 0.2;
+    cursor: pointer;
+    transition: 0.1s all ease-in-out;
+    right: 1em;
+    top: 50%;
+    margin-top: -1em;
+  }
+  paymentinfo:hover {
+    opacity: 0.5;
+  }
+  paymentinfo deleteme:hover {
+    opacity: 1;
+  }
+  #addcreditcard {
+    margin-top: 1em;
+  }
+  purchased {
+    display: block;
+    color: green;
   }
 </style>
 
@@ -258,6 +296,8 @@
   </applicanttemplate>
 
   <creditstemplate>
+    <script src="https://checkout.stripe.com/checkout.js"></script>
+
     <div class="headline">
       You currently have <b>{creditcount}</b> <i>Credits</i>.
     </div>
@@ -270,60 +310,24 @@
         You have to input a positive number of credits.
       </invalidamount>
 
+      Select payment method:
       <paymentselect></paymentselect>
-      <form id="paymentadd">
-        Credit Card Information:
-        <div class="form-slider">
-          <label for="cardnumber">Card Number:</label>
-          <input type="text" id="cardnumber" data-stripe="number" />
-        </div>
-        <div class="form-slider">
-          <label for="cardcvc">CVC:</label>
-          <input type="text" id="cardcvc" data-stripe="cvc" />
-        </div>
-        <div class="form-slider">
-          <label for="cardexp">Expiration (MM/YYYY):</label>
-          <input type="text" id="cardexp" data-stripe="exp" />
-        </div>
-        Billing Information:
-        <div class="form-slider">
-          <label for="billingname">Full Name:</label>
-          <input type="text" id="billingname" data-stripe="name" />
-        </div>
-        <div class="form-slider">
-          <label for="billingaddress_line1">Address Line 1:</label>
-          <input type="text" id="billingaddress_line1"
-                 data-stripe="address_line1" />
-        </div>
-        <div class="form-slider">
-          <label for="billingaddress_line2">Address Line 2:</label>
-          <input type="text" id="billingaddress_line2"
-                 data-stripe="address_line2" />
-        </div>
-        <div class="form-slider">
-          <label for="billingaddress_city">City:</label>
-          <input type="text" id="billingaddress_city"
-                 data-stripe="address_city" />
-        </div>
-        <div class="form-slider">
-          <label for="billingaddress_state">State:</label>
-          <input type="text" id="billingaddress_state"
-                 data-stripe="address_state" />
-        </div>
-        <div class="form-slider">
-          <label for="billingaddress_zip">Zip Code:</label>
-          <input type="text" id="billingaddress_zip"
-                 data-stripe="address_zip" />
-        </div>
-        <center>
-          <input id="addcreditcard" type="button" value="Add Credit Card" />
-        </center>
-        <paymentadderror></paymentadderror>
-      </form>
+      <input id="addcreditcard" type="button" class="smallbutton"
+             value="Add Credit Card" />
+      <br /><br />
 
       You will be charged $<paymentamount>0</paymentamount> to purchase
       <paymentcredits>0</paymentcredits> credits.
       <br /><br />
+      <selectpayment class="hide">
+        Please select a payment method from above.
+      </selectpayment>
+      <purchased class="hide">
+        You have successfully purchased <paymentcredits></paymentcredits>
+        <i>Credits</i>!
+        To unlock applications using these credits, click on the
+        <a href="#" onclick="$('tab[for=unclaimed]').click()">New</a> tab.
+      </purchased>
       <input id="confirmpurchase" type="button" value="Confirm Purchase"
              disabled />
     </paymentform>
@@ -335,6 +339,7 @@
     <paymentinfo cardid="{cardId}">
       <b>Card: </b>Ending in {last4}<br />
       <b>Exp: </b>{expMonth}/{expYear}
+      <deleteme></deleteme>
     </paymentinfo>
   </paymentinfotemplate>
 </templates>
@@ -471,7 +476,7 @@
         }
 
         // TODO: Change this to actual credit count.
-        var oldCredits = <?php View::echof('creditcount'); ?>;
+        var oldCredits = parseInt($('creditcount').html());
         var newCredits = oldCredits - count;
 
         var data = {
@@ -580,12 +585,18 @@
         credits: credits
       };
       $.post('../ajax/buycredits', data, function (data) {
-
+        console.log(data);
+        console.log('Bought ' + credits + ' Credits!');
+        $('#confirmpurchase').prop('disabled', false);
+        $('purchased').show();
+        var oldCredits = parseInt($('creditcount').html());
+        $('creditcount').html(oldCredits + credits);
+        $('tab[for=unclaimed]').trigger('unload');
       });
     }
 
     function addCard(cardId, last4, expMonth, expYear) {
-      var html = Templates.use('paymentinfo', {
+      var html = Templates.use('paymentinfotemplate', {
         cardId: cardId,
         last4: last4,
         expMonth: expMonth,
@@ -594,18 +605,45 @@
       $('paymentselect').append(html);
     }
 
-    function processToken(status, response) {
+    function processToken(token) {
       $('#addcreditcard').prop('disabled', false);
 
-      if (response.error) {
-        $('paymentadderror').html(response.error.message).show();
-        return;
-      }
-
-      var token = response.id;
       $.post('../ajax/addcard', { token: token }, function (data) {
+        console.log(data);
+        data = JSON.parse(data);
         addCard(data.cardId, data.last4, data.expMonth, data.expYear);
       });
+    }
+
+    function setupSelectCard() {
+      $('paymentinfo').off('click').click(function () {
+        $('selectpayment').hide();
+        if ($(this).hasClass('selected')) {
+          $(this).removeClass('selected');
+          return;
+        }
+        $('paymentinfo').removeClass('selected');
+        $(this).addClass('selected');
+      });
+
+      $('paymentinfo deleteme').off('click').click(function (e) {
+        var $paymentinfo = $(this).parent();
+        var cardId = $paymentinfo.attr('cardId');
+        $paymentinfo.remove();
+        $.post('../ajax/removecard', { cardId: cardId }, function (data) {
+          console.log(data);
+          console.log('Removed card ' + cardId);
+        });
+        e.stopPropagation();
+      });
+    }
+
+    function getSelectedCard() {
+      var cardId = null;
+      $('paymentinfo').each(function () {
+        if ($(this).hasClass('selected')) cardId = $(this).attr('cardId');
+      });
+      return cardId;
     }
 
     $('#buycreditsbutton').off('click').click(function () {
@@ -629,26 +667,64 @@
     });
 
     $('#confirmpurchase').off('click').click(function () {
-      var credits = $('paymentcredits').html();
-      var amount = $('paymentamount').html();
+      var credits = parseInt($('paymentcredits').html());
+      var amount = parseInt($('paymentamount').html());
+
+      // Get cardId.
+      var cardId = getSelectedCard();
+      if (cardId === null) {
+        $('selectpayment').show();
+        return;
+      }
 
       var goodToGo = confirm('Are you sure you wish to purchase ' + credits +
                              ' Credits for $' + amount + '?');
       if (!goodToGo) return;
 
-      // Get cardId.
-      // var cardId = ;
+      $(this).prop('disabled', true);
 
       buy(cardId, credits);
     });
 
-    $('#addcreditcard').off('click').click(function () {
-      var $form = $('paymentform');
+    (function setupCheckout() {
+      var handler = StripeCheckout.configure({
+        key: '<?php echo $GLOBALS['stripe']['publishable_key']; ?>',
+        image: 'https://s3.amazonaws.com/stripe-uploads/acct_170LBgJZ3jUzUWXamerchant-icon-1445905399663-favicon.png',
+        locale: 'auto',
+        token: processToken
+      });
 
-      $(this).prop('disabled', true);
+      $('#addcreditcard').off('click').click(function (e) {
+        var credits = $('paymentcredits').html();
+        var amount = $('paymentamount').html();
 
-      Stripe.card.createToken($form, processToken);
-    });
+        $('#addcreditcard').prop('disabled', true);
+
+        // Open Checkout with further options.
+        handler.open({
+          name: 'SubLite, LLC.',
+          description: amount + ' Credits',
+          zipCode: true,
+          panelLabel: 'Add Credit Card',
+          billingAddress: true,
+          email: '<?php echo $_SESSION['email']; ?>'
+        });
+        e.preventDefault();
+      });
+
+      // Close Checkout on page navigation
+      $(window).on('popstate', function() {
+        handler.close();
+      });
+    })();
+
+    (function loadCardData(data) {
+      var cards = data.cards;
+      cards.forEach(function (card) {
+        addCard(card.cardId, card.last4, card.expMonth, card.expYear);
+      });
+      setupSelectCard();
+    })(data);
   }
 
   function getHTMLSetup(id, data) {
@@ -728,6 +804,10 @@
       $('tab').each(function() {
         if ($(this).hasClass('focus'))
           openTab(this);
+      });
+      $('tab').off('unload').on('unload', function() {
+        var name = $(this).attr('for');
+        delete loaded[name];
       });
     })();
   });

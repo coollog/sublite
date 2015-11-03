@@ -30,13 +30,13 @@
 
     public static function setCredits(MongoId $recruiterId, $count) {
       $update = (new DBUpdateQuery(self::$collection))
-        ->queryForId($recruiterId)->toUpdate('credits', $count);
+        ->queryForId($recruiterId)->toUpdate('credits', intval($count));
       $update->run();
     }
 
     public static function addCredits(MongoId $recruiterId, $count) {
       $update = (new DBUpdateQuery(self::$collection))
-        ->queryForId($recruiterId)->toAdd('credits', $count);
+        ->queryForId($recruiterId)->toAdd('credits', intval($count));
       $update->run();
     }
 
@@ -47,7 +47,7 @@
     }
 
     public static function getCustomerId(MongoId $recruiterId) {
-      $entry = self::getById($id, ['paymentinfo' => 1]);
+      $entry = self::getById($recruiterId, ['paymentinfo' => 1]);
       if (!isset($entry['paymentinfo']['customerid'])) return null;
       return $entry['paymentinfo']['customerid'];
     }

@@ -8,7 +8,10 @@
     public static function addCard($customerId, $token);
     public static function removeCard($customerId, $cardId);
 
-    public static function getCardIds($customerId);
+    /**
+     * @return Array of cards with cardId, last4, expMonth, expYear.
+     */
+    public static function getCards($customerId);
 
     /**
      * @return True on success, false on failure.
@@ -44,10 +47,22 @@
       $customer->sources->retrieve($cardId)->delete();
     }
 
-    public static function getCardIds($customerId) {
-      return \Stripe\Customer::retrieve($customerId)->sources->all([
+    public static function getCards($customerId) {
+      $customer = \Stripe\Customer::retrieve($customerId);
+      $cardsCollection = \Stripe\Customer::retrieve($customerId)->sources->all([
         'object' => 'card'
       ]);
+
+      $cards = [];
+      foreach ($cardsCollection['data'] as $card) {
+        $cards[] = [
+          'cardId' => $card->id,
+          'last4' => $card->last4,
+          'expMonth' => $card->exp_month,
+          'expYear' => $card->exp_year
+        ];
+      }
+      return $cards;
     }
 
     public static function charge($customerId, $cardId, $amount) {

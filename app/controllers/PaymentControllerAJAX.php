@@ -24,7 +24,8 @@
       }
 
       // Add card info.
-      $token = $params['token'];
+      $tokenObj = $params['token'];
+      $token = $tokenObj['id'];
 
       $card = StripeBilling::addCard($customerId, $token);
 
@@ -57,9 +58,10 @@
 
       $cardId = $params['cardId'];
       $credits = $params['credits'];
+      if ($credits <= 0) return self::ajaxError();
 
       // How much do we charge per application?
-      $amount = $credits * 8;
+      $amount = $credits * 800;
 
       // Charge the card.
       $res = StripeBilling::charge($customerId, $cardId, $amount);
