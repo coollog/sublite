@@ -39,7 +39,17 @@
       // Get the counts.
       $countsHash = self::getCountsHash($jobId);
 
-      echo toJSON($countsHash);
+      // Get the insights.
+      $schools = self::getSchoolsForUnclaimed($jobId);
+      $num = count($schools);
+      if ($num > 4) {
+        $schools = array_rand($schools, $num);
+      }
+
+      $data = array_merge($countsHash, [
+        'schools' => $schools
+      ]);
+      echo toJSON($data);
     }
 
     public static function applicantsTabClaimed() {
@@ -226,6 +236,20 @@
       $questionData = self::questionArrayToJson($questions);
 
       return $questionData;
+    }
+
+    private static function getSchoolsForUnclaimed(MongoId $jobId) {
+      global $S;
+      $schools = [];
+      $unclaimed = ApplicationStudent::getUnclaimedByJob($jobId);
+      foreach ($unclaimed as $application) {
+        $studentId = $application->getStudentId();
+        $student = StudentModel::getById($studentId, ['email' => 1]);
+        $email = $student['email'];
+        $school = $S->nameOf($email);
+        $schools[] = $school;
+      }
+      return $schools;
     }
 
     private static function questionArrayToJson(array $questions) {

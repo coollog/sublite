@@ -186,7 +186,7 @@
 
     <h2>Insight</h2>
     Your applicants include students from schools including
-    <b>Yale University</b>, and <b>University of Pennsylvania</b>!
+    <insights></insights>!
 
     <br /><br />
 
@@ -439,6 +439,26 @@
 
       $('unlockingtoomany').hide();
     });
+
+    (function setupInsights(schools) {
+      if (schools.length == 0) return;
+
+      var insights = '';
+      for (var i = 0; i < schools.length; i ++) {
+        var schoolName = '<b>' + schools[i] + '</b>';
+        switch (i) {
+          case 0:
+            insights += schoolName;
+            break;
+          case schools.length - 1:
+            insights += ', and ' + schoolName;
+            break;
+          default:
+            insights += ', ' + schoolName;
+        }
+      }
+      $('insights').html(insights);
+    })(data.schools);
 
     (function setupUnlockButtons() {
       var unclaimedCount = <?php View::echof('unclaimedcount'); ?>;
