@@ -98,6 +98,8 @@
 
       $countsHash = self::getCountsHash($jobId);
 
+      $data = array_merge([], $countsHash);
+      echo toJSON($data);
     }
 
     public static function moveApplications() {

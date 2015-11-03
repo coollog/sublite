@@ -1,58 +1,62 @@
 <?php
-require_once('BillingProvider.php');
+  interface Billing {
+    /**
+     * @return A customer id.
+     */
+    public static function createCustomer($email);
 
-class StripeBilling implements BillingProvider {
+    public static function addCard($customerId, $token);
+    public static function removeCard($customerId, $cardId);
 
-  //Stripe Billing implementation
+    public static function getCardIds($customerId);
 
-  // email, token, amount, currency: "usd"
-  public static function chargeNew($creditInfo) {
-    //create new customer for first time payment
-
-    $results = array();
-
-    try {
-      $customer = \Stripe\Customer::create(array(
-        'email' => $creditInfo['email'],
-        'card' => $creditInfo['token']
-      ));
-
-      $charge = \Stripe\Charge::create(array(
-        'customer' => $customer->id,
-        'amount' => $creditInfo['amount'],
-        'currency' => $creditInfo['currency']
-      ));
-
-      $results['customerId'] = $customer->id; //add customerId to results so it can be saved to database
-      $results['success'] = true;
-
-    } catch(\Stripe\Error\Card $e) {
-      //The User's card has been declined
-      $results['success'] = false;
-    }
-
-    return $results;
+    /**
+     * @return True on success, false on failure.
+     */
+    public static function charge($customerId, $cardId, $amount);
   }
 
-  public static function chargeExisting($creditInfo) {
+  class StripeBilling implements Billing {
+    const CURRENCY = 'usd';
 
-    $results = array();
-
-    try {
-      $charge = \Stripe\Charge::create(array(
-        'customer' => $creditInfo['customerId'],
-        'amount' => $creditInfo['amount'],
-        'currency' => $creditInfo['currency']
-      ));
-
-      $results['success'] = true;
-
-    } catch (\Stripe\Error\Card $e) {
-      //The User's card has been declined
-      $results['success'] = false;
+    public static function createCustomer($email) {
+      $customer = \Stripe\Customer::create([
+        'email' => $email
+      ]);
+      return $customer->id;
     }
 
-    return $results;
+    public static function addCard($customerId, $token) {
+      $customer = \Stripe\Customer::retrieve($customerId);
+      $customer->sources->create([
+        'source' => $token
+      ]);
+    }
+
+    public static function removeCard($customerId, $cardId) {
+      $customer = \Stripe\Customer::retrieve($customerId);
+      $customer->sources->retrieve($cardId)->delete();
+    }
+
+    public static function getCardIds($customerId) {
+      return \Stripe\Customer::retrieve($customerId)->sources->all([
+        'object' => 'card'
+      ]);
+    }
+
+    public static function charge($customerId, $cardId, $amount) {
+      try {
+        $charge = \Stripe\Charge::create([
+          'customer' => $customerId,
+          'source' => $cardId,
+          'amount' => $amount,
+          'currency' => self::CURRENCY
+        ]);
+        return true;
+      } catch (\Stripe\Error\Card $e) {
+        // The User's card has been declined.
+        return false;
+      }
+    }
   }
-}
 ?>

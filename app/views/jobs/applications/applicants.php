@@ -76,7 +76,7 @@
   creditsenough {
     display: block;
   }
-  nonetomove, unlockingtoomany, creditsnotenough {
+  nonetomove, unlockingtoomany, creditsnotenough, invalidamount {
     display: block;
     color: red;
   }
@@ -120,6 +120,13 @@
     display: table-cell;
     vertical-align: bottom;
     text-align: right;
+  }
+
+  paymentform {
+    display: block;
+  }
+  paymentamount, paymentcredits {
+    font-weight: bold;
   }
 </style>
 
@@ -241,7 +248,30 @@
   </applicanttemplate>
 
   <creditstemplate>
+    <div class="headline">
+      You currently have <b>{creditcount}</b> <i>Credits</i>.
+    </div>
 
+    <input id="buycreditsbutton" type="button" value="Buy Credits" />
+    <paymentform class="hide">
+      How many credits?
+      <input id="paymentcredits" type="number" placeholder="(eg. 20)" />
+      <invalidamount class="hide">
+        You have to input a positive number of credits.
+      </invalidamount>
+
+      <paymentselect>
+
+      </paymentselect>
+
+      You will be charged $<paymentamount>0</paymentamount> to purchase
+      <paymentcredits>0</paymentcredits> credits.<br />
+      <input id="confirmpurchase" type="button" value="Confirm Purchase"
+             disabled />
+    </paymentform>
+
+    <!-- <h2>Add Payment Information</h2>
+     -->
   </creditstemplate>
 </templates>
 
@@ -480,7 +510,49 @@
     });
   }
   function setupCredits(data) {
+    function buy(cardId, credits) {
+      var data = {
+        cardId: cardId,
+        credits: credits
+      };
+      $.post('../ajax/buycredits', data, function (data) {
 
+      });
+    }
+
+    $('#buycreditsbutton').off('click').click(function () {
+      $('paymentform').slideDown(200, 'easeInOutCubic');
+      $(this).slideUp(200, 'easeInOutCubic');
+    });
+
+    $('#paymentcredits').off('change').change(function () {
+      var credits = parseInt($(this).val());
+      if (credits <= 0) {
+        $('invalidamount').show();
+        return;
+      }
+
+      var amount = credits * 8;
+
+      $('invalidamount').hide();
+      $('paymentcredits').html(credits);
+      $('paymentamount').html(amount);
+      $('#confirmpurchase').prop('disabled', false);
+    });
+
+    $('#confirmpurchase').off('click').click(function () {
+      var credits = $('paymentcredits').html();
+      var amount = $('paymentamount').html();
+
+      var goodToGo = confirm('Are you sure you wish to purchase ' + credits +
+                             ' Credits for $' + amount + '?');
+      if (!goodToGo) return;
+
+      // Get cardId.
+      // var cardId = ;
+
+      buy(cardId, credits);
+    });
   }
 
   function getHTMLSetup(id, data) {

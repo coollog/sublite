@@ -39,6 +39,7 @@
   require_once($dirpre.'controllers/AdminController.php');
   require_once($dirpre.'controllers/ApplicationController.php');
   require_once($dirpre.'controllers/ApplicationControllerAJAX.php');
+  require_once($dirpre.'controllers/PaymentControllerAJAX.php');
 
   require_once($dirpre.'models/AppModel.php');
   require_once($dirpre.'models/CompanyModel.php');

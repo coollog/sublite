@@ -28,4 +28,16 @@
   );
 
   $GLOBALS = array_merge($GLOBALS, $g);
+
+
+  // Config Stripe.
+
+  require_once('stripe/init.php');
+
+  $stripe = array(
+    "secret_key"      => "sk_test_wNJGSrwbxKLnmSE6UArhnSqb",
+    "publishable_key" => "pk_test_ESBSVzQl2DxjcS7QcGPuVjVw"
+  );
+
+  \Stripe\Stripe::setApiKey($stripe['secret_key']);
 ?>

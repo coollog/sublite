@@ -27,6 +27,15 @@
   Router::register('employers/approve', function() {
     GLOBALvarGet('CRecruiter')->approve();
   });
+  Router::register('employers/ajax/buycredits', function() {
+    PaymentControllerAJAX::buyCredits();
+  });
+  Router::register('employers/ajax/addcard', function() {
+    PaymentControllerAJAX::addPaymentInfo();
+  });
+  Router::register('employers/ajax/removecard', function() {
+    PaymentControllerAJAX::removePaymentInfo();
+  });
   Router::register('employers/changepass', function() {
     GLOBALvarGet('CRecruiter')->changePass();
   });
@@ -272,6 +281,12 @@
   Router::route('/employers/addcompany', 'employers/addcompany');
   Router::route('/employers/addjob', 'employers/addjob');
   Router::route('/employers/approve', 'employers/approve');
+  Router::route('/employers/ajax/buycredits',
+                'employers/buycredits');
+  Router::route('/employers/ajax/addcard',
+                'employers/addcard');
+  Router::route('/employers/ajax/removecard',
+                'employers/removecard');
   Router::route('/employers/changepass', 'employers/changepass');
   Router::route('/employers/company', 'employers/company');
   Router::route('/employers/createcustom', 'employers/createcustom');

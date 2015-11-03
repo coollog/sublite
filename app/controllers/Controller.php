@@ -3,7 +3,7 @@
 
   interface ControllerInterface {
     public static function ajaxSuccess();
-    public static function ajaxError();
+    public static function ajaxError($error);
   }
 
   class Controller implements ControllerInterface {
@@ -14,8 +14,9 @@
       return true;
     }
 
-    public static function ajaxError() {
-      echo 'ajaxError() called. This should not parse.';
+    public static function ajaxError(
+      $error = 'ajaxError() called. This should not parse.') {
+      echo $error;
       return false;
     }
 

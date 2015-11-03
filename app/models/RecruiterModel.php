@@ -4,6 +4,18 @@
   interface RecruiterModelInterface {
     public static function getCredits(MongoId $recruiterId);
     public static function setCredits(MongoId $recruiterId, $count);
+    public static function addCredits(MongoId $recruiterId, $count);
+    public static function subtractCredits(MongoId $recruiterId, $count);
+
+    // Payment stuff.
+    /**
+     * @return null if no customerId.
+     */
+    public static function getCustomerId(MongoId $recruiterId);
+    /**
+     * Sets the customer id.
+     */
+    public static function setCustomerId(MongoId $recruiterId, $customerId);
   }
 
   class RecruiterModel extends Model implements RecruiterModelInterface {
@@ -22,9 +34,28 @@
       $update->run();
     }
 
+    public static function addCredits(MongoId $recruiterId, $count) {
+      $update = (new DBUpdateQuery(self::$collection))
+        ->queryForId($recruiterId)->toAdd('credits', $count);
+      $update->run();
+    }
+
     public static function subtractCredits(MongoId $recruiterId, $count) {
       $update = (new DBUpdateQuery(self::$collection))
         ->queryForId($recruiterId)->toAdd('credits', -$count);
+      $update->run();
+    }
+
+    public static function getCustomerId(MongoId $recruiterId) {
+      $entry = self::getById($id, ['paymentinfo' => 1]);
+      if (!isset($entry['paymentinfo']['customerid'])) return null;
+      return $entry['paymentinfo']['customerid'];
+    }
+
+    public static function setCustomerId(MongoId $recruiterId, $customerId) {
+      $update = (new DBUpdateQuery(self::$collection))
+        ->queryForId($recruiterId)
+        ->toUpdate('paymentinfo.customerid', $customerId);
       $update->run();
     }
 
@@ -79,11 +110,6 @@
     }
     function IDexists($id) {
       return (self::$collection->findOne(array('_id' => new MongoId($id))) !== NULL);
-    }
-
-    function getPaymentInfo($id) {
-      $entry = self::getById($id);
-      return $entry['paymentInfo'];
     }
 
     protected static $collection;
