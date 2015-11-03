@@ -138,6 +138,7 @@
     <!-- PLUGINS -->
     <script src="<?php echo $GLOBALS['dirpre']; ?>assets/js/jquery.slidinglabels.min.js"></script>
     <script src="<?php echo $GLOBALS['dirpre']; ?>assets/js/jquery.timepicker.min.js"></script>
+    <script src="<?php echo $GLOBALS['dirpre']; ?>assets/js/jquery.form.min.js"></script>
     <link rel="stylesheet" type="text/css" href="<?php echo $GLOBALS['dirpre']; ?>assets/css/jquery.timepicker.css">
 
     <?php require_once($dirpreOrig.'assets/js/mainjs.php'); ?>

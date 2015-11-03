@@ -400,7 +400,7 @@
 
       // Get the basic info first.
       var bio = $('#input-bio').val();
-      var resume = $('section[name=basicinfo] field[name=resume]').html();
+      var resume = $('#resumelink').html();
       var interests = getFields('basicinfo', 'interests');
       var skills = getFields('basicinfo', 'skills');
       data.bio = bio;
@@ -524,7 +524,7 @@
 
     $('section[name=student] heading').html(name);
     $('#input-bio').val(bio);
-    addField('basicinfo', 'resume', resume, '[Resume]');
+    updateResumeLink(resume);
     addFields('basicinfo', 'interests', interests);
     addFields('basicinfo', 'skills', skills);
 
@@ -539,6 +539,17 @@
       var section = profile[sectionName];
       addItems(sectionName, section);
     });
+  }
+  function updateResumeLink(resume) {
+    if (!resume) {
+      $('section[name=basicinfo] resume').hide();
+      return;
+    }
+    $('section[name=basicinfo] resume').each(function () {
+      $(this).show();
+      $(this).children('a').attr('href', resume);
+    });
+    $('#resumelink').html(resume);
   }
 </script>
 
@@ -558,8 +569,14 @@
 
         <fieldline>
           <strong>Resume: </strong>
-          <field name="resume" required></field>
+          <resume class="hide">
+            <a target="_blank">
+              View Existing Resume
+            </a>
+          </resume>
         </fieldline>
+        <?php View::partial('S3/resume'); ?>
+        <div class="hide" id="resumelink"></div>
 
         <fieldline>
           <strong>Interests: </strong>

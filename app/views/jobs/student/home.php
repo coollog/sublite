@@ -60,40 +60,45 @@
   $(function () {
     (function setupApplications() {
       var applicationData = JSON.parse($('applicationData').html());
+
       var numSaved = 0;
       var numSubmitted = 0;
+
       applicationData.forEach(function (application) {
         var jobId = application.jobId.$id;
         var title = application.title;
         var location = application.location;
+        var company = application.company;
         var vieworedit = application.submitted ? "View" : "Edit";
 
         var data = {
           jobId: jobId,
           title: title,
           location: location,
+          company: company,
           vieworedit : vieworedit
-        }
+        };
         var applicationHTML = useTemplate('applicationtemplate', data);
         if (application.submitted) {
           $('submittedapplications').append(applicationHTML);
-          numSubmitted++;
+          numSubmitted ++;
         } else {
           $('savedapplications').append(applicationHTML);
-          numSaved++;
+          numSaved ++;
         }
       });
+
       if (numSaved == 0) {
         var data = {
-          savedorsubmitted : "saved"
-        }
+          savedorsubmitted: "saved"
+        };
         var noApplicationsHTML = useTemplate('noapplicationstemplate', data);
         $('savedapplications').html(noApplicationsHTML);
       }
       if (numSubmitted == 0) {
         var data = {
-          savedorsubmitted : "submitted"
-        }
+          savedorsubmitted: "submitted"
+        };
         var noApplicationsHTML = useTemplate('noapplicationstemplate', data);
         $('submittedapplications').html(noApplicationsHTML);
       }
@@ -101,10 +106,22 @@
   });
 </script>
 
+<panel>
+  <div class="content">
+    <headline>Manage Your Career Profile</headline>
+    <a href="editprofile">
+      <input type="button" value="Edit Career Profile" />
+    </a>
+    <a href="viewprofile">
+      <input type="button" value="View Career Profile" />
+    </a>
+  </div>
+</panel>
 <panel class="applications">
   <div class="content">
     <headline>Saved Applications</headline>
     <savedapplications></savedapplications>
+
     <headline style="margin-top: 100px;">Submitted Applications</headline>
     <submittedapplications></submittedapplications>
   </div>

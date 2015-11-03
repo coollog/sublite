@@ -2,8 +2,20 @@
   require_once($GLOBALS['dirpre'].'controllers/Controller.php');
   require_once($GLOBALS['dirpre'].'controllers/modules/application/StudentProfile.php');
 
-  class StudentController extends Controller {
+  interface StudentControllerInterface {
+    public static function editStudentProfile();
+    public static function viewStudentProfile();
+
+    /**
+     * For managing job applications.
+     */
+    public static function manage();
+  }
+
+  class StudentController extends Controller
+                          implements StudentControllerInterface {
     public static function editStudentProfile() {
+      self::requireLogin();
       global $params;
 
       $studentId = $_SESSION['_id'];
@@ -22,10 +34,37 @@
     }
 
     public static function viewStudentProfile() {
+      self::requireLogin();
+
       $studentId = $_SESSION['_id'];
       $profile = toJSON(self::getStudentProfile($studentId));
 
       self::render('jobs/student/studentprofile', ['profile' => $profile]);
+    }
+
+    public static function manage() {
+      self::requireLogin();
+
+      $studentId = $_SESSION['_id'];
+      $applications = ApplicationStudent::getByStudent($studentId);
+
+      $data = [];
+      foreach ($applications as $application) {
+        $jobId = $application->getJobId();
+        $job = JobModel::getByIdMinimal($jobId);
+        $companyId = $job['company'];
+        $companyName = CompanyModel::getName($companyId);
+        $data[] = [
+          'title' => $job['title'],
+          'location' => $job['location'],
+          'company' => $companyName,
+          'jobId' => $application->getJobId(),
+          'submitted' => $application->isSubmitted()
+        ];
+      }
+      self::render('jobs/student/home', [
+        'applications' => $data
+      ]);
     }
 
     private static function getStudentProfile(MongoId $studentId) {
@@ -89,28 +128,6 @@
       }
 
       $this->render('student/home', $me);
-    }
-
-    function manage() {
-      global $MStudent;
-      $studentId = new MongoId($MStudent->me()['_id']->{'$id'});
-      $rawApps = ApplicationModel::getApplicationsByStudentId($studentId);
-      $applications = [];
-      foreach ($rawApps as $rawApp) {
-        $application = new ApplicationStudent($rawApp);
-        $job = JobModel::getByIdMinimal($application->getJobId());
-        $data = [
-          'title' => $job['title'],
-          'location' => $job['location'],
-          'jobId' => $application->getJobId(),
-          'submitted' => $application->isSubmitted()
-        ];
-        $applications[] = $data;
-      }
-      $applications = [
-        'applications' => $applications
-      ];
-      $this->render('jobs/home', $applications);
     }
 
     function index() {

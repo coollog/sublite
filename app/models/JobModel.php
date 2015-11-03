@@ -67,7 +67,11 @@
     }
 
     public static function getByIdMinimal(MongoId $jobId) {
-      return self::getById($jobId, ['title' => true, 'location' => true]);
+      return self::getById($jobId, [
+        'title' => 1,
+        'location' => 1,
+        'company' => 1
+      ]);
     }
 
     public function __construct() {

@@ -60,6 +60,9 @@
           'text' => 'Message Recruiter'
         ]);
       ?>
+      <a href="../search?byrecruiter=<?php View::echof('recruiterId'); ?>">
+        <input type="button" value="See More Jobs" />
+      </a>
     <?php } ?>
 
     <left style="margin-top: 2em;">

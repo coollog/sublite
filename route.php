@@ -178,7 +178,7 @@
     ApplicationController::apply($restOfRoute);
   });
   Router::register('jobs/home', function() {
-    GLOBALvarGet('CStudent')->manage();
+    StudentController::manage();
   });
   Router::register('jobs/job', function() {
     GLOBALvarGet('CJob')->view();
@@ -236,6 +236,9 @@
   });
   Router::register('S3', function() {
     GLOBALvarGet('CS3')->upload();
+  });
+  Router::register('S3/resume', function() {
+    S3Controller::resume();
   });
   Router::register('stats', function() {
     GLOBALvarGet('CJob')->requireLogin();
@@ -388,6 +391,7 @@
   Router::route('/S3', 'S3');
   Router::route('/employers/S3', 'S3');
   Router::route('/housing/S3', 'S3');
+  Router::route('/S3/resume', 'S3/resume');
 
   Router::route('/stats', 'stats');
 

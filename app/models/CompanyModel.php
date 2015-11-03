@@ -1,7 +1,11 @@
 <?php
   require_once($GLOBALS['dirpre'].'models/Model.php');
 
-  class CompanyModel extends Model {
+  interface CompanyModelInterface {
+
+  }
+
+  class CompanyModel extends Model implements CompanyModelInterface {
     const DB_TYPE = parent::DB_INTERNSHIPS;
 
     function __construct() {
@@ -19,9 +23,9 @@
     function getByName($name) {
       return self::$collection->findOne(array('name' => $name));
     }
-    function getName($id) {
-      $entry = $this->get($id);
-      return $entry['name'];
+    function getName($companyId) {
+      $company = self::getById($companyId, ['name' => 1]);
+      return $company['name'];
     }
     function getIndustry($id) {
       $entry = $this->get($id);

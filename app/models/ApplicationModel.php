@@ -68,7 +68,7 @@
     /**
      * Gets all applications for a given student.
      */
-    public static function getApplicationsByStudentId(MongoId $studentId);
+    public static function getApplicationsByStudent(MongoId $studentId);
 
     /**
      * Changes the 'status' of the application.
@@ -104,6 +104,7 @@
                                                     'submitted' => 1)));
       mongo_ok(self::$collection->createIndex(array('jobid' => 1,
                                                     'studentid' => 1)));
+      mongo_ok(self::$collection->createIndex(array('studentid' => 1)));
     }
 
     public static function submitWithStudentProfile(
@@ -215,7 +216,7 @@
       return $query->findOne();
     }
 
-    public static function getApplicationsByStudentId(MongoId $studentId) {
+    public static function getApplicationsByStudent(MongoId $studentId) {
       $query = (new DBQuery(self::$collection))
         ->toQuery('studentid', $studentId);
       return $query->run();

@@ -59,6 +59,11 @@
      */
     public static function getById(MongoId $applicationId);
 
+    /**
+     * Gets all the applications submitted/saved by student.
+     */
+    public static function getByStudent(MongoId $studentId);
+
     public function __construct(array $data);
     public function getId();
     public function getJobId();
@@ -204,6 +209,17 @@
       $applicationData = ApplicationModel::getById($applicationId);
       if (is_null($applicationData)) return null;
       return new ApplicationStudent($applicationData);
+    }
+
+    public static function getByStudent(MongoId $studentId) {
+      $applicationData =
+        ApplicationModel::getApplicationsByStudent($studentId);
+      $applications = [];
+      foreach ($applicationData as $application) {
+        $application = new ApplicationStudent($application);
+        $applications[] = $application;
+      }
+      return $applications;
     }
 
     /**
