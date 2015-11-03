@@ -21,7 +21,7 @@
     }
     public static function getProfile(MongoId $studentId) {
       $profileData = StudentModel::getProfile($studentId);
-      if ($profileData === null) return null;
+      if ($profileData === null) $profileData = [];
       return new StudentProfile($studentId, $profileData);
     }
 
