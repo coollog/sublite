@@ -673,7 +673,7 @@
 
     $('#paymentcredits').off('change').change(function () {
       var credits = parseInt($(this).val());
-      if (credits <= 0) {
+      if (credits <= 0 || isNaN(credits)) {
         $('invalidamount').show();
         return;
       }
