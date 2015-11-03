@@ -38,7 +38,13 @@
 
       <?php if (vget('Loggedinstudent')) { ?>
         <br /><br />
-        <a href="newmessage.php?from=<?php vecho('L_id'); ?>&to=<?php vecho('recruiterid'); ?>" onClick="return confirm('I have read, fully understand, and agree to Sublite’s Terms of Service and Privacy Policy. I agree to contact the recruiter in good-faith to inquire about the listing.')"><input type="button" value="Message" /></a>
+        <?php
+          View::partial('newmessage', [
+            'from' => View::get('L_id'),
+            'to' => View::get('recruiterid'),
+            'text' => 'Message'
+          ]);
+        ?>
       <?php } ?>
     </div>
 

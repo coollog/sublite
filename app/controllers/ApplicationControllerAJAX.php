@@ -12,6 +12,7 @@
     public static function applicantsTabCredits();
     public static function moveApplications();
     public static function claimApplications();
+    public static function report();
 
     /**
      * Calls made while editing an application.
@@ -121,7 +122,7 @@
         ApplicationStudent::changeStatus($applicationId, $to);
       }
 
-      echo toJSON(['error' => null]);
+      return self::ajaxSuccess();
     }
 
     public static function claimApplications() {
@@ -140,7 +141,25 @@
 
       ApplicationModel::claim($jobId, $count);
 
-      echo toJSON(['error' => null]);
+      return self::ajaxSuccess();
+    }
+
+    public static function report() {
+      RecruiterController::requireLogin();
+
+      global $params;
+
+      $applicationId = new MongoId($params['_id']);
+      $recruiterId = $_SESSION['_id'];
+
+      if (!ApplicationModel::isOwned($recruiterId, $applicationId)) {
+        return self::ajaxError();
+      }
+
+      ApplicationModel::changeStatus($applicationId,
+                                     ApplicationStudent::STATUS_REPORTED);
+
+      return self::ajaxSuccess();
     }
 
     public static function createCustom() {

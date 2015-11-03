@@ -107,7 +107,7 @@
               '$optional' => [
                 'by' => 'nullString',
                 'date' => 'nullString',
-                'place' => 'nullString',
+                'location' => 'nullString',
                 'summary' => 'emptyString'
               ]
             ]

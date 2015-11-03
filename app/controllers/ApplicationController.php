@@ -238,10 +238,16 @@
       // Only the student who submitted the application and the recruiter
       // associated with the job can view the application.
       $myId = $_SESSION['_id'];
-      $studentId = $application->getStudentId();
+
       $jobId = $application->getJobId();
+
+      $studentId = $application->getStudentId();
       $recruiterId = JobModel::getRecruiterId($jobId);
-      if ($studentId != $myId && $recruiterId != $myId) {
+
+      $isRecruiter = $recruiterId == $myId;
+      $isStudent = $studentId == $myId;
+
+      if (!$isStudent && !$isRecruiter) {
         self::error("permission denied");
         self::render('notice');
         return;
@@ -276,10 +282,19 @@
         'responses' => toJSON($responses),
         'studentname' => $studentName,
         'jobtitle' => $title,
-        'companytitle' => $company['name']
+        'companytitle' => $company['name'],
+        'isStudent' => $isStudent,
+        'isRecruiter' => $isRecruiter,
+        'studentId' => $studentId,
+        'recruiterId' => $recruiterId
       ]);
       self::render('jobs/student/studentprofile', [
         'profile' => toJSON($profile)
+      ]);
+      self::render('jobs/applications/report', [
+        'applicationId' => $applicationId,
+        'isStudent' => $isStudent,
+        'isRecruiter' => $isRecruiter
       ]);
     }
 

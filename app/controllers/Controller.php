@@ -1,8 +1,23 @@
 <?php
   global $params, $valid, $notice;
 
-  class Controller {
+  interface ControllerInterface {
+    public static function ajaxSuccess();
+    public static function ajaxError();
+  }
+
+  class Controller implements ControllerInterface {
     public static $renderQueue = array();
+
+    public static function ajaxSuccess() {
+      echo toJSON(['error' => null]);
+      return true;
+    }
+
+    public static function ajaxError() {
+      echo 'ajaxError() called. This should not parse.';
+      return false;
+    }
 
     /**
      * Retrieves the _id portion of the route.

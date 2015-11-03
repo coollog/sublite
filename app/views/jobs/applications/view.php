@@ -51,6 +51,17 @@
     <headline><?php View::echof('jobtitle'); ?></headline>
     <div class="companyname"><?php View::echof('companytitle'); ?></div>
 
+    <?php if (View::get('isStudent')) { ?>
+      <br /><br />
+      <?php
+        View::partial('newmessage', [
+          'from' => View::get('studentId'),
+          'to' => View::get('recruiterId'),
+          'text' => 'Message Recruiter'
+        ]);
+      ?>
+    <?php } ?>
+
     <left style="margin-top: 2em;">
       <div class="headline">
         Job application from: <b><?php View::echof('studentname'); ?></b>

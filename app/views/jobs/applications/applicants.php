@@ -161,7 +161,7 @@
   </unclaimednonetemplate>
   <unlockconfirmtemplate>
     You are about to unlock <count id="countToUnlock">{count}</count>
-    applications at <i>1 Credit per application</i>.<br />
+    application(s) at <i>1 Credit per application</i>.<br />
     <creditsenough>
       Your new <i>Credits</i> will be
       <count>{oldCredits} - {count} = {newCredits}</count>.
@@ -232,7 +232,8 @@
         <fade class="nohover">Applied on <date>{date}</date></fade>
       </info>
       <buttons>
-        <a href="../../jobs/application/{_id}" target="_blank">
+        <a href="../../jobs/application/{_id}" target="_blank"
+           class="stopPropagation">
           <input type="button" value="View" />
         </a>
       </buttons>
@@ -471,6 +472,11 @@
       $('.moveToButton').show();
       $('.moveToButton[to='+name+']').hide();
       console.log(name);
+    });
+
+    $('.stopPropagation').off('click').click(function (e) {
+      e.stopPropagation();
+      console.log('stoped');
     });
   }
   function setupCredits(data) {

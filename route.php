@@ -162,6 +162,9 @@
   Router::register('jobs/application', function (array $restOfRoute) {
     ApplicationController::view($restOfRoute);
   });
+  Router::register('jobs/application/report', function () {
+    ApplicationControllerAJAX::report();
+  });
   Router::register('jobs/apply', function (array $restOfRoute) {
     ApplicationController::apply($restOfRoute);
   });
@@ -322,6 +325,7 @@
   Router::route('/hubs/start', 'hubs/start');
 
   Router::routeTree('/jobs/application', 'jobs/application');
+  Router::route('/jobs/application/report', 'jobs/application/report');
   Router::routeTree('/jobs/apply', 'jobs/apply');
   Router::route('/jobs/company', 'jobs/company');
   Router::route('/jobs/editprofile', 'jobs/editprofile');
