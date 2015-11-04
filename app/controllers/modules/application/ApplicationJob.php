@@ -13,6 +13,11 @@
     public static function get(MongoId $jobId);
 
     /**
+     * @return An empty job application for $jobId.
+     */
+    public static function getEmptyApplication(MongoId $jobId);
+
+    /**
      * Checks application existence.
      */
     public static function exists(MongoId $jobId);
@@ -48,7 +53,13 @@
         return null;
       }
 
-      return new ApplicationJob($jobId, $applicationData);
+      return new ApplicationJob($jobId, [
+        'questions' => $applicationData
+      ]);
+    }
+
+    public static function getEmptyApplication(MongoId $jobId) {
+      return new ApplicationJob($jobId, []);
     }
 
     public static function exists(MongoId $jobId) {

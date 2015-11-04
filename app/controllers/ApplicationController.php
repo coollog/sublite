@@ -137,9 +137,10 @@
 
       // Make sure application exists.
       if (is_null($application)) {
-        self::error("This job does not have an application.");
-        self::render('notice');
-        return;
+        $application = ApplicationJob::getEmptyApplication($jobId);
+        // self::error("This job does not have an application.");
+        // self::render('notice');
+        // return;
       }
 
       // Saving of application.
@@ -195,7 +196,7 @@
           ];
         }
       } else {
-        foreach ($entry['application']['questions'] as $questionId) {
+        foreach ($application->getQuestions() as $questionId) {
           $answer = '';
           $answers = StudentModel::getAnswers($studentId);
           $answers = arrayToHashByKey($answers, '_id');

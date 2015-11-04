@@ -106,7 +106,8 @@
 
         <br /><br />
         <?php
-          foreach(View::get('questions') as $question) {
+          $questions = View::get('questions');
+          foreach ($questions as $question) {
             $_id = $question['_id'];
             $text = $question['text'];
             $answer = $question['answer'];
@@ -117,16 +118,18 @@
               echo "<textarea _id=\"$_id\" name=\"$_id\" required>$answer</textarea>";
             }
           }
+          if (count($questions) == 0) {
         ?>
-        <?php if (!View::get('submitted')) { ?>
-          <?php vnotice(); ?>
-          <input type="submit" id="submit" value="Apply Now" />
-          <input type="button" id="savebutton" class="save" value="Save" />
-          <div id="success">Application Saved!</div>
-          <div id="fail">Please fill out all questions.</div>
-        <?php } else {?>
-          <div style="color: green;">Your application has been submitted.</div>
-        <?php } ?>
+            No questions to answer in this application. Your profile is enough.
+        <?php
+          }
+        ?>
+
+        <?php vnotice(); ?>
+        <input type="submit" id="submit" value="Apply Now" />
+        <input type="button" id="savebutton" class="save" value="Save" />
+        <div id="success">Application Saved!</div>
+        <div id="fail">Please fill out all questions.</div>
       </left>
     </form>
   </div>

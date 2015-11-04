@@ -73,7 +73,6 @@
         $geocode = '';
       }
       $requirements = clean($data['requirements']);
-      $link = clean($data['link']);
       if (!filter_var($link, FILTER_VALIDATE_EMAIL) &&
         !preg_match('`^(https?:\/\/)`', $link)) $link = "http://$link";
 
@@ -81,7 +80,7 @@
         'title' => $title, 'deadline' => $deadline, 'duration' => $duration,
         'desc' => $desc, 'geocode' => $geocode,
         'location' => $location, 'requirements' => $requirements,
-        'link' => $link, 'salary' => $salary, 'company' => $company,
+        'salary' => $salary, 'company' => $company,
         'salarytype' => $salarytype, 'startdate' => $startdate,
         'enddate' => $enddate, 'jobtype' => $jobtype,
         'locationtype' => $locationtype

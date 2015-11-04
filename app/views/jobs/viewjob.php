@@ -74,18 +74,20 @@
         $buttonText = "Apply Now";
         $onClick = "";
 
-        $hasApplication = View::get('hasApplication');
-        if ($hasApplication) {
-          $href = "apply/$_id";
-        } else {
-          $link = View::get('link');
-          $isEmail = filter_var($link, FILTER_VALIDATE_EMAIL);
-          if ($isEmail) {
-            $buttonText = "Apply by Email";
-          }
-          $href = "../redirect?id=$_id&url=$link";
-          $onClick = "onClick='return clickApply();'";
-        }
+        $href = "apply/$_id";
+
+        // $hasApplication = View::get('hasApplication');
+        // if ($hasApplication) {
+        //   $href = "apply/$_id";
+        // } else {
+        //   $link = View::get('link');
+        //   $isEmail = filter_var($link, FILTER_VALIDATE_EMAIL);
+        //   if ($isEmail) {
+        //     $buttonText = "Apply by Email";
+        //   }
+        //   $href = "../redirect?id=$_id&url=$link";
+        //   $onClick = "onClick='return clickApply();'";
+        // }
     ?>
         <a href="<?php echo $href; ?>" <?php echo $onClick; ?>>
           <input type="button" value="<?php echo $buttonText; ?>" />
