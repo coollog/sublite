@@ -25,6 +25,10 @@
 
     public static function getRecruiterId(MongoId $jobId);
     public static function getByRecruiter(MongoId $recruiterId);
+
+    /**
+     * @return Gets 'title', 'location', 'company'.
+     */
     public static function getByIdMinimal(MongoId $jobId);
   }
 

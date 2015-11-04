@@ -7,11 +7,14 @@
           '\nThe application will be disabled when reported.');
         if (!report) return;
 
+        $('#reportbutton').prop('disabled', true);
+
         var data = { _id: '<?php View::echof('applicationId'); ?>' };
         $.post('report', data, function (data) {
           console.log(data);
           data = JSON.parse(data);
           $('reported').show();
+          $('#reportbutton').prop('disabled', false);
         });
       });
     })();

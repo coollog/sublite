@@ -153,22 +153,7 @@
 
       // Submitting of application.
       if ($params) {
-        $answers = array();
-        foreach ($params as $_id => $answer) {
-          $answers[] = ['_id' => $_id, 'answer' => $answer];
-        }
-        $application = ApplicationStudent::save($jobId, $studentId, $answers);
-        $applicationId = $application->getId();
-
-        $submitted = ApplicationStudent::submit($applicationId);
-        if ($submitted) {
-          self::redirect("../application/$applicationId");
-        }
-
-        self::error(
-          "You must attach a resume to your profile in order to submit ".
-          "an application."
-        );
+        self::submit($jobId, $studentId, $params);
       }
 
       $entry = JobModel::getById($jobId);
@@ -359,6 +344,50 @@
       $success = ApplicationJob::createOrUpdate($jobId, $questionIds);
 
       return true;
+    }
+
+    private static function submit(MongoId $jobId,
+                                   MongoId $studentId,
+                                   array $questions) {
+      $answers = array();
+      foreach ($questions as $_id => $answer) {
+        $answers[] = ['_id' => $_id, 'answer' => $answer];
+      }
+      $application = ApplicationStudent::save($jobId, $studentId, $answers);
+      $applicationId = $application->getId();
+
+      $submitted = ApplicationStudent::submit($applicationId);
+      if ($submitted) {
+        $job = JobModel::getByIdMinimal($jobId);
+        $jobTitle = $job['title'];
+        $linkApplicants = "http://sublite.net/employers/viewapplicants/$jobId";
+        $linkManage = "http://sublite.net/employers/home";
+        $message = "
+          You have received a new applicant for your job: <b>$jobTitle</b>!
+          <br /><br />
+          To unlock and view this application, go to
+          <a href='$linkApplicants'>View Applicants</a>.
+          <br />
+          To manage your jobs, go to <a href='$linkManage'>Manage</a>.
+          <br /><br />
+          View Applicants: <a href='$linkApplicants'>$linkApplicants</a><br />
+          Manage Jobs: <a href='$linkManage'>$linkManage</a><br />
+          <br /><br />
+          -------------------
+          Team SubLite
+        ";
+        sendgmail(['tony.jiang@yale.edu', 'qingyang.chen@gmail.com'],
+                  "info@sublite.net",
+                  "New Applicant for '$jobTitle' | SubLite",
+                  $message);
+
+        self::redirect("../application/$applicationId");
+      }
+
+      self::error(
+        "You must attach a resume to your profile in order to submit ".
+        "an application."
+      );
     }
   }
 ?>
