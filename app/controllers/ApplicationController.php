@@ -177,8 +177,8 @@
       $questions = array();
 
       if (ApplicationModel::applicationExists($jobId, $studentId)) {
-        $application = new ApplicationStudent(
-          ApplicationModel::getApplication($jobId, $studentId));
+        $applicationData = ApplicationModel::getApplication($jobId, $studentId);
+        $application = new ApplicationStudent($applicationData);
         $applicationId = $application->getId();
         $submitted = ApplicationModel::checkSubmitted($application->getId());
 

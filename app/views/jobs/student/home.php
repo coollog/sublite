@@ -30,13 +30,14 @@
   <applicationtemplate>
     <table class="applicationblock"><tr>
       <td class="title">
-        <a href="job?id={jobId}" target="_blank">
+        <a href="<?php echo $GLOBALS['dirpre']; ?>../jobs/job?id={jobId}"
+           target="_blank">
           <applicationtitle>{company}|{title}</applicationtitle><br />
           <location>{location}</location>
         </a>
       </td>
       <td class="buttons">
-        <a href="apply/{jobId}">
+        <a href="<?php echo $GLOBALS['dirpre']; ?>../jobs/apply/{jobId}">
           <input type="button" value="{vieworedit} Application" />
         </a>
       </td>

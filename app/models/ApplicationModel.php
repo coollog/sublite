@@ -61,7 +61,7 @@
                                              MongoId $studentId);
 
     /**
-     * Gets application given a jobId and studentId
+     * Gets application given a jobId and studentId.
      */
     public static function getApplication(MongoId $jobId, MongoId $studentId);
 
@@ -211,8 +211,7 @@
     public static function getApplication(MongoId $jobId, MongoId $studentId) {
       $query = (new DBQuery(self::$collection))
         ->toQuery('jobid', $jobId)
-        ->toQuery('studentid', $studentId)
-        ->projectId();
+        ->toQuery('studentid', $studentId);
       return $query->findOne();
     }
 
