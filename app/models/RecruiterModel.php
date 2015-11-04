@@ -7,6 +7,9 @@
     public static function addCredits(MongoId $recruiterId, $count);
     public static function subtractCredits(MongoId $recruiterId, $count);
 
+    public static function addCreditsForNewCompanyProfile(MongoId $recruiterId);
+    public static function addCreditsForNewJob(MongoId $recruiterId);
+
     // Payment stuff.
     /**
      * @return null if no customerId.
@@ -20,6 +23,9 @@
 
   class RecruiterModel extends Model implements RecruiterModelInterface {
     const DB_TYPE = parent::DB_INTERNSHIPS;
+
+    const CREDITS_FOR_COMPANYPROFILE = 2;
+    const CREDITS_FOR_JOB            = 1;
 
     public static function getCredits(MongoId $recruiterId) {
       $query = (new DBQuery(self::$collection))
@@ -44,6 +50,16 @@
       $update = (new DBUpdateQuery(self::$collection))
         ->queryForId($recruiterId)->toAdd('credits', -$count);
       $update->run();
+    }
+
+    public static function addCreditsForNewCompanyProfile(
+      MongoId $recruiterId) {
+      self::addCredits($recruiterId, CREDITS_FOR_COMPANYPROFILE);
+    }
+
+    public static function addCreditsForNewJob(
+      MongoId $recruiterId) {
+      self::addCredits($recruiterId, CREDITS_FOR_JOB);
     }
 
     public static function getCustomerId(MongoId $recruiterId) {

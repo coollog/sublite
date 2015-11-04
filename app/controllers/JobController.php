@@ -178,6 +178,9 @@
         $data['stats'] = array('views' => 0, 'clicks' => 0);
         $id = $MJob->save($data);
 
+        // Add credit for adding job.
+        RecruiterModel::addCreditsForNewJob();
+
         $this->redirect("editapplication/$id");
         // This should go after the application form is set up.
         // $this->redirect('job', array('id' => $id));

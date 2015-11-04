@@ -396,7 +396,7 @@
             // Save new account information
             $entry['name'] = $name;
             $entry['pass'] = $pass;
-            $entry['orig'] = $pass2;
+            // $entry['orig'] = $pass2;
             $entry['class'] = $class;
             $entry['school'] = $school;
             $entry['time'] = time();

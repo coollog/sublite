@@ -117,6 +117,10 @@
         $me['company'] = new MongoID($id);
         $MRecruiter->save($me);
         $_SESSION['company'] = $id;
+
+        // Add credit for making company profile.
+        RecruiterModel::addCreditsForNewCompanyProfile();
+
         $this->redirect('home');
         return;
       }
