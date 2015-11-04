@@ -65,13 +65,17 @@
       return $cards;
     }
 
-    public static function charge($customerId, $cardId, $amount) {
+    public static function charge($customerId,
+                                  $cardId,
+                                  $amount,
+                                  $description = null) {
       try {
         $charge = \Stripe\Charge::create([
           'customer' => $customerId,
           'source' => $cardId,
           'amount' => $amount,
-          'currency' => self::CURRENCY
+          'currency' => self::CURRENCY,
+          'description' => $description
         ]);
         return null;
       } catch (\Stripe\Error\ApiConnection $e) {

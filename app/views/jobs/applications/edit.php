@@ -303,8 +303,7 @@
         questionIds.push(_id);
       });
 
-      $.post('', {questionIds: questionIds}, function (data) {
-        console.log(data);
+      $.post('', {saving: true, questionIds: questionIds}, function (data) {
         window.location = '../home';
       });
     });
@@ -328,7 +327,14 @@
       <left>
         <div id="selected">
           <subheadline>Selected questions:</subheadline>
-          <i>Select questions from below to add to your application.</i>
+          <i>
+            Select questions from below to add to your application.<br />
+            <small>
+              Applications can have no questions.
+              Each applicant's resume and profile will be automatically attached
+              to the application.
+            </small>
+          </i>
           <div class="chosen"></div>
         </div>
 

@@ -62,9 +62,10 @@
 
       // How much do we charge per application?
       $amount = $credits * 800;
+      $description = "$credits Credits";
 
       // Charge the card.
-      $err = StripeBilling::charge($customerId, $cardId, $amount);
+      $err = StripeBilling::charge($customerId, $cardId, $amount, $description);
       if (!is_null($err)) {
         return self::ajaxError($err);
       }

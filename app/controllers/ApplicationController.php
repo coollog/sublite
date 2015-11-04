@@ -344,10 +344,10 @@
      */
     private static function save(MongoId $jobId) {
       global $params;
+      if (!isset($params['saving'])) return false;
 
-      if (!isset($params['questionIds'])) return false;
-
-      $questionIds = $params['questionIds'];
+      $questionIds = isset($params['questionIds']) ? $params['questionIds'] :
+                                                     [];
 
       // Convert all questionIds to MongoIds.
       foreach ($questionIds as $index => $val) {
