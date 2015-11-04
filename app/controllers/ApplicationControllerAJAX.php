@@ -211,15 +211,16 @@
       $usesCount = $question->getUsesCount();
 
       // Delete question only if:
-      // ('uses' is 0) or ('uses' is 1 and the only use is $jobId).
+      // ('uses' is 0) // NO -> or ('uses' is 1 and the only use is $jobId).
       if ($usesCount > 1) {
         return;
       }
       if ($usesCount == 1) {
-        $use = $question->getUses()[0];
-        if ($use != $jobId) {
-          return;
-        }
+        return;
+        // $use = $question->getUses()[0];
+        // if ($use != $jobId) {
+        //   return;
+        // }
       }
 
       return Question::delete($questionId);

@@ -62,6 +62,10 @@
     float: right;
     margin-top: 0.5em;
   }
+  .customList {
+    max-height: 300px;
+    overflow-y: auto;
+  }
 
   #selected {
     padding-bottom: 1em;
@@ -90,6 +94,19 @@
     <text>{text}</text>
   </question>
 </questiontemplate>
+
+<vanillaquestionsdata class="hide">
+  <?php
+    $vanillaQuestions = View::get('vanillaQuestions');
+    echo toJSON($vanillaQuestions);
+  ?>
+</vanillaquestionsdata>
+<chosenquestionsdata class="hide">
+  <?php
+    $chosen = View::get('chosen');
+    echo toJSON($chosen);
+  ?>
+</chosenquestionsdata>
 
 <script>
   function getQuestionFromTemplate(_id, text, elemClass, hide) {
@@ -221,56 +238,57 @@
     });
 
     // When clicking search.
-    $('#searchCustom').click(function() {
-      $('.customList').html('');
-      var search = $('#searchText').val();
-      $.post('../searchcustom', {search: search}, function (data) {
-        console.log(data);
-        data = JSON.parse(data);
-        // Create the custom questions to be able to add to selected.
-        data.forEach(function (questionData) {
-          addCustomQuestion(questionData._id, questionData.text);
+    (function setupSearchCustom() {
+      $('#searchCustom').click(function() {
+        $('.customList').html('');
+        var search = $('#searchText').val();
+        $.post('../searchcustom', {search: search}, function (data) {
+          console.log(data);
+          data = JSON.parse(data);
+          // Create the custom questions to be able to add to selected.
+          if (data.length == 0) {
+            $('.customList').html("Your search for '" + search +
+                                  "' did not match any questions!");
+          } else {
+            $('.customList').html('');
+          }
+          data.forEach(function (questionData) {
+            addCustomQuestion(questionData._id, questionData.text);
+          });
+
+          // When clicking the plus next to custom questions.
+          bindQuestionOpClick('.customList', false);
+
+          $('#searchText').val('');
         });
-
-        // When clicking the plus next to custom questions.
-        bindQuestionOpClick('.customList', false);
-
-        $('#searchText').val('');
       });
-    });
+      callOnEnter('#searchText', function () {
+        $('#searchCustom').click();
+      });
+    })();
 
     // Load up vanilla questions.
-    <?php
-      $vanillaQuestions = View::get('vanillaQuestions');
-      foreach ($vanillaQuestions as $question) {
-        $_id = $question['_id'];
-        $text = clean($question['text']);
-        $hide = $question['hide'] ? 'true' : 'false';
-    ?>
-        addVanillaQuestion('<?php echo $_id ?>',
-                           '<?php echo $text ?>',
-                           <?php echo $hide ?>);
-    <?php
-      }
-    ?>
+    (function loadVanillaQuestions() {
+      var data = JSON.parse($('vanillaquestionsdata').html());
+      $('vanillaquestionsdata').remove();
+      data.forEach(function (question) {
+        question._id = question._id.$id;
+        addVanillaQuestion(question._id, question.text, question.hide);
+      });
+    })();
 
     // When clicking the plus next to vanilla questions.
     bindQuestionOpClick('.vanillaList', true);
 
     // Load up selected questions.
-    <?php
-      $chosen = View::get('chosen');
-      foreach ($chosen as $question) {
-        $_id = $question['_id'];
-        $text = $question['text'];
-        $vanilla = $question['vanilla'];
-    ?>
-        chooseQuestion('<?php echo $_id ?>',
-                       '<?php echo $text ?>',
-                       <?php echo $vanilla ? 'true' : 'false'; ?>);
-    <?php
-      }
-    ?>
+    (function loadChosenQuestions() {
+      var data = JSON.parse($('chosenquestionsdata').html());
+      $('chosenquestionsdata').remove();
+      data.forEach(function (question) {
+        question._id = question._id.$id;
+        chooseQuestion(question._id, question.text, question.vanilla);
+      });
+    })();
 
     // Finish creating/editing application.
     $('#finish').click(function () {
@@ -308,6 +326,8 @@
           <i>Select questions from below to add to your application.</i>
           <div class="chosen"></div>
         </div>
+
+        <subheadline>Add questions:</subheadline><br />
 
         Choose questions to add to the application (recommended):<br />
         <br />
