@@ -52,6 +52,7 @@
       foreach ($applications as $application) {
         $jobId = $application->getJobId();
         $job = JobModel::getByIdMinimal($jobId);
+        if (is_null($job)) continue;
         $companyId = $job['company'];
         $companyName = CompanyModel::getName($companyId);
         $data[] = [

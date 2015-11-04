@@ -6,7 +6,7 @@
   foreach ($recruiters as $recruiter) {
     if (!isset($recruiter['credits'])) {
       $recruiterId = $recruiter['_id'];
-      RecruiterModel::setCredits($recruiterId, 5);
+      RecruiterModel::setCredits($recruiterId, 0);
     }
   }
 ?>

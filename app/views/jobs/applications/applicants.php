@@ -181,7 +181,7 @@
 <templates>
   <unclaimedtemplate>
     <div class="headline">
-      Your job has <b>{unclaimedcount}</b> new applicants!
+      Your job has <b>{unclaimedcount}</b> new applicant(s)!
     </div>
 
     <h2>Insight</h2>
