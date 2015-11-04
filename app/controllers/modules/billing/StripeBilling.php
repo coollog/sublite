@@ -14,7 +14,7 @@
     public static function getCards($customerId);
 
     /**
-     * @return True on success, false on failure.
+     * @return Null on success, error message on error.
      */
     public static function charge($customerId, $cardId, $amount);
   }
@@ -73,11 +73,19 @@
           'amount' => $amount,
           'currency' => self::CURRENCY
         ]);
-        return true;
+        return null;
+      } catch (\Stripe\Error\ApiConnection $e) {
+        return 'Network error, perhaps try again.';
+      } catch (\Stripe\Error\InvalidRequest $e) {
+        return 'Transaction invalid.';
+      } catch (\Stripe\Error\Api $e) {
+        return 'Transaction servers down. Try again later.';
       } catch (\Stripe\Error\Card $e) {
-        // The User's card has been declined.
-        return false;
+        $e_json = $e->getJsonBody();
+        $error = $e_json['error'];
+        return "Card was declined: $error";
       }
+      return 'Transaction failure.';
     }
   }
 ?>

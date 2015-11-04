@@ -64,9 +64,9 @@
       $amount = $credits * 800;
 
       // Charge the card.
-      $res = StripeBilling::charge($customerId, $cardId, $amount);
-      if (!$res) {
-        return self::ajaxError('Charge failed!');
+      $err = StripeBilling::charge($customerId, $cardId, $amount);
+      if (!is_null($err)) {
+        return self::ajaxError($err);
       }
 
       // Add the credits.

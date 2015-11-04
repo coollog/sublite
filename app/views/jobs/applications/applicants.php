@@ -127,7 +127,7 @@
     text-align: right;
   }
 
-  paymentform {
+  paymentform, paymentselect, verifyingcard {
     display: block;
   }
   paymentamount, paymentcredits {
@@ -175,6 +175,10 @@
   purchased {
     display: block;
     color: green;
+  }
+  purchasefailed {
+    display: block;
+    color: red;
   }
 </style>
 
@@ -299,7 +303,8 @@
     <script src="https://checkout.stripe.com/checkout.js"></script>
 
     <div class="headline">
-      You currently have <b>{creditcount}</b> <i>Credits</i>.
+      You currently have <b><creditcount>{creditcount}</creditcount></b>
+      <i>Credits</i>.
     </div>
 
     <input id="buycreditsbutton" type="button" value="Buy Credits" />
@@ -310,8 +315,10 @@
         You have to input a positive number of credits.
       </invalidamount>
 
+      <br /><br />
       Select payment method:
       <paymentselect></paymentselect>
+      <verifyingcard class="hide">Verifying credit card...</verifyingcard>
       <input id="addcreditcard" type="button" class="smallbutton"
              value="Add Credit Card" />
       <br /><br />
@@ -328,6 +335,8 @@
         To unlock applications using these credits, click on the
         <a href="#" onclick="$('tab[for=unclaimed]').click()">New</a> tab.
       </purchased>
+      <purchasefailed></purchasefailed>
+      <br />
       <input id="confirmpurchase" type="button" value="Confirm Purchase"
              disabled />
     </paymentform>
@@ -606,12 +615,21 @@
       };
       $.post('../ajax/buycredits', data, function (data) {
         console.log(data);
-        console.log('Bought ' + credits + ' Credits!');
+
         $('#confirmpurchase').prop('disabled', false);
+        $('purchasefailed')
+          .html("We're sorry, the transaction was unsuccessful: " + data)
+          .show();
+        $('body').click(function() { $('purchasefailed, purchased').hide(); });
+
+        data = JSON.parse(data);
+
+        console.log('Bought ' + credits + ' Credits!');
         $('purchased').show();
+        $('purchasefailed').hide();
+        $('tab[for=unclaimed]').trigger('unload');
         var oldCredits = parseInt($('creditcount').html());
         $('creditcount').html(oldCredits + credits);
-        $('tab[for=unclaimed]').trigger('unload');
       });
     }
 
@@ -623,15 +641,19 @@
         expYear: expYear
       });
       $('paymentselect').append(html);
+      setupSelectCard();
     }
 
     function processToken(token) {
-      $('#addcreditcard').prop('disabled', false);
+      $('verifyingcard').show();
 
       $.post('../ajax/addcard', { token: token }, function (data) {
         console.log(data);
         data = JSON.parse(data);
+
         addCard(data.cardId, data.last4, data.expMonth, data.expYear);
+        $('#addcreditcard').prop('disabled', false);
+        $('verifyingcard').hide();
       });
     }
 
