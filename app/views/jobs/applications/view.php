@@ -51,19 +51,35 @@
     <headline><?php View::echof('jobtitle'); ?></headline>
     <div class="companyname"><?php View::echof('companytitle'); ?></div>
 
-    <?php if (View::get('isStudent')) { ?>
-      <br /><br />
-      <?php
+    <?php
+      $isStudent = View::get('isStudent');
+      $isRecruiter = View::get('isRecruiter');
+      if ($isStudent || $isRecruiter) {
+        echo '<br /><br />';
+        $studentId = View::get('studentId').'';
+        $recruiterId = View::get('recruiterId').'';
+        if ($isStudent) {
+          $from = $studentId;
+          $to = $recruiterId;
+          $toText = 'Recruiter';
+        }
+        if ($isRecruiter) {
+          $from = $recruiterId;
+          $to = $studentId;
+          $toText = 'Student';
+        }
         View::partial('newmessage', [
-          'from' => View::get('studentId'),
-          'to' => View::get('recruiterId'),
-          'text' => 'Message Recruiter'
+          'from' => $from,
+          'to' => $to,
+          'text' => "Message $toText"
         ]);
-      ?>
-      <a href="../search?byrecruiter=<?php View::echof('recruiterId'); ?>">
-        <input type="button" value="See More Jobs" />
-      </a>
-    <?php } ?>
+        if ($isStudent) {
+          echo View::linkTo('<input type="button" value="See More Jobs" />',
+                            '../search',
+                            ['byrecruiter' => $recruiterId]);
+        }
+      }
+    ?>
 
     <left style="margin-top: 2em;">
       <div class="headline">

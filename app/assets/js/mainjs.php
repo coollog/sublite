@@ -1,6 +1,10 @@
 <script>
   "use strict";
 
+  $(function () {
+    $('.hide, templates').hide();
+  });
+
   function scrollTo(q, n) {
     var top = $(q).offset().top;
     if (typeof n !== 'undefined') {

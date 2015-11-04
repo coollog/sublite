@@ -25,7 +25,7 @@
                                   $route,
                                   $params = null,
                                   $newTab = false) {
-      return vlinkTo($html, $route, $params = null, $newTab = false);
+      return vlinkTo($html, $route, $params, $newTab);
     }
     public static function partial($page, $vars = false) {
       vpartial($page, $vars);

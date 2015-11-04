@@ -16,10 +16,10 @@
     font: 400 14px/1.5em 'Open Sans', sans-serif;
     background: #000;
   }
-  green {
+  green, .green {
     color: #00B233;
   }
-  red {
+  red, .red {
     color: #FF1919;
   }
   a {
@@ -103,8 +103,8 @@
   fade:not(.nohover):hover {
     opacity: 1;
   }
-  .hide, templates {
-    display: none;
+  .div {
+    display: block;
   }
 
   /* MISC CLASSES */
