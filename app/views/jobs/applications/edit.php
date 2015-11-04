@@ -124,6 +124,10 @@
     return html;
   }
 
+  function checkChosen(_id) {
+    return $('.chosen question[qid=' + _id + ']').size() > 0;
+  }
+
   function addVanillaQuestion(_id, text, hide) {
     var html;
     if (hide) {
@@ -135,6 +139,7 @@
   }
 
   function addCustomQuestion(_id, text) {
+    if (checkChosen(_id)) return;
     var html = getQuestionFromTemplate(_id, text, 'custom');
     $('.customList').append(html);
   }
