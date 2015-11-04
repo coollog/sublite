@@ -178,6 +178,15 @@
       ApplicationModel::changeStatus($applicationId,
                                      ApplicationStudent::STATUS_REPORTED);
 
+      $message = "
+        <h1>Application Reported</h1><br />
+        <b>Application ID:</b> $applicationId
+      ";
+      sendgmail(['tony.jiang@yale.edu', 'qingyang.chen@gmail.com'],
+                "info@sublite.net",
+                'Application Reported',
+                $message);
+
       return self::ajaxSuccess();
     }
 
