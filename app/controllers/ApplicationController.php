@@ -340,10 +340,36 @@
         $questionIds[$index] = new MongoId($val);
       }
 
+      // Get old questionIds and find ones to decrement/increment uses.
+      $oldApplication = ApplicationJob::get($jobId);
+      $oldQuestions = [];
+      if ($oldApplication != null) {
+        $oldQuestions = $oldApplication->getQuestions();
+      }
+      self::updateQuestionUses($jobId, $oldQuestions, $questionIds);
+
       // Update job application questions.
       $success = ApplicationJob::createOrUpdate($jobId, $questionIds);
 
       return true;
+    }
+
+    /**
+     * Helper function for save() to update the uses of questions and delete
+     * unused questions.
+     */
+    private static function updateQuestionUses(MongoId $jobId,
+                                               array $oldQuestions,
+                                               array $newQuestions) {
+      $commonQuestions = array_intersect($newQuestions, $oldQuestions);
+      $removedQuestions = array_diff($oldQuestions, $commonQuestions);
+      $addedQuestions = array_diff($newQuestions, $commonQuestions);
+      foreach ($removedQuestions as $questionId) {
+        QuestionModel::removeFromUses($questionId, $jobId);
+      }
+      foreach ($addedQuestions as $questionId) {
+        QuestionModel::addToUses($questionId, $jobId);
+      }
     }
 
     private static function submit(MongoId $jobId,

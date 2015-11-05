@@ -73,6 +73,12 @@
     public function toAdd($name, $addval);
 
     /**
+     * Set individual $push/$pull field.
+     */
+    public function toPush($name, $val);
+    public function toPull($name, $val);
+
+    /**
      * Set entire $set data.
      */
     public function setUpdate($update);
@@ -226,6 +232,16 @@
       return $this;
     }
 
+    public function toPush($name, $val) {
+      $this->push[$name] = $val;
+      return $this;
+    }
+
+    public function toPull($name, $val) {
+      $this->pull[$name] = $val;
+      return $this;
+    }
+
     public function setUpdate($update) {
       $this->update = $update;
     }
@@ -239,6 +255,12 @@
       if (!empty($this->inc)) {
         $data['$inc'] = $this->inc;
       }
+      if (!empty($this->push)) {
+        $data['$push'] = $this->push;
+      }
+      if (!empty($this->pull)) {
+        $data['$pull'] = $this->pull;
+      }
       self::update($data);
     }
 
@@ -248,6 +270,8 @@
 
     private $update = [];
     private $inc = [];
+    private $pull = [];
+    private $push = [];
   }
 
   class DBRemoveQuery extends DBQuery implements DBRemoveQueryInterface {

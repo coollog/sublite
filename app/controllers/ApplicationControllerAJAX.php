@@ -219,20 +219,10 @@
 
       $usesCount = $question->getUsesCount();
 
-      // Delete question only if:
-      // ('uses' is 0) // NO -> or ('uses' is 1 and the only use is $jobId).
-      if ($usesCount > 1) {
-        return;
+      // Delete question only if 'uses' is 0,
+      if ($usesCount == 0) {
+        return Question::delete($questionId);
       }
-      if ($usesCount == 1) {
-        return;
-        // $use = $question->getUses()[0];
-        // if ($use != $jobId) {
-        //   return;
-        // }
-      }
-
-      return Question::delete($questionId);
     }
 
     public static function searchCustom() {

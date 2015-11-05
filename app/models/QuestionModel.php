@@ -7,6 +7,16 @@
     public static function getByExactText($text);
     public static function exists(MongoId $id);
     public static function editText(MongoId $id, $text);
+
+    /**
+     * Adds the 'jobid' to uses.
+     */
+    public static function addToUses(MongoId $questionId, MongoId $jobId);
+
+    /**
+     * Removes the 'jobid' from uses, and deletes if is not vanilla.
+     */
+    public static function removeFromUses(MongoId $questionId, MongoId $jobId);
   }
 
   class QuestionModel extends Model implements QuestionModelInterface {
@@ -61,6 +71,23 @@
       $update = (new DBUpdateQuery(self::$collection))
         ->queryForId($id)->toUpdate('text', $text);
       $update->run();
+    }
+
+    public static function addToUses(MongoId $questionId, MongoId $jobId) {
+      $update = (new DBUpdateQuery(self::$collection))
+        ->queryForId($questionId)->toPush('uses', $jobId);
+      $update->run();
+    }
+
+    public static function removeFromUses(MongoId $questionId, MongoId $jobId) {
+      $update = (new DBUpdateQuery(self::$collection))
+        ->queryForId($questionId)->toPull('uses', $jobId);
+      $update->run();
+
+      $question = self::getById($questionId, ['uses' => 1, 'vanilla' => 1]);
+      if (count($question['uses']) == 0 && !$question['vanilla']) {
+        self::deleteById($questionId);
+      }
     }
 
     protected static $collection;
