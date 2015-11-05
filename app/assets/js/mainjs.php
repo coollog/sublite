@@ -76,6 +76,20 @@
   }
 
   /**
+   * Calls function 'onTab' when Tab is pressed on $(selector).
+   */
+  function callOnTab(selector, onTab) {
+    $(selector).off('keydown').keydown(function (e) {
+      var keyCode = e.keyCode || e.which;
+
+      if (keyCode == 9) {
+        e.preventDefault();
+        onTab(this);
+      }
+    });
+  }
+
+  /**
    * Simulates Enter keypress on $(selector).
    */
   function triggerEnter(selector) {

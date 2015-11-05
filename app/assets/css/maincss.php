@@ -106,6 +106,9 @@
   .div {
     display: block;
   }
+  .gaptop {
+    margin-top: 0.5em;
+  }
 
   /* MISC CLASSES */
   .capitalize {

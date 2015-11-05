@@ -128,5 +128,11 @@
     <a href="addjob">
       <input type="button" value="List Job" />
     </a>
+    <fade class="div gaptop nohover">
+      <i>
+        You will receive 1 free <i>Credit</i> <a href="">(?)</a>
+        for every job you list!
+      </i>
+    </fade>
   </div>
 </panel>

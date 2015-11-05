@@ -73,8 +73,6 @@
         $geocode = '';
       }
       $requirements = clean($data['requirements']);
-      if (!filter_var($link, FILTER_VALIDATE_EMAIL) &&
-        !preg_match('`^(https?:\/\/)`', $link)) $link = "http://$link";
 
       return array(
         'title' => $title, 'deadline' => $deadline, 'duration' => $duration,
@@ -122,8 +120,6 @@
         $err, 'invalid deadline: date should be in the future');
       $this->validate($this->isValidDescription($data['desc']),
         $err, 'description too long');
-      $this->validate($this->isValidURL($data['link']),
-        $err, 'invalid listing URL');
     }
 
     function manage() {
@@ -175,14 +171,15 @@
         $data['applicants'] = array();
         $data['viewers'] = array();
         $data['stats'] = array('views' => 0, 'clicks' => 0);
-        $id = $MJob->save($data);
+        $jobId = $MJob->save($data);
 
         // Add credit for adding job.
-        RecruiterModel::addCreditsForNewJob();
+        $recruiterId = $_SESSION['_id'];
+        RecruiterModel::addCreditsForNewJob($recruiterId);
 
-        $this->redirect("editapplication/$id");
+        $this->redirect("editapplication/$jobId");
         // This should go after the application form is set up.
-        // $this->redirect('job', array('id' => $id));
+        // $this->redirect('job', array('id' => $jobId));
         return;
       }
 

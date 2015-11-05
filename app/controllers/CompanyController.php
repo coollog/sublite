@@ -119,7 +119,8 @@
         $_SESSION['company'] = $id;
 
         // Add credit for making company profile.
-        RecruiterModel::addCreditsForNewCompanyProfile();
+        $recruiterId = $_SESSION['_id'];
+        RecruiterModel::addCreditsForNewCompanyProfile($recruiterId);
 
         $this->redirect('home');
         return;

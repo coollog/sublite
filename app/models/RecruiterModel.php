@@ -54,12 +54,12 @@
 
     public static function addCreditsForNewCompanyProfile(
       MongoId $recruiterId) {
-      self::addCredits($recruiterId, CREDITS_FOR_COMPANYPROFILE);
+      self::addCredits($recruiterId, self::CREDITS_FOR_COMPANYPROFILE);
     }
 
     public static function addCreditsForNewJob(
       MongoId $recruiterId) {
-      self::addCredits($recruiterId, CREDITS_FOR_JOB);
+      self::addCredits($recruiterId, self::CREDITS_FOR_JOB);
     }
 
     public static function getCustomerId(MongoId $recruiterId) {

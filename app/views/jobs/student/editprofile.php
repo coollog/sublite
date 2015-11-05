@@ -286,7 +286,25 @@
 
         $(self).remove();
       }
+
+      (function setupTabbing() {
+        var index = 0;
+        $('section field').each(function() {
+          $(this).attr('index', index);
+          index ++;
+        });
+        function nextField(me) {
+          var parentId = $(me).attr('parent');
+          var $parent = $('#' + parentId);
+          var index = parseInt($parent.attr('index')) + 1;
+          finish(me);
+          $('section field[index='+index+']').click();
+        }
+        callOnTab('section .smallinput', nextField);
+      })();
+
       callOnEnter('section .smallinput', finish);
+
       $('section .smallinput').blur(function () {
         finish(this);
       });
@@ -564,7 +582,9 @@
       <section name="basicinfo">
         <heading></heading>
 
-        <label for="input-bio" class="fortextarea">Write a short summary for yourself:</label>
+        <label for="input-bio" class="fortextarea">
+          Write a short summary for yourself:
+        </label>
         <textarea id="input-bio" class="flexinput"></textarea>
 
         <fieldline>
