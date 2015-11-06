@@ -111,7 +111,11 @@
       // Get cards.
       $recruiterId = $_SESSION['_id'];
       $customerId = RecruiterModel::getCustomerId($recruiterId);
-      $cards = StripeBilling::getCards($customerId);
+      if (is_null($customerId)) {
+        $cards = []
+      } else {
+        $cards = StripeBilling::getCards($customerId);
+      }
 
       $data = array_merge([
         'cards' => $cards
