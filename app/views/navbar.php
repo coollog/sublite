@@ -98,7 +98,7 @@
   );
 ?>
 <navbar class="blackbar">
-  <a href="."><logo>SubLite</logo></a><beta>beta</beta>
+  <a href="/"><logo>SubLite</logo></a><beta>beta</beta>
   <options class="right">
     <?php
       foreach ($menu as $opt) {
