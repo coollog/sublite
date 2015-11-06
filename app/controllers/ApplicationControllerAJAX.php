@@ -112,7 +112,7 @@
       $recruiterId = $_SESSION['_id'];
       $customerId = RecruiterModel::getCustomerId($recruiterId);
       if (is_null($customerId)) {
-        $cards = []
+        $cards = [];
       } else {
         $cards = StripeBilling::getCards($customerId);
       }
