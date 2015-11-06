@@ -54,5 +54,5 @@
   require_once($dirpre.'models/ApplicationModel.php');
 
   // Other necessary modules.
-  require_once($dirpre.'router.php');
+  require_once($dirpre.'Router.php');
 ?>
