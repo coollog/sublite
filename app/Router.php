@@ -108,7 +108,7 @@
       }
 
       // The route isn't registered, so give 404.
-      self::routeNotFound();
+      self::routeNotFound($uri);
     }
 
     private static function call($uri,
@@ -124,8 +124,10 @@
     /**
      * 404?
      */
-    private static function routeNotFound() {
-      echo 'URL invalid.';
+    private static function routeNotFound($uri) {
+      self::setDirpreFromRoute($uri);
+      Controller::render('404');
+      Controller::finish();
     }
 
     /**
