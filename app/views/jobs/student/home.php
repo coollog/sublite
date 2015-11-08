@@ -110,10 +110,10 @@
 <panel>
   <div class="content">
     <headline>Manage Your Career Profile</headline>
-    <a href="editprofile">
+    <a href="<?php echo $GLOBALS['dirpre']; ?>../jobs/editprofile">
       <input type="button" value="Edit Career Profile" />
     </a>
-    <a href="viewprofile">
+    <a href="<?php echo $GLOBALS['dirpre']; ?>../jobs/viewprofile">
       <input type="button" value="View Career Profile" />
     </a>
   </div>
