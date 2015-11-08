@@ -157,7 +157,13 @@
           '/index.php',
           '/',
           '/register.php',
-          '/login.php'
+          '/login.php',
+          '/jobs/login.php',
+          '/housing/login.php',
+          '/employers/login.php',
+          '/housing/register.php',
+          '/jobs/register.php',
+          '/employers/register.php'
         );
         $domain = "https://$_SERVER[HTTP_HOST]";
         $thispage = "$domain$_SERVER[REQUEST_URI]";

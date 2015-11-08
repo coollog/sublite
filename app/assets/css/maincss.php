@@ -76,6 +76,7 @@
     color: #035d75;
     font-family: 'BebasNeue', sans-serif;
     font-weight: bold;
+    line-height: 1em;
   }
   .headline {
     font-size: 1.5em;
