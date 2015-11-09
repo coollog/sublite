@@ -1,5 +1,3 @@
-<?php require_once($GLOBALS['dirpre'].'views/view.php'); ?>
-
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
 <style>
@@ -32,16 +30,16 @@
 <script>
   function up(url) {
     console.log(url);
-    <?php 
+    <?php
       if (isset($_GET['name'])) {
         $name = $_GET['name'];
         echo "window.parent.addImg$name(url, '$name');";
-      } else 
+      } else
         echo 'window.parent.addImg(url);';
     ?>
   }
   <?php vecho('reply'); ?>
-  
+
   function resize() {
     window.parent.$('iframe.S3')
       .width($('.container').width())

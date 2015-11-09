@@ -22,11 +22,11 @@
 
       // Validations
       $this->startValidations();
-      $this->validate($MRecruiter->IDexists($participants[0]) or 
-                      $MStudent->exists($participants[0]), 
+      $this->validate($MRecruiter->IDexists($participants[0]) or
+                      $MStudent->exists($participants[0]),
         $err, 'invalid sender');
-      $this->validate($MRecruiter->IDexists($participants[1]) or 
-                      $MStudent->exists($participants[1]), 
+      $this->validate($MRecruiter->IDexists($participants[1]) or
+                      $MStudent->exists($participants[1]),
         $err, 'invalid receiver');
 
       // Code
@@ -35,7 +35,7 @@
         $this->redirect('messages', array('id' => $id, 'msg' => $msg));
         return;
       }
-      
+
       $this->error($err);
       $this->render('notice');
     }
@@ -86,7 +86,7 @@
       if ($MStudent->exists($from)) {
         $Photo = $MStudent->getPhoto($from);
         if ($Photo == '' or $Photo == 'defaultpic.png' or $Photo == 'noprofilepic.png')
-          $Photo = $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
+          $Photo = $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
         $reply['frompic'] = $Photo;
       } else if ($MRecruiter->IDexists($from)) {
         $reply['frompic'] = $MRecruiter->getPhoto($from);
@@ -94,12 +94,12 @@
         $reply['frompic'] = 'Nonexistent';
       }
       if ($reply['frompic'] == 'assets/gfx/defaultpic.png')
-        $reply['frompic'] = $GLOBALS['dirpre'].$reply['frompic'];
+        $reply['frompic'] = $GLOBALS['dirpreFromRoute'].$reply['frompic'];
     }
 
     function reply() {
       global $CJob; $CJob->requireLogin();
-      
+
       global $params, $MMessage;
       // Params to vars
 
@@ -121,7 +121,7 @@
           if (!$reply['read']) $unread ++;
 
           $c->setFromNamePic($reply, $from);
-          
+
           if (strcmp($m['_id'], $entry['_id']) == 0) $reply['current'] = true;
           else $reply['current'] = false;
 
@@ -167,17 +167,17 @@
         if (isset($_GET['msg'])) $data['msg'] = $_GET['msg'];
         return $data;
       }
-      
+
       if (!isset($_GET['id'])) {
-        $this->render('messages', viewData($this)); return;
+        $this->render('messaging/messages', viewData($this)); return;
       }
 
       /* ACTUALLY SEND MESSAGES */
 
       // Validations
       $this->startValidations();
-      $this->validate(MongoId::isValid($id = $_GET['id']) and 
-                      ($entry = $MMessage->get($id)) !== NULL, 
+      $this->validate(MongoId::isValid($id = $_GET['id']) and
+                      ($entry = $MMessage->get($id)) !== NULL,
         $err, 'unknown message');
       if ($this->isValid())
         $this->validate(in_array($myid = $_SESSION['_id']->{'$id'}, $entry['participants']),
@@ -193,7 +193,7 @@
         $MMessage->save($entry);
 
         if (!isset($_POST['reply'])) {
-          $this->render('messages', viewData($this, $entry)); return;
+          $this->render('messaging/messages', viewData($this, $entry)); return;
         }
 
         extract($data = $this->data($params));
@@ -257,17 +257,16 @@
           ";
           sendgmail(array('tony.jiang@yale.edu', 'qingyang.chen@gmail.com'), "info@sublite.net", 'Message sent on SubLite!', $message);
 
-          $this->render('messages', viewData($this, $entry));
+          $this->render('messaging/messages', viewData($this, $entry));
           return;
         }
-        $this->render('messages', viewData($this, $entry)); return;
+        $this->render('messaging/messages', viewData($this, $entry)); return;
       }
-      
+
       $this->error($err);
       $this->render('notice');
     }
   }
 
-  $CMessage = new MessageController();
-
+  GLOBALvarSet('CMessage', new MessageController());
 ?>

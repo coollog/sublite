@@ -1,46 +1,50 @@
 <?php
   require_once($GLOBALS['dirpre'].'models/Model.php');
 
-  class CompanyModel extends Model {
+  interface CompanyModelInterface {
+
+  }
+
+  class CompanyModel extends Model implements CompanyModelInterface {
+    const DB_TYPE = parent::DB_INTERNSHIPS;
+
     function __construct() {
-      parent::__construct('companies');
+      parent::__construct(self::DB_TYPE, 'companies');
     }
 
     function save($data) {
-      $this->collection->save($data);
+      self::$collection->save($data);
       return $data['_id']->{'$id'};
     }
 
     function get($id) {
-      return $this->collection->findOne(array('_id' => new MongoId($id)));
+      return self::$collection->findOne(array('_id' => new MongoId($id)));
     }
     function getByName($name) {
-      return $this->collection->findOne(array('name' => $name));
+      return self::$collection->findOne(array('name' => $name));
     }
-    function getName($id) {
-      $entry = $this->get($id);
-      return $entry['name'];
+    function getName($companyId) {
+      $company = self::getById($companyId, ['name' => 1]);
+      return $company['name'];
     }
     function getIndustry($id) {
       $entry = $this->get($id);
       return $entry['industry'];
     }
-    function getAll() {
-      return $this->collection->find();
-    }
     function find($query) {
-      return $this->collection->find($query);
+      return self::$collection->find($query);
     }
 
     function delete($id) {
-      
+
     }
-    
+
     function exists($id) {
       return ($this->get($id) !== NULL);
     }
+
+    protected static $collection;
   }
 
-  $MCompany = new CompanyModel();
-
+  GLOBALvarSet('MCompany', new CompanyModel());
 ?>

@@ -36,12 +36,12 @@
 
       return array(
         'student' => $student, 'address' => $address, 'gender' => $gender,
-        'city' => $city, 'state' => $state, 'geocode' => $geocode, 
+        'city' => $city, 'state' => $state, 'geocode' => $geocode,
         'startdate' => $startdate, 'enddate' => $enddate, 'price' => $price,
         'title' => $title, 'summary' => $summary, 'occupancy' => $occupancy,
-        'roomtype' => $roomtype, 'buildingtype' => $buildingtype, 
+        'roomtype' => $roomtype, 'buildingtype' => $buildingtype,
         'photos' => $photos,
-        'amenities' => $amenities, 'publish' => $publish, 
+        'amenities' => $amenities, 'publish' => $publish,
         'comments' => $comments, 'commented' => $commented,
         'pricetype' => $pricetype
       );
@@ -56,7 +56,7 @@
       $this->validate(
         $data['enddate'] >= $data['startdate'],
         $err, 'invalid dates');
-      $this->validate(count($data['photos']) >= 1, 
+      $this->validate(count($data['photos']) >= 1,
         $err, 'must upload at least 1 photo');
     }
 
@@ -66,7 +66,7 @@
       $data = array(
         'sublets' => $MSublet->getByStudent($_SESSION['_id'])
       );
-      $this->render('managesublets', $data);
+      $this->render('student/sublets/manage', $data);
     }
 
     function formDataCommon($data) {
@@ -84,10 +84,10 @@
 
       global $CStudent; $CStudent->requireLogin();
 
-      if (!isset($_POST['add'])) { 
-        $this->render('subletform', formData(array())); return;
+      if (!isset($_POST['add'])) {
+        $this->render('student/sublets/subletform', formData(array())); return;
       }
-      
+
       global $params, $MSublet, $MStudent;
       $me = $MStudent->me();
       $params['student'] = $me['_id'];
@@ -98,7 +98,7 @@
 
       // Params to vars
       extract($data = $this->data($params));
-      
+
       // Validations
       $this->startValidations();
       $this->validateData($data, $err);
@@ -110,17 +110,17 @@
         $this->redirect('sublet', array('id' => $id));
         return;
       }
-      
+
       $this->error($err);
-      $this->render('subletform', formData($this->formDataCommon($data)));
+      $this->render('student/sublets/subletform', formData($this->formDataCommon($data)));
     }
 
     function edit() {
       global $CStudent; $CStudent->requireLogin();
-      
+
       global $params, $MSublet, $MStudent;
       // Params to vars
-      
+
       // Validations
       $this->startValidations();
       $this->validate(isset($_GET['id']) and MongoId::isValid($id = $_GET['id']) and ($entry = $MSublet->get($id)) !== NULL, $err, 'unknown sublet');
@@ -136,8 +136,8 @@
 
       // Code
       if ($this->isValid()) {
-        if (!isset($_POST['edit'])) { 
-          $this->render('subletform', formData(
+        if (!isset($_POST['edit'])) {
+          $this->render('student/sublets/subletform', formData(
             array_merge(
               $this->formDataCommon($this->data($entry)),
               array('_id' => $id)
@@ -157,27 +157,27 @@
           $data = array_merge($entry, $data);
           $id = $MSublet->save($data);
           $this->success('sublet saved');
-          $this->render('subletform', formData(array_merge($this->formDataCommon($data), array('_id' => $id))));
+          $this->render('student/sublets/subletform', formData(array_merge($this->formDataCommon($data), array('_id' => $id))));
           return;
         }
       }
-      
+
       $this->error($err);
-      $this->render('subletform', formData($data, array_merge($this->formDataCommon($data), array('_id' => $id))));
+      $this->render('student/sublets/subletform', formData($data, array_merge($this->formDataCommon($data), array('_id' => $id))));
     }
-    
+
     function view() {
       global $MSublet;
       global $MStudent;
 
       // Validations
       $this->startValidations();
-      $this->validate(isset($_GET['id']) and 
-        ($entry = $MSublet->get($id = $_GET['id'])) != NULL, 
+      $this->validate(isset($_GET['id']) and
+        ($entry = $MSublet->get($id = $_GET['id'])) != NULL,
         $err, 'unknown sublet');
       if ($this->isValid())
         $this->validate(
-          $entry['publish'] or (isset($_SESSION['_id']) and $entry['student'] == $_SESSION['_id']), 
+          $entry['publish'] or (isset($_SESSION['_id']) and $entry['student'] == $_SESSION['_id']),
           $err, 'access denied');
 
       // Code
@@ -216,7 +216,7 @@
         $data = array_merge($entry, $data);
         $data['_id'] = $entry['_id'];
         $data['mine'] = (isset($_SESSION['_id']) and $entry['student'] == $_SESSION['_id']);
-        
+
         // ANY MODiFICATIONS ON DATA GOES HERE
         $s = $MStudent->getById($entry['student']);
         if ($s == NULL) {
@@ -229,28 +229,28 @@
 
         $data['studentname'] = $s['name'];
         $data['studentid'] = $s['_id']->{'$id'};
-        $data['studentclass'] = $s['class'] > 0 ? 
+        $data['studentclass'] = $s['class'] > 0 ?
           " '".substr($s['class'], -2) : '';
         $data['studentschool'] = strlen($s['school']) > 0 ?
           $s['school'] : 'Undergraduate';
         $data['studentpic'] = isset($s['photo']) ?
-          $s['photo'] : $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
+          $s['photo'] : $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
         global $S;
         $data['studentcollege'] = $S->nameOf($s['email']);
         $data['studentbio'] = isset($s['bio']) ?
           $s['bio'] : 'Welcome to my profile!';
         if(isset($_SESSION['loggedinstudent'])) {
           $me = $MStudent->me();
-          $data['studentmsg'] = 
+          $data['studentmsg'] =
             "Hi ".$data['studentname'].",%0A%0A".
             "I am writing to inquire about your listing '".$data['title']."' (http://sublite.net/housing/sublet.php?id=".$entry['_id'].").%0A%0A".
             "Best,%0A".
             $me['name'];
         }
-        
+
         $data['latitude'] = $data['geocode']['latitude'];
         $data['longitude'] = $data['geocode']['longitude'];
-        $data['address'] = 
+        $data['address'] =
           $data['address'].', '.$data['city'].', '.$data['state'];
         if (count($data['photos']) == 0)
           $data['photos'][] = $GLOBALS['dirpre'].'assets/gfx/subletnophoto.png';
@@ -272,7 +272,7 @@
           );
         }
 
-        $this->render('viewsublet', $data);
+        $this->render('student/sublets/viewsublet', $data);
         return;
       }
 
@@ -315,7 +315,7 @@
       $sortby = clean($data['sortby']);
 
       return array_merge($this->dataSearchSetup(), array(
-        'location' => $location, 'startdate' => $startdate, 
+        'location' => $location, 'startdate' => $startdate,
         'enddate' => $enddate, 'price0' => $price0, 'price1' => $price1,
         'occupancy' => $occupancy, 'roomtype' => $roomtype,
         'buildingtype' => $buildingtype, 'gender' => $gender,
@@ -386,7 +386,7 @@
             });
             break;
         }
-        
+
         return $sublets;
       }
 
@@ -408,11 +408,11 @@
           $sublets[] = processRaw($sublet);
         }
 
-        $this->render('subletsearchstart', $this->dataSearchSetup());
-        $this->render('subletsearchresults', array('sublets' => $sublets, 'recent' => true, 'search' => 'housing', 'showMore' => $showMore));
-        return; 
+        $this->render('student/sublets/search/start', $this->dataSearchSetup());
+        $this->render('student/sublets/search/results', array('sublets' => $sublets, 'recent' => true, 'search' => 'housing', 'showMore' => $showMore));
+        return;
       }
-      
+
       // Params to vars
       extract($data = $this->dataSearch(array_merge($this->dataSearchEmpty(), $params)));
 
@@ -476,7 +476,7 @@
             $starttime = microtime(true);
 
             $res = $MSublet->find($query);
-            
+
             $sublets = array();
             $res = process($res, $sortby, $latitude, $longitude, $maxProximity);
             foreach ($res as $sublet) {
@@ -492,8 +492,8 @@
 
             $delay = round((microtime(true) - $starttime) * 1000, 0);
 
-            $this->render('subletsearchresults', array(
-              'sublets' => $sublets, 'delay' => $delay, 
+            $this->render('student/sublets/search/results', array(
+              'sublets' => $sublets, 'delay' => $delay,
               'latitude' => $latitude, 'longitude' => $longitude,
               'maxProximity' => $maxProximity, 'showSearch' => $showSearch,
               'data' => $data, 'search' => 'housing'
@@ -515,5 +515,6 @@
       $this->render('partials/subletsearchform', array_merge($data, array('search' => 'housing')));
     }
   }
-  $CSublet = new SubletController();
+
+  GLOBALvarSet('CSublet', new SubletController());
 ?>

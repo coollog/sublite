@@ -2,12 +2,12 @@
 <style>
   @font-face {
       font-family: BebasNeue;
-      src: url('<?php echo $GLOBALS['dirpre']; ?>assets/fonts/BebasNeue_Regular.ttf');
+      src: url('<?php echo $GLOBALS['dirpre']; ?>/assets/fonts/BebasNeue_Regular.ttf');
       font-weight: normal;
   }
   @font-face {
       font-family: BebasNeue;
-      src: url('<?php echo $GLOBALS['dirpre']; ?>assets/fonts/BebasNeue_Bold.ttf');
+      src: url('<?php echo $GLOBALS['dirpre']; ?>/assets/fonts/BebasNeue_Bold.ttf');
       font-weight: bold;
   }
   html, body {
@@ -16,10 +16,10 @@
     font: 400 14px/1.5em 'Open Sans', sans-serif;
     background: #000;
   }
-  green {
+  green, .green {
     color: #00B233;
   }
-  red {
+  red, .red {
     color: #FF1919;
   }
   a {
@@ -77,6 +77,10 @@
     font-family: 'BebasNeue', sans-serif;
     font-weight: bold;
   }
+  .headline {
+    font-size: 1.5em;
+    margin-bottom: 2em;
+  }
   subheadline {
     display: block;
     font-size: 1.3em;
@@ -91,6 +95,19 @@
   left {
     text-align: left;
     display: block;
+  }
+  fade {
+    opacity: 0.5;
+    transition: 0.1s all ease-in-out;
+  }
+  fade:not(.nohover):hover {
+    opacity: 1;
+  }
+  .div {
+    display: block;
+  }
+  .gaptop {
+    margin-top: 0.5em;
   }
 
   /* MISC CLASSES */

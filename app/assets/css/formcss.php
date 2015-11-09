@@ -33,7 +33,8 @@
   input[type=password],
   input[type=email],
   textarea,
-  select {
+  select,
+  .mimictextarea {
     transition: all 0.30s ease-in-out;
     outline: none;
     padding: 0.75em 0px 0.5em 0.5em;
@@ -47,7 +48,8 @@
     font-family: 'Open Sans', sans-serif;
     font-size: 14px;
   }
-  textarea {
+  textarea,
+  .mimictextarea {
     height: 10em;
   }
   input[type=checkbox],
@@ -73,18 +75,24 @@
     font-weight: 700;
     outline: none;
   }
+  input[type=button].smallbutton {
+    padding: 0 1em;
+    font-size: 1em;
+    font-weight: normal;
+    height: 2.5em;
+  }
   input[type=submit].reverse,
   input[type=button].reverse {
     background: #035d75;
     color: #fff;
   }
-  input[type=submit]:hover,
-  input[type=button]:hover {
+  input[type=submit]:enabled:hover,
+  input[type=button]:enabled:hover {
     background: #035d75;
     color: #fff;
   }
-  input[type=submit].reverse:hover,
-  input[type=button].reverse:hover {
+  input[type=submit].reverse:enabled:hover,
+  input[type=button].reverse:enabled:hover {
     background: #fff;
     color: #000;
   }
@@ -95,7 +103,7 @@
     margin-left: 1em;
     padding-top: 1em;
   }
-  
+
   .img {
     text-align: left;
   }

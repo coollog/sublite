@@ -46,7 +46,7 @@
       $(window).on('resize', function() {
         repositionFooter();
       });
-      repositionFooter();
+      $(function () { repositionFooter(); });
     </script>
   </body>
 </html>

@@ -42,7 +42,7 @@
           }
 
           $this->success($successMsg);
-          $this->render('socialindex', array('hubs' => true, 'signedup' => true));
+          $this->render('social/index', array('hubs' => true, 'signedup' => true));
           return;
         }
 
@@ -59,7 +59,7 @@
         $vdata['myhub'] = $me['hubs']['myhub'];
       }
 
-      $this->render('socialindex', $vdata);
+      $this->render('social/index', $vdata);
     }
 
     function hub() {
@@ -68,12 +68,12 @@
 
       $hubid = $_GET['id'];
 
-      $this->render('socialhub', array(
+      $this->render('social/hub', array(
         'hub' => $hubid
       ));
     }
     function admin() {
-      $this->render('socialadmin');
+      $this->render('social/admin');
     }
 
     function checkIsSet($message, $fields, &$var) {
@@ -670,5 +670,5 @@
     }
   }
 
-  $CSocial = new SocialController();
+  GLOBALvarSet('CSocial', new SocialController());
 ?>

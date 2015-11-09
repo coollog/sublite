@@ -1,14 +1,47 @@
 <?php
+  interface ViewInterface {
+    public static function echof($varName, $format = null, $default = '');
+    public static function echoCount($varName);
+    public static function get($varName);
+    public static function linkTo($html,
+                                  $route,
+                                  $params = null,
+                                  $newTab = false);
+    public static function partial($page, $vars = false);
+  }
+
+  // Implement this and have the functions below as class methods.
+  class View implements ViewInterface {
+    public static function echoCount($varName) {
+      echo count(View::get($varName));
+    }
+    public static function get($varName) {
+      return vget($varName);
+    }
+    public static function echof($varName, $format = null, $default = '') {
+      vecho($varName, $format, $default);
+    }
+    public static function linkTo($html,
+                                  $route,
+                                  $params = null,
+                                  $newTab = false) {
+      return vlinkTo($html, $route, $params, $newTab);
+    }
+    public static function partial($page, $vars = false) {
+      vpartial($page, $vars);
+    }
+  }
+
   function vprocess() {
     global $viewVars;
     if (isset($_SESSION['loggedin'])) {
-      $viewVars = array_merge($viewVars, array(
+      $viewVars = array_merge($viewVars, [
         'Loggedin' => true,
         'L_id' => $_SESSION['_id'],
         'Lemail' => $_SESSION['email'],
         'Lpass' => $_SESSION['pass'],
         'Lcompany' => isset($_SESSION['company'])
-      ));
+      ]);
     } else {
       $viewVars['Loggedin'] = false;
     }
@@ -20,13 +53,13 @@
         return;
       }
 
-      $viewVars = array_merge($viewVars, array(
+      $viewVars = array_merge($viewVars, [
         'Loggedinstudent' => true,
         'L_id' => $_SESSION['_id'],
         'Lemail' => $_SESSION['email'],
         'Lpass' => $_SESSION['pass'],
         'Lname' => $name
-      ));
+      ]);
     } else {
       $viewVars['Loggedinstudent'] = false;
     }
@@ -68,16 +101,18 @@
     if ($params == NULL) $query = '';
     else $query = '?' . http_build_query($params);
 
-    return "<a href=\"$page.php$query\" $newtab>$in</a>";
+    return "<a href=\"$page$query\" $newtab>$in</a>";
   }
   function vpartial($page, $vars = false) {
     global $viewVars;
     if ($vars) $viewVars = array_merge($viewVars, $vars);
 
-    require($GLOBALS['dirpre']."views/partials/$page.php");
+    require($GLOBALS['dirpreOrig']."views/partials/$page.php");
   }
 
   function jsecho($str) {
     echo str_replace(array("\r", "\n"), '', $str);
   }
+
+  $GLOBALS['dirpreOrig'] = $GLOBALS['dirpre'];
 ?>

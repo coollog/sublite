@@ -2,18 +2,19 @@
   require_once($GLOBALS['dirpre'].'models/Model.php');
 
   class SocialModel extends Model {
+    const DB_TYPE = parent::DB_STUDENTS;
+
     // The essentials
     function __construct() {
-      $m = new MongoClient($GLOBALS['dburistudent']);
-      $db = $m->$GLOBALS['dbnamestudent'];
-      $this->collection = $db->hubs;
+      parent::__construct(self::DB_TYPE, 'hubs');
     }
+
     function save($data) {
-      $this->collection->save($data);
+      self::$collection->save($data);
       return $data['_id']->{'$id'};
     }
     function collection() {
-      return $this->collection;
+      return self::$collection;
     }
 
     // Processors
@@ -39,10 +40,7 @@
     // Accessors
     function get($id) {
       if (!MongoId::isValid($id)) return null;
-      return $this->collection->findOne(array('_id' => new MongoId($id)));
-    }
-    function getAll() {
-      return $this->collection->find();
+      return self::$collection->findOne(array('_id' => new MongoId($id)));
     }
     function getClosestHub($address, $maxMiles) {
       $geocode = geocode($address);
@@ -50,7 +48,7 @@
       $latitude = $geocode['latitude'];
       $maxMeters = miles2meters($maxMiles);
 
-      return $this->collection->findOne(array('geojson' => array(
+      return self::$collection->findOne(array('geojson' => array(
         '$near' => array(
           '$geometry' => array(
             'type' => 'Point',
@@ -457,7 +455,9 @@
     function validArray($ar) {
       return is_array($ar) && count($ar) > 0;
     }
+
+    protected static $collection;
   }
 
-  $MSocial = new SocialModel();
+  GLOBALvarSet('MSocial', new SocialModel());
 ?>

@@ -29,6 +29,5 @@
     }
   }
 
-  $CMigrations = new MigrationsController();
-
+  GLOBALvarSet('CMigrations', new MigrationsController());
 ?>
