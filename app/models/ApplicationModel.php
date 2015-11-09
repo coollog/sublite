@@ -25,7 +25,7 @@
     public static function setJobApplication(MongoId $jobId, array $data);
 
     /**
-     * Get the job document's application field.
+     * Get the job document's application field, or [].
      */
     public static function getJobApplication(MongoId $jobId);
 
@@ -145,7 +145,7 @@
 
     public static function getJobApplication(MongoId $jobId) {
       // Check job exists.
-      if (!self::jobExists($jobId)) return null;
+      if (!self::jobExists($jobId)) return [];
 
       return JobModel::getApplicationQuestionIds($jobId);
     }

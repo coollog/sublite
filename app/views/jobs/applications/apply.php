@@ -120,13 +120,15 @@
           }
           if (count($questions) == 0) {
         ?>
-            No questions to answer in this application. Your profile is enough.
+            <div>
+              No questions to answer in this application. Your profile is enough.
+            </div>
         <?php
           }
         ?>
 
         <?php vnotice(); ?>
-        <input type="submit" id="submit" value="Apply Now" />
+        <input type="submit" name="submit" id="submit" value="Apply Now" />
         <input type="button" id="savebutton" class="save" value="Save" />
         <div id="success">Application Saved!</div>
         <div id="fail">Please fill out all questions.</div>

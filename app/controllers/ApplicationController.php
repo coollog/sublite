@@ -135,14 +135,6 @@
       // Make sure job exists.
       if (!self::checkJobExists($jobId)) return;
 
-      // Make sure application exists.
-      if (is_null($application)) {
-        $application = ApplicationJob::getEmptyApplication($jobId);
-        // self::error("This job does not have an application.");
-        // self::render('notice');
-        // return;
-      }
-
       // Saving of application.
       if (isset($params['questions'])) {
         ApplicationStudent::save($jobId, $studentId, $params['questions']);
@@ -410,6 +402,7 @@
         self::redirect("../application/$applicationId");
       }
 
+      die("aklsdjflksa");
       self::error(
         "You must attach a resume to your profile in order to submit ".
         "an application."

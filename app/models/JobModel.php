@@ -6,7 +6,7 @@
 
     /**
      * Gets the 'application' field of a job document.
-     * Returns null if the job does not exist or does not have an 'application'
+     * Returns [] if the job does not exist or does not have an 'application'
      * field.
      */
     public static function getApplicationQuestionIds(MongoId $jobId);
@@ -39,7 +39,7 @@
       $questionIds = (new DBQuery(self::$collection))
         ->toQuery('_id', $jobId)->projectField('application')->findOne();
       return isset($questionIds['application']) ?
-        $questionIds['application']['questions'] : null;
+        $questionIds['application']['questions'] : [];
     }
 
     public static function setApplicationQuestionIds(MongoId $jobId,
