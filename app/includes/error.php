@@ -62,6 +62,6 @@
       errorHandler( $error["type"], $error["message"], $error["file"], $error["line"] );
   }
 
-  //register_shutdown_function( "check_for_fatal" );
-  // set_error_handler( "errorHandler" );
+  register_shutdown_function( "check_for_fatal" );
+  set_error_handler( "errorHandler" );
 ?>

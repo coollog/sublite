@@ -118,6 +118,9 @@
   Router::register('faq', function() {
     GLOBALvarGet('CApp')->faq();
   });
+  Router::register('favicon.ico', function() {
+    Controller::redirect('app/assets/gfx/favicon.png');
+  });
   Router::register('feedback', function() {
     GLOBALvarGet('CApp')->feedback();
   });
@@ -324,6 +327,8 @@
 
   Router::route('/faq', 'faq');
   Router::route('/feedback', 'feedback');
+
+  Router::route('/favicon.ico', 'favicon.ico');
 
   Router::route('/forgotpass', 'forgotpass');
   Router::route('/jobs/forgotpass', 'forgotpass');

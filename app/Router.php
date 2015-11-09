@@ -126,7 +126,7 @@
      */
     private static function routeNotFound($uri) {
       self::setDirpreFromRoute($uri);
-      Controller::render('404');
+      Controller::render('404', ['uri' => $uri]);
       Controller::finish();
     }
 
