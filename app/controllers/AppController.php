@@ -1,7 +1,25 @@
 <?php
   require_once($GLOBALS['dirpre'].'controllers/Controller.php');
+  require_once($GLOBALS['dirpre'].'controllers/modules/stats/Leaderboard.php');
 
-  class AppController extends Controller {
+  interface AppControllerInterface {
+    public static function leaderboard();
+  }
+
+  class AppController extends Controller implements AppControllerInterface {
+    public static function leaderboard() {
+      $schools = array("Bentley University", "Eastern Michigan University");
+      $counts = [7, 30, 90, 180];
+      foreach ($counts as $count) {
+        $schoolCount[$count] = Leaderboard::getSchoolCountDaysBefore($schools, $count);
+      }
+      $schoolCount[0] = Leaderboard::getSchoolCountSince($schools, 0);
+      self::render('stats/leaderboard', [
+        'schools' => $schools,
+        'counts' => $schoolCount
+      ]);
+    }
+
     function faq() {
       $this->render('faq');
     }
@@ -16,10 +34,6 @@
 
     function team() {
       $this->render('team');
-    }
-
-    function leaderboard() {
-      $this->render('leaderboard');
     }
 
     function data($data) {
