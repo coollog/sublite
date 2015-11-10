@@ -84,7 +84,7 @@
       if (count(self::$renderQueue) == 0) return;
 
       ob_start();
-
+  
       global $viewVars; $viewVars = array();
       foreach (self::$renderQueue as $pair) {
         $vars = $pair[1];

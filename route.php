@@ -202,6 +202,9 @@
   Router::register('logout', function() {
     GLOBALvarGet('CStudent')->logout();
   });
+  Router::register('leaderboard', function() {
+    AppController::leaderboard();
+  });
   Router::register('messages', function() {
     GLOBALvarGet('CMessage')->reply();
   });
@@ -360,6 +363,8 @@
   Router::route('/jobs/recruiter', 'jobs/recruiter');
   Router::route('/employers/search', 'jobs/search');
   Router::route('/jobs/search', 'jobs/search');
+
+  Router::route('/leaderboard', 'leaderboard');
 
   Router::route('/login', 'login');
   Router::route('/housing/login', 'login');

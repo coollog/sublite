@@ -115,7 +115,10 @@
       'alisa.melekhina@law.upenn.edu',
       'alex.croxford@yale.edu',
       'julie.slama@yale.edu',
-      'joel.deleon@yale.edu'
+      'eric.yu@yale.edu',
+      'edward.she@yale.edu',
+      'dean.li@yale.edu',
+      'nicolas.jimenez@yale.edu'
     );
     return isset($_SESSION['email']) and in_array($_SESSION['email'], $admins);
   }
