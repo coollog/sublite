@@ -5,14 +5,6 @@
   a:hover {
     color: #ffd800;
   }
-  headline.small {
-    font-size: 2em;
-    letter-spacing: 1px;
-    line-height: 1.5em;
-    margin: 0;
-    display: block;
-    text-align: center;
-  }
 </style>
 
 <panel class="faq">

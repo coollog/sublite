@@ -18,6 +18,10 @@
       $this->render('team');
     }
 
+    function leaderboard() {
+      $this->render('leaderboard');
+    }
+
     function data($data) {
       $name = clean($data['name']);
       $email = clean($data['email']);
