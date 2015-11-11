@@ -285,7 +285,7 @@
         $data['searchcities'] = $searchdata;
       }
 
-      $this->render('graph', $data);
+      $this->render('stats/graph', $data);
     }
 
     function requireLogin() {
@@ -350,7 +350,7 @@
       ksort($mlist);
       $mlist = array_reverse($mlist);
 
-      $this->render('messagestats', array('mlist' => $mlist));
+      $this->render('stats/messagestats', array('mlist' => $mlist));
     }
     function getMessageParticipants() {
       global $MMessage, $CMessage;
@@ -394,5 +394,5 @@
     }
   }
 
-  $CStats = new StatsController();
+  GLOBALvarSet('CStats', new StatsController());
 ?>

@@ -1,5 +1,5 @@
 <?php
-	require_once('PHPMailer/PHPMailerAutoload.php');
+/*	require_once('PHPMailer/PHPMailerAutoload.php');
 	function sendgmail($to, $from, $subject, $message, $cc = null, $bcc = null) {
 		$mail = new PHPMailer;
 		$mail->isSMTP();                                      // Set mailer to use SMTP
@@ -52,5 +52,5 @@
 		}
 		
 		return true;
-	}
+	}*/
 ?>

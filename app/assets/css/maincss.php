@@ -2,12 +2,12 @@
 <style>
   @font-face {
       font-family: BebasNeue;
-      src: url('<?php echo $GLOBALS['dirpre']; ?>assets/fonts/BebasNeue_Regular.ttf');
+      src: url('<?php echo $GLOBALS['dirpre']; ?>/assets/fonts/BebasNeue_Regular.ttf');
       font-weight: normal;
   }
   @font-face {
       font-family: BebasNeue;
-      src: url('<?php echo $GLOBALS['dirpre']; ?>assets/fonts/BebasNeue_Bold.ttf');
+      src: url('<?php echo $GLOBALS['dirpre']; ?>/assets/fonts/BebasNeue_Bold.ttf');
       font-weight: bold;
   }
   html, body {
@@ -16,10 +16,10 @@
     font: 400 14px/1.5em 'Open Sans', sans-serif;
     background: #000;
   }
-  green {
+  green, .green {
     color: #00B233;
   }
-  red {
+  red, .red {
     color: #FF1919;
   }
   a {
@@ -76,6 +76,19 @@
     color: #035d75;
     font-family: 'BebasNeue', sans-serif;
     font-weight: bold;
+    line-height: 1em;
+  }
+  .headline {
+    font-size: 1.5em;
+    margin-bottom: 2em;
+  }
+  headline.small {
+    font-size: 2em;
+    letter-spacing: 1px;
+    line-height: 1.5em;
+    margin: 0;
+    display: block;
+    text-align: center;
   }
   subheadline {
     display: block;
@@ -91,6 +104,19 @@
   left {
     text-align: left;
     display: block;
+  }
+  fade {
+    opacity: 0.5;
+    transition: 0.1s all ease-in-out;
+  }
+  fade:not(.nohover):hover {
+    opacity: 1;
+  }
+  .div {
+    display: block;
+  }
+  .gaptop {
+    margin-top: 0.5em;
   }
 
   /* MISC CLASSES */

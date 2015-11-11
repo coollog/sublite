@@ -3,6 +3,12 @@
   use \ForceUTF8\Encoding;
   // Utility functions
   function clean($s) {
+    if (is_array($s)) {
+      foreach ($s as $key => $val) {
+        $s[$key] = clean($s[$key]);
+      }
+      return $s;
+    }
     // TODO Replace with preg_replace
     $s = str_replace ('“', '"', $s);
     $s = str_replace ('”', '"', $s);
@@ -77,6 +83,7 @@
   }
 
   function fdate($timestamp) { return date('n/j/y', $timestamp); }
+  function fdatelong($timestamp) { return date('F j, Y', $timestamp); }
 
   function strmax($str, $len) {
     if (strlen($str) > $len) {
@@ -108,12 +115,83 @@
       'alisa.melekhina@law.upenn.edu',
       'alex.croxford@yale.edu',
       'julie.slama@yale.edu',
-      'joel.deleon@yale.edu'
+      'eric.yu@yale.edu',
+      'edward.she@yale.edu',
+      'dean.li@yale.edu',
+      'nicolas.jimenez@yale.edu'
     );
     return isset($_SESSION['email']) and in_array($_SESSION['email'], $admins);
   }
 
   function miles2meters($mi) {
     return $mi * 1609.344;
+  }
+
+  // Is $arr associative (vs sequential)?
+  function isAssoc($arr) {
+    return array_keys($arr) !== range(0, count($arr) - 1);
+  }
+
+  // Converts sequential array $arr into hash with key as $key and value as each
+  // entry in $arr.
+  function arrayToHashByKey(array $arr, $key, $valType = 'value') {
+    $hash = array();
+
+    foreach ($arr as $i => $entry) {
+      $hashKey = (string) $entry[$key];
+      switch ($valType) {
+        case 'value': $hash[$hashKey] = $entry; break;
+        case 'index': $hash[$hashKey] = $i; break;
+      }
+    }
+    return $hash;
+  }
+
+  function arrayToSet(array $arr) {
+    $set = [];
+    foreach ($arr as $val) {
+      $val = (string)$val;
+      $set[$val] = true;
+    }
+    return $set;
+  }
+
+  /**
+   * Takes an array of data, and splits it into multiple arrays grouped by a
+   * certain field in the data.
+   */
+  function mapDataArrayByField(array $dataArray, $switchFunc, array $keyMap) {
+    $map = [];
+
+    foreach ($keyMap as $key) {
+      $map[$key] = [];
+    }
+
+    foreach ($dataArray as $data) {
+      $keyMapKey = $switchFunc($data);
+
+      if (!isset($keyMap[$keyMapKey])) continue;
+
+      $key = $keyMap[$keyMapKey];
+      $map[$key][] = $data;
+    }
+
+    return $map;
+  }
+
+  function endsWith($haystack, $needle) {
+    // search forward starting from end minus needle length characters
+    return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== FALSE);
+  }
+
+  function toJSON(array $arr) {
+    return strip_tags(json_encode($arr));
+  }
+
+  function MongoIdArray(array $arr) {
+    foreach ($arr as &$_id) {
+      $_id = new MongoId($_id);
+    }
+    return $arr;
   }
 ?>

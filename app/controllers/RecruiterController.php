@@ -17,13 +17,15 @@
       $company = $data['company'];
       $title = clean($data['title']);
       $phone = isset($data['phone']) ? clean($data['phone']) : '';
-      $photo = isset($data['photo']) ? 
+      $photo = isset($data['photo']) ?
         clean($data['photo']) : 'assets/gfx/defaultpic.png';
       $approved = $data['approved'];
+      $credits = 0;
       return array(
-        'email' => $email, 'pass' => $pass, 'firstname' => $firstname, 
+        'email' => $email, 'pass' => $pass, 'firstname' => $firstname,
         'lastname' => $lastname, 'company' => $company, 'title' => $title,
-        'phone' => $phone, 'photo' => $photo, 'approved' => $approved
+        'phone' => $phone, 'photo' => $photo, 'approved' => $approved,
+        'credits' => $credits
       );
     }
 
@@ -40,11 +42,11 @@
       $me = $MRecruiter->me();
       $me['_id'] = $me['_id']->{'$id'};
       $me['company'] = $me['company']->{'$id'};
-      $this->render('home', $me);
+      $this->render('recruiter/home', $me);
     }
 
     function index() {
-      $this->render('index');
+      $this->render('recruiter/index');
     }
 
     function faq() {
@@ -58,14 +60,14 @@
     function terms() {
       $this->render('terms');
     }
-    
+
     function register() {
       if (isset($_SESSION['loggedin'])) {
         $this->redirect('home');
         return;
       }
-      if (!isset($_POST['register'])) { $this->render('register'); return; }
-      
+      if (!isset($_POST['register'])) { $this->render('recruiter/register'); return; }
+
       global $params, $MRecruiter;
       // Params to vars
       $data = $params;
@@ -73,14 +75,14 @@
       $data['pass'] = crypt($params['pass']);
       $data['approved'] = 'pending';
       extract($data = $this->data($data));
-      
+
       // Validations
       $this->startValidations();
-      $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL), 
+      $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL),
         $err, 'invalid email');
       $this->validate(!$MRecruiter->exists($email),
         $err, 'email taken');
-      $this->validate($params['pass'] == $params['pass2'], 
+      $this->validate($params['pass'] == $params['pass2'],
         $err, 'password mismatch');
       $this->validateData($data, $err);
 
@@ -101,21 +103,21 @@
         $_POST['login'] = true; $this->login();
         return;
       }
-      
+
       $this->error($err);
-      $this->render('register', $data);
+      $this->render('recruiter/register', $data);
     }
 
     function approve() {
       if (!isset($_GET['p'])) { $this->redirect('index'); return; }
-      
+
       global $params, $MRecruiter;
       // Params to vars
       $p = $_GET['p'];
 
       // Validations
       $this->startValidations();
-      $this->validate(($entry = $MRecruiter->getByPass($p)) != NULL, 
+      $this->validate(($entry = $MRecruiter->getByPass($p)) != NULL,
         $err, 'invalid');
       $this->validate($entry['approved'] == 'pending',
         $err, 'already approved');
@@ -135,20 +137,20 @@
                 <br /><br />
                 Best,<br />
                 The SubLite Team";
-        sendgmail(array($email), array("info@sublite.net", 
+        sendgmail(array($email), array("info@sublite.net",
           "SubLite, LLC."), 'SubLite Employers Account Approved!', $msg);
-        
+
         echo 'Approved and automatic notification email sent!';
         return;
       }
-      
+
       echo $err;
     }
 
 
     function login() {
-      if (!isset($_POST['login'])) { $this->render('login'); return; }
-      
+      if (!isset($_POST['login'])) { $this->render('recruiter/login'); return; }
+
       global $params, $MRecruiter;
       // Params to vars
       global $email;
@@ -158,13 +160,13 @@
 
       // Validations
       $this->startValidations();
-      $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL), 
+      $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL),
         $err, 'invalid email');
       $this->validate(
-        ($entry = $MRecruiter->get($email)) != NULL and 
-        $MRecruiter->login($email, $pass), 
+        ($entry = $MRecruiter->get($email)) != NULL and
+        $MRecruiter->login($email, $pass),
         $err, 'invalid credentials');
-      $this->validate($entry['approved'] == 'approved', 
+      $this->validate($entry['approved'] == 'approved',
         $err, 'account is pending approval. please allow 1-2 business days for us to verify your account. we will contact you when we approve your account. thank you!');
 
       if ($this->isValid()) {
@@ -172,7 +174,7 @@
         $_SESSION['email'] = $email;
         $_SESSION['pass'] = $pass;
         $_SESSION['_id'] = $entry['_id'];
-        
+
         if (MongoId::isValid($entry['company'])) {
           $_SESSION['company'] = $entry['company'];
           $this->redirect('home');
@@ -181,20 +183,20 @@
 
         return;
       }
-      
+
       $this->error($err);
-      $this->render('login', $data);
+      $this->render('recruiter/login', $data);
     }
 
     function edit() {
       $this->requireLogin();
-      
+
       global $params, $MRecruiter;
-      if (!isset($_POST['edit'])) { 
-        $this->render('editprofile', 
+      if (!isset($_POST['edit'])) {
+        $this->render('recruiter/editprofile',
           $this->data($MRecruiter->me())); return;
       }
-      
+
       // Params to vars
       $me = $MRecruiter->me();
       $id = $params['_id'] = $me['_id'];
@@ -212,12 +214,12 @@
         $data['_id'] = new MongoId($id);
         $id = $MRecruiter->save($data);
         $this->success('profile saved');
-        $this->render('editprofile', $data);
+        $this->render('recruiter/editprofile', $data);
         return;
       }
-      
+
       $this->error($err);
-      $this->render('editprofile', $data);
+      $this->render('recruiter/editprofile', $data);
     }
 
 
@@ -234,9 +236,9 @@
       // Validations
       $this->startValidations();
       $this->validate(
-          isset($_GET['id']) and isset($_GET['code']) and 
+          isset($_GET['id']) and isset($_GET['code']) and
           ($entry = $MRecruiter->getByID($id = $_GET['id'])) != NULL and
-          $entry['pass'] == $_GET['code'], 
+          $entry['pass'] == $_GET['code'],
         $err, 'permission denied');
 
       if ($this->isValid()) {
@@ -280,7 +282,7 @@
 
       // Validations
       $this->startValidations();
-      $this->validate(($entry = $MRecruiter->get($email)) != NULL, 
+      $this->validate(($entry = $MRecruiter->get($email)) != NULL,
         $err, 'no account found');
       $this->validate($entry['approved'] == 'approved',
         $err, 'account pending approval');
@@ -301,7 +303,7 @@
                 <br /><br />
                 Best,<br />
                 The SubLite Team";
-        sendgmail($email, array("info@sublite.net", 
+        sendgmail($email, array("info@sublite.net",
           "SubLite, LLC."), 'SubLite Recruiter Account Password Reset', $msg);
 
         $this->success('A link to reset your password has been sent to your email. If you do not receive it in the next hour, check your spam folder or whitelist info@sublite.net. <a href="mailto: info@sublite.net">Contact us</a> if you have any further questions.');
@@ -315,13 +317,13 @@
 
     function view() {
       // global $CJob; $CJob->requireLogin();
-      
+
       global $params, $MRecruiter, $MCompany, $MJob;
-      
+
       // Validations
       $this->startValidations();
-      $this->validate(isset($_GET['id']) and 
-        ($entry = $MRecruiter->getByID($id = $_GET['id'])) != NULL, 
+      $this->validate(isset($_GET['id']) and
+        ($entry = $MRecruiter->getByID($id = new MongoId($_GET['id']))) != NULL,
         $err, 'unknown recruiter');
 
       // Code
@@ -330,7 +332,7 @@
 
         $this->validate(($company = $MCompany->get($data['company'])) != NULL,
           $err, 'recruiter has not set up company profile');
-        
+
         if ($this->isValid()) {
           $data['company'] = $company['name'];
 
@@ -345,13 +347,13 @@
           $data['recruiterid'] = $id;
 
           if ($data['photo'] == 'assets/gfx/defaultpic.png')
-            $data['photo'] = $GLOBALS['dirpre'] . $data['photo'];
+            $data['photo'] = $GLOBALS['dirpreFromRoute'] . $data['photo'];
 
-          $this->render('recruiter', $data);
+          $this->render('recruiter/profile', $data);
           return;
         }
       }
-      
+
       $this->error($err);
       $this->render('notice');
     }
@@ -360,34 +362,33 @@
       return isset($_SESSION['loggedin']);
     }
     function requireLogin() {
-      if ($this->loggedIn()) {
+      if (self::loggedIn()) {
         global $MRecruiter;
         // Params to vars
         $email = $_SESSION['email'];
         $pass = $_SESSION['pass'];
 
         // Validations
-        $this->startValidations();
-        $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL), 
+        self::startValidations();
+        self::validate(filter_var($email, FILTER_VALIDATE_EMAIL),
           $err, 'invalid email');
-        $this->validate(($entry = $MRecruiter->get($email)) != NULL, 
+        self::validate(($entry = $MRecruiter->get($email)) != NULL,
           $err, 'unknown email');
-        $this->validate(hash_equals($entry['pass'], crypt($pass, $entry['pass'])), 
+        self::validate(hash_equals($entry['pass'], crypt($pass, $entry['pass'])),
           $err, 'invalid password');
 
-        if (!$this->isValid()) {
-          $this->logout();
+        if (!self::isValid()) {
+          self::logout();
         }
       } else {
-        $this->logout();
+        self::logout();
       }
     }
     function logout() {
       session_unset();
-      $this->redirect('index');
+      self::redirect('index');
     }
   }
 
-  $CRecruiter = new RecruiterController();
-
+  GLOBALvarSet('CRecruiter', new RecruiterController());
 ?>

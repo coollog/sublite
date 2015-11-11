@@ -1,5 +1,6 @@
 <?php
   require_once($GLOBALS['dirpre'].'controllers/Controller.php');
+  require_once($GLOBALS['dirpre'].'controllers/modules/application/ApplicationJob.php');
 
   class JobController extends Controller {
     // TODO Decide some upper bound for duration
@@ -72,15 +73,12 @@
         $geocode = '';
       }
       $requirements = clean($data['requirements']);
-      $link = clean($data['link']);
-      if (!filter_var($link, FILTER_VALIDATE_EMAIL) &&
-        !preg_match('`^(https?:\/\/)`', $link)) $link = "http://$link";
 
       return array(
         'title' => $title, 'deadline' => $deadline, 'duration' => $duration,
         'desc' => $desc, 'geocode' => $geocode,
         'location' => $location, 'requirements' => $requirements,
-        'link' => $link, 'salary' => $salary, 'company' => $company,
+        'salary' => $salary, 'company' => $company,
         'salarytype' => $salarytype, 'startdate' => $startdate,
         'enddate' => $enddate, 'jobtype' => $jobtype,
         'locationtype' => $locationtype
@@ -122,17 +120,17 @@
         $err, 'invalid deadline: date should be in the future');
       $this->validate($this->isValidDescription($data['desc']),
         $err, 'description too long');
-      $this->validate($this->isValidURL($data['link']),
-        $err, 'invalid listing URL');
     }
 
     function manage() {
       global $CRecruiter; $CRecruiter->requireLogin();
       global $MJob;
+
+      $jobs = $MJob->getByRecruiter($_SESSION['_id']);
       $data = array(
-        'jobs' => $MJob->getByRecruiter($_SESSION['_id'])
+        'jobs' => $jobs
       );
-      $this->render('managejobs', $data);
+      $this->render('jobs/managejobs', $data);
     }
 
     function add() {
@@ -151,7 +149,7 @@
       }
 
       if (!isset($_POST['add'])) {
-        $this->render('jobform', formData(array())); return;
+        $this->render('jobs/jobform', formData(array())); return;
       }
 
       global $params, $MJob, $MRecruiter;
@@ -173,13 +171,20 @@
         $data['applicants'] = array();
         $data['viewers'] = array();
         $data['stats'] = array('views' => 0, 'clicks' => 0);
-        $id = $MJob->save($data);
-        $this->redirect('job', array('id' => $id));
+        $jobId = $MJob->save($data);
+
+        // Add credit for adding job.
+        $recruiterId = $_SESSION['_id'];
+        RecruiterModel::addCreditsForNewJob($recruiterId);
+
+        $this->redirect("editapplication/$jobId");
+        // This should go after the application form is set up.
+        // $this->redirect('job', array('id' => $jobId));
         return;
       }
 
       $this->error($err);
-      $this->render('jobform', formData($data));
+      $this->render('jobs/jobform', formData($data));
     }
 
     function edit() { // FIX THIS ADD GET INFO LIKE DATA FROM VIEW AND STUFF
@@ -204,7 +209,7 @@
       // Code
       if ($this->isValid()) {
         if (!isset($_POST['edit'])) {
-          $this->render('jobform', formData(array_merge($this->data($entry), array('_id' => $id)))); return;
+          $this->render('jobs/jobform', formData(array_merge($this->data($entry), array('_id' => $id)))); return;
         }
 
         $me = $MRecruiter->me();
@@ -217,13 +222,13 @@
           $data = array_merge($entry, $data);
           $id = $MJob->save($data);
           $this->success('job saved');
-          $this->render('jobform', formData(array_merge($data, array('_id' => $id))));
+          $this->render('jobs/jobform', formData(array_merge($data, array('_id' => $id))));
           return;
         }
       }
 
       $this->error($err);
-      $this->render('jobform', formData($data, array_merge($data, array('_id' => $id))));
+      $this->render('jobs/jobform', formData($data, array_merge($data, array('_id' => $id))));
     }
 
     function view() {
@@ -250,6 +255,9 @@
         $MJob->save($entry, false);
 
         $data = $entry;
+
+        $data['hasApplication'] = isset($data['application']);
+
         $data['_id'] = $entry['_id'];
         $data['salarytype'] = ($data['salarytype'] == 'total') ?
                               $data['duration'].' weeks' : $data['salarytype'];
@@ -257,7 +265,7 @@
         $r = $MRecruiter->getById($entry['recruiter']);
 
         $company = $MCompany->get($entry['company']);
-        // var_dump($entry);
+
         $data['companyname'] = $company['name'];
         $data['companybanner'] = $company['bannerphoto'];
         $data['companyid'] = $company['_id']->{'$id'};
@@ -265,7 +273,7 @@
         $data['recruitername'] = $r['firstname'] . ' ' . $r['lastname'];
         $data['recruiterid'] = $r['_id']->{'$id'};
 
-        $this->render('viewjob', $data);
+        $this->render('jobs/viewjob', $data);
         return;
       }
 
@@ -352,8 +360,8 @@
         $res = $MJob->last($_SESSION['showMoreJobs']);
         $jobs = process($res);
 
-        $this->render('searchform', $this->dataSearchSetup());
-        $this->render('searchresults', array('jobs' => $jobs, 'recent' => true, 'search' => 'jobs', 'showMore' => $showMore));
+        $this->render('jobs/search/form', $this->dataSearchSetup());
+        $this->render('jobs/search/results', array('jobs' => $jobs, 'recent' => true, 'search' => 'jobs', 'showMore' => $showMore));
         return;
       }
 
@@ -362,8 +370,8 @@
 
       // Validations
       $this->startValidations();
-      $this->validate(strlen($recruiter) == 0 or
-                      !is_null($MRecruiter->getByID($recruiter)),
+      $this->validate(!MongoId::isValid($recruiter) or
+                      !is_null(RecruiterModel::getById(new MongoId($recruiter))),
         $err, 'unknown recruiter');
 
       // Code
@@ -403,8 +411,8 @@
         $res = $MJob->find($query);
         $jobs = process($res);
 
-        if ($showSearch) $this->render('searchform', $data);
-        $this->render('searchresults', array('jobs' => $jobs, 'showCompany' => $showCompany, 'search' => 'jobs'));
+        if ($showSearch) $this->render('jobs/search/form', $data);
+        $this->render('jobs/search/results', array('jobs' => $jobs, 'showCompany' => $showCompany, 'search' => 'jobs'));
 
         // Send email notification of search to us
         // $this->sendrequestreport("Search for jobs:", $jobs);
@@ -417,8 +425,9 @@
       }
 
       $this->error($err);
-      $this->render('searchform', array_merge($data, array('search' => 'jobs')));
+      $this->render('jobs/search/form', array_merge($data, array('search' => 'jobs')));
     }
   }
-  $CJob = new JobController();
+
+  GLOBALvarSet('CJob', new JobController());
 ?>

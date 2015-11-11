@@ -1,7 +1,25 @@
 <?php
   require_once($GLOBALS['dirpre'].'controllers/Controller.php');
+  require_once($GLOBALS['dirpre'].'controllers/modules/stats/Leaderboard.php');
 
-  class AppController extends Controller {
+  interface AppControllerInterface {
+    public static function leaderboard();
+  }
+
+  class AppController extends Controller implements AppControllerInterface {
+    public static function leaderboard() {
+      $schools = array("Bentley University", "Eastern Michigan University");
+      $counts = [7, 30, 90, 180];
+      foreach ($counts as $count) {
+        $schoolCount[$count] = Leaderboard::getSchoolCountDaysBefore($schools, $count);
+      }
+      $schoolCount[0] = Leaderboard::getSchoolCountSince($schools, 0);
+      self::render('stats/leaderboard', [
+        'schools' => $schools,
+        'counts' => $schoolCount
+      ]);
+    }
+
     function faq() {
       $this->render('faq');
     }
@@ -39,7 +57,7 @@
       extract($data = $this->data($params));
 
       $this->startValidations();
-      $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL), 
+      $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL),
         $err, 'invalid email');
 
       if ($this->isValid()) {
@@ -61,6 +79,5 @@
     }
   }
 
-  $CApp = new AppController();
-
+  GLOBALvarSet('CApp', new AppController());
 ?>

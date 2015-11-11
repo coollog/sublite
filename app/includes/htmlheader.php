@@ -123,24 +123,30 @@
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="SubLite" />
 
-    <link rel="icon" type="image/png" href="<?php echo $GLOBALS['dirpre']; ?>assets/gfx/favicon.png" />
+    <link rel="shortcut icon" type="image/png"
+          href="data:<?php echo $GLOBALS['dirpre']; ?>assets/gfx/favicon.png" />
 
+    <!-- JQUERY -->
     <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>-->
     <script src="<?php echo $GLOBALS['dirpre']; ?>assets/delete/jquery-1.11.3.min.js"></script>
     <script src="<?php echo $GLOBALS['dirpre']; ?>assets/delete/jquery-ui.min.js"></script>
-    <?php require_once($GLOBALS['dirpre'].'assets/jqueryui/jquery-uimincss.php'); ?>
+    <?php require_once($dirpreOrig.'assets/jqueryui/jquery-uimincss.php'); ?>
+
+    <!-- STRIPE -->
+    <script src="https://js.stripe.com/v2"></script>
 
     <!-- PLUGINS -->
     <script src="<?php echo $GLOBALS['dirpre']; ?>assets/js/jquery.slidinglabels.min.js"></script>
     <script src="<?php echo $GLOBALS['dirpre']; ?>assets/js/jquery.timepicker.min.js"></script>
+    <script src="<?php echo $GLOBALS['dirpre']; ?>assets/js/jquery.form.min.js"></script>
     <link rel="stylesheet" type="text/css" href="<?php echo $GLOBALS['dirpre']; ?>assets/css/jquery.timepicker.css">
 
-    <?php require_once($GLOBALS['dirpre'].'assets/js/mainjs.php'); ?>
-    <?php require_once($GLOBALS['dirpre'].'assets/js/formjs.php'); ?>
-    <?php require_once($GLOBALS['dirpre'].'assets/css/maincss.php'); ?>
-    <?php require_once($GLOBALS['dirpre'].'assets/css/formcss.php'); ?>
-    <?php require_once($GLOBALS['dirpre'].'assets/css/responsivecss.php'); ?>
+    <?php require_once($dirpreOrig.'assets/js/mainjs.php'); ?>
+    <?php require_once($dirpreOrig.'assets/js/formjs.php'); ?>
+    <?php require_once($dirpreOrig.'assets/css/maincss.php'); ?>
+    <?php require_once($dirpreOrig.'assets/css/formcss.php'); ?>
+    <?php require_once($dirpreOrig.'assets/css/responsivecss.php'); ?>
 
     <?php if (!checkAdmin()) { // if isn't admin, do analytics ?>
       <script>
@@ -175,4 +181,4 @@
        }(document, 'script', 'facebook-jssdk'));
     </script>
 
-    <?php require_once($GLOBALS['dirpre'].'views/navbar.php'); ?>
+    <?php require_once($dirpreOrig.'views/navbar.php'); ?>

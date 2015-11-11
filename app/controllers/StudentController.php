@@ -1,7 +1,84 @@
 <?php
   require_once($GLOBALS['dirpre'].'controllers/Controller.php');
+  require_once($GLOBALS['dirpre'].'controllers/modules/application/StudentProfile.php');
 
-  class StudentController extends Controller {
+  interface StudentControllerInterface {
+    public static function editStudentProfile();
+    public static function viewStudentProfile();
+
+    /**
+     * For managing job applications.
+     */
+    public static function manage();
+  }
+
+  class StudentController extends Controller
+                          implements StudentControllerInterface {
+    public static function editStudentProfile() {
+      self::requireLogin();
+      global $params;
+
+      $studentId = $_SESSION['_id'];
+
+      if (isset($params['profile'])) {
+        // Save the profile.
+        extract($params);
+
+        StudentProfile::createOrUpdate($studentId, $profile);
+        return;
+      }
+
+      $profile = toJSON(self::getStudentProfile($studentId));
+
+      self::render('jobs/student/editprofile', ['profile' => $profile]);
+    }
+
+    public static function viewStudentProfile() {
+      self::requireLogin();
+
+      $studentId = $_SESSION['_id'];
+      $profile = toJSON(self::getStudentProfile($studentId));
+
+      self::render('jobs/student/studentprofile', ['profile' => $profile]);
+    }
+
+    public static function manage() {
+      self::requireLogin();
+
+      $studentId = $_SESSION['_id'];
+      $applications = ApplicationStudent::getByStudent($studentId);
+
+      $data = [];
+      foreach ($applications as $application) {
+        $jobId = $application->getJobId();
+        $job = JobModel::getByIdMinimal($jobId);
+        if (is_null($job)) continue;
+        $companyId = $job['company'];
+        $companyName = CompanyModel::getName($companyId);
+        $data[] = [
+          'title' => $job['title'],
+          'location' => $job['location'],
+          'company' => $companyName,
+          'jobId' => $application->getJobId(),
+          'submitted' => $application->isSubmitted()
+        ];
+      }
+      self::render('jobs/student/home', [
+        'applications' => $data
+      ]);
+    }
+
+    private static function getStudentProfile(MongoId $studentId) {
+      $name = StudentModel::getName($studentId);
+
+      $profile = StudentProfile::getProfile($studentId)->getData();
+      if (is_null($profile)) {
+        $profile = [];
+      }
+      $profile['name'] = $name;
+
+      return $profile;
+    }
 
     function data($data) {
       $name = clean($data['name']);
@@ -38,11 +115,11 @@
       $me = $MStudent->me();
       $me['_id'] = $me['_id']->{'$id'};
 
-      $photo = $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
+      $photo = $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
       if (isset($me['photo']) and !is_null($me['photo'])) {
         $photo = $me['photo'];
         if ($photo == 'nopic.png')
-          $photo = $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
+          $photo = $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
       }
       $me['photo'] = $photo;
 
@@ -51,17 +128,17 @@
         $me['school'] = $S->nameOf($me['email']);
       }
 
-      $this->render('studenthome', $me);
+      $this->render('student/home', $me);
     }
 
     function index() {
       global $MApp;
-      $stats = $MApp->getStats();
+      $stats = AppModel::getStats();
       $users = $stats['recruiters'] + $stats['students'];
 
       $r = isset($_GET['r']) ? $_GET['r'] : null;
 
-      $this->render('studentindex', array(
+      $this->render('student/index', array(
         'users' => $users,
         'jobs' => $stats['jobs'],
         'sublets' => $stats['sublets'],
@@ -76,16 +153,22 @@
       // Setup after-login redirect
       if (isset($_SERVER['HTTP_REFERER'])) {
         $noredirect = array(
-          '', 
-          '/index.php', 
-          '/', 
+          '',
+          '/index.php',
+          '/',
           '/register.php',
-          '/login.php'
+          '/login.php',
+          '/jobs/login.php',
+          '/housing/login.php',
+          '/employers/login.php',
+          '/housing/register.php',
+          '/jobs/register.php',
+          '/employers/register.php'
         );
         $domain = "https://$_SERVER[HTTP_HOST]";
         $thispage = "$domain$_SERVER[REQUEST_URI]";
         $lastpage = $_SERVER['HTTP_REFERER'];
-        $lastpagepath = preg_replace("/https:\/\/$_SERVER[HTTP_HOST]/", '', $lastpage);
+        $lastpagepath = preg_replace("/https*:\/\/$_SERVER[HTTP_HOST]/", '', $lastpage);
         if ($thispage != $lastpage) {
           if (!in_array($lastpagepath, $noredirect)) {
             setcookie('loginredirect', $lastpage, time() + 300);
@@ -106,8 +189,8 @@
     function login() {
       if (!isset($_GET['whereto'])) $this->loginRedirectSetup();
 
-      if (!isset($_POST['login'])) { $this->render('studentlogin'); return; }
-      
+      if (!isset($_POST['login'])) { $this->render('student/login'); return; }
+
       global $params, $MStudent;
       // Params to vars
       global $email;
@@ -117,7 +200,7 @@
 
       // Validations
       $this->startValidations();
-      $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL), 
+      $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL),
         $err, 'invalid email');
       $this->validate(($entry = $MStudent->get($email)) != NULL,
         $err, 'not registered');
@@ -130,7 +213,7 @@
 
           $err = "Your account has not been confirmed yet. A confirmation email has been sent to <strong>$email</strong>. Check your inbox or spam. The email may take up to 24 hours to show up.";
         } else {
-          $this->validate($MStudent->login($email, $pass), 
+          $this->validate($MStudent->login($email, $pass),
             $err, 'invalid credentials');
 
           if ($this->isValid()) {
@@ -139,7 +222,7 @@
             $_SESSION['email'] = $email;
             $_SESSION['pass'] = $pass;
             $_SESSION['name'] = $entry['name'];
-            
+
             // $this->redirect('home');
             // $this->redirect('search');
             $this->loginRedirect();
@@ -148,15 +231,15 @@
           }
         }
       }
-      
+
       $this->error($err);
-      $this->render('studentlogin', $data);
+      $this->render('student/login', $data);
     }
 
     function register() {
       $this->loginRedirectSetup();
 
-      if (!isset($_POST['register'])) { $this->render('studentregister'); return; }
+      if (!isset($_POST['register'])) { $this->render('student/register'); return; }
 
       global $params, $MStudent;
       // Params to vars
@@ -166,7 +249,7 @@
 
       // Validations
       $this->startValidations();
-      $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL), 
+      $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL),
         $err, 'invalid email');
       global $S;
       $this->validate($S->verify($email), $err, 'email must be .edu');
@@ -202,18 +285,18 @@
             <br /><br /><br />
             <i>Thanks again!<br />
             Team SubLite</i>";
-          sendgmail($referrer['email'], array("info@sublite.net", 
+          sendgmail($referrer['email'], array("info@sublite.net",
             "SubLite, LLC."), 'SubLite - Successful Referral!', $message);
         }
 
-        $this->render('studentregisterfinish', array(
+        $this->render('student/registerfinish', array(
           'id' => $id, 'email' => $email
         ));
         return;
       }
-      
+
       $this->error($err);
-      $this->render('studentregister', $data);
+      $this->render('student/register', $data);
     }
 
     function sendConfirm($email) {
@@ -231,17 +314,17 @@
         <br /><br /><br />
         <i>Thanks again and welcome aboard!<br />
         Team SubLite</i>";
-      
+
       if (($error = sendgmail($email, array("info@sublite.net", "SubLite, LLC."), 'SubLite Email Confirmation', $message)) !== true) {
         sendgmail('info@sublite.net', 'info@sublite.net', 'Email Confirmation Failed to Send', "Email address: $email<br />Reason: $error");
-      }     
-      
+      }
+
       return $id;
     }
 
     function sendReferral() {
-      if (isset($_REQUEST['emails']) and 
-          isset($_REQUEST['name']) and 
+      if (isset($_REQUEST['emails']) and
+          isset($_REQUEST['name']) and
           isset($_REQUEST['email'])) {
         $emailspre = $_REQUEST['emails'];
         $name = $_REQUEST['name'];
@@ -297,21 +380,21 @@
         $confirm = $_REQUEST['id'];
         $email = $_REQUEST['email'];
 
-        $this->validate(($entry = $MStudent->get($email)) != null, 
+        $this->validate(($entry = $MStudent->get($email)) != null,
           $err, 'permission denied');
         $this->validate(isset($entry['confirm']) and $entry['confirm'] == $confirm and !isset($entry['pass']),
           $err, 'invalid confirmation code. your code may have expired. return to the registration page to re-enter your email for a new confirmation link.');
 
         if ($this->isValid()) {
 
-          if (!isset($_POST['register'])) { $this->render('confirm'); return; }
+          if (!isset($_POST['register'])) { $this->render('student/confirm'); return; }
 
           // Params to vars
           extract($data = $this->data($params));
 
           $this->validate($pass == $pass2, $err, 'password mismatch');
           $this->validate(strlen($name) > 0, $err, 'name empty');
-          $this->validate(strlen($photo) > 0, 
+          $this->validate(strlen($photo) > 0,
             $err, 'must have profile picture');
 
           if ($this->isValid()) {
@@ -319,7 +402,7 @@
             // Save new account information
             $entry['name'] = $name;
             $entry['pass'] = $pass;
-            $entry['orig'] = $pass2;
+            // $entry['orig'] = $pass2;
             $entry['class'] = $class;
             $entry['school'] = $school;
             $entry['time'] = time();
@@ -335,7 +418,7 @@
           }
 
           $this->error($err);
-          $this->render('confirm', $data);
+          $this->render('student/confirm', $data);
           return;
         }
       }
@@ -353,12 +436,12 @@
       // Validations
       $this->startValidations();
 
-      if (!isset($_POST['edit'])) { $this->render('studentform', $this->data($me)); return; }
+      if (!isset($_POST['edit'])) { $this->render('student/form', $this->data($me)); return; }
 
       // Params to vars
       extract($data = $this->data($params));
 
-      $this->validate(strlen($photo) > 0, 
+      $this->validate(strlen($photo) > 0,
         $err, 'must have profile picture');
 
       if ($this->isValid()) {
@@ -366,12 +449,12 @@
         $MStudent->save($me);
 
         $this->success('profile saved');
-        $this->render('studentform', $data);
+        $this->render('student/form', $data);
         return;
       }
 
       $this->error($err);
-      $this->render('studentform', $data);
+      $this->render('student/form', $data);
     }
 
     function dataChangePass($data) {
@@ -387,9 +470,9 @@
       // Validations
       $this->startValidations();
       $this->validate(
-          isset($_GET['id']) and isset($_GET['code']) and 
+          isset($_GET['id']) and isset($_GET['code']) and
           ($entry = $MStudent->getByID($id = $_GET['id'])) != NULL and
-          $entry['pass'] == $_GET['code'], 
+          $entry['pass'] == $_GET['code'],
         $err, 'permission denied');
 
       if ($this->isValid()) {
@@ -433,7 +516,7 @@
 
       // Validations
       $this->startValidations();
-      $this->validate(($entry = $MStudent->get($email)) != NULL, 
+      $this->validate(($entry = $MStudent->get($email)) != NULL,
         $err, 'no account found');
       $this->validate(isset($entry['pass']),
         $err, 'account has not been confirmed yet. to resend a confirmation email, <a href="register.php">register</a> your email address again.');
@@ -454,7 +537,7 @@
                 <br /><br />
                 Best,<br />
                 The SubLite Team";
-        sendgmail($email, array("info@sublite.net", 
+        sendgmail($email, array("info@sublite.net",
           "SubLite, LLC."), 'SubLite Student Account Password Reset', $msg);
 
         $this->success('A link to reset your password has been sent to your email. If you do not receive it in the next hour, check your spam folder or whitelist info@sublite.net. <a href="mailto: info@sublite.net">Contact us</a> if you have any further questions.');
@@ -469,18 +552,18 @@
     function whereto() {
       $this->requireLogin();
 
-      $this->render('whereto');
+      $this->render('student/whereto');
     }
 
     function view() {
       // $this->requireLogin();
-      
+
       // global $params, $MStudent, $MCompany, $MJob;
-      
+
       // // Validations
       // $this->startValidations();
-      // $this->validate(isset($_GET['id']) and 
-      //   ($entry = $MStudent->getByID($id = $_GET['id'])) != NULL, 
+      // $this->validate(isset($_GET['id']) and
+      //   ($entry = $MStudent->getByID($id = $_GET['id'])) != NULL,
       //   $err, 'unknown Student');
 
       // // Code
@@ -501,7 +584,7 @@
       //   $this->render('Student', $data);
       //   return;
       // }
-      
+
       // $this->error($err);
       // $this->render('notice');
     }
@@ -510,32 +593,31 @@
       return isset($_SESSION['loggedinstudent']);
     }
     function requireLogin() {
-      if ($this->loggedIn()) {
+      if (self::loggedIn()) {
         global $MStudent;
         // Params to vars
         $email = $_SESSION['email'];
         $pass = $_SESSION['pass'];
 
         // Validations
-        $this->startValidations();
-        $this->validate(($entry = $MStudent->get($email)) != NULL, 
+        self::startValidations();
+        self::validate(($entry = $MStudent->get($email)) != NULL,
           $err, 'unknown email');
-        $this->validate($entry['pass'] == md5($pass), 
+        self::validate($entry['pass'] == md5($pass),
           $err, 'invalid password');
 
-        if (!$this->isValid()) {
-          $this->logout();
+        if (!self::isValid()) {
+          self::logout();
         }
       } else {
-        $this->logout();
+        self::logout();
       }
     }
     function logout() {
       session_unset();
-      $this->redirect('index');
+      self::redirect('index');
     }
   }
 
-  $CStudent = new StudentController();
-
+  GLOBALvarSet('CStudent', new StudentController());
 ?>
