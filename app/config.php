@@ -34,7 +34,7 @@
   $GLOBALS = array_merge($GLOBALS, $g);
 
 
-  Config Stripe.
+  // Config Stripe.
   require_once('stripe/init.php');
   \Stripe\Stripe::setApiKey($GLOBALS['stripe']['secret_key']);
 ?>
