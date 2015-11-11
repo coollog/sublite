@@ -11,7 +11,7 @@
     box-sizing: border-box;
   }
   .arrow-down {
-    width: 0; 
+    width: 0;
     height: 0;
     border-left: 30px solid transparent;
     border-right: 30px solid transparent;
@@ -132,7 +132,7 @@
     font-weight: 700;
     line-height: 1.1em;
   }
-  
+
   panel.backedby {
     background-color: #ffd800;
   }
@@ -200,7 +200,7 @@
   panel.how .step table {
     -webkit-transform: skew(-10deg);
      -moz-transform: skew(-10deg);
-       -o-transform: skew(-10deg);    
+       -o-transform: skew(-10deg);
   }
   panel.how .step.active {
     background: #ffd800;
@@ -268,9 +268,9 @@
   <div class="cell">
     <div class="banner">
       <div class="content">
-        <div class="tagline">One-Stop Shop for a Great Summer!</div>
+        <div class="tagline">One-Stop Shop for Internships and Housing!</div>
         <div class="slogan">
-          Find reliable summer housing, cool internships, and meet other university students in your area this summer with SubLite!
+          Find reliable housing, cool internships, and meet other university students in your area with SubLite!
           <div style="font-size: 0.7em;"><br />Verify your ".edu" email address to get started! It's completely free!</div>
         </div>
         <a href="register.php<?php if (!is_null($r = vget('r'))) echo "?r=$r"; ?>">

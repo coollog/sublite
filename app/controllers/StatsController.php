@@ -92,8 +92,24 @@
         <textarea style="width:800px; height: 200px;">';
       foreach ($all as $student) {
         $email = $student['email'];
-        $name = $student['email'];
-        echo "$name,$email\n";
+        $firstname = 'User';
+        $lastname = '';
+        if (isset($student['name'])) {
+          $name = explode(' ', $student['name']);
+          if ($name[0] != '') {
+            $firstname = $name[0];
+            $lastname = isset($name[1]) ? $name[1] : '';
+          }
+        }
+        echo "$firstname,$lastname,$email\n";
+        // $name = isset($student['name']) ? $student['name'] : '';
+        // $last_name = preg_replace('#.*\s([\w-]*)$#', '$1', $name);
+        // $first_name = trim(preg_replace('#'.$last_name.'#', '', $name ));
+        // if (strlen($first_name) == 0) {
+        //   $first_name = $last_name;
+        //   $last_name = "";
+        // }
+        // echo "$first_name,$last_name,$email\n";
       }
       echo '</textarea>';
     }
