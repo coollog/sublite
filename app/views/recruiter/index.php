@@ -11,7 +11,7 @@
     box-sizing: border-box;
   }
   .arrow-down {
-    width: 0; 
+    width: 0;
     height: 0;
     border-left: 30px solid transparent;
     border-right: 30px solid transparent;
@@ -133,7 +133,7 @@
   panel.how .step table {
     -webkit-transform: skew(-10deg);
      -moz-transform: skew(-10deg);
-       -o-transform: skew(-10deg);    
+       -o-transform: skew(-10deg);
   }
   panel.how .step.active {
     background: #ffd800;
@@ -203,7 +203,7 @@
       <div class="content">
         <div class="tagline">Student Recruitment, Reimagined.</div>
         <div class="slogan">Attract the New Generation Talent with your Company's Unique Personality.</div>
-        <a href="register.php">
+        <a href="<?php echo $GLOBALS['dirpre']; ?>../employers/register">
           <input type="button" class="registerlogin" value="Get Started" />
         </a>
         <div class="switch"><a href="../jobs">switch to STUDENT</a></div>

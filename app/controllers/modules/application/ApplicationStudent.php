@@ -235,11 +235,6 @@
       // Retrieve application list from $jobId.
       $applicationQuestions = JobModel::getApplicationQuestionIds($jobId);
 
-      if ($applicationQuestions == null) {
-        // The application doesn't exist, why is the student trying to save it?
-        return null;
-      }
-
       // Build question-answer pairs.
       $savedQuestions = self::pruneQuestionsByIdSet(
         $questions, $applicationQuestions);

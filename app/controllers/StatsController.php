@@ -1,31 +1,25 @@
 <?php
   require_once($GLOBALS['dirpre'].'controllers/Controller.php');
-
   class StatsController extends Controller {
     function update() {
       global $MApp, $MStats;
-
       $stats = $MApp->updateStats();
       if (isset($_GET['cities'])) {
         $cities = $MStats->getCities();
         asort($cities);
         echo '<pre>'; var_dump($cities); echo '</pre>';
       }
-
       echo 'Updated stats! Next time use ?cities to also update cities count (may take a while).<br /><pre>';
       var_dump($stats); echo '</pre>';
     }
     function nojobs() {
       global $MRecruiter, $MJob, $MCompany;
-
       $r = $MRecruiter->find();
       $j = $MJob->find();
-
       $rids = array();
       foreach ($j as $job) {
         $rids[] = $job['recruiter']->{'$id'};
       }
-
       $emails = array();
       $emailswc = array();
       $emailswj = array();
@@ -41,7 +35,6 @@
           $emailswj[] = $rdoc;
         }
       }
-
       echo 'Recruiters who have posted jobs:<br />
         <textarea style="width:800px; height: 400px;">';
       foreach ($emailswj as $r) {
@@ -69,11 +62,9 @@
     }
     function students() {
       global $MStats;
-
       $c = $MStats->getStudentsConfirmed();
       $u = $MStats->getStudentsUnConfirmed();
       $all = $MStats->getStudentsAll();
-
       echo '<br />Confirmed students: '.$c->count().'<br />
         <textarea style="width:800px; height: 200px;">';
       foreach ($c as $student) {
@@ -92,14 +83,29 @@
         <textarea style="width:800px; height: 200px;">';
       foreach ($all as $student) {
         $email = $student['email'];
-        $name = $student['email'];
-        echo "$name,$email\n";
+        $firstname = 'User';
+        $lastname = '';
+        if (isset($student['name'])) {
+          $name = explode(' ', $student['name']);
+          if ($name[0] != '') {
+            $firstname = $name[0];
+            $lastname = isset($name[1]) ? $name[1] : '';
+          }
+        }
+        echo "$firstname,$lastname,$email\n";
+        // $name = isset($student['name']) ? $student['name'] : '';
+        // $last_name = preg_replace('#.*\s([\w-]*)$#', '$1', $name);
+        // $first_name = trim(preg_replace('#'.$last_name.'#', '', $name ));
+        // if (strlen($first_name) == 0) {
+        //   $first_name = $last_name;
+        //   $last_name = "";
+        // }
+        // echo "$first_name,$last_name,$email\n";
       }
       echo '</textarea>';
     }
     function missingrecruiter() {
       global $MStats;
-
       $mr = $MStats->getJobsMissingRecruiter();
       echo '<br />Jobs nonexistent recruiter: '.count($mr).'<br />
         <textarea style="width:800px; height: 200px;">';
@@ -110,13 +116,10 @@
         echo "$id - c: $company, r: $recruiter\n";
       }
       echo '</textarea>';
-
     }
     function recruiterbydate() {
       global $MRecruiter, $MCompany;
-
       $recruiters = $MRecruiter->find()->sort(array('_id'=>-1));
-
       $rs = array();
       foreach ($recruiters as $r) {
         $email = $r['email'];
@@ -128,7 +131,6 @@
         $date = fdate($r['_id']->getTimestamp());
         $rs[] = "\"$email\",\"$firstname\",\"$lastname\",\"$company\",\"$date\"";
       }
-
       echo '<br />Recruiters with date of joining:<br />
         <textarea style="width:800px; height: 200px;">';
       foreach ($rs as $r) {
@@ -138,9 +140,7 @@
     }
     function subletsended2014() {
       global $MSublet, $MStudent;
-
       $sublets = $MSublet->find(array('enddate' => array('$lte' => strtotime('1/1/2015'))));
-
       $ss = array();
       foreach ($sublets as $s) {
         $id = $s['_id'];
@@ -150,7 +150,6 @@
         $email = $student['email'];
         $ss[] = "\"$email\",\"$name\",\"$id\"";
       }
-
       echo '<br />Sublets with end dates before 1/1/2015:<br />
         <textarea style="width:800px; height: 200px;">';
       foreach ($ss as $s) {
@@ -160,7 +159,6 @@
     }
     function unknownschools() {
       global $MStudent, $S;
-
       $domains = array();
       $students = $MStudent->getAll();
       foreach ($students as $student) {
@@ -173,7 +171,6 @@
         }
       }
       $count = count($domains);
-
       echo "<br />Unknown Schools ($count): <br />
         <textarea style=\"width:800px; height: 200px;\">";
       foreach ($domains as $d) {
@@ -183,19 +180,16 @@
     }
     function cumulative() {
       global $MJob;
-
       $views = 0; $clicks = 0;
       $jobs = $MJob->getAll();
       foreach ($jobs as $job) {
         $views += $job['stats']['views'];
         $clicks += $job['stats']['clicks'];
       }
-
       echo "<br />Jobs views: $views<br />Jobs clicks: $clicks<br />";
     }
     function graph() {
       global $MStudent;
-
       // All students by month
       $studentsdata = array();
       $students = $MStudent->getAll();
@@ -205,7 +199,6 @@
         else $studentsdata[$time] ++;
       }
       ksort($studentsdata);
-
       // Students by day
       $studentsdaydata = array();
       $students = $MStudent->getAllwTime();
@@ -216,7 +209,6 @@
       }
       array_splice($studentsdaydata, 0, -100);
       ksort($studentsdaydata);
-
       // Messages
       global $MMessage;
       $msgdata = array();
@@ -229,22 +221,17 @@
         }
       }
       ksort($msgdata);
-
       $data = array(
         'students' => $studentsdata,
         'studentsday' => $studentsdaydata,
         'msgs' => $msgdata
       );
-
       if (isset($_GET['cities'])) {
         // Searches
         global $MApp;
-
         $searchdata = array();
-
         $entry = $MApp->getSearches();
         $searches = array_slice($entry, -$_GET['cities'], NULL, true);
-
         foreach ($searches as $time => $search) {
           echo "$time=>";
           if ($time != '_id' and !isset($search['type'])) {
@@ -253,7 +240,6 @@
             continue;
           }
           if ($time == '_id' or !isset($search['type']) or $search['type'] != 'sublets') continue;
-
           if (!isset($search['city']) or $search['city'] == null) {
             $location = $search['data']['location'];
             $city = getCity($location);
@@ -262,16 +248,13 @@
             $MApp->save($entry);
           } else
             $city = $search['city'];
-
           if (!isset($searchdata[$city])) $searchdata[$city] = 1;
           else $searchdata[$city] ++;
         }
         $data['searchcities'] = $searchdata;
       }
-
       $this->render('stats/graph', $data);
     }
-
     function requireLogin() {
       global $CJob;
       $CJob->requireLogin();
@@ -281,12 +264,10 @@
     function messages() {
       global $MMessage, $CMessage;
       $msgs = $MMessage->getAll();
-
       $mlist = array();
       foreach ($msgs as $m) {
         $replies = $m['replies'];
         if (count($replies) == 0) continue;
-
         $lasttime = $replies[count($replies) - 1]['time'];
         $participants = $m['participants'];
         $plist = array();
@@ -296,7 +277,6 @@
             'email' => $CMessage->getEmail($p)
           );
         }
-
         $rlist = array();
         foreach ($replies as $r) {
           $from = $r['from'];
@@ -333,25 +313,20 @@
       }
       ksort($mlist);
       $mlist = array_reverse($mlist);
-
       $this->render('stats/messagestats', array('mlist' => $mlist));
     }
     function getMessageParticipants() {
       global $MMessage, $CMessage;
       $msgs = $MMessage->getAll();
-
       $plist = array();
-
       foreach ($msgs as $m) {
         $replies = $m['replies'];
         if (count($replies) == 0) continue;
-
         $participants = $m['participants'];
         foreach ($participants as $p) {
           $name = $CMessage->getName($p);
           $email = $CMessage->getEmail($p);
           $type = $CMessage->getType($p);
-
           if (isset($plist[$email])) {
             $plist[$email]['count'] ++;
           } else {
@@ -363,7 +338,6 @@
           }
         }
       }
-
       $n = count($plist);
       echo "<br />Message Participants ($n): <br />
         <textarea style=\"width:800px; height: 200px;\">";
@@ -371,12 +345,10 @@
         $type = $data['type'];
         $name = $data['name'];
         $count = $data['count'];
-
         echo "$email ($type) - $name - sent $count\n";
       }
       echo '</textarea>';
     }
   }
-
   GLOBALvarSet('CStats', new StatsController());
 ?>

@@ -62,6 +62,7 @@
     "notloggedin" => !vget('Loggedin') and !vget('Loggedinstudent'),
     "notloggedin !/employers" => !vget('Loggedin') and !vget('Loggedinstudent') and !preg_match('/^\/employers/', $curdir),
     "notloggedin /employers" => !vget('Loggedin') and !vget('Loggedinstudent') and preg_match('/^\/employers/', $curdir),
+    "loggedin /employers" => vget('Loggedin') and !vget('Loggedinstudent') and preg_match('/^\/employers/', $curdir),
     "recruiter hascompany" => vget('Loggedin') and vget('Lcompany'),
     "recruiter nocompany" => vget('Loggedin') and !vget('Lcompany'),
     "student" => vget('Loggedinstudent'),
@@ -74,32 +75,32 @@
   $menu = array(
     array("Blog", "https://sublite.wordpress.com/", "all"),
 
-    array("List Job", $path."employers/addjob.php", "recruiter hascompany"),
-    array("Manage", $path."employers/home.php", "recruiter hascompany"),
-    array("Messages", $path."employers/messages.php", "recruiter hascompany"),
-    array("Add Company Profile", $path."employers/addcompany.php", "recruiter nocompany"),
+    array("List Job", $path."employers/addjob", "recruiter hascompany"),
+    array("Manage", $path."employers/home", "recruiter hascompany"),
+    array("Messages", $path."employers/messages", "recruiter hascompany"),
+    array("Add Company Profile", $path."employers/addcompany", "recruiter nocompany"),
 
-    array("Housing", $path."housing/search.php", "student"),
-    array("Jobs", $path."jobs/search.php", "student"),
-    array("Socialize", $path."hubs/start.php", "student"),
-    array("Add Sublet", $path."housing/addsublet.php", "student /housing"),
-    array("Manage", $path."housing/home.php", "student"),
-    array("Messages", $path."messages.php", "student"),
+    array("Housing", $path."housing/search", "student"),
+    array("Jobs", $path."jobs/search", "student"),
+    array("Socialize", $path."hubs/start", "student"),
+    array("Add Sublet", $path."housing/addsublet", "student /housing"),
+    array("Manage", $path."housing/home", "student"),
+    array("Messages", $path."messages", "student"),
 
-    array("Search Housing", $path."housing/search.php", "notloggedin !/employers"),
-    array("Search Jobs", $path."jobs/search.php", "notloggedin !/employers"),
-    array("Summer Social", $path."hubs/start.php", "notloggedin !/employers"),
-    array("List Sublet", $path."register.php", "notloggedin !/employers"),
-    array("List Job", $path."register.php", "notloggedin /employers"),
-    array("Sign Up", $path."register.php", "notloggedin !/employers"),
-    array("Sign Up", $path."employers/register.php", "notloggedin /employers"),
-    array("Log In", $path."employers/login.php", "notloggedin /employers"),
-    array("Log In", $path."login.php", "notloggedin !/employers"),
-    array("Log Out", $path."logout.php", "loggedin")
+    array("Search Housing", $path."housing/search", "notloggedin !/employers"),
+    array("Search Jobs", $path."jobs/search", "notloggedin !/employers"),
+    array("Summer Social", $path."hubs/start", "notloggedin !/employers"),
+    array("List Sublet", $path."register", "notloggedin !/employers"),
+    array("List Job", $path."employers/register", "notloggedin /employers"),
+    array("Sign Up", $path."register", "notloggedin !/employers"),
+    array("Sign Up", $path."employers/register", "notloggedin /employers"),
+    array("Log In", $path."employers/login", "notloggedin /employers"),
+    array("Log In", $path."login", "notloggedin !/employers"),
+    array("Log Out", $path."logout", "loggedin")
   );
 ?>
 <navbar class="blackbar">
-  <a href="."><logo>SubLite</logo></a><beta>beta</beta>
+  <a href="/"><logo>SubLite</logo></a><beta>beta</beta>
   <options class="right">
     <?php
       foreach ($menu as $opt) {

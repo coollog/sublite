@@ -49,9 +49,6 @@
 
     public static function get(MongoId $jobId) {
       $applicationData = ApplicationModel::getJobApplication($jobId);
-      if (is_null($applicationData)) {
-        return null;
-      }
 
       return new ApplicationJob($jobId, [
         'questions' => $applicationData

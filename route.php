@@ -118,6 +118,9 @@
   Router::register('faq', function() {
     GLOBALvarGet('CApp')->faq();
   });
+  Router::register('favicon.ico', function() {
+    Controller::redirect('app/assets/gfx/favicon.png');
+  });
   Router::register('feedback', function() {
     GLOBALvarGet('CApp')->feedback();
   });
@@ -198,6 +201,9 @@
   });
   Router::register('logout', function() {
     GLOBALvarGet('CStudent')->logout();
+  });
+  Router::register('leaderboard', function() {
+    AppController::leaderboard();
   });
   Router::register('messages', function() {
     GLOBALvarGet('CMessage')->reply();
@@ -325,6 +331,8 @@
   Router::route('/faq', 'faq');
   Router::route('/feedback', 'feedback');
 
+  Router::route('/favicon.ico', 'favicon.ico');
+
   Router::route('/forgotpass', 'forgotpass');
   Router::route('/jobs/forgotpass', 'forgotpass');
 
@@ -355,6 +363,8 @@
   Router::route('/jobs/recruiter', 'jobs/recruiter');
   Router::route('/employers/search', 'jobs/search');
   Router::route('/jobs/search', 'jobs/search');
+
+  Router::route('/leaderboard', 'leaderboard');
 
   Router::route('/login', 'login');
   Router::route('/housing/login', 'login');

@@ -76,10 +76,19 @@
     color: #035d75;
     font-family: 'BebasNeue', sans-serif;
     font-weight: bold;
+    line-height: 1em;
   }
   .headline {
     font-size: 1.5em;
     margin-bottom: 2em;
+  }
+  headline.small {
+    font-size: 2em;
+    letter-spacing: 1px;
+    line-height: 1.5em;
+    margin: 0;
+    display: block;
+    text-align: center;
   }
   subheadline {
     display: block;

@@ -117,6 +117,10 @@
       <section name="student">
         <heading></heading>
       </section>
+      <a id="resume" class="hide">
+        <br />
+        <input type="button" value="View Resume" />
+      </a>
       <section name="basicinfo">
         <heading></heading>
         <fieldline>
@@ -214,12 +218,16 @@
       var resume = profile.resume;
       var interests = profile.interests;
       var skills = profile.skills;
+      var resume = profile.resume;
 
       $('section[name=student] heading').html(name);
       addField('basicinfo', 'bio', bio);
       addField('basicinfo', 'resume', resume);
       addFields('basicinfo', 'interests', interests);
       addFields('basicinfo', 'skills', skills);
+      if (resume) {
+        $('#resume').show().attr('href', resume);
+      }
 
       var sections = [
         'education',

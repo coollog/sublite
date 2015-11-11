@@ -20,10 +20,12 @@
       $photo = isset($data['photo']) ?
         clean($data['photo']) : 'assets/gfx/defaultpic.png';
       $approved = $data['approved'];
+      $credits = 0;
       return array(
         'email' => $email, 'pass' => $pass, 'firstname' => $firstname,
         'lastname' => $lastname, 'company' => $company, 'title' => $title,
-        'phone' => $phone, 'photo' => $photo, 'approved' => $approved
+        'phone' => $phone, 'photo' => $photo, 'approved' => $approved,
+        'credits' => $credits
       );
     }
 

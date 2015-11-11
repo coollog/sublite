@@ -123,7 +123,8 @@
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="SubLite" />
 
-    <link rel="icon" type="image/png" href="<?php echo $GLOBALS['dirpre']; ?>assets/gfx/favicon.png" />
+    <link rel="shortcut icon" type="image/png"
+          href="data:<?php echo $GLOBALS['dirpre']; ?>assets/gfx/favicon.png" />
 
     <!-- JQUERY -->
     <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>

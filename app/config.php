@@ -35,6 +35,6 @@
 
 
   // Config Stripe.
-  require_once('stripe/init.php');
-  \Stripe\Stripe::setApiKey($GLOBALS['stripe']['secret_key']);
+  // require_once('stripe/init.php');
+  // \Stripe\Stripe::setApiKey($GLOBALS['stripe']['secret_key']);
 ?>
