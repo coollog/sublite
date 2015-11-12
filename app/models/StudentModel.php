@@ -89,7 +89,7 @@
         $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
     }
     function getEmail($id) {
-      $entry = $this->getById($id);
+      $entry = self::getById($id, ['email' => 1]);
       return $entry['email'];
     }
     function last($n=1) {

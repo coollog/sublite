@@ -402,7 +402,6 @@
         self::redirect("../application/$applicationId");
       }
 
-      die("aklsdjflksa");
       self::error(
         "You must attach a resume to your profile in order to submit ".
         "an application."
