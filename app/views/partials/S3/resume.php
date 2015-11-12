@@ -41,7 +41,7 @@
   Select file to upload (&lt; 10MB):
   <input type="file" accept=".doc, .docx, .rtf, .pdf" name="file" />
   <input type="submit" class="smallbutton" value="Upload" style="margin: 0;" />
-  <small>(.DOC, .DOCX, .RTF, .PDF only)</small>
+  <br /><small>(.DOC, .DOCX, .RTF, .PDF only)</small>
   <red></red>
   <green>Resume Uploaded!</green>
 </form>
