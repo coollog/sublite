@@ -380,7 +380,11 @@
         $jobTitle = $job['title'];
         $linkApplicants = "http://sublite.net/employers/viewapplicants/$jobId";
         $linkManage = "http://sublite.net/employers/home";
+        $recruiterId = $job['recruiter'];
+        $firstname = RecruiterModel::getFirstname($recruiterId);
         $message = "
+          Hi $firstname,
+          <br /><br />
           You have received a new applicant for your job: <b>$jobTitle</b>!
           <br /><br />
           To unlock and view this application, go to
@@ -391,8 +395,11 @@
           View Applicants: <a href='$linkApplicants'>$linkApplicants</a><br />
           Manage Jobs: <a href='$linkManage'>$linkManage</a><br />
           <br /><br />
-          -------------------
+          -------------------<br />
           Team SubLite
+          <br /><br />
+          Please let us know if you have any questions. We hope you find the
+          right candidate for your job.
         ";
         sendgmail([$_SESSION['email']],
                   "info@sublite.net",

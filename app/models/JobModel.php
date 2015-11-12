@@ -27,7 +27,7 @@
     public static function getByRecruiter(MongoId $recruiterId);
 
     /**
-     * @return Gets 'title', 'location', 'company'.
+     * @return Gets 'title', 'location', 'company', 'recruiter'.
      */
     public static function getByIdMinimal(MongoId $jobId);
   }
@@ -74,7 +74,8 @@
       return self::getById($jobId, [
         'title' => 1,
         'location' => 1,
-        'company' => 1
+        'company' => 1,
+        'recruiter' => 1
       ]);
     }
 

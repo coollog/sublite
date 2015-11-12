@@ -19,6 +19,8 @@
      * Sets the customer id.
      */
     public static function setCustomerId(MongoId $recruiterId, $customerId);
+
+    public static function getFirstname(MongoId $recruiterId);
   }
 
   class RecruiterModel extends Model implements RecruiterModelInterface {
@@ -73,6 +75,11 @@
         ->queryForId($recruiterId)
         ->toUpdate('paymentinfo.customerid', $customerId);
       $update->run();
+    }
+
+    public static function getFirstname(MongoId $recruiterId) {
+      $entry = self::getById($recruiterId, ['firstname' => 1]);
+      return $entry['firstname'];
     }
 
     function __construct() {
