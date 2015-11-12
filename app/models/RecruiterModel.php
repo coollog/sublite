@@ -15,12 +15,18 @@
      * @return null if no customerId.
      */
     public static function getCustomerId(MongoId $recruiterId);
+
     /**
      * Sets the customer id.
      */
     public static function setCustomerId(MongoId $recruiterId, $customerId);
 
     public static function getFirstname(MongoId $recruiterId);
+
+    /**
+     * Gets just the 'email', 'firstname', 'lastname'.
+     */
+    public static function getByIdMinimal(MongoId $recruiterId);
   }
 
   class RecruiterModel extends Model implements RecruiterModelInterface {
@@ -80,6 +86,14 @@
     public static function getFirstname(MongoId $recruiterId) {
       $entry = self::getById($recruiterId, ['firstname' => 1]);
       return $entry['firstname'];
+    }
+
+    public static function getByIdMinimal(MongoId $recruiterId) {
+      return self::getById($recruiterId, [
+        'email' => 1,
+        'firstname' => 1,
+        'lastname' => 1
+      ]);
     }
 
     function __construct() {

@@ -381,9 +381,11 @@
         $linkApplicants = "http://sublite.net/employers/viewapplicants/$jobId";
         $linkManage = "http://sublite.net/employers/home";
         $recruiterId = $job['recruiter'];
-        $firstname = RecruiterModel::getFirstname($recruiterId);
+        $recruiter = RecruiterModel::getByIdMinimal($recruiterId);
+        $recruiterFirstname = $recruiter['firstname'];
+        $recruiterEmail = $recruiter['email'];
         $message = "
-          Hi $firstname,
+          Hi $recruiterFirstname,
           <br /><br />
           You have received a new applicant for your job: <b>$jobTitle</b>!
           <br /><br />
@@ -401,7 +403,7 @@
           Please let us know if you have any questions. We hope you find the
           right candidate for your job.
         ";
-        sendgmail([$_SESSION['email']],
+        sendgmail([$recruiterEmail],
                   "info@sublite.net",
                   "New Applicant for '$jobTitle' | SubLite",
                   $message);

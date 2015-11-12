@@ -259,6 +259,7 @@
     private static function saveStudentAnswers(Application $application) {
       $studentId = $application->getStudentId();
       $questions = $application->getQuestions();
+      if (count($questions) == 0) return;
 
       // Retrieves the question-answer pairs.
       $answers = StudentModel::getAnswers($studentId);
@@ -307,7 +308,7 @@
         $this->data['_id'] = new MongoId($data['_id']);
       }
       $this->data['jobid'] = new MongoId($data['jobid']);
-
+      $this->data['questions'] = [];
       if (isset($data['questions'])) {
         // Process into list of question id-answer pairs.
         foreach ($data['questions'] as $question) {
@@ -317,8 +318,6 @@
             'answer' => clean($question['answer'])
           ];
         }
-      } else {
-        $this->data['questions'] = [];
       }
       $this->data['profile'] =
         isset($data['profile']) ? $data['profile'] : null;
