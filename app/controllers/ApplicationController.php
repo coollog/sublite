@@ -394,7 +394,7 @@
           -------------------
           Team SubLite
         ";
-        sendgmail(['tony.jiang@yale.edu', 'qingyang.chen@gmail.com'],
+        sendgmail([$_SESSION['email']],
                   "info@sublite.net",
                   "New Applicant for '$jobTitle' | SubLite",
                   $message);
