@@ -23,8 +23,7 @@
 <script>
   function updateDiv(showDiv, totalDiv, days) {
       
-    for(i = 1; i <= totalDiv; i++)
-    {
+    for(i = 1; i <= totalDiv; i++) {
       if(i == showDiv)
         document.getElementById("showHideDiv" + i).style.display = "block";
       else 
