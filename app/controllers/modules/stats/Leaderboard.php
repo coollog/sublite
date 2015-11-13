@@ -14,17 +14,17 @@
     const DAYTIME = 86400;
 
     public static function getSchoolCountSince(array $schools, $time) {
-      $all_schools = self::schoolCountSince($time);
-      $specific_schools = array();
+      $allSchools = self::schoolCountSince($time);
+      $specificSchools = array();
 
       foreach($schools as $school) {
-        if(array_key_exists($school, $all_schools))
-          $specific_schools[$school] = $all_schools[$school];
+        if(array_key_exists($school, $allSchools))
+          $specificSchools[$school] = $allSchools[$school];
         else
-          $specific_schools[$school] = 0;
+          $specificSchools[$school] = 0;
       }
 
-      return $specific_schools;
+      return $specificSchools;
       
     }
 
@@ -48,7 +48,7 @@
 
       $pattern = "/(.*)@(.*)/";
       $schools = array();
-      $school_names = array();
+      $schoolNames = array();
 
       foreach($cursor as $doc) {
         $success = preg_match($pattern, $doc["email"], $match);
@@ -62,18 +62,18 @@
 
       foreach($schools as $key => $id) {
         if($S->hasSchoolOf($key))
-          if(array_key_exists($S->nameOf($key), $school_names))
-            $school_names[$S->nameOf($key)] += $id;
+          if(array_key_exists($S->nameOf($key), $schoolNames))
+            $schoolNames[$S->nameOf($key)] += $id;
           else
-            $school_names[$S->nameOf($key)] = $id;
+            $schoolNames[$S->nameOf($key)] = $id;
         else
-          if(array_key_exists($key, $school_names))
-            $school_names[$key] += $id;
+          if(array_key_exists($key, $schoolNames))
+            $schoolNames[$key] += $id;
           else
-            $school_names[$key] = $id;
+            $schoolNames[$key] = $id;
       }
 
-      return $school_names;
+      return $schoolNames;
     }
 
     private static function getPerDayForSchool($schoolName, $numIntervals) {
@@ -81,30 +81,30 @@
       
       $pattern = "/(.*)@(.*)/";
 
-      $time_now = time()-18000;
+      $timeNow = time()-18000;
       $intervals = array();
-      $result_array = array();
+      $resultArray = array();
 
       for($x = $numIntervals; $x > 0; $x--) {
         array_push($intervals, (strtotime("today -" . ($x-1) . " day")-18000));
-        array_push($result_array, array(date('D', (strtotime("today -" . ($x-1) . " day")-18000)), 0));
+        array_push($resultArray, array(date('D', (strtotime("today -" . ($x-1) . " day")-18000)), 0));
       }
-      array_push($intervals, $time_now);
+      array_push($intervals, $timeNow);
 
       //$intervals = array_map(function ($x) { return $x-46035245; } , $intervals);
 
       foreach($cursor as $doc) {
         $success = preg_match($pattern, $doc["email"], $match);
         if($success && $match[2] == $schoolName) {
-          $doc_time = $doc["_id"]->getTimeStamp();
+          $docTime = $doc["_id"]->getTimeStamp();
           for($i = 0; $i < $numIntervals; $i++) {
-            if($doc_time >= $intervals[$i] and $doc_time < $intervals[$i+1])
-              $result_array[$i][1]++;
+            if($docTime >= $intervals[$i] and $docTime < $intervals[$i+1])
+              $resultArray[$i][1]++;
           }
         }
       }
 
-      return $result_array;
+      return $resultArray;
     }
   }
 ?>
