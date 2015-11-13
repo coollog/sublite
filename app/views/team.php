@@ -470,7 +470,6 @@ Insert this code into one of two sections, one which is for the main team, and t
 
       //add background images to each box and set size
       memberInfo.forEach(function (member, index) {
-        console.log(document.getElementById('picBox'+(index+1)));
         var box = document.getElementById('picBox'+(index+1));
         box.style.backgroundImage =
         'url(<?php echo $GLOBALS['dirpre']; ?>assets/gfx/headshots/'
