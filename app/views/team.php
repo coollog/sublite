@@ -1,141 +1,32 @@
-<!--To add a new person to this team page:
-
-(1) Look at how many current member boxes there are. The new box will be the next number (If there are 12 members, you will be making number 13)
-
-(2) Go to <head> section, to second set <script> tags containing Javascript code, and add the script written below under the line denoted (2). Wherever it says "#picBox12", add the new number.
-
-
-  $("#picBox12").click(function(){
-      $(".memberbox").slideUp("slow");
-        $("#box12").slideDown("slow");
-        $(".picBox .overlay").css("opacity", "");
-        $("#picBox12 .overlay").css("opacity", "1");
-    });
-
-(3) Go to <head> section, to <style> CSS section. Find line denoted (3), where picBox will be added. Change the picBox number to the new number, and change the url to url of new .jpg of new member.
-
-
-  #picBox1{
-    background:url(images/yuanlingyuan.jpg);
-    background-size: 160px 160px;
-  }
-
-(4) Go to HTML Body section and find <div class="memberbox"> sections. Change the following:
-  - id="box1" - change the number of the box to that of the new number.
-  - Change "images/newmemberimg.jpg" into the jpg file of new member
-  - Change "NewMemberName" to new member name
-  - Change "NewMemberPosition" to "Member Position, School"
-  - Change "NewMemberBio" to the new member's bio
-
-
-  <div class="memberbox" id="box1">
-    <div>
-      <img class= "memberimage" src="images/newmemberimg.jpg" />
-      <p>
-        <span class="membername">NewMemberName</span>
-        <br>
-        <span class="memberposition">NewMemberPosition</span>
-      </p>
-      <p class="memberbio">
-        NewMemberBio
-      </p>
-    </div>
-      <div class="exit">
-        <p>X</p>
-      </div>
-  </div>
-
-(5) Go the HTML Body section and find <div class ="clear" id="teamBlock">.
-Change the following of the code below:
-  - id="picBox9" - change the number of the picBox to that of the new number
-  - Change "NewMemberName" to the newest member's name
-  - Change "PositionName" to the member's position
-  - Change "SchoolName" to the member's school name (abbreviated)
-Insert this code into one of two sections, one which is for the main team, and the other which is for summer interns.
-
-
-  <div class="picBox" id="picBox9">
-    <div class="overlay">
-      <i class="fa fa-angle-double-up"></i>
-      <p><span>NewMemberName</span>
-        <br>
-        PositionName, SchoolName
-      </p>
-    </div>
-  </div>
-
--->
-<head>
-
-<!-- JQuery script tags -->
-
-<!---------------------------------------------------------------------->
-<!--JQuery script - add or take away if adding or removing new members-->
-<!---------------------------------------------------------------------->
-
 <!-- Font Awesome link to access double up arrow icon for member overlay hover-->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
-<!--CSS styles-->
 <style>
-
-/*.panel and .content should be already built into the website, and included here as I have been coding without the PHP server*/
-
-  .panel {
-      display: block;
-      width: 100%;
-      padding: 20px 0;
-      background-color: #FFFFFF;
-    }
-
-    .content {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 0 50px;
-    }
-
-    #teamBlock {
-      padding-bottom: 10%
-    }
-
-
-
-  /*----------------------------------------------------------------------*/
-  /*CSS that controls member profiles that appear when team member clicked*/
-  /*----------------------------------------------------------------------*/
-
-    .memberbox{
-      display: none;
-
-    }
-
-    .membername {
-      font-size: 2em;
-      font-weight: bold;
+  #teamBlock {
+    padding-bottom: 10%
   }
-
+  .memberbox{
+    display: none;
+  }
+  .membername {
+    font-size: 2em;
+    font-weight: bold;
+  }
   .memberposition {
-      font-weight: bold;
-      color: #035d75;
+    font-weight: bold;
+    color: #035d75;
   }
-
   .memberimage {
-      height:18em;
-      float: left;
-      margin-right: 15px;
+    height:18em;
+    float: left;
+    margin-right: 15px;
   }
-
   .memberbox p {
-      line-height: 1.3em;
-    }
-
-  .memberbio {
-      font-size: 0.9em;
+    line-height: 1.3em;
   }
-
-  /*-------------------------------------------------*/
-  /*CSS for the X that exits seleceted member profile*/
-  /*-------------------------------------------------*/
+  .memberbio {
+    font-size: 0.9em;
+  }
 
   .exit{
     margin: 20px 0 20px 8.5%;
@@ -148,121 +39,87 @@ Insert this code into one of two sections, one which is for the main team, and t
     border-bottom: #e1e1e1 1px solid;
     display:block;
   }
-
   .exit p{
     margin: 0;
   }
-
   .exit:hover{
     background-color: #e1e1e1;
   }
 
-
-  /*--------------------------------------------------------*/
-  /*CSS for the team block (grid of clickable member photos)*/
-  /*--------------------------------------------------------*/
-
   .clear{
     clear: both;
   }
-
   #teamBlock{
-      float: center;
-      height: 600px;
-      width: 700px;
-    }
-
+    float: center;
+    height: 600px;
+    width: 700px;
+  }
   .picBox{
-      margin: 7px 7px;
-      float: left;
-      height: 160px;
+    margin: 7px 7px;
+    float: left;
+    height: 160px;
     width: 160px;
-    }
-
+  }
   #picBoxTeam{
     background-color: #FFD800;
     height: 160px;
     width: 334px;
     margin: 7px 7px;
-      float: left;
-      text-align: center;
-      font-size: 50px;
+    float: left;
+    text-align: center;
+    font-size: 50px;
   }
 
-  /*-----------------------------------*/
-  /*(3)--------------------------------*/
-  /*CSS for each individual picture box*/
-  /*EDIT HERE TO ADD OR REMOVE MEMBERS-*/
-  /*-----------------------------------*/
-
-
-
-  /*-------------------------*/
-  /*CSS for join black square*/
-  /*-------------------------*/
   #join{
     background-color: black;
     color: #FFD800;
     text-align: center;
   }
-
   #join .fa{
     padding-top: 35px;
     font-size: 70px;
   }
-
   #join p{
     margin-top: 5px;
     color: white;
     font-size: 18px;
   }
-
   #join:hover{
     opacity: 0.3;
   }
-
-  /*CSS for summer team square*/
   #summer{
     background-color: black;
     color: yellow;
     text-align: center;
   }
-
   #summer p{
     font-size: 30px;
     padding-top: 20px;
   }
 
-
-  /*CSS for overlay over profile squares*/
   .overlay{
     background:rgba(0,0,0,.75);
-        opacity:0;
-        padding: 40px 0px 6px 0px;
-        color: white;
-        text-align: center;
-        font-size: 50px;
-        -webkit-transition: opacity .25s ease;
+    opacity:0;
+    padding: 40px 0px 6px 0px;
+    color: white;
+    text-align: center;
+    font-size: 50px;
+    -webkit-transition: opacity .25s ease;
     -moz-transition: opacity .25s ease;
   }
-
   .overlay p {
     text-align: left;
     font-size: 10px;
     margin-left: 15px;
   }
-
   .overlay p span{
     color: #FFD800;
     font-size: 18px;
   }
-
   .picBox:hover .overlay {
     opacity: 1;
   }
 </style>
-
-</head>
 
 <templates>
   <membertemplate>
@@ -281,11 +138,6 @@ Insert this code into one of two sections, one which is for the main team, and t
         </div>
     </div>
   </membertemplate>
-</templates>
-
-
-
-<templates>
   <boxtemplate>
     <div class = "picBox" id="picBox{index}">
       <div class = "overlay">
@@ -299,49 +151,25 @@ Insert this code into one of two sections, one which is for the main team, and t
   </boxtemplate>
 </templates>
 
-
 <panel>
-    <div class="clear content" id="team"></div>
+  <div class="clear content" id="team"></div>
 </panel>
 
-<!--HTML FOR MEMBER PROFILE SQUARES-->
-<!--(5) ADD NEW MEMBER SQUARES BELOW-->
-
 <panel>
-
-<div class ="clear content" id="teamBlock">
-
+  <div class ="clear content" id="teamBlock">
     <div id="picBoxTeam">
       <p style="margin-top: 22%">OUR TEAM</p>
     </div>
 
-    <a id="boxes" href="#team">
+    <a id="boxes" href="#team"></a>
 
-
-
-      <!-------------------------------------------------->
-      <!--(5) ADD NEW PROFILE SQUARES FOR MAIN TEAM HERE-->
-      <!-------------------------------------------------->
-
-    </a>
-
-    <!--dead "join us link", insert some link to form to join Sublite-->
-    <!-- link is to campus rep program. Better way to embed link? -->
     <a href="jobs/job?id=561576fcd83594905f7eb765">
-    <div class="picBox" id="join">
-      <i class="fa fa-plus"></i>
-      <p>JOIN US NOW!</p>
-    </div>
+      <div class="picBox" id="join">
+        <i class="fa fa-plus"></i>
+        <p>JOIN US NOW!</p>
+      </div>
     </a>
-
-
-
-      <!------------------------------------------------>
-      <!--(5) ADD NEW PROFILE SQUARES FOR INTERNS HERE-->
-      <!------------------------------------------------>
-
-
-</div>
+  </div>
 </panel>
 
 <script>
@@ -520,9 +348,5 @@ Insert this code into one of two sections, one which is for the main team, and t
           }
       });
     })();
-
-
-
   });
-
 </script>
