@@ -160,7 +160,7 @@
         $applicationId = $application->getId();
         $submitted = ApplicationModel::checkSubmitted($application->getId());
 
-        if ($submitted) {
+        if ($submitted) { //student succesfully submitted application
           self::redirect("../application/$applicationId");
         }
 
