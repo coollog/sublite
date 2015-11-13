@@ -1,6 +1,5 @@
 <!-- TODO: Refactor this with the other use of it -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
-<script src='app/assets/js/buttons.js'></script>
 
 <style>
   panel.leaderboard .numdays {
@@ -22,87 +21,20 @@
 </style>
 
 <script>
-  function showHide() {
-      var ele = document.getElementById("showHideDiv");
-      var ele1 = document.getElementById("showHideDiv1");
-      var ele2 = document.getElementById("showHideDiv2");
-      var ele3 = document.getElementById("showHideDiv3");
-      var ele4 = document.getElementById("showHideDiv4");
-      ele.style.display = "block";
-      ele1.style.display = "none";
-      ele2.style.display = "none";
-      ele3.style.display = "none";
-      ele4.style.display = "none";
+  function updateDiv(showDiv, totalDiv, days) {
+      
+    for(i = 1; i <= totalDiv; i++) {
+      if(i == showDiv)
+        document.getElementById("showHideDiv" + i).style.display = "block";
+      else 
+        document.getElementById("showHideDiv" + i).style.display = "none";
+    }
 
-      var title = document.getElementById("leaderboardTitle");
-      title.innerHTML = "Sign-ups in past number of days: 7";
+    var title = document.getElementById("leaderboardTitle");
+    title.innerHTML = "Sign-ups in past number of days: " + days;
   }
 
-  function showHide1() {
-      var ele = document.getElementById("showHideDiv");
-      var ele1 = document.getElementById("showHideDiv1");
-      var ele2 = document.getElementById("showHideDiv2");
-      var ele3 = document.getElementById("showHideDiv3");
-      var ele4 = document.getElementById("showHideDiv4");
-      ele.style.display = "none";
-      ele1.style.display = "block";
-      ele2.style.display = "none";
-      ele3.style.display = "none";
-      ele4.style.display = "none";
-
-      var title = document.getElementById("leaderboardTitle");
-      title.innerHTML = "Sign-ups in past number of days: 30";
-  }
-
-  function showHide2() {
-      var ele = document.getElementById("showHideDiv");
-      var ele1 = document.getElementById("showHideDiv1");
-      var ele2 = document.getElementById("showHideDiv2");
-      var ele3 = document.getElementById("showHideDiv3");
-      var ele4 = document.getElementById("showHideDiv4");
-      ele.style.display = "none";
-      ele1.style.display = "none";
-      ele2.style.display = "block";
-      ele3.style.display = "none";
-      ele4.style.display = "none";
-
-      var title = document.getElementById("leaderboardTitle");
-      title.innerHTML = "Sign-ups in past number of days: 90";
-  }
-
-  function showHide3() {
-      var ele = document.getElementById("showHideDiv");
-      var ele1 = document.getElementById("showHideDiv1");
-      var ele2 = document.getElementById("showHideDiv2");
-      var ele3 = document.getElementById("showHideDiv3");
-      var ele4 = document.getElementById("showHideDiv4");
-      ele.style.display = "none";
-      ele1.style.display = "none";
-      ele2.style.display = "none";
-      ele3.style.display = "block";
-      ele4.style.display = "none";
-
-      var title = document.getElementById("leaderboardTitle");
-      title.innerHTML = "Sign-ups in past number of days: 180";
-  }
-
-  function showHide4() {
-      var ele = document.getElementById("showHideDiv");
-      var ele1 = document.getElementById("showHideDiv1");
-      var ele2 = document.getElementById("showHideDiv2");
-      var ele3 = document.getElementById("showHideDiv3");
-      var ele4 = document.getElementById("showHideDiv4");
-      ele.style.display = "none";
-      ele1.style.display = "none";
-      ele2.style.display = "none";
-      ele3.style.display = "none";
-      ele4.style.display = "block";
-
-      var title = document.getElementById("leaderboardTitle");
-      title.innerHTML = "Sign-ups in past number of days: Forever";
-  }
-
-  function draw_bar_graph(chart_id, my_data) {
+  function drawBarGraph(chart_id, my_data) {
     var key_array = new Array();
     var value_array = new Array();
 
@@ -129,7 +61,7 @@
     var myBarChart = new Chart(ctx).Bar(data);
   }
 
-  function draw_line_graph(chart_id, my_data) {
+  function drawLineGraph(chart_id, my_data) {
     var key_array = new Array();
     var value_array = new Array();
 
@@ -172,50 +104,50 @@
       <headline class="small" id="leaderboardTitle">Sign-ups in past number of days:</headline>
 
       <center>
-        <button class="numdays" onclick="return showHide();">7</button>
-        <button class="numdays" onclick="return showHide1();">30</button>
-        <button class="numdays" onclick="return showHide2();">90</button>
-        <button class="numdays" onclick="return showHide3();">180</button>
-        <button class="numdays" onclick="return showHide4();">Forever</button>
+        <button class="numdays" onclick="return updateDiv(1, 5, 7);">7</button>
+        <button class="numdays" onclick="return updateDiv(2, 5, 30);">30</button>
+        <button class="numdays" onclick="return updateDiv(3, 5, 90);">90</button>
+        <button class="numdays" onclick="return updateDiv(4, 5, 180);">180</button>
+        <button class="numdays" onclick="return updateDiv(5, 5, \"Forever\");">Forever</button>
       </center>
 
-      <div id="showHideDiv">
+      <div id="showHideDiv1">
         <canvas id="7days" width="900" height="400"></canvas>
         <script>
-          draw_bar_graph("7days", <?php echo toJSON($schoolCount[7]); ?>);
-        </script>
-      </div>
-
-      <div id="showHideDiv1">
-        <canvas id="30days" width="900" height="400"></canvas>
-        <script>
-          draw_bar_graph("30days", <?php echo toJSON($schoolCount[30]); ?>);
+          drawBarGraph("7days", <?php echo toJSON($schoolCount[7]); ?>);
         </script>
       </div>
 
       <div id="showHideDiv2">
-        <canvas id="90days" width="900" height="400"></canvas>
+        <canvas id="30days" width="900" height="400"></canvas>
         <script>
-          draw_bar_graph("90days", <?php echo toJSON($schoolCount[90]); ?>);
+          drawBarGraph("30days", <?php echo toJSON($schoolCount[30]); ?>);
         </script>
       </div>
 
       <div id="showHideDiv3">
-        <canvas id="180days" width="900" height="400"></canvas>
+        <canvas id="90days" width="900" height="400"></canvas>
         <script>
-          draw_bar_graph("180days", <?php echo toJSON($schoolCount[180]); ?>);
+          drawBarGraph("90days", <?php echo toJSON($schoolCount[90]); ?>);
         </script>
       </div>
 
       <div id="showHideDiv4">
+        <canvas id="180days" width="900" height="400"></canvas>
+        <script>
+          drawBarGraph("180days", <?php echo toJSON($schoolCount[180]); ?>);
+        </script>
+      </div>
+
+      <div id="showHideDiv5">
         <canvas id="foreverdays" width="900" height="400"></canvas>
         <script>
-          draw_bar_graph("foreverdays", <?php echo toJSON($schoolCount[FOREVER]); ?>);
+          drawBarGraph("foreverdays", <?php echo toJSON($schoolCount[FOREVER]); ?>);
         </script>
       </div>
 
       <script>
-        showHide4();
+        updateDiv(5, 5, "Forever");
       </script>
 
     </left>
