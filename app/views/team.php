@@ -74,7 +74,7 @@ Insert this code into one of two sections, one which is for the main team, and t
 <!---------------------------------------------------------------------->
 
 <!-- Font Awesome link to access double up arrow icon for member overlay hover-->
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
 <!--CSS styles-->
 <style>
