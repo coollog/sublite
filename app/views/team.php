@@ -125,7 +125,7 @@
   <membertemplate>
     <div class="memberbox" id="box{index}">
       <div>
-        <img class= "memberimage" src="{photo}"  />
+        <img class= "memberimage" photo="{photo}"  />
         <p>
           <span class="membername">{name}</span>
           <br>
@@ -305,6 +305,10 @@
         box.style.backgroundSize = "160px 160px";
       });
 
+      $('img.memberimage').forEach(function (elem) {
+        var src = $(this).attr('photo');
+        $(this).attr('src', src);
+      });
     })();
 
     (function setupBoxAnimation () {
