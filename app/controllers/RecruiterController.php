@@ -42,23 +42,23 @@
       $me = $MRecruiter->me();
       $me['_id'] = $me['_id']->{'$id'};
       $me['company'] = $me['company']->{'$id'};
-      $this->render('recruiter/home', $me);
+      self::render('recruiter/home', $me);
     }
 
     function index() {
-      $this->render('recruiter/index');
+      self::render('recruiter/index');
     }
 
     function faq() {
-      $this->render('faq');
+      self::render('faq');
     }
 
     function privacy() {
-      $this->render('privacy');
+      self::render('privacy');
     }
 
     function terms() {
-      $this->render('terms');
+      self::render('terms');
     }
 
     function register() {
@@ -66,7 +66,7 @@
         $this->redirect('home');
         return;
       }
-      if (!isset($_POST['register'])) { $this->render('recruiter/register'); return; }
+      if (!isset($_POST['register'])) { self::render('recruiter/register'); return; }
 
       global $params, $MRecruiter;
       // Params to vars
@@ -105,7 +105,7 @@
       }
 
       $this->error($err);
-      $this->render('recruiter/register', $data);
+      self::render('recruiter/register', $data);
     }
 
     function approve() {
@@ -149,7 +149,7 @@
 
 
     function login() {
-      if (!isset($_POST['login'])) { $this->render('recruiter/login'); return; }
+      if (!isset($_POST['login'])) { self::render('recruiter/login'); return; }
 
       global $params, $MRecruiter;
       // Params to vars
@@ -185,7 +185,7 @@
       }
 
       $this->error($err);
-      $this->render('recruiter/login', $data);
+      self::render('recruiter/login', $data);
     }
 
     function edit() {
@@ -193,7 +193,7 @@
 
       global $params, $MRecruiter;
       if (!isset($_POST['edit'])) {
-        $this->render('recruiter/editprofile',
+        self::render('recruiter/editprofile',
           $this->data($MRecruiter->me())); return;
       }
 
@@ -214,12 +214,12 @@
         $data['_id'] = new MongoId($id);
         $id = $MRecruiter->save($data);
         $this->success('profile saved');
-        $this->render('recruiter/editprofile', $data);
+        self::render('recruiter/editprofile', $data);
         return;
       }
 
       $this->error($err);
-      $this->render('recruiter/editprofile', $data);
+      self::render('recruiter/editprofile', $data);
     }
 
 
@@ -242,7 +242,7 @@
         $err, 'permission denied');
 
       if ($this->isValid()) {
-        if (!isset($_POST['change'])) { $this->render('changepass'); return; }
+        if (!isset($_POST['change'])) { self::render('changepass'); return; }
 
         extract($data = $this->dataChangePass($params));
 
@@ -258,12 +258,12 @@
         }
 
         $this->error($err);
-        $this->render('changepass', $data);
+        self::render('changepass', $data);
         return;
       }
 
       $this->error($err);
-      $this->render('notice');
+      self::render('notice');
     }
 
     function dataForgotPass($data) {
@@ -276,7 +276,7 @@
     function forgotPass() {
       global $params, $MRecruiter;
 
-      if (!isset($_POST['forgot'])) { $this->render('forgotpass'); return; }
+      if (!isset($_POST['forgot'])) { self::render('forgotpass'); return; }
 
       extract($data = $this->dataForgotPass($params));
 
@@ -307,12 +307,12 @@
           "SubLite, LLC."), 'SubLite Recruiter Account Password Reset', $msg);
 
         $this->success('A link to reset your password has been sent to your email. If you do not receive it in the next hour, check your spam folder or whitelist info@sublite.net. <a href="mailto: info@sublite.net">Contact us</a> if you have any further questions.');
-        $this->render('forgotpass');
+        self::render('forgotpass');
         return;
       }
 
       $this->error($err);
-      $this->render('forgotpass', $data);
+      self::render('forgotpass', $data);
     }
 
     function view() {
@@ -349,13 +349,14 @@
           if ($data['photo'] == 'assets/gfx/defaultpic.png')
             $data['photo'] = $GLOBALS['dirpreFromRoute'] . $data['photo'];
 
-          $this->render('recruiter/profile', $data);
+          self::displayMetatags('recruiter');
+          self::render('recruiter/profile', $data);
           return;
         }
       }
 
       $this->error($err);
-      $this->render('notice');
+      self::render('notice');
     }
 
     function loggedIn() {

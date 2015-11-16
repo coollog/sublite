@@ -2,19 +2,37 @@
   global $params, $valid, $notice;
 
   interface ControllerInterface {
-    public static function ajaxSuccess();
-    public static function ajaxError($error);
+    /**
+     * Initialization includes:
+     * 1) Rendering the buffer if it exists.
+     */
+    public static function init();
+
+    /**
+     * Used to set which meta tags to display in htmlheader.
+     */
+    public static function displayMetatags($type);
   }
 
   class Controller implements ControllerInterface {
-    public static $renderQueue = array();
+    public static function init() {
+      if (isset($_SESSION['view'])) {
+        echo $_SESSION['view'];
+        unset($_SESSION['view']);
+        die();
+      }
+    }
 
-    public static function ajaxSuccess() {
+    public static function displayMetatags($type) {
+      self::$metatagType = $type;
+    }
+
+    protected static function ajaxSuccess() {
       echo toJSON(['error' => null]);
       return true;
     }
 
-    public static function ajaxError(
+    protected static function ajaxError(
       $error = 'ajaxError() called. This should not parse.') {
       echo $error;
       return false;
@@ -33,17 +51,11 @@
       return new MongoId($restOfRoute[0]);
     }
 
-    /**
-     * Initialization includes:
-     * 1) Rendering the buffer if it exists.
-     */
-    function init() {
-      if (isset($_SESSION['view'])) {
-        echo $_SESSION['view'];
-        unset($_SESSION['view']);
-        die();
-      }
-    }
+    // Used to define which htmlheader meta tags to use.
+    private static $metatagType = null;
+
+    private static $renderQueue = array();
+
 
     function validate($test, &$var, $msg) {
       global $valid;
@@ -84,8 +96,10 @@
       if (count(self::$renderQueue) == 0) return;
 
       ob_start();
-  
-      global $viewVars; $viewVars = array();
+
+      global $viewVars;
+      $viewVars = ['_metatagType' => self::$metatagType];
+
       foreach (self::$renderQueue as $pair) {
         $vars = $pair[1];
         if ($vars === false) $vars = array();

@@ -130,7 +130,7 @@
       $data = array(
         'jobs' => $jobs
       );
-      $this->render('jobs/managejobs', $data);
+      self::render('jobs/managejobs', $data);
     }
 
     function add() {
@@ -145,11 +145,11 @@
       global $CCompany;
       if (!$CCompany->exists()) {
         $this->error('you must create a company profile first');
-        $this->render('notice'); return;
+        self::render('notice'); return;
       }
 
       if (!isset($_POST['add'])) {
-        $this->render('jobs/jobform', formData(array())); return;
+        self::render('jobs/jobform', formData(array())); return;
       }
 
       global $params, $MJob, $MRecruiter;
@@ -184,7 +184,7 @@
       }
 
       $this->error($err);
-      $this->render('jobs/jobform', formData($data));
+      self::render('jobs/jobform', formData($data));
     }
 
     function edit() { // FIX THIS ADD GET INFO LIKE DATA FROM VIEW AND STUFF
@@ -209,7 +209,7 @@
       // Code
       if ($this->isValid()) {
         if (!isset($_POST['edit'])) {
-          $this->render('jobs/jobform', formData(array_merge($this->data($entry), array('_id' => $id)))); return;
+          self::render('jobs/jobform', formData(array_merge($this->data($entry), array('_id' => $id)))); return;
         }
 
         $me = $MRecruiter->me();
@@ -222,13 +222,13 @@
           $data = array_merge($entry, $data);
           $id = $MJob->save($data);
           $this->success('job saved');
-          $this->render('jobs/jobform', formData(array_merge($data, array('_id' => $id))));
+          self::render('jobs/jobform', formData(array_merge($data, array('_id' => $id))));
           return;
         }
       }
 
       $this->error($err);
-      $this->render('jobs/jobform', formData($data, array_merge($data, array('_id' => $id))));
+      self::render('jobs/jobform', formData($data, array_merge($data, array('_id' => $id))));
     }
 
     function view() {
@@ -273,12 +273,13 @@
         $data['recruitername'] = $r['firstname'] . ' ' . $r['lastname'];
         $data['recruiterid'] = $r['_id']->{'$id'};
 
-        $this->render('jobs/viewjob', $data);
+        self::displayMetatags('job');
+        self::render('jobs/viewjob', $data);
         return;
       }
 
       $this->error($err);
-      $this->render('notice');
+      self::render('notice');
     }
 
 
@@ -360,8 +361,8 @@
         $res = $MJob->last($_SESSION['showMoreJobs']);
         $jobs = process($res);
 
-        $this->render('jobs/search/form', $this->dataSearchSetup());
-        $this->render('jobs/search/results', array('jobs' => $jobs, 'recent' => true, 'search' => 'jobs', 'showMore' => $showMore));
+        self::render('jobs/search/form', $this->dataSearchSetup());
+        self::render('jobs/search/results', array('jobs' => $jobs, 'recent' => true, 'search' => 'jobs', 'showMore' => $showMore));
         return;
       }
 
@@ -411,8 +412,8 @@
         $res = $MJob->find($query);
         $jobs = process($res);
 
-        if ($showSearch) $this->render('jobs/search/form', $data);
-        $this->render('jobs/search/results', array('jobs' => $jobs, 'showCompany' => $showCompany, 'search' => 'jobs'));
+        if ($showSearch) self::render('jobs/search/form', $data);
+        self::render('jobs/search/results', array('jobs' => $jobs, 'showCompany' => $showCompany, 'search' => 'jobs'));
 
         // Send email notification of search to us
         // $this->sendrequestreport("Search for jobs:", $jobs);
@@ -425,7 +426,7 @@
       }
 
       $this->error($err);
-      $this->render('jobs/search/form', array_merge($data, array('search' => 'jobs')));
+      self::render('jobs/search/form', array_merge($data, array('search' => 'jobs')));
     }
   }
 

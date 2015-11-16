@@ -66,7 +66,7 @@
       $data = array(
         'sublets' => $MSublet->getByStudent($_SESSION['_id'])
       );
-      $this->render('student/sublets/manage', $data);
+      self::render('student/sublets/manage', $data);
     }
 
     function formDataCommon($data) {
@@ -85,7 +85,7 @@
       global $CStudent; $CStudent->requireLogin();
 
       if (!isset($_POST['add'])) {
-        $this->render('student/sublets/subletform', formData(array())); return;
+        self::render('student/sublets/subletform', formData(array())); return;
       }
 
       global $params, $MSublet, $MStudent;
@@ -111,8 +111,8 @@
         return;
       }
 
-      $this->error($err);
-      $this->render('student/sublets/subletform', formData($this->formDataCommon($data)));
+      self::error($err);
+      self::render('student/sublets/subletform', formData($this->formDataCommon($data)));
     }
 
     function edit() {
@@ -137,7 +137,7 @@
       // Code
       if ($this->isValid()) {
         if (!isset($_POST['edit'])) {
-          $this->render('student/sublets/subletform', formData(
+          self::render('student/sublets/subletform', formData(
             array_merge(
               $this->formDataCommon($this->data($entry)),
               array('_id' => $id)
@@ -157,13 +157,13 @@
           $data = array_merge($entry, $data);
           $id = $MSublet->save($data);
           $this->success('sublet saved');
-          $this->render('student/sublets/subletform', formData(array_merge($this->formDataCommon($data), array('_id' => $id))));
+          self::render('student/sublets/subletform', formData(array_merge($this->formDataCommon($data), array('_id' => $id))));
           return;
         }
       }
 
-      $this->error($err);
-      $this->render('student/sublets/subletform', formData($data, array_merge($this->formDataCommon($data), array('_id' => $id))));
+      self::error($err);
+      self::render('student/sublets/subletform', formData($data, array_merge($this->formDataCommon($data), array('_id' => $id))));
     }
 
     function view() {
@@ -222,8 +222,8 @@
         if ($s == NULL) {
           $entry['publish'] = false;
           $MSublet->save($entry);
-          $this->error('this listing is no longer available');
-          $this->render('notice');
+          self::error('this listing is no longer available');
+          self::render('notice');
           return;
         }
 
@@ -272,12 +272,13 @@
           );
         }
 
-        $this->render('student/sublets/viewsublet', $data);
+        self::displayMetatags('sublet');
+        self::render('student/sublets/viewsublet', $data);
         return;
       }
 
-      $this->error($err);
-      $this->render('notice');
+      self::error($err);
+      self::render('notice');
     }
 
     function dataSearchSetup() {
@@ -408,8 +409,13 @@
           $sublets[] = processRaw($sublet);
         }
 
-        $this->render('student/sublets/search/start', $this->dataSearchSetup());
-        $this->render('student/sublets/search/results', array('sublets' => $sublets, 'recent' => true, 'search' => 'housing', 'showMore' => $showMore));
+        self::render('student/sublets/search/start', $this->dataSearchSetup());
+        self::render('student/sublets/search/results', [
+          'sublets' => $sublets,
+          'recent' => true,
+          'search' => 'housing',
+          'showMore' => $showMore
+        ]);
         return;
       }
 
@@ -492,12 +498,12 @@
 
             $delay = round((microtime(true) - $starttime) * 1000, 0);
 
-            $this->render('student/sublets/search/results', array(
+            self::render('student/sublets/search/results', [
               'sublets' => $sublets, 'delay' => $delay,
               'latitude' => $latitude, 'longitude' => $longitude,
               'maxProximity' => $maxProximity, 'showSearch' => $showSearch,
               'data' => $data, 'search' => 'housing'
-            ));
+            ]);
 
             // Send email notification of search to us
             // $this->sendrequestreport("Search for sublets:", $sublets);
@@ -511,8 +517,11 @@
         }
       }
 
-      $this->error($err);
-      $this->render('partials/subletsearchform', array_merge($data, array('search' => 'housing')));
+      self::error($err);
+      self::render('partials/subletsearchform', [
+        'data' => $data,
+        'search' => 'housing'
+      ]);
     }
   }
 

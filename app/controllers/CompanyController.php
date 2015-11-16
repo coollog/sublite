@@ -97,7 +97,7 @@
 
       $me = $MRecruiter->me();
       if (!isset($_POST['add'])) {
-        $this->render('companies/form', formData(array(
+        self::render('companies/form', formData(array(
           'name' => $me['company']))); return;
       }
       // Params to vars
@@ -126,8 +126,8 @@
         return;
       }
 
-      $this->error($err);
-      $this->render('companies/form', formData($data));
+      self::error($err);
+      self::render('companies/form', formData($data));
     }
 
     function edit() { // FIX THIS ADD GET INFO LIKE DATA FROM VIEW AND STUFF
@@ -154,7 +154,7 @@
         }
 
         if (!isset($_POST['edit'])) {
-          $this->render('companies/form', formData(array_merge($this->data($entry), array('_id' => $id->{'$id'})))); return;
+          self::render('companies/form', formData(array_merge($this->data($entry), array('_id' => $id->{'$id'})))); return;
         }
 
         $params['name'] = $entry['name'];
@@ -166,16 +166,16 @@
           $data['_id'] = new MongoId($id);
           $MCompany->save($data);
           $this->success('company saved');
-          $this->render('companies/form', formData(array_merge($data, array('_id' => $id->{'$id'}))));
+          self::render('companies/form', formData(array_merge($data, array('_id' => $id->{'$id'}))));
           return;
         }
 
-        $this->error($err);
-        $this->render('companies/form', formData(array_merge($this->data($data), array('_id' => $id->{'$id'})))); return;
+        self::error($err);
+        self::render('companies/form', formData(array_merge($this->data($data), array('_id' => $id->{'$id'})))); return;
       }
 
-      $this->error($err);
-      $this->render('notice');
+      self::error($err);
+      self::render('notice');
     }
 
     function view() {
@@ -195,12 +195,13 @@
 
         $data['isme'] = !is_null($me) ? idcmp($id, $me['company']) : false;
 
-        $this->render('companies/viewcompany', $data);
+        self::displayMetatags('companyprofile');
+        self::render('companies/viewcompany', $data);
         return;
       }
 
-      $this->error($err);
-      $this->render('notice');
+      self::error($err);
+      self::render('notice');
     }
 
     function exists() {

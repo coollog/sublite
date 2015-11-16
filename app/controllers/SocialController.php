@@ -42,7 +42,8 @@
           }
 
           $this->success($successMsg);
-          $this->render('social/index', array('hubs' => true, 'signedup' => true));
+          self::displayMetatags('hubs');
+          self::render('social/index', array('hubs' => true, 'signedup' => true));
           return;
         }
 
@@ -59,7 +60,8 @@
         $vdata['myhub'] = $me['hubs']['myhub'];
       }
 
-      $this->render('social/index', $vdata);
+      self::displayMetatags('hubs');
+      self::render('social/index', $vdata);
     }
 
     function hub() {
@@ -68,12 +70,13 @@
 
       $hubid = $_GET['id'];
 
-      $this->render('social/hub', array(
+      self::displayMetatags('hubs');
+      self::render('social/hub', array(
         'hub' => $hubid
       ));
     }
     function admin() {
-      $this->render('social/admin');
+      self::render('social/admin');
     }
 
     function checkIsSet($message, $fields, &$var) {

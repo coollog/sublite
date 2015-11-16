@@ -19,100 +19,131 @@
     GLOBALvarGet('CStudent')->edit();
   });
   Router::register('employers/addcompany', function() {
+    Controller::displayMetatags('/employers');
     GLOBALvarGet('CCompany')->add();
   });
   Router::register('employers/addjob', function() {
+    Controller::displayMetatags('/employers');
     GLOBALvarGet('CJob')->add();
   });
   Router::register('employers/approve', function() {
+    Controller::displayMetatags('/employers');
     GLOBALvarGet('CRecruiter')->approve();
   });
   Router::register('employers/buycredits', function() {
+    Controller::displayMetatags('/employers');
     PaymentControllerAJAX::buyCredits();
   });
   Router::register('employers/addcard', function() {
+    Controller::displayMetatags('/employers');
     PaymentControllerAJAX::addPaymentInfo();
   });
   Router::register('employers/removecard', function() {
+    Controller::displayMetatags('/employers');
     PaymentControllerAJAX::removePaymentInfo();
   });
   Router::register('employers/changepass', function() {
+    Controller::displayMetatags('/employers');
     GLOBALvarGet('CRecruiter')->changePass();
   });
   Router::register('employers/company', function() {
+    Controller::displayMetatags('/employers');
     GLOBALvarGet('CCompany')->view();
   });
   Router::register('employers/createcustom', function () {
+    Controller::displayMetatags('/employers');
     echo ApplicationControllerAJAX::createCustom();
   });
   Router::register('employers/deletecustom', function () {
+    Controller::displayMetatags('/employers');
     echo ApplicationControllerAJAX::deleteCustom();
   });
   Router::register('employers/searchcustom', function () {
+    Controller::displayMetatags('/employers');
     echo ApplicationControllerAJAX::searchCustom();
   });
   Router::register('employers/editapplication', function (array $restOfRoute) {
+    Controller::displayMetatags('/employers');
     ApplicationController::edit($restOfRoute);
   });
   Router::register('employers/editcompany', function() {
+    Controller::displayMetatags('/employers');
     GLOBALvarGet('CCompany')->edit();
   });
   Router::register('employers/editjob', function() {
+    Controller::displayMetatags('/employers');
     GLOBALvarGet('CJob')->edit();
   });
   Router::register('employers/editprofile', function() {
+    Controller::displayMetatags('/employers');
     GLOBALvarGet('CRecruiter')->edit();
   });
   Router::register('employers/forgotpass', function() {
+    Controller::displayMetatags('/employers');
     GLOBALvarGet('CRecruiter')->forgotPass();
   });
   Router::register('employers/home', function() {
+    Controller::displayMetatags('/employers');
     GLOBALvarGet('CRecruiter')->home();
     GLOBALvarGet('CJob')->manage();
   });
   Router::register('employers/index', function() {
+    Controller::displayMetatags('/employers');
     GLOBALvarGet('CRecruiter')->index();
   });
   Router::register('employers/login', function() {
+    Controller::displayMetatags('/employers');
     GLOBALvarGet('CRecruiter')->login();
   });
   Router::register('employers/loginregister', function() {
+    Controller::displayMetatags('/employers');
     GLOBALvarGet('CRecruiter')->register();
     GLOBALvarGet('CRecruiter')->login();
   });
   Router::register('employers/logout', function() {
+    Controller::displayMetatags('/employers');
     GLOBALvarGet('CRecruiter')->logout();
   });
   Router::register('employers/profile', function() {
+    Controller::displayMetatags('/employers');
     // PROB THINK OF ANOTHER WAY OF REFACTORING THE FOLLOWING CODE
     if (isset($_SESSION['email'])) echo 'yay!';
     else echo 'nay...';
   });
   Router::register('employers/recruiter', function() {
+    Controller::displayMetatags('/employers');
     GLOBALvarGet('CRecruiter')->view();
   });
   Router::register('employers/register', function() {
+    Controller::displayMetatags('/employers');
     GLOBALvarGet('CRecruiter')->register();
   });
   Router::register('employers/S3', function() {
+    Controller::displayMetatags('/employers');
     GLOBALvarGet('CS3')->upload();
   });
   Router::register('employers/viewapplicants', function (array $restOfRoute) {
+    Controller::displayMetatags('/employers');
     ApplicationController::applicants($restOfRoute);
   });
   Router::register('employers/viewapplicants/tabunclaimed', function() {
+    Controller::displayMetatags('/employers');
     ApplicationControllerAJAX::applicantsTabUnclaimed();
   });
   Router::register('employers/viewapplicants/tabclaimed', function() {
+    Controller::displayMetatags('/employers');
     ApplicationControllerAJAX::applicantsTabClaimed();
   });
   Router::register('employers/viewapplicants/tabcredits', function() {
+    Controller::displayMetatags('/employers');
     ApplicationControllerAJAX::applicantsTabCredits();
   });
   Router::register('employers/viewapplicants/moveapplications', function() {
+    Controller::displayMetatags('/employers');
     ApplicationControllerAJAX::moveApplications();
   });
   Router::register('employers/viewapplicants/claimapplications', function() {
+    Controller::displayMetatags('/employers');
     ApplicationControllerAJAX::claimApplications();
   });
   Router::register('faq', function() {
@@ -143,6 +174,7 @@
     GLOBALvarGet('CSublet')->edit();
   });
   Router::register('housing/search', function() {
+    Controller::displayMetatags('searchhousing');
     GLOBALvarGet('CSublet')->search();
   });
   Router::register('housing/sublet', function() {
@@ -191,6 +223,7 @@
     GLOBALvarGet('CRecruiter')->view();
   });
   Router::register('jobs/search', function() {
+    Controller::displayMetatags('searchjobs');
     GLOBALvarGet('CJob')->search();
   });
   Router::register('jobs/company', function() {

@@ -8,6 +8,7 @@
                                   $params = null,
                                   $newTab = false);
     public static function partial($page, $vars = false);
+    public static function vars();
   }
 
   // Implement this and have the functions below as class methods.
@@ -29,6 +30,10 @@
     }
     public static function partial($page, $vars = false) {
       vpartial($page, $vars);
+    }
+    public static function vars() {
+      global $viewVars;
+      return $viewVars;
     }
   }
 
