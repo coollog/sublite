@@ -1,4 +1,8 @@
 <style>
+  img {
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
   .company {
     margin: 40px 0;
     text-align: left;
@@ -84,7 +88,7 @@
           <td class="brief">
             <div class="info">
               <div class="companylogo"></div>
-              <?php 
+              <?php
                 // $industries = vget('industry');
                 // $last = $industries[count($industries) - 1];
                 // foreach ($industries as $industry) {
@@ -95,7 +99,7 @@
               ?><br />
               <?php vecho('size'); ?><br />
               Founded in <?php vecho('founded'); ?><br />
-              <?php 
+              <?php
                 // $locations = vget('location');
                 // $last = $locations[count($locations) - 1];
                 // foreach ($locations as $location) {
@@ -112,9 +116,18 @@
         </tr>
         <tr>
           <?php
-            global $pointer, $cols;
+            global $pointer, $cols, $photos;
             $pointer = 0;
+            $photos = vget('photos');
             $cols = array(array(), array(), array());
+            function insertPhoto($index, $col, $pos) {
+              global $cols, $photos;
+              if ($index >= sizeof($photos)) return;
+              if ($pos >= sizeof($cols[$col])) return;
+              $url = $photos[$index];
+              $html = "<img src=\"$url\">";
+              array_splice($cols[$col], $pos, 0, $html);
+            }
             function blurb($name, $title, $color) {
               global $pointer, $cols;
               if (strlen($val = vget($name)) > 0) {
@@ -141,6 +154,12 @@
             blurb('dresscode', 'Dress Code', 'pink');
             blurb('freeanswer1', vget('freequestion1'), 'orange');
             blurb('freeanswer2', vget('freequestion2'), 'blue');
+
+            // TODO: Make more asthetically pleasing
+            insertPhoto(0, 0, 3);
+            insertPhoto(1, 1, 2);
+            insertPhoto(2, 2, 1);
+
           ?>
           <td class="col">
             <?php foreach ($cols[0] as $blurb) { echo $blurb; } ?>
