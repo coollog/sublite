@@ -135,8 +135,11 @@
       die();
     }
     function refresh($view) {
+      if (isFacebookBot()) {
+        echo $view;
+        return;
+      }
       header('refresh: 0');
-      echo $view;
       die();
     }
 
