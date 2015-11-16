@@ -108,7 +108,7 @@
         <button class="numdays" onclick="return updateDiv(2, 5, 30);">30</button>
         <button class="numdays" onclick="return updateDiv(3, 5, 90);">90</button>
         <button class="numdays" onclick="return updateDiv(4, 5, 180);">180</button>
-        <button class="numdays" onclick="return updateDiv(5, 5, \"Forever\");">Forever</button>
+        <button class="numdays" onclick="return updateDiv(5, 5, &quot;Forever&quot;);">Forever</button>
       </center>
 
       <div id="showHideDiv1">

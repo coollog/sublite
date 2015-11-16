@@ -261,6 +261,12 @@
   ];
 
   $(function () {
+
+    function hideMemberBox() {
+      $(".memberbox").slideUp("slow");
+      $(".picBox .overlay").css("opacity", "");
+    }
+
     (function setupMembers() {
       teamHTML = '';
 
@@ -316,10 +322,16 @@
       //Have to make another function to avoid closure
       function createClickForBox(i) {
         $("#picBox"+i).click(function(){
-          $(".memberbox").slideUp("slow");
-          $('#box'+i).slideDown("slow");
-          $('.picBox .overlay').css("opacity","");
-          $('#picBox'+i+' .overlay').css("opacity","1");
+          if (this.getAttribute("current") == "current") {
+            hideMemberBox();
+          } else {
+            this.setAttribute("current","current");
+            $(".memberbox").slideUp("slow");
+            $('#box'+i).slideDown("slow");
+            $('.picBox .overlay').css("opacity","");
+            $('#picBox'+i+' .overlay').css("opacity","1");
+          }
+          
         });
       }
 
@@ -331,8 +343,7 @@
       }
 
       $(".exit").click(function(){
-        $(".memberbox").slideUp("slow");
-        $(".picBox .overlay").css("opacity", "");
+        hideMemberBox();
       });
 
       //script from https://css-tricks.com/snippets/jquery/smooth-scrolling/
