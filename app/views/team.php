@@ -151,7 +151,7 @@
   </boxtemplate>
 </templates>
 
-<panel style="padding: 25px 0;">
+<panel style="padding: 20px 0;">
   <div class="clear content" id="team"></div>
 </panel>
 
@@ -331,7 +331,7 @@
             $('.picBox .overlay').css("opacity","");
             $('#picBox'+i+' .overlay').css("opacity","1");
           }
-          
+
         });
       }
 
