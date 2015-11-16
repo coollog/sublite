@@ -89,7 +89,7 @@
       Metatags::ogImageType('image/jpeg');
       Metatags::ogImageWidth($width);
       Metatags::ogImageHeight($height);
-      Metatags::description($desc);
+      Metatags::ogDescription($desc);
       Metatags::title("$name &ndash; Company profile on SubLite");
       break;
 
