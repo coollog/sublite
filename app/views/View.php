@@ -87,8 +87,13 @@
     else return null;
   }
   function vnotice() {
+    $bugLink = '<br/>
+      <small>
+        <a href="'.$GLOBALS['dirpre'].'../feedback">Found a bug?</a>
+      </small>';
+
     vecho('Success', "<div class=\"success\">{var}</div>");
-    vecho('Error', "<div class=\"error\">{var}</div>");
+    vecho('Error', "<div class=\"error\">{var}$bugLink</div>");
   }
   function vchecked($var, $val) {
     global $viewVars;
