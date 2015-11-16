@@ -119,7 +119,7 @@
       $_SESSION['view'] = $view;
 
       // Reloading the page will prevent duplicate requests upon refresh.
-      self::refresh();
+      self::refresh($view);
     }
     function redirectURL($url) {
       header("Location: $url");
@@ -134,8 +134,9 @@
       }
       die();
     }
-    function refresh() {
+    function refresh($view) {
       header('refresh: 0');
+      echo $view;
       die();
     }
 

@@ -194,4 +194,10 @@
     }
     return $arr;
   }
+
+  function isFacebookBot() {
+    return
+      strpos($_SERVER["HTTP_USER_AGENT"], "facebookexternalhit/") !== false ||
+      strpos($_SERVER["HTTP_USER_AGENT"], "Facebot") !== false;
+  }
 ?>
