@@ -13,6 +13,7 @@
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="SubLite" />
+    <meta property="fb:app_id" content="478408982286879"/>
 
     <link rel="shortcut icon" type="image/png"
           href="data:<?php echo $GLOBALS['dirpre']; ?>assets/gfx/favicon.png" />
