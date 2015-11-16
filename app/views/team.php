@@ -305,7 +305,6 @@
         box.style.backgroundSize = "160px 160px";
       });
 
-
       $('#team img.memberimage').each(function (elem) {
         var src = $(this).attr('photo');
         $(this).attr('src', src);
