@@ -79,6 +79,7 @@
     array("Manage", $path."employers/home", "recruiter hascompany"),
     array("Messages", $path."employers/messages", "recruiter hascompany"),
     array("Add Company Profile", $path."employers/addcompany", "recruiter nocompany"),
+    // array("Edit Company Profile", $path."employers/editcompany", "recruiter hascompany"),
 
     array("Housing", $path."housing/search", "student"),
     array("Jobs", $path."jobs/search", "student"),

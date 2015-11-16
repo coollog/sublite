@@ -59,10 +59,11 @@
   }
   .blurb subheadline {
     text-transform: uppercase;
-    font-size: 2em;
-    margin-top: 0;
+    font-size: 3em;
+    margin-top: -0.3em;
     line-height: 1em;
-    margin-bottom: 0.5em;
+    margin-bottom: -0.3em;
+    font-family: BebasNeue;
   }
   .blurb.pink { border-color: #ff2a5c; }
   .blurb.pink subheadline { color: #ff2a5c; }
