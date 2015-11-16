@@ -151,7 +151,7 @@
   </boxtemplate>
 </templates>
 
-<panel>
+<panel style="padding: 25px 0;">
   <div class="clear content" id="team"></div>
 </panel>
 
@@ -163,7 +163,7 @@
 
     <a id="boxes" href="#team"></a>
 
-    <a href="jobs/job?id=561576fcd83594905f7eb765">
+    <a href="jobs/job?id=55945194d83594ea38f21b6b">
       <div class="picBox" id="join">
         <i class="fa fa-plus"></i>
         <p>JOIN US NOW!</p>
