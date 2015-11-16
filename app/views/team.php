@@ -324,6 +324,7 @@
         $("#picBox"+i).click(function(){
           if (this.getAttribute("current") == "current") {
             hideMemberBox();
+            this.setAttribute("current","");
           } else {
             this.setAttribute("current","current");
             $(".memberbox").slideUp("slow");
