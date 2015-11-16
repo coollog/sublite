@@ -130,6 +130,8 @@
       break;
 
     default:
+      Metatags::title(
+        "SubLite &ndash; Your One-Stop Shop for a Great Summer!");
       Metatags::ogTitle(
         "SubLite &ndash; Your One-Stop Shop for a Great Summer!");
       Metatags::ogImage("https://sublite.net/app/assets/gfx/studentmain.jpg");
