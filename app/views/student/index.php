@@ -62,7 +62,6 @@
     margin-top: 0.5em;
     color: #ffd800;
   }
-
   panel.stats {
     padding: 20px 0;
     background: #000;
@@ -171,92 +170,56 @@
     text-transform: uppercase;
     font-weight: bold;
   }
-
   panel.how {
-    background: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/how.jpg') no-repeat center center;
+    background: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/castle.jpg') no-repeat center 80%;
     background-size: cover;
     background-attachment: fixed;
     min-height: 300px;
+    padding: 0;
   }
-  panel.how .headline {
+  panel.how > div:first-of-type {
+    background: rgba(88, 151, 172, 0.6);
+    padding-top: 50px;
+  }
+  panel.how .steps {
     color: #ffd800;
   }
   panel.how .steps {
     width: 100%;
-    border-spacing: 10px;
-    border-collapse: separate;
+    border-spacing: 30px;
+    position: relative;
   }
   panel.how .step {
-    background: #fff;
-    -webkit-transform: skew(10deg);
-     -moz-transform: skew(10deg);
-       -o-transform: skew(10deg);
-    height: 3em;
+    display: inline-block;
+    width: 20%;
+    min-width: 160px;
+    margin: 0 30px 50px 0;
+  }
+  panel.how .howimg {
+    padding: 40px 0;
+    background: #eed033;
+    width: 100%;
+  }
+  panel.how .howimg img{
+    height: 8em;
+  }
+  panel.how .howtxt {
     padding: 10px;
-    cursor: pointer;
-    font-weight: 700;
-    width: 16%;
+    background: #fdfbe9;
+    font-weight: bold;
+    color:black;
   }
-  panel.how .step table {
-    -webkit-transform: skew(-10deg);
-     -moz-transform: skew(-10deg);
-       -o-transform: skew(-10deg);
+  panel.how #join {
+    padding: 50px;
   }
-  panel.how .step.active {
-    background: #ffd800;
-  }
-  panel.how .step.active .bignum {
-    color: #035d75;
-  }
-  panel.how .bignum {
-    font-size: 2em;
-    color: #ffd800;
-  }
-  panel.how .steptext {
-    text-align: left;
-    padding-left: 10px;
-  }
-  panel.how .desc {
-    text-align: left;
-    background: rgba(255, 216, 0, 0.8);
-    padding: 20px 40px;
-    display: none;
-    font-size: 1em;
+  panel.how #join headline{
+    color:white;
   }
 </style>
 
 <script>
   $(function() {
-    function getStep(q) {
-      return parseInt($(q).find('.bignum').html());
-    }
-    var step = null;
-    $('panel.how .step').hover(function() {
-      $(this).addClass('active');
-    }, function() {
-      if (step != getStep(this)) {
-        $(this).removeClass('active');
-      }
-    }).click(function() {
-      scrollTo(this);
-      if (step == getStep(this)) {
-        $(this).removeClass('active');
-        step = null;
-        $('.desc').slideUp(200, 'easeInOutCubic');
-      } else {
-        $('panel.how .step').removeClass('active');
-        $(this).addClass('active');
-        step = getStep(this);
-        $('.desc').each(function() {
-          if ($(this).attr('num') == step)
-            $(this).slideDown(200, 'easeInOutCubic');
-          else
-            $(this).slideUp(200, 'easeInOutCubic');
-        });
-      }
-    }).hover(function() {
-      if (step == null) $(this).click();
-    }, function() {});
+    
 
     $('.arrow-down').click(function() {
       scrollTo('panel.why');
@@ -268,9 +231,9 @@
   <div class="cell">
     <div class="banner">
       <div class="content">
-        <div class="tagline">One-Stop Shop for Internships and Housing!</div>
+        <div class="tagline">MORE INTERNSHIPS, MORE HOUSING<br>AND LESS HASSLE</div>
         <div class="slogan">
-          Find reliable housing, cool internships, and meet other university students in your area with SubLite!
+          Maximize your next summer experience with your one-stop shop for internships and housing.
           <div style="font-size: 0.7em;"><br />Verify your ".edu" email address to get started! It's completely free!</div>
         </div>
         <a href="register.php<?php if (!is_null($r = vget('r'))) echo "?r=$r"; ?>">
@@ -303,21 +266,21 @@
     <table class="whys"><tr>
       <td class="whycell"><incell>
         <div class="whyimg whyimg1">
-          <div class="whyroll"><div class="cell">Sublet from other students and connect directly with recruiters.</div></div>
+          <div class="whyroll"><div class="cell">Lease and sublet verified housing with other college students.</div></div>
         </div>
-        <div class="whytext">Verified housing and job listings</div>
+        <div class="whytext">Verified Peer-to-Peer Housting Network</div>
       </incell></td>
       <td class="whycell"><incell>
         <div class="whyimg whyimg2">
-          <div class="whyroll"><div class="cell">Meet up with other students working in your area and get all your questions answered in our hub-based forums.</div></div>
+          <div class="whyroll"><div class="cell">Find and be matched to companies and start-ups across the country.</div></div>
         </div>
-        <div class="whytext">Connect with Other Students</div>
+        <div class="whytext">Internship and Full-Time Job Opportunities</div>
       </incell></td>
       <td class="whycell"><incell>
         <div class="whyimg whyimg3">
-          <div class="whyroll"><div class="cell">Only students with university .edu emails can register for an account.</div></div>
+          <div class="whyroll"><div class="cell">Have your profile available to many companies</div></div>
         </div>
-        <div class="whytext">Exclusively for students</div>
+        <div class="whytext">Streamlined Job Application Process</div>
       </incell></td>
     </tr></table>
     <iframe src="https://www.youtube.com/embed/LY_JB8zc0lk" scrolling="no" allowTransparency="true" frameborder="0" style="max-width: 900px; max-height: 400px; height: 400px; margin-top: 50px;"></iframe>
@@ -334,39 +297,49 @@
   </div>
 </panel>
 <panel class="how">
-  <div class="content">
-    <headline style="color: #ffd800">How It Works</headline>
-    <table class="steps"><tr>
-      <td class="step"><table><tr>
-        <td class="bignum">1</td>
-        <td class="steptext">Register</td>
-      </tr></table></td>
-      <td class="step"><table><tr>
-        <td class="bignum">2</td>
-        <td class="steptext">Search for Internships</td>
-      </tr></table></td>
-      <td class="step"><table><tr>
-        <td class="bignum">3</td>
-        <td class="steptext">Contact Recruiters</td>
-      </tr></table></td>
-      <td class="step"><table><tr>
-        <td class="bignum">4</td>
-        <td class="steptext">Secure Internship</td>
-      </tr></table></td>
-      <td class="step"><table><tr>
-        <td class="bignum">5</td>
-        <td class="steptext">Sublet</td>
-      </tr></table></td>
-      <td class="step"><table><tr>
-        <td class="bignum">6</td>
-        <td class="steptext">Summer Success!</td>
-      </tr></table></td>
-    </tr></table>
-    <div class="desc" num="1">Use your .edu email address to create a SubLite profile. Connect exclusively with other university students.</div>
-    <div class="desc" num="2">Our enhanced listing portal allows you to search for jobs by geographic region, industry, dates, and more. Unlike plain listings, SubLite allows companies to highlight their culture &mdash; allowing you to make an informed decision based on criteria you care about.</div>
-    <div class="desc" num="3">Our internal messaging system allows you to contact recruiters directly.</div>
-    <div class="desc" num="4">Land that internship you want!</div>
-    <div class="desc" num="5">Now that you know your summer location, you may need to either find housing or sublet your apartment while away. Our platform gives you the peace of mind of subletting exclusively to students. Show off your place by highlighting its amenities and uploading photos. Negotiate directly with other students on the final terms &mdash; there is no fee!</div>
-    <div class="desc" num="6">With a job and housing secured, you are set for a stress-free summer!</div>
+  <div> <!-- tint wrapper -->
+    <div class="content" id="howitworks">
+      <headline style="color: #ffd800">How It Works</headline>
+      <div class="steps">
+        <div class="step">
+          <div class="howimg">
+            <img src="<?php echo $GLOBALS['dirpre']; ?>assets/gfx/community.png"/>
+          </div>
+          <div class="howtxt">
+            <center>Join the <br>SubLite Community</center>
+          </div>
+        </div>
+        <div class="step">
+          <div class="howimg">
+            <img src="<?php echo $GLOBALS['dirpre']; ?>assets/gfx/profile.png"/>
+          </div>
+          <div class="howtxt">
+            <center>Create Your <br>Profile</center>
+          </div>
+        </div>
+        <div class="step">
+          <div class="howimg">
+            <img src="<?php echo $GLOBALS['dirpre']; ?>assets/gfx/searchandapply.png"/>
+          </div>
+          <div class="howtxt">
+            <center>Search and <br>Apply</center>
+          </div>
+        </div>
+        <div class="step">
+          <div class="howimg">
+            <img src="<?php echo $GLOBALS['dirpre']; ?>assets/gfx/summersuccess.png"/>
+          </div>
+          <div class="howtxt">
+            <center>Summer <br>Success!</center>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="content" id="join">
+    <headline>JOIN OUR TEAM!</headline>
+    <a href="jobs/job?id=561576fcd83594905f7eb765">
+      <input type="button" class="registerlogin" value="Details" />
+    </a>
   </div>
 </panel>

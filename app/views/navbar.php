@@ -24,12 +24,7 @@
     line-height: 30px;
     height: 30px;
   }
-  navbar beta {
-    font-size: 1em;
-    color: #ADCC14;
-    vertical-align: bottom;
-    margin-left: 0.5em;
-  }
+  
   options.right {
     float: right;
   }
@@ -101,7 +96,7 @@
   );
 ?>
 <navbar class="blackbar">
-  <a href="/"><logo>SubLite</logo></a><beta>beta</beta>
+  <a href="/"><logo>SubLite</logo></a>
   <options class="right">
     <?php
       foreach ($menu as $opt) {
