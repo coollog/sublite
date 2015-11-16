@@ -173,6 +173,7 @@
           ];
         }
       } else {
+        JobModel::incrementApply($jobId);
         foreach ($application->getQuestions() as $questionId) {
           $answer = '';
           $answers = StudentModel::getAnswers($studentId);

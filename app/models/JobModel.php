@@ -113,7 +113,7 @@
     }
 
     function incrementApply($id) {
-      $entry = $this->get($id);
+      $entry = self::get($id);
       if($entry !== NULL) {
         ++$entry['stats']['clicks'];
         if(isset($_SESSION['loggedinstudent'])) {
@@ -122,7 +122,7 @@
         else {
           $entry['applicants'][] = array('', new MongoDate());
         }
-        $this->save($entry, false);
+        self::save($entry, false);
         return $entry['stats']['clicks'];
       }
       else {
