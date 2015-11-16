@@ -130,7 +130,8 @@
     </a>
     <fade class="div gaptop nohover">
       <i>
-        You will receive 1 free <i>Credit</i> <a href="">(?)</a>
+        You will receive 1 free <i>Credit</i>
+        <a href="<?php echo $GLOBALS['dirpre']; ?>../faq#recruiters">(?)</a>
         for every job you list!
       </i>
     </fade>
