@@ -1,7 +1,7 @@
 <?php
-  require_once($GLOBALS['dirpre'].'models/Model.php');
-
   interface RecruiterModelInterface {
+    public function __construct();
+
     public static function getCredits(MongoId $recruiterId);
     public static function setCredits(MongoId $recruiterId, $count);
     public static function addCredits(MongoId $recruiterId, $count);
@@ -27,6 +27,17 @@
      * Gets just the 'email', 'firstname', 'lastname'.
      */
     public static function getByIdMinimal(MongoId $recruiterId);
+
+    public static function save(array $data);
+    public static function login($email, $pass);
+    public static function getByEmail($email);
+    public static function getByPass($pass);
+    public static function getCompany(MongoId $recruiterId);
+    public static function getName(MongoId $recruiterId);
+    public static function getEmail(MongoId $recruiterId);
+    public static function getPhoto(MongoId $recruiterId);
+    public static function me();
+    public static function emailExists($email);
   }
 
   class RecruiterModel extends Model implements RecruiterModelInterface {
@@ -34,6 +45,14 @@
 
     const CREDITS_FOR_COMPANYPROFILE = 2;
     const CREDITS_FOR_JOB            = 1;
+
+    public function __construct() {
+      parent::__construct(self::DB_TYPE, 'recruiters');
+
+      // Create necessary indices.
+      mongo_ok(self::$collection->createIndex(['email' => 1]));
+      mongo_ok(self::$collection->createIndex(['pass' => 1]));
+    }
 
     public static function getCredits(MongoId $recruiterId) {
       $query = (new DBQuery(self::$collection))
@@ -96,61 +115,56 @@
       ]);
     }
 
-    function __construct() {
-      parent::__construct(self::DB_TYPE, 'recruiters');
-    }
-
-    function save($data) {
+    public static function save(array $data) {
       $data['msgs'] = array();
       self::$collection->save($data);
       return $data['_id']->{'$id'};
     }
 
-    function login($email, $pass) {
-      if (is_null($entry = $this->get($email))) return false;
-      return hash_equals($entry['pass'], crypt($pass, $entry['pass']));
+    public static function login($email, $pass) {
+      if (is_null($recruiter = self::getByEmail($email)))
+        return false;
+      return hash_equals($recruiter['pass'], crypt($pass, $recruiter['pass']));
     }
 
-    function get($email) {
-      return self::$collection->findOne(array('email' => $email));
+    public static function getByEmail($email) {
+      $query = (new DBQuery(self::$collection))->toQuery('email', $email);
+      return $query->findOne();
     }
-    function getByPass($pass) {
-      return self::$collection->findOne(array('pass' => $pass));
+    public static function getByPass($pass) {
+      $query = (new DBQuery(self::$collection))->toQuery('pass', $pass);
+      return $query->findOne();
     }
-    function getCompany($rid) {
-      $r = self::getByID($rid);
-      global $MCompany;
-      return $MCompany->get($r['company']);
+    public static function getCompany(MongoId $recruiterId) {
+      $recruiter = self::getById($recruiterId, ['company' => 1]);
+      return CompanyModel::getById($recruiter['company']);
     }
-    function getName($id) {
-      $entry = $this->getById(new MongoId($id));
-      return $entry['firstname'] . ' ' . $entry['lastname'];
+    public static function getName(MongoId $recruiterId) {
+      $recruiter = self::getById($recruiterId, [
+        'firstname' => 1,
+        'lastname' => 1
+      ]);
+      return "$recruiter[firstname] $recruiter[lastname]";
     }
-    function getEmail($id) {
-      $entry = $this->getById($id);
-      return $entry['email'];
+    public static function getEmail(MongoId $recruiterId) {
+      $recruiter = self::getById($recruiterId, ['email' => 1]);
+      return $recruiter['email'];
     }
-    function getPhoto($id) {
-      $entry = $this->getById(new MongoId($id));
-      return isset($entry['photo']) ? $entry['photo'] : null;
+    public static function getPhoto(MongoId $recruiterId) {
+      $recruiter = self::getById($recruiterId, ['photo' => 1]);
+      return isset($recruiter['photo']) ? $recruiter['photo'] : null;
     }
-    function me() {
+    public static function me() {
       if (!isset($_SESSION['email'])) return null;
-      return $this->get($_SESSION['email']);
-    }
-    function find($query=array()) {
-      return self::$collection->find($query);
+      return self::getByEmail($_SESSION['email']);
     }
 
-    function exists($email) {
-      return ($this->get($email) !== NULL);
-    }
-    function IDexists($id) {
-      return (self::$collection->findOne(array('_id' => new MongoId($id))) !== NULL);
+    public static function emailExists($email) {
+      return !is_null($this->getByEmail($email));
     }
 
     protected static $collection;
   }
 
-  GLOBALvarSet('MRecruiter', new RecruiterModel());
+  new RecruiterModel();
 ?>

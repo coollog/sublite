@@ -1,8 +1,7 @@
 <?php
-  require_once($GLOBALS['dirpre'].'models/Model.php');
-
   interface StudentModelInterface {
     public function __construct();
+
     public static function getAnswers(MongoId $studentId);
     public static function replaceAnswers(MongoId $studentId, array $answers);
     public static function getProfile(MongoId $studentId);
@@ -12,10 +11,30 @@
      * Retrieves just email, name, and school name.
      */
     public static function getByIdMinimal(MongoId $studentId);
+
+    public static function save(array $data);
+    public static function find(array $query);
+    public static function getByEmail($email);
+    public static function getAllwTime();
+    public static function getIdByEmail($email);
+    public static function getName(MongoId $studentId);
+    public static function getPhoto(MongoId $studentId);
+    public static function getEmail(MongoId $studentId);
+    public static function me();
+    public static function login($email, $pass);
+    public static function emailExists($email);
   }
 
   class StudentModel extends Model {
     const DB_TYPE = parent::DB_STUDENTS;
+
+    public function __construct() {
+      parent::__construct(self::DB_TYPE, 'emails');
+
+      // Create necessary indices.
+      mongo_ok(self::$collection->createIndex(['email' => 1]));
+      mongo_ok(self::$collection->createIndex(['time' => 1]));
+    }
 
     public static function getAnswers(MongoId $studentId) {
       $query = self::queryForId($studentId)->projectField('answers');
@@ -51,81 +70,74 @@
       return $student;
     }
 
-    public function __construct() {
-      parent::__construct(self::DB_TYPE, 'emails');
-    }
-
-    function save($data) {
+    public static function save(array $data) {
       self::$collection->save($data);
       return $data['_id']->{'$id'};
     }
 
-    function find($query) {
+    public static function find(array $query) {
       return self::$collection->find($query);
     }
-    function get($email) {
-      return self::$collection->findOne(array('email' => $email));
+    public static function getByEmail($email) {
+      $query = (new DBQuery(self::$collection))->toQuery('email', $email);
+      return $query->findOne();
     }
-    function getAllwTime() {
-      return self::$collection->find(array('time' => array('$exists' => true)));
+    public static function getAllwTime() {
+      $query = (new DBQuery(self::$collection))
+        ->toQuery('time', ['$exists' => true]);
+      return $query->run();
     }
-    public static function getById($id) {
-      $student = self::$collection->findOne(array('_id' => new MongoId($id)));
+    public static function getById(MongoId $studentId) {
+      $student = parent::getById($studentId);
+      if (Is_null($student)) return null;
       $student['photo'] = isset($student['photo']) ? $student['photo'] :
         $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
       return $student;
     }
-    function getID($email) {
-      if (is_null($entry = $this->get($email))) return $entry;
-      else return $entry['_id'];
+    public static function getIdByEmail($email) {
+      $student = self::getByEmail($email);
+      if (is_null($student)) return null;
+      return $student['_id'];
     }
-    function getName($id) {
-      $entry = self::getById($id);
-      return $entry['name'];
+    public static function getName(MongoId $studentId) {
+      $student = self::getById($studentId, ['name' => 1]);
+      return $student['name'];
     }
-    function getPhoto($id) {
-      $entry = $this->getById($id);
-      return isset($entry['photo']) ? $entry['photo'] :
+    public static function getPhoto(MongoId $studentId) {
+      $student = self::getById($studentId, ['photo' => 1]);
+      return isset($student['photo']) ? $student['photo'] :
         $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
     }
-    function getEmail($id) {
-      $entry = self::getById($id, ['email' => 1]);
-      return $entry['email'];
+    public static function getEmail(MongoId $studentId) {
+      $student = self::getById($studentId, ['email' => 1]);
+      return $student['email'];
     }
-    function last($n=1) {
-      return self::$collection->find()->sort(array('_id'=>-1))->limit($n);
-    }
-    function me() {
+    public static function me() {
       if (isset($_SESSION['loggedinstudent']))
-        return $this->get($_SESSION['email']);
-      else {
-        return array(
-          'email' => '',
-          'name' => '',
-          'gender' => ''
-        );
-      }
+        return self::getByEmail($_SESSION['email']);
 
+      return [
+        'email' => '',
+        'name' => '',
+        'gender' => ''
+      ];
     }
 
-    function login($email, $pass) {
-      if (is_null($entry = $this->get($email))) return false;
-      return $entry['pass'] == md5($pass);
+    public static function login($email, $pass) {
+      $student = self::getByEmail($email);
+      if (is_null($student)) return false;
+
+      return $student['pass'] == md5($pass);
     }
 
-    function delete($id) {
-
-    }
-
-    function exists($id) {
-      return (self::$collection->findOne(array('_id' => new MongoId($id))) !== NULL);
-    }
-    function existsEmail($email) {
-      return (self::$collection->findOne(array('email' => $email)) !== NULL);
+    public static function emailExists($email) {
+      $query = (new DBQuery(self::$collection))
+        ->toQuery('email', $email)->projectId();
+      return !is_null($query->findOne());
     }
 
     protected static $collection;
   }
 
-  GLOBALvarSet('MStudent', new StudentModel());
+  new StudentModel();
 ?>

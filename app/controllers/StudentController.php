@@ -111,8 +111,7 @@
 
     function home() {
       $this->requireLogin();
-      global $MStudent, $MSublet;
-      $me = $MStudent->me();
+      $me = StudentModel::me();
       $me['_id'] = $me['_id']->{'$id'};
 
       $photo = $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
@@ -191,7 +190,7 @@
 
       if (!isset($_POST['login'])) { $this->render('student/login'); return; }
 
-      global $params, $MStudent;
+      global $params;
       // Params to vars
       global $email;
       $email = clean($params['email']);
@@ -202,18 +201,18 @@
       $this->startValidations();
       $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL),
         $err, 'invalid email');
-      $this->validate(($entry = $MStudent->get($email)) != NULL,
+      $this->validate(($entry = StudentModel::getByEmail($email)) != NULL,
         $err, 'not registered');
 
       if ($this->isValid()) {
         if (!isset($entry['pass'])) {
           $confirm = $this->sendConfirm($email);
           $entry['confirm'] = $confirm;
-          $MStudent->save($entry);
+          StudentModel::save($entry);
 
           $err = "Your account has not been confirmed yet. A confirmation email has been sent to <strong>$email</strong>. Check your inbox or spam. The email may take up to 24 hours to show up.";
         } else {
-          $this->validate($MStudent->login($email, $pass),
+          $this->validate(StudentModel::login($email, $pass),
             $err, 'invalid credentials');
 
           if ($this->isValid()) {
@@ -241,7 +240,7 @@
 
       if (!isset($_POST['register'])) { $this->render('student/register'); return; }
 
-      global $params, $MStudent;
+      global $params;
       // Params to vars
       global $email;
       $email = clean($params['email']);
@@ -253,7 +252,7 @@
         $err, 'invalid email');
       global $S;
       $this->validate($S->verify($email), $err, 'email must be .edu');
-      $this->validate(($entry = $MStudent->get($email)) == NULL or !isset($entry['pass']),
+      $this->validate(($entry = StudentModel::getByEmail($email)) == NULL or !isset($entry['pass']),
         $err, 'email already in use, please log in instead');
 
       if ($this->isValid()) {
@@ -269,13 +268,13 @@
         $entry['stats'] = array('referrals' => array());
         $entry['time'] = time();
 
-        $id = $MStudent->save($entry);
+        $id = StudentModel::save($entry);
 
         // Handle referrals
-        if (isset($_GET['r']) and $MStudent->exists($r = $_GET['r'])) {
-          $referrer = $MStudent->getById($r);
+        if (isset($_GET['r']) && StudentModel::exists($r = $_GET['r'])) {
+          $referrer = StudentModel::getById($r);
           $referrer['stats']['referrals'][] = $id;
-          $MStudent->save($referrer);
+          StudentModel::save($referrer);
 
           $message = "
             <h1 style=\"padding: 0.5em 0; margin: 1em 0; background: #000; color: #ffd800; text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4); text-align: center;\">Thanks for referring your friend!</h1>
@@ -331,11 +330,10 @@
         $r = $_REQUEST['r'];
 
         // Remove emails that are registered
-        global $MStudent;
         $emails = array();
         for ($i = 0; $i < count($emailspre); $i ++) {
           $email = $emailspre[$i];
-          if (!$MStudent->existsEmail($email)) {
+          if (!StudentModel::emailExists($email)) {
             $emails[] = $email;
           }
         }
@@ -369,7 +367,7 @@
 
     function confirm() {
 
-      global $params, $MStudent;
+      global $params;
 
       // Validations
       $this->startValidations();
@@ -380,7 +378,7 @@
         $confirm = $_REQUEST['id'];
         $email = $_REQUEST['email'];
 
-        $this->validate(($entry = $MStudent->get($email)) != null,
+        $this->validate(($entry = StudentModel::getByEmail($email)) != null,
           $err, 'permission denied');
         $this->validate(isset($entry['confirm']) and $entry['confirm'] == $confirm and !isset($entry['pass']),
           $err, 'invalid confirmation code. your code may have expired. return to the registration page to re-enter your email for a new confirmation link.');
@@ -409,7 +407,7 @@
             $entry['gender'] = $gender;
             $entry['photo'] = $photo;
             $entry['bio'] = $bio;
-            $MStudent->save($entry);
+            StudentModel::save($entry);
 
             $params['email'] = $email;
             $_POST['login'] = true; $_GET['whereto'] = true;
@@ -430,8 +428,8 @@
     function edit() {
       $this->requireLogin();
 
-      global $params, $MStudent;
-      $me = $MStudent->me();
+      global $params;
+      $me = StudentModel::me();
 
       // Validations
       $this->startValidations();
@@ -446,7 +444,7 @@
 
       if ($this->isValid()) {
         $me = array_merge($me, $data);
-        $MStudent->save($me);
+        StudentModel::save($me);
 
         $this->success('profile saved');
         $this->render('student/form', $data);
@@ -465,13 +463,13 @@
       );
     }
     function changePass() {
-      global $params, $MStudent;
+      global $params;
 
       // Validations
       $this->startValidations();
       $this->validate(
           isset($_GET['id']) and isset($_GET['code']) and
-          ($entry = $MStudent->getByID($id = $_GET['id'])) != NULL and
+          ($entry = StudentModel::getById($id = $_GET['id'])) != NULL and
           $entry['pass'] == $_GET['code'],
         $err, 'permission denied');
 
@@ -484,7 +482,7 @@
 
         if ($this->isValid()) {
           $entry['pass'] = md5($pass);
-          $MStudent->save($entry);
+          StudentModel::save($entry);
 
           $params['email'] = $entry['email'];
           $_POST['login'] = true; $this->login();
@@ -508,7 +506,7 @@
       );
     }
     function forgotPass() {
-      global $params, $MStudent;
+      global $params;
 
       if (!isset($_POST['forgot'])) { $this->render('forgotpass'); return; }
 
@@ -516,7 +514,7 @@
 
       // Validations
       $this->startValidations();
-      $this->validate(($entry = $MStudent->get($email)) != NULL,
+      $this->validate(($entry = StudentModel::getByEmail($email)) != NULL,
         $err, 'no account found');
       $this->validate(isset($entry['pass']),
         $err, 'account has not been confirmed yet. to resend a confirmation email, <a href="register.php">register</a> your email address again.');
@@ -558,12 +556,12 @@
     function view() {
       // $this->requireLogin();
 
-      // global $params, $MStudent, $MCompany, $MJob;
+      // global $params, $MCompany, $MJob;
 
       // // Validations
       // $this->startValidations();
       // $this->validate(isset($_GET['id']) and
-      //   ($entry = $MStudent->getByID($id = $_GET['id'])) != NULL,
+      //   ($entry = StudentModel::getById($id = $_GET['id'])) != NULL,
       //   $err, 'unknown Student');
 
       // // Code
@@ -594,14 +592,13 @@
     }
     function requireLogin() {
       if (self::loggedIn()) {
-        global $MStudent;
         // Params to vars
         $email = $_SESSION['email'];
         $pass = $_SESSION['pass'];
 
         // Validations
         self::startValidations();
-        self::validate(($entry = $MStudent->get($email)) != NULL,
+        self::validate(($entry = StudentModel::getByEmail($email)) != NULL,
           $err, 'unknown email');
         self::validate($entry['pass'] == md5($pass),
           $err, 'invalid password');

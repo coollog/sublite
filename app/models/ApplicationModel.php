@@ -94,17 +94,17 @@
       parent::__construct(self::DB_TYPE, 'applications');
 
       // Create necessary indices.
-      mongo_ok(self::$collection->createIndex(array('jobid' => 1)));
-      mongo_ok(self::$collection->createIndex(array('jobid' => 1,
-                                                    'submitted' => 1)));
-      mongo_ok(self::$collection->createIndex(array('jobid' => 1,
-                                                    'status' => 1)));
-      mongo_ok(self::$collection->createIndex(array('jobid' => 1,
+      mongo_ok(self::$collection->createIndex(['jobid' => 1]));
+      mongo_ok(self::$collection->createIndex(['jobid' => 1,
+                                                    'submitted' => 1]));
+      mongo_ok(self::$collection->createIndex(['jobid' => 1,
+                                                    'status' => 1]));
+      mongo_ok(self::$collection->createIndex(['jobid' => 1,
                                                     'status' => 1,
-                                                    'submitted' => 1)));
-      mongo_ok(self::$collection->createIndex(array('jobid' => 1,
-                                                    'studentid' => 1)));
-      mongo_ok(self::$collection->createIndex(array('studentid' => 1)));
+                                                    'submitted' => 1]));
+      mongo_ok(self::$collection->createIndex(['jobid' => 1,
+                                                    'studentid' => 1]));
+      mongo_ok(self::$collection->createIndex(['studentid' => 1]));
     }
 
     public static function submitWithStudentProfile(

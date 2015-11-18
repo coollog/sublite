@@ -14,9 +14,7 @@
   // - change amenity to amenities
   // - add stats
 
-  global $MSublet;
-
-  $sublets = $MSublet->getAll();
+  $sublets = SubletModel::getAll();
 
   foreach ($sublets as $sublet) {
     if (isset($sublet['location'])) {
@@ -66,7 +64,7 @@
     }
     if (!isset($sublet['stats']))
       $sublet['stats'] = array('views' => 0);
-    if (isset($sublet['geocode']['latitude']) and 
+    if (isset($sublet['geocode']['latitude']) and
         isset($sublet['geocode']['longitude'])) {
       $latitude = $sublet['geocode']['latitude'];
       if ($latitude < 0) {
@@ -75,6 +73,6 @@
       }
     }
 
-    $MSublet->save($sublet, false);
+    SubletModel::save($sublet, false);
   }
 ?>

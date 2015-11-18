@@ -20,6 +20,13 @@
     public function toNotQuery($name, $val);
     public function limit($n);
 
+    public function setQuery(array $query);
+
+    /**
+     * Add a sort to the query. Order is usually 1 or -1.
+     */
+    public function sort($name, $order);
+
     /**
      * Run a text search on $text.
      */
@@ -216,8 +223,16 @@
       return self::query();
     }
 
+    public function setQuery(array $query) {
+      $this->query = $query;
+    }
+
     public function getQuery() {
       return $this->query;
+    }
+
+    public function sort($name, $order) {
+      $this->sort[$name] = $order;
     }
   }
 

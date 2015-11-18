@@ -19,13 +19,13 @@
 
     // Processors
     function membersInfo($members, $title='Member') {
-      global $MStudent, $S;
+      global $S;
 
       $membersinfo = array();
       foreach ($members as $member) {
         $id = $member['id'];
         $joined = "$title, ".timeAgo($member['date']);
-        $student = $MStudent->getById($id);
+        $student = StudentModel::getById($id);
         $membersinfo[] = array(
           'id' => $id,
           'name' => $student['name'],
@@ -59,8 +59,7 @@
     }
 
     function processPost($post) {
-      global $MStudent;
-      $student = $MStudent->getById($post['from']);
+      $student = StudentModel::getById($post['from']);
       $post['pic'] = $student['photo'];
       $post['name'] = $student['name'];
       $post['date'] = timeAgo($post['date']);
@@ -213,8 +212,7 @@
       //   }
       // }
       // return $ret;
-      global $MStudent;
-      $s = $MStudent->getById($student);
+      $s = StudentModel::getById($student);
       if (!isset($s['hubs']['myhub'])) return array();
 
       $myhub = $s['hubs']['myhub'];
@@ -243,10 +241,9 @@
       $this->save($entry, false);
 
       // Gotta update myhub (current hub)
-      global $MStudent;
-      $s = $MStudent->getById($student);
+      $s = StudentModel::getById($student);
       $s['hubs']['myhub'] = $hub;
-      $MStudent->save($s);
+      StudentModel::save($s);
 
       return $entry['members'];
     }

@@ -41,7 +41,7 @@
       Upload a banner:
       <?php
         vpartial('s3single', array(
-          's3name' => 'banner', 
+          's3name' => 'banner',
           's3title' => 'What would you like your banner image to be?*'
         ));
       ?>
@@ -72,9 +72,9 @@
   <div class="content">
     <headline>Select students to add to hubs!</headline>
     <form>
-      <?php 
-        global $MStudent, $MSocial;
-        $students = iterator_to_array($MStudent->find(array(
+      <?php
+        global $MSocial;
+        $students = iterator_to_array(StudentModel::find(array(
           'hubs' => array('$exists' => true)
         )));
 
@@ -160,7 +160,7 @@
         return function() {
           var students = '';
           locations[i].students.forEach(function (student) {
-            students += 
+            students +=
               '<p>' +
                 student.name + ' - ' + student.email + ' - ' + student.city
               '</p>';
@@ -169,10 +169,10 @@
           infowindow.setContent(
             '<div class="iwcontent">' +
               '<h3 class="iwfirstHeading" class="firstHeading">' +
-                locations[i].students.length + 
+                locations[i].students.length +
               '</h3>' +
               '<div class="iwbodyContent">' +
-                students + 
+                students +
               '</div>' +
             '</div>');
 

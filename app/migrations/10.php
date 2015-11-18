@@ -1,17 +1,15 @@
 <?php
-  global $MSublet, $MStudent;
-
-  $sublets = $MSublet->getAll();
+  $sublets = SubletModel::getAll();
 
   foreach ($sublets as $sublet) {
     if (isset($sublet['email'])) {
-      $sublet['student'] = $MStudent->get($sublet['email']);
+      $sublet['student'] = StudentModel::getByEmail($sublet['email']);
       unset($sublet['email']);
     }
     if (isset($sublet['student']) and !MongoId::isValid($sublet['student'])) {
       $sublet['student'] = $sublet['student']['_id'];
     }
 
-    $MSublet->save($sublet, false);
+    SubletModel::save($sublet, false);
   }
 ?>

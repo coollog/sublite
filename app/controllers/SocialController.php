@@ -5,7 +5,7 @@
 
     function index() {
       if (isset($_POST['signup'])) {
-        global $CStudent, $MStudent, $MSocial;
+        global $CStudent, $MSocial;
         $CStudent->requireLogin();
 
         // Params to vars
@@ -17,11 +17,11 @@
 
         // Code
         if ($this->isValid()) {
-          $me = $MStudent->me();
+          $me = StudentModel::me();
           $me['hubs'] = array(
             'city' => $city
           );
-          $MStudent->save($me);
+          StudentModel::save($me);
 
           $email = $_SESSION['email'];
           $message = "
@@ -54,8 +54,7 @@
         'hubs' => true
       );
 
-      global $MStudent;
-      $me = $MStudent->me();
+      $me = StudentModel::me();
       if (isset($me['hubs']['myhub'])) {
         $vdata['myhub'] = $me['hubs']['myhub'];
       }
@@ -112,7 +111,7 @@
     }
 
     function api() {
-      global $CStudent, $MStudent, $MSocial, $S;
+      global $CStudent, $MSocial, $S;
       $kill = false;
       if ($kill) {
         return;
@@ -163,16 +162,14 @@
           return $success;
 
         case 'default hub':
-          global $MStudent;
-          $me = $MStudent->me();
+          $me = StudentModel::me();
           $me['hubs']['myhub'] = $hub;
-          $MStudent->save($me);
+          StudentModel::save($me);
 
           return $success;
 
         case 'load hub info':
-          global $MStudent;
-          $me = $MStudent->me();
+          $me = StudentModel::me();
           $myhub = Isset($me['hubs']['myhub']) ? $me['hubs']['myhub'] : null;
 
           $entry = $MSocial->get($hub);
@@ -284,8 +281,7 @@
           $event = $ret['events'][$index];
 
           // Get host name and pic
-          global $MStudent;
-          $student = $MStudent->getById($event['creator']);
+          $student = StudentModel::getById($event['creator']);
           $event['hostname'] = $student['name'];
           $event['hostphoto'] = $student['photo'];
 
@@ -565,7 +561,7 @@
     }
 
     function adminapi() {
-      global $MStudent, $MSocial;
+      global $MSocial;
 
       // make sure logged in
       if (!checkAdmin()) {
@@ -577,7 +573,7 @@
 
       switch ($name) {
         case 'load students':
-          $students = $MStudent->find(array(
+          $students = StudentModel::find(array(
             'hubs' => array('$exists' => true))
           );
 
@@ -592,7 +588,7 @@
               $geocode = geocode($city);
               $student['hubs']['geocode'] = $geocode;
 
-              if (!is_null($geocode)) $MStudent->save($student);
+              if (!is_null($geocode)) StudentModel::save($student);
               else $inc = false;
             }
 
@@ -646,7 +642,7 @@
             return $this->errorString('Please select a hub.');
           }
           foreach ($students as $student) {
-            $studententry = $MStudent->getById($student);
+            $studententry = StudentModel::getById($student);
 
             $name = $studententry['name'];
             $email = $studententry['email'];

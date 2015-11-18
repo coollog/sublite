@@ -1,11 +1,9 @@
 <?php
-  global $MStudent;
-
-  $students = $MStudent->getAll();
+  $students = StudentModel::getAll();
 
   foreach ($students as $student) {
     if (!isset($student['stats'])) $student['stats'] = array('referrals' => 0);
-    
-    $MStudent->save($student);
+
+    StudentModel::save($student);
   }
 ?>

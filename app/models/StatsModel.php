@@ -21,11 +21,9 @@
     function getJobsMissingRecruiter() {
       $jobs = $this->dbinternships->jobs->find();
 
-      global $MRecruiter;
-
       $norecruiter = array();
       foreach ($jobs as $job) {
-        if (!$MRecruiter->IDexists($job['recruiter'])) {
+        if (!RecruiterModel::exists($job['recruiter'])) {
           $norecruiter[] = $job;
         }
       }
@@ -44,12 +42,10 @@
       return $is;
     }
     function getIndustriesByJobs() {
-      global $MCompany;
-
       $industries = array();
       $jobs = $this->dbinternships->jobs->find();
       foreach ($jobs as $job) {
-        $industry = $MCompany->getIndustry($job['company']);
+        $industry = CompanyModel::getIndustry($job['company']);
         $industrysplit = explode(',', $industry);
         foreach ($industrysplit as $i) {
           $i = trim($i);

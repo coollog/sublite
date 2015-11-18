@@ -1,7 +1,5 @@
 <?php
-  global $MStudent;
-
-  $students = $MStudent->getAll();
+  $students = StudentModel::getAll();
 
   foreach ($students as $student) {
     if (isset($student['stats']['referrals'])) {
@@ -9,7 +7,7 @@
         $student['stats']['referrals'] = array();
       }
     }
-    
-    $MStudent->save($student);
+
+    StudentModel::save($student);
   }
 ?>

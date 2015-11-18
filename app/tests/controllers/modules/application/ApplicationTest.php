@@ -10,8 +10,7 @@
 
       TEST($class, "$class.student.saveEditSubmitAndDelete", function($class) {
         // Create job
-        global $MJob;
-        $jobId = new MongoId($MJob->save([], false));
+        $jobId = new MongoId(JobModel::save([], false));
 
         $studentId = new MongoId();
 
@@ -65,20 +64,19 @@
         FALSE(ApplicationJob::createOrUpdate(new MongoId(), []));
 
         // Create job
-        global $MJob;
-        $jobId = new MongoId($MJob->save([], false));
+        $jobId = new MongoId(JobModel::save([], false));
 
         // Try to create application for job
         $oldQuestionId = new MongoId();
         $oldQuestions = [$oldQuestionId];
         TRUE(ApplicationJob::createOrUpdate($jobId, $oldQuestions));
-        EQ($MJob::getApplicationQuestionIds($jobId), $oldQuestions);
+        EQ(JobModel::getApplicationQuestionIds($jobId), $oldQuestions);
 
         // Try to change one question in application for job
         $newQuestionId = new MongoId();
         $newQuestions = [$newQuestionId];
         TRUE(ApplicationJob::createOrUpdate($jobId, $newQuestions));
-        EQ($MJob::getApplicationQuestionIds($jobId), $newQuestions);
+        EQ(JobModel::getApplicationQuestionIds($jobId), $newQuestions);
 
         TRUE(false,
           'TODO: Check to make sure student applications are updated right.');

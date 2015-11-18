@@ -62,9 +62,8 @@
 
     function manage() {
       global $CStudent; $CStudent->requireLogin();
-      global $MSublet;
       $data = array(
-        'sublets' => $MSublet->getByStudent($_SESSION['_id'])
+        'sublets' => SubletModel::getByStudent($_SESSION['_id'])
       );
       self::render('student/sublets/manage', $data);
     }
@@ -88,8 +87,8 @@
         self::render('student/sublets/subletform', formData(array())); return;
       }
 
-      global $params, $MSublet, $MStudent;
-      $me = $MStudent->me();
+      global $params, $MSublet;
+      $me = StudentModel::me();
       $params['student'] = $me['_id'];
       $params['publish'] = true;
       $params['comments'] = array();
@@ -106,7 +105,7 @@
       // Code
       if ($this->isValid()) {
         $data['stats'] = array('views' => 0);
-        $id = $MSublet->save($data);
+        $id = SubletModel::save($data);
         $this->redirect('sublet', array('id' => $id));
         return;
       }
@@ -118,12 +117,12 @@
     function edit() {
       global $CStudent; $CStudent->requireLogin();
 
-      global $params, $MSublet, $MStudent;
+      global $params, $MSublet;
       // Params to vars
 
       // Validations
       $this->startValidations();
-      $this->validate(isset($_GET['id']) and MongoId::isValid($id = $_GET['id']) and ($entry = $MSublet->get($id)) !== NULL, $err, 'unknown sublet');
+      $this->validate(isset($_GET['id']) and MongoId::isValid($id = $_GET['id']) and ($entry = SubletModel::get($id)) !== NULL, $err, 'unknown sublet');
       if ($this->isValid())
         $this->validate($_SESSION['_id'] == $entry['student'],
           $err, 'permission denied');
@@ -155,7 +154,7 @@
 
         if ($this->isValid()) {
           $data = array_merge($entry, $data);
-          $id = $MSublet->save($data);
+          $id = SubletModel::save($data);
           $this->success('sublet saved');
           self::render('student/sublets/subletform', formData(array_merge($this->formDataCommon($data), array('_id' => $id))));
           return;
@@ -168,12 +167,11 @@
 
     function view() {
       global $MSublet;
-      global $MStudent;
 
       // Validations
       $this->startValidations();
       $this->validate(isset($_GET['id']) and
-        ($entry = $MSublet->get($id = $_GET['id'])) != NULL,
+        ($entry = SubletModel::get($id = $_GET['id'])) != NULL,
         $err, 'unknown sublet');
       if ($this->isValid())
         $this->validate(
@@ -211,17 +209,17 @@
         }
 
         $entry['stats']['views']++;
-        $MSublet->save($entry);
+        SubletModel::save($entry);
 
         $data = array_merge($entry, $data);
         $data['_id'] = $entry['_id'];
         $data['mine'] = (isset($_SESSION['_id']) and $entry['student'] == $_SESSION['_id']);
 
         // ANY MODiFICATIONS ON DATA GOES HERE
-        $s = $MStudent->getById($entry['student']);
+        $s = StudentModel::getById($entry['student']);
         if ($s == NULL) {
           $entry['publish'] = false;
-          $MSublet->save($entry);
+          SubletModel::save($entry);
           self::error('this listing is no longer available');
           self::render('notice');
           return;
@@ -240,7 +238,7 @@
         $data['studentbio'] = isset($s['bio']) ?
           $s['bio'] : 'Welcome to my profile!';
         if(isset($_SESSION['loggedinstudent'])) {
-          $me = $MStudent->me();
+          $me = StudentModel::me();
           $data['studentmsg'] =
             "Hi ".$data['studentname'].",%0A%0A".
             "I am writing to inquire about your listing '".$data['title']."' (http://sublite.net/housing/sublet.php?id=".$entry['_id'].").%0A%0A".
@@ -263,7 +261,7 @@
 
         for ($i = 0; $i < count($data['comments']); $i ++) {
           $comment = $data['comments'][$i];
-          $commenter = $MStudent->getById($comment['commenter']);
+          $commenter = StudentModel::getById($comment['commenter']);
           $data['comments'][$i] = array(
             'name' => $commenter['name'],
             'photo' => $commenter['photo'],
@@ -287,8 +285,7 @@
     }
     function dataSearchEmpty() {
       /* MAKE GENDER THE GENDER OF THE USER */
-      global $MStudent;
-      $me = $MStudent->me();
+      $me = StudentModel::me();
       $gender = $me['gender'];
 
       return array(
@@ -334,7 +331,7 @@
 
       global $params;
       $params = $_REQUEST;
-      global $MSublet, $MStudent;
+      global $MSublet;
 
       // process without sorting/filtering
       function processRaw($sublet) {
@@ -403,7 +400,7 @@
           $showMore = $_SESSION['showMore'];
         } else $_SESSION['showMore'] = 6;
 
-        $res = $MSublet->last($_SESSION['showMore']);
+        $res = SubletModel::last($_SESSION['showMore']);
         $sublets = array();
         foreach ($res as $sublet) {
           $sublets[] = processRaw($sublet);
@@ -481,7 +478,7 @@
             // Performing search
             $starttime = microtime(true);
 
-            $res = $MSublet->find($query);
+            $res = SubletModel::find($query);
 
             $sublets = array();
             $res = process($res, $sortby, $latitude, $longitude, $maxProximity);
