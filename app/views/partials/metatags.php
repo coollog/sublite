@@ -24,6 +24,17 @@
     public static function title($title) {
       echo "<title>$title</title>";
     }
+    public static function defaultImages() {
+      self::ogImage("https://sublite.net/app/assets/gfx/studentmain.jpg");
+      self::ogImage("https://sublite.net/app/assets/gfx/main.jpg");
+      self::ogImage("https://sublite.s3.amazonaws.com/1423101952.jpeg");
+      self::ogImageWidth(1000);
+      self::ogImageHeight(1000);
+    }
+    public static function bothTitles($title) {
+      self::title($title);
+      self::ogTitle($title);
+    }
   }
 
   switch (View::get('_metatagType')) {
@@ -104,15 +115,14 @@
       break;
 
     case 'hubs':
-      Metatags::ogTitle(
-        "SubLite &ndash; Meet and Socialize with Students Working in Your City");
+      $title =
+        "SubLite &ndash; Meet and Socialize with Students Working in Your City";
+      Metatags::bothTitles($title);
       Metatags::ogImage("https://sublite.net/app/assets/gfx/socialmain.jpg");
       Metatags::ogDescription(
         "Get your questions answered and make new friends this summer!");
       Metatags::ogImageWidth(1677);
       Metatags::ogImageHeight(1118);
-      Metatags::title(
-        "SubLite &ndash; Meet and Socialize with Students Working in Your City");
       break;
 
     case 'searchhousing':
@@ -121,28 +131,26 @@
       if ($data && isset($data['location']))
         $location = " - $data[location]";
 
-      Metatags::title(
-        "SubLite &ndash; Search for Sublets, Rentals, and Other Housing$location");
+      $title =
+        "SubLite &ndash; Search for Sublets, Rentals, and Other Housing$location";
+      Metatags::bothTitles($title);
+      Metatags::defaultImages();
       break;
 
     case 'searchjobs':
-      Metatags::title("SubLite &ndash; Search for Jobs and Internships");
+      $title = "SubLite &ndash; Search for Jobs and Internships";
+      Metatags::bothTitles($title);
+      Metatags::defaultImages();
       break;
 
     default:
-      Metatags::title(
-        "SubLite &ndash; Your One-Stop Shop for a Great Summer!");
-      Metatags::ogTitle(
-        "SubLite &ndash; Your One-Stop Shop for a Great Summer!");
-      Metatags::ogImage("https://sublite.net/app/assets/gfx/studentmain.jpg");
-      Metatags::ogImage("https://sublite.net/app/assets/gfx/main.jpg");
-      Metatags::ogImage("https://sublite.s3.amazonaws.com/1423101952.jpeg");
+      $title = "SubLite &ndash; Your One-Stop Shop for a Great Summer!";
+      Metatags::bothTitles($title);
+      Metatags::defaultImages();
       Metatags::ogDescription(
         "Find summer internships and safe, student-only summer housing with " .
         "SubLite! Verify your &quot;.edu&quot; email address to get started! " .
         "It's completely free!"
       );
-      Metatags::ogImageWidth(1000);
-      Metatags::ogImageHeight(1000);
   }
 ?>
