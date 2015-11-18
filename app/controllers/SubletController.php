@@ -122,7 +122,9 @@
 
       // Validations
       $this->startValidations();
-      $this->validate(isset($_GET['id']) and MongoId::isValid($id = $_GET['id']) and ($entry = SubletModel::get($id)) !== NULL, $err, 'unknown sublet');
+      $this->validate(isset($_GET['id']) &&
+                      ($entry = SubletModel::getById($id = new MongoId($_GET['id']))) !== NULL,
+                      $err, 'unknown sublet');
       if ($this->isValid())
         $this->validate($_SESSION['_id'] == $entry['student'],
           $err, 'permission denied');
