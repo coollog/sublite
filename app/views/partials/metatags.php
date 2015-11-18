@@ -30,6 +30,7 @@
       self::ogImage("https://sublite.s3.amazonaws.com/1423101952.jpeg");
       self::ogImageWidth(1000);
       self::ogImageHeight(1000);
+      self::ogImageType("image/jpeg");
     }
     public static function bothTitles($title) {
       self::title($title);
