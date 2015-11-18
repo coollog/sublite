@@ -36,6 +36,13 @@
       self::title($title);
       self::ogTitle($title);
     }
+    public static function defaultDescription() {
+      self::ogDescription(
+        "Find summer internships and safe, student-only summer housing with " .
+        "SubLite! Verify your &quot;.edu&quot; email address to get started! " .
+        "It's completely free!"
+      );
+    }
   }
 
   switch (View::get('_metatagType')) {
@@ -136,22 +143,20 @@
         "SubLite &ndash; Search for Sublets, Rentals, and Other Housing$location";
       Metatags::bothTitles($title);
       Metatags::defaultImages();
+      Metatags::defaultDescription();
       break;
 
     case 'searchjobs':
       $title = "SubLite &ndash; Search for Jobs and Internships";
       Metatags::bothTitles($title);
       Metatags::defaultImages();
+      Metatags::defaultDescription();
       break;
 
     default:
       $title = "SubLite &ndash; Your One-Stop Shop for a Great Summer!";
       Metatags::bothTitles($title);
       Metatags::defaultImages();
-      Metatags::ogDescription(
-        "Find summer internships and safe, student-only summer housing with " .
-        "SubLite! Verify your &quot;.edu&quot; email address to get started! " .
-        "It's completely free!"
-      );
+      Metatags::defaultDescription();
   }
 ?>
