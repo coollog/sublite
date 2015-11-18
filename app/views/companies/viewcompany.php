@@ -124,7 +124,7 @@
             function insertPhoto($index, $col, $pos) {
               global $cols, $photos;
               if ($index >= sizeof($photos)) return;
-              if ($pos >= sizeof($cols[$col])) return;
+              if ($pos > sizeof($cols[$col])) return;
               $url = $photos[$index];
               $html = "<img src=\"$url\">";
               array_splice($cols[$col], $pos, 0, $html);
