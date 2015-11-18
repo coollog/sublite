@@ -28,7 +28,7 @@
       return self::$collection->find($query, $fields);
     }
     public static function last($n=1) {
-      parent::last($n, ['publish' => true]);
+      return parent::last($n, ['publish' => true]);
     }
     public static function getByStudent(MongoId $studentId) {
       $query = (new DBQuery(self::$collection))->toQuery('student', $studentId);

@@ -30,7 +30,7 @@
     }
 
     public static function reply(MongoId $messageId, $from, $msg) {
-      $message = self::getBymessageId($messageId);
+      $message = self::getById($messageId);
       array_push($message['replies'], [
         'from' => $from, 'msg' => $msg, 'time' => time(), 'read' => false
       ]);

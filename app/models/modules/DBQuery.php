@@ -112,11 +112,7 @@
    */
   class DBExecute implements DBExecuteInterface {
     private static function cursorToArray(MongoCursor $cursor) {
-      $docs = [];
-      foreach ($cursor as $doc) {
-        $docs[] = $doc;
-      }
-      return $docs;
+      return iterator_to_array($cursor, false);
     }
 
     public function __construct(MongoCollection $collection) {
@@ -225,6 +221,7 @@
 
     public function setQuery(array $query) {
       $this->query = $query;
+      return $this;
     }
 
     public function getQuery() {
@@ -233,6 +230,7 @@
 
     public function sort($name, $order) {
       $this->sort[$name] = $order;
+      return $this;
     }
   }
 

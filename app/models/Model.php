@@ -70,11 +70,11 @@
     }
 
     public static function last($n=1, array $query=array()) {
-      $query = (new DBQuery(self::$collection))
+      $last = (new DBQuery(static::$collection))
         ->setQuery($query)
         ->sort('_id', -1)
         ->limit($n);
-      return $query->run();
+      return $last->run();
     }
 
     protected static function checkReady() {

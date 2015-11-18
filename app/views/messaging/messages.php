@@ -153,7 +153,7 @@
         <?php } ?>
         <div class="mblockwrapper">
           <table class="mblock">
-            <td class="pp"><profpic style="background-image: url('asdf');"></profpic></td>
+            <td class="pp"><profpic></profpic></td>
             <td><data>
               <form method="post" action="?id=<?php vecho('currentid'); ?>">
                 <textarea id="msg" name="msg" required maxlength="2000" placeholder="Write Your Message:"><?php vecho('msg'); ?></textarea>

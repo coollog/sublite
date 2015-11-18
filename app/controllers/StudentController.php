@@ -169,7 +169,8 @@
         $lastpage = $_SERVER['HTTP_REFERER'];
         $lastpagepath = preg_replace("/https*:\/\/$_SERVER[HTTP_HOST]/", '', $lastpage);
         if ($thispage != $lastpage) {
-          if (!in_array($lastpagepath, $noredirect)) {
+          if (!in_array($lastpagepath, $noredirect) &&
+              !in_array("$lastpagepath.php", $noredirect)) {
             setcookie('loginredirect', $lastpage, time() + 300);
           } else {
             setcookie('loginredirect', '', time() - 3600);

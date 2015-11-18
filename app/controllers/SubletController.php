@@ -171,7 +171,7 @@
       // Validations
       $this->startValidations();
       $this->validate(isset($_GET['id']) and
-        ($entry = SubletModel::get($id = $_GET['id'])) != NULL,
+        ($entry = SubletModel::getById($id = new MongoId($_GET['id']))) != NULL,
         $err, 'unknown sublet');
       if ($this->isValid())
         $this->validate(
