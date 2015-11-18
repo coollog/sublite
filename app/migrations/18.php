@@ -1,11 +1,9 @@
 <?php
-  global $MStudent;
-
-  $students = $MStudent->getAll();
+  $students = StudentModel::getAll();
 
   foreach ($students as $student) {
     if (isset($student['orig'])) unset($student['orig']);
 
-    $MStudent->save($student);
+    StudentModel::save($student);
   }
 ?>

@@ -23,7 +23,9 @@
 
       <input type="hidden" name="photo" value="<?php vecho('photo'); ?>" />
       <subheadline>Upload Photo</subheadline>
-      <div class="iframe"><iframe class="S3" src="S3.php"></iframe></div>
+      <div class="iframe">
+        <iframe class="S3" src="<?php echo $GLOBALS['dirpre'] ?>../S3.php"></iframe>
+      </div>
       <subheadline>Current Photo</subheadline>
       <div class="img"><img src="<?php vecho('photo'); ?>" /></div>
 

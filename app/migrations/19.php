@@ -16,8 +16,7 @@
   }
   new JobOldModel();
 
-  global $MJob;
-  $jobs = $MJob->getAll();
+  $jobs = JobModel::getAll();
 
   foreach ($jobs as $job) {
     if (pastDeadline($job['deadline'])) {

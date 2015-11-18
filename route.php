@@ -258,7 +258,6 @@
     GLOBALvarGet('CApp')->privacy();
   });
   Router::register('redirect', function() {
-    GLOBALvarGet('MJob')->incrementApply($_GET['id']);
     if(filter_var($_GET['url'], FILTER_VALIDATE_EMAIL)) {
       header("Location: mailto:" . $_GET['url']);
     } else {

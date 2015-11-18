@@ -33,8 +33,10 @@
         $price = $sublet['price'];
         $pricetype = $sublet['pricetype'];
         $publish = $sublet['publish'];
-        if ($publish) $published = '<green>Public</green>';
-        else          $published = '<red>Private (Publish to have listing show up in search results)</red>';
+        if ($publish)
+          $published = '<green>Public</green>';
+        else
+          $published = '<red>Private (Publish to have listing show up in search results)</red>';
         return "
           <div class=\"subletblock\">
             <div class=\"title\">$title | $location</div>
@@ -43,11 +45,11 @@
           </div>
         ";
       }
-      $sublets = vget('sublets');
+      $sublets = View::get('sublets');
       foreach ($sublets as $sublet) {
         echo vlinkto(subletBlock($sublet), 'editsublet', array('id' => $sublet['_id']->{'$id'}));
       }
-      if ($sublets->count() == 0) {
+      if (count($sublets) == 0) {
         echo "<b style=\"font-size: 1.5em;\">Congratulations! You have completed your profile and are on your way to finding tenants for the summer. Just take a moment to complete your sublet listing(s) by clicking the button below and you'll be all set!</b><br /><br />" . vlinkto('<input type="button" value="List Sublet" />', 'addsublet');
       }
     ?>

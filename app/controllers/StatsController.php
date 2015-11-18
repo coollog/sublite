@@ -16,10 +16,8 @@
       var_dump($stats); echo '</pre>';
     }
     function nojobs() {
-      global $MRecruiter, $MJob, $MCompany;
-
-      $r = $MRecruiter->find();
-      $j = $MJob->find();
+      $r = RecruiterModel::getAll();
+      $j = JobModel::getAll();
 
       $rids = array();
       foreach ($j as $job) {
@@ -50,7 +48,7 @@
         $lastname = $r['lastname'];
         $company = $r['company'];
         if (MongoId::isValid($company))
-          $company = $MCompany->getName($company);
+          $company = CompanyModel::getName($company);
         echo "\"$email\",\"$firstname\",\"$lastname\",\"$company\"\n";
       }
       echo '</textarea>';
@@ -129,9 +127,7 @@
 
     }
     function recruiterbydate() {
-      global $MRecruiter, $MCompany;
-
-      $recruiters = $MRecruiter->find()->sort(array('_id'=>-1));
+      $recruiters = RecruiterModel::getAll()->sort(array('_id'=>-1));
 
       $rs = array();
       foreach ($recruiters as $r) {
@@ -140,7 +136,7 @@
         $lastname = $r['lastname'];
         $company = $r['company'];
         if (MongoId::isValid($company))
-          $company = $MCompany->getName($company);
+          $company = CompanyModel::getName($company);
         $date = fdate($r['_id']->getTimestamp());
         $rs[] = "\"$email\",\"$firstname\",\"$lastname\",\"$company\",\"$date\"";
       }
@@ -153,14 +149,12 @@
       echo '</textarea>';
     }
     function subletsended2014() {
-      global $MSublet, $MStudent;
-
-      $sublets = $MSublet->find(array('enddate' => array('$lte' => strtotime('1/1/2015'))));
+      $sublets = SubletModel::find(array('enddate' => array('$lte' => strtotime('1/1/2015'))));
 
       $ss = array();
       foreach ($sublets as $s) {
         $id = $s['_id'];
-        $student = $MStudent->getById($s['student']);
+        $student = StudentModel::getById($s['student']);
         if (isset($student['name'])) $name = $student['name'];
         else $name = 'noname';
         $email = $student['email'];
@@ -175,10 +169,10 @@
       echo '</textarea>';
     }
     function unknownschools() {
-      global $MStudent, $S;
+      global $S;
 
       $domains = array();
-      $students = $MStudent->getAll();
+      $students = StudentModel::getAll();
       foreach ($students as $student) {
         $email = $student['email'];
         if (!$S->hasSchoolOf($email)) {
@@ -198,10 +192,8 @@
       echo '</textarea>';
     }
     function cumulative() {
-      global $MJob;
-
       $views = 0; $clicks = 0;
-      $jobs = $MJob->getAll();
+      $jobs = JobModel::getAll();
       foreach ($jobs as $job) {
         $views += $job['stats']['views'];
         $clicks += $job['stats']['clicks'];
@@ -210,11 +202,9 @@
       echo "<br />Jobs views: $views<br />Jobs clicks: $clicks<br />";
     }
     function graph() {
-      global $MStudent;
-
       // All students by month
       $studentsdata = array();
-      $students = $MStudent->getAll();
+      $students = StudentModel::getAll();
       foreach ($students as $student) {
         $time = (int)($student['_id']->getTimestamp()/3600/24/30.2);
         if (!isset($studentsdata[$time])) $studentsdata[$time] = 1;
@@ -224,7 +214,7 @@
 
       // Students by day
       $studentsdaydata = array();
-      $students = $MStudent->getAllwTime();
+      $students = StudentModel::getAllwTime();
       foreach ($students as $student) {
         $time = (int)($student['time']/3600/24);
         if (!isset($studentsdaydata[$time])) $studentsdaydata[$time] = 1;
@@ -234,9 +224,8 @@
       ksort($studentsdaydata);
 
       // Messages
-      global $MMessage;
       $msgdata = array();
-      $msgs = $MMessage->getAll();
+      $msgs = MessageModel::getAll();
       foreach ($msgs as $msg) {
         foreach ($msg['replies'] as $reply) {
           $time = (int)($reply['time']/3600/24);
@@ -295,8 +284,8 @@
         die('permission denied');
     }
     function messages() {
-      global $MMessage, $CMessage;
-      $msgs = $MMessage->getAll();
+      global $CMessage;
+      $msgs = MessageModel::getAll();
 
       $mlist = array();
       foreach ($msgs as $m) {
@@ -353,8 +342,8 @@
       $this->render('stats/messagestats', array('mlist' => $mlist));
     }
     function getMessageParticipants() {
-      global $MMessage, $CMessage;
-      $msgs = $MMessage->getAll();
+      global $CMessage;
+      $msgs = MessageModel::getAll();
 
       $plist = array();
 

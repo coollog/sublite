@@ -1,11 +1,9 @@
 <?php
-  global $MSublet, $MStudent;
-
-  $sublets = $MSublet->getAll();
+  $sublets = SubletModel::getAll();
 
   foreach ($sublets as $sublet) {
     $sublet['summary'] = str_replace('<br />', '', $sublet['summary']);
 
-    $MSublet->save($sublet, false);
+    SubletModel::save($sublet, false);
   }
 ?>

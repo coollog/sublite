@@ -124,9 +124,8 @@
 
     function manage() {
       global $CRecruiter; $CRecruiter->requireLogin();
-      global $MJob;
 
-      $jobs = $MJob->getByRecruiter($_SESSION['_id']);
+      $jobs = JobModel::getByRecruiter($_SESSION['_id']);
       $data = array(
         'jobs' => $jobs
       );
@@ -152,8 +151,8 @@
         self::render('jobs/jobform', formData(array())); return;
       }
 
-      global $params, $MJob, $MRecruiter;
-      $me = $MRecruiter->me();
+      global $params;
+      $me = RecruiterModel::me();
       $params['company'] = $me['company'];
 
       $this->startValidations();
@@ -171,7 +170,7 @@
         $data['applicants'] = array();
         $data['viewers'] = array();
         $data['stats'] = array('views' => 0, 'clicks' => 0);
-        $jobId = $MJob->save($data);
+        $jobId = JobModel::save($data);
 
         // Add credit for adding job.
         $recruiterId = $_SESSION['_id'];
@@ -190,12 +189,16 @@
     function edit() { // FIX THIS ADD GET INFO LIKE DATA FROM VIEW AND STUFF
       global $CRecruiter; $CRecruiter->requireLogin();
 
-      global $params, $MJob, $MRecruiter;
+      global $params;
       // Params to vars
 
       // Validations
       $this->startValidations();
-      $this->validate(isset($_GET['id']) and MongoId::isValid($id = $_GET['id']) and ($entry = $MJob->get($id)) !== NULL, $err, 'unknown job');
+      $this->validate(
+        isset($_GET['id']) &&
+        MongoId::isValid($id = $_GET['id']) &&
+        ($entry = JobModel::getById($id)) !== NULL,
+        $err, 'unknown job');
       if ($this->isValid())
         $this->validate($_SESSION['_id'] == $entry['recruiter'],
           $err, 'permission denied');
@@ -212,7 +215,7 @@
           self::render('jobs/jobform', formData(array_merge($this->data($entry), array('_id' => $id)))); return;
         }
 
-        $me = $MRecruiter->me();
+        $me = RecruiterModel::me();
         $params['company'] = $me['company'];
         extract($data = $this->data($params));
         // Validations
@@ -220,7 +223,7 @@
 
         if ($this->isValid()) {
           $data = array_merge($entry, $data);
-          $id = $MJob->save($data);
+          $id = JobModel::save($data);
           $this->success('job saved');
           self::render('jobs/jobform', formData(array_merge($data, array('_id' => $id))));
           return;
@@ -233,14 +236,11 @@
 
     function view() {
       //$this->requireLogin();
-      global $MJob;
-      global $MRecruiter;
-      global $MCompany;
 
       // Validations
       $this->startValidations();
       $this->validate(isset($_GET['id']) and
-        ($entry = $MJob->get($_GET['id'])) != NULL,
+        ($entry = JobModel::getById(new MongoId($_GET['id']))) != NULL,
         $err, 'unknown job');
 
       // Code
@@ -252,7 +252,7 @@
         else {
           $entry['viewers'][] = array('', new MongoDate());
         }
-        $MJob->save($entry, false);
+        JobModel::save($entry, false);
 
         $data = $entry;
 
@@ -262,9 +262,9 @@
         $data['salarytype'] = ($data['salarytype'] == 'total') ?
                               $data['duration'].' weeks' : $data['salarytype'];
 
-        $r = $MRecruiter->getById($entry['recruiter']);
+        $r = RecruiterModel::getById($entry['recruiter']);
 
-        $company = $MCompany->get($entry['company']);
+        $company = CompanyModel::getById($entry['company']);
 
         $data['companyname'] = $company['name'];
         $data['companybanner'] = $company['bannerphoto'];
@@ -317,15 +317,13 @@
 
       global $params;
       $params = $_REQUEST;
-      global $MJob, $MStudent, $MCompany, $MRecruiter;
 
       // Function for processing results and showing them
       function process($res) {
-        global $MCompany;
         // Processing results
         $jobs = array();
         foreach ($res as $job) {
-          $company = $MCompany->get($job['company']);
+          $company = CompanyModel::getById($job['company']);
           $job['company'] = $company['name'];
           $job['desc'] = strmax($job['desc'], 300);
           $job['logophoto'] = $company['logophoto'];
@@ -345,7 +343,7 @@
       if (isset($_GET['bycompany'])) {
         $params = $this->dataSearchEmpty();
         $params['company'] = $_GET['bycompany'];
-        $showCompany = $MCompany->getByName($_GET['bycompany']);
+        $showCompany = CompanyModel::getByName($_GET['bycompany']);
         $showSearch = false;
       }
 
@@ -358,7 +356,7 @@
           $showMore = $_SESSION['showMoreJobs'];
         } else $_SESSION['showMoreJobs'] = 6;
 
-        $res = $MJob->last($_SESSION['showMoreJobs']);
+        $res = JobModel::last($_SESSION['showMoreJobs']);
         $jobs = process($res);
 
         self::render('jobs/search/form', $this->dataSearchSetup());
@@ -390,7 +388,7 @@
         if (strlen($city) > 0) {
           $companyquery['location'] = array('$regex' => keywords2mregex($city));
         }
-        $cs = $MCompany->find($companyquery);
+        $cs = CompanyModel::findIds($companyquery);
 
         // Search query building
         $query = array();
@@ -402,14 +400,14 @@
           $query['title'] = array('$regex' => keywords2mregex($title));
         }
 
-        $companies = array();
+        $companyIds = array();
         foreach ($cs as $c) {
-          array_push($companies, $c['_id']);
+          array_push($companyIds, $c['_id']);
         }
-        $query['company'] = array('$in' => $companies);
+        $query['company'] = array('$in' => $companyIds);
 
         // Performing search
-        $res = $MJob->find($query);
+        $res = JobModel::find($query);
         $jobs = process($res);
 
         if ($showSearch) self::render('jobs/search/form', $data);

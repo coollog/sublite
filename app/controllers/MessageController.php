@@ -15,23 +15,25 @@
     function add() {
       global $CJob; $CJob->requireLogin();
 
-      global $params, $MMessage, $MRecruiter, $MStudent;
+      global $params;
 
       // Params to vars
       extract($data = $this->newData($_REQUEST));
+      $pid1 = new MongoId($participants[0]);
+      $pid2 = new MongoId($participants[1]);
 
       // Validations
       $this->startValidations();
-      $this->validate($MRecruiter->IDexists($participants[0]) or
-                      $MStudent->exists($participants[0]),
+      $this->validate(RecruiterModel::exists($pid1) or
+                      StudentModel::exists($pid1),
         $err, 'invalid sender');
-      $this->validate($MRecruiter->IDexists($participants[1]) or
-                      $MStudent->exists($participants[1]),
+      $this->validate(RecruiterModel::exists($pid2) or
+                      StudentModel::exists($pid2),
         $err, 'invalid receiver');
 
       // Code
       if ($this->isValid()) {
-        $id = $MMessage->add($participants);
+        $id = MessageModel::add($participants);
         $this->redirect('messages', array('id' => $id, 'msg' => $msg));
         return;
       }
@@ -48,48 +50,44 @@
     }
 
     // Some helper functions
-    function getName($p) {
-      global $MStudent, $MRecruiter;
-      if ($MStudent->exists($p)) {
-        $name = $MStudent->getName($p);
-      } else if ($MRecruiter->IDexists($p)) {
-        $name = $MRecruiter->getName($p);
+    function getName(MongoId $pid) {
+      if (StudentModel::exists($pid)) {
+        $name = StudentModel::getName($pid);
+      } else if (RecruiterModel::exists($pid)) {
+        $name = RecruiterModel::getName($pid);
       } else {
         $name = 'Nonexistent';
       }
       return $name;
     }
-    function getEmail($p) {
-      global $MStudent, $MRecruiter;
-      if ($MStudent->exists($p)) {
-        $name = $MStudent->getEmail($p);
-      } else if ($MRecruiter->IDexists($p)) {
-        $name = $MRecruiter->getEmail($p);
+    function getEmail(MongoId $pid) {
+      if (StudentModel::exists($pid)) {
+        $name = StudentModel::getEmail($pid);
+      } else if (RecruiterModel::exists($pid)) {
+        $name = RecruiterModel::getEmail($pid);
       } else {
         $name = 'Nonexistent';
       }
       return $name;
     }
-    function getType($p) {
-      global $MStudent, $MRecruiter;
-      if ($MStudent->exists($p)) {
+    function getType(MongoId $pid) {
+      if (StudentModel::exists($pid)) {
         return 'student';
-      } else if ($MRecruiter->IDexists($p)) {
+      } else if (RecruiterModel::exists($pid)) {
         return 'recruiter';
       } else {
         return 'none';
       }
     }
-    function setFromNamePic(&$reply, $from) {
-      global $MStudent, $MRecruiter;
+    function setFromNamePic(&$reply, MongoId $from) {
       $reply['fromname'] = $this->getName($from);
-      if ($MStudent->exists($from)) {
-        $Photo = $MStudent->getPhoto($from);
-        if ($Photo == '' or $Photo == 'defaultpic.png' or $Photo == 'noprofilepic.png')
-          $Photo = $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
-        $reply['frompic'] = $Photo;
-      } else if ($MRecruiter->IDexists($from)) {
-        $reply['frompic'] = $MRecruiter->getPhoto($from);
+      if (StudentModel::exists($from)) {
+        $photo = StudentModel::getPhoto($from);
+        if ($photo == '' or $photo == 'defaultpic.png' or $photo == 'noprofilepic.png')
+          $photo = $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
+        $reply['frompic'] = $photo;
+      } else if (RecruiterModel::exists($from)) {
+        $reply['frompic'] = RecruiterModel::getPhoto($from);
       } else {
         $reply['frompic'] = 'Nonexistent';
       }
@@ -100,13 +98,14 @@
     function reply() {
       global $CJob; $CJob->requireLogin();
 
-      global $params, $MMessage;
+      global $params;
       // Params to vars
 
       // Processes message data
       function viewData($c, $entry=NULL) {
-        global $MMessage;
-        $messages = array_reverse(iterator_to_array($MMessage->findByParticipant($_SESSION['_id']->{'$id'})));
+        $messages = array_reverse(
+          MessageModel::findByParticipant($_SESSION['_id']->{'$id'})
+        );
 
         $replies = array();
         $unread = 0;
@@ -120,7 +119,7 @@
           }
           if (!$reply['read']) $unread ++;
 
-          $c->setFromNamePic($reply, $from);
+          $c->setFromNamePic($reply, new MongoId($from));
 
           if (strcmp($m['_id'], $entry['_id']) == 0) $reply['current'] = true;
           else $reply['current'] = false;
@@ -139,12 +138,12 @@
           $currentreplies = $entry['replies'];
           $current = array();
           foreach ($currentreplies as $m) {
-            $c->setFromNamePic($m, $m['from']);
+            $c->setFromNamePic($m, new MongoId($m['from']));
             $m['time'] = timeAgo($m['time']);
             array_push($current, $m);
           }
 
-          $to = 'Message To: ' . $c->getName($entry['participants'][0]);
+          $to = 'Message To: ' . $c->getName(new MongoId($entry['participants'][0]));
           foreach ($entry['participants'] as $p) {
             if (strcmp($p, $_SESSION['_id']) != 0) {
               $to = 'Message To: ' . $c->getName($p);
@@ -176,8 +175,8 @@
 
       // Validations
       $this->startValidations();
-      $this->validate(MongoId::isValid($id = $_GET['id']) and
-                      ($entry = $MMessage->get($id)) !== NULL,
+      $this->validate(MongoId::isValid($id = new MongoId($_GET['id'])) and
+                      ($entry = MessageModel::getById($id)) !== NULL,
         $err, 'unknown message');
       if ($this->isValid())
         $this->validate(in_array($myid = $_SESSION['_id']->{'$id'}, $entry['participants']),
@@ -190,7 +189,7 @@
           if (strcmp($entry['replies'][$i]['from'], $_SESSION['_id']) != 0)
             $entry['replies'][$i]['read'] = true;
         }
-        $MMessage->save($entry);
+        MessageModel::save($entry);
 
         if (!isset($_POST['reply'])) {
           $this->render('messaging/messages', viewData($this, $entry)); return;
@@ -208,13 +207,13 @@
           // Send the message
           $msgid = $entry['_id']->{'$id'};
           $from = $myid;
-          $fromname = $this->getName($from);
+          $fromname = $this->getName(new MongoId($from));
           $tos = array_remove($entry['participants'], $from);
-          $entry = $MMessage->reply($msgid, $from, $msg);
+          $entry = MessageModel::reply(new MongoId($msgid), $from, $msg);
 
           $emails = array();
           foreach ($tos as $to) {
-            $emails[] = $this->getEmail($to);
+            $emails[] = $this->getEmail(new MongoId($to));
           }
 
           // Notify recipients by email
@@ -236,11 +235,11 @@
 
           // Notify us of the message
           $toemails = implode(', ', $emails);
-          $fromemail = $this->getEmail($from);
+          $fromemail = $this->getEmail(new MongoId($from));
           $prevmsgs = '';
           $replies = array_reverse($entry['replies']);
           foreach ($replies as $reply) {
-            $pfromemail = $this->getEmail($reply['from']);
+            $pfromemail = $this->getEmail(new MongoId($reply['from']));
             $pmsg = $reply['msg'];
             $prevmsgs .= "<b>$pfromemail</b>: <br />$pmsg<br />";
           }

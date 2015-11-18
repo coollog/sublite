@@ -1,11 +1,9 @@
 <?php
-  global $MJob;
-
-  $jobs = $MJob->getAll();
+  $jobs = JobModel::getAll();
 
   foreach ($jobs as $job) {
     if (!isset($job['viewers'])) $job['viewers'] = array();
-    
-    $MJob->save($job, false);
+
+    JobModel::save($job, false);
   }
 ?>

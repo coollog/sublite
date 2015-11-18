@@ -93,9 +93,9 @@
 
       global $CRecruiter; $CRecruiter->requireLogin();
 
-      global $params, $MCompany, $MRecruiter;
+      global $params;
 
-      $me = $MRecruiter->me();
+      $me = RecruiterModel::me();
       if (!isset($_POST['add'])) {
         self::render('companies/form', formData(array(
           'name' => $me['company']))); return;
@@ -112,11 +112,11 @@
 
       // Code
       if ($this->isValid()) {
-        $id = $MCompany->save($data);
-        $me = $MRecruiter->me();
-        $me['company'] = new MongoID($id);
-        $MRecruiter->save($me);
-        $_SESSION['company'] = $id;
+        $companyId = CompanyModel::save($data);
+        $me = RecruiterModel::me();
+        $me['company'] = new MongoID($companyId);
+        RecruiterModel::save($me);
+        $_SESSION['company'] = $companyId;
 
         // Add credit for making company profile.
         $recruiterId = $_SESSION['_id'];
@@ -133,15 +133,15 @@
     function edit() { // FIX THIS ADD GET INFO LIKE DATA FROM VIEW AND STUFF
       global $CRecruiter; $CRecruiter->requireLogin();
 
-      global $params, $MCompany, $MRecruiter;
+      global $params;
       // Params to vars
-      $me = $MRecruiter->me();
+      $me = RecruiterModel::me();
       $id = $params['_id'] = $me['company'];
       if (!MongoId::isValid($me['company'])) $this->redirect('addcompany');
 
       // Validations
       $this->startValidations();
-      $this->validate(($entry = $MCompany->get($me['company'])) !== NULL,
+      $this->validate(($entry = CompanyModel::getById($me['company'])) !== NULL,
         $err, 'unknown company');
 
       // Code
@@ -164,7 +164,7 @@
 
         if ($this->isValid()) {
           $data['_id'] = new MongoId($id);
-          $MCompany->save($data);
+          CompanyModel::save($data);
           $this->success('company saved');
           self::render('companies/form', formData(array_merge($data, array('_id' => $id->{'$id'}))));
           return;
@@ -180,18 +180,16 @@
 
     function view() {
       // global $CJob; $CJob->requireLogin();
-      global $MCompany;
-      global $MRecruiter;
       // Validations
       $this->startValidations();
       $this->validate(isset($_GET['id']) and
-        ($entry = $MCompany->get($id = $_GET['id'])) != NULL,
+        ($entry = CompanyModel::getById($id = new MongoId($_GET['id']))) != NULL,
         $err, 'unknown company');
 
       // Code
       if ($this->isValid()) {
         $data = $entry;
-        $me = $MRecruiter->me();
+        $me = RecruiterModel::me();
 
         $data['isme'] = !is_null($me) ? idcmp($id, $me['company']) : false;
 
@@ -205,8 +203,7 @@
     }
 
     function exists() {
-      global $MRecruiter;
-      $me = $MRecruiter->me();
+      $me = RecruiterModel::me();
       return MongoId::isValid($me['company']);
     }
   }

@@ -27,6 +27,7 @@
 
       // Create necessary indices.
       mongo_ok(self::$collection->createIndex(array('text' => 'text')));
+      mongo_ok(self::$collection->createIndex(array('vanilla' => 1)));
     }
 
     public static function getAllVanilla($justText = false) {

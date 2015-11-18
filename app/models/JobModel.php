@@ -1,6 +1,4 @@
 <?php
-  require_once($GLOBALS['dirpre'].'models/Model.php');
-
   interface JobModelInterface {
     public function __construct();
 
@@ -30,10 +28,22 @@
      * @return Gets 'title', 'location', 'company', 'recruiter'.
      */
     public static function getByIdMinimal(MongoId $jobId);
+
+    public static function save(array $data, $setRecruiter);
+    public static function owner(MongoId $jobId);
+    public static function incrementApply(MongoId $jobId);
+    public static function find(array $query=array());
   }
 
   class JobModel extends Model {
     const DB_TYPE = parent::DB_INTERNSHIPS;
+
+    public function __construct() {
+      parent::__construct(self::DB_TYPE, 'jobs');
+
+      // Create necessary indices.
+      mongo_ok(self::$collection->createIndex(['recruiter' => 1]));
+    }
 
     public static function getApplicationQuestionIds(MongoId $jobId) {
       $questionIds = (new DBQuery(self::$collection))
@@ -79,59 +89,41 @@
       ]);
     }
 
-    public function __construct() {
-      parent::__construct(self::DB_TYPE, 'jobs');
-    }
-
-    function save($data, $setRecruiter=true) {
-      if ($setRecruiter) $data['recruiter'] = $_SESSION['_id'];
+    public static function save(array $data, $setRecruiter=true) {
+      if ($setRecruiter) {
+        $data['recruiter'] = $_SESSION['_id'];
+      }
       self::$collection->save($data);
       return $data['_id']->{'$id'};
     }
 
-    function get($id) {
-      return self::$collection->findOne(array('_id' => new MongoId($id)));
+    public static function owner(MongoId $jobId) {
+      $job = self::getById($jobId, ['recruiter' => 1]);
+      if (is_null($job)) return NULL;
+      return $job['recruiter'];
     }
-    function find($query=array()) {
+
+    public static function find(array $query=array()) {
       return self::$collection->find($query);
     }
-    function last($n=1) {
-      return self::$collection->find()->sort(array('_id'=>-1))->limit($n);
-    }
 
-    function owner($id) {
-      if (is_null($entry = $this->get($id))) return NULL;
-      return $entry['recruiter'];
-    }
+    public static function incrementApply(MongoId $jobId) {
+      $job = self::getById($jobId);
+      if (is_null($job)) return null;
 
-    function delete($id) {
-
-    }
-
-    function exists($id) {
-      return (self::get($id) !== NULL);
-    }
-
-    function incrementApply($id) {
-      $entry = self::get($id);
-      if($entry !== NULL) {
-        ++$entry['stats']['clicks'];
-        if(isset($_SESSION['loggedinstudent'])) {
-          $entry['applicants'][] = array($_SESSION['_id'], new MongoDate());
-        }
-        else {
-          $entry['applicants'][] = array('', new MongoDate());
-        }
-        self::save($entry, false);
-        return $entry['stats']['clicks'];
+      ++ $job['stats']['clicks'];
+      if (isset($_SESSION['loggedinstudent'])) {
+        $job['applicants'][] = array($_SESSION['_id'], new MongoDate());
       }
       else {
-        return NULL;
+        $job['applicants'][] = array('', new MongoDate());
       }
+      self::save($job, false);
+      return $job['stats']['clicks'];
     }
 
     protected static $collection;
   }
 
-  GLOBALvarSet('MJob', new JobModel());
+  new JobModel();
 ?>

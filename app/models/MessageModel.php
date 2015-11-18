@@ -1,57 +1,52 @@
 <?php
-  require_once($GLOBALS['dirpre'].'models/Model.php');
+  interface MessageModelInterface {
+    public function __construct($test);
 
-  class MessageModel extends Model {
+    public static function save(array $data);
+    public static function add(array $participants);
+    public static function reply(MongoId $messageId, $from, $msg);
+    public static function findByParticipant($participant);
+  }
+
+  class MessageModel extends Model implements MessageModelInterface {
     const DB_TYPE = parent::DB_INTERNSHIPS;
 
-    function __construct($test=false) {
+    public function __construct($test=false) {
       parent::__construct(self::DB_TYPE, 'message', $test);
+
+      // Create necessary indices.
     }
 
-    function save($data) {
+    public static function save(array $data) {
       self::$collection->save($data);
       return $data['_id']->{'$id'};
     }
 
-    function add($participants) {
+    public static function add(array $participants) {
       $data = array(
-        'participants' => $participants, 'replies' => array()
+        'participants' => $participants, 'replies' => []
       );
-      self::$collection->save($data);
-      return $data['_id']->{'$id'};
+      return self::save($data);
     }
 
-    function reply($id, $from, $msg) {
-      $entry = $this->get($id);
-      array_push($entry['replies'], array(
+    public static function reply(MongoId $messageId, $from, $msg) {
+      $message = self::getById($messageId);
+      array_push($message['replies'], [
         'from' => $from, 'msg' => $msg, 'time' => time(), 'read' => false
-      ));
-      self::$collection->save($entry);
-      return $entry;
+      ]);
+      self::save($message);
+      return $message;
     }
 
-    function findByParticipant($participant) {
-      return self::$collection->find(array(
-        'participants' => $participant,
-        'replies' => array('$not' => array('$size' => 0))
-      ));
-    }
-
-    function getLastOf($id) {
-      $entry = $this->get($id);
-      return array_pop($entry);
-    }
-
-    function get($id) {
-      return self::$collection->findOne(array('_id' => new MongoId($id)));
-    }
-
-    function exists($id) {
-      return ($this->get($id) !== NULL);
+    public static function findByParticipant($participant) {
+      $query = (new DBQuery(self::$collection))
+        ->toQuery('participants', $participant)
+        ->toQuery('replies', ['$not' => ['$size' => 0]]);
+      return $query->run();
     }
 
     protected static $collection;
   }
 
-  GLOBALvarSet('MMessage', new MessageModel());
+  new MessageModel();
 ?>

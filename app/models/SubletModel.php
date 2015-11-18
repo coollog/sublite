@@ -1,41 +1,42 @@
 <?php
-  require_once($GLOBALS['dirpre'].'models/Model.php');
+  interface SubletModelInterface {
+    public function __construct();
 
-  class SubletModel extends Model {
+    public static function save(array $data);
+    public static function find(array $query, array $fields);
+    public static function last($n);
+    public static function getByStudent(MongoId $studentId);
+  }
+
+  class SubletModel extends Model implements SubletModelInterface {
     const DB_TYPE = parent::DB_STUDENTS;
 
-    function __construct() {
+    public function __construct() {
       parent::__construct(self::DB_TYPE, 'listings');
+
+      // Create necessary indices.
+      mongo_ok(self::$collection->createIndex(['student' => 1]));
+      mongo_ok(self::$collection->createIndex(['publish' => 1]));
     }
 
-    function save($data) {
+    public static function save(array $data) {
       self::$collection->save($data);
       return $data['_id']->{'$id'};
     }
 
-    function get($id) {
-      return self::$collection->findOne(array('_id' => new MongoId($id)));
-    }
-    function find($query=array(), $fields=array()) {
+    public static function find(array $query=array(), array $fields=array()) {
       return self::$collection->find($query, $fields);
     }
-    function last($n=1) {
-      return $this->find(array('publish' => true))->sort(array('_id'=>-1))->limit($n);
+    public static function last($n=1) {
+      return parent::last($n, ['publish' => true]);
     }
-    function getByStudent($id) {
-      return self::$collection->find(array('student' => new MongoId($id)));
-    }
-
-    function delete($id) {
-
-    }
-
-    function exists($id) {
-      return (self::$collection->findOne(array('_id' => new MongoId($id))) !== NULL);
+    public static function getByStudent(MongoId $studentId) {
+      $query = (new DBQuery(self::$collection))->toQuery('student', $studentId);
+      return $query->run();
     }
 
     protected static $collection;
   }
 
-  GLOBALvarSet('MSublet', new SubletModel());
+  new SubletModel();
 ?>

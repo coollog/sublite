@@ -17,8 +17,13 @@
       $company = $data['company'];
       $title = clean($data['title']);
       $phone = isset($data['phone']) ? clean($data['phone']) : '';
-      $photo = isset($data['photo']) ?
-        clean($data['photo']) : 'assets/gfx/defaultpic.png';
+      $photo =
+        isset($data['photo']) ?
+          clean($data['photo']) :
+          $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
+      if ($photo == 'assets/gfx/defaultpic.png') {
+        $photo = $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
+      }
       $approved = $data['approved'];
       $credits = 0;
       return array(
@@ -38,8 +43,7 @@
 
     function home() {
       $this->requireLogin();
-      global $MRecruiter, $MJobs;
-      $me = $MRecruiter->me();
+      $me = RecruiterModel::me();
       $me['_id'] = $me['_id']->{'$id'};
       $me['company'] = $me['company']->{'$id'};
       self::render('recruiter/home', $me);
@@ -68,7 +72,7 @@
       }
       if (!isset($_POST['register'])) { self::render('recruiter/register'); return; }
 
-      global $params, $MRecruiter;
+      global $params;
       // Params to vars
       $data = $params;
       $data['email'] = clean($params['email']);
@@ -80,7 +84,7 @@
       $this->startValidations();
       $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL),
         $err, 'invalid email');
-      $this->validate(!$MRecruiter->exists($email),
+      $this->validate(!RecruiterModel::emailExists($email),
         $err, 'email taken');
       $this->validate($params['pass'] == $params['pass2'],
         $err, 'password mismatch');
@@ -89,7 +93,7 @@
       // Code
       if ($this->isValid()) {
         // Register the user, send a notice to us, and log him in
-        $MRecruiter->save($data);
+        RecruiterModel::save($data);
         $approveurl = "http://" . $GLOBALS['domain'] . "/approve.php?p=$pass";
         $msg = "New recruiter registered needs approval of account.
                 <br />Registration information:<br />
@@ -111,20 +115,20 @@
     function approve() {
       if (!isset($_GET['p'])) { $this->redirect('index'); return; }
 
-      global $params, $MRecruiter;
+      global $params;
       // Params to vars
       $p = $_GET['p'];
 
       // Validations
       $this->startValidations();
-      $this->validate(($entry = $MRecruiter->getByPass($p)) != NULL,
+      $this->validate(($entry = RecruiterModel::getByPass($p)) != NULL,
         $err, 'invalid');
       $this->validate($entry['approved'] == 'pending',
         $err, 'already approved');
 
       if ($this->isValid()) {
         $entry['approved'] = 'approved';
-        $MRecruiter->save($entry);
+        RecruiterModel::save($entry);
         extract($entry);
 
         $msg = "Hi $firstname!
@@ -151,7 +155,7 @@
     function login() {
       if (!isset($_POST['login'])) { self::render('recruiter/login'); return; }
 
-      global $params, $MRecruiter;
+      global $params;
       // Params to vars
       global $email;
       $email = clean($params['email']);
@@ -163,8 +167,8 @@
       $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL),
         $err, 'invalid email');
       $this->validate(
-        ($entry = $MRecruiter->get($email)) != NULL and
-        $MRecruiter->login($email, $pass),
+        ($entry = RecruiterModel::getByEmail($email)) != NULL and
+        RecruiterModel::login($email, $pass),
         $err, 'invalid credentials');
       $this->validate($entry['approved'] == 'approved',
         $err, 'account is pending approval. please allow 1-2 business days for us to verify your account. we will contact you when we approve your account. thank you!');
@@ -191,14 +195,14 @@
     function edit() {
       $this->requireLogin();
 
-      global $params, $MRecruiter;
+      global $params;
       if (!isset($_POST['edit'])) {
         self::render('recruiter/editprofile',
-          $this->data($MRecruiter->me())); return;
+          $this->data(RecruiterModel::me())); return;
       }
 
       // Params to vars
-      $me = $MRecruiter->me();
+      $me = RecruiterModel::me();
       $id = $params['_id'] = $me['_id'];
       $params['email'] = $me['email'];
       $params['pass'] = $me['pass'];
@@ -212,7 +216,7 @@
 
       if ($this->isValid()) {
         $data['_id'] = new MongoId($id);
-        $id = $MRecruiter->save($data);
+        $id = RecruiterModel::save($data);
         $this->success('profile saved');
         self::render('recruiter/editprofile', $data);
         return;
@@ -231,13 +235,13 @@
       );
     }
     function changePass() {
-      global $params, $MRecruiter;
+      global $params;
 
       // Validations
       $this->startValidations();
       $this->validate(
           isset($_GET['id']) and isset($_GET['code']) and
-          ($entry = $MRecruiter->getByID($id = $_GET['id'])) != NULL and
+          ($entry = RecruiterModel::getByID($id = $_GET['id'])) != NULL and
           $entry['pass'] == $_GET['code'],
         $err, 'permission denied');
 
@@ -250,7 +254,7 @@
 
         if ($this->isValid()) {
           $entry['pass'] = crypt($pass);
-          $MRecruiter->save($entry);
+          RecruiterModel::save($entry);
 
           $params['email'] = $entry['email'];
           $_POST['login'] = true; $this->login();
@@ -274,7 +278,7 @@
       );
     }
     function forgotPass() {
-      global $params, $MRecruiter;
+      global $params;
 
       if (!isset($_POST['forgot'])) { self::render('forgotpass'); return; }
 
@@ -282,7 +286,7 @@
 
       // Validations
       $this->startValidations();
-      $this->validate(($entry = $MRecruiter->get($email)) != NULL,
+      $this->validate(($entry = RecruiterModel::getByEmail($email)) != NULL,
         $err, 'no account found');
       $this->validate($entry['approved'] == 'approved',
         $err, 'account pending approval');
@@ -318,25 +322,25 @@
     function view() {
       // global $CJob; $CJob->requireLogin();
 
-      global $params, $MRecruiter, $MCompany, $MJob;
+      global $params;
 
       // Validations
       $this->startValidations();
       $this->validate(isset($_GET['id']) and
-        ($entry = $MRecruiter->getByID($id = new MongoId($_GET['id']))) != NULL,
+        ($entry = RecruiterModel::getByID($id = new MongoId($_GET['id']))) != NULL,
         $err, 'unknown recruiter');
 
       // Code
       if ($this->isValid()) {
         $data = $this->data($entry);
 
-        $this->validate(($company = $MCompany->get($data['company'])) != NULL,
+        $this->validate(($company = CompanyModel::getById($data['company'])) != NULL,
           $err, 'recruiter has not set up company profile');
 
         if ($this->isValid()) {
           $data['company'] = $company['name'];
 
-          $jobs = $MJob->getByRecruiter($id);
+          $jobs = JobModel::getByRecruiter($id);
           $data['jobtitles'] = array(); $data['joblocations'] = array();
           foreach ($jobs as $job) {
             array_push($data['jobtitles'], $job['title']);
@@ -364,7 +368,6 @@
     }
     function requireLogin() {
       if (self::loggedIn()) {
-        global $MRecruiter;
         // Params to vars
         $email = $_SESSION['email'];
         $pass = $_SESSION['pass'];
@@ -373,7 +376,7 @@
         self::startValidations();
         self::validate(filter_var($email, FILTER_VALIDATE_EMAIL),
           $err, 'invalid email');
-        self::validate(($entry = $MRecruiter->get($email)) != NULL,
+        self::validate(($entry = RecruiterModel::getByEmail($email)) != NULL,
           $err, 'unknown email');
         self::validate(hash_equals($entry['pass'], crypt($pass, $entry['pass'])),
           $err, 'invalid password');

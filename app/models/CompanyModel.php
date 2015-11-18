@@ -1,50 +1,49 @@
 <?php
-  require_once($GLOBALS['dirpre'].'models/Model.php');
-
   interface CompanyModelInterface {
+    public function __construct();
 
+    public static function save(array $data);
+    public static function getByName($name);
+    public static function getName(MongoId $companyId);
+    public static function getIndustry(MongoId $companyId);
+    public static function findIds(array $query);
   }
 
   class CompanyModel extends Model implements CompanyModelInterface {
     const DB_TYPE = parent::DB_INTERNSHIPS;
 
-    function __construct() {
+    public function __construct() {
       parent::__construct(self::DB_TYPE, 'companies');
+
+      // Create necessary indices.
+      mongo_ok(self::$collection->createIndex(['name' => 1]));
+      mongo_ok(self::$collection->createIndex(['industry' => 1]));
     }
 
-    function save($data) {
+    public static function save(array $data) {
       self::$collection->save($data);
       return $data['_id']->{'$id'};
     }
 
-    function get($id) {
-      return self::$collection->findOne(array('_id' => new MongoId($id)));
+    public static function getByName($name) {
+      $query = (new DBQuery(self::$collection))->toQuery('name', $name);
+      return $query->findOne();
     }
-    function getByName($name) {
-      return self::$collection->findOne(array('name' => $name));
-    }
-    function getName($companyId) {
+    public static function getName(MongoId $companyId) {
       $company = self::getById($companyId, ['name' => 1]);
       return $company['name'];
     }
-    function getIndustry($id) {
-      $entry = $this->get($id);
-      return $entry['industry'];
+    public static function getIndustry(MongoId $companyId) {
+      $company = self::getById($companyId, ['industry' => 1]);
+      return $company['industry'];
     }
-    function find($query) {
-      return self::$collection->find($query);
-    }
-
-    function delete($id) {
-
-    }
-
-    function exists($id) {
-      return ($this->get($id) !== NULL);
+    public static function findIds(array $query) {
+      $query = (new DBQuery(self::$collection))->setQuery($query)->projectId();
+      return $query->run();
     }
 
     protected static $collection;
   }
 
-  GLOBALvarSet('MCompany', new CompanyModel());
+  new CompanyModel();
 ?>

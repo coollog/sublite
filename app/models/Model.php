@@ -14,6 +14,8 @@
     public static function deleteById(MongoId $id);
     public static function getById(MongoId $id, array $projection);
     public static function getAll();
+    public static function exists(MongoId $id);
+    public static function last($n, array $query);
   }
 
   class Model {
@@ -29,6 +31,10 @@
       }
 
       return static::$collection;
+    }
+
+    public static function exists(MongoId $id) {
+      return !is_null(self::getById($id));
     }
 
     public static function insert(array $data) {
@@ -61,6 +67,14 @@
 
     public static function getAll() {
       return (new DBQuery(static::$collection))->run();
+    }
+
+    public static function last($n=1, array $query=array()) {
+      $last = (new DBQuery(static::$collection))
+        ->setQuery($query)
+        ->sort('_id', -1)
+        ->limit($n);
+      return $last->run();
     }
 
     protected static function checkReady() {
@@ -120,10 +134,11 @@
       return $m;
     }
 
+    protected static $collection;
+
     // Stores the db references to retrieve collections.
     private static $dbs = array();
 
-    protected static $collection;
 
     public function __construct($dbType, $collectionName) {
       self::connect($dbType);

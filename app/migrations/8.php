@@ -1,7 +1,5 @@
 <?php
-  global $MStudent;
-
-  $students = $MStudent->getAll();
+  $students = StudentModel::getAll();
 
   foreach ($students as $student) {
     if (!isset($student['gender'])) $student['gender'] = '';
@@ -9,7 +7,7 @@
       $student['photo'] = $student['pic'];
       unset($student['pic']);
     }
-    
-    $MStudent->save($student);
+
+    StudentModel::save($student);
   }
 ?>
