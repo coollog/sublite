@@ -285,15 +285,7 @@
   });
   Router::register('stats', function() {
     GLOBALvarGet('CJob')->requireLogin();
-    GLOBALvarGet('CStats')->update();
-    GLOBALvarGet('CStats')->nojobs();
-    GLOBALvarGet('CStats')->students();
-    GLOBALvarGet('CStats')->missingrecruiter();
-    GLOBALvarGet('CStats')->recruiterbydate();
-    GLOBALvarGet('CStats')->subletsended2014();
-    GLOBALvarGet('CStats')->unknownschools();
-    GLOBALvarGet('CStats')->cumulative();
-    GLOBALvarGet('CStats')->getMessageParticipants();
+    GLOBALvarGet('CStats')->loadStats()
   });
   Router::register('team', function() {
     GLOBALvarGet('CApp')->team();

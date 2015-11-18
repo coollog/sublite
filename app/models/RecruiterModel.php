@@ -127,7 +127,7 @@
       return $entry['firstname'] . ' ' . $entry['lastname'];
     }
     function getEmail($id) {
-      $entry = $this->getById($id);
+      $entry = $this->getById(new MongoId($id));
       return $entry['email'];
     }
     function getPhoto($id) {
