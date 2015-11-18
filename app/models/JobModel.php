@@ -32,6 +32,7 @@
     public static function save(array $data, $setRecruiter);
     public static function owner(MongoId $jobId);
     public static function incrementApply(MongoId $jobId);
+    public static function find(array $query=array());
   }
 
   class JobModel extends Model {
@@ -100,6 +101,10 @@
       $job = self::getById($jobId, ['recruiter' => 1]);
       if (is_null($job)) return NULL;
       return $job['recruiter'];
+    }
+
+    public static function find(array $query=array()) {
+      return self::$collection->find($query);
     }
 
     public static function incrementApply(MongoId $jobId) {

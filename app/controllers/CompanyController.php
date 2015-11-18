@@ -183,7 +183,7 @@
       // Validations
       $this->startValidations();
       $this->validate(isset($_GET['id']) and
-        ($entry = CompanyModel::getById($id = $_GET['id'])) != NULL,
+        ($entry = CompanyModel::getById($id = new MongoId($_GET['id']))) != NULL,
         $err, 'unknown company');
 
       // Code

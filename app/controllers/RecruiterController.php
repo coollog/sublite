@@ -17,8 +17,13 @@
       $company = $data['company'];
       $title = clean($data['title']);
       $phone = isset($data['phone']) ? clean($data['phone']) : '';
-      $photo = isset($data['photo']) ?
-        clean($data['photo']) : 'assets/gfx/defaultpic.png';
+      $photo =
+        isset($data['photo']) ?
+          clean($data['photo']) :
+          $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
+      if ($photo == 'assets/gfx/defaultpic.png') {
+        $photo = $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
+      }
       $approved = $data['approved'];
       $credits = 0;
       return array(

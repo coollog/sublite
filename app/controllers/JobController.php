@@ -240,7 +240,7 @@
       // Validations
       $this->startValidations();
       $this->validate(isset($_GET['id']) and
-        ($entry = JobModel::getById($_GET['id'])) != NULL,
+        ($entry = JobModel::getById(new MongoId($_GET['id']))) != NULL,
         $err, 'unknown job');
 
       // Code

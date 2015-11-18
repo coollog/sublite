@@ -82,10 +82,10 @@
     function setFromNamePic(&$reply, MongoId $from) {
       $reply['fromname'] = $this->getName($from);
       if (StudentModel::exists($from)) {
-        $Photo = StudentModel::getPhoto($from);
-        if ($Photo == '' or $Photo == 'defaultpic.png' or $Photo == 'noprofilepic.png')
-          $Photo = $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
-        $reply['frompic'] = $Photo;
+        $photo = StudentModel::getPhoto($from);
+        if ($photo == '' or $photo == 'defaultpic.png' or $photo == 'noprofilepic.png')
+          $photo = $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
+        $reply['frompic'] = $photo;
       } else if (RecruiterModel::exists($from)) {
         $reply['frompic'] = RecruiterModel::getPhoto($from);
       } else {
