@@ -285,7 +285,7 @@
   });
   Router::register('stats', function() {
     GLOBALvarGet('CJob')->requireLogin();
-    GLOBALvarGet('CStats')->loadStats()
+    GLOBALvarGet('CStats')->loadStats();
   });
   Router::register('team', function() {
     GLOBALvarGet('CApp')->team();

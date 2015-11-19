@@ -10,13 +10,22 @@
       $missingRecruiterArray = self::missingrecruiter(); //contains array 'missingRecruiters'
       $recruiterByDateArray = self::recruiterbydate(); //contains array 'recruiterByDate'
       $subletsended2014Array = self::subletsended2014(); // contains array 'subletsended2014'
-      $unknownschoolsArray = self::unknownschools(); // contains array 'domain'
+      $unknownSchoolsArray = self::unknownschools(); // contains array 'domains'
       $cumulativeArray = self::cumulative(); // contains arrays 'cumulativeviews', 'cumulativeclicks'
       $getMessageParticipantsArray = self::getMessageParticipants(); // contains array 'messageparticipants'
 
-      $toRender = array_merge($updateArray, $nojobsArray, $studentsArray,
-        $missingRecruiterArray, $recruiterByDateArray, $subletsended2014Array,
-        $unknownschoolsArray, $cumulativeArray, $getMessageParticipantsArray);
+      $toRender = [
+        "updateArray" => $updateArray,
+        "nojobsArray" => $nojobsArray,
+        "studentsArray" => $studentsArray,
+        "missingRecruiterArray" => $missingRecruiterArray,
+        "recruiterByDateArray" => $recruiterByDateArray,
+        "subletsended2014Array" => $subletsended2014Array,
+        "unknownSchoolsArray" => $unknownSchoolsArray,
+        "cumulativeArray" => $cumulativeArray,
+        "getMessageParticipantsArray" => $getMessageParticipantsArray
+      ];
+
       self::render('/stats/stats', $toRender);
     }
 
@@ -25,7 +34,7 @@
     */
     function update() {
       global $MApp, $MStats;
-      $updateArray = [];
+      $updateArray = ["cities" => null];
 
       $stats = $MApp->updateStats();
       $updateArray['stats'] = $stats;
@@ -110,13 +119,12 @@
           }
         }
         $allStudents[] = ["firstname" => $firstname, "lastname" => $lastname, "email" => $email];
-
+      }
       $studentsArray['studentsConfirmedEmails'] = $confirmedEmails;
       $studentsArray['studentsUnconfirmedEmails'] = $unconfirmedEmails;
       $studentsArray['allStudents'] = $allStudents;
       return $studentsArray;
     }
-  }
 
     /*
     * Returns recruiters who are missing jobs
@@ -125,7 +133,6 @@
       global $MStats;
       $missingRecruiterArray = [];
 
-      $mrArray = [];
       $mr = $MStats->getJobsMissingRecruiter();
 
       $missingRecruiterArray["missingRecruiters"] = $mr;
@@ -186,7 +193,7 @@
         }
       }
       $count = count($domains);
-      $unknownschoolsArray['unknownschoolsdomains'] = $domains;
+      $unknownschoolsArray['domains'] = $domains;
       return $unknownschoolsArray;
     }
     function cumulative() {

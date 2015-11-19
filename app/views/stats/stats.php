@@ -10,15 +10,15 @@
 <panel>
 <div class = "content">
   <div id="update">
-    <pre><?php var_dump(View::get('stats')); ?></pre>
-    <pre><?php var_dump(View::get('cities'));?></pre>
+    <pre><?php var_dump(View::get('updateArray')['stats']); ?></pre>
+    <pre><?php var_dump(View::get('updateArray')['cities']);?></pre>
   </div>
   <div id = "nojobs">
     <?php
     global $MRecruiter, $MJob, $MCompany; //get rid of these globals somehow?
       echo 'Recruiters who have posted jobs:<br />
         <textarea style="width:800px; height: 400px;">';
-      foreach (View::get('recruiterEmailsWJ') as $r) {
+      foreach (View::get('nojobsArray')['recruiterEmailsWJ'] as $r) {
         $email = $r['email'];
         $firstname = $r['firstname'];
         $lastname = $r['lastname'];
@@ -30,13 +30,13 @@
       echo '</textarea>';
       echo '<br />Recruiters who have not posted jobs:<br />
         <textarea style="width:800px; height: 400px;">';
-      foreach (View::get('recruiterEmails') as $email) {
+      foreach (View::get('nojobsArray')['recruiterEmails'] as $email) {
         echo "$email\n";
       }
       echo '</textarea>';
       echo '<br />Recruiters who have not posted jobs but have made a company profile:<br />
         <textarea style="width:800px; height: 400px;">';
-      foreach (View::get('recruiterEmailsWC') as $email) {
+      foreach (View::get('nojobsArray')['recruiterEmailsWC'] as $email) {
         echo "$email\n";
       }
       echo '</textarea>';
@@ -44,9 +44,9 @@
   </div>
   <div id = "students">
     <?php
-    $c = View::get('studentsConfirmedEmails');
-    $u = View::get('studentsUnconfirmedEmails');
-    $all = View::get('allStudents');
+    $c = View::get('studentsArray')['studentsConfirmedEmails'];
+    $u = View::get('studentsArray')['studentsUnconfirmedEmails'];
+    $all = View::get('studentsArray')['allStudents'];
     echo '<br />Confirmed students: '.count($c).'<br />
       <textarea style="width:800px; height: 200px;">';
     foreach ($c as $email) {
@@ -74,7 +74,7 @@
 
   <div id="missingrecruiter">
     <?php
-    $mr = View::get('missingRecruiters');
+    $mr = View::get('missingRecruiterArray')['missingRecruiters'];
     echo '<br />Jobs nonexistent recruiter: '.count($mr).'<br />
      <textarea style="width:800px; height: 200px;">';
      foreach ($mr as $job) {
@@ -89,7 +89,7 @@
 
   <div id = "recruiterbydate">
     <?php
-    $rs = View::get('recruiterByDate');
+    $rs = View::get('recruiterByDateArray')['recruiterByDate'];
     echo '<br />Recruiters with date of joining:<br />
      <textarea style="width:800px; height: 200px;">';
     foreach ($rs as $r) {
@@ -101,7 +101,7 @@
 
   <div id = "subletsended2014">
     <?php
-    $ss = View::get('subletsended2014');
+    $ss = View::get('subletsended2014Array')['subletsended2014'];
     echo '<br />Sublets with end dates before 1/1/2015:<br />
       <textarea style="width:800px; height: 200px;">';
     foreach ($ss as $s) {
@@ -113,7 +113,7 @@
 
   <div id = "unknownschools">
     <?php
-    $domains = View::get('unknownschoolsdomains');
+    $domains = View::get('unknownSchoolsArray')['domains'];
     echo "<br />Unknown Schools: " . count($domains) . ' <br />
      <textarea style="width:800px; height: 200px;">';
     foreach ($domains as $d) {
@@ -125,15 +125,16 @@
 
   <div id = "cumulative">
     <?php
-    $views = View::get('cumulativeviews');
-    $clicks = View::get('cumulativeclicks');
-    echo "<br />Jobs views: $views<br />Jobs clicks: $clicks<br />";
+    $cumulative = View::get('cumulativeArray');
+    $views = $cumulative['cumulativeviews'];
+    $clicks = $cumulative['cumulativeclicks'];
+    echo "<br />Jobs views: $views<br />Jobs clicks: $clicks <br />";
     ?>
   </div>
 
   <div id = "getmessageparticipants">
     <?php
-    $plist = View::get('messageparticipants');
+    $plist = View::get('getMessageParticipantsArray')['messageparticipants'];
     echo "<br />Message Participants: " . count($plist) . ' <br />
      <textarea style="width:800px; height: 200px;">';
     foreach ($plist as $email => $data) {
