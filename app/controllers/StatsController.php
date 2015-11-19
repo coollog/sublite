@@ -171,7 +171,8 @@
         $student = $MStudent->getById($s['student']);
         if (isset($student['name'])) $name = $student['name'];
         else $name = 'noname';
-        $email = $student['email'];
+        if (isset($student['email'])) $email = $student['email'];
+        else $email = 'noemail';
         $ss[] = "\"$email\",\"$name\",\"$id\"";
       }
       $subletsended2014Array['subletsended2014'] = $ss;
