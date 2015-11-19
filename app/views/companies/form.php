@@ -5,7 +5,7 @@
       <i>This form auto-saves, so you may return to finish the form later.</i>
     <?php } ?>
     <form method="post" id="company">
-      <?php 
+      <?php
         if (vget('_id') !== null) {
           $id = vget('_id');
           echo ' &nbsp; ' . vlinkto('<input type="button" value="View Company Profile" /><br /><br />', 'company', array('id' => $id));
@@ -31,28 +31,28 @@
 
       <div class="form-slider"><label for="founded">Year of founding?*</label><input type="text" id="founded" name="founded" value="<?php vecho('founded'); ?>" required /></div>
 
-      <div class="form-slider"><label for="location" class="fortextarea">Location of office(s)?*</label><input type="text" id="location" name="location" value="<?php vecho('location'); ?>" required /></div>      
+      <div class="form-slider"><label for="location" class="fortextarea">Location of office(s)?*</label><input type="text" id="location" name="location" value="<?php vecho('location'); ?>" required /></div>
 
       <div class="form-slider"><label for="corevalues" class="fortextarea">What are your company's core values?* (max. 1000 characters)</label><textarea id="corevalues" name="corevalues" required maxlength="1000"><?php vecho('corevalues'); ?></textarea></div>
 
-      <?php 
+      <?php
         vpartial('s3single', array(
-          's3name' => 'logophoto', 
+          's3name' => 'logophoto',
           's3title' => 'What is your company logo?*',
           's3link' => vget('logophoto')
         ));
       ?>
-      <?php 
+      <?php
         vpartial('s3single', array(
-          's3name' => 'bannerphoto', 
+          's3name' => 'bannerphoto',
           's3title' => 'What would you like your banner image to be?*',
           's3link' => vget('bannerphoto')
         ));
       ?>
 
-      <?php 
+      <?php
         vpartial('s3multiple', array(
-          's3name' => 'photos', 
+          's3name' => 'photos',
           's3title' => 'Additional photos (upload at least 4 more):',
           's3links' => vget('photos')
         ));
@@ -165,6 +165,11 @@
         .filter(function() { return $(this).val() == val; })
         .prop('checked', true);
     }
+    console.log('loaded form');
   }
-  <?php if (vget('submitname') == 'add') echo "loadForm('#company');"; ?>
+  <?php
+    if (View::get('submitname') == 'add' && View::get('Error') == '') {
+      echo "loadForm('#company');";
+    }
+  ?>
 </script>
