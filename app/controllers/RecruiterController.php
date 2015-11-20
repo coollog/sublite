@@ -154,7 +154,7 @@
       global $params, $MRecruiter;
       // Params to vars
       global $email;
-      $email = clean($params['email']);
+      $email = strtolower(clean($params['email']));
       $pass = $params['pass'];
       $data = array('email' => $email);
 
