@@ -69,9 +69,9 @@
         $id = $recruiter['_id']->{'$id'};
         $rdoc = $MRecruiter->getById(new MongoId($id));
         if (!in_array($id, $rids)) {
-          $emails[] = $rdoc['email'];
+          $emails[] = $rdoc;
           if (MongoID::isValid($recruiter['company'])) {
-            $emailswc[] = $rdoc['email'];
+            $emailswc[] = $rdoc;
           }
         } else {
           $emailswj[] = $rdoc; 
