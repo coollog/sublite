@@ -113,8 +113,8 @@
       break;
 
     case '/employers':
-      Metatags::ogTitle(
-        "SubLite &ndash; Your One-Stop Shop for a Great Summer!");
+      $title = "SubLite &ndash; Your One-Stop Shop for a Great Summer!";
+      Metatags::bothTitles($title);
       Metatags::ogImage("https://sublite.net/app/assets/gfx/studentmain.jpg");
       Metatags::ogDescription(
         "Attract the New Generation Talent with your Company's Unique Personality.");
