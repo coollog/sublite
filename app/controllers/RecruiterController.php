@@ -147,7 +147,6 @@
       echo $err;
     }
 
-
     function login() {
       if (!isset($_POST['login'])) { self::render('recruiter/login'); return; }
 
