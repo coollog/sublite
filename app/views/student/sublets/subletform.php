@@ -2,7 +2,7 @@
   <div class="content">
     <headline><?php vecho('headline'); ?> Sublet Listing</headline>
     <form method="post">
-      <?php 
+      <?php
         if (vget('_id') !== null) {
           $id = vget('_id');
           echo ' &nbsp; ' . vlinkto('<input type="button" value="View Sublet Listing" /><br /><br />', 'sublet', array('id' => $id), true);
@@ -10,13 +10,13 @@
       ?>
 
       <?php vnotice(); ?>
-      
+
       <div class="form-slider"><label for="address">Address:</label><input type="text" id="address" name="address" value="<?php vecho('address'); ?>" required /></div>
       <div class="form-slider"><label for="city">City:</label><input type="text" id="city" name="city" value="<?php vecho('city'); ?>" required /></div>
       <div class="form-slider"><label for="state">State:</label><input type="text" id="state" name="state" value="<?php vecho('state'); ?>" required /></div>
 
-      <div class="form-slider"><label for="startdate">Available from (mm/dd/yyyy):</label><input type="text" id="startdate" name="startdate" value="<?php vecho('startdate'); ?>" required /></div>
-      <div class="form-slider"><label for="enddate">Available till (mm/dd/yyyy):</label><input type="text" id="enddate" name="enddate" value="<?php vecho('enddate'); ?>" required /></div>
+      <div class="form-slider"><label for="startdate">Available from (mm/dd/yyyy):</label><input class="datepicker" type="text" id="startdate" name="startdate" value="<?php vecho('startdate'); ?>" required /></div>
+      <div class="form-slider"><label for="enddate">Available till (mm/dd/yyyy):</label><input class="datepicker" type="text" id="enddate" name="enddate" value="<?php vecho('enddate'); ?>" required /></div>
 
       <div class="form-slider"><label for="price">Price ($):</label><input type="text" id="price" name="price" value="<?php vecho('price'); ?>" required /></div>
       <right>
@@ -46,9 +46,9 @@
 
       <?php vpartial('amenities'); ?>
 
-      <?php 
+      <?php
         vpartial('s3multiple', array(
-          's3name' => 'photos', 
+          's3name' => 'photos',
           's3title' => 'Photos (recommended: >4 photos):',
           's3links' => vget('photos')
         ));
@@ -68,7 +68,7 @@
       <input type="checkbox" name="terms" id="terms" value="agree" required /> <label for="terms">I have read, fully understand, and agree to SubLite&rsquo;s <a href="terms.php">Terms of Service</a>. I represent and warrant that I have permission to list this property, and that the description is accurate and not misleading. I will negotiate the terms of the stay with potential guests in good-faith.</label>
 
       <br /><br />
-      
+
       <?php vnotice(); ?>
 
       <right>
