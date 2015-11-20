@@ -31,7 +31,7 @@
     <div class="slider sliderrange" min="0" max="10000" minfield="#price0" maxfield="#price1"></div>
     <div class="sliderafter" id="price0after">$<span><?php vecho('price0', null, 0); ?></span> &ndash; $<span><?php vecho('price1', null, 5000); ?></div>
 
-    <div class="form-slider"><label for="occupancy">How many people? </label><input type="number" id="occupancy" name="occupancy" value="<?php vecho('occupancy'); ?>" /></div>
+    <div class="form-slider"><label for="occupancy">How many people? </label><input type="number" min="0" id="occupancy" name="occupancy" value="<?php vecho('occupancy'); ?>" /></div>
 
     <?php vpartial('roomtype', array('any'=>true)); ?>
 
@@ -56,7 +56,7 @@
         ?>
       </select>
     </div>
-    
+
     <?php vnotice(); ?>
     <input type="submit" name="search" value="Search" />
   </form>
