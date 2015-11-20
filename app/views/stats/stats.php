@@ -37,6 +37,8 @@
         $company = $r['company'];
         if (MongoId::isValid($company))
           $company = $MCompany->getName($company);
+        else
+          $company = "NO COMPANY";
         echo "\"$email\",\"$firstname\",\"$lastname\",\"$company\"\n";
       }
       echo '</textarea>';
@@ -49,6 +51,8 @@
         $company = $r['company'];
         if (MongoId::isValid($company))
           $company = $MCompany->getName($company);
+        else
+          $company = "NO COMPANY";
         echo "\"$email\",\"$firstname\",\"$lastname\",\"$company\"\n";
       }
       echo '</textarea>';
@@ -61,6 +65,8 @@
         $company = $r['company'];
         if (MongoId::isValid($company))
           $company = $MCompany->getName($company);
+        else
+          $company = "NO COMPANY";
         echo "\"$email\",\"$firstname\",\"$lastname\",\"$company\"\n";
       }
       echo '</textarea>';
