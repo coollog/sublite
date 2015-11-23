@@ -4,25 +4,26 @@
   ini_set("log_errors", 1);
   ini_set("error_log", $GLOBALS['dirpre']."../errors.log");
 
+  // Send error reports.
+  function senderror($error) {
+    $session = $_SESSION;
+    unset($session['pass']);
+    $m = array2str(array(
+      'errormsg' => $error,
+      'session' => array2str($session, " &nbsp; &nbsp; %s = '%s'"),
+      'server' => array2str($_SERVER, " &nbsp; &nbsp; %s = '%s'"),
+      'request' => array2str($_REQUEST, " &nbsp; &nbsp; %s = '%s'")
+    ));
+
+    sendgmail(array('tony.jiang@yale.edu', 'qingyang.chen@gmail.com'), "info@sublite.net", 'SubLite Error Report', $m);
+    //echo "Error report sent!<br />\n";
+  }
+
   // error handler function
   function errorHandler($errno, $errstr, $errfile, $errline) {
     if (!(error_reporting() & $errno)) {
       // This error code is not included in error_reporting
       return;
-    }
-
-    function senderror($error) {
-      $session = $_SESSION;
-      unset($session['pass']);
-      $m = array2str(array(
-        'errormsg' => $error,
-        'session' => array2str($session, " &nbsp; &nbsp; %s = '%s'"),
-        'server' => array2str($_SERVER, " &nbsp; &nbsp; %s = '%s'"),
-        'request' => array2str($_REQUEST, " &nbsp; &nbsp; %s = '%s'")
-      ));
-
-      sendgmail(array('tony.jiang@yale.edu', 'qingyang.chen@gmail.com'), "info@sublite.net", 'SubLite Error Report', $m);
-      //echo "Error report sent!<br />\n";
     }
 
     switch ($errno) {
@@ -39,10 +40,11 @@
 
       default:
         $error = "Unknown error type: [$errno] \"$errstr\" in file \"$errfile\" on line $errline<br />\n";
-        Controller::render('500');
-        Controller::finish();
 
         senderror($error);
+
+        Controller::render('500');
+        Controller::finish();
 
         //echo 'Aborting...<br />\n';
         exit(1);
@@ -62,8 +64,8 @@
       errorHandler( $error["type"], $error["message"], $error["file"], $error["line"] );
   }
 
-  if ($env !== 'dev') {
+  // if ($env !== 'dev') {
     register_shutdown_function( "check_for_fatal" );
     set_error_handler( "errorHandler" );
-  }
+  // }
 ?>

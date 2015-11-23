@@ -470,8 +470,8 @@
       // Validations
       $this->startValidations();
       $this->validate(
-          isset($_GET['id']) and isset($_GET['code']) and
-          ($entry = $MStudent->getByID($id = $_GET['id'])) != NULL and
+          isset($_GET['id']) && isset($_GET['code']) &&
+          !is_null($entry = $MStudent->getByID($id = new MongoId($_GET['id']))) &&
           $entry['pass'] == $_GET['code'],
         $err, 'permission denied');
 
