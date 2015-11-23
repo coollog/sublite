@@ -652,3 +652,7 @@
     </div>
   </div>
 </panel>
+
+<script>
+  formunloadjobsmsg("Are you sure you wish to leave this page? Unsaved changes will be lost.");
+</script>
