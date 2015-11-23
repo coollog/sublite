@@ -236,7 +236,7 @@
       $this->startValidations();
       $this->validate(
           isset($_GET['id']) and isset($_GET['code']) and
-          ($entry = $MRecruiter->getByID($id = $_GET['id'])) != NULL and
+          ($entry = $MRecruiter->getByID($id = new MongoId($_GET['id']))) != NULL and
           $entry['pass'] == $_GET['code'],
         $err, 'permission denied');
 

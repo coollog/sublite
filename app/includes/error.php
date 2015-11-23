@@ -38,11 +38,11 @@
         break;
 
       default:
+        senderror($error);
+
         $error = "Unknown error type: [$errno] \"$errstr\" in file \"$errfile\" on line $errline<br />\n";
         Controller::render('500');
         Controller::finish();
-
-        senderror($error);
 
         //echo 'Aborting...<br />\n';
         exit(1);
