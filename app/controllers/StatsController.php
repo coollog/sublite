@@ -62,24 +62,32 @@
         $rids[] = $job['recruiter']->{'$id'};
       }
 
-      $emails = array();
-      $emailswc = array();
-      $emailswj = array();
+      $emails = [];
+      $emailswc = [];
+      $emailswj = [];
+      $onlyApproved = [];
       foreach ($r as $recruiter) {
         $id = $recruiter['_id']->{'$id'};
         $rdoc = $MRecruiter->getById(new MongoId($id));
-        if (!in_array($id, $rids)) {
-          $emails[] = $rdoc['email'];
-          if (MongoID::isValid($recruiter['company'])) {
-            $emailswc[] = $rdoc['email'];
-          }
+        if (in_array($id, $rids)) {
+          $emailswj[] = $rdoc; // recruiters who have posted at least one job and have a company profile
         } else {
-          $emailswj[] = $rdoc; 
+          $emails[] = $rdoc; // recruiters who have not posted a job
+          if (MongoID::isValid($recruiter['company'])) { // recruiters who have a company profile
+            $emailswc[] = $rdoc; 
+          } else { // recruiters who don't have a company profile
+            if ($recruiter['approved'] == 'approved') { // recruiters who are approved
+              $onlyApproved[] = $rdoc;
+            } else { // recruiters who are not approved
+
+            }
+          }
         }
       }
       $nojobsArray['recruiterEmails'] = $emails;
       $nojobsArray['recruiterEmailsWC'] = $emailswc;
       $nojobsArray['recruiterEmailsWJ'] = $emailswj;
+      $nojobsArray['recruiterEmailsOnlyApproved'] = $onlyApproved;
 
       return $nojobsArray;
     }

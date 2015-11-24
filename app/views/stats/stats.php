@@ -30,14 +30,38 @@
       echo '</textarea>';
       echo '<br />Recruiters who have not posted jobs:<br />
         <textarea style="width:800px; height: 400px;">';
-      foreach (View::get('nojobsArray')['recruiterEmails'] as $email) {
-        echo "$email\n";
+      foreach (View::get('nojobsArray')['recruiterEmails'] as $r) {
+        $email = $r['email'];
+        $firstname = $r['firstname'];
+        $lastname = $r['lastname'];
+        $company = $r['company'];
+        if (MongoId::isValid($company))
+          $company = $MCompany->getName($company);
+        echo "\"$email\",\"$firstname\",\"$lastname\",\"$company\"\n";
       }
       echo '</textarea>';
       echo '<br />Recruiters who have not posted jobs but have made a company profile:<br />
         <textarea style="width:800px; height: 400px;">';
-      foreach (View::get('nojobsArray')['recruiterEmailsWC'] as $email) {
-        echo "$email\n";
+      foreach (View::get('nojobsArray')['recruiterEmailsWC'] as $r) {
+        $email = $r['email'];
+        $firstname = $r['firstname'];
+        $lastname = $r['lastname'];
+        $company = $r['company'];
+        if (MongoId::isValid($company))
+          $company = $MCompany->getName($company);
+        echo "\"$email\",\"$firstname\",\"$lastname\",\"$company\"\n";
+      }
+      echo '</textarea>';
+      echo '<br />Recruiters who are approved but have done nothing: <br />
+        <textarea style="width:800px; height: 400px;">';
+      foreach (View::get('nojobsArray')['recruiterEmailsOnlyApproved'] as $r) {
+        $email = $r['email'];
+        $firstname = $r['firstname'];
+        $lastname = $r['lastname'];
+        $company = $r['company'];
+        if (MongoId::isValid($company))
+          $company = $MCompany->getName($company);
+        echo "\"$email\",\"$firstname\",\"$lastname\",\"$company\"\n";
       }
       echo '</textarea>';
     ?>
