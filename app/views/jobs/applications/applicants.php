@@ -861,8 +861,13 @@
       <div class="headline">
         Viewing job applicants for:
         <b>
-          <?php View::echof('jobTitle'); ?> |
-          <?php View::echof('jobLocation'); ?>
+          <?php View::echof('jobTitle'); ?>
+          <?php
+            if (strlen(View::get('joblocation')) > 0) {
+              echo ' | ';
+              View::echof('jobLocation');
+            }
+          ?>
         </b>
       </div>
 
