@@ -15,7 +15,7 @@
 
     function add($participants) {
       $data = array(
-        'participants' => new MongoId($participants), 'replies' => array()
+        'participants' => $participants, 'replies' => array()
       );
       self::$collection->save($data);
       return $data['_id']->{'$id'};
