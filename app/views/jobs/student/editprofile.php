@@ -490,6 +490,7 @@
         return;
       }
       saveProfile(profile);
+      window.onbeforeunload = null;
     });
   }
 
