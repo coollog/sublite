@@ -24,7 +24,7 @@
     line-height: 30px;
     height: 30px;
   }
-  
+
   options.right {
     float: right;
   }
@@ -78,7 +78,7 @@
 
     array("Housing", $path."housing/search", "student"),
     array("Jobs", $path."jobs/search", "student"),
-    array("Socialize", $path."hubs/start", "student"),
+    // array("Socialize", $path."hubs/start", "student"),
     array("Add Sublet", $path."housing/addsublet", "student /housing"),
     array("Manage", $path."housing/home", "student"),
     array("Messages", $path."messages", "student"),

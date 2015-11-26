@@ -196,6 +196,7 @@
   }
 
   function isFacebookBot() {
+    if (!isset($_SERVER["HTTP_USER_AGENT"])) return false;
     return
       strpos($_SERVER["HTTP_USER_AGENT"], "facebookexternalhit/") !== false ||
       strpos($_SERVER["HTTP_USER_AGENT"], "Facebot") !== false;

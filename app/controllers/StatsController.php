@@ -2,21 +2,57 @@
   require_once($GLOBALS['dirpre'].'controllers/Controller.php');
 
   class StatsController extends Controller {
+
+    function loadStats() {
+      $updateArray = self::update(); // contains arrays 'stats' and 'cities'
+      $nojobsArray = self::nojobs(); // contains arrays 'recruiterEmails', 'recruiterEmailsWC', and 'recruiterEmailsWJ'
+      $studentsArray = self::students(); // contains arrays 'studentConfirmedEmails', 'studentsUnconfirmedEmails', 'allStudents'
+      $missingRecruiterArray = self::missingrecruiter(); //contains array 'missingRecruiters'
+      $recruiterByDateArray = self::recruiterbydate(); //contains array 'recruiterByDate'
+      $subletsended2014Array = self::subletsended2014(); // contains array 'subletsended2014'
+      $unknownSchoolsArray = self::unknownschools(); // contains array 'domains'
+      $cumulativeArray = self::cumulative(); // contains arrays 'cumulativeviews', 'cumulativeclicks'
+      $getMessageParticipantsArray = self::getMessageParticipants(); // contains array 'messageparticipants'
+
+      $toRender = [
+        "updateArray" => $updateArray,
+        "nojobsArray" => $nojobsArray,
+        "studentsArray" => $studentsArray,
+        "missingRecruiterArray" => $missingRecruiterArray,
+        "recruiterByDateArray" => $recruiterByDateArray,
+        "subletsended2014Array" => $subletsended2014Array,
+        "unknownSchoolsArray" => $unknownSchoolsArray,
+        "cumulativeArray" => $cumulativeArray,
+        "getMessageParticipantsArray" => $getMessageParticipantsArray
+      ];
+
+      self::render('/stats/stats', $toRender);
+    }
+
+    /*
+    * Returns a view with updated stats
+    */
     function update() {
       global $MApp, $MStats;
+      $updateArray = ["cities" => null];
 
       $stats = $MApp->updateStats();
+      $updateArray['stats'] = $stats;
       if (isset($_GET['cities'])) {
         $cities = $MStats->getCities();
         asort($cities);
-        echo '<pre>'; var_dump($cities); echo '</pre>';
+        $updateArray['cities'] = $cities;
       }
-
-      echo 'Updated stats! Next time use ?cities to also update cities count (may take a while).<br /><pre>';
-      var_dump($stats); echo '</pre>';
+      //echo 'Updated stats! Next time use ?cities to also update cities count (may take a while).<br /><pre>';
+      return $updateArray;
     }
+
+    /*
+    * Returns a view that has lists of emails of recruiters without companies and without jobs
+    */
     function nojobs() {
       global $MRecruiter, $MJob, $MCompany;
+      $nojobsArray = [];
 
       $r = $MRecruiter->find();
       $j = $MJob->find();
@@ -26,70 +62,59 @@
         $rids[] = $job['recruiter']->{'$id'};
       }
 
-      $emails = array();
-      $emailswc = array();
-      $emailswj = array();
+      $emails = [];
+      $emailswc = [];
+      $emailswj = [];
+      $onlyApproved = [];
       foreach ($r as $recruiter) {
         $id = $recruiter['_id']->{'$id'};
-        $rdoc = $MRecruiter->getById($id);
-        if (!in_array($id, $rids)) {
-          $emails[] = $rdoc['email'];
-          if (MongoID::isValid($recruiter['company'])) {
-            $emailswc[] = $rdoc['email'];
-          }
+        $rdoc = $MRecruiter->getById(new MongoId($id));
+        if (in_array($id, $rids)) {
+          $emailswj[] = $rdoc; // recruiters who have posted at least one job and have a company profile
         } else {
-          $emailswj[] = $rdoc;
+          $emails[] = $rdoc; // recruiters who have not posted a job
+          if (MongoID::isValid($recruiter['company'])) { // recruiters who have a company profile
+            $emailswc[] = $rdoc; 
+          } else { // recruiters who don't have a company profile
+            if ($recruiter['approved'] == 'approved') { // recruiters who are approved
+              $onlyApproved[] = $rdoc;
+            } else { // recruiters who are not approved
+
+            }
+          }
         }
       }
+      $nojobsArray['recruiterEmails'] = $emails;
+      $nojobsArray['recruiterEmailsWC'] = $emailswc;
+      $nojobsArray['recruiterEmailsWJ'] = $emailswj;
+      $nojobsArray['recruiterEmailsOnlyApproved'] = $onlyApproved;
 
-      echo 'Recruiters who have posted jobs:<br />
-        <textarea style="width:800px; height: 400px;">';
-      foreach ($emailswj as $r) {
-        $email = $r['email'];
-        $firstname = $r['firstname'];
-        $lastname = $r['lastname'];
-        $company = $r['company'];
-        if (MongoId::isValid($company))
-          $company = $MCompany->getName($company);
-        echo "\"$email\",\"$firstname\",\"$lastname\",\"$company\"\n";
-      }
-      echo '</textarea>';
-      echo '<br />Recruiters who have not posted jobs:<br />
-        <textarea style="width:800px; height: 400px;">';
-      foreach ($emails as $email) {
-        echo "$email\n";
-      }
-      echo '</textarea>';
-      echo '<br />Recruiters who have not posted jobs but have made a company profile:<br />
-        <textarea style="width:800px; height: 400px;">';
-      foreach ($emailswc as $email) {
-        echo "$email\n";
-      }
-      echo '</textarea>';
+      return $nojobsArray;
     }
+
+    /*
+    * Returns a view with students
+    */
     function students() {
       global $MStats;
+      $studentsArray = [];
 
       $c = $MStats->getStudentsConfirmed();
       $u = $MStats->getStudentsUnConfirmed();
       $all = $MStats->getStudentsAll();
 
-      echo '<br />Confirmed students: '.$c->count().'<br />
-        <textarea style="width:800px; height: 200px;">';
+      $confirmedEmails = [];
+      $unconfirmedEmails = [];
+      $allStudents = [];
+
       foreach ($c as $student) {
-        $email = $student['email'];
-        echo "$email\n";
+        $confirmedEmails[] = $student['email'];
       }
-      echo '</textarea>';
-      echo '<br />Unconfirmed students: '.$u->count().'<br />
-        <textarea style="width:800px; height: 200px;">';
+
       foreach ($u as $student) {
-        $email = $student['email'];
-        echo "$email\n";
+        $unconfirmedEmails[] = $student['email'];
       }
-      echo '</textarea>';
-      echo '<br />All students: '.$all->count().'<br />
-        <textarea style="width:800px; height: 200px;">';
+
       foreach ($all as $student) {
         $email = $student['email'];
         $firstname = 'User';
@@ -101,35 +126,30 @@
             $lastname = isset($name[1]) ? $name[1] : '';
           }
         }
-        echo "$firstname,$lastname,$email\n";
-        // $name = isset($student['name']) ? $student['name'] : '';
-        // $last_name = preg_replace('#.*\s([\w-]*)$#', '$1', $name);
-        // $first_name = trim(preg_replace('#'.$last_name.'#', '', $name ));
-        // if (strlen($first_name) == 0) {
-        //   $first_name = $last_name;
-        //   $last_name = "";
-        // }
-        // echo "$first_name,$last_name,$email\n";
+        $allStudents[] = ["firstname" => $firstname, "lastname" => $lastname, "email" => $email];
       }
-      echo '</textarea>';
+      $studentsArray['studentsConfirmedEmails'] = $confirmedEmails;
+      $studentsArray['studentsUnconfirmedEmails'] = $unconfirmedEmails;
+      $studentsArray['allStudents'] = $allStudents;
+      return $studentsArray;
     }
+
+    /*
+    * Returns recruiters who are missing jobs
+    */
     function missingrecruiter() {
       global $MStats;
+      $missingRecruiterArray = [];
 
       $mr = $MStats->getJobsMissingRecruiter();
-      echo '<br />Jobs nonexistent recruiter: '.count($mr).'<br />
-        <textarea style="width:800px; height: 200px;">';
-      foreach ($mr as $job) {
-        $id = $job['_id'];
-        $company = $job['company'];
-        $recruiter = $job['recruiter'];
-        echo "$id - c: $company, r: $recruiter\n";
-      }
-      echo '</textarea>';
+
+      $missingRecruiterArray["missingRecruiters"] = $mr;
+      return $missingRecruiterArray;
 
     }
     function recruiterbydate() {
       global $MRecruiter, $MCompany;
+      $recruiterByDateArray = [];
 
       $recruiters = $MRecruiter->find()->sort(array('_id'=>-1));
 
@@ -144,16 +164,12 @@
         $date = fdate($r['_id']->getTimestamp());
         $rs[] = "\"$email\",\"$firstname\",\"$lastname\",\"$company\",\"$date\"";
       }
-
-      echo '<br />Recruiters with date of joining:<br />
-        <textarea style="width:800px; height: 200px;">';
-      foreach ($rs as $r) {
-        echo "$r\n";
-      }
-      echo '</textarea>';
+      $recruiterByDateArray["recruiterByDate"] = $rs;
+      return $recruiterByDateArray;
     }
     function subletsended2014() {
       global $MSublet, $MStudent;
+      $subletsended2014Array = [];
 
       $sublets = $MSublet->find(array('enddate' => array('$lte' => strtotime('1/1/2015'))));
 
@@ -163,19 +179,16 @@
         $student = $MStudent->getById($s['student']);
         if (isset($student['name'])) $name = $student['name'];
         else $name = 'noname';
-        $email = $student['email'];
+        if (isset($student['email'])) $email = $student['email'];
+        else $email = 'noemail';
         $ss[] = "\"$email\",\"$name\",\"$id\"";
       }
-
-      echo '<br />Sublets with end dates before 1/1/2015:<br />
-        <textarea style="width:800px; height: 200px;">';
-      foreach ($ss as $s) {
-        echo "$s\n";
-      }
-      echo '</textarea>';
+      $subletsended2014Array['subletsended2014'] = $ss;
+      return $subletsended2014Array;
     }
     function unknownschools() {
       global $MStudent, $S;
+      $unknownschoolsArray = [];
 
       $domains = array();
       $students = $MStudent->getAll();
@@ -189,16 +202,12 @@
         }
       }
       $count = count($domains);
-
-      echo "<br />Unknown Schools ($count): <br />
-        <textarea style=\"width:800px; height: 200px;\">";
-      foreach ($domains as $d) {
-        echo "$d\n";
-      }
-      echo '</textarea>';
+      $unknownschoolsArray['domains'] = $domains;
+      return $unknownschoolsArray;
     }
     function cumulative() {
       global $MJob;
+      $cumulativeArray = [];
 
       $views = 0; $clicks = 0;
       $jobs = $MJob->getAll();
@@ -206,8 +215,9 @@
         $views += $job['stats']['views'];
         $clicks += $job['stats']['clicks'];
       }
-
-      echo "<br />Jobs views: $views<br />Jobs clicks: $clicks<br />";
+      $cumulativeArray['cumulativeviews'] = $views;
+      $cumulativeArray['cumulativeclicks'] = $clicks;
+      return $cumulativeArray;
     }
     function graph() {
       global $MStudent;
@@ -262,7 +272,7 @@
         $searches = array_slice($entry, -$_GET['cities'], NULL, true);
 
         foreach ($searches as $time => $search) {
-          echo "$time=>";
+          //echo "$time=>";
           if ($time != '_id' and !isset($search['type'])) {
             unset($entry[$time]);
             $MApp->save($entry);
@@ -355,6 +365,7 @@
     function getMessageParticipants() {
       global $MMessage, $CMessage;
       $msgs = $MMessage->getAll();
+      $getMessageParticipantsArray = [];
 
       $plist = array();
 
@@ -379,18 +390,13 @@
           }
         }
       }
-
-      $n = count($plist);
-      echo "<br />Message Participants ($n): <br />
-        <textarea style=\"width:800px; height: 200px;\">";
       foreach ($plist as $email => $data) {
         $type = $data['type'];
         $name = $data['name'];
         $count = $data['count'];
-
-        echo "$email ($type) - $name - sent $count\n";
       }
-      echo '</textarea>';
+      $getMessageParticipantsArray['messageparticipants'] = $plist;
+      return $getMessageParticipantsArray;
     }
   }
 
