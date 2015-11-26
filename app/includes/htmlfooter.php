@@ -15,11 +15,11 @@
     </style>
     <footer class="blackbar">
       <options class="left">
-        <a href="<?php echo $GLOBALS['dirpre']; ?>../team"><opt>The Team</opt></a>
-        <a href="<?php echo $GLOBALS['dirpre']; ?>../faq"><opt>FAQ</opt></a>
-        <a href="<?php echo $GLOBALS['dirpre']; ?>../privacy"><opt>Privacy</opt></a>
-        <a href="<?php echo $GLOBALS['dirpre']; ?>../terms"><opt>Terms of Service</opt></a>
-        <a href="<?php echo $GLOBALS['dirpre']; ?>../feedback"><opt>Report a Bug/Feedback</opt></a>
+        <a href="<?php echo $GLOBALS['dirpre']; ?>../team.php"><opt>The Team</opt></a>
+        <a href="<?php echo $GLOBALS['dirpre']; ?>../faq.php"><opt>FAQ</opt></a>
+        <a href="<?php echo $GLOBALS['dirpre']; ?>../privacy.php"><opt>Privacy</opt></a>
+        <a href="<?php echo $GLOBALS['dirpre']; ?>../terms.php"><opt>Terms of Service</opt></a>
+        <a href="<?php echo $GLOBALS['dirpre']; ?>../feedback.php"><opt>Report a Bug/Feedback</opt></a>
       </options>
       <options class="right">
         <opt>
