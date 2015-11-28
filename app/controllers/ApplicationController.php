@@ -408,7 +408,34 @@
                   "info@sublite.net",
                   "New Applicant for '$jobTitle' | SubLite",
                   $message);
-
+        
+        //send an email to the student
+        $companyId = $job['company'];
+        $company = CompanyModel::getById($companyId);
+        $companyName = $company['name'];
+        $student = StudentModel::getByIdMinimal($studentId);
+        $studentFirstName = $student['name'];
+        $studentEmail = $student['email'];
+        $linkApplication = "http://sublite.net/jobs/applications/$applicationId";
+        $linkJob = "http://sublite.net/job?id=$jobId";
+        $linkJobSearch = "http://sublite.net/jobs/search";
+        $linkJobsByCompany = "http://sublite.net/jobs/search?byrecruiter=$recruiterId";
+        $message = "
+          Hi $studentFirstName,
+          <br />$companyName has successfully received your application $linkApplication for <b>$jobTitle</b>!<br />
+          <br />View your application: $linkApplication<br />
+          <br />View the job you applied to $linkJob<br />
+          <br />View more jobs by $linkJobsByCompany<br />
+          <br />You are now one step closer to finding your perfect summer experience! Take more steps by applying to more jobs: $linkJobSearch<br />
+          -------------------<br />
+          Good luck!
+          <br />
+          Team SubLite
+        ";
+        sendgmail([$studentEmail],
+                  "info@sublite.net",
+                  "Confirmation for Job Application",
+                  $message);
         self::redirect("../application/$applicationId");
       }
 
