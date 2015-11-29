@@ -422,6 +422,7 @@
         $linkJobsByCompany = "http://sublite.net/jobs/search?byrecruiter=$recruiterId";
         $message = "
           Hi $studentFirstName,
+          <br />
           <br />$companyName has successfully received your application $linkApplication for <b>$jobTitle</b>!<br />
           <br />View your application: $linkApplication<br />
           <br />View the job you applied to $linkJob<br />
