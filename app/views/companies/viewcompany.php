@@ -232,7 +232,7 @@
       }
       return -1;
     };
-    // Repeat this process 10 times (or until we don't see much improvement,
+    // Repeat this process 5 times (or until we don't see much improvement,
     // whichever comes first).
     for (var i = 0; i < 5; ++i) {
       if (incrementalBalance() == -1) break;
