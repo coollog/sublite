@@ -52,7 +52,7 @@
     padding: 20px;
     border-top: 20px solid transparent;
     border-bottom: 10px solid transparent;
-    font-size: 0.8em;
+    font-size: 0.9em;
     line-height: 1.3em;
     margin-bottom: 20px;
     white-space: pre-line;
