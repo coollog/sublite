@@ -108,7 +108,8 @@
                 //   else echo "$location, ";
                 // }
                 vecho('location');
-              ?><br />
+              ?><br /><br />
+              <a href="search.php?bycompany=<?php vecho('name'); ?>"><input type="button" value="View Job Listings" /></a>
             </div>
           </td>
           <td colspan="2" class="officephoto">
@@ -156,7 +157,6 @@
             blurb('freeanswer1', vget('freequestion1'), 'orange');
             blurb('freeanswer2', vget('freequestion2'), 'blue');
 
-            // TODO: Make more asthetically pleasing
             insertPhoto(0, 0, 3);
             insertPhoto(1, 1, 2);
             insertPhoto(2, 2, 1);
@@ -175,7 +175,6 @@
       </table>
     </div>
 
-    <a href="search.php?bycompany=<?php vecho('name'); ?>"><input type="button" value="View Job Listings" /></a>
 
     <?php if (vget('isme')) { ?>
       <br /><br />
@@ -183,3 +182,60 @@
     <?php } ?>
   </div>
 </panel>
+
+<script>
+  $(window).load(function() {
+    function incrementalBalance() {
+      var lengths = [];
+      $('.col').each(function() {
+        var toAdd =[];
+        $(this).children().each(function() {
+          toAdd.push($(this).outerHeight());
+        });
+        lengths.push(toAdd);
+      });
+      totalLengths = lengths.map(function(element) {
+        return element.reduce(function(a,b){return a+b});
+      });
+      var max = totalLengths[0];
+      var maxIndex = 0;
+      var min = totalLengths[0];
+      var minIndex = 0;
+      for (var i = 1; i < totalLengths.length; ++i) {
+        if (totalLengths[i] > max) {
+          maxIndex = i;
+          max = totalLengths[i]
+        }
+        if (totalLengths[i] < min) {
+          minIndex = i;
+          min = totalLengths[i]
+        }
+      }
+      if (max - min < 50) return -1;
+      var table = $('tr:last');
+      var maxColumn = table.children().eq(maxIndex);
+      var minColumn = table.children().eq(minIndex);
+      var bestMin = min;
+      var bestMinIndex = -1;
+      for (var i = 0; i < lengths[maxIndex].length; ++i) {
+        // Don't want to move pictures or "The Company"
+        if ((maxIndex == 0 && i == 0) || maxColumn.children().eq(i).is('img')) continue;
+        var height = lengths[maxIndex][i];
+        if (Math.min(max - height, min + height) > bestMin) {
+          bestMin = Math.min(max - height, min + height);
+          bestMinIndex = i;
+        }
+      }
+      if (bestMinIndex != -1) {
+        maxColumn.children().eq(bestMinIndex).detach().appendTo(minColumn);
+        return 0;
+      }
+      return -1;
+    };
+    // Repeat this process 5 times (or until we don't see much improvement,
+    // whichever comes first).
+    for (var i = 0; i < 5; ++i) {
+      if (incrementalBalance() == -1) break;
+    }
+  });
+</script>
