@@ -221,7 +221,7 @@
         // Don't want to move pictures or "The Company"
         if ((maxIndex == 0 && i == 0) || maxColumn.children().eq(i).is('img')) continue;
         var height = lengths[maxIndex][i];
-        if (Math.min(max - height, min + height) > bestMin + 50) {
+        if (Math.min(max - height, min + height) > bestMin) {
           bestMin = Math.min(max - height, min + height);
           bestMinIndex = i;
         }
