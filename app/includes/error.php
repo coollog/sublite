@@ -64,8 +64,8 @@
       errorHandler( $error["type"], $error["message"], $error["file"], $error["line"] );
   }
 
-  // if ($env !== 'dev') {
+  if ($env !== 'dev') {
     register_shutdown_function( "check_for_fatal" );
     set_error_handler( "errorHandler" );
-  // }
+  }
 ?>
