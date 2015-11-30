@@ -73,7 +73,14 @@
         else $info['firstname'] = 'no firstname';
         if (isset($recruiter['lastname'])) $info['lastname'] = $recruiter['lastname'];
         else $info['lastname'] = 'no lastname';
-        if (isset($recruiter['company'])) $info['company'] = $recruiter['company']; //annoying company names that have ", Inc." in them
+        if (isset($recruiter['company'])) {
+          if (MongoID::isValid($recruiter['company'])) { // if the company is a MongoID
+            $info['company'] = $MCompany->getName($recruiter['company']);
+          } else {
+            $info['company'] = $recruiter['company'];
+          }
+          
+        }
         else $info['company'] = 'no company';
         $info['dateJoined'] = fdate($recruiter['_id']->getTimestamp());
 
