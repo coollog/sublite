@@ -14,6 +14,7 @@
     public static function deleteById(MongoId $id);
     public static function getById(MongoId $id, array $projection);
     public static function getAll();
+    public static function getSize();
   }
 
   class Model {
@@ -61,6 +62,10 @@
 
     public static function getAll() {
       return (new DBQuery(static::$collection))->run();
+    }
+
+    public static function getSize() {
+      return static::$collection->count();
     }
 
     protected static function checkReady() {
