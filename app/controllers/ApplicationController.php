@@ -423,9 +423,9 @@
         $message = "
           Hi $studentFirstName,
           <br />
-          <br />$companyName has successfully received your application $linkApplication for <b>$jobTitle</b>!<br />
-          <br />View your application: $linkApplication<br />
-          <br />View the job you applied to $linkJob<br />
+          <br />$companyName has successfully received your <a href='$linkApplication'>application</a> for <b>$jobTitle</b>!<br />
+          <br />View your application: $linkApplication
+          <br />View the job you applied to $linkJob
           <br />View more jobs by $linkJobsByCompany<br />
           <br />You are now one step closer to finding your perfect summer experience! Take more steps by applying to more jobs: $linkJobSearch<br />
           -------------------<br />
