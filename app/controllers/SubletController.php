@@ -208,6 +208,19 @@
             $comment
           ";
           sendgmail(array('tony.jiang@yale.edu', 'qingyang.chen@gmail.com'), "info@sublite.net", 'Comment posted on SubLite!', $message);
+
+          // Notify the subletter of the comment
+          $subletterEmail = $MStudent->getById($entry['student'])['email'];
+          $subletterName = $_SESSION['name'];
+          $message = "
+            Hey there!
+            <br /><br />
+            $subletterName has commented on your sublet! Check it out <a href=\"http://sublite.net/housing/sublet.php?id=$id\">here</a>.
+            <br /><br />
+            Happy subletting, <br />
+            SubLite Team
+          ";
+          sendgmail(array($subletterEmail), "info@sublite.net", 'You have a new comment on your sublet!', $message);
         }
 
         $entry['stats']['views']++;
