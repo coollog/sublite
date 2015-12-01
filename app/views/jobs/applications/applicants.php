@@ -189,7 +189,7 @@
     </div>
 
     <h2>Insight</h2>
-    Your applicants include students from schools including
+    Your new applicants include students from schools including
     <insights></insights>!
 
     <br /><br />
