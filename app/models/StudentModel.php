@@ -81,7 +81,8 @@
     }
     function getName($id) {
       $entry = self::getById($id);
-      return $entry['name'];
+      if (isset($entry['name'])) return $entry['name'];
+      else return "No Name";
     }
     function getPhoto($id) {
       $entry = $this->getById($id);

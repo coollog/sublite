@@ -4,6 +4,11 @@
       window.onbeforeunload = function() { return msg; }
     });
   }
+  function formunloadjobsmsg(msg) {
+    $('input, fields, items, textarea, select').change(function() {
+      window.onbeforeunload = function() { return msg; }
+    });
+  }
   function formunloadfunction(f) {
     $('input, textarea, select').change(function() {
       window.onbeforeunload = function() { f(); }
