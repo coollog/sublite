@@ -414,6 +414,7 @@
       };
       $('unlocking').html('Unlocking...');
       loadContent('claimapplications', data, function (data) {
+        $('tab[for=claimed]').trigger('unload');
         $('tab[for=unclaimed]').click();
         // $('tab[for=claimed]').click();
       });

@@ -237,6 +237,7 @@
     public static function claim(MongoId $jobId, $count) {
       $query = (new DBQuery(self::$collection))
         ->toQuery('jobid', $jobId)
+        ->toQuery('status', ApplicationStudent::STATUS_UNCLAIMED)
         ->projectId()
         ->limit($count);
       $applications = $query->run();
