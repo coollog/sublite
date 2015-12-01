@@ -360,9 +360,10 @@
 
         $res = $MJob->last($_SESSION['showMoreJobs']);
         $jobs = process($res);
+        $recent = count($jobs) < JobModel::getSize();
 
         self::render('jobs/search/form', $this->dataSearchSetup());
-        self::render('jobs/search/results', array('jobs' => $jobs, 'recent' => true, 'search' => 'jobs', 'showMore' => $showMore));
+        self::render('jobs/search/results', array('jobs' => $jobs, 'recent' => $recent, 'search' => 'jobs', 'showMore' => $showMore));
         return;
       }
 

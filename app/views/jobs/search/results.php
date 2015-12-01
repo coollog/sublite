@@ -102,7 +102,7 @@
         echo "No jobs matching your query. Stay posted! New jobs are being added regularly.";
       }
     ?>
-    <?php if (!is_null(vget('recent'))) { ?>
+    <?php if (!is_null(vget('recent')) && vget('recent')) { ?>
       <a href="?showMore">Show More</a>
       <?php if (vget('showMore')) { ?>
         <script>scrollTo('.jobblock', <?php vecho('showMore'); ?>-7);</script>
