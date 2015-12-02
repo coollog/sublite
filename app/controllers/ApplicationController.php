@@ -24,6 +24,7 @@
      * Recruiters have extra functionality to report an application.
      */
     public static function view(array $restOfRoute);
+
   }
 
   class ApplicationController extends Controller
