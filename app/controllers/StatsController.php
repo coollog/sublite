@@ -48,7 +48,7 @@
     * Returns a view that has lists of emails of recruiters without companies and without jobs
     */
     function recruiters() {
-      global $MRecruiter, $MJob, $MCompany;
+      global $MRecruiter, $MJob, $MCompany, $MApp;
       $recruiterArray = [];
       $recruiterColumns = ["email","firstname","lastname","company","datejoined","postedjob","madecompany","approved"];
       $jobColumns = ["jobname","jobviews","jobclicks","applicants"];
@@ -111,7 +111,7 @@
           else 'No Job Title';
           $jobInfo['views'] = $job['stats']['views'];
           $jobInfo['clicks'] = $job['stats']['clicks'];
-          $jobInfo['applicants'] = count($job['applicants']);
+          $jobInfo['applicants'] = ApplicationModel::countByJob($job['_id']);
           $recruiterArray[] = str_repeat(',', count($recruiterColumns)) . implode(',', self::quoteStringsInArray($jobInfo));
 
         }
