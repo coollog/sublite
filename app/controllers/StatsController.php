@@ -51,7 +51,7 @@
       global $MRecruiter, $MJob, $MCompany;
       $recruiterArray = [];
       $recruiterColumns = ["email","firstname","lastname","company","datejoined","postedjob","madecompany","approved"];
-      $jobColumns = ["jobname","jobviews","jobclicks"];
+      $jobColumns = ["jobname","jobviews","jobclicks","applicants"];
       $recruiterArray[] = implode(',', $recruiterColumns) . ',' . implode(',', $jobColumns);
 
 
@@ -111,6 +111,7 @@
           else 'No Job Title';
           $jobInfo['views'] = $job['stats']['views'];
           $jobInfo['clicks'] = $job['stats']['clicks'];
+          $jobInfo['applicants'] = count($job['applicants']);
           $recruiterArray[] = str_repeat(',', count($recruiterColumns)) . implode(',', self::quoteStringsInArray($jobInfo));
 
         }
