@@ -339,6 +339,10 @@
       <br />
       <input id="confirmpurchase" type="button" value="Confirm Purchase"
              disabled />
+      <br />
+      <small><a href="<?php echo $GLOBALS['dirpre']; ?>../feedback">
+        Trouble buying Credits?
+      </a></small>
     </paymentform>
 
     <!-- <h2>Add Payment Information</h2>
