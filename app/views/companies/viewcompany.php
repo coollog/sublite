@@ -19,8 +19,8 @@
     width: 30%;
   }
   .companylogo {
-    width: 150px;
-    height: 150px;
+    width: 125px;
+    height: 125px;
     display: block;
     margin: 0 auto;
     background: url('<?php vecho('logophoto'); ?>') no-repeat center center;
@@ -44,7 +44,7 @@
     position: relative;
   }
   .brief .info {
-    padding: 20px;
+    padding: 10px;
     font-size: 1em;
   }
   .blurb {
@@ -75,6 +75,10 @@
   .blurb.cobalt subheadline { color: #035e75; }
   .blurb.blue { border-color: #01354a; }
   .blurb.blue subheadline { color: #01354a; }
+
+  .viewjobsbutton {
+    margin-top: 10px;
+  }
 </style>
 
 <panel class="job">
@@ -108,8 +112,10 @@
                 //   else echo "$location, ";
                 // }
                 vecho('location');
-              ?><br /><br />
-              <a href="search.php?bycompany=<?php vecho('name'); ?>"><input type="button" value="View Job Listings" /></a>
+              ?><br />
+              <div class="viewjobsbutton">
+                <a href="search.php?bycompany=<?php vecho('name'); ?>"><input type="button" value="View Job Listings" /></a>
+              </div>
             </div>
           </td>
           <td colspan="2" class="officephoto">
