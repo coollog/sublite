@@ -274,7 +274,7 @@
         $data['address'] =
           $data['address'].', '.$data['city'].', '.$data['state'];
         if (count($data['photos']) == 0)
-          $data['photos'][] = $GLOBALS['dirpre'].'assets/gfx/subletnophoto.png';
+          $data['photos'][] = $GLOBALS['dirpreFromRoute'].'assets/gfx/subletnophoto.png';
         $data['startdate'] = fdate($data['startdate']);
         $data['enddate'] = fdate($data['enddate']);
         switch ($data['gender']) {
@@ -361,7 +361,7 @@
       function processRaw($sublet) {
         // Processing result
         $sublet['photo'] = isset($sublet['photos'][0]) ? $sublet['photos'][0]
-          : $GLOBALS['dirpre'].'assets/gfx/subletnophoto.png';
+          : $GLOBALS['dirpreFromRoute'].'assets/gfx/subletnophoto.png';
 
         $sublet['address'] = $sublet['address'];
         if (strlen($sublet['city']) > 0)
