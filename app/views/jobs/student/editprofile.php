@@ -117,7 +117,7 @@
   <extracurricularsitemtemplate>
     <item>
       <h1><field name="title" required {invalid}>{title}</field></h1>
-      <h2><field name="organiation" required {invalid}>{organiation}</field></h2>
+      <h2><field name="organization" required {invalid}>{organization}</field></h2>
       <fade>
         <field name="dates.start" required {invalid}>{dates.start}</field>
         to
@@ -200,7 +200,7 @@
     },
     extracurriculars: {
       title: '[Title (eg. President)]',
-      extracurriculars: '[Organization Name]',
+      organization: '[Organization Name]',
       'dates.start': '[Start Date (eg. August 2015)]',
       'dates.end': '[End Date (eg. May 2019)]',
       location: '[Location (eg. New Haven)]',
