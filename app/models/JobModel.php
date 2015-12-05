@@ -96,7 +96,9 @@
       return self::$collection->find($query);
     }
     function last($n=1) {
-      return self::$collection->find()->sort(array('_id'=>-1))->limit($n);
+      return
+        self::$collection->find()
+          ->sort(array('priority'=>-1, '_id'=>-1))->limit($n);
     }
 
     function owner($id) {

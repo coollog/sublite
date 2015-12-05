@@ -71,7 +71,7 @@
     array("Blog", "https://sublite.wordpress.com/", "all"),
 
     array("List Job", $path."employers/addjob", "recruiter hascompany"),
-    array("Manage", $path."employers/home", "recruiter hascompany"),
+    array("Dashboard", $path."employers/home", "recruiter hascompany"),
     array("Messages", $path."employers/messages", "recruiter hascompany"),
     array("Add Company Profile", $path."employers/addcompany", "recruiter nocompany"),
     // array("Edit Company Profile", $path."employers/editcompany", "recruiter hascompany"),
@@ -80,7 +80,7 @@
     array("Jobs", $path."jobs/search", "student"),
     // array("Socialize", $path."hubs/start", "student"),
     array("Add Sublet", $path."housing/addsublet", "student /housing"),
-    array("Manage", $path."housing/home", "student"),
+    array("Dashboard", $path."housing/home", "student"),
     array("Messages", $path."messages", "student"),
 
     array("Search Housing", $path."housing/search", "notloggedin !/employers"),

@@ -15,82 +15,22 @@
   </div>
   <div id = "nojobs">
     <?php
-    global $MRecruiter, $MJob, $MCompany; //get rid of these globals somehow?
-      echo 'Recruiters who have posted jobs:<br />
-        <textarea style="width:800px; height: 400px;">';
-      foreach (View::get('nojobsArray')['recruiterEmailsWJ'] as $r) {
-        $email = $r['email'];
-        $firstname = $r['firstname'];
-        $lastname = $r['lastname'];
-        $company = $r['company'];
-        if (MongoId::isValid($company))
-          $company = $MCompany->getName($company);
-        echo "\"$email\",\"$firstname\",\"$lastname\",\"$company\"\n";
-      }
-      echo '</textarea>';
-      echo '<br />Recruiters who have not posted jobs:<br />
-        <textarea style="width:800px; height: 400px;">';
-      foreach (View::get('nojobsArray')['recruiterEmails'] as $r) {
-        $email = $r['email'];
-        $firstname = $r['firstname'];
-        $lastname = $r['lastname'];
-        $company = $r['company'];
-        if (MongoId::isValid($company))
-          $company = $MCompany->getName($company);
-        echo "\"$email\",\"$firstname\",\"$lastname\",\"$company\"\n";
-      }
-      echo '</textarea>';
-      echo '<br />Recruiters who have not posted jobs but have made a company profile:<br />
-        <textarea style="width:800px; height: 400px;">';
-      foreach (View::get('nojobsArray')['recruiterEmailsWC'] as $r) {
-        $email = $r['email'];
-        $firstname = $r['firstname'];
-        $lastname = $r['lastname'];
-        $company = $r['company'];
-        if (MongoId::isValid($company))
-          $company = $MCompany->getName($company);
-        echo "\"$email\",\"$firstname\",\"$lastname\",\"$company\"\n";
-      }
-      echo '</textarea>';
-      echo '<br />Recruiters who are approved but have done nothing: <br />
-        <textarea style="width:800px; height: 400px;">';
-      foreach (View::get('nojobsArray')['recruiterEmailsOnlyApproved'] as $r) {
-        $email = $r['email'];
-        $firstname = $r['firstname'];
-        $lastname = $r['lastname'];
-        $company = $r['company'];
-        if (MongoId::isValid($company))
-          $company = $MCompany->getName($company);
-        echo "\"$email\",\"$firstname\",\"$lastname\",\"$company\"\n";
-      }
-      echo '</textarea>';
+    echo 'Recruiters:<br />
+      <textarea style="width:800px; height: 400px;">';
+    foreach (View::get('recruiterArray')['recruiterArray'] as $r) {
+      echo "$r\n";
+    }
+    echo '</textarea>';
     ?>
   </div>
+
   <div id = "students">
     <?php
-    $c = View::get('studentsArray')['studentsConfirmedEmails'];
-    $u = View::get('studentsArray')['studentsUnconfirmedEmails'];
-    $all = View::get('studentsArray')['allStudents'];
-    echo '<br />Confirmed students: '.count($c).'<br />
+    $all = View::get('studentArray')['studentArray'];
+    echo '<br />Students: '.count($all).'<br />
       <textarea style="width:800px; height: 200px;">';
-    foreach ($c as $email) {
-      echo "$email\n";
-    }
-    echo '</textarea>';
-    echo '<br />Unconfirmed students: '.count($u).'<br />
-      <textarea style="width:800px; height: 200px;">';
-    foreach ($u as $email) {
-      echo "$email\n";
-    }
-    echo '</textarea>';
-    echo '<br />All students: '.count($all).'<br />
-     <textarea style="width:800px; height: 200px;">';
     foreach ($all as $student) {
-      $firstname = $student['firstname'];
-      $lastname = $student['lastname'];
-      $email = $student['email'];
-      echo "$firstname , $lastname , $email\n";
-
+      echo "$student\n";
     }
     echo '</textarea>';
     ?>
@@ -108,18 +48,6 @@
        echo "$id - c: $company, r: $recruiter\n";
      }
      echo '</textarea>';
-    ?>
-  </div>
-
-  <div id = "recruiterbydate">
-    <?php
-    $rs = View::get('recruiterByDateArray')['recruiterByDate'];
-    echo '<br />Recruiters with date of joining:<br />
-     <textarea style="width:800px; height: 200px;">';
-    foreach ($rs as $r) {
-      echo "$r\n";
-    }
-    echo '</textarea>';
     ?>
   </div>
 
@@ -152,7 +80,7 @@
     $cumulative = View::get('cumulativeArray');
     $views = $cumulative['cumulativeviews'];
     $clicks = $cumulative['cumulativeclicks'];
-    echo "<br />Jobs views: $views<br />Jobs clicks: $clicks <br />";
+    echo "<br />Total Jobs views: $views<br />Total Jobs clicks: $clicks <br />";
     ?>
   </div>
 

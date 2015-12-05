@@ -5,10 +5,9 @@
 
     function loadStats() {
       $updateArray = self::update(); // contains arrays 'stats' and 'cities'
-      $nojobsArray = self::nojobs(); // contains arrays 'recruiterEmails', 'recruiterEmailsWC', and 'recruiterEmailsWJ'
-      $studentsArray = self::students(); // contains arrays 'studentConfirmedEmails', 'studentsUnconfirmedEmails', 'allStudents'
+      $recruiterArray = self::recruiters(); // contains arrays 'recruiterEmails', 'recruiterEmailsWC', and 'recruiterEmailsWJ'
+      $studentArray = self::students(); // contains arrays 'studentConfirmedEmails', 'studentsUnconfirmedEmails', 'allStudents'
       $missingRecruiterArray = self::missingrecruiter(); //contains array 'missingRecruiters'
-      $recruiterByDateArray = self::recruiterbydate(); //contains array 'recruiterByDate'
       $subletsended2014Array = self::subletsended2014(); // contains array 'subletsended2014'
       $unknownSchoolsArray = self::unknownschools(); // contains array 'domains'
       $cumulativeArray = self::cumulative(); // contains arrays 'cumulativeviews', 'cumulativeclicks'
@@ -16,16 +15,14 @@
 
       $toRender = [
         "updateArray" => $updateArray,
-        "nojobsArray" => $nojobsArray,
-        "studentsArray" => $studentsArray,
+        "recruiterArray" => $recruiterArray,
+        "studentArray" => $studentArray,
         "missingRecruiterArray" => $missingRecruiterArray,
-        "recruiterByDateArray" => $recruiterByDateArray,
         "subletsended2014Array" => $subletsended2014Array,
         "unknownSchoolsArray" => $unknownSchoolsArray,
         "cumulativeArray" => $cumulativeArray,
         "getMessageParticipantsArray" => $getMessageParticipantsArray
       ];
-
       self::render('/stats/stats', $toRender);
     }
 
@@ -50,46 +47,77 @@
     /*
     * Returns a view that has lists of emails of recruiters without companies and without jobs
     */
-    function nojobs() {
-      global $MRecruiter, $MJob, $MCompany;
-      $nojobsArray = [];
+    function recruiters() {
+      global $MRecruiter, $MJob, $MCompany, $MApp;
+      $recruiterArray = [];
+      $recruiterColumns = ["email","firstname","lastname","company","datejoined","postedjob","madecompany","approved"];
+      $jobColumns = ["jobname","jobviews","jobclicks","applicants"];
+      $recruiterArray[] = implode(',', $recruiterColumns) . ',' . implode(',', $jobColumns);
+
 
       $r = $MRecruiter->find();
       $j = $MJob->find();
 
-      $rids = array();
+      $rids = array(); // an array of recruiters ids that have posted jobs
       foreach ($j as $job) {
         $rids[] = $job['recruiter']->{'$id'};
       }
 
-      $emails = [];
-      $emailswc = [];
-      $emailswj = [];
-      $onlyApproved = [];
       foreach ($r as $recruiter) {
-        $id = $recruiter['_id']->{'$id'};
-        $rdoc = $MRecruiter->getById(new MongoId($id));
-        if (in_array($id, $rids)) {
-          $emailswj[] = $rdoc; // recruiters who have posted at least one job and have a company profile
-        } else {
-          $emails[] = $rdoc; // recruiters who have not posted a job
-          if (MongoID::isValid($recruiter['company'])) { // recruiters who have a company profile
-            $emailswc[] = $rdoc; 
-          } else { // recruiters who don't have a company profile
-            if ($recruiter['approved'] == 'approved') { // recruiters who are approved
-              $onlyApproved[] = $rdoc;
-            } else { // recruiters who are not approved
+        $info = [];
+        $id = $recruiter['_id'];
+        $rdoc = $MRecruiter->getById($id);
+        if (isset($recruiter['email'])) $info['email'] = $recruiter['email'];
+        else $info['email'] = 'no email';
+        if (isset($recruiter['firstname'])) $info['firstname'] = $recruiter['firstname'];
+        else $info['firstname'] = 'no firstname';
+        if (isset($recruiter['lastname'])) $info['lastname'] = $recruiter['lastname'];
+        else $info['lastname'] = 'no lastname';
+        if (isset($recruiter['company'])) {
+          if (MongoID::isValid($recruiter['company'])) { // if the company is a MongoID
+            $info['company'] = $MCompany->getName($recruiter['company']);
+          } else {
+            $info['company'] = $recruiter['company'];
+          }
+          
+        }
+        else $info['company'] = 'no company';
+        $info['dateJoined'] = fdate($recruiter['_id']->getTimestamp());
 
+        if (in_array($id, $rids)) { // recruiters who have posted at least one job and have a company profile
+          $info['postedJob'] = 'YES'; 
+          $info['madeCompany'] = 'YES';
+          $info['approved'] = 'YES';
+        } else {// recruiters who have not posted a job
+          $info['postedJob'] = 'NO';
+          if (MongoID::isValid($recruiter['company'])) { // recruiters who have a company profile
+            $info['madeCompany'] = 'YES'; 
+            $info['approved'] = 'YES';
+          } else { // recruiters who don't have a company profile
+            $info['madeCompany'] = 'NO';
+            if ($recruiter['approved'] == 'approved') { // recruiters who are approved
+              $info['approved'] = 'YES';
+            } else { // recruiters who are not approved
+              $info['approved'] = 'NO';
             }
           }
         }
-      }
-      $nojobsArray['recruiterEmails'] = $emails;
-      $nojobsArray['recruiterEmailsWC'] = $emailswc;
-      $nojobsArray['recruiterEmailsWJ'] = $emailswj;
-      $nojobsArray['recruiterEmailsOnlyApproved'] = $onlyApproved;
+        $recruiterArray[] = implode(',', self::quoteStringsInArray($info));
+        $jobs = $MJob->getByRecruiter($id); // get jobs for recruiter
 
-      return $nojobsArray;
+        foreach ($jobs as $job) { //make rows under each recruiter for their listed jobs
+          $jobInfo = [];
+          if (isset($job['title'])) $jobInfo['title'] = $job['title'];
+          else 'No Job Title';
+          $jobInfo['views'] = $job['stats']['views'];
+          $jobInfo['clicks'] = $job['stats']['clicks'];
+          $jobInfo['applicants'] = ApplicationModel::countByJob($job['_id']);
+          $recruiterArray[] = str_repeat(',', count($recruiterColumns)) . implode(',', self::quoteStringsInArray($jobInfo));
+
+        }
+
+      }
+      return ["recruiterArray" => $recruiterArray];
     }
 
     /*
@@ -97,41 +125,37 @@
     */
     function students() {
       global $MStats;
-      $studentsArray = [];
+      $studentArray = [];
+      $studentArray[] = "email , firstname , lastname , school , confirmed";
+      $confirmedEmails = [];
 
-      $c = $MStats->getStudentsConfirmed();
-      $u = $MStats->getStudentsUnConfirmed();
+      $confirmed = $MStats->getStudentsConfirmed();
       $all = $MStats->getStudentsAll();
 
-      $confirmedEmails = [];
-      $unconfirmedEmails = [];
-      $allStudents = [];
-
-      foreach ($c as $student) {
+      foreach ($confirmed as $student) {
         $confirmedEmails[] = $student['email'];
       }
 
-      foreach ($u as $student) {
-        $unconfirmedEmails[] = $student['email'];
-      }
-
       foreach ($all as $student) {
-        $email = $student['email'];
-        $firstname = 'User';
-        $lastname = '';
-        if (isset($student['name'])) {
-          $name = explode(' ', $student['name']);
-          if ($name[0] != '') {
-            $firstname = $name[0];
-            $lastname = isset($name[1]) ? $name[1] : '';
-          }
+        $info = [];
+        if (isset($student['email'])) $info['email'] = $student['email'];
+        else $info['email'] = 'No Email';
+        if (isset($student['name'])) $name = $student['name'];
+        else $name = "NoName NoName"; //twice because we explode to get firstname and lastname
+        $info['firstname'] = 'User';
+        $info['lastname'] = '';
+        $name = explode(' ', $name);
+        if ($name[0] != '') {
+          $info['firstname'] = $name[0];
+          $info['lastname'] = isset($name[1]) ? $name[1] : '';
         }
-        $allStudents[] = ["firstname" => $firstname, "lastname" => $lastname, "email" => $email];
+        if (isset($student['school'])) $info['school'] = $student['school'];
+        else $info['school'] = 'unknown school';
+        if (in_array($info['email'], $confirmedEmails)) $info['confirmed'] = 'YES';
+        else $info['confirmed'] = 'NO';
+        $studentArray[] = implode(',', self::quoteStringsInArray($info));
       }
-      $studentsArray['studentsConfirmedEmails'] = $confirmedEmails;
-      $studentsArray['studentsUnconfirmedEmails'] = $unconfirmedEmails;
-      $studentsArray['allStudents'] = $allStudents;
-      return $studentsArray;
+      return ["studentArray" => $studentArray];
     }
 
     /*
@@ -147,26 +171,7 @@
       return $missingRecruiterArray;
 
     }
-    function recruiterbydate() {
-      global $MRecruiter, $MCompany;
-      $recruiterByDateArray = [];
 
-      $recruiters = $MRecruiter->find()->sort(array('_id'=>-1));
-
-      $rs = array();
-      foreach ($recruiters as $r) {
-        $email = $r['email'];
-        $firstname = $r['firstname'];
-        $lastname = $r['lastname'];
-        $company = $r['company'];
-        if (MongoId::isValid($company))
-          $company = $MCompany->getName($company);
-        $date = fdate($r['_id']->getTimestamp());
-        $rs[] = "\"$email\",\"$firstname\",\"$lastname\",\"$company\",\"$date\"";
-      }
-      $recruiterByDateArray["recruiterByDate"] = $rs;
-      return $recruiterByDateArray;
-    }
     function subletsended2014() {
       global $MSublet, $MStudent;
       $subletsended2014Array = [];
@@ -374,13 +379,14 @@
         if (count($replies) == 0) continue;
 
         $participants = $m['participants'];
+
         foreach ($participants as $p) {
           $name = $CMessage->getName($p);
           $email = $CMessage->getEmail($p);
           $type = $CMessage->getType($p);
 
           if (isset($plist[$email])) {
-            $plist[$email]['count'] ++;
+            $plist[$email]['count']++;
           } else {
             $plist[$email] = array(
               'name' => $name,
@@ -389,7 +395,9 @@
             );
           }
         }
+
       }
+
       foreach ($plist as $email => $data) {
         $type = $data['type'];
         $name = $data['name'];
@@ -398,7 +406,19 @@
       $getMessageParticipantsArray['messageparticipants'] = $plist;
       return $getMessageParticipantsArray;
     }
+
+    /*
+    * Takes an array full of strings, returns an array where each string has been wrapped in double quotes
+    */
+    private static function quoteStringsInArray($array) {
+      $quotedArray = [];
+      foreach ($array as $key=>$str) {
+        $quotedArray[$key] = '"'.trim($str,'"').'"';
+      }
+      return $quotedArray;
+    }
   }
+
 
   GLOBALvarSet('CStats', new StatsController());
 ?>

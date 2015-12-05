@@ -27,6 +27,8 @@
           return respond('max file size exceeded');
         case UPLOAD_ERR_NO_FILE:
           return respond('no file selected');
+        case UPLOAD_ERR_INI_SIZE:
+          return respond('file too large');
       }
 
       if ($_FILES['file']['size'] > 10*1024*1024) {
@@ -66,6 +68,8 @@
 
       // Validations
       $this->startValidations();
+      $this->validate($_FILES['upload']['error'] !== 1, $err,
+        'size too large');
       $this->validate($_FILES['upload']['error'] === 0, $err, 'upload error');
       $this->validate($_FILES['upload']['size'] <= 10*1024*1024,
       	$err, 'size too large');

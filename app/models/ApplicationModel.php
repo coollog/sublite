@@ -85,6 +85,11 @@
      * Changes 'status' of $count applications under $jobId to 'review'.
      */
     public static function claim(MongoId $jobId, $count);
+
+    /**
+    * Gets the number of applications for a certain job
+    */  
+    public static function countByJob(MongoId $jobId);
   }
 
   class ApplicationModel extends Model implements ApplicationModelInterface {
@@ -237,6 +242,7 @@
     public static function claim(MongoId $jobId, $count) {
       $query = (new DBQuery(self::$collection))
         ->toQuery('jobid', $jobId)
+        ->toQuery('status', ApplicationStudent::STATUS_UNCLAIMED)
         ->projectId()
         ->limit($count);
       $applications = $query->run();
@@ -244,6 +250,14 @@
         $applicationId = $application['_id'];
         self::changeStatus($applicationId, ApplicationStudent::STATUS_REVIEW);
       }
+    }
+
+    public static function countByJob(MongoId $jobId) {
+      $query = (new DBQuery(self::$collection))
+        ->toQuery('jobid', $jobId)
+        ->projectId();
+      $applications = $query->run();
+      return count($applications);
     }
 
     private static function jobExists(MongoId $id) {

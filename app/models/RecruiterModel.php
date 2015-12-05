@@ -114,30 +114,37 @@
     function get($email) {
       return self::$collection->findOne(array('email' => $email));
     }
+
     function getByPass($pass) {
       return self::$collection->findOne(array('pass' => $pass));
     }
+
     function getCompany($rid) {
       $r = self::getByID($rid);
       global $MCompany;
       return $MCompany->get($r['company']);
     }
+
     function getName($id) {
       $entry = $this->getById(new MongoId($id));
       return $entry['firstname'] . ' ' . $entry['lastname'];
     }
+
     function getEmail($id) {
       $entry = $this->getById(new MongoId($id));
       return $entry['email'];
     }
+
     function getPhoto($id) {
       $entry = $this->getById(new MongoId($id));
       return isset($entry['photo']) ? $entry['photo'] : null;
     }
+
     function me() {
       if (!isset($_SESSION['email'])) return null;
       return $this->get($_SESSION['email']);
     }
+
     function find($query=array()) {
       return self::$collection->find($query);
     }
@@ -145,6 +152,7 @@
     function exists($email) {
       return ($this->get($email) !== NULL);
     }
+
     function IDexists($id) {
       return (self::$collection->findOne(array('_id' => new MongoId($id))) !== NULL);
     }

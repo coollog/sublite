@@ -16,9 +16,10 @@
 
   class Controller implements ControllerInterface {
     public static function init() {
-      if (isset($_SESSION['view'])) {
-        echo $_SESSION['view'];
-        unset($_SESSION['view']);
+      self::$viewKey = 'view-'.currentPageUrl();
+      if (isset($_SESSION[self::$viewKey])) {
+        echo $_SESSION[self::$viewKey];
+        unset($_SESSION[self::$viewKey]);
         die();
       }
     }
@@ -116,7 +117,7 @@
       self::requireUsingRoutePath('includes/htmlfooter.php');
 
       $view = ob_get_clean();
-      $_SESSION['view'] = $view;
+      $_SESSION[self::$viewKey] = $view;
 
       // Reloading the page will prevent duplicate requests upon refresh.
       self::refresh($view);
@@ -167,6 +168,8 @@
       require_once("$dirpreOrig$relPath");
       $GLOBALS['dirpre'] = $dirpreOrig;
     }
+
+    private static $viewKey;
   }
 
   global $params;

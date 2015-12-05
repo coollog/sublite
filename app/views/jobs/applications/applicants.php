@@ -189,7 +189,7 @@
     </div>
 
     <h2>Insight</h2>
-    Your applicants include students from schools including
+    Your new applicants include students from schools including
     <insights></insights>!
 
     <br /><br />
@@ -339,6 +339,10 @@
       <br />
       <input id="confirmpurchase" type="button" value="Confirm Purchase"
              disabled />
+      <br />
+      <small><a href="<?php echo $GLOBALS['dirpre']; ?>../feedback">
+        Trouble buying Credits?
+      </a></small>
     </paymentform>
 
     <!-- <h2>Add Payment Information</h2>
@@ -414,6 +418,7 @@
       };
       $('unlocking').html('Unlocking...');
       loadContent('claimapplications', data, function (data) {
+        $('tab[for=claimed]').trigger('unload');
         $('tab[for=unclaimed]').click();
         // $('tab[for=claimed]').click();
       });
@@ -861,8 +866,13 @@
       <div class="headline">
         Viewing job applicants for:
         <b>
-          <?php View::echof('jobTitle'); ?> |
-          <?php View::echof('jobLocation'); ?>
+          <?php View::echof('jobTitle'); ?>
+          <?php
+            if (strlen(View::get('joblocation')) > 0) {
+              echo ' | ';
+              View::echof('jobLocation');
+            }
+          ?>
         </b>
       </div>
 
