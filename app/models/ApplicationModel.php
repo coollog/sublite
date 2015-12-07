@@ -49,7 +49,7 @@
     public static function getClaimed(MongoId $jobId);
 
     /**
-     * Gets all applications by $jobId, but project only 'status'.
+     * Gets all submitted applications by $jobId, but project only 'status'.
      */
     public static function getStatusesByJob(MongoId $jobId);
 
@@ -88,7 +88,7 @@
 
     /**
     * Gets the number of applications for a certain job
-    */  
+    */
     public static function countByJob(MongoId $jobId);
   }
 
@@ -200,6 +200,7 @@
     public static function getStatusesByJob(MongoId $jobId) {
       $query = (new DBQuery(self::$collection))
         ->toQuery('jobid', $jobId)
+        ->toQuery('submitted', true)
         ->projectField('status');
       return $query->run();
     }
@@ -243,6 +244,7 @@
       $query = (new DBQuery(self::$collection))
         ->toQuery('jobid', $jobId)
         ->toQuery('status', ApplicationStudent::STATUS_UNCLAIMED)
+        ->toQuery('submitted', true)
         ->projectId()
         ->limit($count);
       $applications = $query->run();

@@ -59,6 +59,8 @@
      */
     public static function getById(MongoId $applicationId);
 
+    public static function getClaimedUnclaimedCounts(MongoId $jobId);
+
     /**
      * Gets all the applications submitted/saved by student.
      */
