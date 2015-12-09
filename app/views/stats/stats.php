@@ -33,6 +33,14 @@
       echo "$student\n";
     }
     echo '</textarea>';
+
+    $confirmed = View::get('confirmedStudentArray')['confirmedStudentArray'];
+    echo '<br />Confirmed Students: '.count($confirmed).'<br />
+      <textarea style="width:800px; height:200px;">';
+    foreach ($confirmed as $email) {
+      echo "$email\n";
+    }
+    echo '</textarea>';
     ?>
   </div>
 
