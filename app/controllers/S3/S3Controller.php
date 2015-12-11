@@ -81,10 +81,16 @@
 				require_once($GLOBALS['dirpre'].'includes/S3/SimpleImage.php');
 				$image = new SimpleImage();
 				$this->validate($image->load($fname), $err, 'invalid image type');
-
         if ($this->isValid()) {
-  				if ($image->getHeight() > 1000)
-  					$image->resizeToHeight(1000);
+          if ($image->getHeight() < $image->getWidth()) {
+  				  if ($image->getHeight() > 1000) {
+  					 $image->resizeToHeight(1000);
+            }
+          } else {
+            if ($image->getWidth() > 1000) {
+             $image->resizeToWidth(1000);
+            }
+          }
   				$image->save($fname);
 
   				function getMIME($fname) {
@@ -106,7 +112,11 @@
 
   					//Rename image name.
   					$actual_image_name = time() . "." . $filetype[1];
-
+            if ($_GET['name'] == 'bannerphoto') {
+              $this->validate($image->getWidth() >= 1000, $err,
+                'Warning: Banner images at least 1000px wide look the best ' .
+                'on your company and job profiles!');
+            }
   					$this->validate($s3->putObjectFile($fname, $bucket ,
   																						 $actual_image_name,
   																						 S3::ACL_PUBLIC_READ),
