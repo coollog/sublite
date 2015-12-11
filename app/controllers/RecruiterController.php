@@ -18,7 +18,7 @@
       $title = clean($data['title']);
       $phone = isset($data['phone']) ? clean($data['phone']) : '';
       $photo = isset($data['photo']) ?
-        clean($data['photo']) : 'assets/gfx/defaultpic.png';
+        clean($data['photo']) : $_GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
       $approved = $data['approved'];
       $credits = 0;
       return array(
