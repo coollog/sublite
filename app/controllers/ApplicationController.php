@@ -416,7 +416,7 @@
         $student = StudentModel::getByIdMinimal($studentId);
         $studentFirstName = $student['name'];
         $studentEmail = $student['email'];
-        $linkApplication = "http://sublite.net/jobs/applications/$applicationId";
+        $linkApplication = "http://sublite.net/jobs/application/$applicationId";
         $linkJob = "http://sublite.net/job?id=$jobId";
         $linkJobSearch = "http://sublite.net/jobs/search";
         $linkJobsByCompany = "http://sublite.net/jobs/search?byrecruiter=$recruiterId";
