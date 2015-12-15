@@ -1,5 +1,5 @@
 <style>
-  .messagestats {
+  messagestats {
     background: white;
   }
   .thread {
