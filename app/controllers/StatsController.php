@@ -4,19 +4,21 @@
   class StatsController extends Controller {
 
     function loadStats() {
-      $updateArray = self::update(); // contains arrays 'stats' and 'cities'
-      $recruiterArray = self::recruiters(); // contains arrays 'recruiterEmails', 'recruiterEmailsWC', and 'recruiterEmailsWJ'
-      $studentArray = self::students(); // contains arrays 'studentConfirmedEmails', 'studentsUnconfirmedEmails', 'allStudents'
-      $missingRecruiterArray = self::missingrecruiter(); //contains array 'missingRecruiters'
-      $subletsended2014Array = self::subletsended2014(); // contains array 'subletsended2014'
-      $unknownSchoolsArray = self::unknownschools(); // contains array 'domains'
-      $cumulativeArray = self::cumulative(); // contains arrays 'cumulativeviews', 'cumulativeclicks'
-      $getMessageParticipantsArray = self::getMessageParticipants(); // contains array 'messageparticipants'
+      $updateArray = self::update();
+      $recruiterArray = self::recruiters(); 
+      $studentArray = self::students(); 
+      $confirmedStudentArray = self::confirmedStudents();
+      $missingRecruiterArray = self::missingrecruiter(); 
+      $subletsended2014Array = self::subletsended2014(); 
+      $unknownSchoolsArray = self::unknownschools(); 
+      $cumulativeArray = self::cumulative(); 
+      $getMessageParticipantsArray = self::getMessageParticipants(); 
 
       $toRender = [
         "updateArray" => $updateArray,
         "recruiterArray" => $recruiterArray,
         "studentArray" => $studentArray,
+        "confirmedStudentArray" => $confirmedStudentArray,
         "missingRecruiterArray" => $missingRecruiterArray,
         "subletsended2014Array" => $subletsended2014Array,
         "unknownSchoolsArray" => $unknownSchoolsArray,
@@ -156,6 +158,20 @@
         $studentArray[] = implode(',', self::quoteStringsInArray($info));
       }
       return ["studentArray" => $studentArray];
+    }
+
+    function confirmedStudents() {
+      global $MStats;
+
+      $confirmed = $MStats->getStudentsConfirmed();
+      $confirmedEmails = [];
+
+      foreach ($confirmed as $student) {
+        $confirmedEmails[] = $student['email'];
+      }
+
+      return ["confirmedStudentArray" => $confirmedEmails];
+
     }
 
     /*
