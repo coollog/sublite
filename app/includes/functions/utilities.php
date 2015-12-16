@@ -196,24 +196,23 @@
   }
 
   function toJSON(array $arr) {
-    // function escapeJson(array $arr) {
-    //   $newArr = [];
-    //   foreach ($arr as $key => $value) {
-    //     $val = $arr[$key];
-    //     if (is_array($val)) {
-    //       $val = escapeJson($val);
-    //     } else if (is_string($val)) {
-    //       $val = htmlspecialchars($val);
-    //     }
+    function escapeJson(array $arr) {
+      $newArr = [];
+      foreach ($arr as $key => $value) {
+        $newKey = htmlspecialchars($key);
+        $val = $arr[$key];
+        if (is_array($val)) {
+          $val = escapeJson($val);
+        } else {
+          $val = htmlspecialchars($val);
+        }
+        $newArr[$newKey] = $val;
+      }
+      return $newArr;
+    }
 
-    //     if (is_string($key)) $newKey = htmlspecialchars($key);
-    //     $newArr[$newKey] = $val;
-    //   }
-    //   return $newArr;
-    // }
-
-    // $arr = escapeJson($arr);
-    return strip_tags(json_encode($arr));
+    $arr = escapeJson($arr);
+    return strip_tags(json_encode($arr, JSON_HEX_QUOT));
   }
 
   function MongoIdArray(array $arr) {
