@@ -57,7 +57,7 @@
           break;
       }
 
-      self::redirect($_GLOBALS['dirpre'].'../');
+      self::redirect($GLOBALS['dirpre'].'../');
     }
   }
 
