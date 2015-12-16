@@ -60,6 +60,7 @@
     "loggedin /employers" => vget('Loggedin') and !vget('Loggedinstudent') and preg_match('/^\/employers/', $curdir),
     "recruiter hascompany" => vget('Loggedin') and vget('Lcompany'),
     "recruiter nocompany" => vget('Loggedin') and !vget('Lcompany'),
+    "recruiter" => vget('Loggedin'),
     "student" => vget('Loggedinstudent'),
     "student /housing" => vget('Loggedinstudent') and preg_match('/^\/housing/', $curdir),
     "all" => true
@@ -92,7 +93,8 @@
     array("Sign Up", $path."employers/register", "notloggedin /employers"),
     array("Log In", $path."employers/login", "notloggedin /employers"),
     array("Log In", $path."login", "notloggedin !/employers"),
-    array("Log Out", $path."logout", "loggedin")
+    array("Log Out", $path."logout", "student"),
+    array("Log Out", $path."employers/logout", "recruiter")
   );
 ?>
 <navbar class="blackbar">

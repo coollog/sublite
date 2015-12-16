@@ -1,6 +1,7 @@
 <style>
   messagestats {
     background: white;
+    display: block;
   }
   .thread {
     border: 1px solid #666;
