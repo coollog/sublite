@@ -195,28 +195,28 @@
       return $result;
   }
 
-  function toJSON(array $arr) {
-    $escapeJson = function (array $arr) {
-      $newArr = [];
-      foreach ($arr as $key => $value) {
-        $val = $arr[$key];
-        if (is_array($val)) {
-          $val = $escapeJson($val);
-        } else if (is_string($val)) {
-          $val = htmlspecialchars($val);
-        }
-
-        if (is_string($key))
-          $newKey = htmlspecialchars($key);
-        else
-          $newKey = $key;
-        $newArr[$newKey] = $val;
+  function escapeJson(array $arr) {
+    $newArr = [];
+    foreach ($arr as $key => $value) {
+      $val = $arr[$key];
+      if (is_array($val)) {
+        $val = escapeJson($val);
+      } else if (is_string($val)) {
+        $val = htmlspecialchars($val);
       }
-      return $newArr;
-    }
 
-    $arr = $escapeJson($arr);
-    return strip_tags(json_encode($arr, JSON_HEX_QUOT));
+      if (is_string($key))
+        $newKey = htmlspecialchars($key);
+      else
+        $newKey = $key;
+      $newArr[$newKey] = $val;
+    }
+    return $newArr;
+  }
+
+  function toJSON(array $arr) {
+    $arr = escapeJson($arr);
+    return strip_tags(json_encode($arr));
   }
 
   function MongoIdArray(array $arr) {
