@@ -172,7 +172,7 @@
 
     function me() {
       if (!isset($_SESSION['email'])) return null;
-      return $this->get($_SESSION['email']);
+      return self::get($_SESSION['email']);
     }
 
     function find($query=array()) {

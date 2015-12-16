@@ -99,8 +99,7 @@
   });
   Router::register('employers/home', function() {
     Controller::displayMetatags('/employers');
-    GLOBALvarGet('CRecruiter')->home();
-    GLOBALvarGet('CJob')->manage();
+    RecruiterController::home();
   });
   Router::register('employers/index', function() {
     Controller::displayMetatags('/employers');
