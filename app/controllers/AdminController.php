@@ -60,7 +60,7 @@
           break;
       }
 
-      self::redirect($GLOBALS['dirprefromroute'].'../');
+      self::redirect($GLOBALS['dirpreFromRoute'].'../');
     }
   }
 
