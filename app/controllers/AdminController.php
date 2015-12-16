@@ -54,10 +54,13 @@
           $_SESSION['loggedin'] = true;
           $recruiter = RecruiterModel::get($email);
           $_SESSION['_id'] = $recruiter['_id'];
+          if (MongoId::isValid($recruiter['company'])) {
+            $_SESSION['company'] = $recruiter['company'];
+          }
           break;
       }
 
-      self::redirect($GLOBALS['dirpre'].'../');
+      self::redirect($GLOBALS['dirprefromroute'].'../');
     }
   }
 
