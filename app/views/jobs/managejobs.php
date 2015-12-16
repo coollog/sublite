@@ -63,12 +63,12 @@
   </nojobstemplate>
 </templates>
 
-<textarea id="jobData" class="hide">
+<jobData class="hide">
   <?php
     $jobs = View::get('jobs');
     echo toJSON($jobs);
   ?>
-</textarea id="jobData">
+</jobData>
 
 <script>
   function setupJobHover() {
@@ -81,7 +81,7 @@
 
   $(function () {
     (function setupJobs() {
-      var jobData = JSON.parse($('#jobData').html());
+      var jobData = JSON.parse($('jobData').html());
       jobData.forEach(function (job) {
         var _id = job._id.$id;
         var title = job.title;

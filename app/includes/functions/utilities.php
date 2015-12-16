@@ -185,7 +185,7 @@
   }
 
   function toJSON(array $arr) {
-    return strip_tags(json_encode($arr));
+    return strip_tags(json_encode($arr, JSON_HEX_QUOT));
   }
 
   function MongoIdArray(array $arr) {
