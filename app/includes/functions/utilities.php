@@ -199,12 +199,12 @@
     function escapeJson(array $arr) {
       $newArr = [];
       foreach ($arr as $key => $value) {
-        $newKey = escapeJsonString($key);
+        $newKey = htmlspecialchars($key);
         $val = $arr[$key];
         if (is_array($val)) {
           $val = escapeJson($val);
         } else {
-          $val = escapeJsonString($val);
+          $val = htmlspecialchars($val);
         }
         $newArr[$newKey] = $val;
       }
