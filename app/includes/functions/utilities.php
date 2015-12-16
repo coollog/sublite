@@ -184,7 +184,34 @@
     return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== FALSE);
   }
 
+  /**
+   * @param $value
+   * @return mixed
+   */
+  function escapeJsonString($value) { # list from www.json.org: (\b backspace, \f formfeed)
+      $escapers = array("\\", "/", "\"", "\n", "\r", "\t", "\x08", "\x0c");
+      $replacements = array("\\\\", "\\/", "\\\"", "\\n", "\\r", "\\t", "\\f", "\\b");
+      $result = str_replace($escapers, $replacements, $value);
+      return $result;
+  }
+
   function toJSON(array $arr) {
+    function escapeJson(array $arr) {
+      $newArr = [];
+      foreach ($arr as $key => $value) {
+        $newKey = escapeJsonString($key);
+        $val = $arr[$key];
+        if (is_array($val)) {
+          $val = escapeJson($val);
+        } else {
+          $val = escapeJsonString($val);
+        }
+        $newArr[$newKey] = $val;
+      }
+      return $newArr;
+    }
+
+    $arr = escapeJson($arr);
     return strip_tags(json_encode($arr, JSON_HEX_QUOT));
   }
 
