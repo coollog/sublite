@@ -199,13 +199,17 @@
     function escapeJson(array $arr) {
       $newArr = [];
       foreach ($arr as $key => $value) {
-        $newKey = htmlspecialchars($key);
         $val = $arr[$key];
         if (is_array($val)) {
           $val = escapeJson($val);
-        } else {
+        } else if (is_string($val)) {
           $val = htmlspecialchars($val);
         }
+
+        if (is_string($key))
+          $newKey = htmlspecialchars($key);
+        else
+          $newKey = $key;
         $newArr[$newKey] = $val;
       }
       return $newArr;
