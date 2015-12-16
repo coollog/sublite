@@ -148,11 +148,6 @@
         </select>
       </div>
 
-      <!-- If you are an undergraduate student, enter your class year:
-      <div class="form-slider"><label for="class">Class Year</label><input type="text" id="class" name="class" value="<?php vecho('class'); ?>" /></div>
-      If you are a graduate student, enter your school:
-      <div class="form-slider"><label for="school">(eg. Law School, Business School)</label><input type="text" id="name" name="school" value="<?php vecho('school'); ?>" /></div> -->
-
       <div class="form-slider"><label for="gender">Gender </label>
         <select id="gender" name="gender" required>
           <?php vecho('gender', '<option selected="selected">{var}</option>'); ?>
@@ -685,8 +680,7 @@
 </panel>
 
 <script type="text/javascript">
-function educationValueChanged()
-{
+function educationValueChanged() {
   if($('.undergraduate').is(":checked"))
     $(".undergraduateShow").show();
   else
@@ -698,8 +692,7 @@ function educationValueChanged()
     $(".graduateShow").hide();
 }
 
-function lookingForValueChanged()
-{
+function lookingForValueChanged() {
     if($('.internship').is(":checked") || $('.fulltime').is(":checked"))
       $(".jobShow").show();
     else

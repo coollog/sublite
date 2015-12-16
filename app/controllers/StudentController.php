@@ -187,11 +187,7 @@
         'lookingFor' => $lookingFor, 'internshipTimes' => $internshipTimes, 
         'fulltimeTimes' => $fulltimeTimes, 'housingTimes' => $housingTimes);
 
-      $data = array(
-        'registration' => $registration
-      );
-
-      return $data;
+      return $registration;
     }
 
     function validateData($data, &$err) {
@@ -481,7 +477,7 @@
 
           // Params to vars
           extract($data = $this->data($params));
-          extract($this->registrationData($params));
+          $registration = self::registrationData($params);
 
 
           $this->validate($pass == $pass2, $err, 'password mismatch');
@@ -501,13 +497,6 @@
             $entry['gender'] = $gender;
             $entry['photo'] = $photo;
             $entry['bio'] = $bio;
-            /* $entry['industry'] = $industry;
-            $entry['countries'] = $countries;
-            $entry['states'] = $states;
-            $entry['lookingFor'] = $lookingFor;
-            $entry['internshipTimes'] = $internshipTimes;
-            $entry['fulltimeTimes'] = $fulltimeTimes;
-            $entry['housingTimes'] = $housingTimes; */
             $entry['registration'] = $registration;
             $MStudent->save($entry);
 
