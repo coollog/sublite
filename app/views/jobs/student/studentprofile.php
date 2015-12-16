@@ -117,7 +117,7 @@
       <section name="student">
         <heading></heading>
       </section>
-      <a id="resume" class="hide">
+      <a id="resume" class="hide" target="_blank">
         <br />
         <input type="button" value="View Resume" />
       </a>
