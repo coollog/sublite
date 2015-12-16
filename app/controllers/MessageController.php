@@ -82,7 +82,7 @@
     }
     function setFromNamePic(&$reply, $from) {
       global $MStudent, $MRecruiter;
-      $reply['fromname'] = $this->getName($from);
+      $reply['fromname'] = self::getName($from);
       if ($MStudent->exists($from)) {
         $Photo = $MStudent->getPhoto($from);
         if ($Photo == '' or $Photo == 'defaultpic.png' or $Photo == 'noprofilepic.png')

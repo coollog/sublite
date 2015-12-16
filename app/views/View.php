@@ -22,6 +22,10 @@
     public static function echof($varName, $format = null, $default = '') {
       vecho($varName, $format, $default);
     }
+    public static function echoArray($varName, $key) {
+      $var = vget($varName);
+      echo $var[$key];
+    }
     public static function linkTo($html,
                                   $route,
                                   $params = null,

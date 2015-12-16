@@ -7,49 +7,49 @@
     }
 
     function data($data) {
-      $name = $this->format(clean($data['name']));
+      $name = self::format(clean($data['name']));
       if (isset($data['industry'])) {
         $industry = $data['industry'];
         if (is_array($industry)) {
           $industry = implode(', ', $industry);
-          $industry = $this->format(clean($industry));
+          $industry = self::format(clean($industry));
         }
       } else {
         $industry = "";
       }
-      $size = $this->format(clean($data['size']));
-      $desc = $this->format(clean($data['desc']));
-      $founded = $this->format(clean($data['founded']));
-      $location = $this->format(clean($data['location']));
-      $corevalues = $this->format(clean($data['corevalues']));
+      $size = self::format(clean($data['size']));
+      $desc = self::format(clean($data['desc']));
+      $founded = self::format(clean($data['founded']));
+      $location = self::format(clean($data['location']));
+      $corevalues = self::format(clean($data['corevalues']));
       $bannerphoto = "";
       if(isset($data['bannerphoto'])) {
-        $bannerphoto = $this->format(clean($data['bannerphoto']));
+        $bannerphoto = self::format(clean($data['bannerphoto']));
       }
       $logophoto = "";
       if(isset($data['logophoto'])) {
-        $logophoto = $this->format(clean($data['logophoto']));
+        $logophoto = self::format(clean($data['logophoto']));
       }
       $photos = array();
       if (isset($data['photos'])) {
         foreach ($data['photos'] as $photo)
-          $photos[] = $this->format(clean($photo));
+          $photos[] = self::format(clean($photo));
       }
-      $funfacts = $this->format(clean($data['funfacts']));
-      $society = $this->format(clean($data['society']));
-      $socialevent = $this->format(clean($data['socialevent']));
-      $colorscheme = $this->format(clean($data['colorscheme']));
-      $media = $this->format(clean($data['media']));
-      $employees = $this->format(clean($data['employees']));
-      $perks = $this->format(clean($data['perks']));
-      $forfun = $this->format(clean($data['forfun']));
-      $dessert = $this->format(clean($data['dessert']));
-      $talent = $this->format(clean($data['talent']));
-      $dresscode = $this->format(clean($data['dresscode']));
-      $freequestion1 = $this->format(clean($data['freequestion1']));
-      $freeanswer1 = $this->format(clean($data['freeanswer1']));
-      $freequestion2 = $this->format(clean($data['freequestion2']));
-      $freeanswer2 = $this->format(clean($data['freeanswer2']));
+      $funfacts = self::format(clean($data['funfacts']));
+      $society = self::format(clean($data['society']));
+      $socialevent = self::format(clean($data['socialevent']));
+      $colorscheme = self::format(clean($data['colorscheme']));
+      $media = self::format(clean($data['media']));
+      $employees = self::format(clean($data['employees']));
+      $perks = self::format(clean($data['perks']));
+      $forfun = self::format(clean($data['forfun']));
+      $dessert = self::format(clean($data['dessert']));
+      $talent = self::format(clean($data['talent']));
+      $dresscode = self::format(clean($data['dresscode']));
+      $freequestion1 = self::format(clean($data['freequestion1']));
+      $freeanswer1 = self::format(clean($data['freeanswer1']));
+      $freequestion2 = self::format(clean($data['freequestion2']));
+      $freeanswer2 = self::format(clean($data['freeanswer2']));
       return array(
         'name' => $name, 'industry' => $industry, 'size' => $size,
         'desc' => $desc, 'founded' => $founded, 'location' => $location,

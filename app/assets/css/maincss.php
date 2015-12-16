@@ -130,4 +130,11 @@
     line-height: 50px;
     font-size: 20px;
   }
+  .hover {
+    transition: 0.1s all ease-in-out;
+    cursor: pointer;
+  }
+  .hover:hover {
+    opacity: 0.5;
+  }
 </style>

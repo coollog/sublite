@@ -1,7 +1,112 @@
 <?php
   require_once($GLOBALS['dirpre'].'controllers/Controller.php');
 
-  class RecruiterController extends Controller {
+  interface RecruiterControllerInterface {
+    public static function home();
+  }
+
+  class RecruiterController extends Controller
+                            implements RecruiterControllerInterface {
+    public static function home() {
+      self::requireLogin();
+
+      $me = self::data(RecruiterModel::me());
+
+      $myId = $_SESSION['_id'];
+      if ($me['photo'] == 'assets/gfx/defaultpic.png')
+        $me['photo'] = $GLOBALS['dirpreFromRoute'] . $me['photo'];
+
+      $companyId = $me['company'];
+      $company = CompanyController::data(CompanyModel::get($me['company']));
+
+      $jobs = JobModel::getByRecruiter($myId);
+      $jobCount = count($jobs);
+
+      // Process job listings and counts.
+      $jobArray = [];
+      $applicantCount = 0;
+      $totalViewCount = 0;
+      $totalApplyCount = 0;
+      foreach ($jobs as $job) {
+        $jobId = $job['_id'];
+        $applicants = ApplicationModel::countByJob($jobId);
+
+        $jobListing = [
+          '_id' => $jobId->{'$id'},
+          'title' => $job['title'],
+          'location' => $job['location'],
+          'applicants' => $applicants
+        ];
+        $jobArray[] = $jobListing;
+
+        $applicantCount += $applicants;
+        $totalViewCount += $job['stats']['views'];
+        $totalApplyCount += $job['stats']['clicks'];
+      }
+
+      // Process messages.
+      $messages = array_slice(array_reverse(iterator_to_array(
+        MessageModel::findByParticipant($_SESSION['_id']->{'$id'})
+      )), 0, 4);
+      $replies = [];
+      $unread = 0;
+      foreach ($messages as $m) {
+        $reply = array_pop($m['replies']);
+        $reply['_id'] = $m['_id'];
+
+        $from = $reply['from'];
+        if (!$reply['read']) {
+          $reply['read'] = (strcmp($from, $_SESSION['_id']) == 0);
+        }
+        if (!$reply['read']) $unread ++;
+
+        MessageController::setFromNamePic($reply, $from);
+
+        $reply['time'] = timeAgo($reply['time']);
+
+        if (strlen($reply['msg']) > 100) {
+          $reply['msg'] = substr($reply['msg'], 0, 97) . '...';
+        }
+
+        $replies[] = $reply;
+      }
+
+      $personalprof = [
+        'firstname' => $me['firstname'],
+        'lastname' => $me['lastname'],
+        'title' => $me['title'],
+        'photo' => $me['photo']
+      ];
+
+      $companyprof = [
+        'name' => $company['name'],
+        'logophoto' => $company['logophoto'],
+        'location' => $company['location'],
+        'jobcount' => $jobCount,
+        'applicantcount' => $applicantCount
+      ];
+
+      $stats = [
+        'views' => $totalViewCount,
+        'clicks' => $totalApplyCount
+      ];
+
+      $messages = [
+        'messages' => $replies,
+        'unread' => $unread
+      ];
+
+      $jobListings = toJSON($jobArray);
+
+      self::render('recruiter/home', [
+        'personal' => $personalprof,
+        'company' => $companyprof,
+        'stats' => $stats,
+        'messages' => toJSON($messages),
+        'jobs' => $jobListings
+      ]);
+    }
+
     // Validation functions
     function isValidName($name) { // Works for first or last name
       if(strlen($name) > 100) return false;
@@ -34,15 +139,6 @@
         $err, 'first name is too long');
       $this->validate($this->isValidName($data['lastname']),
         $err, 'last name is too long');
-    }
-
-    function home() {
-      $this->requireLogin();
-      global $MRecruiter, $MJobs;
-      $me = $MRecruiter->me();
-      $me['_id'] = $me['_id']->{'$id'};
-      $me['company'] = $me['company']->{'$id'};
-      self::render('recruiter/home', $me);
     }
 
     function index() {
