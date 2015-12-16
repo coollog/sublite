@@ -194,6 +194,7 @@
 
         var selector = 'section[name='+sectionName+'] fields[name='+fieldName+']';
 
+        console.log(list.length);
         if (list.length == 0) {
           $(this).parent().remove();
           return;
