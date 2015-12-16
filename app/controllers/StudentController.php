@@ -598,13 +598,16 @@
         // Params to vars
         $email = $_SESSION['email'];
         $pass = $_SESSION['pass'];
+        $skippass = isset($_SESSION['skippass']);
 
         // Validations
         self::startValidations();
         self::validate(($entry = $MStudent->get($email)) != NULL,
           $err, 'unknown email');
-        self::validate($entry['pass'] == md5($pass),
-          $err, 'invalid password');
+        if (!$skippass) {
+          self::validate($entry['pass'] == md5($pass),
+            $err, 'invalid password');
+        }
 
         if (!self::isValid()) {
           self::logout();

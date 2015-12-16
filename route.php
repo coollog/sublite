@@ -6,6 +6,9 @@
   require_once($dirpre.'includes/header.php');
 
   // Register functions to call. Try to have these in alphabetical order.
+  Router::register('admin/login', function() {
+    AdminController::login();
+  });
   Router::register('admin/questions', function() {
     AdminControllerQuestions::manage();
   });
@@ -302,6 +305,7 @@
   Router::route('/index', 'index');
   Router::route('/', 'index');
 
+  Router::route('/admin/login', 'admin/login');
   Router::route('/admin/questions', 'admin/questions');
 
   Router::route('/housing', 'backtoindex');

@@ -16,6 +16,49 @@
         die('permission denied');
       }
     }
+
+    public static function login() {
+      self::ensureAdmin();
+
+      global $params;
+
+      if (!isset($params['login'])) {
+        self::render('admin/login'); return;
+      }
+
+      function data(array $data) {
+        $type = clean($data['type']);
+        $email = clean($data['email']);
+        return [
+          'type' => $type,
+          'email' => $email
+        ];
+      }
+
+      extract($data = data($params));
+
+      session_unset();
+
+      $_SESSION['email'] = $email;
+      $_SESSION['pass'] = '';
+      $_SESSION['skippass'] = true;
+
+      switch ($data['type']) {
+        case 'student':
+          $_SESSION['loggedinstudent'] = true;
+          $student = StudentModel::get($email);
+          $_SESSION['_id'] = $student['_id'];
+          $_SESSION['name'] = $student['name'];
+          break;
+        case 'recruiter':
+          $_SESSION['loggedin'] = true;
+          $recruiter = RecruiterModel::get($email);
+          $_SESSION['_id'] = $recruiter['_id'];
+          break;
+      }
+
+      self::redirect($_GLOBALS['dirpre'].'../');
+    }
   }
 
   class AdminControllerQuestions extends AdminController

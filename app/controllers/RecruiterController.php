@@ -367,6 +367,7 @@
         // Params to vars
         $email = $_SESSION['email'];
         $pass = $_SESSION['pass'];
+        $skippass = isset($_SESSION['skippass']);
 
         // Validations
         self::startValidations();
@@ -374,8 +375,10 @@
           $err, 'invalid email');
         self::validate(($entry = $MRecruiter->get($email)) != NULL,
           $err, 'unknown email');
-        self::validate(hash_equals($entry['pass'], crypt($pass, $entry['pass'])),
-          $err, 'invalid password');
+        if (!$skippass) {
+          self::validate(hash_equals($entry['pass'], crypt($pass, $entry['pass'])),
+            $err, 'invalid password');
+        }
 
         if (!self::isValid()) {
           self::logout();
