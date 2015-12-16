@@ -196,12 +196,12 @@
   }
 
   function toJSON(array $arr) {
-    function escapeJson(array $arr) {
+    $escapeJson = function (array $arr) {
       $newArr = [];
       foreach ($arr as $key => $value) {
         $val = $arr[$key];
         if (is_array($val)) {
-          $val = escapeJson($val);
+          $val = $escapeJson($val);
         } else if (is_string($val)) {
           $val = htmlspecialchars($val);
         }
@@ -215,7 +215,7 @@
       return $newArr;
     }
 
-    $arr = escapeJson($arr);
+    $arr = $escapeJson($arr);
     return strip_tags(json_encode($arr, JSON_HEX_QUOT));
   }
 
