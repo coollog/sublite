@@ -194,6 +194,11 @@
 
         var selector = 'section[name='+sectionName+'] fields[name='+fieldName+']';
 
+        if (list.length == 0) {
+          $(this).parent().remove();
+          return;
+        }
+
         list.forEach(function (val) {
           var fieldHTML = Template.makeField(fieldName, val);
           $(selector).append(fieldHTML);
