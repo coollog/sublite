@@ -8,7 +8,6 @@
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     $response = json_decode(curl_exec($ch), true);
     curl_close($ch);
-    var_dump($response);
 
     // If Status Code is ZERO_RESULTS, OVER_QUERY_LIMIT, REQUEST_DENIED or INVALID_REQUEST
     if ($response['status'] != 'OK') {
@@ -34,30 +33,53 @@
       'latitude' => $geometry['location']['lat'],
       'longitude' => $geometry['location']['lng'],
       'location_type' => $geometry['location_type'],
+      'city' => getCityFromGeocodeResponse($response),
+      'state' => getStateFromGeocodeResponse($response)
     );
 
     return $array;
+  }
+  function getCityFromGeocodeResponse(array $response) {
+    $address_components = $response['results'][0]['address_components'];
+
+    $city = null;
+    foreach ($address_components as $c) {
+      if (in_array("locality", $c['types'])) {
+        $city = $c['short_name'];
+      }
+    }
+
+    if (is_null($city)) return null;
+    return $city;
+  }
+  function getStateFromGeocodeResponse(array $response) {
+    $address_components = $response['results'][0]['address_components'];
+
+    $state = null;
+    foreach ($address_components as $c) {
+      if (in_array("administrative_area_level_1", $c['types'])) {
+        $state = $c['short_name'];
+      }
+    }
+
+    if ($state == null) return null;
+    return $state;
+  }
+  function getCityStateFromGeocode(array $geocode) {
+    $city = $geocode['city'];
+    $state = $geocode['state'];
+
+    if (empty($city)) return $state;
+    else return "$city, $state";
   }
   function getCity($string) {
     if (($response = geocodeJSON($string)) == null) {
       return null;
     }
 
-    $address_components = $response['results'][0]['address_components'];
+    $city = getCityFromGeocodeResponse($response);
+    $state = getStateFromGeocodeResponse($response);
 
-    $city = null;
-    $state = null;
-    foreach ($address_components as $c) {
-      if (in_array("locality", $c['types'])) {
-        $city = $c['short_name'];
-      }
-      if (in_array("administrative_area_level_1", $c['types'])) {
-        $state = $c['short_name'];
-      }
-    }
-
-    if ($city == null or $state == null)
-      return null;
     return "$city, $state";
   }
   // distance between coords

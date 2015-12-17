@@ -5,35 +5,21 @@
   require_once('pass.php'); // Imports the MongoURI for the database.
   require_once('geocode.php');
 
+  require_once('DeciderSublets.php');
+  require_once('DeciderJobs.php');
+
   // Connect to the databases.
   $m1 = new MongoClient($dbUri1);
   $m2 = new MongoClient($dbUri2);
   $db1 = $m1->sublite;
   $db2 = $m2->subliteinternships;
+  $collListings = $db1->listings;
+  $collJobs = $db2->jobs;
+  $collCompanies = $db2->companies;
   $collGeocodes = $db1->geocodes;
   $collGeocodes->createIndex(['location' => 1]);
 
-  class GeocodeModel {
-    public static function lookup($location) {
-      $location = strtolower($location);
-      $entry =
-        $collGeocodes->findOne(['location' => $location], ['geocode' => 1]);
-      if (is_null($entry)) return null;
-      return $entry['geocode'];
-    }
-    public static function record($location, array $geocode) {
-      $location = strtolower($location);
-      if (!is_null(self::lookup($location))) return;
-      $data = [
-        'location' => $location,
-        'geocode' => $geocode
-      ];
-      $collGeocodes->insert($data);
-    }
-    public static function get($location) {
-      $geocode = geocode($location);
-    }
-  }
+  GeocodeModel::init($collGeocodes);
 
   // Get the search data.
   $searches0 = $db2->app->findOne(['_id' => 'searches']);
@@ -42,37 +28,52 @@
 
   $searches = array_merge($searches0, $searches1, $searches2);
 
-  // Process sublet searches for locations.
-  function processSubletLocations(array $searches) {
-    $locationHash = [];
-
-    // Add one count for each unique location per email.
-    foreach ($searches as $time => $search) {
-      if (!is_array($search)) continue;
-      if ($search['type'] != 'sublets') continue;
-
-      $email = $search['email'];
-      $location = strtolower($search['data']['location']);
-      if (isset($locationHash[$location])) {
-        if (isset($locationHash[$location]['email'][$email])) continue;
-        $locationHash[$location]['email'][$email] = true;
-        $locationHash[$location]['count'] ++;
-      } else {
-        $locationHash[$location] = [
-          'email' => [$email => true],
-          'count' => 1
-        ];
-      }
+  if (isset($_POST['goal'])) {
+    switch ($_POST['goal']) {
+      case 'sublets': require_once('decide_sublets.php'); break;
+      case 'jobs': require_once('decide_jobs.php'); break;
+      case 'student': require_once('decide_student.php'); break;
     }
-
-    // Extract counts.
-    $locationCounts = [];
-    foreach ($locationHash as $location => $data) {
-      $locationCounts[$location] = $data['count'];
-    }
-
-    arsort($locationCounts);
-    return $locationCounts;
+    exit();
   }
-  var_dump(processSubletLocations($searches));
 ?>
+
+<?php require_once('commonhtml.php'); ?>
+
+<style>
+  #loading {
+    display: none;
+    font-size: 1.5em;
+  }
+</style>
+
+<choosegoal class="content">
+  <h1>What is your goal?</h1>
+
+  <form method="post">
+    <buttons>
+      <button type="submit" name="goal" value="sublets">
+        Balance supply and demand for sublets.
+      </button>
+
+      <button type="submit" name="goal" value="jobs">
+        Balance supply and demand for jobs.
+      </button>
+
+      <button type="submit" name="goal" value="student">
+        Determine a student's preferences.
+      </button>
+    </buttons>
+    <div id="loading">
+      Entering your preferences into the automated decision system...
+    </div>
+  </form>
+</choosegoal>
+
+<script>
+  $('form').submit(function() {
+    $('buttons').hide();
+    $('#loading').show();
+    return true;
+  });
+</script>
