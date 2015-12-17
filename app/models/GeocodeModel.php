@@ -28,6 +28,7 @@
     }
 
     public static function record($location, array $geocode) {
+      $location = strtolower($location);
       if (!is_null(self::lookup($location))) {
         return;
       }
