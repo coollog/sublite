@@ -19,7 +19,6 @@
   header("Pragma: no-cache");
 
   require_once($dirpre.'includes/functions/hash_equals.php');
-  require_once($dirpre.'includes/functions/geocode.php');
   require_once($dirpre.'includes/functions/sendgmail.php');
   require_once($dirpre.'includes/functions/lib_autolink.php');
   require_once($dirpre.'includes/schools.php');
@@ -52,6 +51,10 @@
   require_once($dirpre.'models/SocialModel.php');
   require_once($dirpre."models/QuestionModel.php");
   require_once($dirpre.'models/ApplicationModel.php');
+  require_once($dirpre.'models/GeocodeModel.php');
+
+  // Standalone modules.
+  require_once($dirpre.'controllers/modules/Geocode.php');
 
   // Other necessary modules.
   require_once($dirpre.'Router.php');

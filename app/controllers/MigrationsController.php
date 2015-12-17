@@ -6,7 +6,7 @@
       global $MApp;
 
       // Get current counter
-      $mlast = $MApp->get('migrations');
+      $mlast = AppModel::getByStringId('migrations');
       if ($mlast == NULL) $mlast = 0;
       else $mlast = $mlast['current'];
 
