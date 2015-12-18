@@ -15,6 +15,11 @@
 <link href="commondecide.css" rel="stylesheet" type="text/css">
 
 <recommendation class="content">
+  <h5>SubLite Marketing Automated Decision System</h5>
+  <br /><br />
+  <h1>Goal: Balance supply and demand for sublets.</h1>
+  <br /><br />
+
   By analysis of our database on both the searches that were performed and the sublets
   that are available for rent, the system calculated a demand score for each city that
   was searched for. This demand score equals the amount of unique demand for a city

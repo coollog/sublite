@@ -24,6 +24,11 @@
 <link href="commondecide.css" rel="stylesheet" type="text/css">
 
 <recommendation class="content">
+  <h5>SubLite Marketing Automated Decision System</h5>
+  <br /><br />
+  <h1>Goal: Balance supply and demand for jobs.</h1>
+  <br /><br />
+
   By analysis of our database on both the searches that were performed and the jobs
   that are available to apply to, the system calculated a demand score for each city
   and industry that was searched for. This demand score equals the amount

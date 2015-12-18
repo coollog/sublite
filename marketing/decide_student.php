@@ -23,6 +23,11 @@
 </style>
 
 <recommendation class="content">
+  <h5>SubLite Marketing Automated Decision System</h5>
+  <br /><br />
+  <h1>Goal: Determine a student's preferences.</h1>
+  <br /><br />
+
   By analysis of the searches that were performed by the student with email
   '<?php echo $email; ?>', the system has determined the following to be the
   student's preferences for subletting locations, job locations, and job industries.
