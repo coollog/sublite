@@ -106,7 +106,7 @@
     }
 
     function registrationData($data) {
-      $education = $data['education'];
+      $education = isset($data['education']) ? $data['education'] : 'undergraduate';
       $degree;
       $year;
       $graduationMonth;
