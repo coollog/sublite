@@ -124,4 +124,10 @@
     text-transform: capitalize;
   }
   .clear{ clear:both; }
+  .noscriptwarning {
+    background: red;
+    text-align: center;
+    line-height: 50px;
+    font-size: 20px;
+  }
 </style>

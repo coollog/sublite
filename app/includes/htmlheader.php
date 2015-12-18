@@ -23,6 +23,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+    <?php require_once($dirpreOrig.'assets/jqueryui/jquery-uimincss.php'); ?>
 
     <!-- STRIPE -->
     <script src="https://js.stripe.com/v2"></script>
@@ -53,6 +54,13 @@
     <?php } ?>
   </head>
   <body>
+    <noscript>
+      <div class="noscriptwarning">
+        This website requires JavaScript to function properly.
+        <br />
+        Check if your browser has JavaScript blocked or disabled.
+      </div>
+    </noscript>
     <script src="<?php echo $GLOBALS['dirpre']; ?>assets/js/fbinit.js"></script>
 
     <?php require_once($dirpreOrig.'views/navbar.php'); ?>

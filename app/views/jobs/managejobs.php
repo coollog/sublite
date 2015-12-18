@@ -45,7 +45,7 @@
           <input type="button" value="Edit Job" />
         </a>
         <a href="editapplication/{_id}">
-          <input type="button" value="Edit Application" />
+          <input type="button" value="{editorcreate}" />
         </a>
         <a href="viewapplicants/{_id}">
           <input type="button" value="View Applicants" />
@@ -86,11 +86,14 @@
         var _id = job._id.$id;
         var title = job.title;
         var location = job.location;
+        var editorcreate = job.application.questions.length == 0
+          ? 'Create Application' : 'Edit Application';
 
         var data = {
           _id: _id,
           title: title,
-          location: location
+          location: location,
+          editorcreate : editorcreate
         }
         var jobHTML = useTemplate('jobtemplate', data);
         $('jobs').append(jobHTML);

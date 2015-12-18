@@ -81,7 +81,7 @@
       $this->validate(count($data['photos']) >= 4,
         $err, 'must upload at least 4 additional photos');
       $this->validate($answered >= 6,
-        $err, 'must answer at least 6 cultural questions');
+        $err, 'must answer at least 6 questions');
     }
 
     function add() {
