@@ -85,13 +85,14 @@
       if (isset($data['pass'])) $pass = $data['pass'];
       if (isset($data['pass2'])) $pass2 = $data['pass2'];
       $gender = $data['gender'];
-      $class = clean($data['class']);
-      $school = clean($data['school']);
+      $class = isset($data['class']) ? clean($data['class']) : '';
+      $school = isset($data['school']) ? clean($data['school']) : '';
       $bio = isset($data['bio']) ? clean($data['bio']) : '';
       $photo = '';
       if(isset($data['photo'])) {
         $photo = clean($data['photo']);
       }
+
       $data = array(
         'gender' => $gender, 'bio' => $bio,
         'name' => $name, 'class' => $class, 'school' => $school,
@@ -102,6 +103,91 @@
         $data['pass2'] = $pass2;
       }
       return $data;
+    }
+
+    function registrationData($data) {
+      $education = $data['education'];
+      $degree;
+      $year;
+      $graduationMonth;
+      $graduationYear;
+      if($education == "undergraduate") {
+        $degree = $data['undergraduateDegree'];
+        $year = $data['undergraduateYear'];
+        $graduationMonth = $data['undergraduateGraduationMonth'];
+        $graduationYear = $data['undergraduateGraduationYear'];
+      } else {
+        $degree = $data['graduateDegree'];
+        $year = $data['graduateYear'];
+        $graduationMonth = $data['graduateGraduationMonth'];
+        $graduationYear = $data['graduateGraduationYear'];
+      }
+      $industry = isset($data['industryChooser']) ? $data['industryChooser'] : [];
+      $countries = isset($data['countryChooser']) ? $data['countryChooser'] : [];
+      $states = isset($data['stateChooser']) ? $data['stateChooser'] : [];
+      if(empty($industry))
+        $industry = array();
+      if(empty($countries))
+        $countries = array();
+      if(empty($states))
+        $states = array();
+      $lookingFor = array();
+      $internshipTimes = array();
+      $fulltimeTimes = array();
+      $housingTimes = array();
+      if(!empty($data['internship'])) {
+        array_push($lookingFor, 'internship');
+        if(!empty($data['internshipWinter2016']))
+          array_push($internshipTimes, 'Winter 2016');
+        if(!empty($data['internshipSpring2016']))
+          array_push($internshipTimes, 'Spring 2016');
+        if(!empty($data['internshipSummer2016']))
+          array_push($internshipTimes, 'Summer 2016');
+        if(!empty($data['internshipFall2016']))
+          array_push($internshipTimes, 'Fall 2016');
+        if(!empty($data['internshipWinter2017']))
+          array_push($internshipTimes, 'Winter 2017');
+        if(!empty($data['internshipSpring2017']))
+          array_push($internshipTimes, 'Spring 2017');
+      }
+      if(!empty($data['fulltime'])) {
+        array_push($lookingFor, 'fulltime');
+        if(!empty($data['fulltimeWinter2016']))
+          array_push($fulltimeTimes, 'Winter 2016');
+        if(!empty($data['fulltimeSpring2016']))
+          array_push($fulltimeTimes, 'Spring 2016');
+        if(!empty($data['fulltimeSummer2016']))
+          array_push($fulltimeTimes, 'Summer 2016');
+        if(!empty($data['fulltimeFall2016']))
+          array_push($fulltimeTimes, 'Fall 2016');
+        if(!empty($data['fulltimeWinter2017']))
+          array_push($fulltimeTimes, 'Winter 2017');
+        if(!empty($data['fulltimeSpring2017']))
+          array_push($fulltimeTimes, 'Spring 2017');
+      }
+      if(!empty($data['housing'])) {
+        array_push($lookingFor, 'housing');
+        if(!empty($data['housingWinter2016']))
+          array_push($housingTimes, 'Winter 2016');
+        if(!empty($data['housingSpring2016']))
+          array_push($housingTimes, 'Spring 2016');
+        if(!empty($data['housingSummer2016']))
+          array_push($housingTimes, 'Summer 2016');
+        if(!empty($data['housingFall2016']))
+          array_push($housingTimes, 'Fall 2016');
+        if(!empty($data['housingWinter2017']))
+          array_push($housingTimes, 'Winter 2017');
+        if(!empty($data['housingSpring2017']))
+          array_push($housingTimes, 'Spring 2017');
+      }
+
+      $registration = array('education' => $education, 'degree' => $degree, 'year' => $year,
+        'graduationMonth' => $graduationMonth, 'graduationYear' => $graduationYear,
+        'industry' => $industry, 'countries' => $countries, 'states' => $states,
+        'lookingFor' => $lookingFor, 'internshipTimes' => $internshipTimes,
+        'fulltimeTimes' => $fulltimeTimes, 'housingTimes' => $housingTimes);
+
+      return $registration;
     }
 
     function validateData($data, &$err) {
@@ -391,6 +477,8 @@
 
           // Params to vars
           extract($data = $this->data($params));
+          $registration = self::registrationData($params);
+
 
           $this->validate($pass == $pass2, $err, 'password mismatch');
           $this->validate(strlen($name) > 0, $err, 'name empty');
@@ -409,6 +497,7 @@
             $entry['gender'] = $gender;
             $entry['photo'] = $photo;
             $entry['bio'] = $bio;
+            $entry['registration'] = $registration;
             $MStudent->save($entry);
 
             $params['email'] = $email;
