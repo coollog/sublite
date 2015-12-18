@@ -122,7 +122,7 @@
         $graduationMonth = $data['graduateGraduationMonth'];
         $graduationYear = $data['graduateGraduationYear'];
       }
-      $industry = $data['industryChooser'];
+      $industry = isset($data['industryChooser']) ? $data['industryChooser'] : [];
       $countries = $data['countryChooser'];
       $states = $data['stateChooser'];
       if(is_null($industry))
@@ -181,10 +181,10 @@
           array_push($housingTimes, 'Spring 2017');
       }
 
-      $registration = array('education' => $education, 'degree' => $degree, 'year' => $year, 
-        'graduationMonth' => $graduationMonth, 'graduationYear' => $graduationYear, 
-        'industry' => $industry, 'countries' => $countries, 'states' => $states, 
-        'lookingFor' => $lookingFor, 'internshipTimes' => $internshipTimes, 
+      $registration = array('education' => $education, 'degree' => $degree, 'year' => $year,
+        'graduationMonth' => $graduationMonth, 'graduationYear' => $graduationYear,
+        'industry' => $industry, 'countries' => $countries, 'states' => $states,
+        'lookingFor' => $lookingFor, 'internshipTimes' => $internshipTimes,
         'fulltimeTimes' => $fulltimeTimes, 'housingTimes' => $housingTimes);
 
       return $registration;
