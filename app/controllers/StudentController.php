@@ -125,59 +125,59 @@
       $industry = isset($data['industryChooser']) ? $data['industryChooser'] : [];
       $countries = isset($data['countryChooser']) ? $data['countryChooser'] : [];
       $states = isset($data['stateChooser']) ? $data['stateChooser'] : [];
-      if(is_null($industry))
+      if(empty($industry))
         $industry = array();
-      if(is_null($countries))
+      if(empty($countries))
         $countries = array();
-      if(is_null($states))
+      if(empty($states))
         $states = array();
       $lookingFor = array();
       $internshipTimes = array();
       $fulltimeTimes = array();
       $housingTimes = array();
-      if(!is_null($data['internship'])) {
+      if(!empty($data['internship'])) {
         array_push($lookingFor, 'internship');
-        if(!is_null($data['internshipWinter2016']))
+        if(!empty($data['internshipWinter2016']))
           array_push($internshipTimes, 'Winter 2016');
-        if(!is_null($data['internshipSpring2016']))
+        if(!empty($data['internshipSpring2016']))
           array_push($internshipTimes, 'Spring 2016');
-        if(!is_null($data['internshipSummer2016']))
+        if(!empty($data['internshipSummer2016']))
           array_push($internshipTimes, 'Summer 2016');
-        if(!is_null($data['internshipFall2016']))
+        if(!empty($data['internshipFall2016']))
           array_push($internshipTimes, 'Fall 2016');
-        if(!is_null($data['internshipWinter2017']))
+        if(!empty($data['internshipWinter2017']))
           array_push($internshipTimes, 'Winter 2017');
-        if(!is_null($data['internshipSpring2017']))
+        if(!empty($data['internshipSpring2017']))
           array_push($internshipTimes, 'Spring 2017');
       }
-      if(!is_null($data['fulltime'])) {
+      if(!empty($data['fulltime'])) {
         array_push($lookingFor, 'fulltime');
-        if(!is_null($data['fulltimeWinter2016']))
+        if(!empty($data['fulltimeWinter2016']))
           array_push($fulltimeTimes, 'Winter 2016');
-        if(!is_null($data['fulltimeSpring2016']))
+        if(!empty($data['fulltimeSpring2016']))
           array_push($fulltimeTimes, 'Spring 2016');
-        if(!is_null($data['fulltimeSummer2016']))
+        if(!empty($data['fulltimeSummer2016']))
           array_push($fulltimeTimes, 'Summer 2016');
-        if(!is_null($data['fulltimeFall2016']))
+        if(!empty($data['fulltimeFall2016']))
           array_push($fulltimeTimes, 'Fall 2016');
-        if(!is_null($data['fulltimeWinter2017']))
+        if(!empty($data['fulltimeWinter2017']))
           array_push($fulltimeTimes, 'Winter 2017');
-        if(!is_null($data['fulltimeSpring2017']))
+        if(!empty($data['fulltimeSpring2017']))
           array_push($fulltimeTimes, 'Spring 2017');
       }
-      if(!is_null($data['housing'])) {
+      if(!empty($data['housing'])) {
         array_push($lookingFor, 'housing');
-        if(!is_null($data['housingWinter2016']))
+        if(!empty($data['housingWinter2016']))
           array_push($housingTimes, 'Winter 2016');
-        if(!is_null($data['housingSpring2016']))
+        if(!empty($data['housingSpring2016']))
           array_push($housingTimes, 'Spring 2016');
-        if(!is_null($data['housingSummer2016']))
+        if(!empty($data['housingSummer2016']))
           array_push($housingTimes, 'Summer 2016');
-        if(!is_null($data['housingFall2016']))
+        if(!empty($data['housingFall2016']))
           array_push($housingTimes, 'Fall 2016');
-        if(!is_null($data['housingWinter2017']))
+        if(!empty($data['housingWinter2017']))
           array_push($housingTimes, 'Winter 2017');
-        if(!is_null($data['housingSpring2017']))
+        if(!empty($data['housingSpring2017']))
           array_push($housingTimes, 'Spring 2017');
       }
 
