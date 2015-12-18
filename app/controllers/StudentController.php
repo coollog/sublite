@@ -123,8 +123,8 @@
         $graduationYear = $data['graduateGraduationYear'];
       }
       $industry = isset($data['industryChooser']) ? $data['industryChooser'] : [];
-      $countries = $data['countryChooser'];
-      $states = $data['stateChooser'];
+      $countries = isset($data['countryChooser']) ? $data['countryChooser'] : [];
+      $states = isset($data['stateChooser']) ? $data['stateChooser'] : [];
       if(is_null($industry))
         $industry = array();
       if(is_null($countries))
