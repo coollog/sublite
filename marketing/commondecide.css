@@ -26,9 +26,3 @@ charts canvas {
   display: block;
   width: 100%;
 }
-label {
-  display: block;
-  text-align: center;
-  font-weight: bold;
-  text-transform: uppercase;
-}

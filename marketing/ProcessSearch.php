@@ -120,6 +120,88 @@
       return $industryCounts;
     }
 
+    // Process sublets and jobs searches by student.
+    public static function processByStudent($email) {
+      $subletLocations = [];
+      $jobLocations = [];
+      $jobIndustries = [];
+
+      foreach (self::$searches as $time => $search) {
+        if (!is_array($search)) continue;
+        if ($search['email'] != $email) continue;
+
+        switch ($search['type']) {
+          case 'sublets':
+            if (!empty($search['data']['location'])) {
+              $location = strtolower($search['data']['location']);
+
+              // Location to geocode, to City, State.
+              $geocode = GeocodeModel::get($location);
+              if (is_null($geocode)) continue;
+              $cityState = strtolower(getCityStateFromGeocode($geocode));
+
+              if (isset($subletLocations[$cityState])) {
+                $subletLocations[$cityState] ++;
+              } else {
+                $subletLocations[$cityState] = 1;
+              }
+            }
+            break;
+          case 'jobs':
+            if (!empty($search['data']['city'])) {
+              $location = strtolower($search['data']['city']);
+
+              // Location to geocode, to City, State.
+              $geocode = GeocodeModel::get($location);
+              if (is_null($geocode)) continue;
+              $cityState = strtolower(getCityStateFromGeocode($geocode));
+
+              if (isset($jobLocations[$cityState])) {
+                $jobLocations[$cityState] ++;
+              } else {
+                $jobLocations[$cityState] = 1;
+              }
+            }
+            if (!empty($search['data']['industry'])) {
+              $industry = strtolower($search['data']['industry']);
+              if (isset($jobIndustries[$industry])) {
+                $jobIndustries[$industry] ++;
+              } else {
+                $jobIndustries[$industry] = 1;
+              }
+            }
+            break;
+        }
+      }
+
+      arsort($subletLocations);
+      arsort($jobLocations);
+      arsort($jobIndustries);
+      return [
+        'subletLocations' => $subletLocations,
+        'jobLocations' => $jobLocations,
+        'jobIndustries' => $jobIndustries
+      ];
+    }
+
+    public static function getEmails() {
+      $emailsHash = [];
+
+      foreach (self::$searches as $time => $search) {
+        if (!is_array($search)) continue;
+
+        $email = $search['email'];
+        if (isset($emailsHash[$email])) {
+          $emailsHash[$email] ++;
+        } else {
+          $emailsHash[$email] = 1;
+        }
+      }
+
+      arsort($emailsHash);
+      return $emailsHash;
+    }
+
     private static $searches;
   }
 ?>

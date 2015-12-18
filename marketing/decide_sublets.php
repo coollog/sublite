@@ -3,7 +3,9 @@
    * ONLY TO BE INCLUDED FROM INDEX.PHP!!!
    */
 
-  $decision = DeciderSublets::decide($collListings, $searches);
+  require_once('decide.php');
+
+  $decision = DeciderSublets::decide($collListings);
 ?>
 
 <title>Goal: Balance supply and demand for sublets.</title>
@@ -65,103 +67,31 @@
   <br /><br />
   Below are the charts to see more concrete data:
   <charts>
-    <label for="chartDemand">Top 10 Demand</label>
-    <canvas id="chartDemand"></canvas>
+    <?php
+      chartTop10(
+        $decision['demand'],
+        'chartDemand',
+        'Top 10 Demand'
+      );
+    ?>
     <br /><br />
-    <label for="chartSearches">Top 10 cities searched for</label>
-    <canvas id="chartSearches"></canvas>
+    <?php
+      chartTop10(
+        $decision['searches'],
+        'chartSearches',
+        'Top 10 cities searched for'
+      );
+    ?>
     <br /><br />
-    <label for="chartSublets">Top 10 cities with sublets</label>
-    <canvas id="chartSublets"></canvas>
+    <?php
+      chartTop10(
+        $decision['sublets'],
+        'chartSublets',
+        'Top 10 cities with sublets'
+      );
+    ?>
     <br />
   </charts>
+
+  <?php require_once('goback.php'); ?>
 </recommendation>
-
-<script>
-  var options = {
-    pointHitDetectionRadius : 5,
-  };
-
-  var dataDemand = {
-    labels: [
-      <?php
-        $demand10 = array_slice($decision['demand'], 0, 10);
-        foreach ($demand10 as $cityState => $count) {
-          echo "'$cityState', ";
-        }
-      ?>
-    ],
-    datasets: [
-      {
-        label: "City, State",
-        fillColor: "rgba(220,220,220,0.2)",
-        data: [
-          <?php
-            foreach ($demand10 as $cityState => $count) {
-              echo "'$count', ";
-            }
-          ?>
-        ]
-      }
-    ]
-  };
-
-  var dataSearches = {
-    labels: [
-      <?php
-        $searches10 = array_slice($decision['searches'], 0, 10);
-        foreach ($searches10 as $cityState => $count) {
-          echo "'$cityState', ";
-        }
-      ?>
-    ],
-    datasets: [
-      {
-        label: "City, State",
-        fillColor: "rgba(220,220,220,0.2)",
-        data: [
-          <?php
-            foreach ($searches10 as $cityState => $count) {
-              echo "'$count', ";
-            }
-          ?>
-        ]
-      }
-    ]
-  };
-
-  var dataSublets = {
-    labels: [
-      <?php
-        $sublets10 = array_slice($decision['sublets'], 0, 10);
-        foreach ($sublets10 as $cityState => $count) {
-          echo "'$cityState', ";
-        }
-      ?>
-    ],
-    datasets: [
-      {
-        label: "City, State",
-        fillColor: "rgba(220,220,220,0.2)",
-        data: [
-          <?php
-            foreach ($sublets10 as $cityState => $count) {
-              echo "'$count', ";
-            }
-          ?>
-        ]
-      }
-    ]
-  };
-
-  var ctxDemand = $("#chartDemand").get(0).getContext("2d");
-  var chartDemand = new Chart(ctxDemand).Line(dataDemand, options);
-
-  var ctxSearches = $("#chartSearches").get(0).getContext("2d");
-  var chartSearches = new Chart(ctxSearches).Line(dataSearches, options);
-
-  var ctxSublets = $("#chartSublets").get(0).getContext("2d");
-  var chartSublets = new Chart(ctxSublets).Line(dataSublets, options);
-</script>
-
-<?php require_once('goback.php'); ?>

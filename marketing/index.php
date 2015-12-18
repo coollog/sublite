@@ -7,6 +7,7 @@
 
   require_once('DeciderSublets.php');
   require_once('DeciderJobs.php');
+  require_once('DeciderStudent.php');
 
   // Connect to the databases.
   $m1 = new MongoClient($dbUri1);
@@ -27,6 +28,7 @@
   $searches2 = $db2->app->findOne(['_id' => 'searches2']);
 
   $searches = array_merge($searches0, $searches1, $searches2);
+  ProcessSearch::init($searches);
 
   if (isset($_POST['goal'])) {
     switch ($_POST['goal']) {
@@ -45,12 +47,37 @@
     display: none;
     font-size: 1.5em;
   }
+  studentemail {
+    display: block;
+    text-align: center;
+  }
+  input[type=text] {
+    border: 2px solid #ccc;
+    padding: 1em;
+    font-family: inherit;
+    font-size: inherit;
+    display: block;
+    width: 80%;
+  }
+
+  emaillist {
+    display: block;
+    overflow-y: auto;
+    max-height: 400px;
+    margin: 2em;
+    border: 2px solid #eee;
+    padding: 2em;
+  }
+
+  label {
+
+  }
 </style>
 
 <choosegoal class="content">
   <h1>What is your goal?</h1>
 
-  <form method="post">
+  <form method="post" novalidate>
     <buttons>
       <button type="submit" name="goal" value="sublets">
         Balance supply and demand for sublets.
@@ -60,10 +87,32 @@
         Balance supply and demand for jobs.
       </button>
 
-      <button type="submit" name="goal" value="student">
+      <button id="buttonStudent">
         Determine a student's preferences.
       </button>
     </buttons>
+    <studentemail>
+      <input type="text" name="email" placeholder="Email address of student" required />
+      <button name="goal" value="student">
+        Determine preferences.
+      </button>
+      <button id="buttonBack">
+        I have a different goal.
+      </button>
+
+      <br /><br />
+      <label for="emaillist">See list of students</label>
+      <emaillist>
+        <?php
+          $emailsHash = ProcessSearch::getEmails();
+          $textList = [];
+          foreach ($emailsHash as $email => $count) {
+            $textList[] = "$email ($count)";
+          }
+          echo implode('<br>', $textList);
+        ?>
+      </emaillist>
+    </studentemail>
     <div id="loading">
       Entering your preferences into the automated decision system...
     </div>
@@ -72,8 +121,25 @@
 
 <script>
   $('form').submit(function() {
-    $('buttons').hide();
+    $('buttons, studentemail').hide();
     $('#loading').show();
     return true;
   });
+
+  $('#buttonStudent').click(function () {
+    event.preventDefault();
+    $('buttons').hide();
+    $('studentemail').show();
+  });
+  $('#buttonBack').click(function () {
+    event.preventDefault();
+    $('buttons').show();
+    $('studentemail').hide();
+  });
+  $('studentemail').hide();
+
+  $('label[for=emaillist]').click(function () {
+    $('emaillist').slideToggle(100);
+  });
+  $('emaillist').hide();
 </script>

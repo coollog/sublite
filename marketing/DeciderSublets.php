@@ -4,8 +4,7 @@
 
   require_once('Decider.php');
   class DeciderSublets extends Decider {
-    public static function decide(MongoCollection $coll, array $searches) {
-      ProcessSearch::init($searches);
+    public static function decide(MongoCollection $coll) {
       $searchCityStates = ProcessSearch::processSubletLocations();
 
       SubletListings::init($coll);

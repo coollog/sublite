@@ -40,3 +40,15 @@ button {
 button:hover {
   opacity: 1;
 }
+
+label {
+  cursor: pointer;
+  transition: 0.1s all ease-out;
+  display: block;
+  text-align: center;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+label:hover {
+  opacity: 0.5;
+}

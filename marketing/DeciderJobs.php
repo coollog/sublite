@@ -5,12 +5,8 @@
 
   require_once('Decider.php');
   class DeciderJobs extends Decider {
-    const DEMAND_BRACKET_RANGE = 50;
-    const DEMAND_BRACKET_COUNT = 5;
     public static function decide(MongoCollection $collJobs,
-                                  MongoCollection $collCompanies,
-                                  array $searches) {
-      ProcessSearch::init($searches);
+                                  MongoCollection $collCompanies) {
       $searchCityStates = ProcessSearch::processJobLocations();
       $searchIndustries = ProcessSearch::processJobIndustries();
 
@@ -28,8 +24,10 @@
       $recommendationIndustries = self::getRecommendation($demandIndustries);
 
       return [
-        'searches' => $searchCityStates,
-        'jobs' => $jobCityStates,
+        'searchesCities' => $searchCityStates,
+        'jobsCities' => $jobCityStates,
+        'searchesIndustries' => $searchIndustries,
+        'companyIndustries' => $companyIndustries,
         'demandCities' => $demandCities,
         'demandIndustries' => $demandIndustries,
         'recommendationCities' => $recommendationCities,

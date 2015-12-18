@@ -3,7 +3,9 @@
    * ONLY TO BE INCLUDED FROM INDEX.PHP!!!
    */
 
-  $decision = DeciderJobs::decide($collListings, $collCompanies, $searches);
+  require_once('decide.php');
+
+  $decision = DeciderJobs::decide($collJobs, $collCompanies);
 
   function priorityToText($priority) {
     $priorityMap = [
@@ -23,8 +25,8 @@
 
 <recommendation class="content">
   By analysis of our database on both the searches that were performed and the jobs
-  that are available to apply to, the system calculated a demand score for each city,
-  company, and industry that was searched for. This demand score equals the amount
+  that are available to apply to, the system calculated a demand score for each city
+  and industry that was searched for. This demand score equals the amount
   of unique demand for a city, company, or industry minus the number of jobs
   available in each category.
   <br /><br />
@@ -74,11 +76,6 @@
   </table>
 
   <br /><br />
-  These companies should be targetted for marketing efforts to increase job listings:
-  <br /><br />
-
-
-  <br /><br />
   The top three cities that should be targetted, along with their relative demand
   scores are:
   <top3>
@@ -105,6 +102,59 @@
       echo implode(' | ', $textList);
     ?>
   </top3>
+
+  <br /><br />
+  Below are the charts to see more concrete data:
+  <charts>
+    <?php
+      chartTop10(
+        $decision['demandCities'],
+        'chartDemandCities',
+        'Top 10 Location Demand'
+      );
+    ?>
+    <br /><br />
+    <?php
+      chartTop10(
+        $decision['demandIndustries'],
+        'chartDemandIndustries',
+        'Top 10 Industry Demand'
+      );
+    ?>
+    <br /><br />
+    <?php
+      chartTop10(
+        $decision['searchesCities'],
+        'chartSearchesCities',
+        'Top 10 cities searched for'
+      );
+    ?>
+    <br /><br />
+    <?php
+      chartTop10(
+        $decision['searchesIndustries'],
+        'chartSearchesIndustries',
+        'Top 10 industries searched for'
+      );
+    ?>
+    <br /><br />
+    <?php
+      chartTop10(
+        $decision['jobsCities'],
+        'chartJobsCities',
+        'Top 10 cities with jobs'
+      );
+    ?>
+    <br /><br />
+    <?php
+      chartTop10(
+        $decision['companyIndustries'],
+        'chartCompanyIndustries',
+        'Top 10 industries with jobs'
+      );
+    ?>
+    <br />
+  </charts>
 
   <?php require_once('goback.php'); ?>
 </recommendation>
