@@ -163,6 +163,7 @@
             blurb('freeanswer1', vget('freequestion1'), 'orange');
             blurb('freeanswer2', vget('freequestion2'), 'blue');
 
+            insertPhoto(0, 0, 1);
             insertPhoto(0, 0, 3);
             insertPhoto(1, 1, 2);
             insertPhoto(2, 2, 1);
