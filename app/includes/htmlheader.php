@@ -53,6 +53,13 @@
     <?php } ?>
   </head>
   <body>
+    <noscript>
+      <div class="noscriptwarning">
+        This website requires JavaScript to function properly.
+        <br />
+        Check if your browser has JavaScript blocked or disabled.
+      </div>
+    </noscript>
     <script src="<?php echo $GLOBALS['dirpre']; ?>assets/js/fbinit.js"></script>
 
     <?php require_once($dirpreOrig.'views/navbar.php'); ?>
