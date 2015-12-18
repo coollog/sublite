@@ -63,7 +63,7 @@
   <extracurricularsitemtemplate>
     <item>
       <h1><field name="title" class="nohover">{title}</field></h1>
-      <h2><field name="organiation" class="nohover">{organiation}</field></h2>
+      <h2><field name="organization" class="nohover">{organization}</field></h2>
       <fade class="nohover">
         <field name="dates.start" class="nohover">{dates.start}</field>
         to
