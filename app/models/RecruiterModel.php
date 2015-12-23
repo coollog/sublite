@@ -32,7 +32,7 @@
   class RecruiterModel extends Model implements RecruiterModelInterface {
     const DB_TYPE = parent::DB_INTERNSHIPS;
 
-    const CREDITS_FOR_COMPANYPROFILE = 2;
+    const CREDITS_FOR_COMPANYPROFILE = 1;
     const CREDITS_FOR_JOB            = 1;
 
     public static function getCredits(MongoId $recruiterId) {
