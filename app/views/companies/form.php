@@ -53,7 +53,7 @@
       <?php
         vpartial('s3multiple', array(
           's3name' => 'photos',
-          's3title' => 'Additional photos (upload at least 4 more):',
+          's3title' => 'Additional photos (upload at least 4 more)*:',
           's3links' => vget('photos')
         ));
       ?>

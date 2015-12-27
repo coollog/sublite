@@ -219,7 +219,7 @@
 
 <script>
   $(function() {
-    
+
 
     $('.arrow-down').click(function() {
       scrollTo('panel.why');
