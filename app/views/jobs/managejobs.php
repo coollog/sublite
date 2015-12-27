@@ -86,8 +86,9 @@
         var _id = job._id.$id;
         var title = job.title;
         var location = job.location;
-        var editorcreate = job.application.questions.length == 0
-          ? 'Create Application' : 'Edit Application';
+        var editorcreate =
+          !job.application || job.application.questions.length == 0
+            ? 'Create Application' : 'Edit Application';
 
         var data = {
           _id: _id,
