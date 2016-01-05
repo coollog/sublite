@@ -41,6 +41,10 @@
         </a>
       </div>
       <div class="buttons">
+        <a href="deletejob/{_id}"
+           onclick="return confirm('Are you sure you wish to delete this job? This will also delete all applications submitted for this job as well.');">
+          <input type="button" class="reverse" value="Delete Job" />
+        </a>
         <a href="editjob?id={_id}">
           <input type="button" value="Edit Job" />
         </a>

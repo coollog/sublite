@@ -76,6 +76,10 @@
     Controller::displayMetatags('/employers');
     GLOBALvarGet('CCompany')->edit();
   });
+  Router::register('employers/deletejob', function (array $restOfRoute) {
+    Controller::displayMetatags('/employers');
+    JobController::delete($restOfRoute);
+  });
   Router::register('employers/editjob', function() {
     Controller::displayMetatags('/employers');
     GLOBALvarGet('CJob')->edit();
@@ -336,6 +340,7 @@
   Router::route('/employers/searchcustom', 'employers/searchcustom');
   Router::routeTree('/employers/editapplication', 'employers/editapplication');
   Router::route('/employers/editcompany', 'employers/editcompany');
+  Router::routeTree('/employers/deletejob', 'employers/deletejob');
   Router::route('/employers/editjob', 'employers/editjob');
   Router::route('/employers/editprofile', 'employers/editprofile');
   Router::route('/employers/forgotpass', 'employers/forgotpass');

@@ -106,10 +106,6 @@
       return $entry['recruiter'];
     }
 
-    function delete($id) {
-
-    }
-
     function exists($id) {
       return (self::get($id) !== NULL);
     }

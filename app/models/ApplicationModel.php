@@ -90,6 +90,8 @@
     * Gets the number of applications for a certain job
     */
     public static function countByJob(MongoId $jobId);
+
+    public static function deleteByJob(MongoId $jobId);
   }
 
   class ApplicationModel extends Model implements ApplicationModelInterface {
@@ -260,6 +262,10 @@
         ->projectId();
       $applications = $query->run();
       return count($applications);
+    }
+
+    public static function deleteByJob(MongoId $jobId) {
+      (new DBRemoveQuery(self::$collection))->toQuery('jobId', $jobId)->run();
     }
 
     private static function jobExists(MongoId $id) {

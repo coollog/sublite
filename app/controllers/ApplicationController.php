@@ -280,6 +280,7 @@
 
     /**
      * Checks if $jobId is a job, and if not, error.
+     * TODO: Merge this with one in JobController.
      */
     protected static function checkJobExists(MongoId $jobId) {
       if (!JobModel::exists($jobId)) {
@@ -292,6 +293,7 @@
 
     /**
      * Checks if the recruiters owns $jobId, and if not, error.
+     * TODO: Merge this with one in JobController.
      */
     protected static function ownsJob(MongoId $jobId) {
       $recruiterId = $_SESSION['_id'];
@@ -409,7 +411,7 @@
                   "info@sublite.net",
                   "New Applicant for '$jobTitle' | SubLite",
                   $message);
-        
+
         //send an email to the student
         $companyId = $job['company'];
         $company = CompanyModel::getById($companyId);
