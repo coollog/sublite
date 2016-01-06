@@ -59,16 +59,31 @@
       $cardId = $params['cardId'];
       $credits = $params['credits'];
       if ($credits <= 0) return self::ajaxError();
+      $filtered = $params['filtered'];
+      $filterRequest = $params['filterRequest'];
 
       // How much do we charge per application?
       $amount = $credits * 800;
-      $description = "$credits Credits";
+      if ($credits > 50) {
+        $amount *= 5/8;
+      }
+      if ($filtered) {
+        $amount += $credits * 500;
+      }
+      $filteredText = $filtered ? ' Filtered' : '';
+      $description = "$credits$filteredText Credits";
 
       // Charge the card.
       $err = StripeBilling::charge($customerId, $cardId, $amount, $description);
       if (!is_null($err)) {
         return self::ajaxError($err);
       }
+
+      $message = "_id: $recruiterId, filterRequest: $filterRequest";
+      sendgmail(['tony.jiang@yale.edu', 'qingyang.chen@gmail.com'],
+                "info@sublite.net",
+                'Filter Bought',
+                $message);
 
       // Add the credits.
       RecruiterModel::addCredits($recruiterId, $credits);
