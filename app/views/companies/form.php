@@ -45,7 +45,7 @@
       <?php
         vpartial('s3single', array(
           's3name' => 'bannerphoto',
-          's3title' => 'What would you like your banner image to be?*',
+          's3title' => 'What would you like your banner image to be? (must be at least 1000px wide)*',
           's3link' => vget('bannerphoto')
         ));
       ?>

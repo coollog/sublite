@@ -114,8 +114,7 @@
   					$actual_image_name = time() . "." . $filetype[1];
             if ($_GET['name'] == 'bannerphoto') {
               $this->validate($image->getWidth() >= 1000, $err,
-                'Warning: Banner images at least 1000px wide look the best ' .
-                'on your company and job profiles!');
+                'Please upload a banner image at least 1000px wide.');
             }
   					$this->validate($s3->putObjectFile($fname, $bucket ,
   																						 $actual_image_name,
