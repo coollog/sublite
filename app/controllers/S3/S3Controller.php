@@ -112,7 +112,7 @@
 
   					//Rename image name.
   					$actual_image_name = time() . "." . $filetype[1];
-            if ($_GET['name'] == 'bannerphoto') {
+            if (isset($_GET['name']) && $_GET['name'] == 'bannerphoto') {
               $this->validate($image->getWidth() >= 1000, $err,
                 'Please upload a banner image at least 1000px wide.');
             }
