@@ -40,13 +40,21 @@
     Controller::displayMetatags('/employers');
     PaymentControllerAJAX::buyCredits();
   });
-  Router::register('employers/addcard', function() {
+  Router::register('employers/buyplan', function() {
     Controller::displayMetatags('/employers');
+    RecruiterController::buyPlan();
+  });
+  Router::register('employers/buyplanfinish', function() {
+    PaymentControllerAJAX::buyPlan();
+  });
+  Router::register('employers/addcard', function() {
     PaymentControllerAJAX::addPaymentInfo();
   });
   Router::register('employers/removecard', function() {
-    Controller::displayMetatags('/employers');
     PaymentControllerAJAX::removePaymentInfo();
+  });
+  Router::register('employers/getcards', function() {
+    PaymentControllerAJAX::getCards();
   });
   Router::register('employers/changepass', function() {
     Controller::displayMetatags('/employers');
@@ -57,15 +65,12 @@
     GLOBALvarGet('CCompany')->view();
   });
   Router::register('employers/createcustom', function () {
-    Controller::displayMetatags('/employers');
     echo ApplicationControllerAJAX::createCustom();
   });
   Router::register('employers/deletecustom', function () {
-    Controller::displayMetatags('/employers');
     echo ApplicationControllerAJAX::deleteCustom();
   });
   Router::register('employers/searchcustom', function () {
-    Controller::displayMetatags('/employers');
     echo ApplicationControllerAJAX::searchCustom();
   });
   Router::register('employers/editapplication', function (array $restOfRoute) {
@@ -327,12 +332,12 @@
   Router::route('/employers/addcompany', 'employers/addcompany');
   Router::route('/employers/addjob', 'employers/addjob');
   Router::route('/employers/approve', 'employers/approve');
-  Router::route('/employers/ajax/buycredits',
-                'employers/buycredits');
-  Router::route('/employers/ajax/addcard',
-                'employers/addcard');
-  Router::route('/employers/ajax/removecard',
-                'employers/removecard');
+  Router::route('/employers/ajax/buycredits', 'employers/buycredits');
+  Router::route('/employers/ajax/addcard', 'employers/addcard');
+  Router::route('/employers/ajax/removecard', 'employers/removecard');
+  Router::route('/employers/ajax/getcards', 'employers/getcards');
+  Router::route('/employers/buyplan', 'employers/buyplan');
+  Router::route('/employers/ajax/buyplanfinish', 'employers/buyplanfinish');
   Router::route('/employers/changepass', 'employers/changepass');
   Router::route('/employers/company', 'employers/company');
   Router::route('/employers/createcustom', 'employers/createcustom');

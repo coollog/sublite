@@ -1,7 +1,16 @@
 <?php
   require_once($GLOBALS['dirpre'].'controllers/Controller.php');
 
+  interface RecruiterControllerInterface {
+    public static function buyPlan();
+  }
+
   class RecruiterController extends Controller {
+    public static function buyPlan() {
+      self::requireLogin();
+      self::render('recruiter/buyplan');
+    }
+
     // Validation functions
     function isValidName($name) { // Works for first or last name
       if(strlen($name) > 100) return false;

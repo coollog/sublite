@@ -84,7 +84,7 @@
       $name = clean($data['name']);
       if (isset($data['pass'])) $pass = $data['pass'];
       if (isset($data['pass2'])) $pass2 = $data['pass2'];
-      $gender = $data['gender'];
+      $gender = isset($data['gender']) ? clean($data['gender']) : '';
       $class = isset($data['class']) ? clean($data['class']) : '';
       $school = isset($data['school']) ? clean($data['school']) : '';
       $bio = isset($data['bio']) ? clean($data['bio']) : '';

@@ -13,6 +13,8 @@
      */
     public static function getCards($customerId);
 
+    public static function getCardsByRecruiter(MongoId $recruiterId);
+
     /**
      * @return Null on success, error message on error.
      */
@@ -62,6 +64,18 @@
           'expYear' => $card->exp_year
         ];
       }
+      return $cards;
+    }
+
+    public static function getCardsByRecruiter(MongoId $recruiterId) {
+      // Get cards.
+      $customerId = RecruiterModel::getCustomerId($recruiterId);
+      if (is_null($customerId)) {
+        $cards = [];
+      } else {
+        $cards = StripeBilling::getCards($customerId);
+      }
+
       return $cards;
     }
 

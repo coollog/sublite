@@ -6,6 +6,8 @@
     public static function addPaymentInfo();
     public static function removePaymentInfo();
     public static function buyCredits();
+    public static function buyPlan();
+    public static function getCards();
   }
 
   class PaymentControllerAJAX extends Controller
@@ -89,6 +91,29 @@
       RecruiterModel::addCredits($recruiterId, $credits);
 
       return self::ajaxSuccess();
+    }
+
+    public static function buyPlan() {
+      RecruiterController::requireLogin();
+      global $params;
+
+      $recruiterId = $_SESSION['_id'];
+      $customerId = RecruiterModel::getCustomerId($recruiterId);
+
+      $cardId = $params['cardId'];
+      $type = $params['type'];
+      $term = $params['term'];
+
+      echo toJSON(['cardId' => $cardId, 'type' => $type, 'term' => $term]);
+    }
+
+    public static function getCards() {
+      RecruiterController::requireLogin();
+
+      $recruiterId = $_SESSION['_id'];
+      $cards = StripeBilling::getCardsByRecruiter($recruiterId);
+
+      echo toJSON($cards);
     }
   }
 ?>
