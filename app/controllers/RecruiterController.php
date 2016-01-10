@@ -8,7 +8,17 @@
   class RecruiterController extends Controller {
     public static function buyPlan() {
       self::requireLogin();
-      self::render('recruiter/buyplan');
+
+      if (isset($_GET['code']) &&
+          ($code = $_GET['code']) == PaymentControllerAJAX::BUYPLAN_DISCOUNT) {
+        $discount = "'$_GET[code]'";
+      } else {
+        $discount = 'false';
+      }
+
+      self::render('recruiter/buyplan', [
+        'discount' => $discount
+      ]);
     }
 
     // Validation functions

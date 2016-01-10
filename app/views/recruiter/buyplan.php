@@ -132,7 +132,7 @@
 <script src="https://checkout.stripe.com/checkout.js"></script>
 
 <script>
-  var DISCOUNT_CODE = true; <?php View::echof('discount'); ?>
+  var DISCOUNT_CODE = <?php View::echof('discount'); ?>;
 
   function setupMultiselect() {
     $('.multiselect').click(function () {
@@ -151,8 +151,10 @@
       var data = {
         cardId: cardId,
         type: type,
-        term: term
+        term: term,
+        discount: DISCOUNT_CODE
       };
+      console.log(data);
       $.post('ajax/buyplanfinish', data, function (data) {
         console.log(data);
 
@@ -162,7 +164,11 @@
           .show();
         $('body').click(function() { $('purchasefailed, purchased').hide(); });
 
-        data = JSON.parse(data);
+        try {
+          data = JSON.parse(data);
+        } catch (e) {
+          return;
+        }
 
         $('purchased').show();
         $('purchasefailed').hide();
@@ -371,7 +377,7 @@
 
 <panel>
   <div class="content">
-    <headline>Choose a Purchase Plan</headline>
+    <headline>Choose a Subscription Plan</headline>
 
     <plan class="multiselect" name="plans" type="basic">
       <type>Basic</type>

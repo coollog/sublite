@@ -12,6 +12,8 @@
 
   class PaymentControllerAJAX extends Controller
                               implements PaymentControllerAJAXInterface {
+    const BUYPLAN_DISCOUNT = 'promo2016';
+
     public static function addPaymentInfo() {
       RecruiterController::requireLogin();
       global $params;
@@ -103,8 +105,49 @@
       $cardId = $params['cardId'];
       $type = $params['type'];
       $term = $params['term'];
+      $discount = $params['discount'];
+      if ($discount == self::BUYPLAN_DISCOUNT) {
+        $discountType = 'discounted';
+      } else {
+        $discountType = 'normal';
+      }
 
-      echo toJSON(['cardId' => $cardId, 'type' => $type, 'term' => $term]);
+      $costs = [
+        'basic' => [
+          '1' => ['normal' => 39, 'discounted' => 29],
+          '3' => ['normal' => 99, 'discounted' => 79],
+          '6' => ['normal' => 179, 'discounted' => 149],
+          '12' => ['normal' => 299, 'discounted' => 259]
+        ],
+        'premium' => [
+          '1' => ['normal' => 99, 'discounted' => 79],
+          '3' => ['normal' => 249, 'discounted' => 219],
+          '6' => ['normal' => 429, 'discounted' => 379],
+          '12' => ['normal' => 799, 'discounted' => 739]
+        ]
+      ];
+
+      $amount = $costs[$type][$term][$discountType] * 100;
+      $description = ucfirst($type) . " plan for $term month(s)";
+
+      // Charge the card.
+      $err = StripeBilling::charge($customerId, $cardId, $amount, $description);
+      if (!is_null($err)) {
+        return self::ajaxError($err);
+      }
+
+      $message = "
+        _id: $recruiterId<br />
+        type: $type<br />
+        term: $term<br />
+        discount: $discount
+      ";
+      sendgmail(['tony.jiang@yale.edu', 'qingyang.chen@gmail.com'],
+                "info@sublite.net",
+                'Subscription Plan Bought!',
+                $message);
+
+      return self::ajaxSuccess();
     }
 
     public static function getCards() {
