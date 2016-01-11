@@ -82,7 +82,7 @@
 
     public function getLatitudeLongitudeType() {
       return [
-        'latitude' => $this->getLatitiude(),
+        'latitude' => $this->getLatitude(),
         'longitude' => $this->getLongitude(),
         'location_type' => $this->getLocationType(),
       ];
