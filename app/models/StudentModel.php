@@ -8,6 +8,11 @@
     public static function getProfile(MongoId $studentId);
     public static function setProfile(MongoId $studentId, array $profileData);
 
+    public static function getNumUnread(MongoId $studentId);
+    public static function setUnread(MongoId $studentId, $count);
+    public static function incrementUnread(MongoId $studentId);
+    public static function decrementUnread(MongoId $studentId);
+
     /**
      * Retrieves just email, name, and school name.
      */
@@ -49,6 +54,31 @@
       $student = self::getById($studentId, ['email' => true, 'name' => true]);
       $student['school'] = $S->nameOf($student['email']);
       return $student;
+    }
+
+    public static function getNumUnread(MongoId $studentId) {
+      $query = (new DBQuery(self::$collection))
+        ->queryForId($studentId)->projectField('unread');
+      $student = $query->findOne();
+      return $student['unread'];
+    }
+
+    public static function setUnread(MongoId $studentId, $count) {
+      $update = (new DBUpdateQuery(self::$collection))
+        ->queryForId($studentId)->toUpdate('unread', $count);
+      $update->run();
+    }
+
+    public static function incrementUnread(MongoId $studentId) {
+      $update = (new DBUpdateQuery(self::$collection))
+        ->queryForId($studentId)->toAdd('unread', 1);
+      $update->run();
+    }
+
+    public static function decrementUnread(MongoId $studentId) {
+      $update = (new DBUpdateQuery(self::$collection))
+        ->queryForId($studentId)->toAdd('unread', -1);
+      $update->run();
     }
 
     public function __construct() {

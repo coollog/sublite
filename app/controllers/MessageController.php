@@ -109,16 +109,12 @@
         $messages = array_reverse(iterator_to_array($MMessage->findByParticipant($_SESSION['_id']->{'$id'})));
 
         $replies = array();
-        $unread = 0;
+        $unread = $MMessage->getNumUnread($_SESSION['_id']->{'$id'});
         foreach ($messages as $m) {
           $reply = array_pop($m['replies']);
           $reply['_id'] = $m['_id'];
 
           $from = $reply['from'];
-          if (!$reply['read']) {
-            $reply['read'] = (strcmp($from, $_SESSION['_id']) == 0);
-          }
-          if (!$reply['read']) $unread ++;
 
           $c->setFromNamePic($reply, $from);
 
@@ -187,8 +183,12 @@
         // Set replies to read
         $repliesn = count($entry['replies']);
         for ($i = 0; $i < $repliesn; $i ++) {
-          if (strcmp($entry['replies'][$i]['from'], $_SESSION['_id']) != 0)
+          if (strcmp($entry['replies'][$i]['from'], $_SESSION['_id']) != 0) {
+            if (!$entry['replies'][$i]['read']) {
+              $MMessage->decrementUnread($_SESSION['_id']->{'$id'});
+            }
             $entry['replies'][$i]['read'] = true;
+          }
         }
         $MMessage->save($entry);
 

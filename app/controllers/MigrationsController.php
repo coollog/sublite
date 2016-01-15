@@ -6,13 +6,13 @@
       global $MApp;
 
       // Get current counter
-      $mlast = AppModel::getByStringId('migrations');
+      $mlast = -1;
       if ($mlast == NULL) $mlast = 0;
       else $mlast = $mlast['current'];
 
       // Do migrations after counter
       $mcur = $mlast;
-      $migrations = glob($GLOBALS['dirpre'].'migrations/*.php');
+      $migrations = glob($GLOBALS['dirpre'].'migrations/20.php');
       natsort($migrations);
       foreach ($migrations as $m) {
         if (($mcur = str2int($m)) > $mlast) {

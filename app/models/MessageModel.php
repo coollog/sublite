@@ -26,6 +26,11 @@
       array_push($entry['replies'], array(
         'from' => $from, 'msg' => $msg, 'time' => time(), 'read' => false
       ));
+      foreach ($entry['participants'] as $participant) {
+        if ($participant != $from) {
+          $this->incrementUnread($participant);
+        }
+      }
       self::$collection->save($entry);
       return $entry;
     }
@@ -48,6 +53,37 @@
 
     function exists($id) {
       return ($this->get($id) !== NULL);
+    }
+
+    function getNumUnread($studentOrRecruiterId) {
+      if (StudentModel::exists($studentOrRecruiterId)) {
+        return StudentModel::getNumUnread(new MongoId($studentOrRecruiterId));
+      } else if (RecruiterModel::IDexists($studentOrRecruiterId)) {
+        return RecruiterModel::getNumUnread(new MongoId($studentOrRecruiterId));
+      } else {
+        // This shouldn't happen!
+        return -1;
+      }
+    }
+
+    function incrementUnread($studentOrRecruiterId) {
+      if (StudentModel::exists($studentOrRecruiterId)) {
+        StudentModel::incrementUnread(new MongoId($studentOrRecruiterId));
+      } else if (RecruiterModel::IDexists($studentOrRecruiterId)) {
+        RecruiterModel::incrementUnread(new MongoId($studentOrRecruiterId));
+      } else {
+        // This shouldn't happen!
+      }
+    }
+
+    function decrementUnread($studentOrRecruiterId) {
+      if (StudentModel::exists($studentOrRecruiterId)) {
+        StudentModel::decrementUnread(new MongoId($studentOrRecruiterId));
+      } else if (RecruiterModel::IDexists($studentOrRecruiterId)) {
+        RecruiterModel::decrementUnread(new MongoId($studentOrRecruiterId));
+      } else {
+        // This shouldn't happen!
+      }
     }
 
     protected static $collection;
