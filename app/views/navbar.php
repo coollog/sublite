@@ -49,7 +49,7 @@
     color: #ffd800;
   }
 
-  .messagecount {
+  .highlight {
     color: #ffd800;
   }
 </style>
@@ -113,7 +113,7 @@
           global $MMessage;
           $num = $MMessage->getNumUnread($_SESSION['_id']->{'$id'});
           if ($num > 0) {
-            echo "<a href=\"$link\"><opt>$text <span class=\"messagecount\">($num)</span></opt></a>";
+            echo "<a href=\"$link\"><opt>$text <span class=\"highlight\">($num)</span></opt></a>";
           } else {
             echo "<a href=\"$link\"><opt>$text (0)</span></opt></a>";
           }
