@@ -5,26 +5,36 @@
     <form method="post">
       <?php vnotice(); ?>
       
-      <div class="form-slider"><label for="name">Full Name</label><input type="text" id="name" name="name" value="<?php vecho('name'); ?>" maxlength="100" required /></div>
+      <div class="form-slider"><label for="name">Full Name*</label><input type="text" id="name" name="name" value="<?php vecho('name'); ?>" maxlength="100" required /></div>
 
-      <div class="form-slider"><label for="pass">Password (6 chars min)</label><input type="password" id="pass" name="pass" required pattern=".{6,}" /></div>
-      <div class="form-slider"><label for="pass2">Confirm Password</label><input type="password" id="pass2" name="pass2" required pattern=".{6,}" /></div>
+      <div class="form-slider"><label for="pass">Password (6 chars min)*</label><input type="password" id="pass" name="pass" required pattern=".{6,}" /></div>
+      <div class="form-slider"><label for="pass2">Confirm Password*</label><input type="password" id="pass2" name="pass2" required pattern=".{6,}" /></div>
         
+      <p style="text-align:left;margin-bottom:0px">What is your gender?*</p>
+      <select id="gender" name="gender" required>
+        <?php vecho('gender', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); ?>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select>
+
       <p style="text-align:left;margin-bottom:0px">Are you an undergraduate or graduate student? If you have graduated, select your most recent degree.</p>
-      <input class="undergraduate" onchange="educationValueChanged()" type="radio" name="education" id="undergraduate" value="undergraduate" checked> Undergraduate
-      <input class="graduate" onchange="educationValueChanged()" type="radio" name="education" id="graduate" value="graduate"> Graduate
+      <label><input class="undergraduate" onchange="educationValueChanged()" type="radio" name="education" id="undergraduate" value="undergraduate" checked> Undergraduate</label>
+      <label><input class="graduate" onchange="educationValueChanged()" type="radio" name="education" id="graduate" value="graduate" <?php vchecked('education', 'graduate'); ?> > Graduate</label>
 
       <div class="undergraduateShow">
-        <p style="text-align:left;margin-bottom:0px">What degree are you pursuing or have already attained?</p>
-        <select name="undergraduateDegree" id="degreeChooser" type="singleselect">
+        <p style="text-align:left;margin-bottom:0px">What degree are you pursuing or have already attained?*</p>
+        <select name="undergraduateDegree" id="uDegreeChooser" type="singleselect" required>
+          <?php if(vget('education') == 'undergraduate') vecho('degree', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
           <option value="Bachelor of Arts">Bachelor of Arts</option>
           <option value="Bachelor of Science">Bachelor of Science</option>
           <option value="Associate Degree">Associate Degree</option>
           <option value="Other">Other</option>
         </select>
 
-        <p style="text-align:left;margin-bottom:0px">What year are you?</p>
-        <select name="undergraduateYear" id="yearChooser" type="singleselect">
+        <p style="text-align:left;margin-bottom:0px">What year are you?*</p>
+        <select name="undergraduateYear" id="uYearChooser" type="singleselect" required>
+          <?php if(vget('education') == 'undergraduate') vecho('year', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
           <option value="Freshman">Freshman</option>
           <option value="Sophomore">Sophomore</option>
           <option value="Junior">Junior</option>
@@ -32,22 +42,24 @@
           <option value="I have already graduated">I have already graduated</option>
         </select>
 
-        <p style="text-align:left;margin-bottom:0px">What is the month and year of your (projected) graduation?</p>
-        <select name="undergraduateGraduationMonth" id="graduationMonthChooser" type="singleselect">
-          <option value="1">January</option>
-          <option value="2">February</option>
-          <option value="3">March</option>
-          <option value="4">April</option>
-          <option value="5">May</option>
-          <option value="6">June</option>
-          <option value="7">July</option>
-          <option value="8">August</option>
-          <option value="9">September</option>
-          <option value="10">October</option>
-          <option value="11">November</option>
-          <option value="12">December</option>
+        <p style="text-align:left;margin-bottom:0px">What is the month and year of your (projected) graduation?*</p>
+        <select name="undergraduateGraduationMonth" id="uGraduationMonthChooser" type="singleselect" required>
+          <?php if(vget('education') == 'undergraduate') vecho('graduationMonth', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
+          <option value="January">January</option>
+          <option value="February">February</option>
+          <option value="March">March</option>
+          <option value="April">April</option>
+          <option value="May">May</option>
+          <option value="June">June</option>
+          <option value="July">July</option>
+          <option value="August">August</option>
+          <option value="September">September</option>
+          <option value="October">October</option>
+          <option value="November">November</option>
+          <option value="December">December</option>
         </select>
-        <select name="undergraduateGraduationYear" id="grduationYearChooser" type="singleselect">
+        <select name="undergraduateGraduationYear" id="uGraduationYearChooser" type="singleselect" required>
+          <?php if(vget('education') == 'undergraduate') vecho('graduationYear', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
           <option value="2000">2000</option>
           <option value="2001">2001</option>
           <option value="2002">2002</option>
@@ -78,8 +90,9 @@
       </div>
 
       <div class="graduateShow" style="display:none">
-        What degree are you pursuing or have already attained?
-        <select name="graduateDegree" id="degreeChooser" type="singleselect">
+        <p style="text-align:left;margin-bottom:0px">What degree are you pursuing or have already attained?*</p>
+        <select name="graduateDegree" id="gDegreeChooser" type="singleselect" required>
+          <?php if(vget('education') == 'graduate') vecho('degree', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
           <option value="Masters (M.A)">Masters (M.A)</option>
           <option value="Masters (M.S)">Masters (M.S)</option>
           <option value="PhD">PhD</option>
@@ -89,8 +102,9 @@
           <option value="Other">Other</option>
         </select>
 
-        What year are you in your program?
-        <select name="graduateYear" id="yearChooser" type="singleselect">
+        <p style="text-align:left;margin-bottom:0px">What year are you in your program?*</p>
+        <select name="graduateYear" id="gYearChooser" type="singleselect" required>
+          <?php if(vget('education') == 'graduate') vecho('year', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
           <option value="First year">First year</option>
           <option value="Second year">Second year</option>
           <option value="Third year">Third year</option>
@@ -103,22 +117,24 @@
           <option value="Tenth year">Tenth year</option>
         </select>
 
-        What is the month and year of your (projected) graduation?
-        <select name="graduateGraduationMonth" id="graduationMonthChooser" type="singleselect">
-          <option value="1">January</option>
-          <option value="2">February</option>
-          <option value="3">March</option>
-          <option value="4">April</option>
-          <option value="5">May</option>
-          <option value="6">June</option>
-          <option value="7">July</option>
-          <option value="8">August</option>
-          <option value="9">September</option>
-          <option value="10">October</option>
-          <option value="11">November</option>
-          <option value="12">December</option>
+        <p style="text-align:left;margin-bottom:0px">What is the month and year of your (projected) graduation?*</p>
+        <select name="graduateGraduationMonth" id="gGraduationMonthChooser" type="singleselect" required>
+          <?php if(vget('education') == 'graduate') vecho('graduationMonth', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
+          <option value="January">January</option>
+          <option value="February">February</option>
+          <option value="March">March</option>
+          <option value="April">April</option>
+          <option value="May">May</option>
+          <option value="June">June</option>
+          <option value="July">July</option>
+          <option value="August">August</option>
+          <option value="September">September</option>
+          <option value="October">October</option>
+          <option value="November">November</option>
+          <option value="December">December</option>
         </select>
-        <select name="graduateGraduationYear" id="grduationYearChooser" type="singleselect">
+        <select name="graduateGraduationYear" id="gGraduationYearChooser" type="singleselect" required>
+          <?php if(vget('education') == 'graduate') vecho('graduationYear', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
           <option value="2000">2000</option>
           <option value="2001">2001</option>
           <option value="2002">2002</option>
@@ -148,33 +164,232 @@
         </select>
       </div>
 
-      <div class="form-slider"><label for="gender">Gender </label>
-        <select id="gender" name="gender" required>
-          <?php vecho('gender', '<option selected="selected">{var}</option>'); ?>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-          <option value="other">Other</option>
-        </select>
-      </div>
+      <p style="text-align:left;margin-bottom:0px">What is your (intended) major?*</p>
+      <select name="majorChooser" id="majorChooser" type="singleselect" required>
+        <?php vecho('major', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); ?>
+        <option value ="Accounting">Accounting</option>
+        <option value ="Acupuncture">Acupuncture</option>
+        <option value ="Administrative Assistant">Administrative Assistant</option>
+        <option value ="Advertising and Marketing">Advertising and Marketing</option>
+        <option value ="Agriculture">Agriculture</option>
+        <option value ="Air Traffic Controller">Air Traffic Controller</option>
+        <option value ="Aircraft Mechanic">Aircraft Mechanic</option>
+        <option value ="Animal Science">Animal Science</option>
+        <option value ="Animation">Animation</option>
+        <option value ="Anthropology">Anthropology</option>
+        <option value ="Archaeology">Archaeology</option>
+        <option value ="Architecture">Architecture</option>
+        <option value ="Art History">Art History</option>
+        <option value ="Art Therapy">Art Therapy</option>
+        <option value ="Astronomy">Astronomy</option>
+        <option value ="Astrophysics">Astrophysics</option>
+        <option value ="Athletic Training">Athletic Training</option>
+        <option value ="Audio and Video Production">Audio and Video Production</option>
+        <option value ="Audiology and Speech Pathology">Audiology and Speech Pathology</option>
+        <option value ="Auto Body">Auto Body</option>
+        <option value ="Auto Mechanic">Auto Mechanic</option>
+        <option value ="Automotive Engineering">Automotive Engineering</option>
+        <option value ="Aviation">Aviation</option>
+        <option value ="Baking And Pastry">Baking And Pastry</option>
+        <option value ="Behavioral Science">Behavioral Science</option>
+        <option value ="Biochemistry">Biochemistry</option>
+        <option value ="Biology">Biology</option>
+        <option value ="Biomedical Engineering">Biomedical Engineering</option>
+        <option value ="Biomedical Science">Biomedical Science</option>
+        <option value ="Bookkeeping">Bookkeeping</option>
+        <option value ="Botany">Botany</option>
+        <option value ="Bus and Truck Driver">Bus and Truck Driver</option>
+        <option value ="Business Administration">Business Administration</option>
+        <option value ="Carpentry">Carpentry</option>
+        <option value ="Chemical Engineering">Chemical Engineering</option>
+        <option value ="Chemistry">Chemistry</option>
+        <option value ="Child Care">Child Care</option>
+        <option value ="Child Development">Child Development</option>
+        <option value ="Chiropractic">Chiropractic</option>
+        <option value ="Christian Counseling">Christian Counseling</option>
+        <option value ="Cinematography And Film">Cinematography And Film</option>
+        <option value ="Civil Engineering">Civil Engineering</option>
+        <option value ="Clinical Psychology">Clinical Psychology</option>
+        <option value ="Communications">Communications</option>
+        <option value ="Computer Aided Design (CAD)">Computer Aided Design (CAD)</option>
+        <option value ="Computer Graphics">Computer Graphics</option>
+        <option value ="Computer Networking">Computer Networking</option>
+        <option value ="Computer Programming">Computer Programming</option>
+        <option value ="Computer Science">Computer Science</option>
+        <option value ="Construction Management">Construction Management</option>
+        <option value ="Cosmetology">Cosmetology</option>
+        <option value ="Counseling Psychology">Counseling Psychology</option>
+        <option value ="Court Reporting">Court Reporting</option>
+        <option value ="Creative Writing">Creative Writing</option>
+        <option value ="Criminal Justice">Criminal Justice</option>
+        <option value ="Criminology">Criminology</option>
+        <option value ="Culinary Arts">Culinary Arts</option>
+        <option value ="Dance">Dance</option>
+        <option value ="Dental Assistant">Dental Assistant</option>
+        <option value ="Dental Hygienist">Dental Hygienist</option>
+        <option value ="Dentistry">Dentistry</option>
+        <option value ="Developmental And Child Psychology">Developmental And Child Psychology</option>
+        <option value ="Diesel Mechanic">Diesel Mechanic</option>
+        <option value ="Dietetics">Dietetics</option>
+        <option value ="Early Childhood Education">Early Childhood Education</option>
+        <option value ="Economics">Economics</option>
+        <option value ="Education">Education</option>
+        <option value ="Educational Leadership and Administration">Educational Leadership and Administration</option>
+        <option value ="Electrical Engineering">Electrical Engineering</option>
+        <option value ="Electrician">Electrician</option>
+        <option value ="Elementary Education">Elementary Education</option>
+        <option value ="Engineering">Engineering</option>
+        <option value ="Engineering Management">Engineering Management</option>
+        <option value ="English">English</option>
+        <option value ="Environmental Health">Environmental Health</option>
+        <option value ="Environmental Science">Environmental Science</option>
+        <option value ="Environmental and Wildlife Management">Environmental and Wildlife Management</option>
+        <option value ="Equine Studies">Equine Studies</option>
+        <option value ="Esthetician">Esthetician</option>
+        <option value ="Exercise Physiology">Exercise Physiology</option>
+        <option value ="Fashion Design">Fashion Design</option>
+        <option value ="Fashion Merchandising">Fashion Merchandising</option>
+        <option value ="Finance">Finance</option>
+        <option value ="Fire Science">Fire Science</option>
+        <option value ="Food Science">Food Science</option>
+        <option value ="Forensic Psychology">Forensic Psychology</option>
+        <option value ="Forensic Science">Forensic Science</option>
+        <option value ="Forestry">Forestry</option>
+        <option value ="Game Design">Game Design</option>
+        <option value ="General Studies">General Studies</option>
+        <option value ="Geography">Geography</option>
+        <option value ="Geology">Geology</option>
+        <option value ="Graphic Design">Graphic Design</option>
+        <option value ="Guidance Counselor">Guidance Counselor</option>
+        <option value ="Gunsmithing">Gunsmithing</option>
+        <option value ="Health Informatics">Health Informatics</option>
+        <option value ="Healthcare Administration">Healthcare Administration</option>
+        <option value ="Heating and Air Conditioning (HVAC)">Heating and Air Conditioning (HVAC)</option>
+        <option value ="History">History</option>
+        <option value ="Holistic Health and Nutrition">Holistic Health and Nutrition</option>
+        <option value ="Horticulture">Horticulture</option>
+        <option value ="Hotel and Hospitality Management">Hotel and Hospitality Management</option>
+        <option value ="Human Resources">Human Resources</option>
+        <option value ="Human Services">Human Services</option>
+        <option value ="Illustration">Illustration</option>
+        <option value ="Industrial Design">Industrial Design</option>
+        <option value ="Information Systems">Information Systems</option>
+        <option value ="Information Technology">Information Technology</option>
+        <option value ="Interior Design">Interior Design</option>
+        <option value ="International Business">International Business</option>
+        <option value ="International Relations">International Relations</option>
+        <option value ="Jewelry Design">Jewelry Design</option>
+        <option value ="Journalism">Journalism</option>
+        <option value ="Kinesiology And Exercise Science">Kinesiology And Exercise Science</option>
+        <option value ="Law">Law</option>
+        <option value ="Law and Justice Administration">Law and Justice Administration</option>
+        <option value ="Legal Studies">Legal Studies</option>
+        <option value ="Liberal Arts">Liberal Arts</option>
+        <option value ="Licensed Practical Nurse (LPN)">Licensed Practical Nurse (LPN)</option>
+        <option value ="Linguistics">Linguistics</option>
+        <option value ="Logistics and Supply Chain Management">Logistics and Supply Chain Management</option>
+        <option value ="Makeup Artist">Makeup Artist</option>
+        <option value ="Marine Biology">Marine Biology</option>
+        <option value ="Marriage and Family Therapy">Marriage and Family Therapy</option>
+        <option value ="Massage Therapy">Massage Therapy</option>
+        <option value ="Math">Math</option>
+        <option value ="Mechanical Engineering">Mechanical Engineering</option>
+        <option value ="Medical Assistant">Medical Assistant</option>
+        <option value ="Medical Transcription">Medical Transcription</option>
+        <option value ="Medicine">Medicine</option>
+        <option value ="Mental Health Counseling">Mental Health Counseling</option>
+        <option value ="Microbiology">Microbiology</option>
+        <option value ="Ministry">Ministry</option>
+        <option value ="Molecular Biology">Molecular Biology</option>
+        <option value ="Museum Studies">Museum Studies</option>
+        <option value ="Music">Music</option>
+        <option value ="Music Management">Music Management</option>
+        <option value ="Music Therapy">Music Therapy</option>
+        <option value ="Nail Technician">Nail Technician</option>
+        <option value ="Neuroscience">Neuroscience</option>
+        <option value ="Nursing">Nursing</option>
+        <option value ="Nursing Assistant">Nursing Assistant</option>
+        <option value ="Nutrition">Nutrition</option>
+        <option value ="Occupational Therapy">Occupational Therapy</option>
+        <option value ="Occupational Therapy Assistant (OTA)">Occupational Therapy Assistant (OTA)</option>
+        <option value ="Operations Management">Operations Management</option>
+        <option value ="Optometry">Optometry</option>
+        <option value ="Organizational Psychology">Organizational Psychology</option>
+        <option value ="Organizational and Nonprofit Management">Organizational and Nonprofit Management</option>
+        <option value ="Paralegal">Paralegal</option>
+        <option value ="Parks and Recreation Management">Parks and Recreation Management</option>
+        <option value ="Petroleum Engineering">Petroleum Engineering</option>
+        <option value ="Pharmacy">Pharmacy</option>
+        <option value ="Pharmacy Technician">Pharmacy Technician</option>
+        <option value ="Philosophy">Philosophy</option>
+        <option value ="Phlebotomy">Phlebotomy</option>
+        <option value ="Photography">Photography</option>
+        <option value ="Physical Education">Physical Education</option>
+        <option value ="Physical Therapist Assistant">Physical Therapist Assistant</option>
+        <option value ="Physical Therapy">Physical Therapy</option>
+        <option value ="Physician Assistant">Physician Assistant</option>
+        <option value ="Physics">Physics</option>
+        <option value ="Podiatry">Podiatry</option>
+        <option value ="Political Science">Political Science</option>
+        <option value ="Property Management">Property Management</option>
+        <option value ="Psychology">Psychology</option>
+        <option value ="Public Administration">Public Administration</option>
+        <option value ="Public Health">Public Health</option>
+        <option value ="Public Policy">Public Policy</option>
+        <option value ="Public Relations">Public Relations</option>
+        <option value ="Radio And Television Broadcasting">Radio And Television Broadcasting</option>
+        <option value ="Radiology Technician">Radiology Technician</option>
+        <option value ="Real Estate">Real Estate</option>
+        <option value ="Religious Studies">Religious Studies</option>
+        <option value ="Respiratory Therapy">Respiratory Therapy</option>
+        <option value ="Risk Management and Insurance">Risk Management and Insurance</option>
+        <option value ="School Psychology">School Psychology</option>
+        <option value ="Secondary Education">Secondary Education</option>
+        <option value ="Sign Language">Sign Language</option>
+        <option value ="Social Work">Social Work</option>
+        <option value ="Sociology">Sociology</option>
+        <option value ="Software Engineering">Software Engineering</option>
+        <option value ="Special Education">Special Education</option>
+        <option value ="Sports Management">Sports Management</option>
+        <option value ="Sports Medicine">Sports Medicine</option>
+        <option value ="Statistics">Statistics</option>
+        <option value ="Structural Engineering">Structural Engineering</option>
+        <option value ="Substance Abuse and Addiction Counseling">Substance Abuse and Addiction Counseling</option>
+        <option value ="Surgical Technologist">Surgical Technologist</option>
+        <option value ="Systems Engineering">Systems Engineering</option>
+        <option value ="Theology">Theology</option>
+        <option value ="Turf Management">Turf Management</option>
+        <option value ="Ultrasound Technician">Ultrasound Technician</option>
+        <option value ="Urban Planning">Urban Planning</option>
+        <option value ="Veterinary Assistant">Veterinary Assistant</option>
+        <option value ="Veterinary Medicine">Veterinary Medicine</option>
+        <option value ="Web Design">Web Design</option>
+        <option value ="Welding">Welding</option>
+        <option value ="Wildlife Biology">Wildlife Biology</option>
+        <option value ="Zoology">Zoology</option>
+        <option value ="Other">Other</option>
+        <option value ="Undecided">Undecided</option>
+      </select>
 
-      <?php 
-        vpartial('s3single', array(
-          's3name' => 'photo', 
-          's3title' => 'Upload a profile picture *: ',
-          's3link' => vget('photo')
-        ));
-      ?>
+      <p style="text-align:left;margin-bottom:0px">What is your GPA range?*</p>
+      <select name="gpaChooser" id="gpaChooser" type="singleselect" required>
+        <?php vecho('gpa', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); ?>
+        <option value ="3.51-4.00">3.51-4.00</option>
+        <option value ="3.01-3.50">3.01-3.50</option>
+        <option value ="2.51-3.00">2.51-3.00</option>
+        <option value ="2.01-2.50">2.01-2.50</option>
+        <option value ="Below 2">Below 2</option>
+        <option value ="Undisclosed">I prefer not to say</option>
+      </select>
 
-      <?php vnotice(); ?>
-
-      <p style="text-align:left;margin-bottom:0px">What are you looking for? Please select all that apply. <br> Your answers to the following will help us find better opportunities for you.</p>
-      <label for="looking">Internship</label><input class="internship" onchange="lookingForValueChanged()" type="checkbox" id="internship" name="internship" value="<?php vecho('internship'); ?>" />
-      <label for="looking">Full-Time</label><input class="fulltime" onchange="lookingForValueChanged()" type="checkbox" id="fulltime" name="fulltime" value="<?php vecho('fulltime'); ?>" />
-      <label for="looking">Housing</label><input class="housing" onchange="lookingForValueChanged()" type="checkbox" id="housing" name="housing" value="<?php vecho('housing'); ?>" />
+      <p style="text-align:left;margin-bottom:0px">What are you looking for? Please select at least one.* <br> Your answers to the following will help us find better opportunities for you.</p>
+      <label><input class="internship" onchange="lookingForValueChanged()" type="checkbox" id="internship" name="internship" value="<?php vecho('internship'); ?>" <?php vchecked('lookingFor', 'internship'); ?> />Internship </label>
+      <label><input class="fulltime" onchange="lookingForValueChanged()" type="checkbox" id="fulltime" name="fulltime" value="<?php vecho('fulltime'); ?>" <?php vchecked('lookingFor', 'fulltime'); ?> />Full-Time </label>
+      <label><input class="housing" onchange="lookingForValueChanged()" type="checkbox" id="housing" name="housing" value="<?php vecho('housing'); ?>" <?php vchecked('lookingFor', 'housing'); ?> />Housing </label>
       <br>
 
       <div class="jobShow" style="display:none">
-        <p style="text-align:left;margin-bottom:0px">What industries are you interested in? Please select all that apply. (Hold Control to select multiple options.)</p>
+        <p style="text-align:left;margin-bottom:0px">What industries are you interested in? Please select all that apply. (Hold Ctrl/Cmd to select multiple options.)</p>
         <select name="industryChooser[]" id="industryChooser" style="height:10em;" multiple>
           <option value="Accounting">Accounting</option>
           <option value="Airlines/Aviation">Airlines/Aviation</option>
@@ -213,6 +428,7 @@
           <option value="E-Learning">E-Learning</option>
           <option value="Electrical/Electronic Manufacturing">Electrical/Electronic Manufacturing</option>
           <option value="Entertainment">Entertainment</option>
+          <option value="Entrepreneurship">Entrepreneurship</option>
           <option value="Environmental Services">Environmental Services</option>
           <option value="Events Services">Events Services</option>
           <option value="Executive Office">Executive Office</option>
@@ -325,354 +541,77 @@
           <option value="Writing and Editing">Writing and Editing</option>
         </select>
 
-        <p style="text-align:left;margin-bottom:0px">In which countries are you looking for an internship/program/job? Please select all that apply. (Hold Control to select multiple options.)</p>
-        <select name="countryChooser[]" id="countryChooser" style="height:10em;" multiple>
-          <option value="United States">United States</option>
-          <option value="Afghanistan (‫افغانستان‬‎)">Afghanistan (‫افغانستان‬‎)</option>
-          <option value="Åland Islands (Åland)">Åland Islands (Åland)</option>
-          <option value="Albania (Shqipëri)">Albania (Shqipëri)</option>
-          <option value="Algeria">Algeria</option>
-          <option value="American Samoa">American Samoa</option>
-          <option value="Andorra">Andorra</option>
-          <option value="Angola">Angola</option>
-          <option value="Anguilla">Anguilla</option>
-          <option value="Antarctica">Antarctica</option>
-          <option value="Antigua &amp; Barbuda">Antigua &amp; Barbuda</option>
-          <option value="Argentina">Argentina</option>
-          <option value="Armenia (Հայաստան)">Armenia (Հայաստան)</option>
-          <option value="Aruba">Aruba</option>
-          <option value="Ascension Island">Ascension Island</option>
-          <option value="Australia">Australia</option>
-          <option value="Austria (Österreich)">Austria (Österreich)</option>
-          <option value="Azerbaijan (Azərbaycan)">Azerbaijan (Azərbaycan)</option>
-          <option value="Bahamas">Bahamas</option>
-          <option value="Bahrain (‫البحرين‬‎)">Bahrain (‫البحرين‬‎)</option>
-          <option value="Bangladesh (বাংলাদেশ)">Bangladesh (বাংলাদেশ)</option>
-          <option value="Barbados">Barbados</option>
-          <option value="Belarus (Беларусь)">Belarus (Беларусь)</option>
-          <option value="Belgium">Belgium</option>
-          <option value="Belize">Belize</option>
-          <option value="Benin (Bénin)">Benin (Bénin)</option>
-          <option value="Bermuda">Bermuda</option>
-          <option value="Bhutan (འབྲུག)">Bhutan (འབྲུག)</option>
-          <option value="Bolivia">Bolivia</option>
-          <option value="Bosnia &amp; Herzegovina (Босна и Херцеговина)">Bosnia &amp; Herzegovina (Босна и Херцеговина)</option>
-          <option value="Botswana">Botswana</option>
-          <option value="Bouvet Island">Bouvet Island</option>
-          <option value="Brazil (Brasil)">Brazil (Brasil)</option>
-          <option value="British Indian Ocean Territory">British Indian Ocean Territory</option>
-          <option value="British Virgin Islands">British Virgin Islands</option>
-          <option value="Brunei">Brunei</option>
-          <option value="Bulgaria (България)">Bulgaria (България)</option>
-          <option value="Burkina Faso">Burkina Faso</option>
-          <option value="Burundi (Uburundi)">Burundi (Uburundi)</option>
-          <option value="Cambodia (កម្ពុជា)">Cambodia (កម្ពុជា)</option>
-          <option value="Cameroon (Cameroun)">Cameroon (Cameroun)</option>
-          <option value="Canada">Canada</option>
-          <option value="Canary Islands (islas Canarias)">Canary Islands (islas Canarias)</option>
-          <option value="Cape Verde (Kabu Verdi)">Cape Verde (Kabu Verdi)</option>
-          <option value="Caribbean Netherlands">Caribbean Netherlands</option>
-          <option value="Cayman Islands">Cayman Islands</option>
-          <option value="Central African Republic (République centrafricaine)">Central African Republic (République centrafricaine)</option>
-          <option value="Ceuta &amp; Melilla (Ceuta y Melilla)">Ceuta &amp; Melilla (Ceuta y Melilla)</option>
-          <option value="Chad (Tchad)">Chad (Tchad)</option>
-          <option value="Chile">Chile</option>
-          <option value="China (中国)">China (中国)</option>
-          <option value="Christmas Island">Christmas Island</option>
-          <option value="Clipperton Island">Clipperton Island</option>
-          <option value="Cocos (Keeling) Islands (Kepulauan Cocos (Keeling))">Cocos (Keeling) Islands (Kepulauan Cocos (Keeling))</option>
-          <option value="Colombia">Colombia</option>
-          <option value="Comoros (‫جزر القمر‬‎)">Comoros (‫جزر القمر‬‎)</option>
-          <option value="Congo (DRC) (Jamhuri ya Kidemokrasia ya Kongo)">Congo (DRC) (Jamhuri ya Kidemokrasia ya Kongo)</option>
-          <option value="Congo (Republic) (Congo-Brazzaville)">Congo (Republic) (Congo-Brazzaville)</option>
-          <option value="Cook Islands">Cook Islands</option>
-          <option value="Costa Rica">Costa Rica</option>
-          <option value="Côte d’Ivoire">Côte d’Ivoire</option>
-          <option value="Croatia (Hrvatska)">Croatia (Hrvatska)</option>
-          <option value="Cuba">Cuba</option>
-          <option value="Curaçao">Curaçao</option>
-          <option value="Cyprus (Κύπρος)">Cyprus (Κύπρος)</option>
-          <option value="Czech Republic (Česká republika)">Czech Republic (Česká republika)</option>
-          <option value="Denmark (Danmark)">Denmark (Danmark)</option>
-          <option value="Diego Garcia">Diego Garcia</option>
-          <option value="Djibouti">Djibouti</option>
-          <option value="Dominica">Dominica</option>
-          <option value="Dominican Republic (República Dominicana)">Dominican Republic (República Dominicana)</option>
-          <option value="Ecuador">Ecuador</option>
-          <option value="Egypt (‫مصر‬‎)">Egypt (‫مصر‬‎)</option>
-          <option value="El Salvador">El Salvador</option>
-          <option value="Equatorial Guinea (Guinea Ecuatorial)">Equatorial Guinea (Guinea Ecuatorial)</option>
-          <option value="Eritrea">Eritrea</option>
-          <option value="Estonia (Eesti)">Estonia (Eesti)</option>
-          <option value="Ethiopia">Ethiopia</option>
-          <option value="Falkland Islands (Islas Malvinas)">Falkland Islands (Islas Malvinas)</option>
-          <option value="Faroe Islands (Føroyar)">Faroe Islands (Føroyar)</option>
-          <option value="Fiji">Fiji</option>
-          <option value="Finland (Suomi)">Finland (Suomi)</option>
-          <option value="France">France</option>
-          <option value="French Guiana (Guyane française)">French Guiana (Guyane française)</option>
-          <option value="French Polynesia (Polynésie française)">French Polynesia (Polynésie française)</option>
-          <option value="French Southern Territories (Terres australes françaises)">French Southern Territories (Terres australes françaises)</option>
-          <option value="Gabon">Gabon</option>
-          <option value="Gambia">Gambia</option>
-          <option value="Georgia (საქართველო)">Georgia (საქართველო)</option>
-          <option value="Germany (Deutschland)">Germany (Deutschland)</option>
-          <option value="Ghana (Gaana)">Ghana (Gaana)</option>
-          <option value="Gibraltar">Gibraltar</option>
-          <option value="Greece (Ελλάδα)">Greece (Ελλάδα)</option>
-          <option value="Greenland (Kalaallit Nunaat)">Greenland (Kalaallit Nunaat)</option>
-          <option value="Grenada">Grenada</option>
-          <option value="Guadeloupe">Guadeloupe</option>
-          <option value="Guam">Guam</option>
-          <option value="Guatemala">Guatemala</option>
-          <option value="Guernsey">Guernsey</option>
-          <option value="Guinea (Guinée)">Guinea (Guinée)</option>
-          <option value="Guinea-Bissau (Guiné-Bissau)">Guinea-Bissau (Guiné-Bissau)</option>
-          <option value="Guyana">Guyana</option>
-          <option value="Haiti">Haiti</option>
-          <option value="Heard &amp; McDonald Islands">Heard &amp; McDonald Islands</option>
-          <option value="Honduras">Honduras</option>
-          <option value="Hong Kong (香港)">Hong Kong (香港)</option>
-          <option value="Hungary (Magyarország)">Hungary (Magyarország)</option>
-          <option value="Iceland (Ísland)">Iceland (Ísland)</option>
-          <option value="India (भारत)">India (भारत)</option>
-          <option value="Indonesia">Indonesia</option>
-          <option value="Iran (‫ایران‬‎)">Iran (‫ایران‬‎)</option>
-          <option value="Iraq (‫العراق‬‎)">Iraq (‫العراق‬‎)</option>
-          <option value="Ireland">Ireland</option>
-          <option value="Isle of Man">Isle of Man</option>
-          <option value="Israel (‫ישראל‬‎)">Israel (‫ישראל‬‎)</option>
-          <option value="Italy (Italia)">Italy (Italia)</option>
-          <option value="Jamaica">Jamaica</option>
-          <option value="Japan (日本)">Japan (日本)</option>
-          <option value="Jersey">Jersey</option>
-          <option value="Jordan (‫الأردن‬‎)">Jordan (‫الأردن‬‎)</option>
-          <option value="Kazakhstan (Казахстан)">Kazakhstan (Казахстан)</option>
-          <option value="Kenya">Kenya</option>
-          <option value="Kiribati">Kiribati</option>
-          <option value="Kosovo (Kosovë)">Kosovo (Kosovë)</option>
-          <option value="Kuwait (‫الكويت‬‎)">Kuwait (‫الكويت‬‎)</option>
-          <option value="Kyrgyzstan (Кыргызстан)">Kyrgyzstan (Кыргызстан)</option>
-          <option value="Laos (ລາວ)">Laos (ລາວ)</option>
-          <option value="Latvia (Latvija)">Latvia (Latvija)</option>
-          <option value="Lebanon (‫لبنان‬‎)">Lebanon (‫لبنان‬‎)</option>
-          <option value="Lesotho">Lesotho</option>
-          <option value="Liberia">Liberia</option>
-          <option value="Libya (‫ليبيا‬‎)">Libya (‫ليبيا‬‎)</option>
-          <option value="Liechtenstein">Liechtenstein</option>
-          <option value="Lithuania (Lietuva)">Lithuania (Lietuva)</option>
-          <option value="Luxembourg">Luxembourg</option>
-          <option value="Macau (澳門)">Macau (澳門)</option>
-          <option value="Macedonia (FYROM) (Македонија)">Macedonia (FYROM) (Македонија)</option>
-          <option value="Madagascar (Madagasikara)">Madagascar (Madagasikara)</option>
-          <option value="Malawi">Malawi</option>
-          <option value="Malaysia">Malaysia</option>
-          <option value="Maldives">Maldives</option>
-          <option value="Mali">Mali</option>
-          <option value="Malta">Malta</option>
-          <option value="Marshall Islands">Marshall Islands</option>
-          <option value="Martinique">Martinique</option>
-          <option value="Mauritania (‫موريتانيا‬‎)">Mauritania (‫موريتانيا‬‎)</option>
-          <option value="Mauritius (Moris)">Mauritius (Moris)</option>
-          <option value="Mayotte">Mayotte</option>
-          <option value="Mexico (México)">Mexico (México)</option>
-          <option value="Micronesia">Micronesia</option>
-          <option value="Moldova (Republica Moldova)">Moldova (Republica Moldova)</option>
-          <option value="Monaco">Monaco</option>
-          <option value="Mongolia (Монгол)">Mongolia (Монгол)</option>
-          <option value="Montenegro (Crna Gora)">Montenegro (Crna Gora)</option>
-          <option value="Montserrat">Montserrat</option>
-          <option value="Morocco">Morocco</option>
-          <option value="Mozambique (Moçambique)">Mozambique (Moçambique)</option>
-          <option value="Myanmar (Burma) (မြန်မာ)">Myanmar (Burma) (မြန်မာ)</option>
-          <option value="Namibia (Namibië)">Namibia (Namibië)</option>
-          <option value="Nauru">Nauru</option>
-          <option value="Nepal (नेपाल)">Nepal (नेपाल)</option>
-          <option value="Netherlands (Nederland)">Netherlands (Nederland)</option>
-          <option value="New Caledonia (Nouvelle-Calédonie)">New Caledonia (Nouvelle-Calédonie)</option>
-          <option value="New Zealand">New Zealand</option>
-          <option value="Nicaragua">Nicaragua</option>
-          <option value="Niger (Nijar)">Niger (Nijar)</option>
-          <option value="Nigeria">Nigeria</option>
-          <option value="Niue">Niue</option>
-          <option value="Norfolk Island">Norfolk Island</option>
-          <option value="Northern Mariana Islands">Northern Mariana Islands</option>
-          <option value="North Korea (조선민주주의인민공화국)">North Korea (조선민주주의인민공화국)</option>
-          <option value="Norway (Norge)">Norway (Norge)</option>
-          <option value="Oman (‫عُمان‬‎)">Oman (‫عُمان‬‎)</option>
-          <option value="Pakistan (‫پاکستان‬‎)">Pakistan (‫پاکستان‬‎)</option>
-          <option value="Palau">Palau</option>
-          <option value="Palestine (‫فلسطين‬‎)">Palestine (‫فلسطين‬‎)</option>
-          <option value="Panama (Panamá)">Panama (Panamá)</option>
-          <option value="Papua New Guinea">Papua New Guinea</option>
-          <option value="Paraguay">Paraguay</option>
-          <option value="Peru (Perú)">Peru (Perú)</option>
-          <option value="Philippines">Philippines</option>
-          <option value="Pitcairn Islands">Pitcairn Islands</option>
-          <option value="Poland (Polska)">Poland (Polska)</option>
-          <option value="Portugal">Portugal</option>
-          <option value="Puerto Rico">Puerto Rico</option>
-          <option value="Qatar (‫قطر‬‎)">Qatar (‫قطر‬‎)</option>
-          <option value="Réunion (La Réunion)">Réunion (La Réunion)</option>
-          <option value="Romania (România)">Romania (România)</option>
-          <option value="Russia (Россия)">Russia (Россия)</option>
-          <option value="Rwanda">Rwanda</option>
-          <option value="Samoa">Samoa</option>
-          <option value="San Marino">San Marino</option>
-          <option value="São Tomé &amp; Príncipe (São Tomé e Príncipe)">São Tomé &amp; Príncipe (São Tomé e Príncipe)</option>
-          <option value="Saudi Arabia (‫المملكة العربية السعودية‬‎)">Saudi Arabia (‫المملكة العربية السعودية‬‎)</option>
-          <option value="Senegal">Senegal</option>
-          <option value="Serbia (Србија)">Serbia (Србија)</option>
-          <option value="Seychelles">Seychelles</option>
-          <option value="Sierra Leone">Sierra Leone</option>
-          <option value="Singapore">Singapore</option>
-          <option value="Sint Maarten">Sint Maarten</option>
-          <option value="Slovakia (Slovensko)">Slovakia (Slovensko)</option>
-          <option value="Slovenia (Slovenija)">Slovenia (Slovenija)</option>
-          <option value="Solomon Islands">Solomon Islands</option>
-          <option value="Somalia (Soomaaliya)">Somalia (Soomaaliya)</option>
-          <option value="South Africa">South Africa</option>
-          <option value="South Georgia &amp; South Sandwich Islands">South Georgia &amp; South Sandwich Islands</option>
-          <option value="South Korea (대한민국)">South Korea (대한민국)</option>
-          <option value="South Sudan (‫جنوب السودان‬‎)">South Sudan (‫جنوب السودان‬‎)</option>
-          <option value="Spain (España)">Spain (España)</option>
-          <option value="Sri Lanka (ශ්‍රී ලංකාව)">Sri Lanka (ශ්‍රී ලංකාව)</option>
-          <option value="St. Barthélemy (Saint-Barthélemy)">St. Barthélemy (Saint-Barthélemy)</option>
-          <option value="St. Helena">St. Helena</option>
-          <option value="St. Kitts &amp; Nevis">St. Kitts &amp; Nevis</option>
-          <option value="St. Lucia">St. Lucia</option>
-          <option value="St. Martin (Saint-Martin)">St. Martin (Saint-Martin)</option>
-          <option value="St. Pierre &amp; Miquelon (Saint-Pierre-et-Miquelon)">St. Pierre &amp; Miquelon (Saint-Pierre-et-Miquelon)</option>
-          <option value="St. Vincent &amp; Grenadines">St. Vincent &amp; Grenadines</option>
-          <option value="Sudan (‫السودان‬‎)">Sudan (‫السودان‬‎)</option>
-          <option value="Suriname">Suriname</option>
-          <option value="Svalbard &amp; Jan Mayen (Svalbard og Jan Mayen)">Svalbard &amp; Jan Mayen (Svalbard og Jan Mayen)</option>
-          <option value="Swaziland">Swaziland</option>
-          <option value="Sweden (Sverige)">Sweden (Sverige)</option>
-          <option value="Switzerland (Schweiz)">Switzerland (Schweiz)</option>
-          <option value="Syria (‫سوريا‬‎)">Syria (‫سوريا‬‎)</option>
-          <option value="Taiwan (台灣)">Taiwan (台灣)</option>
-          <option value="Tajikistan">Tajikistan</option>
-          <option value="Tanzania">Tanzania</option>
-          <option value="Thailand (ไทย)">Thailand (ไทย)</option>
-          <option value="Timor-Leste">Timor-Leste</option>
-          <option value="Togo">Togo</option>
-          <option value="Tokelau">Tokelau</option>
-          <option value="Tonga">Tonga</option>
-          <option value="Trinidad &amp; Tobago">Trinidad &amp; Tobago</option>
-          <option value="Tristan da Cunha">Tristan da Cunha</option>
-          <option value="Tunisia">Tunisia</option>
-          <option value="Turkey (Türkiye)">Turkey (Türkiye)</option>
-          <option value="Turkmenistan">Turkmenistan</option>
-          <option value="Turks &amp; Caicos Islands">Turks &amp; Caicos Islands</option>
-          <option value="Tuvalu">Tuvalu</option>
-          <option value="U.S. Outlying Islands">U.S. Outlying Islands</option>
-          <option value="U.S. Virgin Islands">U.S. Virgin Islands</option>
-          <option value="Uganda">Uganda</option>
-          <option value="Ukraine (Україна)">Ukraine (Україна)</option>
-          <option value="United Arab Emirates (‫الإمارات العربية المتحدة‬‎)">United Arab Emirates (‫الإمارات العربية المتحدة‬‎)</option>
-          <option value="United Kingdom">United Kingdom</option>
-          <option value="Uruguay">Uruguay</option>
-          <option value="Uzbekistan (Oʻzbekiston)">Uzbekistan (Oʻzbekiston)</option>
-          <option value="Vanuatu">Vanuatu</option>
-          <option value="Vatican City (Città del Vaticano)">Vatican City (Città del Vaticano)</option>
-          <option value="Venezuela">Venezuela</option>
-          <option value="Vietnam (Việt Nam)">Vietnam (Việt Nam)</option>
-          <option value="Wallis &amp; Futuna">Wallis &amp; Futuna</option>
-          <option value="Western Sahara (‫الصحراء الغربية‬‎)">Western Sahara (‫الصحراء الغربية‬‎)</option>
-          <option value="Yemen (‫اليمن‬‎)">Yemen (‫اليمن‬‎)</option>
-          <option value="Zambia">Zambia</option>
-          <option value="Zimbabwe">Zimbabwe</option>
-        </select>
-
-        <p style="text-align:left;margin-bottom:0px">If you selected the United States in the previous question, in which states are you looking for an internship/program/job? Please select all that apply. (Hold Control to select multiple options.)</p>
-        <select name="stateChooser[]" id="stateChooser" style="height:10em;" multiple>
-          <option value="AL">Alabama</option>
-          <option value="AK">Alaska</option>
-          <option value="AZ">Arizona</option>
-          <option value="AR">Arkansas</option>
-          <option value="CA">California</option>
-          <option value="CO">Colorado</option>
-          <option value="CT">Connecticut</option>
-          <option value="DE">Delaware</option>
-          <option value="DC">District Of Columbia</option>
-          <option value="FL">Florida</option>
-          <option value="GA">Georgia</option>
-          <option value="HI">Hawaii</option>
-          <option value="ID">Idaho</option>
-          <option value="IL">Illinois</option>
-          <option value="IN">Indiana</option>
-          <option value="IA">Iowa</option>
-          <option value="KS">Kansas</option>
-          <option value="KY">Kentucky</option>
-          <option value="LA">Louisiana</option>
-          <option value="ME">Maine</option>
-          <option value="MD">Maryland</option>
-          <option value="MA">Massachusetts</option>
-          <option value="MI">Michigan</option>
-          <option value="MN">Minnesota</option>
-          <option value="MS">Mississippi</option>
-          <option value="MO">Missouri</option>
-          <option value="MT">Montana</option>
-          <option value="NE">Nebraska</option>
-          <option value="NV">Nevada</option>
-          <option value="NH">New Hampshire</option>
-          <option value="NJ">New Jersey</option>
-          <option value="NM">New Mexico</option>
-          <option value="NY">New York</option>
-          <option value="NC">North Carolina</option>
-          <option value="ND">North Dakota</option>
-          <option value="OH">Ohio</option>
-          <option value="OK">Oklahoma</option>
-          <option value="OR">Oregon</option>
-          <option value="PA">Pennsylvania</option>
-          <option value="RI">Rhode Island</option>
-          <option value="SC">South Carolina</option>
-          <option value="SD">South Dakota</option>
-          <option value="TN">Tennessee</option>
-          <option value="TX">Texas</option>
-          <option value="UT">Utah</option>
-          <option value="VT">Vermont</option>
-          <option value="VA">Virginia</option>
-          <option value="WA">Washington</option>
-          <option value="WV">West Virginia</option>
-          <option value="WI">Wisconsin</option>
-          <option value="WY">Wyoming</option>
+        <p style="text-align:left;margin-bottom:0px">In which cities are you looking for an internship/program/job? Please select all that apply. (Hold Ctrl/Cmd to select multiple options.)</p>
+        <select name="citiesChooser[]" id="citiesChooser" style="height:10em;" multiple>
+          <option value="Atlanta, GA">Atlanta, GA</option>
+          <option value="Austin, TX">Austin, TX</option>
+          <option value="Boston, MA">Boston, MA</option>
+          <option value="Chicago, IL">Chicago, IL</option>
+          <option value="Columbus, OH">Columbus, OH</option>
+          <option value="Dallas, TX">Dallas, TX</option>
+          <option value="Denver, CO">Denver, CO</option>
+          <option value="Houston, TX">Houston, TX</option>
+          <option value="Los Angeles, CA">Los Angeles, CA</option>
+          <option value="Minneapolis, MN">Minneapolis, MN</option>
+          <option value="New York, NY">New York, NY</option>
+          <option value="Orlando, FL">Orlando, FL</option>
+          <option value="Philadelphia, PA">Philadelphia, PA</option>
+          <option value="Phoenix, AZ">Phoenix, AZ</option>
+          <option value="Portland, OR">Portland, OR</option>
+          <option value="Raleigh, NC">Raleigh, NC</option>
+          <option value="Riverside, CA">Riverside, CA</option>
+          <option value="San Antonio, TX">San Antonio, TX</option>
+          <option value="San Diego, CA">San Diego, CA</option>
+          <option value="San Francisco, CA">San Francisco, CA</option>
+          <option value="San Jose, CA">San Jose, CA</option>
+          <option value="Seattle, WA">Seattle, WA</option>
+          <option value="Tampa, FL">Tampa, FL</option>
+          <option value="Washington, D.C.">Washington, D.C.</option>
         </select>
       </div>
 
       <div class="internshipShow" style="display:none">
         <p style="text-align:left;margin-bottom:0px">During which period of the year would you like to have an internship/program? Please select all that apply.</p>
-        <label for="looking">Winter 2016</label><input type="checkbox" id="internshipWinter2016" name="internshipWinter2016" value="<?php vecho('internshipWinter2016'); ?>" />
-        <label for="looking">Spring 2016</label><input type="checkbox" id="internshipSpring2016" name="internshipSpring2016" value="<?php vecho('internshipSpring2016'); ?>" />
-        <label for="looking">Summer 2016</label><input type="checkbox" id="internshipSummer2016" name="internshipSummer2016" value="<?php vecho('internshipSummer2016'); ?>" />
-        <label for="looking">Fall 2016</label><input type="checkbox" id="internshipFall2016" name="internshipFall2016" value="<?php vecho('internshipFall2016'); ?>" />
-        <label for="looking">Winter 2017</label><input type="checkbox" id="internshipWinter2017" name="internshipWinter2017" value="<?php vecho('internshipWinter2017'); ?>" />
-        <label for="looking">Spring 2017</label><input type="checkbox" id="internshipSpring2017" name="internshipSpring2017" value="<?php vecho('internshipSpring2017'); ?>" />
+        <label><input type="checkbox" id="internshipWinter2016" name="internshipWinter2016" value="<?php vecho('internshipWinter2016'); ?>" <?php vchecked('internshipTimes', 'Winter 2016'); ?> />Winter 2016 </label>
+        <label><input type="checkbox" id="internshipSpring2016" name="internshipSpring2016" value="<?php vecho('internshipSpring2016'); ?>" <?php vchecked('internshipTimes', 'Spring 2016'); ?> />Spring 2016 </label>
+        <label><input type="checkbox" id="internshipSummer2016" name="internshipSummer2016" value="<?php vecho('internshipSummer2016'); ?>" <?php vchecked('internshipTimes', 'Summer 2016'); ?> />Summer 2016 </label>
+        <label><input type="checkbox" id="internshipFall2016" name="internshipFall2016" value="<?php vecho('internshipFall2016'); ?>" <?php vchecked('internshipTimes', 'Fall 2016'); ?> />Fall 2016 </label>
+        <label><input type="checkbox" id="internshipWinter2017" name="internshipWinter2017" value="<?php vecho('internshipWinter2017'); ?>" <?php vchecked('internshipTimes', 'Winter 2017'); ?> />Winter 2017 </label>
+        <label><input type="checkbox" id="internshipSpring2017" name="internshipSpring2017" value="<?php vecho('internshipSpring2017'); ?>" <?php vchecked('internshipTimes', 'Spring 2017'); ?> />Spring 2017 </label>
         <br>
       </div>
 
       <div class="fulltimeShow" style="display:none">
         <p style="text-align:left;margin-bottom:0px">When would you like to start your full-time job? Please select all the times during which you can start a job.</p>
-        <label for="looking">Winter 2016</label><input type="checkbox" id="fulltimeWinter2016" name="fulltimeWinter2016" value="<?php vecho('fulltimeWinter2016'); ?>" />
-        <label for="looking">Spring 2016</label><input type="checkbox" id="fulltimeSpring2016" name="fulltimeSpring2016" value="<?php vecho('fulltimeSpring2016'); ?>" />
-        <label for="looking">Summer 2016</label><input type="checkbox" id="fulltimeSummer2016" name="fulltimeSummer2016" value="<?php vecho('fulltimeSummer2016'); ?>" />
-        <label for="looking">Fall 2016</label><input type="checkbox" id="fulltimeFall2016" name="fulltimeFall2016" value="<?php vecho('fulltimeFall2016'); ?>" />
-        <label for="looking">Winter 2017</label><input type="checkbox" id="fulltimeWinter2017" name="fulltimeWinter2017" value="<?php vecho('fulltimeWinter2017'); ?>" />
-        <label for="looking">Spring 2017</label><input type="checkbox" id="fulltimeSpring2017" name="fulltimeSpring2017" value="<?php vecho('fulltimeSpring2017'); ?>" />
-        <br>
+        <label><input type="checkbox" id="fulltimeWinter2016" name="fulltimeWinter2016" value="<?php vecho('fulltimeWinter2016'); ?>" <?php vchecked('fulltimeTimes', 'Winter 2016'); ?> />Winter 2016 </label>
+        <label><input type="checkbox" id="fulltimeSpring2016" name="fulltimeSpring2016" value="<?php vecho('fulltimeSpring2016'); ?>" <?php vchecked('fulltimeTimes', 'Spring 2016'); ?> />Spring 2016 </label>
+        <label><input type="checkbox" id="fulltimeSummer2016" name="fulltimeSummer2016" value="<?php vecho('fulltimeSummer2016'); ?>" <?php vchecked('fulltimeTimes', 'Summer 2016'); ?> />Summer 2016 </label>
+        <label><input type="checkbox" id="fulltimeFall2016" name="fulltimeFall2016" value="<?php vecho('fulltimeFall2016'); ?>" <?php vchecked('fulltimeTimes', 'Fall 2016'); ?> />Fall 2016 </label>
+        <label><input type="checkbox" id="fulltimeWinter2017" name="fulltimeWinter2017" value="<?php vecho('fulltimeWinter2017'); ?>" <?php vchecked('fulltimeTimes', 'Winter 2017'); ?> />Winter 2017 </label>
+        <label><input type="checkbox" id="fulltimeSpring2017" name="fulltimeSpring2017" value="<?php vecho('fulltimeSpring2017'); ?>" <?php vchecked('fulltimeTimes', 'Spring 2017'); ?> />Spring 2017 </label>
+        <br></label>
       </div>
 
       <div class="housingShow" style="display:none">
         <p style="text-align:left;margin-bottom:0px">During which period of the year would you like to have housing (sublet)? Please select all that apply.</p>
-        <label for="looking">Winter 2016</label><input type="checkbox" id="housingWinter2016" name="housingWinter2016" value="<?php vecho('housingWinter2016'); ?>" />
-        <label for="looking">Spring 2016</label><input type="checkbox" id="housingSpring2016" name="housingSpring2016" value="<?php vecho('housingSpring2016'); ?>" />
-        <label for="looking">Summer 2016</label><input type="checkbox" id="housingSummer2016" name="housingSummer2016" value="<?php vecho('housingSummer2016'); ?>" />
-        <label for="looking">Fall 2016</label><input type="checkbox" id="housingFall2016" name="housingFall2016" value="<?php vecho('housingFall2016'); ?>" />
-        <label for="looking">Winter 2017</label><input type="checkbox" id="housingWinter2017" name="housingWinter2017" value="<?php vecho('housingWinter2017'); ?>" />
-        <label for="looking">Spring 2017</label><input type="checkbox" id="housingSpring2017" name="housingSpring2017" value="<?php vecho('housingSpring2017'); ?>" />
+        <label><input type="checkbox" id="housingWinter2016" name="housingWinter2016" value="<?php vecho('housingWinter2016'); ?>" <?php vchecked('housingTimes', 'Winter 2016'); ?> />Winter 2016 </label>
+        <label><input type="checkbox" id="housingSpring2016" name="housingSpring2016" value="<?php vecho('housingSpring2016'); ?>" <?php vchecked('housingTimes', 'Spring 2016'); ?> />Spring 2016 </label>
+        <label><input type="checkbox" id="housingSummer2016" name="housingSummer2016" value="<?php vecho('housingSummer2016'); ?>" <?php vchecked('housingTimes', 'Summer 2016'); ?> />Summer 2016 </label>
+        <label><input type="checkbox" id="housingFall2016" name="housingFall2016" value="<?php vecho('housingFall2016'); ?>" <?php vchecked('housingTimes', 'Fall 2016'); ?> />Fall 2016 </label>
+        <label><input type="checkbox" id="housingWinter2017" name="housingWinter2017" value="<?php vecho('housingWinter2017'); ?>" <?php vchecked('housingTimes', 'Winter 2017'); ?> />Winter 2017 </label>
+        <label><input type="checkbox" id="housingSpring2017" name="housingSpring2017" value="<?php vecho('housingSpring2017'); ?>" <?php vchecked('housingTimes', 'Spring 2017'); ?> />Spring 2017 </label>
         <br>
       </div>
+
+      <?php 
+        vpartial('s3single', array(
+          's3name' => 'photo', 
+          's3title' => 'Upload a profile picture *: ',
+          's3link' => vget('photo')
+        ));
+      ?>
+
+      <?php vnotice(); ?>
 
       <input type="submit" name="register" value="Register" />
     </form>
@@ -682,14 +621,31 @@
 <script type="text/javascript">
 function educationValueChanged() {
   if($('.undergraduate').is(":checked"))
+  {
+    $("#uDegreeChooser").prop('required', true);
+    $("#uYearChooser").prop('required', true);
+    $("#uGraduationMonthChooser").prop('required', true);
+    $("#uGraduationYearChooser").prop('required', true);
+    $("#gDegreeChooser").prop('required', false);
+    $("#gYearChooser").prop('required', false);
+    $("#gGraduationMonthChooser").prop('required', false);
+    $("#gGraduationYearChooser").prop('required', false);
     $(".undergraduateShow").show();
-  else
-    $(".undergraduateShow").hide();
-
-  if($('.graduate').is(":checked"))
-    $(".graduateShow").show();
-  else
     $(".graduateShow").hide();
+  }
+  else
+  {
+    $("#uDegreeChooser").prop('required', false);
+    $("#uYearChooser").prop('required', false);
+    $("#uGraduationMonthChooser").prop('required', false);
+    $("#uGraduationYearChooser").prop('required', false);
+    $("#gDegreeChooser").prop('required', true);
+    $("#gYearChooser").prop('required', true);
+    $("#gGraduationMonthChooser").prop('required', true);
+    $("#gGraduationYearChooser").prop('required', true);
+    $(".graduateShow").show();
+    $(".undergraduateShow").hide();
+  }
 }
 
 function lookingForValueChanged() {
@@ -713,4 +669,13 @@ function lookingForValueChanged() {
     else
       $(".housingShow").hide();
 }
+
+educationValueChanged();
+lookingForValueChanged();
+
+// Restore previously selected items
+var industry = <?php echo json_encode(vget('industry')); ?>;
+$( "#industryChooser" ).val(industry);
+var cities = <?php echo json_encode(vget('cities')); ?>;
+$( "#citiesChooser" ).val(cities);
 </script>

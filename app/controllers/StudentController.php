@@ -85,8 +85,8 @@
       if (isset($data['pass'])) $pass = $data['pass'];
       if (isset($data['pass2'])) $pass2 = $data['pass2'];
       $gender = $data['gender'];
-      $class = clean($data['class']);
-      $school = clean($data['school']);
+      $class = isset($data['class']) ? clean($data['class']) : '';
+      $school = isset($data['school']) ? clean($data['school']) : '';
       $bio = isset($data['bio']) ? clean($data['bio']) : '';
       $photo = '';
       if(isset($data['photo'])) {
@@ -122,68 +122,67 @@
         $graduationMonth = $data['graduateGraduationMonth'];
         $graduationYear = $data['graduateGraduationYear'];
       }
-      $industry = $data['industryChooser'];
-      $countries = $data['countryChooser'];
-      $states = $data['stateChooser'];
+      $major = $data['majorChooser'];
+      $gpa = $data['gpaChooser'];
+      $industry = isset($data['industryChooser']) ? $data['industryChooser'] : array();
+      $cities = isset($data['citiesChooser']) ? $data['citiesChooser'] : array();
       if(is_null($industry))
         $industry = array();
-      if(is_null($countries))
-        $countries = array();
-      if(is_null($states))
-        $states = array();
+      if(is_null($cities))
+        $cities = array();
       $lookingFor = array();
       $internshipTimes = array();
       $fulltimeTimes = array();
       $housingTimes = array();
-      if(!is_null($data['internship'])) {
+      if(isset($data['internship'])) {
         array_push($lookingFor, 'internship');
-        if(!is_null($data['internshipWinter2016']))
+        if(isset($data['internshipWinter2016']))
           array_push($internshipTimes, 'Winter 2016');
-        if(!is_null($data['internshipSpring2016']))
+        if(isset($data['internshipSpring2016']))
           array_push($internshipTimes, 'Spring 2016');
-        if(!is_null($data['internshipSummer2016']))
+        if(isset($data['internshipSummer2016']))
           array_push($internshipTimes, 'Summer 2016');
-        if(!is_null($data['internshipFall2016']))
+        if(isset($data['internshipFall2016']))
           array_push($internshipTimes, 'Fall 2016');
-        if(!is_null($data['internshipWinter2017']))
+        if(isset($data['internshipWinter2017']))
           array_push($internshipTimes, 'Winter 2017');
-        if(!is_null($data['internshipSpring2017']))
+        if(isset($data['internshipSpring2017']))
           array_push($internshipTimes, 'Spring 2017');
       }
-      if(!is_null($data['fulltime'])) {
+      if(isset($data['fulltime'])) {
         array_push($lookingFor, 'fulltime');
-        if(!is_null($data['fulltimeWinter2016']))
+        if(isset($data['fulltimeWinter2016']))
           array_push($fulltimeTimes, 'Winter 2016');
-        if(!is_null($data['fulltimeSpring2016']))
+        if(isset($data['fulltimeSpring2016']))
           array_push($fulltimeTimes, 'Spring 2016');
-        if(!is_null($data['fulltimeSummer2016']))
+        if(isset($data['fulltimeSummer2016']))
           array_push($fulltimeTimes, 'Summer 2016');
-        if(!is_null($data['fulltimeFall2016']))
+        if(isset($data['fulltimeFall2016']))
           array_push($fulltimeTimes, 'Fall 2016');
-        if(!is_null($data['fulltimeWinter2017']))
+        if(isset($data['fulltimeWinter2017']))
           array_push($fulltimeTimes, 'Winter 2017');
-        if(!is_null($data['fulltimeSpring2017']))
+        if(isset($data['fulltimeSpring2017']))
           array_push($fulltimeTimes, 'Spring 2017');
       }
-      if(!is_null($data['housing'])) {
+      if(isset($data['housing'])) {
         array_push($lookingFor, 'housing');
-        if(!is_null($data['housingWinter2016']))
+        if(isset($data['housingWinter2016']))
           array_push($housingTimes, 'Winter 2016');
-        if(!is_null($data['housingSpring2016']))
+        if(isset($data['housingSpring2016']))
           array_push($housingTimes, 'Spring 2016');
-        if(!is_null($data['housingSummer2016']))
+        if(isset($data['housingSummer2016']))
           array_push($housingTimes, 'Summer 2016');
-        if(!is_null($data['housingFall2016']))
+        if(isset($data['housingFall2016']))
           array_push($housingTimes, 'Fall 2016');
-        if(!is_null($data['housingWinter2017']))
+        if(isset($data['housingWinter2017']))
           array_push($housingTimes, 'Winter 2017');
-        if(!is_null($data['housingSpring2017']))
+        if(isset($data['housingSpring2017']))
           array_push($housingTimes, 'Spring 2017');
       }
 
       $registration = array('education' => $education, 'degree' => $degree, 'year' => $year, 
         'graduationMonth' => $graduationMonth, 'graduationYear' => $graduationYear, 
-        'industry' => $industry, 'countries' => $countries, 'states' => $states, 
+        'major' => $major, 'gpa' => $gpa, 'industry' => $industry, 'cities' => $cities,
         'lookingFor' => $lookingFor, 'internshipTimes' => $internshipTimes, 
         'fulltimeTimes' => $fulltimeTimes, 'housingTimes' => $housingTimes);
 
@@ -478,10 +477,12 @@
           // Params to vars
           extract($data = $this->data($params));
           $registration = self::registrationData($params);
+          $data = array_merge($data, $registration);
 
 
           $this->validate($pass == $pass2, $err, 'password mismatch');
           $this->validate(strlen($name) > 0, $err, 'name empty');
+          $this->validate(!empty($registration['lookingFor']), $err, 'must select at least one checkbox');
           $this->validate(strlen($photo) > 0,
             $err, 'must have profile picture');
 
@@ -491,8 +492,8 @@
             $entry['name'] = $name;
             $entry['pass'] = $pass;
             // $entry['orig'] = $pass2;
-            $entry['class'] = $class;
-            $entry['school'] = $school;
+            $entry['class'] = $registration['graduationYear'];
+            $entry['school'] = "";
             $entry['time'] = time();
             $entry['gender'] = $gender;
             $entry['photo'] = $photo;
@@ -525,10 +526,12 @@
       // Validations
       $this->startValidations();
 
-      if (!isset($_POST['edit'])) { $this->render('student/form', $this->data($me)); return; }
+      if (!isset($_POST['edit'])) { $this->render('student/form', array_merge($this->data($me), $me['registration'])); return; }
 
       // Params to vars
       extract($data = $this->data($params));
+      $registration = self::registrationData($params);
+      $data = array_merge($data, $registration);
 
       $this->validate(strlen($photo) > 0,
         $err, 'must have profile picture');
