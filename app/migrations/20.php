@@ -1,8 +1,7 @@
 <?php
   function countUnread($id) {
-    global $MMessage;
     $messages = array_reverse(iterator_to_array(
-        $MMessage->findByParticipant($id->{'$id'})));
+        MessageModel::findByParticipant($id->{'$id'})));
     $unread = 0;
     foreach ($messages as $m) {
       $reply = array_pop($m['replies']);
@@ -17,16 +16,14 @@
     return $unread;
   }
 
-  global $MStudent;
-
-  $students = $MStudent->getAll();
+  $students = StudentModel::getAll();
 
   foreach ($students as $student) {
     if (!isset($student['unread'])) {
       $studentId = $student['_id'];
       $student['unread'] = countUnread($studentId);
+      StudentModel::save($student);
     }
-    $MStudent->save($student);
   }
 
   $recruiters = RecruiterModel::getAll();

@@ -110,8 +110,7 @@
         $link = $opt[1];
         if (!$states[$opt[2]]) continue;
         if ($opt[0] == "Messages") {
-          global $MMessage;
-          $num = $MMessage->getNumUnread($_SESSION['_id']->{'$id'});
+          $num = MessageModel::getNumUnread($_SESSION['_id']);
           if ($num > 0) {
             echo "<a href=\"$link\"><opt>$text <span class=\"highlight\">($num)</span></opt></a>";
           } else {

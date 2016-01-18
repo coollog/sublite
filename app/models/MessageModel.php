@@ -28,7 +28,7 @@
       ));
       foreach ($entry['participants'] as $participant) {
         if ($participant != $from) {
-          $this->incrementUnread($participant);
+          $this->incrementUnread(new MongoId($participant));
         }
       }
       self::$collection->save($entry);
@@ -55,34 +55,33 @@
       return ($this->get($id) !== NULL);
     }
 
-    function getNumUnread($studentOrRecruiterId) {
+    function getNumUnread(MongoId $studentOrRecruiterId) {
       if (StudentModel::exists($studentOrRecruiterId)) {
-        return StudentModel::getNumUnread(new MongoId($studentOrRecruiterId));
+        return StudentModel::getNumUnread($studentOrRecruiterId);
       } else if (RecruiterModel::IDexists($studentOrRecruiterId)) {
-        return RecruiterModel::getNumUnread(new MongoId($studentOrRecruiterId));
+        return RecruiterModel::getNumUnread($studentOrRecruiterId);
       } else {
-        // This shouldn't happen!
-        return -1;
+        invariant(false, 'Invalid student or recruiter');
       }
     }
 
-    function incrementUnread($studentOrRecruiterId) {
+    function incrementUnread(MongoId $studentOrRecruiterId) {
       if (StudentModel::exists($studentOrRecruiterId)) {
-        StudentModel::incrementUnread(new MongoId($studentOrRecruiterId));
+        StudentModel::incrementUnread($studentOrRecruiterId);
       } else if (RecruiterModel::IDexists($studentOrRecruiterId)) {
-        RecruiterModel::incrementUnread(new MongoId($studentOrRecruiterId));
+        RecruiterModel::incrementUnread($studentOrRecruiterId);
       } else {
-        // This shouldn't happen!
+        invariant(false, 'Invalid student or recruiter');
       }
     }
 
-    function decrementUnread($studentOrRecruiterId) {
+    function decrementUnread(MongoId $studentOrRecruiterId) {
       if (StudentModel::exists($studentOrRecruiterId)) {
-        StudentModel::decrementUnread(new MongoId($studentOrRecruiterId));
+        StudentModel::decrementUnread($studentOrRecruiterId);
       } else if (RecruiterModel::IDexists($studentOrRecruiterId)) {
-        RecruiterModel::decrementUnread(new MongoId($studentOrRecruiterId));
+        RecruiterModel::decrementUnread($studentOrRecruiterId);
       } else {
-        // This shouldn't happen!
+        invariant(false, 'Invalid student or recruiter');
       }
     }
 

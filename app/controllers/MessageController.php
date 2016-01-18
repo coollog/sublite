@@ -109,7 +109,7 @@
         $messages = array_reverse(iterator_to_array($MMessage->findByParticipant($_SESSION['_id']->{'$id'})));
 
         $replies = array();
-        $unread = $MMessage->getNumUnread($_SESSION['_id']->{'$id'});
+        $unread = $MMessage->getNumUnread($_SESSION['_id']);
         foreach ($messages as $m) {
           $reply = array_pop($m['replies']);
           $reply['_id'] = $m['_id'];
@@ -185,7 +185,7 @@
         for ($i = 0; $i < $repliesn; $i ++) {
           if (strcmp($entry['replies'][$i]['from'], $_SESSION['_id']) != 0) {
             if (!$entry['replies'][$i]['read']) {
-              $MMessage->decrementUnread($_SESSION['_id']->{'$id'});
+              $MMessage->decrementUnread($_SESSION['_id']);
             }
             $entry['replies'][$i]['read'] = true;
           }
