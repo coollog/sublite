@@ -24,7 +24,7 @@
 
       <div class="undergraduateShow">
         <p style="text-align:left;margin-bottom:0px">What degree are you pursuing or have already attained?*</p>
-        <select name="undergraduateDegree" id="uDegreeChooser" type="singleselect" required>
+        <select class="undergraduateChoosers" name="undergraduateDegree" id="uDegreeChooser" type="singleselect" required>
           <?php if(vget('education') == 'undergraduate') vecho('degree', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
           <option value="Bachelor of Arts">Bachelor of Arts</option>
           <option value="Bachelor of Science">Bachelor of Science</option>
@@ -33,7 +33,7 @@
         </select>
 
         <p style="text-align:left;margin-bottom:0px">What year are you?*</p>
-        <select name="undergraduateYear" id="uYearChooser" type="singleselect" required>
+        <select class="undergraduateChoosers" name="undergraduateYear" id="uYearChooser" type="singleselect" required>
           <?php if(vget('education') == 'undergraduate') vecho('year', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
           <option value="Freshman">Freshman</option>
           <option value="Sophomore">Sophomore</option>
@@ -43,7 +43,7 @@
         </select>
 
         <p style="text-align:left;margin-bottom:0px">What is the month and year of your (projected) graduation?*</p>
-        <select name="undergraduateGraduationMonth" id="uGraduationMonthChooser" type="singleselect" required>
+        <select class="undergraduateChoosers" name="undergraduateGraduationMonth" id="uGraduationMonthChooser" type="singleselect" required>
           <?php if(vget('education') == 'undergraduate') vecho('graduationMonth', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
           <option value="January">January</option>
           <option value="February">February</option>
@@ -58,7 +58,7 @@
           <option value="November">November</option>
           <option value="December">December</option>
         </select>
-        <select name="undergraduateGraduationYear" id="uGraduationYearChooser" type="singleselect" required>
+        <select class="undergraduateChoosers" name="undergraduateGraduationYear" id="uGraduationYearChooser" type="singleselect" required>
           <?php if(vget('education') == 'undergraduate') vecho('graduationYear', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
           <option value="2000">2000</option>
           <option value="2001">2001</option>
@@ -91,7 +91,7 @@
 
       <div class="graduateShow" style="display:none">
         <p style="text-align:left;margin-bottom:0px">What degree are you pursuing or have already attained?*</p>
-        <select name="graduateDegree" id="gDegreeChooser" type="singleselect" required>
+        <select class="graduateChoosers" name="graduateDegree" id="gDegreeChooser" type="singleselect" required>
           <?php if(vget('education') == 'graduate') vecho('degree', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
           <option value="Masters (M.A)">Masters (M.A)</option>
           <option value="Masters (M.S)">Masters (M.S)</option>
@@ -103,7 +103,7 @@
         </select>
 
         <p style="text-align:left;margin-bottom:0px">What year are you in your program?*</p>
-        <select name="graduateYear" id="gYearChooser" type="singleselect" required>
+        <select class="graduateChoosers" name="graduateYear" id="gYearChooser" type="singleselect" required>
           <?php if(vget('education') == 'graduate') vecho('year', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
           <option value="First year">First year</option>
           <option value="Second year">Second year</option>
@@ -118,7 +118,7 @@
         </select>
 
         <p style="text-align:left;margin-bottom:0px">What is the month and year of your (projected) graduation?*</p>
-        <select name="graduateGraduationMonth" id="gGraduationMonthChooser" type="singleselect" required>
+        <select class="graduateChoosers" name="graduateGraduationMonth" id="gGraduationMonthChooser" type="singleselect" required>
           <?php if(vget('education') == 'graduate') vecho('graduationMonth', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
           <option value="January">January</option>
           <option value="February">February</option>
@@ -133,7 +133,7 @@
           <option value="November">November</option>
           <option value="December">December</option>
         </select>
-        <select name="graduateGraduationYear" id="gGraduationYearChooser" type="singleselect" required>
+        <select class="graduateChoosers" name="graduateGraduationYear" id="gGraduationYearChooser" type="singleselect" required>
           <?php if(vget('education') == 'graduate') vecho('graduationYear', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
           <option value="2000">2000</option>
           <option value="2001">2001</option>
@@ -383,9 +383,9 @@
       </select>
 
       <p style="text-align:left;margin-bottom:0px">What are you looking for? Please select at least one.* <br> Your answers to the following will help us find better opportunities for you.</p>
-      <label><input class="internship" onchange="lookingForValueChanged()" type="checkbox" id="internship" name="internship" value="<?php vecho('internship'); ?>" <?php vchecked('lookingFor', 'internship'); ?> />Internship </label>
-      <label><input class="fulltime" onchange="lookingForValueChanged()" type="checkbox" id="fulltime" name="fulltime" value="<?php vecho('fulltime'); ?>" <?php vchecked('lookingFor', 'fulltime'); ?> />Full-Time </label>
-      <label><input class="housing" onchange="lookingForValueChanged()" type="checkbox" id="housing" name="housing" value="<?php vecho('housing'); ?>" <?php vchecked('lookingFor', 'housing'); ?> />Housing </label>
+      <label><input class="internship opportunities" data-related-item="internshipShow" onchange="lookingForValueChanged()" type="checkbox" id="internship" name="internship" value="<?php vecho('internship'); ?>" <?php vchecked('lookingFor', 'internship'); ?> />Internship </label>
+      <label><input class="fulltime opportunities" data-related-item="fulltimeShow" onchange="lookingForValueChanged()" type="checkbox" id="fulltime" name="fulltime" value="<?php vecho('fulltime'); ?>" <?php vchecked('lookingFor', 'fulltime'); ?> />Full-Time </label>
+      <label><input class="housing opportunities" data-related-item="housingShow" onchange="lookingForValueChanged()" type="checkbox" id="housing" name="housing" value="<?php vecho('housing'); ?>" <?php vchecked('lookingFor', 'housing'); ?> />Housing </label>
       <br>
 
       <div class="jobShow" style="display:none">
@@ -622,27 +622,15 @@
 function educationValueChanged() {
   if($('.undergraduate').is(":checked"))
   {
-    $("#uDegreeChooser").prop('required', true);
-    $("#uYearChooser").prop('required', true);
-    $("#uGraduationMonthChooser").prop('required', true);
-    $("#uGraduationYearChooser").prop('required', true);
-    $("#gDegreeChooser").prop('required', false);
-    $("#gYearChooser").prop('required', false);
-    $("#gGraduationMonthChooser").prop('required', false);
-    $("#gGraduationYearChooser").prop('required', false);
+    $(".undergraduateChoosers").prop('required', true);
+    $(".graduateChoosers").prop('required', false);
     $(".undergraduateShow").show();
     $(".graduateShow").hide();
   }
   else
   {
-    $("#uDegreeChooser").prop('required', false);
-    $("#uYearChooser").prop('required', false);
-    $("#uGraduationMonthChooser").prop('required', false);
-    $("#uGraduationYearChooser").prop('required', false);
-    $("#gDegreeChooser").prop('required', true);
-    $("#gYearChooser").prop('required', true);
-    $("#gGraduationMonthChooser").prop('required', true);
-    $("#gGraduationYearChooser").prop('required', true);
+    $(".undergraduateChoosers").prop('required', false);
+    $(".graduateChoosers").prop('required', true);
     $(".graduateShow").show();
     $(".undergraduateShow").hide();
   }
@@ -654,28 +642,26 @@ function lookingForValueChanged() {
     else
       $(".jobShow").hide();
 
-    if($('.internship').is(":checked"))   
-      $(".internshipShow").show();
-    else
-      $(".internshipShow").hide();
-
-    if($('.fulltime').is(":checked"))   
-      $(".fulltimeShow").show();
-    else
-      $(".fulltimeShow").hide();
-
-    if($('.housing').is(":checked"))   
-      $(".housingShow").show();
-    else
-      $(".housingShow").hide();
+    $('.opportunities').each(evaluate);
 }
 
 educationValueChanged();
 lookingForValueChanged();
 
+function evaluate(){
+    var item = $(this);
+    var relatedItem = $("." + item.attr("data-related-item")).parent();
+   
+    if(item.is(":checked")){
+        relatedItem.show();
+    } else {
+        relatedItem.hide();   
+    }
+}
+
 // Restore previously selected items
-var industry = <?php echo json_encode(vget('industry')); ?>;
+var industry = <?php echo toJSON(vget('industry')); ?>;
 $( "#industryChooser" ).val(industry);
-var cities = <?php echo json_encode(vget('cities')); ?>;
+var cities = <?php echo toJSON(vget('cities')); ?>;
 $( "#citiesChooser" ).val(cities);
 </script>
