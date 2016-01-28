@@ -642,13 +642,13 @@ function lookingForValueChanged() {
     else
       $(".jobShow").hide();
 
-    $('.opportunities').each(evaluate);
+    $('.opportunities').each(evaluateRelatedItems);
 }
 
 educationValueChanged();
 lookingForValueChanged();
 
-function evaluate(){
+function evaluateRelatedItems(){
     var item = $(this);
     var relatedItem = $("." + item.attr("data-related-item")).parent();
    
