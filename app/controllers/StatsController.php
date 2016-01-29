@@ -5,14 +5,14 @@
 
     function loadStats() {
       $updateArray = self::update();
-      $recruiterArray = self::recruiters(); 
-      $studentArray = self::students(); 
+      $recruiterArray = self::recruiters();
+      $studentArray = self::students();
       $confirmedStudentArray = self::confirmedStudents();
-      $missingRecruiterArray = self::missingrecruiter(); 
-      $subletsended2014Array = self::subletsended2014(); 
-      $unknownSchoolsArray = self::unknownschools(); 
-      $cumulativeArray = self::cumulative(); 
-      $getMessageParticipantsArray = self::getMessageParticipants(); 
+      $missingRecruiterArray = self::missingrecruiter();
+      $subletsended2014Array = self::subletsended2014();
+      $unknownSchoolsArray = self::unknownschools();
+      $cumulativeArray = self::cumulative();
+      $getMessageParticipantsArray = self::getMessageParticipants();
 
       $toRender = [
         "updateArray" => $updateArray,
@@ -81,19 +81,19 @@
           } else {
             $info['company'] = $recruiter['company'];
           }
-          
+
         }
         else $info['company'] = 'no company';
         $info['dateJoined'] = fdate($recruiter['_id']->getTimestamp());
 
         if (in_array($id, $rids)) { // recruiters who have posted at least one job and have a company profile
-          $info['postedJob'] = 'YES'; 
+          $info['postedJob'] = 'YES';
           $info['madeCompany'] = 'YES';
           $info['approved'] = 'YES';
         } else {// recruiters who have not posted a job
           $info['postedJob'] = 'NO';
           if (MongoID::isValid($recruiter['company'])) { // recruiters who have a company profile
-            $info['madeCompany'] = 'YES'; 
+            $info['madeCompany'] = 'YES';
             $info['approved'] = 'YES';
           } else { // recruiters who don't have a company profile
             $info['madeCompany'] = 'NO';
