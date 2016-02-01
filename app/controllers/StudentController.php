@@ -136,50 +136,30 @@
       $internshipTimes = array();
       $fulltimeTimes = array();
       $housingTimes = array();
+      $seasons = array('Winter 2016', 'Spring 2016', 'Summer 2016', 'Fall 2016', 'Winter 2017', 'Spring 2017');
       if(isset($data['internship'])) {
         array_push($lookingFor, 'internship');
-        if(isset($data['internshipWinter2016']))
-          array_push($internshipTimes, 'Winter 2016');
-        if(isset($data['internshipSpring2016']))
-          array_push($internshipTimes, 'Spring 2016');
-        if(isset($data['internshipSummer2016']))
-          array_push($internshipTimes, 'Summer 2016');
-        if(isset($data['internshipFall2016']))
-          array_push($internshipTimes, 'Fall 2016');
-        if(isset($data['internshipWinter2017']))
-          array_push($internshipTimes, 'Winter 2017');
-        if(isset($data['internshipSpring2017']))
-          array_push($internshipTimes, 'Spring 2017');
+        $internshipSeasons = array_map(function ($season) {return 'internship' . str_replace(' ', '', $season);}, $seasons);
+        for($i = 0; $i < count($seasons); $i++) {
+          if(isset($data[$internshipSeasons[$i]]))
+            array_push($internshipTimes, $seasons[$i]);
+        }
       }
       if(isset($data['fulltime'])) {
         array_push($lookingFor, 'fulltime');
-        if(isset($data['fulltimeWinter2016']))
-          array_push($fulltimeTimes, 'Winter 2016');
-        if(isset($data['fulltimeSpring2016']))
-          array_push($fulltimeTimes, 'Spring 2016');
-        if(isset($data['fulltimeSummer2016']))
-          array_push($fulltimeTimes, 'Summer 2016');
-        if(isset($data['fulltimeFall2016']))
-          array_push($fulltimeTimes, 'Fall 2016');
-        if(isset($data['fulltimeWinter2017']))
-          array_push($fulltimeTimes, 'Winter 2017');
-        if(isset($data['fulltimeSpring2017']))
-          array_push($fulltimeTimes, 'Spring 2017');
+        $fulltimeSeasons = array_map(function ($season) {return 'fulltime' . str_replace(' ', '', $season);}, $seasons);
+        for($i = 0; $i < count($seasons); $i++) {
+          if(isset($data[$fulltimeSeasons[$i]]))
+            array_push($fulltimeTimes, $seasons[$i]);
+        }
       }
       if(isset($data['housing'])) {
         array_push($lookingFor, 'housing');
-        if(isset($data['housingWinter2016']))
-          array_push($housingTimes, 'Winter 2016');
-        if(isset($data['housingSpring2016']))
-          array_push($housingTimes, 'Spring 2016');
-        if(isset($data['housingSummer2016']))
-          array_push($housingTimes, 'Summer 2016');
-        if(isset($data['housingFall2016']))
-          array_push($housingTimes, 'Fall 2016');
-        if(isset($data['housingWinter2017']))
-          array_push($housingTimes, 'Winter 2017');
-        if(isset($data['housingSpring2017']))
-          array_push($housingTimes, 'Spring 2017');
+        $housingSeasons = array_map(function ($season) {return 'housing' . str_replace(' ', '', $season);}, $seasons);
+        for($i = 0; $i < count($seasons); $i++) {
+          if(isset($data[$housingSeasons[$i]]))
+            array_push($housingTimes, $seasons[$i]);
+        }
       }
 
       $registration = array('education' => $education, 'degree' => $degree, 'year' => $year,

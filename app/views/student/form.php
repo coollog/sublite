@@ -570,36 +570,55 @@
         </select>
       </div>
 
+      <?php
+        $seasons = array('Winter 2016', 'Spring 2016', 'Summer 2016', 'Fall 2016', 'Winter 2017', 'Spring 2017');
+        $internshipSeasons = array_map(function ($season) {return 'internship' . str_replace(' ', '', $season);}, $seasons);
+        $fulltimeSeasons = array_map(function ($season) {return 'fulltime' . str_replace(' ', '', $season);}, $seasons);
+        $housingSeasons = array_map(function ($season) {return 'housing' . str_replace(' ', '', $season);}, $seasons);
+      ?>
+
       <div class="internshipShow" style="display:none">
         <p style="text-align:left;margin-bottom:0px">During which period of the year would you like to have an internship/program? Please select all that apply.</p>
-        <label><input type="checkbox" id="internshipWinter2016" name="internshipWinter2016" value="<?php vecho('internshipWinter2016'); ?>" <?php vchecked('internshipTimes', 'Winter 2016'); ?> />Winter 2016 </label>
-        <label><input type="checkbox" id="internshipSpring2016" name="internshipSpring2016" value="<?php vecho('internshipSpring2016'); ?>" <?php vchecked('internshipTimes', 'Spring 2016'); ?> />Spring 2016 </label>
-        <label><input type="checkbox" id="internshipSummer2016" name="internshipSummer2016" value="<?php vecho('internshipSummer2016'); ?>" <?php vchecked('internshipTimes', 'Summer 2016'); ?> />Summer 2016 </label>
-        <label><input type="checkbox" id="internshipFall2016" name="internshipFall2016" value="<?php vecho('internshipFall2016'); ?>" <?php vchecked('internshipTimes', 'Fall 2016'); ?> />Fall 2016 </label>
-        <label><input type="checkbox" id="internshipWinter2017" name="internshipWinter2017" value="<?php vecho('internshipWinter2017'); ?>" <?php vchecked('internshipTimes', 'Winter 2017'); ?> />Winter 2017 </label>
-        <label><input type="checkbox" id="internshipSpring2017" name="internshipSpring2017" value="<?php vecho('internshipSpring2017'); ?>" <?php vchecked('internshipTimes', 'Spring 2017'); ?> />Spring 2017 </label>
+        <?php
+          for($i = 0; $i < count($seasons); $i++) {
+            ob_start();
+            vchecked('internshipTimes', $seasons[$i]);
+            $checked = ob_get_contents();
+            ob_end_clean();
+
+            echo "<label><input type=\"checkbox\" id=\"" . $internshipSeasons[$i] . "\" name=\"" . $internshipSeasons[$i] . "\" " . " " . $checked . " />" . $seasons[$i] . " </label>";
+          }
+        ?>
         <br>
       </div>
 
       <div class="fulltimeShow" style="display:none">
         <p style="text-align:left;margin-bottom:0px">When would you like to start your full-time job? Please select all the times during which you can start a job.</p>
-        <label><input type="checkbox" id="fulltimeWinter2016" name="fulltimeWinter2016" value="<?php vecho('fulltimeWinter2016'); ?>" <?php vchecked('fulltimeTimes', 'Winter 2016'); ?> />Winter 2016 </label>
-        <label><input type="checkbox" id="fulltimeSpring2016" name="fulltimeSpring2016" value="<?php vecho('fulltimeSpring2016'); ?>" <?php vchecked('fulltimeTimes', 'Spring 2016'); ?> />Spring 2016 </label>
-        <label><input type="checkbox" id="fulltimeSummer2016" name="fulltimeSummer2016" value="<?php vecho('fulltimeSummer2016'); ?>" <?php vchecked('fulltimeTimes', 'Summer 2016'); ?> />Summer 2016 </label>
-        <label><input type="checkbox" id="fulltimeFall2016" name="fulltimeFall2016" value="<?php vecho('fulltimeFall2016'); ?>" <?php vchecked('fulltimeTimes', 'Fall 2016'); ?> />Fall 2016 </label>
-        <label><input type="checkbox" id="fulltimeWinter2017" name="fulltimeWinter2017" value="<?php vecho('fulltimeWinter2017'); ?>" <?php vchecked('fulltimeTimes', 'Winter 2017'); ?> />Winter 2017 </label>
-        <label><input type="checkbox" id="fulltimeSpring2017" name="fulltimeSpring2017" value="<?php vecho('fulltimeSpring2017'); ?>" <?php vchecked('fulltimeTimes', 'Spring 2017'); ?> />Spring 2017 </label>
-        <br></label>
+        <?php
+          for($i = 0; $i < count($seasons); $i++) {
+            ob_start();
+            vchecked('fulltimeTimes', $seasons[$i]);
+            $checked = ob_get_contents();
+            ob_end_clean();
+
+            echo "<label><input type=\"checkbox\" id=\"" . $fulltimeSeasons[$i] . "\" name=\"" . $fulltimeSeasons[$i] . "\" " . " " . $checked . " />" . $seasons[$i] . " </label>";
+          }
+        ?>
+        <br>
       </div>
 
       <div class="housingShow" style="display:none">
         <p style="text-align:left;margin-bottom:0px">During which period of the year would you like to have housing (sublet)? Please select all that apply.</p>
-        <label><input type="checkbox" id="housingWinter2016" name="housingWinter2016" value="<?php vecho('housingWinter2016'); ?>" <?php vchecked('housingTimes', 'Winter 2016'); ?> />Winter 2016 </label>
-        <label><input type="checkbox" id="housingSpring2016" name="housingSpring2016" value="<?php vecho('housingSpring2016'); ?>" <?php vchecked('housingTimes', 'Spring 2016'); ?> />Spring 2016 </label>
-        <label><input type="checkbox" id="housingSummer2016" name="housingSummer2016" value="<?php vecho('housingSummer2016'); ?>" <?php vchecked('housingTimes', 'Summer 2016'); ?> />Summer 2016 </label>
-        <label><input type="checkbox" id="housingFall2016" name="housingFall2016" value="<?php vecho('housingFall2016'); ?>" <?php vchecked('housingTimes', 'Fall 2016'); ?> />Fall 2016 </label>
-        <label><input type="checkbox" id="housingWinter2017" name="housingWinter2017" value="<?php vecho('housingWinter2017'); ?>" <?php vchecked('housingTimes', 'Winter 2017'); ?> />Winter 2017 </label>
-        <label><input type="checkbox" id="housingSpring2017" name="housingSpring2017" value="<?php vecho('housingSpring2017'); ?>" <?php vchecked('housingTimes', 'Spring 2017'); ?> />Spring 2017 </label>
+        <?php
+          for($i = 0; $i < count($seasons); $i++) {
+            ob_start();
+            vchecked('housingTimes', $seasons[$i]);
+            $checked = ob_get_contents();
+            ob_end_clean();
+
+            echo "<label><input type=\"checkbox\" id=\"" . $housingSeasons[$i] . "\" name=\"" . $housingSeasons[$i] . "\" " . " " . $checked . " />" . $seasons[$i] . " </label>";
+          }
+        ?>
         <br>
       </div>
 
