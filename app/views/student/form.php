@@ -7,7 +7,10 @@
 
       <div class="form-slider"><label for="name">Full Name</label><input type="text" id="name" name="name" value="<?php vecho('name'); ?>" maxlength="100" required /></div>
 
-      <p style="text-align:left;margin-bottom:0px">What is your gender?*</p>
+      <div class="form-slider"><label for="class">Class Year</label><input type="text" id="class" name="class" value="<?php vecho('class'); ?>" /></div>
+      <div class="form-slider"><label for="school">School</label><input type="text" id="name" name="school" value="<?php vecho('school'); ?>" /></div>
+
+      <p style="text-align:left;margin-bottom:0px;margin-top:0px">What is your gender?*</p>
       <select id="gender" name="gender" required>
         <?php vecho('gender', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); ?>
         <option value="Male">Male</option>
@@ -376,7 +379,7 @@
         <option value ="2.51-3.00">2.51-3.00</option>
         <option value ="2.01-2.50">2.01-2.50</option>
         <option value ="Below 2">Below 2</option>
-        <option value ="Undisclosed">I prefer not to say</option>
+        <option value ="I prefer not to say">I prefer not to say</option>
       </select>
 
       <p style="text-align:left;margin-bottom:0px">What are you looking for? Please select at least one.* <br> Your answers to the following will help us find better opportunities for you.</p>
@@ -393,11 +396,11 @@
           <option value="Alternative Dispute Resolution">Alternative Dispute Resolution</option>
           <option value="Alternative Medicine">Alternative Medicine</option>
           <option value="Animation">Animation</option>
-          <option value="Apparel &amp; Fashion">Apparel &amp; Fashion</option>
-          <option value="Architecture &amp; Planning">Architecture &amp; Planning</option>
+          <option value="Apparel and Fashion">Apparel and Fashion</option>
+          <option value="Architecture and Planning">Architecture and Planning</option>
           <option value="Arts and Crafts">Arts and Crafts</option>
           <option value="Automotive">Automotive</option>
-          <option value="Aviation &amp; Aerospace">Aviation &amp; Aerospace</option>
+          <option value="Aviation and Aerospace">Aviation and Aerospace</option>
           <option value="Banking">Banking</option>
           <option value="Biotechnology">Biotechnology</option>
           <option value="Broadcast Media">Broadcast Media</option>
@@ -405,10 +408,10 @@
           <option value="Business Supplies and Equipment">Business Supplies and Equipment</option>
           <option value="Capital Markets">Capital Markets</option>
           <option value="Chemicals">Chemicals</option>
-          <option value="Civic &amp; Social Organization">Civic &amp; Social Organization</option>
+          <option value="Civic and Social Organization">Civic and Social Organization</option>
           <option value="Civil Engineering">Civil Engineering</option>
           <option value="Commercial Real Estate">Commercial Real Estate</option>
-          <option value="Computer &amp; Network Security">Computer &amp; Network Security</option>
+          <option value="Computer and Network Security">Computer and Network Security</option>
           <option value="Computer Games">Computer Games</option>
           <option value="Computer Hardware">Computer Hardware</option>
           <option value="Computer Networking">Computer Networking</option>
@@ -419,7 +422,7 @@
           <option value="Consumer Services">Consumer Services</option>
           <option value="Cosmetics">Cosmetics</option>
           <option value="Dairy">Dairy</option>
-          <option value="Defense &amp; Space">Defense &amp; Space</option>
+          <option value="Defense and Space">Defense and Space</option>
           <option value="Design">Design</option>
           <option value="Education Management">Education Management</option>
           <option value="E-Learning">E-Learning</option>
@@ -434,22 +437,22 @@
           <option value="Financial Services">Financial Services</option>
           <option value="Fine Art">Fine Art</option>
           <option value="Fishery">Fishery</option>
-          <option value="Food &amp; Beverages">Food &amp; Beverages</option>
+          <option value="Food and Beverages">Food and Beverages</option>
           <option value="Food Production">Food Production</option>
           <option value="Fund-Raising">Fund-Raising</option>
           <option value="Furniture">Furniture</option>
-          <option value="Gambling &amp; Casinos">Gambling &amp; Casinos</option>
-          <option value="Glass, Ceramics &amp; Concrete">Glass, Ceramics &amp; Concrete</option>
+          <option value="Gambling and Casinos">Gambling and Casinos</option>
+          <option value="Glass, Ceramics and Concrete">Glass, Ceramics and Concrete</option>
           <option value="Government Administration">Government Administration</option>
           <option value="Government Relations">Government Relations</option>
           <option value="Graphic Design">Graphic Design</option>
           <option value="Health, Wellness and Fitness">Health, Wellness and Fitness</option>
           <option value="Higher Education">Higher Education</option>
-          <option value="Hospital &amp; Health Care">Hospital &amp; Health Care</option>
+          <option value="Hospital and Health Care">Hospital and Health Care</option>
           <option value="Hospitality">Hospitality</option>
           <option value="Human Resources">Human Resources</option>
           <option value="Import and Export">Import and Export</option>
-          <option value="Individual &amp; Family Services">Individual &amp; Family Services</option>
+          <option value="Individual and Family Services">Individual and Family Services</option>
           <option value="Industrial Automation">Industrial Automation</option>
           <option value="Information Services">Information Services</option>
           <option value="Information Technology and Services">Information Technology and Services</option>
@@ -464,10 +467,10 @@
           <option value="Law Practice">Law Practice</option>
           <option value="Legal Services">Legal Services</option>
           <option value="Legislative Office">Legislative Office</option>
-          <option value="Leisure, Travel &amp; Tourism">Leisure, Travel &amp; Tourism</option>
+          <option value="Leisure, Travel and Tourism">Leisure, Travel and Tourism</option>
           <option value="Libraries">Libraries</option>
           <option value="Logistics and Supply Chain">Logistics and Supply Chain</option>
-          <option value="Luxury Goods &amp; Jewelry">Luxury Goods &amp; Jewelry</option>
+          <option value="Luxury Goods and Jewelry">Luxury Goods and Jewelry</option>
           <option value="Machinery">Machinery</option>
           <option value="Management Consulting">Management Consulting</option>
           <option value="Maritime">Maritime</option>
@@ -479,19 +482,19 @@
           <option value="Medical Practice">Medical Practice</option>
           <option value="Mental Health Care">Mental Health Care</option>
           <option value="Military">Military</option>
-          <option value="Mining &amp; Metals">Mining &amp; Metals</option>
+          <option value="Mining and Metals">Mining and Metals</option>
           <option value="Motion Pictures and Film">Motion Pictures and Film</option>
           <option value="Museums and Institutions">Museums and Institutions</option>
           <option value="Music">Music</option>
           <option value="Nanotechnology">Nanotechnology</option>
           <option value="Newspapers">Newspapers</option>
           <option value="Nonprofit Organization Management">Nonprofit Organization Management</option>
-          <option value="Oil &amp; Energy">Oil &amp; Energy</option>
+          <option value="Oil and Energy">Oil and Energy</option>
           <option value="Online Media">Online Media</option>
           <option value="Outsourcing/Offshoring">Outsourcing/Offshoring</option>
           <option value="Package/Freight Delivery">Package/Freight Delivery</option>
           <option value="Packaging and Containers">Packaging and Containers</option>
-          <option value="Paper &amp; Forest Products">Paper &amp; Forest Products</option>
+          <option value="Paper and Forest Products">Paper and Forest Products</option>
           <option value="Performing Arts">Performing Arts</option>
           <option value="Pharmaceuticals">Pharmaceuticals</option>
           <option value="Philanthropy">Philanthropy</option>
@@ -500,7 +503,7 @@
           <option value="Political Organization">Political Organization</option>
           <option value="Primary/Secondary Education">Primary/Secondary Education</option>
           <option value="Printing">Printing</option>
-          <option value="Professional Training &amp; Coaching">Professional Training &amp; Coaching</option>
+          <option value="Professional Training and Coaching">Professional Training and Coaching</option>
           <option value="Program Development">Program Development</option>
           <option value="Public Policy">Public Policy</option>
           <option value="Public Relations and Communications">Public Relations and Communications</option>
@@ -511,7 +514,7 @@
           <option value="Real Estate">Real Estate</option>
           <option value="Recreational Facilities and Services">Recreational Facilities and Services</option>
           <option value="Religious Institutions">Religious Institutions</option>
-          <option value="Renewables &amp; Environment">Renewables &amp; Environment</option>
+          <option value="Renewables and Environment">Renewables and Environment</option>
           <option value="Research">Research</option>
           <option value="Restaurants">Restaurants</option>
           <option value="Retail">Retail</option>
@@ -529,7 +532,7 @@
           <option value="Translation and Localization">Translation and Localization</option>
           <option value="Transportation/Trucking/Railroad">Transportation/Trucking/Railroad</option>
           <option value="Utilities">Utilities</option>
-          <option value="Venture Capital &amp; Private Equity">Venture Capital &amp; Private Equity</option>
+          <option value="Venture Capital and Private Equity">Venture Capital and Private Equity</option>
           <option value="Veterinary">Veterinary</option>
           <option value="Warehousing">Warehousing</option>
           <option value="Wholesale">Wholesale</option>
@@ -660,8 +663,14 @@ educationValueChanged();
 lookingForValueChanged();
 
 // Restore previously selected items
-var industry = <?php echo toJSON(vget('industry')); ?>;
-$( "#industryChooser" ).val(industry);
-var cities = <?php echo toJSON(vget('cities')); ?>;
-$( "#citiesChooser" ).val(cities);
+<?php 
+  if(!is_null(vget('industry'))) {
+    echo "var industry = " . toJSON(vget('industry')) . ";";
+    echo "$( \"#industryChooser\" ).val(industry);";
+  }
+  if(!is_null(vget('cities'))) {
+    echo "var cities = " . toJSON(vget('cities')) . ";";
+    echo "$( \"#citiesChooser\" ).val(cities);";
+  }
+?>
 </script>

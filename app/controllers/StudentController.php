@@ -124,7 +124,7 @@
       }
       $major = $data['majorChooser'];
       $gpa = $data['gpaChooser'];
-      $industry = isset($data['industryChooser']) ? $data['industryChooser'] : array();
+      $industry = isset($data['industryChooser']) ? array_map("htmlspecialchars_decode", $data['industryChooser']) : array();
       $cities = isset($data['citiesChooser']) ? $data['citiesChooser'] : array();
       if(is_null($industry))
         $industry = array();
@@ -494,8 +494,8 @@
             $entry['name'] = $name;
             $entry['pass'] = $pass;
             // $entry['orig'] = $pass2;
-            $entry['class'] = $registration['graduationYear'];
-            $entry['school'] = "";
+            $entry['class'] = $class;
+            $entry['school'] = $school;
             $entry['time'] = time();
             $entry['gender'] = $gender;
             $entry['photo'] = $photo;
@@ -534,12 +534,13 @@
       extract($data = $this->data($params));
       $registration = self::registrationData($params);
       $data = array_merge($data, $registration);
+      $saveData = array_merge($data, array("registration" => $registration));
 
       $this->validate(strlen($photo) > 0,
         $err, 'must have profile picture');
 
       if ($this->isValid()) {
-        $me = array_merge($me, $data);
+        $me = array_merge($me, $saveData);
         $MStudent->save($me);
 
         $this->success('profile saved');
