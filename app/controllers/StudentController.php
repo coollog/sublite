@@ -84,7 +84,7 @@
       $name = clean($data['name']);
       if (isset($data['pass'])) $pass = $data['pass'];
       if (isset($data['pass2'])) $pass2 = $data['pass2'];
-      $gender = $data['gender'];
+      $gender = isset($data['gender']) ? clean($data['gender']) : '';
       $class = isset($data['class']) ? clean($data['class']) : '';
       $school = isset($data['school']) ? clean($data['school']) : '';
       $bio = isset($data['bio']) ? clean($data['bio']) : '';
@@ -106,7 +106,7 @@
     }
 
     function registrationData($data) {
-      $education = $data['education'];
+      $education = isset($data['education']) ? $data['education'] : 'undergraduate';
       $degree;
       $year;
       $graduationMonth;
@@ -130,6 +130,8 @@
         $industry = array();
       if(is_null($cities))
         $cities = array();
+      if(is_null($industry))
+        $industry = array();
       $lookingFor = array();
       $internshipTimes = array();
       $fulltimeTimes = array();
@@ -180,10 +182,10 @@
           array_push($housingTimes, 'Spring 2017');
       }
 
-      $registration = array('education' => $education, 'degree' => $degree, 'year' => $year, 
-        'graduationMonth' => $graduationMonth, 'graduationYear' => $graduationYear, 
+      $registration = array('education' => $education, 'degree' => $degree, 'year' => $year,
+        'graduationMonth' => $graduationMonth, 'graduationYear' => $graduationYear,
         'major' => $major, 'gpa' => $gpa, 'industry' => $industry, 'cities' => $cities,
-        'lookingFor' => $lookingFor, 'internshipTimes' => $internshipTimes, 
+        'lookingFor' => $lookingFor, 'internshipTimes' => $internshipTimes,
         'fulltimeTimes' => $fulltimeTimes, 'housingTimes' => $housingTimes);
 
       return $registration;
@@ -329,7 +331,7 @@
       global $params, $MStudent;
       // Params to vars
       global $email;
-      $email = clean($params['email']);
+      $email = strtolower(clean($params['email']));
       $data = array('email' => $email);
 
       // Validations
@@ -690,13 +692,16 @@
         // Params to vars
         $email = $_SESSION['email'];
         $pass = $_SESSION['pass'];
+        $skippass = isset($_SESSION['skippass']);
 
         // Validations
         self::startValidations();
         self::validate(($entry = $MStudent->get($email)) != NULL,
           $err, 'unknown email');
-        self::validate($entry['pass'] == md5($pass),
-          $err, 'invalid password');
+        if (!$skippass) {
+          self::validate($entry['pass'] == md5($pass),
+            $err, 'invalid password');
+        }
 
         if (!self::isValid()) {
           self::logout();

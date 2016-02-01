@@ -108,14 +108,7 @@
 
       $countsHash = self::getCountsHash($jobId);
 
-      // Get cards.
-      $recruiterId = $_SESSION['_id'];
-      $customerId = RecruiterModel::getCustomerId($recruiterId);
-      if (is_null($customerId)) {
-        $cards = [];
-      } else {
-        $cards = StripeBilling::getCards($customerId);
-      }
+      $cards = StripeBilling::getCardsByRecruiter($_SESSION['_id']);
 
       $data = array_merge([
         'cards' => $cards

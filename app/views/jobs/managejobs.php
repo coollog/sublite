@@ -41,11 +41,15 @@
         </a>
       </div>
       <div class="buttons">
+        <a href="deletejob/{_id}"
+           onclick="return confirm('Are you sure you wish to delete this job? This will also delete all applications submitted for this job as well.');">
+          <input type="button" class="reverse" value="Delete" />
+        </a>
         <a href="editjob?id={_id}">
           <input type="button" value="Edit Job" />
         </a>
         <a href="editapplication/{_id}">
-          <input type="button" value="Edit Application" />
+          <input type="button" value="{editorcreate}" />
         </a>
         <a href="viewapplicants/{_id}">
           <input type="button" value="View Applicants" />
@@ -86,11 +90,15 @@
         var _id = job._id.$id;
         var title = job.title;
         var location = job.location;
+        var editorcreate =
+          !job.application || job.application.questions.length == 0
+            ? 'Create Application' : 'Edit Application';
 
         var data = {
           _id: _id,
           title: title,
-          location: location
+          location: location,
+          editorcreate : editorcreate
         }
         var jobHTML = useTemplate('jobtemplate', data);
         $('jobs').append(jobHTML);

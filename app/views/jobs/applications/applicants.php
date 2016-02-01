@@ -133,6 +133,9 @@
   paymentamount, paymentcredits {
     font-weight: bold;
   }
+  paymentfiltered, filteropt {
+    display: none;
+  }
   paymentinfo {
     background: white;
     box-shadow: 1px 1px 1px #ccc;
@@ -315,6 +318,17 @@
         You have to input a positive number of credits.
       </invalidamount>
 
+      <br />
+      <input type="checkbox" id="buyfiltered">
+      <label for="buyfiltered">Buy Filtered Credits (Additional $5/Credit)</label>
+      <filteropt>
+        <br />
+        Briefly describe the filter you would like. We will try our best to
+        accomodate your requested filter.
+        <input type="text" id="filterrequest"
+               placeholder="(eg. only students in the nyc area)" />
+      </filteropt>
+
       <br /><br />
       Select payment method:
       <paymentselect></paymentselect>
@@ -324,7 +338,8 @@
       <br /><br />
 
       You will be charged $<paymentamount>0</paymentamount> to purchase
-      <paymentcredits>0</paymentcredits> credits.
+      <paymentcredits>0</paymentcredits> <paymentfiltered>filtered</paymentfiltered>
+      credits.
       <br /><br />
       <selectpayment class="hide">
         Please select a payment method from above.
@@ -613,10 +628,12 @@
     });
   }
   function setupCredits(data) {
-    function buy(cardId, credits) {
+    function buy(cardId, credits, filtered) {
       var data = {
         cardId: cardId,
-        credits: credits
+        credits: credits,
+        filtered: filtered,
+        filterRequest: $('#filterrequest').val()
       };
       $.post('../ajax/buycredits', data, function (data) {
         console.log(data);
@@ -698,24 +715,54 @@
       $(this).slideUp(200, 'easeInOutCubic');
     });
 
-    $('#paymentcredits').off('change').change(function () {
-      var credits = parseInt($(this).val());
-      if (credits <= 0 || isNaN(credits)) {
+    var buyCredits = 0;
+    var buyFiltered = false;
+
+    function calculatePaymentAmount(credits, filtered) {
+      var amount = credits * 8;
+      if (credits > 50) {
+        amount *= 5/8;
+      }
+      if (filtered) {
+        amount += credits * 5;
+      }
+      return amount;
+    }
+
+    $('#paymentcredits, #buyfiltered').off('change').change(function () {
+      buyFiltered = $('#buyfiltered').prop('checked');
+      if (buyFiltered) {
+        $('filteropt').show();
+      } else {
+        $('filteropt').hide();
+      }
+
+      buyCredits = parseInt($('#paymentcredits').val());
+      if (buyCredits <= 0 || isNaN(buyCredits)) {
         $('invalidamount').show();
         return;
       }
 
-      var amount = credits * 8;
+      var amount = calculatePaymentAmount(buyCredits, buyFiltered);
 
       $('invalidamount').hide();
-      $('paymentcredits').html(credits);
+      $('paymentcredits').html(buyCredits);
       $('paymentamount').html(amount);
+      if (buyFiltered) {
+        $('paymentfiltered').show();
+      } else {
+        $('paymentfiltered').hide();
+      }
       $('#confirmpurchase').prop('disabled', false);
     });
 
     $('#confirmpurchase').off('click').click(function () {
-      var credits = parseInt($('paymentcredits').html());
-      var amount = parseInt($('paymentamount').html());
+      var amount = calculatePaymentAmount(buyCredits, buyFiltered);
+
+      var filtered = '';
+      if (buyFiltered) {
+        filtered = ' Filtered';
+      }
 
       // Get cardId.
       var cardId = getSelectedCard();
@@ -724,13 +771,13 @@
         return;
       }
 
-      var goodToGo = confirm('Are you sure you wish to purchase ' + credits +
-                             ' Credits for $' + amount + '?');
+      var goodToGo = confirm('Are you sure you wish to purchase ' + buyCredits +
+                             filtered + ' Credits for $' + amount + '?');
       if (!goodToGo) return;
 
       $(this).prop('disabled', true);
 
-      buy(cardId, credits);
+      buy(cardId, buyCredits, buyFiltered);
     });
 
     (function setupCheckout() {
@@ -745,7 +792,7 @@
         var credits = $('paymentcredits').html();
         var amount = $('paymentamount').html();
 
-        $('#addcreditcard').prop('disabled', true);
+        // $('#addcreditcard').prop('disabled', true);
 
         // Open Checkout with further options.
         handler.open({

@@ -1,0 +1,28 @@
+table, table th, table td {
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+}
+table th, table td {
+  padding: 1em;
+}
+table th {
+  font-weight: bold;
+}
+table td {
+  text-transform: uppercase;
+}
+
+top3 {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+charts {
+  display: block;
+  width: 100%;
+  padding: 2em;
+}
+charts canvas {
+  display: block;
+  width: 100%;
+}

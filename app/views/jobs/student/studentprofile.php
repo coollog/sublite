@@ -63,7 +63,7 @@
   <extracurricularsitemtemplate>
     <item>
       <h1><field name="title" class="nohover">{title}</field></h1>
-      <h2><field name="organiation" class="nohover">{organiation}</field></h2>
+      <h2><field name="organization" class="nohover">{organization}</field></h2>
       <fade class="nohover">
         <field name="dates.start" class="nohover">{dates.start}</field>
         to
@@ -117,7 +117,7 @@
       <section name="student">
         <heading></heading>
       </section>
-      <a id="resume" class="hide">
+      <a id="resume" class="hide" target="_blank">
         <br />
         <input type="button" value="View Resume" />
       </a>
@@ -193,6 +193,11 @@
         if (!list) return;
 
         var selector = 'section[name='+sectionName+'] fields[name='+fieldName+']';
+
+        if (list.length == 0) {
+          $(selector).parent().remove();
+          return;
+        }
 
         list.forEach(function (val) {
           var fieldHTML = Template.makeField(fieldName, val);

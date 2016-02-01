@@ -6,6 +6,9 @@
   require_once($dirpre.'includes/header.php');
 
   // Register functions to call. Try to have these in alphabetical order.
+  Router::register('admin/login', function() {
+    AdminController::login();
+  });
   Router::register('admin/questions', function() {
     AdminControllerQuestions::manage();
   });
@@ -37,13 +40,21 @@
     Controller::displayMetatags('/employers');
     PaymentControllerAJAX::buyCredits();
   });
-  Router::register('employers/addcard', function() {
+  Router::register('employers/buyplan', function() {
     Controller::displayMetatags('/employers');
+    RecruiterController::buyPlan();
+  });
+  Router::register('employers/buyplanfinish', function() {
+    PaymentControllerAJAX::buyPlan();
+  });
+  Router::register('employers/addcard', function() {
     PaymentControllerAJAX::addPaymentInfo();
   });
   Router::register('employers/removecard', function() {
-    Controller::displayMetatags('/employers');
     PaymentControllerAJAX::removePaymentInfo();
+  });
+  Router::register('employers/getcards', function() {
+    PaymentControllerAJAX::getCards();
   });
   Router::register('employers/changepass', function() {
     Controller::displayMetatags('/employers');
@@ -54,15 +65,12 @@
     GLOBALvarGet('CCompany')->view();
   });
   Router::register('employers/createcustom', function () {
-    Controller::displayMetatags('/employers');
     echo ApplicationControllerAJAX::createCustom();
   });
   Router::register('employers/deletecustom', function () {
-    Controller::displayMetatags('/employers');
     echo ApplicationControllerAJAX::deleteCustom();
   });
   Router::register('employers/searchcustom', function () {
-    Controller::displayMetatags('/employers');
     echo ApplicationControllerAJAX::searchCustom();
   });
   Router::register('employers/editapplication', function (array $restOfRoute) {
@@ -72,6 +80,10 @@
   Router::register('employers/editcompany', function() {
     Controller::displayMetatags('/employers');
     GLOBALvarGet('CCompany')->edit();
+  });
+  Router::register('employers/deletejob', function (array $restOfRoute) {
+    Controller::displayMetatags('/employers');
+    JobController::delete($restOfRoute);
   });
   Router::register('employers/editjob', function() {
     Controller::displayMetatags('/employers');
@@ -302,6 +314,7 @@
   Router::route('/index', 'index');
   Router::route('/', 'index');
 
+  Router::route('/admin/login', 'admin/login');
   Router::route('/admin/questions', 'admin/questions');
 
   Router::route('/housing', 'backtoindex');
@@ -319,12 +332,12 @@
   Router::route('/employers/addcompany', 'employers/addcompany');
   Router::route('/employers/addjob', 'employers/addjob');
   Router::route('/employers/approve', 'employers/approve');
-  Router::route('/employers/ajax/buycredits',
-                'employers/buycredits');
-  Router::route('/employers/ajax/addcard',
-                'employers/addcard');
-  Router::route('/employers/ajax/removecard',
-                'employers/removecard');
+  Router::route('/employers/ajax/buycredits', 'employers/buycredits');
+  Router::route('/employers/ajax/addcard', 'employers/addcard');
+  Router::route('/employers/ajax/removecard', 'employers/removecard');
+  Router::route('/employers/ajax/getcards', 'employers/getcards');
+  Router::route('/employers/buyplan', 'employers/buyplan');
+  Router::route('/employers/ajax/buyplanfinish', 'employers/buyplanfinish');
   Router::route('/employers/changepass', 'employers/changepass');
   Router::route('/employers/company', 'employers/company');
   Router::route('/employers/createcustom', 'employers/createcustom');
@@ -332,6 +345,7 @@
   Router::route('/employers/searchcustom', 'employers/searchcustom');
   Router::routeTree('/employers/editapplication', 'employers/editapplication');
   Router::route('/employers/editcompany', 'employers/editcompany');
+  Router::routeTree('/employers/deletejob', 'employers/deletejob');
   Router::route('/employers/editjob', 'employers/editjob');
   Router::route('/employers/editprofile', 'employers/editprofile');
   Router::route('/employers/forgotpass', 'employers/forgotpass');

@@ -1,7 +1,26 @@
 <?php
   require_once($GLOBALS['dirpre'].'controllers/Controller.php');
 
+  interface RecruiterControllerInterface {
+    public static function buyPlan();
+  }
+
   class RecruiterController extends Controller {
+    public static function buyPlan() {
+      self::requireLogin();
+
+      if (isset($_GET['code']) &&
+          ($code = $_GET['code']) == PaymentControllerAJAX::BUYPLAN_DISCOUNT) {
+        $discount = "'$_GET[code]'";
+      } else {
+        $discount = 'false';
+      }
+
+      self::render('recruiter/buyplan', [
+        'discount' => $discount
+      ]);
+    }
+
     // Validation functions
     function isValidName($name) { // Works for first or last name
       if(strlen($name) > 100) return false;
@@ -18,7 +37,7 @@
       $title = clean($data['title']);
       $phone = isset($data['phone']) ? clean($data['phone']) : '';
       $photo = isset($data['photo']) ?
-        clean($data['photo']) : 'assets/gfx/defaultpic.png';
+        clean($data['photo']) : $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
       $approved = $data['approved'];
       $credits = 0;
       return array(
@@ -367,6 +386,7 @@
         // Params to vars
         $email = $_SESSION['email'];
         $pass = $_SESSION['pass'];
+        $skippass = isset($_SESSION['skippass']);
 
         // Validations
         self::startValidations();
@@ -374,8 +394,10 @@
           $err, 'invalid email');
         self::validate(($entry = $MRecruiter->get($email)) != NULL,
           $err, 'unknown email');
-        self::validate(hash_equals($entry['pass'], crypt($pass, $entry['pass'])),
-          $err, 'invalid password');
+        if (!$skippass) {
+          self::validate(hash_equals($entry['pass'], crypt($pass, $entry['pass'])),
+            $err, 'invalid password');
+        }
 
         if (!self::isValid()) {
           self::logout();

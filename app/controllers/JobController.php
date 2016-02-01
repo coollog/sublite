@@ -2,7 +2,67 @@
   require_once($GLOBALS['dirpre'].'controllers/Controller.php');
   require_once($GLOBALS['dirpre'].'controllers/modules/application/ApplicationJob.php');
 
-  class JobController extends Controller {
+  interface JobControllerInterface {
+    public static function delete(array $restOfRoute);
+  }
+
+  class JobController extends Controller implements JobControllerInterface {
+    public static function delete(array $restOfRoute) {
+      RecruiterController::requireLogin();
+
+      $jobId = self::getIdFromRoute($restOfRoute);
+      if (is_null($jobId)) return;
+
+      // Make sure job exists.
+      // Make sure recruiter has permission to edit the job.
+      if (!self::checkJobExists($jobId)) return;
+      if (!self::ownsJob($jobId)) return;
+
+      // Delete all applications with jobid.
+      ApplicationModel::deleteByJob($jobId);
+
+      // Delete from questions' uses this jobid.
+      $application = ApplicationJob::get($jobId);
+      $questions = [];
+      if (!is_null($application)) {
+        $questions = $application->getQuestions();
+      }
+      foreach ($questions as $questionId) {
+        QuestionModel::removeFromUses($questionId, $jobId);
+      }
+
+      // Delete this job.
+      JobModel::deleteById($jobId);
+
+      // Redirect back to home.
+      self::redirect('../home');
+    }
+
+    /**
+     * Checks if $jobId is a job, and if not, error.
+     */
+    private static function checkJobExists(MongoId $jobId) {
+      if (!JobModel::exists($jobId)) {
+        self::error("nonexistent job");
+        self::render('notice');
+        return false;
+      }
+      return true;
+    }
+
+    /**
+     * Checks if the recruiters owns $jobId, and if not, error.
+     */
+    private static function ownsJob(MongoId $jobId) {
+      $recruiterId = $_SESSION['_id'];
+      if (!JobModel::matchJobRecruiter($jobId, $recruiterId)) {
+        self::error("permission denied");
+        self::render('notice');
+        return false;
+      }
+      return true;
+    }
+
     // TODO Decide some upper bound for duration
     function isValidDuration($duration) {
       if(!preg_match('`^[0-9]*$`', $duration)) return false;
@@ -67,7 +127,7 @@
       $location = clean($data['location']);
       $locationtype = '';
       if(isset($data['locationtype'])) $locationtype = clean($data['locationtype']);
-      $geocode = geocode($location);
+      $geocode = Geocode::geocode($location);
       if ($locationtype) {
         $location = '';
         $geocode = '';

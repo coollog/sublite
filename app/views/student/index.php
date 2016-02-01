@@ -219,7 +219,7 @@
 
 <script>
   $(function() {
-    
+
 
     $('.arrow-down').click(function() {
       scrollTo('panel.why');
@@ -268,7 +268,7 @@
         <div class="whyimg whyimg1">
           <div class="whyroll"><div class="cell">Lease and sublet verified housing with other college students.</div></div>
         </div>
-        <div class="whytext">Verified Peer-to-Peer Housting Network</div>
+        <div class="whytext">Verified Peer-to-Peer Housing Network</div>
       </incell></td>
       <td class="whycell"><incell>
         <div class="whyimg whyimg2">
