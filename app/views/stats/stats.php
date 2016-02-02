@@ -88,7 +88,10 @@
     $cumulative = View::get('cumulativeArray');
     $views = $cumulative['cumulativeviews'];
     $clicks = $cumulative['cumulativeclicks'];
-    echo "<br />Total Jobs views: $views<br />Total Jobs clicks: $clicks <br />";
+    $claimedApps = $cumulative['claimedApplications'];
+    $unclaimedApps = $cumulative['unclaimedApplications'];
+    echo "<br />Total Jobs views: $views<br />Total Jobs clicks: $clicks <br />
+          Total Claimed Applications: $claimedApps<br />Total Unclaimed Applications: $unclaimedApps <br />";
     ?>
   </div>
 
@@ -105,6 +108,17 @@
     }
     echo '</textarea>';
     ?>
+  </div>
+  <div id = "applications">
+    <?php
+      $applications = View::get('applicationsArray')['applicationsArray'];
+      echo "<br />Jobs: " . count($applications) . ' <br />
+      <textarea style="width:800px; height: 200px;">';
+      foreach ($applications as $application) {
+        echo "$application\n";
+      }
+      echo '</textarea>';
+     ?>
   </div>
 
 </div>
