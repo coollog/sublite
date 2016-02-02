@@ -48,6 +48,10 @@
   opt:hover {
     color: #ffd800;
   }
+
+  .highlight {
+    color: #ffd800;
+  }
 </style>
 <?php
   $curdir = dirname($_SERVER['REQUEST_URI'] . '/.');
@@ -105,8 +109,16 @@
         $text = $opt[0];
         $link = $opt[1];
         if (!$states[$opt[2]]) continue;
-
-        echo "<a href=\"$link\"><opt>$text</opt></a>";
+        if ($opt[0] == "Messages") {
+          $num = MessageModel::getNumUnread($_SESSION['_id']);
+          if ($num > 0) {
+            echo "<a href=\"$link\"><opt>$text <span class=\"highlight\">($num)</span></opt></a>";
+          } else {
+            echo "<a href=\"$link\"><opt>$text (0)</span></opt></a>";
+          }
+        } else {
+          echo "<a href=\"$link\"><opt>$text</opt></a>";
+        }
       }
     ?>
   </options>

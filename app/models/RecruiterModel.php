@@ -2,6 +2,11 @@
   require_once($GLOBALS['dirpre'].'models/Model.php');
 
   interface RecruiterModelInterface {
+    public static function getNumUnread(MongoId $recruiterId);
+    public static function setUnread(MongoId $recruiterId, $count);
+    public static function incrementUnread(MongoId $recruiterId);
+    public static function decrementUnread(MongoId $recruiterId);
+
     public static function getCredits(MongoId $recruiterId);
     public static function setCredits(MongoId $recruiterId, $count);
     public static function addCredits(MongoId $recruiterId, $count);
@@ -34,6 +39,31 @@
 
     const CREDITS_FOR_COMPANYPROFILE = 1;
     const CREDITS_FOR_JOB            = 1;
+
+    public static function getNumUnread(MongoId $recruiterId) {
+      $query = (new DBQuery(self::$collection))
+        ->queryForId($recruiterId)->projectField('unread');
+      $recruiter = $query->findOne();
+      return $recruiter['unread'];
+    }
+
+    public static function setUnread(MongoId $recruiterId, $count) {
+      $update = (new DBUpdateQuery(self::$collection))
+        ->queryForId($recruiterId)->toUpdate('unread', $count);
+      $update->run();
+    }
+
+    public static function incrementUnread(MongoId $recruiterId) {
+      $update = (new DBUpdateQuery(self::$collection))
+        ->queryForId($recruiterId)->toAdd('unread', 1);
+      $update->run();
+    }
+
+    public static function decrementUnread(MongoId $recruiterId) {
+      $update = (new DBUpdateQuery(self::$collection))
+        ->queryForId($recruiterId)->toAdd('unread', -1);
+      $update->run();
+    }
 
     public static function getCredits(MongoId $recruiterId) {
       $query = (new DBQuery(self::$collection))
