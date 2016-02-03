@@ -190,7 +190,7 @@
       }
       $me['photo'] = $photo;
 
-      if (strlen($me['school']) == 0) {
+      if (!isset($me['school']) || strlen($me['school']) == 0) {
         global $S;
         $me['school'] = $S->nameOf($me['email']);
       }
