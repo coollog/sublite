@@ -51,7 +51,7 @@
       $schoolNames = array();
 
       foreach($cursor as $doc) {
-        $success = preg_match($pattern, $doc["email"], $match);
+        $success = isset($doc["email"]) ? preg_match($pattern, $doc["email"], $match) : null;
         if($success && $doc["_id"]->getTimestamp() > $time) {
           if(array_key_exists($match[2], $schools))
             $schools[$match[2]] += 1;
