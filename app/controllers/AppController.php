@@ -18,7 +18,6 @@
       foreach ($countAdjustments as $school => $adjustment) {
         $schoolCount[0][$school] =  $schoolCount[0][$school] - $adjustment;
       }
-      var_dump($schoolCount);
       self::render('stats/leaderboard', [
         'schools' => $schools,
         'counts' => $schoolCount
