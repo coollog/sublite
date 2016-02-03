@@ -127,7 +127,7 @@
       $location = clean($data['location']);
       $locationtype = '';
       if(isset($data['locationtype'])) $locationtype = clean($data['locationtype']);
-      $geocode = Geocode::geocode($location);
+      $geocode = geocode($location);
       if ($locationtype) {
         $location = '';
         $geocode = '';

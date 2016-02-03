@@ -43,7 +43,7 @@
       return self::$collection->findOne(array('_id' => new MongoId($id)));
     }
     function getClosestHub($address, $maxMiles) {
-      $geocode = Geocode::geocode($address);
+      $geocode = geocode($address);
       $longitude = $geocode['longitude'];
       $latitude = $geocode['latitude'];
       $maxMeters = miles2meters($maxMiles);

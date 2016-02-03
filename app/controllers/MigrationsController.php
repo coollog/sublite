@@ -6,13 +6,14 @@
       global $MApp;
 
       // Get current counter
-      $mlast = -1;
+      $mlast = $MApp->get('migrations');
+
       if ($mlast == NULL) $mlast = 0;
       else $mlast = $mlast['current'];
 
       // Do migrations after counter
       $mcur = $mlast;
-      $migrations = glob($GLOBALS['dirpre'].'migrations/20.php');
+      $migrations = glob($GLOBALS['dirpre'].'migrations/*.php');
       natsort($migrations);
       foreach ($migrations as $m) {
         if (($mcur = str2int($m)) > $mlast) {

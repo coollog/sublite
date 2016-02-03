@@ -19,7 +19,46 @@
 		}
 		return $response;
 	}
+	function geocode($string) {
+		if (($response = geocodeJSON($string)) == null) {
+			return null;
+		}
 
+		$geometry = $response['results'][0]['geometry'];
+
+		$longitude = $geometry['location']['lat'];
+		$latitude = $geometry['location']['lng'];
+
+		$array = array(
+			'latitude' => $geometry['location']['lat'],
+			'longitude' => $geometry['location']['lng'],
+			'location_type' => $geometry['location_type'],
+		);
+
+		return $array;
+	}
+	function getCity($string) {
+		if (($response = geocodeJSON($string)) == null) {
+			return null;
+		}
+		
+		$address_components = $response['results'][0]['address_components'];
+		
+		$city = null;
+		$state = null;
+		foreach ($address_components as $c) {
+			if (in_array("locality", $c['types'])) {
+				$city = $c['short_name'];
+			}
+			if (in_array("administrative_area_level_1", $c['types'])) {
+				$state = $c['short_name'];
+			}
+		}
+		
+		if ($city == null or $state == null)
+			return null;
+		return "$city, $state";
+	}
 	// distance between coords
 	function distance($lat1, $lon1, $lat2, $lon2) {
 		$theta = $lon1 - $lon2;

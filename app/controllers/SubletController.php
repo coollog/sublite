@@ -9,7 +9,7 @@
       if ($gender == 'both') $gender = '';
       $city = clean($data['city']);
       $state = clean($data['state']);
-      $geocode = Geocode::geocode("$address, $city, $state");
+      $geocode = geocode("$address, $city, $state");
       $startdate = $data['startdate'];
       $enddate = $data['enddate'];
       $price = cleanfloat($data['price']);
@@ -445,10 +445,7 @@
 
       $this->startValidations();
 
-      $this->validate(
-        !is_null($geocode = Geocode::geocode($location)),
-        $err,
-        'invalid location or daily search limit reached (come back tomorrow)');
+      $this->validate(!is_null($geocode = geocode($location)), $err, 'invalid location or daily search limit reached (come back tomorrow)');
       if ($this->isValid()) {
         $latitude = $geocode['latitude'];
         $longitude = $geocode['longitude'];

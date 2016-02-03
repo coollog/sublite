@@ -1,26 +1,20 @@
 <?php
   require_once($GLOBALS['dirpre'].'models/Model.php');
 
-  interface AppModelInterface {
-    public static function getByStringId($id);
-  }
-
-  class AppModel extends Model implements AppModelInterface {
+  class AppModel extends Model {
     const DB_TYPE = parent::DB_INTERNSHIPS;
-
-    public static function getByStringId($id) {
-      return self::$collection->findOne(array('_id' => $id));
-    }
 
     function __construct() {
       parent::__construct(self::DB_TYPE, 'app');
-
-      // Set up indexes.
     }
 
     function save($data) {
       self::$collection->save($data);
       return $data['_id'];
+    }
+
+    static function get($id) {
+      return self::$collection->findOne(array('_id' => $id));
     }
 
     function updateStats($countCities=false) {
@@ -48,7 +42,7 @@
     }
 
     static function getStats() {
-      return self::getByStringId('stats');
+      return self::get('stats');
     }
     function getIndustries() {
       $stats = $this->getStats();

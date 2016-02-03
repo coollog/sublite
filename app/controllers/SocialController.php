@@ -342,7 +342,7 @@
           //   return $this->errorString("invalid date range: end date should be after start date.");
           // }
 
-          $geocode = Geocode::geocode($message['address']);
+          $geocode = geocode($message['address']);
 
           if ($name == 'create event') {
             return $this->successString($MSocial->createEvent(
@@ -589,7 +589,7 @@
             if (!isset($student['hubs']['geocode']) or
                 is_null($student['hubs']['geocode'])) {
               $city = $student['hubs']['city'];
-              $geocode = Geocode::geocode($city);
+              $geocode = geocode($city);
               $student['hubs']['geocode'] = $geocode;
 
               if (!is_null($geocode)) $MStudent->save($student);
@@ -603,7 +603,7 @@
 
         case 'create hub':
           $name = $json['name'];
-          $location = Geocode::geocode($json['location']);
+          $location = geocode($json['location']);
           $banner = $json['banner'];
 
           if ($location == null)

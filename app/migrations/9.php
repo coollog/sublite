@@ -4,8 +4,8 @@
   $jobs = $MJob->getAll();
 
   foreach ($jobs as $job) {
-    $job['geocode'] = Geocode::geocode($job['location']);
-
+    $job['geocode'] = geocode($job['location']);
+    
     $MJob->save($job, false);
   }
 ?>
