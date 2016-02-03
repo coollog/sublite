@@ -508,7 +508,8 @@
       // Validations
       $this->startValidations();
 
-      if (!isset($_POST['edit'])) { $this->render('student/form', array_merge($this->data($me), $me['registration'])); return; }
+      $registrationInfo = isset($me['registration']) ? $me['registration'] : array();
+      if (!isset($_POST['edit'])) { $this->render('student/form', array_merge($this->data($me), $registrationInfo)); return; }
 
       // Params to vars
       extract($data = $this->data($params));
