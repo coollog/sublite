@@ -89,6 +89,7 @@
       $school = isset($data['school']) ? clean($data['school']) : '';
       $bio = isset($data['bio']) ? clean($data['bio']) : '';
       $photo = '';
+      $unread = isset($data['unread']) ? $data['unread'] : 0;
       if(isset($data['photo'])) {
         $photo = clean($data['photo']);
       }
@@ -96,7 +97,7 @@
       $data = array(
         'gender' => $gender, 'bio' => $bio,
         'name' => $name, 'class' => $class, 'school' => $school,
-        'photo' => $photo
+        'photo' => $photo, 'unread' => $unread
       );
       if (isset($pass) and isset($pass2)) {
         $data['pass'] = $pass;
@@ -335,6 +336,7 @@
         }
         $entry['stats'] = array('referrals' => array());
         $entry['time'] = time();
+        $entry['unread'] = 0;
 
         $id = $MStudent->save($entry);
 

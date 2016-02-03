@@ -141,12 +141,13 @@
       $photo = isset($data['photo']) ?
         clean($data['photo']) : $GLOBALS['dirpre'].'assets/gfx/defaultpic.png';
       $approved = $data['approved'];
-      $credits = 0;
+      $unread = isset($data['unread']) ? $data['unread'] : 0;
+      $credits = isset($data['credits']) ? $data['credits'] : 0;
       return array(
         'email' => $email, 'pass' => $pass, 'firstname' => $firstname,
         'lastname' => $lastname, 'company' => $company, 'title' => $title,
         'phone' => $phone, 'photo' => $photo, 'approved' => $approved,
-        'credits' => $credits
+        'credits' => $credits, 'unread' => $unread
       );
     }
 
@@ -186,6 +187,7 @@
       $data['email'] = clean($params['email']);
       $data['pass'] = crypt($params['pass']);
       $data['approved'] = 'pending';
+      $data['unread'] = 0;
       extract($data = $this->data($data));
 
       // Validations
