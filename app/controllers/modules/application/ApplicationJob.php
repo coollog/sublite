@@ -42,6 +42,7 @@
 
       // Update student applications saved for this job to be new list of
       // questions.
+      die(var_dump($questions));
       $questionIds = [];
       foreach ($questions as $question) {
         $questionIds[] = new MongoId($question['_id']);
