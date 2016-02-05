@@ -42,12 +42,7 @@
 
       // Update student applications saved for this job to be new list of
       // questions.
-      die(var_dump($questions));
-      $questionIds = [];
-      foreach ($questions as $question) {
-        $questionIds[] = new MongoId($question['_id']);
-      }
-      self::updateSavedApplications($jobId, $questionIds);
+      self::updateSavedApplications($jobId, $questions);
 
       return true;
     }
@@ -76,6 +71,7 @@
                                                     array $questionIds) {
       // Get the saved applications corresponding to $jobId.
       $saved = ApplicationModel::getSavedForJob($jobId);
+      die(var_dump($questionIds));
 
       // Prune the questions field to be just those in $questionIds.
       foreach ($saved as $application) {
