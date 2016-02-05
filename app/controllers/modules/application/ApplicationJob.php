@@ -71,7 +71,6 @@
                                                     array $questionIds) {
       // Get the saved applications corresponding to $jobId.
       $saved = ApplicationModel::getSavedForJob($jobId);
-      die(var_dump($questionIds));
 
       // Prune the questions field to be just those in $questionIds.
       foreach ($saved as $application) {
