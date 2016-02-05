@@ -305,6 +305,8 @@
         questionIds.push(_id);
       });
 
+      console.log(questionIds);
+
       $.post('', {saving: true, questionIds: questionIds}, function (data) {
         if (data.length > 0) {
           console.log(data); return;
