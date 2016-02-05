@@ -76,7 +76,7 @@
       foreach ($saved as $application) {
         $questions = $application['questions'];
 
-        $newQuestions = self::pruneQuestionsByIdSet($questions, $questionIds);
+        $newQuestions = self::pruneQuestionsByIdSet($questions, $questions);
 
         // Update the entry with $newQuestions.
         ApplicationModel::replaceQuestionsField($application['_id'], $newQuestions);
