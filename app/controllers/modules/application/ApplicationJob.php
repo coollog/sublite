@@ -42,7 +42,11 @@
 
       // Update student applications saved for this job to be new list of
       // questions.
-      self::updateSavedApplications($jobId, $application->getData());
+      $questionIds = [];
+      foreach ($questions as $question) {
+        $questionIds[] = new MongoId($question['_id']);
+      }
+      self::updateSavedApplications($jobId, $questionIds);
 
       return true;
     }
@@ -76,7 +80,7 @@
       foreach ($saved as $application) {
         $questions = $application['questions'];
 
-        $newQuestions = self::pruneQuestionsByIdSet($questions, $questions);
+        $newQuestions = self::pruneQuestionsByIdSet($questions, $questionIds);
 
         // Update the entry with $newQuestions.
         ApplicationModel::replaceQuestionsField($application['_id'], $newQuestions);
