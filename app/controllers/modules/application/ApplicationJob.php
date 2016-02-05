@@ -42,7 +42,7 @@
 
       // Update student applications saved for this job to be new list of
       // questions.
-      self::updateSavedApplications($jobId, $application->getData());
+      self::updateSavedApplications($jobId, $questions);
 
       return true;
     }

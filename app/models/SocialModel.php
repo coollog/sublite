@@ -28,7 +28,7 @@
         $student = $MStudent->getById($id);
         $membersinfo[] = array(
           'id' => $id,
-          'name' => $student['name'],
+          'name' => isset($student['name']) ? $student['name'] : 'Nonexistent',
           'pic' => $student['photo'],
           'school' => $S->nameOf($student['email']),
           'joined' => $joined
@@ -62,7 +62,7 @@
       global $MStudent;
       $student = $MStudent->getById($post['from']);
       $post['pic'] = $student['photo'];
-      $post['name'] = $student['name'];
+      $post['name'] = isset($student['name']) ? $student['name'] : 'Nonexistent';
       $post['date'] = timeAgo($post['date']);
       $post['id'] = $post['id']->{'$id'};
       if ($post['parent'] != '')

@@ -297,13 +297,20 @@
 
     // Finish creating/editing application.
     $('#finish').click(function () {
+      $(this).prop('disabled', true);
+
       var questionIds = [];
       $('.chosen').children().each(function() {
         var _id = $(this).attr('qid');
         questionIds.push(_id);
       });
 
+      console.log(questionIds);
+
       $.post('', {saving: true, questionIds: questionIds}, function (data) {
+        if (data.length > 0) {
+          console.log(data); return;
+        }
         window.location = '../home';
       });
     });
