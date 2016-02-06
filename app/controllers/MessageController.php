@@ -64,7 +64,7 @@
       if ($MStudent->exists($p)) {
         $name = $MStudent->getEmail($p);
       } else if ($MRecruiter->IDexists($p)) {
-        $name = $MRecruiter->getEmail($p);
+        $name = $MRecruiter->getEmail(new MongoId($p));
       } else {
         $name = 'Nonexistent';
       }

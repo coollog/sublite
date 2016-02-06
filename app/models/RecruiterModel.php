@@ -27,6 +27,7 @@
      * Gets just the 'email', 'firstname', 'lastname'.
      */
     public static function getByIdMinimal(MongoId $recruiterId);
+    public static function getEmail(MongoId $recruiterId);
   }
 
   class RecruiterModel extends Model implements RecruiterModelInterface {
@@ -96,6 +97,11 @@
       ]);
     }
 
+    public static function getEmail(MongoId $id) {
+      $entry = self::getById(new MongoId($id));
+      return $entry['email'];
+    }
+
     function __construct() {
       parent::__construct(self::DB_TYPE, 'recruiters');
     }
@@ -128,11 +134,6 @@
     function getName($id) {
       $entry = $this->getById(new MongoId($id));
       return $entry['firstname'] . ' ' . $entry['lastname'];
-    }
-
-    function getEmail($id) {
-      $entry = $this->getById(new MongoId($id));
-      return $entry['email'];
     }
 
     function getPhoto($id) {

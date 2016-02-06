@@ -235,7 +235,7 @@
       global $MJob;
       $cumulativeArray = [];
 
-      $views = 0; $clicks = 0; $claimedApps = 0; $unclaimedApps = 0;
+      $views = $clicks = $claimedApps = $unclaimedApps = 0;
       $jobs = $MJob->getAll();
       foreach ($jobs as $job) {
         $views += $job['stats']['views'];
@@ -433,7 +433,6 @@
       return $getMessageParticipantsArray;
     }
     function applications() {
-      //TODO add applications box here
       $applicationsArray = [];
       $applicationsArray[] = "jobname, recruiteremail, # applicants";
       $all = JobModel::getAll(); // get all jobs
@@ -445,8 +444,7 @@
         $info['recruiterEmail'] = "";
         $recruiterId = isset($job['recruiter']) ? $job['recruiter'] : null;
         if ($recruiterId != null) {
-          $recruiter = RecruiterModel::getById($recruiterId);
-          $info['recruiterEmail'] = isset($recruiter['email']) ? $recruiter['email'] : "No Email";
+          $info['recruiterEmail'] = RecruiterModel::getEmail($recruiterId);
         } else {
           $info['recruiterEmail'] = "No Email";
         }
