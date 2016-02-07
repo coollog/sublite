@@ -13,6 +13,7 @@
       $unknownSchoolsArray = self::unknownschools();
       $cumulativeArray = self::cumulative();
       $getMessageParticipantsArray = self::getMessageParticipants();
+      $applicationsArray = self::applications();
 
       $toRender = [
         "updateArray" => $updateArray,
@@ -23,7 +24,8 @@
         "subletsended2014Array" => $subletsended2014Array,
         "unknownSchoolsArray" => $unknownSchoolsArray,
         "cumulativeArray" => $cumulativeArray,
-        "getMessageParticipantsArray" => $getMessageParticipantsArray
+        "getMessageParticipantsArray" => $getMessageParticipantsArray,
+        "applicationsArray" => $applicationsArray
       ];
       self::render('/stats/stats', $toRender);
     }
@@ -226,18 +228,26 @@
       $unknownschoolsArray['domains'] = $domains;
       return $unknownschoolsArray;
     }
+    /*
+    * Gives cumulative stats i.e. total number of jobs clicks, total number of jobs views, etc.
+    */
     function cumulative() {
       global $MJob;
       $cumulativeArray = [];
 
-      $views = 0; $clicks = 0;
+      $views = $clicks = $claimedApps = $unclaimedApps = 0;
       $jobs = $MJob->getAll();
       foreach ($jobs as $job) {
         $views += $job['stats']['views'];
         $clicks += $job['stats']['clicks'];
+        $claimedApps += count(ApplicationModel::getClaimed($job['_id']));
+        $unclaimedApps += count(ApplicationModel::getUnclaimed($job['_id']));
       }
       $cumulativeArray['cumulativeviews'] = $views;
       $cumulativeArray['cumulativeclicks'] = $clicks;
+      // Application stats
+      $cumulativeArray['claimedApplications'] = $claimedApps;
+      $cumulativeArray['unclaimedApplications'] = $unclaimedApps;
       return $cumulativeArray;
     }
     function graph() {
@@ -421,6 +431,30 @@
       }
       $getMessageParticipantsArray['messageparticipants'] = $plist;
       return $getMessageParticipantsArray;
+    }
+    function applications() {
+      $applicationsArray = [];
+      $applicationsArray[] = "jobname, recruiteremail, # applicants";
+      $all = JobModel::getAll(); // get all jobs
+      foreach ($all as $job) {
+        $info = [];
+        // Get Job Name
+        $info['jobName'] = isset($job['title']) ? $job['title'] : "No Title";
+        // Get Recruiter Email
+        $info['recruiterEmail'] = "";
+        $recruiterId = isset($job['recruiter']) ? $job['recruiter'] : null;
+        if ($recruiterId != null) {
+          $info['recruiterEmail'] = RecruiterModel::getEmail($recruiterId);
+        } else {
+          $info['recruiterEmail'] = "No Email";
+        }
+        // Get # of applicants
+        $info['numberApplicants'] = ApplicationModel::countByJob($job['_id']);
+        $applicationsArray[] = implode(',', self::quoteStringsInArray($info));
+
+
+      }
+      return ["applicationsArray" => $applicationsArray];
     }
 
     /*
