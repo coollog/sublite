@@ -519,6 +519,7 @@
 
       $this->validate(strlen($photo) > 0,
         $err, 'must have profile picture');
+      $this->validate(!empty($registration['lookingFor']), $err, 'must select at least one checkbox');
 
       if ($this->isValid()) {
         $me = array_merge($me, $saveData);
