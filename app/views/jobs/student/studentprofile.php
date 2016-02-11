@@ -103,7 +103,6 @@
       <fieldline>
         <strong>Links: </strong>
         <fields name="links"></fields>
-        <addfield name="links"></addfield>
       </fieldline>
       <field name="summary" type="textarea" class="nohover">{summary}</field>
     </item>
