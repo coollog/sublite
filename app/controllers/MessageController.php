@@ -184,7 +184,7 @@
         $repliesn = count($entry['replies']);
         for ($i = 0; $i < $repliesn; $i ++) {
           if (strcmp($entry['replies'][$i]['from'], $_SESSION['_id']) != 0) {
-            if (!$entry['replies'][$i]['read']) {
+            if (!$entry['replies'][$i]['read'] && $entry['replies'][$i]['from'] != $_GET['id']) {
               $MMessage->decrementUnread($_SESSION['_id']);
             }
             $entry['replies'][$i]['read'] = true;
