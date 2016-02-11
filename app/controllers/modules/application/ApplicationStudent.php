@@ -130,7 +130,7 @@
       // submit.
       $studentId = $application->getStudentId();
       $studentProfile = StudentProfile::getProfile($studentId);
-      if (is_null($studentProfile) || is_null($studentProfile->getResume())) {
+      if (empty($studentProfile->getData()) || empty($studentProfile->getResume())) {
         return false;
       }
 
