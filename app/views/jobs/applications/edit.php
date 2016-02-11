@@ -114,6 +114,7 @@
     if (hide) {
       style = 'display: none;';
     }
+    text = $('<div/>').html(text).text();
     var html = useTemplate('questiontemplate', {
       text: text,
       _id: _id,

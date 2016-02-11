@@ -32,14 +32,18 @@
   $(function () {
     var responsesData = JSON.parse($('#responsesData').html());
 
+    Templates.init();
+
     (function setupResponses() {
       var responsesHTML = '';
       responsesData.forEach(function (response) {
+        response.text = $('<div/>').html(response.text).text();
+        response.answer = $('<div/>').html(response.answer).text();
         var data = {
           text: response.text,
           answer: response.answer
         };
-        responsesHTML += useTemplate('responsetemplate', data);
+        responsesHTML += Templates.use('responsetemplate', data);
       });
       $('responses').html(responsesHTML);
     })();

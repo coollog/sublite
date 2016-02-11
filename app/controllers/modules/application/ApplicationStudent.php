@@ -317,7 +317,7 @@
           $id = new MongoId($question['_id']);
           $this->data['questions'][(string) $id] = [
             '_id' => $id,
-            'answer' => clean($question['answer'])
+            'answer' => $question['answer']
           ];
         }
       }

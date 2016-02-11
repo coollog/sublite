@@ -202,7 +202,10 @@
       if (is_array($val)) {
         $val = escapeJson($val);
       } else if (is_string($val)) {
+        // $val = escapeJsonString($val);
         $val = htmlspecialchars($val);
+        // $val = htmlspecialchars(
+        //     htmlspecialchars_decode($val, ENT_QUOTES), ENT_QUOTES);
       }
 
       if (is_string($key))
