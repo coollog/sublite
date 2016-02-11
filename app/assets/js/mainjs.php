@@ -3,6 +3,13 @@
 
   $(function () {
     $('.hide, templates').hide();
+    setTimeout(function() {
+      $('.form-slider > input').each(function() {
+        if ($(this).val()) {
+          $(this).focus().blur();
+        }
+      });
+    }, 200);
   });
 
   function scrollTo(q, n) {
