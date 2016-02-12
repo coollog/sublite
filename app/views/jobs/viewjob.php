@@ -68,13 +68,12 @@
 <templates>
   <applytemplate>
     <?php
-      if(vget('Loggedinstudent') || vget('Loggedin')) {
-        $_id = View::get('_id');
+      $_id = View::get('_id');
+      $href = "apply/$_id";
 
+      if(vget('Loggedinstudent') || vget('Loggedin')) {
         $buttonText = "Apply Now";
         $onClick = "";
-
-        $href = "apply/$_id";
 
         // $hasApplication = View::get('hasApplication');
         // if ($hasApplication) {
