@@ -86,6 +86,7 @@
 
     function add() {
       function formData($data) {
+        $data['industry'] = isset($data['industry']) ? explode(', ', $data['industry']) : array();
         return array_merge($data, array(
           'headline' => 'Create',
           'submitname' => 'add', 'submitvalue' => 'Add Company'));

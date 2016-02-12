@@ -177,6 +177,7 @@
 
     setupFlexInput();
     setupAddItem();
+    setupDeleteItem();
     setupFields();
     setupFinish();
   });
