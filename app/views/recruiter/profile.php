@@ -7,26 +7,30 @@
     border-radius: 100px;
     display: inline-block;
   }
+  .recruiter headline {
+    margin-bottom: -20px;
+  }
   .recruiter subheadline {
     color: #000;
   }
   .recruiterinfo {
     margin: 40px 0;
   }
+  .topeditprofile {
+    margin-top: 20px;
+  }
 </style>
 
 <panel class="recruiter">
   <div class="content">
-    <headline>Recruiter Profile</headline>
+    <headline><?php vecho('firstname'); ?> <?php vecho('lastname'); ?></headline>
+    <subheadline class="title"><?php vecho('title'); ?> at <?php vecho('company'); ?></subheadline>
     <?php if (vget('isme')) { ?>
-      <a href="editprofile.php"><input type="button" value="Edit Profile" /></a>
+      <a href="editprofile.php"><input type="button" value="Edit Profile" class="topeditprofile" /></a>
     <?php } ?>
 
     <div class="recruiterinfo">
       <div class="recruiterpic" style="background-image: url('<?php vecho('photo'); ?>');"></div>
-
-      <subheadline><?php vecho('firstname'); ?> <?php vecho('lastname'); ?></subheadline>
-      <?php vecho('title'); ?> at <?php vecho('company'); ?>
 
       <?php if (count($jobs = vget('jobtitles')) > 0) { ?>
         <subheadline>Looking for</subheadline>
