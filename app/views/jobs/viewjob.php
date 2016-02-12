@@ -112,7 +112,7 @@
     var applyHTML = Templates.use('applytemplate', {});
     $('apply').html(applyHTML);
 
-    $('#desc a').attr('href', '<?php echo $href; ?>');
+    $('#desc a, #requirements a').attr('href', '<?php echo $href; ?>');
   });
 </script>
 
@@ -154,7 +154,9 @@
                 <?php echo autolink(View::get('desc')); ?>
               </div>
               <subheadline>Requirements</subheadline>
-              <?php vecho('requirements'); ?>
+              <div id="requirements">
+                <?php echo autolink(View::get('requirements')); ?>
+              </div>
               <subheadline>Posted By</subheadline>
               <?php
                 echo vlinkto(vget('recruitername'), 'recruiter', array('id' => vget('recruiterid')));
