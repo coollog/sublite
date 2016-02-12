@@ -313,7 +313,7 @@
 
           if (!isset($search['city']) or $search['city'] == null) {
             $location = $search['data']['location'];
-            $city = getCity($location);
+            $city = Geocode::getCity($location);
             // Save cities so don't need to recurl in the future
             $entry[$time]['city'] = $city;
             $MApp->save($entry);

@@ -90,33 +90,39 @@
 
     public function getLatitude() {
       $geometry = $this->getGeometry();
+      if (is_null($geometry)) return $this->data['latitude'];
       $latitude = $geometry['location']['lat'];
       return $latitude;
     }
 
     public function getLongitude() {
       $geometry = $this->getGeometry();
+      if (is_null($geometry)) return $this->data['longitude'];
       $longitude = $geometry['location']['lng'];
       return $longitude;
     }
 
     public function getLocationType() {
       $geometry = $this->getGeometry();
+      if (is_null($geometry)) return $this->data['location_type'];
       $locationType = $geometry['location_type'];
       return $locationType;
     }
 
     public function getAddressComponents() {
       $firstResult = $this->getFirstResult();
+      if (is_null($firstResult)) return null;
       return $firstResult['address_components'];
     }
 
     private function getGeometry() {
       $firstResult = $this->getFirstResult();
+      if (is_null($firstResult)) return null;
       return $firstResult['geometry'];
     }
 
     private function getFirstResult() {
+      if (!isset($this->data['results'])) return null;
       return $this->data['results'][0];
     }
 

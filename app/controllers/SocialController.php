@@ -342,7 +342,7 @@
           //   return $this->errorString("invalid date range: end date should be after start date.");
           // }
 
-          $geocode = geocode($message['address']);
+          $geocode = Geocode::geocode($message['address']);
 
           if ($name == 'create event') {
             return $this->successString($MSocial->createEvent(
