@@ -108,8 +108,12 @@
       'You have clicked on an external link and are leaving the pages of SubLite.net. We are not responsible for the accuracy or effectiveness of any content outside of SubLite.net.');
   }
   $(function() {
-    var applyHTML = useTemplate('applytemplate', {});
+    Templates.init();
+
+    var applyHTML = Templates.use('applytemplate', {});
     $('apply').html(applyHTML);
+
+    $('#desc a').attr('href', '<?php echo $href; ?>');
   });
 </script>
 
@@ -147,7 +151,9 @@
         <tr>
           <td style="width: 60%;">
             <div style="overflow: hidden; width: 100%; white-space: pre-line;">
-              <?php vecho('desc'); ?>
+              <div id="desc">
+                <?php echo autolink(View::get('desc')); ?>
+              </div>
               <subheadline>Requirements</subheadline>
               <?php vecho('requirements'); ?>
               <subheadline>Posted By</subheadline>

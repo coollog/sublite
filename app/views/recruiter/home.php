@@ -142,7 +142,9 @@
   <joblistingtemplate>
     <joblisting>
       <info>
-        {title} | {location}
+        <a href="../jobs/job?id={_id}" target="_blank">
+          {title} | {location}
+        </a>
       </info>
       <buttons>
         <a href="viewapplicants/{_id}">{applicants} applicants</a> |
