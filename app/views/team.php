@@ -257,7 +257,43 @@
       position: 'Software Engineer, Yale University',
       shortPosition: 'Software, Yale',
       bio: 'Edward She is a sophomore at Yale University studying Computer Science and Economics, although he is interested in practically anything STEM-related. In particular, he enjoys math, problem solving, and puzzles of all types. Edward loves coding because he views it as a combination of all three of these things. Outside of academic pursuits, Edward especially enjoys food and, in particular, searching for free food. His love for food has partially led him to become actively involved in the Chinese American Students Association, where he organizes events with free food. He is also involved with Yale University Diversified Investments and YHack.',
+    },
+    {
+      photo: 'charlie',
+      name: 'Charlie Desprat',
+      position: 'Publicity Director, Yale University',
+      shortPosition: 'Publicity, Yale',
+      bio: 'Charlotte Desprat is a French sophomore at Yale University from Prague and is currently majoring in history while venturing into more obscure topics such as the political anthropology of Russia or the history of epidemics in Western society since 1600. Her international background and passion for foreign cultures have enabled her to speak French, English, German and Russian and contribute to Accent and The Yale Globalist - two undergraduate publications focused on international affairs - as a writer, editor and layout designer. She found in SubLite the opportunity to combine her interests in writing, marketing and entrepreneurship while contributing to the larger student community. In her free time, she enjoys pondering the meaning of Russian jokes, hiking to East Rock, aggressively jumping in the New Haven snow until she realizes that it is ice but it is far too late, and practicing her guitar skills.',
+    },
+    {
+      photo: 'christopher',
+      name: 'Christopher Fu',
+      position: 'Software Engineer, Yale University',
+      shortPosition: 'Software, Yale',
+      bio: 'Christopher Fu is a sophomore at Yale University studying computer science. He enjoys any sort of programming but is most experienced with iOS/Mac OS X and web development. He is also a member of the Yale Undergraduate Aerospace Association, where he is working on a team to launch a miniature satellite called a CubeSat into space. In his free time, Chris enjoys playing video games with friends, running, and messing around with technology.',
+    },
+    {
+      photo: 'david',
+      name: 'David Liu',
+      position: 'Project Manager, Yale University',
+      shortPosition: 'PM, Yale',
+      bio: 'David Liu is from Southern California. He\'s looking to play some 3v3 pickup so contact him if interested.',
+    },
+    {
+      photo: 'ngan',
+      name: 'Ngan Vu',
+      position: 'Web Designer',
+      shortPosition: 'Designer, Yale',
+      bio: 'Ngan is a freshman in Ezra Stiles college, currently planning to major in Computing and the Arts and Molecular, Cellular and Developmental Biology. She loves anything that is pretty, so besides front-end web development, she is exploring theatrical lighting, photography, graphic design, and wall painting. She also loves anything that is edible. During her free time, if not eating, she enjoys playing the piano or struggling with squash. She has the same birthday as Pusheen the cat. Her current favorite command line is “sudo pecl install mongo”.',
+    },
+    {
+      photo: 'sloane',
+      name: 'Sloane Smith',
+      position: 'Social Media Director',
+      shortPosition: 'Social Media, Yale',
+      bio: 'Sloane is a sophomore at Yale University interested in Biomedical Engineering. She joined just a few weeks ago as the director of social media and is very excited to start promoting Sublite and the opportunities it provides for other students. Outside of Sublite, Sloane is on the gymnastics team at Yale where she excels on vault and floor. She also loves to travel and hopes to spend a summer just traveling to different countries.',
     }
+
   ];
 
   $(function () {
@@ -326,13 +362,14 @@
             hideMemberBox();
             this.setAttribute("current","");
           } else {
+            // set the old current one to nothing
+            $("[current=current]").attr("current","");
             this.setAttribute("current","current");
             $(".memberbox").slideUp("slow");
             $('#box'+i).slideDown("slow");
             $('.picBox .overlay').css("opacity","");
             $('#picBox'+i+' .overlay').css("opacity","1");
           }
-
         });
       }
 
@@ -344,6 +381,7 @@
       }
 
       $(".exit").click(function(){
+        $("[current=current]").attr("current","");
         hideMemberBox();
       });
 
