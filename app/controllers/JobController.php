@@ -117,7 +117,8 @@
       $enddate = clean($data['enddate']);
       $salarytype = clean($data['salarytype']);
       $salary = clean($data['salary']);
-      if ($salarytype != 'other') $salary = str2float($salary);
+      if ($salarytype != 'other' && $salarytype != 'commission')
+        $salary = str2float($salary);
       if ($jobtype == 'fulltime' || $jobtype == 'parttime') {
         $duration = '';
         $enddate = '';

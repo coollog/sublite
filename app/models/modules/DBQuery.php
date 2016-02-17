@@ -19,6 +19,7 @@
     public function toQuery($name, $val);
     public function toNotQuery($name, $val);
     public function limit($n);
+    public function skip($n);
 
     /**
      * Run a text search on $text.
@@ -135,6 +136,10 @@
         $cursor->limit($this->limit);
       }
 
+      if (isset($this->skip)) {
+        $cursor->skip($this->skip);
+      }
+
       return self::cursorToArray($cursor);
     }
 
@@ -155,6 +160,7 @@
     protected $projection = [];
     protected $sort = [];
     protected $limit;
+    protected $skip;
   }
 
   ////////////////
@@ -185,6 +191,10 @@
 
     public function limit($n) {
       $this->limit = $n;
+      return $this;
+    }
+    public function skip($n) {
+      $this->skip = $n;
       return $this;
     }
 

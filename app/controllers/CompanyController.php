@@ -1,7 +1,18 @@
 <?php
   require_once($GLOBALS['dirpre'].'controllers/Controller.php');
 
-  class CompanyController extends Controller {
+  interface CompanyControllerInterface {
+    // View list of companies.
+    public static function viewAll();
+  }
+
+  class CompanyController extends Controller
+                          implements CompanyControllerInterface {
+    public static function viewAll() {
+      self::displayMetatags('companyprofile');
+      self::render('companies/list');
+    }
+
     function format($token) {
       return $token;
     }

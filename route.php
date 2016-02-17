@@ -240,6 +240,9 @@
     Controller::displayMetatags('searchjobs');
     GLOBALvarGet('CJob')->search();
   });
+  Router::register('jobs/companies', function() {
+    CompanyController::viewAll();
+  });
   Router::register('jobs/company', function() {
     GLOBALvarGet('CCompany')->view();
   });
@@ -395,6 +398,7 @@
   Router::routeTree('/jobs/application', 'jobs/application');
   Router::route('/jobs/application/report', 'jobs/application/report');
   Router::routeTree('/jobs/apply', 'jobs/apply');
+  Router::route('/jobs/companies', 'jobs/companies');
   Router::route('/jobs/company', 'jobs/company');
   Router::route('/jobs/editprofile', 'jobs/editprofile');
   Router::route('/jobs/home', 'jobs/home');

@@ -242,16 +242,23 @@
             <div class="icon" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/salaryico.png');">
               <div class="cell">
                 <subheadline>
-                <?php
-                  if(vget('salarytype') != "other") echo '$';
-                  vecho('salary');
-                  if(vget('salarytype') != "other") {
-                    echo ' / ';
-                    vecho('salarytype');
-                  }
-                ?>
+                  <?php
+                    $salaryType = View::get('salarytype');
+                    $showType =
+                      ($salaryType != 'other' && $salaryType != 'commission');
+
+                    if ($showType) echo '$';
+                    View::echof('salary');
+                    if ($showType) echo " / $salaryType";
+                  ?>
                 </subheadline>
-                <small>Compensation</small>
+                <small>
+                  <?php if ($salaryType == 'commission') { ?>
+                    Commission
+                  <?php } else { ?>
+                    Compensation
+                  <?php } ?>
+                </small>
               </div>
             </div>
 

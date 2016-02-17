@@ -2,11 +2,21 @@
   require_once($GLOBALS['dirpre'].'models/Model.php');
 
   interface CompanyModelInterface {
-
+    // Return a subset of the companies in our database.
+    // $count=0 means no limit.
+    public static function getSubset($start, $count);
   }
 
   class CompanyModel extends Model implements CompanyModelInterface {
     const DB_TYPE = parent::DB_INTERNSHIPS;
+
+    public static function getSubset($start=0, $count=0) {
+      $query = (new DBQuery(self::$collection))
+        // ->projectField('')
+        ->skip($start)->limit($count);
+      $companies = $query->run();
+      return $companies;
+    }
 
     function __construct() {
       parent::__construct(self::DB_TYPE, 'companies');
