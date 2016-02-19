@@ -292,7 +292,49 @@
       position: 'Social Media Director',
       shortPosition: 'Social Media, Yale',
       bio: 'Sloane is a sophomore at Yale University interested in Biomedical Engineering. She joined just a few weeks ago as the director of social media and is very excited to start promoting Sublite and the opportunities it provides for other students. Outside of Sublite, Sloane is on the gymnastics team at Yale where she excels on vault and floor. She also loves to travel and hopes to spend a summer just traveling to different countries.',
-    }
+    },
+		{
+			photo: 'jasson',
+			name: 'Jasson Ortiz',
+			position: 'Campus Ambassador',
+			shortPosition: 'Campus Rep',
+			bio: 'Jasson Ortiz is a sophomore at Bentley University, majoring in Marketing and minoring in Management. He has served on several executive boards as Marketing Director  and has helped advertise several organization across campus through social media platforms. He has a passion for digital media and spends time editing videos and working on new video projects. In his spare time, he likes to play soccer and ride his skateboard along the beach.',
+		},
+		{
+			photo: 'Elana',
+			name: 'Elana Schmidt',
+			position: 'Campus Ambassador',
+			shortPosition: 'Campus Rep',
+			bio: 'Elana Schmidt is a freshman at Columbia College Chicago majoring in Media Management with a minor in Marketing. She is also a general board member of Columbia’s Student Programming Board as well as a member of the Women + Film Club. When she has free time, Elana enjoys attending musicals, improv shows, and watching How I Met Your Mother.',
+		},
+		{
+			photo: 'john',
+			name: 'Jiang Wang',
+			position: 'Campus Ambassador',
+			shortPosition: 'Campus Rep',
+			bio: 'Jiang Wang, better known as John, is a freshman at UC Berkeley with an intended major in Business Administration. Through his role as Brand Ambassador of Mead Five Star during high school, he developed experience in the fields of marketing, social media endorsements, and peer promotions. He joined the team as after Q, SubLite’s CTO, introduced the site to him as a way to find a summer internship. As an avid gamer, John loves playing League of Legends. During his free time, John also enjoys meeting new people and trying different experiences, along with spending time with family and friends, watching movies, and playing ping pong.',
+		},
+		{
+			photo: 'stephen',
+			name: 'Stephen DeRosa',
+			position: 'Campus Ambassador',
+			shortPosition: 'Campus Rep',
+			bio: 'Stephen DeRosa is a freshman studying mechanical engineering at The University of Hartford. He is beyond thrilled to be apart of the Sublite team and gain valuable experience. He is a member of Engineers Without Borders, and is working on creating a solar powered golf cart. He is also a member of an acapella group on campus. Stephen lives in New York where, in his free time, he enjoys spending time with his family, friends, reading, and snowboarding.',
+		},
+		{
+			photo: 'davidschutte',
+			name: 'David Schutte',
+			position: 'Campus Ambassador',
+			shortPosition: 'Campus Rep',
+			bio: 'David Schutte grew up in 6 different countries – The U.S., Holland, Uzbekistan, Ukraine, Thailand, and Poland – and has visited in addition. He is a second year at the University of Virginia, majoring in economics and finance. Upon matriculating, he joined the university’s student newspaper, the Cavalier Daily, taking on positions as an associate editor and advertising representative. He had the unique opportunity to prepare a briefer of economic/demographic data for a Virginia congressional candidate, which is being used for her 2016 campaign. His hobbies including playing the piano, basketball, and tennis. David hopes to bring his global perspective to SubLite’s marketing team.',
+		},
+		{
+			photo: 'helena',
+			name: 'Helena Li',
+			position: 'Campus Ambassador',
+			shortPosition: 'Campus Rep',
+			bio: 'Helena Li, also known as Zucchini, is a first year student at UC Berkeley. She intends to major in computer science with a minor in philosophy and creative writing. Having worked at a Six Flags park for a summer, she is very experienced in customer service. In her free time, Zucchini enjoys reading and writing poetry. Her favorite poet being John Keats. Spontaneous and eccentric at times, Zucchini also enjoys spending time in the company of others and going on adventures.',
+		},
 
   ];
 
