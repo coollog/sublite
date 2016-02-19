@@ -5,15 +5,19 @@
     public static function viewAll();
   }
 
-  class CompanyControllerAJAX
-    extends CompanyController
-    implements CompanyControllerAJAXInterface {
-
+  class CompanyControllerAJAX extends CompanyController
+                              implements CompanyControllerAJAXInterface {
     public static function viewAll() {
+      global $params;
+
       $start = intval($params['start']);
       $count = intval($params['count']);
-
-      $companies = CompanyModel::getSubset($start, $count);
+      if (isset($params['search'])) {
+        $search = clean($params['search']);
+        $companies = CompanyModel::search($search, $start, $count);
+      } else {
+        $companies = CompanyModel::getSubset($start, $count);
+      }
 
       echo toJSON($companies);
     }

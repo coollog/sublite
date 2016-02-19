@@ -27,6 +27,11 @@
     public function textSearch($text);
 
     /**
+     * Add this field to the sort by $val.
+     */
+    public function sortField($name, $val);
+
+    /**
      * Add this field to the projection.
      */
     public function projectField($name);
@@ -195,6 +200,11 @@
     }
     public function skip($n) {
       $this->skip = $n;
+      return $this;
+    }
+
+    public function sortField($name, $val) {
+      $this->sort[$name] = $val;
       return $this;
     }
 

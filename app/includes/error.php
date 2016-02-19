@@ -65,6 +65,7 @@
   }
 
   if ($env !== 'dev') {
+    die('asdfkjlsadkf');
     register_shutdown_function( "check_for_fatal" );
     set_error_handler( "errorHandler" );
   }

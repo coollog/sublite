@@ -243,6 +243,9 @@
   Router::register('jobs/companies', function() {
     CompanyController::viewAll();
   });
+  Router::register('jobs/ajax/loadcompanies', function() {
+    CompanyControllerAJAX::viewAll();
+  });
   Router::register('jobs/company', function() {
     GLOBALvarGet('CCompany')->view();
   });
@@ -399,6 +402,7 @@
   Router::route('/jobs/application/report', 'jobs/application/report');
   Router::routeTree('/jobs/apply', 'jobs/apply');
   Router::route('/jobs/companies', 'jobs/companies');
+  Router::route('/jobs/ajax/loadcompanies', 'jobs/ajax/loadcompanies');
   Router::route('/jobs/company', 'jobs/company');
   Router::route('/jobs/editprofile', 'jobs/editprofile');
   Router::route('/jobs/home', 'jobs/home');
