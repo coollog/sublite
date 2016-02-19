@@ -217,6 +217,13 @@
       bio: 'Michelle Chan is a senior at Hong Kong University majoring in International Business &amp; Global Management and Japanese. She was an exchange student at Yale for her junior year. At Yale, she enjoyed great freedom in taking art and film classes such as graphic design, photography, and documentary filmmaking. She was also a staff photographer for Yale Daily News and a photographer and layout designer for the Yale Entrepreneur Magazine. In Hong Kong, Michelle worked for a start-up called Launchpilots and started the Entrepreneurship Apprentice Program for university students. During her free time, she loves taking photos, hiking, and stargazing.',
     },
     {
+      photo: 'alex',
+      name: 'Alex Croxford',
+      position: 'Business Development Director, Yale University',
+      shortPosition: 'Business Development, Yale',
+      bio: 'Alex Croxford is a sophomore at Yale University and currently planning to major in Electrical Engineering and Computer Science. He loves the outdoors and is a member Branford Sustainability and BSA Venturing Crew. Over the past summers, he has enjoyed working on his family’s farm in Illinois. In his free time he loves camping, hiking, and spending time with family and friends.',
+    },
+		{
       photo: 'julie',
       name: 'Julie Slama',
       position: 'Marketing Director, Yale University',
@@ -224,25 +231,11 @@
       bio: 'Julie Slama is a sophomore at Yale University, majoring in Global Affairs. After landing her first internship, she scoured Craigslist and Facebook to find available sublets, eventually leading her to SubLite. She is also Outreach Manager for the Yale Daily News Business Team,  a member of the LEAD Institute and the William F. Buckley, Jr. Program, and works as a lifeguard at the Yale University Pool. In her free time, she loves training for marathons, fishing, and camping with her family back home in Nebraska.',
     },
     {
-      photo: 'alex',
-      name: 'Alex Croxford',
-      position: 'Business Development Director, Yale University',
-      shortPosition: 'Business Development, Yale',
-      bio: 'Alex Croxford is a sophomore at Yale University and currently planning to major in Electrical Engineering and Computer Science. He loves the outdoors and is a member Branford Sustainability and BSA Venturing Crew. Over the past summers, he has enjoyed working on his family’s farm in Illinois. In his free time he loves camping, hiking, and spending time with family and friends.',
-    },
-    {
       photo: 'dean',
       name: 'Dean Li',
       position: 'Recruitment Director, Yale University',
       shortPosition: 'Recruitment, Yale',
       bio: 'Dean is a freshman at Yale University interested in Economics and Computer Science. He found Sublite in the craziness of the first month of college, and relating to the company’s purpose because of his summer internship program, he joined and has not looked back. He brings to the company a deep love of food and little to no diversity. Outside of Sublite, he plays basketball and cello, is an avid Bulls fan, and is involved in the Asian-American cultural center at Yale.',
-    },
-    {
-      photo: 'nicolas',
-      name: 'Nicholas Jimenez',
-      position: 'Communications Director, Yale University',
-      shortPosition: 'Communications, Yale',
-      bio: 'Nicolas Jimenez is a freshman at Yale University from Bogota, Colombia, who is currently studying a wide range of subjects from Computer Science to French Literature and Philosophy. He is an ardent traveler, and is fortunate to have studied and done service internationally. Nicolas is a member of the Yale Climbing Team and the Yale Ski Team, writes for an international publication, and is proud captain of his college’s Intramural Ping Pong Team. In his free time, he enjoys photography, hiking, and reading about religion.',
     },
     {
       photo: 'eric',
