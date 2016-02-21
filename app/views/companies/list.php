@@ -156,7 +156,12 @@
       }
     }
     $('#search')
-      .click(function () { $(this).val(''); searchAgain(); })
+      .click(function () {
+        if ($(this).val()) {
+          $(this).val('');
+          searchAgain();
+        }
+      })
       .change(searchAgain);
 
     $('form').submit(function () { return false; });
