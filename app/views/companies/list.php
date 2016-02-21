@@ -174,7 +174,7 @@
       </div>
     </form>
 
-    <list></list>
+    <list>Loading...</list>
 
     <showMore>Show More</showMore>
   </div>
