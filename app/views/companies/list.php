@@ -11,6 +11,7 @@
     text-align: center;
     transition: 0.1s all ease-in-out;
     width: 200px;
+    color: black !important;
   }
   company:hover {
     opacity: 0.5;
@@ -48,13 +49,15 @@
 
 <templates>
   <companytemplate>
-    <company>
-      <photo style="background-image: url('{logophoto}');"
-             class="div imagecontain"></photo>
-      <name class="div">{name}</name>
-      <industry class="div">{industry}</industry>
-      <desc class="div">{desc}</desc>
-    </company>
+    <a href="company?id={_id}">
+      <company>
+        <photo style="background-image: url('{logophoto}');"
+               class="div imagecontain"></photo>
+        <name class="div">{name}</name>
+        <industry class="div">{industry}</industry>
+        <desc class="div">{desc}</desc>
+      </company>
+    </a>
   </companytemplate>
 </templates>
 
@@ -89,6 +92,7 @@
       Companies.finish()
     }
     data.forEach(function (company) {
+      company._id = company._id.$id;
       var html = Templates.use('companytemplate', company);
       $('list').append(html);
     });
