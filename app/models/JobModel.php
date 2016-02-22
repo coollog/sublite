@@ -97,7 +97,15 @@
     }
     function last($n=1) {
       return
-        self::$collection->find()
+        self::$collection
+          ->find([], [
+            'title' => 1,
+            'company' => 1,
+            'location' => 1,
+            'desc' => 1,
+            'deadline' => 1,
+            'logophoto' => 1
+          ])
           ->sort(array('priority'=>-1, '_id'=>-1))->limit($n);
     }
 

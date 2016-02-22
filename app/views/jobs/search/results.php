@@ -72,7 +72,7 @@
 
 <panel class="results">
   <div class="content">
-    <?php if (!is_null(vget('recent'))) { ?>
+    <?php if (!is_null(View::get('recent'))) { ?>
       <headline>Recent Listings</headline>
     <?php } ?>
     <?php
@@ -94,9 +94,9 @@
           </tr></table>
         ";
       }
-      $jobs = vget('jobs');
+      $jobs = View::get('jobs');
       foreach ($jobs as $job) {
-        echo vlinkto(jobBlock($job), 'job', array('id' => $job['_id']->{'$id'}));
+        echo View::linkTo(jobBlock($job), 'job', ['id' => $job['_id']->{'$id'}]);
       }
       if (count($jobs) == 0) {
         echo "No jobs matching your query. Stay posted! New jobs are being added regularly.";
