@@ -91,6 +91,10 @@
     if (data.length < 10) {
       Companies.finish()
     }
+    if (data.length == 0) {
+      var search = $('#search').val();
+      $('list').html('No companies matching found for "' + search + '".');
+    }
     data.forEach(function (company) {
       company._id = company._id.$id;
       var html = Templates.use('companytemplate', company);
