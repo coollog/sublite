@@ -2,6 +2,8 @@
 
 <?php
 
+  define("MAX_EMAILS", 200); // max number of emails per batch
+  require('../pass.php');
   //to use with cron: "* 2 * * sun /usr/bin/php ~/Sites/sublite/app/cronjobs/recruiterreminder.php"
   // runs job at 2am on sundays
 
@@ -9,11 +11,19 @@
 
   //connect to database
   try {
+    $dbname = 'subliteinternships';
 
-    define("MAX_EMAILS", 200); // max number of emails per batch
+    switch ($env) { // test development environment to determine which database to connect to
+      case 'dev':
+        $dbhost = 'localhost:27017';
+        break;
+      default:
+        $dbhost = 'ds051980.mongolab.com:51980';
+    }
+    $uri = "mongodb://$dbuser:$dbpass@$dbhost/$dbname";
+    $m = new MongoClient($uri); // connect to database
 
-    $m = new MongoClient();
-    $db = $m->subliteinternships;
+    $db = $m->$dbname;
     //query the subliteinternships db -> applications collection for unique jobids where application(s) have not been unlocked yet
 
     //get unique jobids
@@ -24,7 +34,7 @@
 
     // query the recruiters collection for any recruiters with ids in $recruiteridResult, and also recruiters that have not been sent an email in a week or whose last_emailed field is NULL
     $currentTime = time();
-    $interval = time() - 7 * 24 * 60 * 60; // 7 days
+    $interval = time() - 7 * 24 * 60 * 60; // 7 days before
     $mongoInterval = new MongoDate($interval); // MongoDate seven days in the past
 
     //final query
@@ -50,16 +60,15 @@
         )
       )->limit(MAX_EMAILS);
 
-
     if ($recruiterResult) {
-
+      $recruitersEmailed = []; // keep track of emails of recruiters reminded using this script
       //set up phpmailer
       $mail = new PHPMailer;
       $mail->isSMTP();                                      // Set mailer to use SMTP
       $mail->Host = 'smtp.gmail.com';                       // Specify main and backup server
       $mail->SMTPAuth = true;                               // Enable SMTP authentication
       $mail->Username = 'info@sublite.net';                 // SMTP username
-      $mail->Password = '1q2w3eAwesomePeepsUnite!:3';              // SMTP password
+      $mail->Password = $gmailpass;
       $mail->SMTPSecure = 'tls';                            // Enable encryption, 'ssl' also accepted
       $mail->Port = 587;                                    //Set the SMTP port number - 587 for authenticated TLS
       $mail->setFrom("info@sublite.net");
@@ -70,6 +79,7 @@
       $mail->Subject = $subject;
 
       foreach ($recruiterResult as $recruiter) { // loop through all recruiters and send them personalized reminder emails
+        $recruitersEmailed[] = $recruiter['email'];
         $mail->addAddress($recruiter['email']);
         $recruiterFullName = $recruiter['firstname'] . $recruiter['lastname'];
         $recruiterId = $recruiter['_id'];
@@ -78,7 +88,7 @@
         $message = "
           Dear $recruiterFullName,
           <br />
-          <br />You have unclaimed applications for some of your job listings! Please visit your <a href = '$linkDashboard'>recruiter dashboard</a> to claim them!
+          <br />You have unclaimed applications for some of your job listings! Please visit your <a href = '$linkDashboard'>recruiter homepage</a> and your invidual job listings pages to claim them!
           <br />
           <br /
           Team SubLite
@@ -104,6 +114,18 @@
 
          // clear recipients for next recruiter's email
         $mail->ClearAllRecipients();
+      }
+
+      // send email to sublite reporting on details of cron job
+      $mail->addAddress("eric.yu@yale.edu");
+      $mail->addAddress("qingyang.chen@yale.edu");
+      $message = "Recruiters emailed by cron job recruiterreminder.php: " . implode(',', $recruitersEmailed);
+      $mail->Body    = $message;
+      $mail->AltBody = strip_tags($message);
+
+      // send email
+      if (!$mail->send()) {
+         return $mail->ErrorInfo;
       }
 
     } else { // no results
