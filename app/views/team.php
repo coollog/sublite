@@ -51,7 +51,7 @@
   }
   #teamBlock{
     float: center;
-    height: 600px;
+    height: 900px;
     width: 700px;
   }
   .picBox{
@@ -231,11 +231,25 @@
       bio: 'Julie Slama is a sophomore at Yale University, majoring in Global Affairs. After landing her first internship, she scoured Craigslist and Facebook to find available sublets, eventually leading her to SubLite. She is also Outreach Manager for the Yale Daily News Business Team,  a member of the LEAD Institute and the William F. Buckley, Jr. Program, and works as a lifeguard at the Yale University Pool. In her free time, she loves training for marathons, fishing, and camping with her family back home in Nebraska.',
     },
     {
+      photo: 'eddie',
+      name: 'Edward She',
+      position: 'Software Engineer, Yale University',
+      shortPosition: 'Software, Yale',
+      bio: 'Edward She is a sophomore at Yale University studying Computer Science and Economics, although he is interested in practically anything STEM-related. In particular, he enjoys math, problem solving, and puzzles of all types. Edward loves coding because he views it as a combination of all three of these things. Outside of academic pursuits, Edward especially enjoys food and, in particular, searching for free food. His love for food has partially led him to become actively involved in the Chinese American Students Association, where he organizes events with free food. He is also involved with Yale University Diversified Investments and YHack.',
+    },
+    {
       photo: 'dean',
       name: 'Dean Li',
       position: 'Recruitment Director, Yale University',
       shortPosition: 'Recruitment, Yale',
       bio: 'Dean is a freshman at Yale University interested in Economics and Computer Science. He found Sublite in the craziness of the first month of college, and relating to the company’s purpose because of his summer internship program, he joined and has not looked back. He brings to the company a deep love of food and little to no diversity. Outside of Sublite, he plays basketball and cello, is an avid Bulls fan, and is involved in the Asian-American cultural center at Yale.',
+    },
+    {
+      photo: 'davidl',
+      name: 'David Liu',
+      position: 'Project Manager, Yale University',
+      shortPosition: 'PM, Yale',
+      bio: 'David Liu is from Southern California. He\'s looking to play some 3v3 pickup so contact him if interested.',
     },
     {
       photo: 'eric',
@@ -245,11 +259,11 @@
       bio: 'Eric Yu is a freshman at Yale University currently exploring the fields of computer science and medicine. His background is mainly in web development, but he is always open to new technologies and is an avid learner of all things new. Besides programming Eric is passionate about various things, from studying Japanese and Japanese History to the art of eating Hot Cheetos with chopsticks. At Yale, he is also a member of the Ballroom Dancing Team and the Elmseed Enterprise Fund, and manages the Yale Politic’s website as its Director of Technology.',
     },
     {
-      photo: 'edward',
-      name: 'Edward She',
-      position: 'Software Engineer, Yale University',
-      shortPosition: 'Software, Yale',
-      bio: 'Edward She is a sophomore at Yale University studying Computer Science and Economics, although he is interested in practically anything STEM-related. In particular, he enjoys math, problem solving, and puzzles of all types. Edward loves coding because he views it as a combination of all three of these things. Outside of academic pursuits, Edward especially enjoys food and, in particular, searching for free food. His love for food has partially led him to become actively involved in the Chinese American Students Association, where he organizes events with free food. He is also involved with Yale University Diversified Investments and YHack.',
+      photo: 'ngan',
+      name: 'Ngan Vu',
+      position: 'Web Designer',
+      shortPosition: 'Designer, Yale',
+      bio: 'Ngan is a freshman in Ezra Stiles college, currently planning to major in Computing and the Arts and Molecular, Cellular and Developmental Biology. She loves anything that is pretty, so besides front-end web development, she is exploring theatrical lighting, photography, graphic design, and wall painting. She also loves anything that is edible. During her free time, if not eating, she enjoys playing the piano or struggling with squash. She has the same birthday as Pusheen the cat. Her current favorite command line is “sudo pecl install mongo”.',
     },
     {
       photo: 'charlie',
@@ -259,25 +273,11 @@
       bio: 'Charlotte Desprat is a French sophomore at Yale University from Prague and is currently majoring in history while venturing into more obscure topics such as the political anthropology of Russia or the history of epidemics in Western society since 1600. Her international background and passion for foreign cultures have enabled her to speak French, English, German and Russian and contribute to Accent and The Yale Globalist - two undergraduate publications focused on international affairs - as a writer, editor and layout designer. She found in SubLite the opportunity to combine her interests in writing, marketing and entrepreneurship while contributing to the larger student community. In her free time, she enjoys pondering the meaning of Russian jokes, hiking to East Rock, aggressively jumping in the New Haven snow until she realizes that it is ice but it is far too late, and practicing her guitar skills.',
     },
     {
-      photo: 'christopher',
+      photo: 'chris',
       name: 'Christopher Fu',
       position: 'Software Engineer, Yale University',
       shortPosition: 'Software, Yale',
       bio: 'Christopher Fu is a sophomore at Yale University studying computer science. He enjoys any sort of programming but is most experienced with iOS/Mac OS X and web development. He is also a member of the Yale Undergraduate Aerospace Association, where he is working on a team to launch a miniature satellite called a CubeSat into space. In his free time, Chris enjoys playing video games with friends, running, and messing around with technology.',
-    },
-    {
-      photo: 'david',
-      name: 'David Liu',
-      position: 'Project Manager, Yale University',
-      shortPosition: 'PM, Yale',
-      bio: 'David Liu is from Southern California. He\'s looking to play some 3v3 pickup so contact him if interested.',
-    },
-    {
-      photo: 'ngan',
-      name: 'Ngan Vu',
-      position: 'Web Designer',
-      shortPosition: 'Designer, Yale',
-      bio: 'Ngan is a freshman in Ezra Stiles college, currently planning to major in Computing and the Arts and Molecular, Cellular and Developmental Biology. She loves anything that is pretty, so besides front-end web development, she is exploring theatrical lighting, photography, graphic design, and wall painting. She also loves anything that is edible. During her free time, if not eating, she enjoys playing the piano or struggling with squash. She has the same birthday as Pusheen the cat. Her current favorite command line is “sudo pecl install mongo”.',
     },
     {
       photo: 'sloane',
@@ -286,13 +286,6 @@
       shortPosition: 'Social Media, Yale',
       bio: 'Sloane is a sophomore at Yale University interested in Biomedical Engineering. She joined just a few weeks ago as the director of social media and is very excited to start promoting Sublite and the opportunities it provides for other students. Outside of Sublite, Sloane is on the gymnastics team at Yale where she excels on vault and floor. She also loves to travel and hopes to spend a summer just traveling to different countries.',
     },
-		{
-			photo: 'jasson',
-			name: 'Jasson Ortiz',
-			position: 'Campus Ambassador',
-			shortPosition: 'Campus Rep',
-			bio: 'Jasson Ortiz is a sophomore at Bentley University, majoring in Marketing and minoring in Management. He has served on several executive boards as Marketing Director  and has helped advertise several organization across campus through social media platforms. He has a passion for digital media and spends time editing videos and working on new video projects. In his spare time, he likes to play soccer and ride his skateboard along the beach.',
-		},
 		{
 			photo: 'Elana',
 			name: 'Elana Schmidt',
@@ -315,7 +308,7 @@
 			bio: 'Stephen DeRosa is a freshman studying mechanical engineering at The University of Hartford. He is beyond thrilled to be apart of the Sublite team and gain valuable experience. He is a member of Engineers Without Borders, and is working on creating a solar powered golf cart. He is also a member of an acapella group on campus. Stephen lives in New York where, in his free time, he enjoys spending time with his family, friends, reading, and snowboarding.',
 		},
 		{
-			photo: 'davidschutte',
+			photo: 'davids',
 			name: 'David Schutte',
 			position: 'Campus Ambassador',
 			shortPosition: 'Campus Rep',
