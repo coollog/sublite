@@ -634,37 +634,24 @@
     }
 
     function view() {
-      // $this->requireLogin();
+      // Validations
+      $this->startValidations();
+      $this->validate(isset($_GET['id']) and
+        ($entry = StudentModel::getByID($id = new MongoId($_GET['id']))) != NULL,
+        $err, 'unknown student');
 
-      // global $params, $MStudent, $MCompany, $MJob;
+      // Code
+      if ($this->isValid()) {
+        $data = $this->data($entry);
+        if ($data['photo'] == 'assets/gfx/defaultpic.png')
+            $data['photo'] = $GLOBALS['dirpreFromRoute'] . $data['photo'];
+        self::displayMetatags('recruiter');
+        $data['studentid'] = new MongoId($_GET['id']);
+        self::render('student/profile', $data);
+      }
 
-      // // Validations
-      // $this->startValidations();
-      // $this->validate(isset($_GET['id']) and
-      //   ($entry = $MStudent->getByID($id = $_GET['id'])) != NULL,
-      //   $err, 'unknown Student');
-
-      // // Code
-      // if ($this->isValid()) {
-      //   $data = $this->data($entry);
-      //   $company = $MCompany->get($data['company']);
-      //   $data['company'] = $company['name'];
-
-      //   $jobs = $MJob->getByStudent($id);
-      //   $data['jobtitles'] = array(); $data['joblocations'] = array();
-      //   foreach ($jobs as $job) {
-      //     array_push($data['jobtitles'], $job['title']);
-      //     array_push($data['joblocations'], $job['location']);
-      //   }
-
-      //   $data['isme'] = idcmp($id, $_SESSION['_id']);
-
-      //   $this->render('Student', $data);
-      //   return;
-      // }
-
-      // $this->error($err);
-      // $this->render('notice');
+      $this->error($err);
+      self::render('notice');
     }
 
     function loggedIn() {
