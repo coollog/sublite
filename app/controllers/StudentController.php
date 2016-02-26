@@ -3,6 +3,14 @@
   require_once($GLOBALS['dirpre'].'controllers/modules/application/StudentProfile.php');
 
   interface StudentControllerInterface {
+    /**
+     * Student dashboard.
+     */
+    public static function home();
+
+    /**
+     * For the career profile.
+     */
     public static function editStudentProfile();
     public static function viewStudentProfile();
 
@@ -14,6 +22,14 @@
 
   class StudentController extends Controller
                           implements StudentControllerInterface {
+    public static function home() {
+      self::requireLogin();
+
+      $me = self::getMe();
+
+      self::render('student/home', $me);
+    }
+
     public static function editStudentProfile() {
       self::requireLogin();
       global $params;
@@ -78,6 +94,26 @@
       $profile['name'] = $name;
 
       return $profile;
+    }
+
+    private static function getMe() {
+      $me = StudentModel::me();
+      $me['_id'] = $me['_id']->{'$id'};
+
+      $photo = $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
+      if (isset($me['photo']) and !is_null($me['photo'])) {
+        $photo = $me['photo'];
+        if ($photo == 'nopic.png')
+          $photo = $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
+      }
+      $me['photo'] = $photo;
+
+      if (!isset($me['school']) || strlen($me['school']) == 0) {
+        global $S;
+        $me['school'] = $S->nameOf($me['email']);
+      }
+
+      return $me;
     }
 
     function data($data) {
@@ -175,28 +211,6 @@
     function validateData($data, &$err) {
       $this->validate($this->isValidName($data['firstname']),
         $err, 'first name is too long');
-    }
-
-    function home() {
-      $this->requireLogin();
-      global $MStudent, $MSublet;
-      $me = $MStudent->me();
-      $me['_id'] = $me['_id']->{'$id'};
-
-      $photo = $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
-      if (isset($me['photo']) and !is_null($me['photo'])) {
-        $photo = $me['photo'];
-        if ($photo == 'nopic.png')
-          $photo = $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
-      }
-      $me['photo'] = $photo;
-
-      if (!isset($me['school']) || strlen($me['school']) == 0) {
-        global $S;
-        $me['school'] = $S->nameOf($me['email']);
-      }
-
-      $this->render('student/home', $me);
     }
 
     function index() {
