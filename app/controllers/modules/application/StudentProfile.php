@@ -119,7 +119,7 @@
               ],
               '$optional' => [
                 'summary' => 'emptyString',
-                'link' => 'nullString',
+                'links' => 'arrayOfStrings',
                 // 'dates.start' => 'date',
                 // 'dates.end' => 'nullDate'
                 'dates' => [

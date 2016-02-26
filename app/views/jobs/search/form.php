@@ -77,7 +77,7 @@
         }
         $('#industry')
           .change(function() { changeIndustryLabel($(this).val().length > 0); })
-          .ready(function() { changeIndustryLabel(<?php 
+          .ready(function() { changeIndustryLabel(<?php
             if (strlen(vget('industry')) > 0) echo 'true';
             else echo 'false';
           ?>) });
@@ -86,8 +86,11 @@
       <div class="form-slider"><label for="city">City:</label><input type="text" id="city" name="city" value="<?php vecho('city'); ?>" /></div>
 
       <div class="form-slider"><label for="company">Company:</label><input type="text" id="company" name="company" value="<?php vecho('company'); ?>" /></div>
-      
+
+      <a href="companies">See All Companies</a><br />
+
       <?php vnotice(); ?>
+
       <input type="submit" name="search" value="Search" />
     </form>
   </div>

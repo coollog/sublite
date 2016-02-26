@@ -68,13 +68,12 @@
 <templates>
   <applytemplate>
     <?php
-      if(vget('Loggedinstudent') || vget('Loggedin')) {
-        $_id = View::get('_id');
+      $_id = View::get('_id');
+      $href = "apply/$_id";
 
+      if(vget('Loggedinstudent') || vget('Loggedin')) {
         $buttonText = "Apply Now";
         $onClick = "";
-
-        $href = "apply/$_id";
 
         // $hasApplication = View::get('hasApplication');
         // if ($hasApplication) {
@@ -108,8 +107,12 @@
       'You have clicked on an external link and are leaving the pages of SubLite.net. We are not responsible for the accuracy or effectiveness of any content outside of SubLite.net.');
   }
   $(function() {
-    var applyHTML = useTemplate('applytemplate', {});
+    Templates.init();
+
+    var applyHTML = Templates.use('applytemplate', {});
     $('apply').html(applyHTML);
+
+    $('#desc a, #requirements a').attr('href', '<?php echo $href; ?>');
   });
 </script>
 
@@ -147,9 +150,13 @@
         <tr>
           <td style="width: 60%;">
             <div style="overflow: hidden; width: 100%; white-space: pre-line;">
-              <?php vecho('desc'); ?>
+              <div id="desc">
+                <?php echo autolink(View::get('desc')); ?>
+              </div>
               <subheadline>Requirements</subheadline>
-              <?php vecho('requirements'); ?>
+              <div id="requirements">
+                <?php echo autolink(View::get('requirements')); ?>
+              </div>
               <subheadline>Posted By</subheadline>
               <?php
                 echo vlinkto(vget('recruitername'), 'recruiter', array('id' => vget('recruiterid')));
@@ -235,16 +242,23 @@
             <div class="icon" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/salaryico.png');">
               <div class="cell">
                 <subheadline>
-                <?php
-                  if(vget('salarytype') != "other") echo '$';
-                  vecho('salary');
-                  if(vget('salarytype') != "other") {
-                    echo ' / ';
-                    vecho('salarytype');
-                  }
-                ?>
+                  <?php
+                    $salaryType = View::get('salarytype');
+                    $showType =
+                      ($salaryType != 'other' && $salaryType != 'commission');
+
+                    if ($showType) echo '$';
+                    View::echof('salary');
+                    if ($showType) echo " / $salaryType";
+                  ?>
                 </subheadline>
-                <small>Compensation</small>
+                <small>
+                  <?php if ($salaryType == 'commission') { ?>
+                    Commission
+                  <?php } else { ?>
+                    Compensation
+                  <?php } ?>
+                </small>
               </div>
             </div>
 

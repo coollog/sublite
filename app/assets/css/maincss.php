@@ -115,6 +115,14 @@
   .div {
     display: block;
   }
+  .imagecontain {
+    background: transparent no-repeat center center;
+    background-size: contain;
+  }
+  .imagecover {
+    background: transparent no-repeat center center;
+    background-size: cover;
+  }
   .gaptop {
     margin-top: 0.5em;
   }

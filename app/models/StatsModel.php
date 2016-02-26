@@ -86,9 +86,9 @@
 
       function addCity(&$cities, $doc) {
         if (isset($doc['city']) and isset($doc['state']))
-          $city = getCity($doc['city'] . ', ' . $doc['state']);
+          $city = Geocode::getCity($doc['city'] . ', ' . $doc['state']);
         else
-          $city = getCity($doc['location']);
+          $city = Geocode::getCity($doc['location']);
         if ($city != null) {
           if (isset($cities[$city])) $cities[$city] ++;
           else $cities[$city] = 1;

@@ -2,14 +2,36 @@
   require_once($GLOBALS['dirpre'].'models/Model.php');
 
   interface CompanyModelInterface {
-
+    // Return a subset of the companies in our database.
+    // $count=0 means no limit.
+    public static function getSubset($start, $count);
+    public static function search($search);
   }
 
   class CompanyModel extends Model implements CompanyModelInterface {
     const DB_TYPE = parent::DB_INTERNSHIPS;
 
+    public static function getSubset($start=0, $count=0) {
+      $query = (new DBQuery(self::$collection))
+        // ->projectField('')
+        ->sortField('_id', -1)->skip($start)->limit($count);
+      $companies = $query->run();
+      return $companies;
+    }
+
+    public static function search($search, $start=0, $count=0) {
+      return (new DBQuery(self::$collection))
+        ->skip($start)->limit($count)->textSearch($search);
+    }
+
     function __construct() {
       parent::__construct(self::DB_TYPE, 'companies');
+
+      // Create necessary indices.
+      mongo_ok(self::$collection->createIndex([
+        'name' => 'text',
+        'industry' => 'text'
+      ]));
     }
 
     function save($data) {

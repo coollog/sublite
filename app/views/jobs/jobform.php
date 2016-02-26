@@ -1,3 +1,20 @@
+<script>
+  $(function () {
+    var salaryText = $('label[for=salary]').html();
+    var commissionText = 'Commission:';
+
+    function setSalaryLabel() {
+      if ($('#commission').is(':checked')) {
+        $('label[for=salary]').html(commissionText).click();
+      } else {
+        $('label[for=salary]').html(salaryText).click();
+      }
+    }
+    $('#commission').change(setSalaryLabel);
+    setSalaryLabel();
+  });
+</script>
+
 <panel class="form">
   <div class="content">
     <headline><?php vecho('headline'); ?> Job Listing</headline>
@@ -18,14 +35,29 @@
       <div class="form-slider" id="durationdiv"><label for="duration">Duration (weeks):</label><input type="text" id="duration" name="duration" maxlength="100" value="<?php vecho('duration'); ?>" /></div>
       <div class="form-slider"><label for="startdate">Start date (optional, mm/dd/yyyy):</label><input class="datepicker" type="text" id="startdate" name="startdate" maxlength="100" value="<?php vecho('startdate'); ?>" /></div>
       <div class="form-slider" id="enddatediv"><label for="enddate">End date (optional, mm/dd/yyyy):</label><input class="datepicker" type="text" id="enddate" name="enddate" maxlength="100" value="<?php vecho('enddate'); ?>" /></div>
-      <div class="form-slider"><label for="salary">Compensation / Stipend ($US):</label><input type="text" id="salary" name="salary" required maxlength="100" value="<?php vecho('salary'); ?>" required /></div>
+      <div class="form-slider"><label for="salary"></label><input type="text" id="salary" name="salary" required maxlength="100" value="<?php vecho('salary'); ?>" required /></div>
       <right>
-        <input type="radio" name="salarytype" id="month" value="month" <?php vchecked('salarytype', 'month'); ?> required /><label for="month"> / month</label>
-        <input type="radio" name="salarytype" id="week" value="week" <?php vchecked('salarytype', 'week'); ?> /><label for="week"> / week</label>
-        <input type="radio" name="salarytype" id="day" value="day" <?php vchecked('salarytype', 'day'); ?> /><label for="day"> / day</label>
-        <input type="radio" name="salarytype" id="hour" value="hour" <?php vchecked('salarytype', 'hour'); ?> /><label for="hour"> / hour</label>
-        <input type="radio" name="salarytype" id="total" value="total" <?php vchecked('salarytype', 'total'); ?> /><label for="total"> total payment</label>
-        <input type="radio" name="salarytype" id="other" value="other" <?php vchecked('salarytype', 'other'); ?> /><label for="other"> other (100 chars max)</label>
+        <input type="radio" name="salarytype" id="month" value="month"
+          <?php vchecked('salarytype', 'month'); ?> required />
+          <label for="month"> / month</label>
+        <input type="radio" name="salarytype" id="week" value="week"
+          <?php vchecked('salarytype', 'week'); ?> />
+          <label for="week"> / week</label>
+        <input type="radio" name="salarytype" id="day" value="day"
+          <?php vchecked('salarytype', 'day'); ?> />
+          <label for="day"> / day</label>
+        <input type="radio" name="salarytype" id="hour" value="hour"
+          <?php vchecked('salarytype', 'hour'); ?> />
+          <label for="hour"> / hour</label>
+        <input type="radio" name="salarytype" id="total" value="total"
+          <?php vchecked('salarytype', 'total'); ?> />
+          <label for="total"> total payment</label>
+        <input type="radio" name="salarytype" id="commission" value="commission"
+          <?php vchecked('salarytype', 'commission'); ?> />
+          <label for="commission"> commission</label>
+        <input type="radio" name="salarytype" id="other" value="other"
+          <?php vchecked('salarytype', 'other'); ?> />
+          <label for="other"> other (100 chars max)</label>
       </right>
       <div class="form-slider"><label for="deadline">Deadline for Application (mm/dd/yyyy):</label><input class="datepicker" type="text" id="deadline" name="deadline" value="<?php vecho('deadline'); ?>" required /></div>
       <div class="form-slider"><label for="desc">Job Description (2500 chars max):</label><textarea id="desc" name="desc" required maxlength="2500"><?php vecho('desc'); ?></textarea></div>

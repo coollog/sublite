@@ -24,6 +24,9 @@
   require_once($dirpre.'includes/functions/lib_autolink.php');
   require_once($dirpre.'includes/schools.php');
 
+  // Global modules
+  require_once($GLOBALS['dirpre'].'controllers/modules/Geocode.php');
+
   // Require other header files
   require_once($dirpre.'controllers/AppController.php');
   require_once($dirpre.'controllers/MigrationsController.php');
@@ -40,6 +43,7 @@
   require_once($dirpre.'controllers/ApplicationController.php');
   require_once($dirpre.'controllers/ApplicationControllerAJAX.php');
   require_once($dirpre.'controllers/PaymentControllerAJAX.php');
+  require_once($dirpre.'controllers/CompanyControllerAJAX.php');
 
   require_once($dirpre.'models/AppModel.php');
   require_once($dirpre.'models/CompanyModel.php');
@@ -52,6 +56,7 @@
   require_once($dirpre.'models/SocialModel.php');
   require_once($dirpre."models/QuestionModel.php");
   require_once($dirpre.'models/ApplicationModel.php');
+  require_once($dirpre.'models/GeocodeModel.php');
 
   // Other necessary modules.
   require_once($dirpre.'Router.php');

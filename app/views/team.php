@@ -51,7 +51,7 @@
   }
   #teamBlock{
     float: center;
-    height: 600px;
+    height: 900px;
     width: 700px;
   }
   .picBox{
@@ -217,6 +217,13 @@
       bio: 'Michelle Chan is a senior at Hong Kong University majoring in International Business &amp; Global Management and Japanese. She was an exchange student at Yale for her junior year. At Yale, she enjoyed great freedom in taking art and film classes such as graphic design, photography, and documentary filmmaking. She was also a staff photographer for Yale Daily News and a photographer and layout designer for the Yale Entrepreneur Magazine. In Hong Kong, Michelle worked for a start-up called Launchpilots and started the Entrepreneurship Apprentice Program for university students. During her free time, she loves taking photos, hiking, and stargazing.',
     },
     {
+      photo: 'alex',
+      name: 'Alex Croxford',
+      position: 'Business Development Director, Yale University',
+      shortPosition: 'Business Development, Yale',
+      bio: 'Alex Croxford is a sophomore at Yale University and currently planning to major in Electrical Engineering and Computer Science. He loves the outdoors and is a member Branford Sustainability and BSA Venturing Crew. Over the past summers, he has enjoyed working on his family’s farm in Illinois. In his free time he loves camping, hiking, and spending time with family and friends.',
+    },
+		{
       photo: 'julie',
       name: 'Julie Slama',
       position: 'Marketing Director, Yale University',
@@ -224,11 +231,11 @@
       bio: 'Julie Slama is a sophomore at Yale University, majoring in Global Affairs. After landing her first internship, she scoured Craigslist and Facebook to find available sublets, eventually leading her to SubLite. She is also Outreach Manager for the Yale Daily News Business Team,  a member of the LEAD Institute and the William F. Buckley, Jr. Program, and works as a lifeguard at the Yale University Pool. In her free time, she loves training for marathons, fishing, and camping with her family back home in Nebraska.',
     },
     {
-      photo: 'alex',
-      name: 'Alex Croxford',
-      position: 'Business Development Director, Yale University',
-      shortPosition: 'Business Development, Yale',
-      bio: 'Alex Croxford is a sophomore at Yale University and currently planning to major in Electrical Engineering and Computer Science. He loves the outdoors and is a member Branford Sustainability and BSA Venturing Crew. Over the past summers, he has enjoyed working on his family’s farm in Illinois. In his free time he loves camping, hiking, and spending time with family and friends.',
+      photo: 'eddie',
+      name: 'Edward She',
+      position: 'Software Engineer, Yale University',
+      shortPosition: 'Software, Yale',
+      bio: 'Edward She is a sophomore at Yale University studying Computer Science and Economics, although he is interested in practically anything STEM-related. In particular, he enjoys math, problem solving, and puzzles of all types. Edward loves coding because he views it as a combination of all three of these things. Outside of academic pursuits, Edward especially enjoys food and, in particular, searching for free food. His love for food has partially led him to become actively involved in the Chinese American Students Association, where he organizes events with free food. He is also involved with Yale University Diversified Investments and YHack.',
     },
     {
       photo: 'dean',
@@ -238,11 +245,11 @@
       bio: 'Dean is a freshman at Yale University interested in Economics and Computer Science. He found Sublite in the craziness of the first month of college, and relating to the company’s purpose because of his summer internship program, he joined and has not looked back. He brings to the company a deep love of food and little to no diversity. Outside of Sublite, he plays basketball and cello, is an avid Bulls fan, and is involved in the Asian-American cultural center at Yale.',
     },
     {
-      photo: 'nicolas',
-      name: 'Nicholas Jimenez',
-      position: 'Communications Director, Yale University',
-      shortPosition: 'Communications, Yale',
-      bio: 'Nicolas Jimenez is a freshman at Yale University from Bogota, Colombia, who is currently studying a wide range of subjects from Computer Science to French Literature and Philosophy. He is an ardent traveler, and is fortunate to have studied and done service internationally. Nicolas is a member of the Yale Climbing Team and the Yale Ski Team, writes for an international publication, and is proud captain of his college’s Intramural Ping Pong Team. In his free time, he enjoys photography, hiking, and reading about religion.',
+      photo: 'davidl',
+      name: 'David Liu',
+      position: 'Project Manager, Yale University',
+      shortPosition: 'PM, Yale',
+      bio: 'David Liu is from Southern California. He\'s looking to play some 3v3 pickup so contact him if interested.',
     },
     {
       photo: 'eric',
@@ -252,12 +259,69 @@
       bio: 'Eric Yu is a freshman at Yale University currently exploring the fields of computer science and medicine. His background is mainly in web development, but he is always open to new technologies and is an avid learner of all things new. Besides programming Eric is passionate about various things, from studying Japanese and Japanese History to the art of eating Hot Cheetos with chopsticks. At Yale, he is also a member of the Ballroom Dancing Team and the Elmseed Enterprise Fund, and manages the Yale Politic’s website as its Director of Technology.',
     },
     {
-      photo: 'edward',
-      name: 'Edward She',
+      photo: 'ngan',
+      name: 'Ngan Vu',
+      position: 'Web Designer',
+      shortPosition: 'Designer, Yale',
+      bio: 'Ngan is a freshman in Ezra Stiles college, currently planning to major in Computing and the Arts and Molecular, Cellular and Developmental Biology. She loves anything that is pretty, so besides front-end web development, she is exploring theatrical lighting, photography, graphic design, and wall painting. She also loves anything that is edible. During her free time, if not eating, she enjoys playing the piano or struggling with squash. She has the same birthday as Pusheen the cat. Her current favorite command line is “sudo pecl install mongo”.',
+    },
+    {
+      photo: 'charlie',
+      name: 'Charlie Desprat',
+      position: 'Publicity Director, Yale University',
+      shortPosition: 'Publicity, Yale',
+      bio: 'Charlotte Desprat is a French sophomore at Yale University from Prague and is currently majoring in history while venturing into more obscure topics such as the political anthropology of Russia or the history of epidemics in Western society since 1600. Her international background and passion for foreign cultures have enabled her to speak French, English, German and Russian and contribute to Accent and The Yale Globalist - two undergraduate publications focused on international affairs - as a writer, editor and layout designer. She found in SubLite the opportunity to combine her interests in writing, marketing and entrepreneurship while contributing to the larger student community. In her free time, she enjoys pondering the meaning of Russian jokes, hiking to East Rock, aggressively jumping in the New Haven snow until she realizes that it is ice but it is far too late, and practicing her guitar skills.',
+    },
+    {
+      photo: 'chris',
+      name: 'Christopher Fu',
       position: 'Software Engineer, Yale University',
       shortPosition: 'Software, Yale',
-      bio: 'Edward She is a sophomore at Yale University studying Computer Science and Economics, although he is interested in practically anything STEM-related. In particular, he enjoys math, problem solving, and puzzles of all types. Edward loves coding because he views it as a combination of all three of these things. Outside of academic pursuits, Edward especially enjoys food and, in particular, searching for free food. His love for food has partially led him to become actively involved in the Chinese American Students Association, where he organizes events with free food. He is also involved with Yale University Diversified Investments and YHack.',
-    }
+      bio: 'Christopher Fu is a sophomore at Yale University studying computer science. He enjoys any sort of programming but is most experienced with iOS/Mac OS X and web development. He is also a member of the Yale Undergraduate Aerospace Association, where he is working on a team to launch a miniature satellite called a CubeSat into space. In his free time, Chris enjoys playing video games with friends, running, and messing around with technology.',
+    },
+    {
+      photo: 'sloane',
+      name: 'Sloane Smith',
+      position: 'Social Media Director',
+      shortPosition: 'Social Media, Yale',
+      bio: 'Sloane is a sophomore at Yale University interested in Biomedical Engineering. She joined just a few weeks ago as the director of social media and is very excited to start promoting Sublite and the opportunities it provides for other students. Outside of Sublite, Sloane is on the gymnastics team at Yale where she excels on vault and floor. She also loves to travel and hopes to spend a summer just traveling to different countries.',
+    },
+		{
+			photo: 'Elana',
+			name: 'Elana Schmidt',
+			position: 'Campus Ambassador',
+			shortPosition: 'Campus Rep',
+			bio: 'Elana Schmidt is a freshman at Columbia College Chicago majoring in Media Management with a minor in Marketing. She is also a general board member of Columbia’s Student Programming Board as well as a member of the Women + Film Club. When she has free time, Elana enjoys attending musicals, improv shows, and watching How I Met Your Mother.',
+		},
+		{
+			photo: 'john',
+			name: 'Jiang Wang',
+			position: 'Campus Ambassador',
+			shortPosition: 'Campus Rep',
+			bio: 'Jiang Wang, better known as John, is a freshman at UC Berkeley with an intended major in Business Administration. Through his role as Brand Ambassador of Mead Five Star during high school, he developed experience in the fields of marketing, social media endorsements, and peer promotions. He joined the team as after Q, SubLite’s CTO, introduced the site to him as a way to find a summer internship. As an avid gamer, John loves playing League of Legends. During his free time, John also enjoys meeting new people and trying different experiences, along with spending time with family and friends, watching movies, and playing ping pong.',
+		},
+		{
+			photo: 'stephen',
+			name: 'Stephen DeRosa',
+			position: 'Campus Ambassador',
+			shortPosition: 'Campus Rep',
+			bio: 'Stephen DeRosa is a freshman studying mechanical engineering at The University of Hartford. He is beyond thrilled to be apart of the Sublite team and gain valuable experience. He is a member of Engineers Without Borders, and is working on creating a solar powered golf cart. He is also a member of an acapella group on campus. Stephen lives in New York where, in his free time, he enjoys spending time with his family, friends, reading, and snowboarding.',
+		},
+		{
+			photo: 'davids',
+			name: 'David Schutte',
+			position: 'Campus Ambassador',
+			shortPosition: 'Campus Rep',
+			bio: 'David Schutte grew up in 6 different countries – The U.S., Holland, Uzbekistan, Ukraine, Thailand, and Poland – and has visited in addition. He is a second year at the University of Virginia, majoring in economics and finance. Upon matriculating, he joined the university’s student newspaper, the Cavalier Daily, taking on positions as an associate editor and advertising representative. He had the unique opportunity to prepare a briefer of economic/demographic data for a Virginia congressional candidate, which is being used for her 2016 campaign. His hobbies including playing the piano, basketball, and tennis. David hopes to bring his global perspective to SubLite’s marketing team.',
+		},
+		{
+			photo: 'helena',
+			name: 'Helena Li',
+			position: 'Campus Ambassador',
+			shortPosition: 'Campus Rep',
+			bio: 'Helena Li, also known as Zucchini, is a first year student at UC Berkeley. She intends to major in computer science with a minor in philosophy and creative writing. Having worked at a Six Flags park for a summer, she is very experienced in customer service. In her free time, Zucchini enjoys reading and writing poetry. Her favorite poet being John Keats. Spontaneous and eccentric at times, Zucchini also enjoys spending time in the company of others and going on adventures.',
+		},
+
   ];
 
   $(function () {
@@ -326,13 +390,14 @@
             hideMemberBox();
             this.setAttribute("current","");
           } else {
+            // set the old current one to nothing
+            $("[current=current]").attr("current","");
             this.setAttribute("current","current");
             $(".memberbox").slideUp("slow");
             $('#box'+i).slideDown("slow");
             $('.picBox .overlay').css("opacity","");
             $('#picBox'+i+' .overlay').css("opacity","1");
           }
-
         });
       }
 
@@ -344,6 +409,7 @@
       }
 
       $(".exit").click(function(){
+        $("[current=current]").attr("current","");
         hideMemberBox();
       });
 

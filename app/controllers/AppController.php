@@ -8,8 +8,8 @@
 
   class AppController extends Controller implements AppControllerInterface {
     public static function leaderboard() {
-      $schools = array("Bentley University", "Columbia College Chicago", "Hartford University", "New York University", "University of California Berkeley", "University of Rochester", "University of Virginia");
-      $countAdjustments = array("Bentley University" => 6, "Columbia College Chicago" => 5, "Hartford University" => 1, "New York University" => 249, "University of California Berkeley" => 93, "University of Rochester" => 8, "University of Virginia" => 39);
+      $schools = array("Columbia College Chicago", "Hartford University", "New York University", "University of California Berkeley", "University of Virginia");
+      $countAdjustments = array("Columbia College Chicago" => 5, "Hartford University" => 1, "New York University" => 249, "University of California Berkeley" => 93, "University of Virginia" => 39);
       $counts = [7, 30, 90, 180];
       foreach ($counts as $count) {
         $schoolCount[$count] = Leaderboard::getSchoolCountDaysBefore($schools, $count);
