@@ -131,7 +131,7 @@
               <td class="pp"><profpic style="background-image: url('<?php echo $m['frompic'] ?>');"></profpic></td>
               <td><data>
                 <name><?php echo $m['fromname']; ?></name><time><?php echo $m['time']; ?></time>
-                <text><?php echo autolink(($m['from'] == vget('Lname') ? 'You' : $m['fromname']) . ': ' . $m['msg']); ?></text>
+                <text><?php echo autolink(($m['fromname'] == vget('Lname') ? 'You' : $m['fromname']) . ': ' . $m['msg']); ?></text>
               </data></td>
             </tr></table>
           </div>
