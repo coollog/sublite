@@ -207,7 +207,7 @@
       $r = isset($_GET['r']) ? $_GET['r'] : null;
 
       $this->render('student/index', array(
-        'users' => $users,
+        'users' => number_format($users),
         'jobs' => $stats['jobs'],
         'sublets' => $stats['sublets'],
         'universities' => $stats['universities'],
