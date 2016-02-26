@@ -115,7 +115,7 @@
           else 'No Job Title';
           $jobInfo['views'] = $job['stats']['views'];
           $jobInfo['clicks'] = $job['stats']['clicks'];
-          $jobInfo['applicants'] = ApplicationModel::countByJob($job['_id']);
+          $jobInfo['applicants'] = ApplicationModel::countByJob($job['_id'])['total'];
           $recruiterArray[] = str_repeat(',', count($recruiterColumns)) . implode(',', self::quoteStringsInArray($jobInfo));
 
         }
@@ -434,7 +434,8 @@
     }
     function applications() {
       $applicationsArray = [];
-      $applicationsArray[] = "jobname, recruiteremail, # applicants";
+      $applicationsArray[] = "jobname, recruiteremail, total, " .
+                             "unclaimed, review, rejected, accepted, reported";
       $all = JobModel::getAll(); // get all jobs
       foreach ($all as $job) {
         $info = [];
@@ -448,11 +449,16 @@
         } else {
           $info['recruiterEmail'] = "No Email";
         }
-        // Get # of applicants
-        $info['numberApplicants'] = ApplicationModel::countByJob($job['_id']);
+        // Get Applications data
+        $applicationCountData = ApplicationModel::countByJob($job['_id']);
+        $info['totalApplicants'] = $applicationCountData['total'];
+        $info['unclaimedApplicants'] = $applicationCountData['unclaimed'];
+        $info['reviewApplicants'] = $applicationCountData['review'];
+        $info['rejectedApplicants'] = $applicationCountData['rejected'];
+        $info['acceptedApplicants'] = $applicationCountData['accepted'];
+        $info['reportedApplicants'] = $applicationCountData['reported'];
+
         $applicationsArray[] = implode(',', self::quoteStringsInArray($info));
-
-
       }
       return ["applicationsArray" => $applicationsArray];
     }

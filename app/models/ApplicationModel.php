@@ -259,9 +259,44 @@
     public static function countByJob(MongoId $jobId) {
       $query = (new DBQuery(self::$collection))
         ->toQuery('jobid', $jobId)
-        ->projectId();
+        ->projectField('status');
       $applications = $query->run();
-      return count($applications);
+      $applicationCountData = [
+        "total" => count($applications),
+        "unclaimed" => 0,
+        "review" => 0,
+        "rejected" => 0,
+        "accepted" => 0,
+        "reported" => 0
+      ];
+      if (count($applications) > 0) {
+        foreach($applications as $app) {
+          // switch statement to count each type of application
+          //TODO use constant names from ApplicationStudent.php?
+          //die(var_dump($app));
+          switch ($app['status']) {
+            case 0: // unclaimed
+              $applicationCountData['unclaimed'] += 1;
+              break;
+            case 1: // in review
+              $applicationCountData['review'] += 1;
+              break;
+            case 2: // rejected
+              $applicationCountData['rejected'] += 1;
+              break;
+            case 3: // accepted
+              $applicationCountData['accepted'] += 1;
+              break;
+            case 4: // reported
+              $applicationCountData['reported'] += 1;
+              break;
+            default:
+              # code...
+              break;
+          }
+        }
+      }
+      return $applicationCountData;
     }
 
     public static function deleteByJob(MongoId $jobId) {
