@@ -177,9 +177,10 @@
     GLOBALvarGet('CStats')->graph();
   });
   Router::register('home', function() {
-    GLOBALvarGet('CStudent')->home();
-    GLOBALvarGet('CSublet')->manage();
-    StudentController::manage();
+    StudentController::home();
+    // GLOBALvarGet('CStudent')->home();
+    // GLOBALvarGet('CSublet')->manage();
+    // StudentController::manage();
   });
   Router::register('housing/addsublet', function() {
     GLOBALvarGet('CSublet')->add();

@@ -115,6 +115,9 @@
   .div {
     display: block;
   }
+  .inlinediv {
+    display: inline-block;
+  }
   .imagecontain {
     background: transparent no-repeat center center;
     background-size: contain;

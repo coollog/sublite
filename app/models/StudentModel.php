@@ -128,7 +128,7 @@
     }
     function me() {
       if (isset($_SESSION['loggedinstudent']))
-        return $this->get($_SESSION['email']);
+        return self::get($_SESSION['email']);
       else {
         return array(
           'email' => '',
