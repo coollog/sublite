@@ -434,8 +434,8 @@
     }
     function applications() {
       $applicationsArray = [];
-      $applicationsArray[] = "jobname, recruiteremail, total,
-        unclaimed, review, rejected, accepted, reported";
+      $applicationsArray[] = "jobname, recruiteremail, total, " .
+                             "unclaimed, review, rejected, accepted, reported";
       $all = JobModel::getAll(); // get all jobs
       foreach ($all as $job) {
         $info = [];
