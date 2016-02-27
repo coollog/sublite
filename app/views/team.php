@@ -294,7 +294,7 @@
 			bio: 'Elana Schmidt is a freshman at Columbia College Chicago majoring in Media Management with a minor in Marketing. She is also a general board member of Columbia’s Student Programming Board as well as a member of the Women + Film Club. When she has free time, Elana enjoys attending musicals, improv shows, and watching How I Met Your Mother.',
 		},
 		{
-			photo: 'john',
+			photo: 'johnw',
 			name: 'Jiang Wang',
 			position: 'Campus Ambassador',
 			shortPosition: 'Campus Rep',
