@@ -287,7 +287,7 @@
       bio: 'Sloane is a sophomore at Yale University interested in Biomedical Engineering. She joined just a few weeks ago as the director of social media and is very excited to start promoting Sublite and the opportunities it provides for other students. Outside of Sublite, Sloane is on the gymnastics team at Yale where she excels on vault and floor. She also loves to travel and hopes to spend a summer just traveling to different countries.',
     },
 		{
-			photo: 'Elana',
+			photo: 'elana',
 			name: 'Elana Schmidt',
 			position: 'Campus Ambassador',
 			shortPosition: 'Campus Rep',
