@@ -55,7 +55,7 @@
         ];
         $jobArray[] = $jobListing;
 
-        $applicantCount += $applicants;
+        $applicantCount += $applicants['total'];
         $totalViewCount += $job['stats']['views'];
         $totalApplyCount += $job['stats']['clicks'];
       }
