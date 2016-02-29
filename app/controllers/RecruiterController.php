@@ -51,7 +51,7 @@
           '_id' => $jobId->{'$id'},
           'title' => $job['title'],
           'location' => $job['location'],
-          'applicants' => $applicants
+          'applicants' => $applicants['total']
         ];
         $jobArray[] = $jobListing;
 
