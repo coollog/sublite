@@ -11,13 +11,29 @@
       $schools = array("Columbia College Chicago", "Hartford University", "New York University", "University of California Berkeley", "University of Virginia");
       $countAdjustments = array("Columbia College Chicago" => 5, "Hartford University" => 1, "New York University" => 249, "University of California Berkeley" => 93, "University of Virginia" => 39);
       $counts = [7, 30, 90, 180];
-      foreach ($counts as $count) {
-        $schoolCount[$count] = Leaderboard::getSchoolCountDaysBefore($schools, $count);
+
+      //0 and last monday
+      $lastMonday = strtotime("last Monday", strtotime("+12 hours")) + 43200;
+      $times = array(0, $lastMonday);
+      $currentTime = time();
+      foreach($counts as $count) {
+        array_push($times, $currentTime - ($count * 86400));
       }
-      $schoolCount[0] = Leaderboard::getSchoolCountSince($schools, 0);
+      $schoolCount = Leaderboard::getSchoolCountSinceTimes($schools, $times);
+
+      //Rename keys
+      $schoolCount[1] = $schoolCount[$lastMonday];
+      unset($schoolCount[$lastMonday]);
+      foreach($counts as $count) {
+        $schoolCount[$count] = $schoolCount[$currentTime - ($count * 86400)];
+        unset($schoolCount[$currentTime - ($count * 86400)]);
+      }
+
+      //Adjust counts
       foreach ($countAdjustments as $school => $adjustment) {
         $schoolCount[0][$school] =  $schoolCount[0][$school] - $adjustment;
       }
+
       self::render('stats/leaderboard', [
         'schools' => $schools,
         'counts' => $schoolCount

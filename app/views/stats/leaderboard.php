@@ -94,6 +94,7 @@
 <?php
   $schoolCount = View::get('counts');
   define('FOREVER', 0);
+  define('SPRINT', 1);
 ?>
 
 <panel class="leaderboard">
@@ -104,11 +105,12 @@
       <headline class="small" id="leaderboardTitle">Sign-ups in past number of days:</headline>
 
       <center>
-        <button class="numdays" onclick="return updateDiv(1, 5, 7);">7</button>
-        <button class="numdays" onclick="return updateDiv(2, 5, 30);">30</button>
-        <button class="numdays" onclick="return updateDiv(3, 5, 90);">90</button>
-        <button class="numdays" onclick="return updateDiv(4, 5, 180);">180</button>
-        <button class="numdays" onclick="return updateDiv(5, 5, &quot;Forever&quot;);">Forever</button>
+        <button class="numdays" onclick="return updateDiv(6, 6, &quot;7 Day Sprint&quot;);">7 Day Sprint</button>
+        <button class="numdays" onclick="return updateDiv(1, 6, 7);">7</button>
+        <button class="numdays" onclick="return updateDiv(2, 6, 30);">30</button>
+        <button class="numdays" onclick="return updateDiv(3, 6, 90);">90</button>
+        <button class="numdays" onclick="return updateDiv(4, 6, 180);">180</button>
+        <button class="numdays" onclick="return updateDiv(5, 6, &quot;Forever&quot;);">Forever</button>
       </center>
 
       <div id="showHideDiv1">
@@ -146,8 +148,15 @@
         </script>
       </div>
 
+      <div id="showHideDiv6">
+        <canvas id="sprintdays" width="900" height="400"></canvas>
+        <script>
+          drawBarGraph("sprintdays", <?php echo toJSON($schoolCount[SPRINT]); ?>);
+        </script>
+      </div>
+
       <script>
-        updateDiv(5, 5, "Forever");
+        updateDiv(5, 6, "Forever");
       </script>
 
     </left>
