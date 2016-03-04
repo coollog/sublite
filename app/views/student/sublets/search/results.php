@@ -3,7 +3,7 @@
     $photo = $sublet['photo'];
     $title = $sublet['title'];
     $address = $sublet['address'];
-    $proximity = ($sublet['proximity'] == '') ? $sublet['proximity'] : 
+    $proximity = ($sublet['proximity'] == '') ? $sublet['proximity'] :
       round($sublet['proximity'], 1).' mi';
     $price = $sublet['price'];
     $pricetype = $sublet['pricetype'];
@@ -262,6 +262,14 @@
           }
         })(marker, i));
       }
+
+      // Marker for search location
+      var searchLocMarkerIcon = '<?php echo $GLOBALS['dirpre']; ?>assets/gfx/map/map-marker-icon.png';
+      var searchLocMarker = new google.maps.Marker({
+        position: searchzone,
+        map: map,
+        icon: searchLocMarkerIcon
+      });
 
       //clicking map will close opened infowindow
       google.maps.event.addListener(map, 'click', function() {
