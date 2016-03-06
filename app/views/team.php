@@ -267,7 +267,7 @@
     },
     {
       photo: 'charlie',
-      name: 'Charlie Desprat',
+      name: 'Charlotte Desprat',
       position: 'Publicity Director, Yale University',
       shortPosition: 'Publicity, Yale',
       bio: 'Charlotte Desprat is a French sophomore at Yale University from Prague and is currently majoring in history while venturing into more obscure topics such as the political anthropology of Russia or the history of epidemics in Western society since 1600. Her international background and passion for foreign cultures have enabled her to speak French, English, German and Russian and contribute to Accent and The Yale Globalist - two undergraduate publications focused on international affairs - as a writer, editor and layout designer. She found in SubLite the opportunity to combine her interests in writing, marketing and entrepreneurship while contributing to the larger student community. In her free time, she enjoys pondering the meaning of Russian jokes, hiking to East Rock, aggressively jumping in the New Haven snow until she realizes that it is ice but it is far too late, and practicing her guitar skills.',
