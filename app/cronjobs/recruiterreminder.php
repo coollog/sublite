@@ -27,41 +27,71 @@
     //query the subliteinternships db -> applications collection for unique jobids where application(s) have not been unlocked yet
 
     //get unique jobids
+
+    // array to store list of recruiters to remind about unclaimed applications
+    $reminders = [];
+
+    // jobs with unclaimed applications
     $jobidResult = $db->applications->distinct("jobid",array("status"=>0));
+    if ($jobidResult) {
+      // calculate a day 7 days in the past
+      $currentTime = time();
+      $interval = time() - 7 * 24 * 60 * 60; // 7 days before
+      $mongoInterval = new MongoDate($interval); // MongoDate seven days in the past
 
-    //get unique recruiterids with unclaimed applications
-    $recruiteridResult = $db->jobs->distinct("recruiter", array('$or' => wrapIdsInArrayOfMongoIds($jobidResult)));
+      // loop through distinct job ids and find number of applicants unclaimed and recruiter info
+      foreach ($jobidResult as $jobid) {
+        $numUnclaimed;
+        $jobName;
+        $recruiterId;
+        $recruiterName;
+        $recruiterEmail;
+        $recruiterCredits;
+        // count number of unclaimed per job
+        $numUnclaimed = count($db->applications->find([
+          '$and' => [
+            ['jobid' => $jobid],
+            ['status' => 0]
+          ]
+        ]));
+        // query jobs collection
+        $recruiterIdResult = $db->jobs->findOne(["_id" => $jobid], ["recruiter", "title"]);
+        // get recruiter Id and jobname
+        $recruiterId = $recruiterIdResult ? $recruiterIdResult['recruiter'] : "";
+        $jobName = $recruiterIdResult ? $recruiterIdResult['title'] : "";
+        // find recruiter with recruiterId and emailed longer than 7 days ago
+        // query recruiters collection
+        $recruiterResult = $db->recruiters->findOne([
+          '$and' => [
+            ['_id' => $recruiterId],
+            ['$or' => [
+              ['last_emailed' => [
+                '$lt' => $mongoInterval
+                ]
+              ],
+              ['last_emailed' => null]
+              ]
+            ]
+            ]
+          ], ["email"]);
+        // get email of recruiter
+        $recruiterEmail = $recruiterResult ? $recruiterResult['email'] : "";
+        $recruiterName = $recruiterResult ? $recruiterResult['firstname'] . ' ' . $recruiterResult['lastname'] : "";
+        //$recruiterCredits = $recruiterResult ? $recruiterResult['credits'] : "";
+        $recruiterCredits = 9001;
+        $recruiterId = $recruiterResult ? $recruiterResult['_id'] : "";
+        // add recruiter and data to list of reminders
+        $reminders[] = [
+          'email' => $recruiterEmail,
+          'name' => $recruiterName,
+          'numUnclaimed' => $numUnclaimed,
+          'jobname' => $jobName,
+          'credits' => $recruiterCredits,
+          'id' => $recruiterId;
+        ]
 
-    // query the recruiters collection for any recruiters with ids in $recruiteridResult, and also recruiters that have not been sent an email in a week or whose last_emailed field is NULL
-    $currentTime = time();
-    $interval = time() - 7 * 24 * 60 * 60; // 7 days before
-    $mongoInterval = new MongoDate($interval); // MongoDate seven days in the past
+      }
 
-    //final query
-    $recruiterResult = $db->recruiters->find(
-      array(
-          '$and' => array(
-              array(
-                '$or' => array(
-                  array(
-                    "last_emailed" => array(
-                      '$lt' => $mongoInterval
-                    )
-                  ),
-                  array(
-                    "last_emailed" => null
-                  )
-                )
-              ),
-              array(
-                '$or' => wrapIdsInArrayOfMongoIds($recruiteridResult)
-              )
-            )
-        )
-      )->limit(MAX_EMAILS);
-
-    if ($recruiterResult) {
-      $recruitersEmailed = []; // keep track of emails of recruiters reminded using this script
       //set up phpmailer
       $mail = new PHPMailer;
       $mail->isSMTP();                                      // Set mailer to use SMTP
@@ -78,18 +108,28 @@
       $subject = "SubLite Unclaimed Applications";
       $mail->Subject = $subject;
 
-      foreach ($recruiterResult as $recruiter) { // loop through all recruiters and send them personalized reminder emails
-        $recruitersEmailed[] = $recruiter['email'];
-        $mail->addAddress($recruiter['email']);
-        $recruiterFullName = $recruiter['firstname'] . $recruiter['lastname'];
-        $recruiterId = $recruiter['_id'];
-        $linkDashboard = "http://sublite.net/employers/home"; //how to make a link to dashboard?
+      // loop through recruiters and email them, stop if MAX_EMAILS is reached
+      $numEmailed = 0;
+      $recruitersEmailed = []; // keep track of emails of recruiters reminded using this script
+      foreach ($reminders as $reminder) {
+        if ($numEmailed > MAX_EMAILS) break;
 
+        $recruitersEmailed[] = $reminder['email'];
+        $mail->addAddress($reminder['email']);
+        $recruiterId = $reminder['id'];
+        $recruiterFullName = $reminder['name'];
+        $numUnclaimed = $reminder['numUnclaimed'];
+        $jobName = $reminder['jobname'];
+        $credits = $reminder['credits'];
         $message = "
           Dear $recruiterFullName,
           <br />
-          <br />You have unclaimed applications for some of your job listings! Please visit your <a href = '$linkDashboard'>recruiter homepage</a> and your invidual job listings pages to claim them!
+          You have $numUnclaimed applicants waiting to hear back from you on your job listing for $jobName!
+          You may view their names and universities before using your credits to unlock their applications.
+          You have $credits free credits left, and you receive another free credit for every work opportunity posted on SubLite.
+          In addition, you can purchase credits for 8 dollars. All purchases in quantities of 10 credits and over are 5 dollars, and unused credits can be refunded at the rate they were purchased at.
           <br />
+          If you have any questions, feel free to reach out to our recruitment director Dean at dean.li@yale.edu! Thank you so much for using the SubLite Platform.
           <br /
           Team SubLite
         ";
@@ -114,11 +154,14 @@
 
          // clear recipients for next recruiter's email
         $mail->ClearAllRecipients();
+        $numEmailed++;
       }
 
       // send email to sublite reporting on details of cron job
       $mail->addAddress("eric.yu@yale.edu");
       $mail->addAddress("qingyang.chen@yale.edu");
+      $mail->addAddress("info@sublite.net");
+      $mail->addAddress("tony.jiang@yale.edu");
       $message = "Recruiters emailed by cron job recruiterreminder.php: " . implode(',', $recruitersEmailed);
       $mail->Body    = $message;
       $mail->AltBody = strip_tags($message);
@@ -127,25 +170,12 @@
       if (!$mail->send()) {
          return $mail->ErrorInfo;
       }
-
     } else { // no results
       echo "no results";
     }
 
-
   } catch (MongoConnectionException $e) {
     trigger_error('Mongodb not available');
-  }
-
-  //Helper function - takes an array of MongoIds, and then stores them in structure that is easy to use in "or" Mongo queries
-  //I use large "or" queries in order to avoid numerous small queries.
-  function wrapIdsInArrayOfMongoIds($ids)
-  {
-    $finalArray = [];
-    foreach ($ids as $id) {
-      $finalArray[] = ["_id" => new MongoId($id)];
-    }
-    return $finalArray;
   }
 
 ?>
