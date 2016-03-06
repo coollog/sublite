@@ -26,8 +26,6 @@
     $db = $m->$dbname;
     //query the subliteinternships db -> applications collection for unique jobids where application(s) have not been unlocked yet
 
-    //get unique jobids
-
     // array to store list of recruiters to remind about unclaimed applications
     $reminders = [];
 
@@ -92,6 +90,8 @@
 
       }
 
+    if ($recruiterResult) {
+      $recruitersEmailed = []; // keep track of emails of recruiters reminded using this script
       //set up phpmailer
       $mail = new PHPMailer;
       $mail->isSMTP();                                      // Set mailer to use SMTP
@@ -107,7 +107,6 @@
       $mail->isHTML(true);
       $subject = "SubLite Unclaimed Applications";
       $mail->Subject = $subject;
-
       // loop through recruiters and email them, stop if MAX_EMAILS is reached
       $numEmailed = 0;
       $recruitersEmailed = []; // keep track of emails of recruiters reminded using this script
@@ -173,7 +172,6 @@
     } else { // no results
       echo "no results";
     }
-
   } catch (MongoConnectionException $e) {
     trigger_error('Mongodb not available');
   }
