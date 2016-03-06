@@ -65,7 +65,6 @@
         $jobName = $recruiterIdResult ? $recruiterIdResult['title'] : "";
         // find recruiter with recruiterId and emailed longer than 7 days ago
         // query recruiters collection
-        //die($recruiterId);
         $recruiterResult = $db->recruiters->findOne([
           '$and' => [
             [
@@ -85,7 +84,6 @@
         if ($recruiterResult) { // there is recruiter result
           $recruiterEmail = $recruiterResult['email'] ? $recruiterResult['email'] : "";
           $recruiterName = $recruiterResult['firstname'] ? $recruiterResult['firstname'] . ' ' . $recruiterResult['lastname'] : "";
-          //$recruiterCredits = $recruiterResult ? $recruiterResult['credits'] : "";
           $recruiterCredits = $recruiterResult['credits'] ? $recruiterResult['credits'] : 0;
           $recruiterId = $recruiterResult ? $recruiterResult['_id'] : "";
           // add recruiter and data to list of reminders
