@@ -87,7 +87,8 @@
     public static function claim(MongoId $jobId, $count);
 
     /**
-    * Gets the number of applications for a certain job
+    * Gets the number of applications for a certain job, in an array, with
+    * total and all statuses as keys and the counts as values.
     */
     public static function countByJob(MongoId $jobId);
 
@@ -269,31 +270,24 @@
         "accepted" => 0,
         "reported" => 0
       ];
-      if (count($applications) > 0) {
-        foreach($applications as $app) {
-          // switch statement to count each type of application
-          //TODO use constant names from ApplicationStudent.php?
-          //die(var_dump($app));
-          switch ($app['status']) {
-            case 0: // unclaimed
-              $applicationCountData['unclaimed'] += 1;
-              break;
-            case 1: // in review
-              $applicationCountData['review'] += 1;
-              break;
-            case 2: // rejected
-              $applicationCountData['rejected'] += 1;
-              break;
-            case 3: // accepted
-              $applicationCountData['accepted'] += 1;
-              break;
-            case 4: // reported
-              $applicationCountData['reported'] += 1;
-              break;
-            default:
-              # code...
-              break;
-          }
+      foreach ($applications as $app) {
+        // Count each type of application.
+        switch ($app['status']) {
+          case ApplicationStudent::STATUS_UNCLAIMED:
+            $applicationCountData['unclaimed'] ++;
+            break;
+          case ApplicationStudent::STATUS_REVIEW:
+            $applicationCountData['review'] ++;
+            break;
+          case ApplicationStudent::STATUS_REJECTED:
+            $applicationCountData['rejected'] ++;
+            break;
+          case ApplicationStudent::STATUS_ACCEPTED:
+            $applicationCountData['accepted'] ++;
+            break;
+          case ApplicationStudent::STATUS_REPORTED:
+            $applicationCountData['reported'] ++;
+            break;
         }
       }
       return $applicationCountData;

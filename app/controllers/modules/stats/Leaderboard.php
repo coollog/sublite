@@ -28,6 +28,63 @@
       
     }
 
+    public static function getSchoolCountSinceTimes(array $schools, array $times) {
+      global $S;
+
+      $cursor = StudentModel::getAll();
+
+      $pattern = "/(.*)@(.*)/";
+      $results = array();
+      $schoolNames = array();
+      foreach($times as $time) {
+        $results[$time] = array();
+        $schoolNames[$time] = array();
+      }
+
+      foreach($cursor as $doc) {
+        $success = isset($doc["email"]) ? preg_match($pattern, $doc["email"], $match) : null;
+        if($success) {
+          foreach($times as $time) {
+            if($doc["_id"]->getTimestamp() > $time) {
+              if(array_key_exists($match[2], $results[$time]))
+                $results[$time][$match[2]] += 1;
+              else
+                $results[$time][$match[2]] = 1;
+            }
+          }
+        }
+      }
+
+      foreach($times as $time) {
+        foreach($results[$time] as $key => $id) {
+          if($S->hasSchoolOf($key))
+            if(array_key_exists($S->nameOf($key), $schoolNames[$time]))
+              $schoolNames[$time][$S->nameOf($key)] += $id;
+            else
+              $schoolNames[$time][$S->nameOf($key)] = $id;
+          else
+            if(array_key_exists($key, $schoolNames))
+              $schoolNames[$time][$key] += $id;
+            else
+              $schoolNames[$time][$key] = $id;
+        }
+      }
+
+      $specificSchools = array();
+
+      foreach($times as $time) {
+        foreach($schools as $school) {
+          if(array_key_exists($school, $schoolNames[$time]))
+            $specificSchools[$time][$school] = $schoolNames[$time][$school];
+          else
+            $specificSchools[$time][$school] = 0;
+        }
+      }
+
+      return $specificSchools;
+
+    }
+
     public static function getSchoolCountDaysBefore(array $schools, $days) {
       return self::getSchoolCountSince($schools, time()-($days * self::DAYTIME));
     }

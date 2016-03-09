@@ -10,7 +10,7 @@
 
   .mleft {
     background: #f4f3ee;
-    width: 400px;
+    width: 40%;
     vertical-align: top;
   }
   .mright {
@@ -82,6 +82,10 @@
     display: block;
   }
 
+  .themessage {
+    word-wrap: break-word;
+    max-width: 150px;
+  }
   .mblockwrapper {
     padding: 20px 40px;
     border-bottom: 1px solid #eee;
@@ -129,9 +133,9 @@
           <div class="iblockwrapper <?php if ($m['current']) echo 'current'; ?> <?php if (!$m['read']) echo 'unread'; ?>">
             <table class="iblock"><tr>
               <td class="pp"><profpic style="background-image: url('<?php echo $m['frompic'] ?>');"></profpic></td>
-              <td><data>
+              <td class="themessage"><data>
                 <name><?php echo $m['fromname']; ?></name><time><?php echo $m['time']; ?></time>
-                <text><?php echo autolink($m['msg']); ?></text>
+                <text><?php echo autolink(($m['fromname'] == vget('Lname') ? 'You' : $m['fromname']) . ': ' . $m['msg']); ?></text>
               </data></td>
             </tr></table>
           </div>
@@ -144,7 +148,7 @@
           <div class="mblockwrapper">
             <table class="mblock"><tr>
               <td class="pp"><profpic style="background-image: url('<?php echo $m['frompic'] ?>');"></profpic></td>
-              <td><data>
+              <td class="themessage"><data>
                 <name><?php echo $m['fromname']; ?></name><time><?php echo $m['time']; ?></time>
                 <text><?php echo nl2br(autolink($m['msg'])); ?></text>
               </data></td>

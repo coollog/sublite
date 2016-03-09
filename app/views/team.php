@@ -267,7 +267,7 @@
     },
     {
       photo: 'charlie',
-      name: 'Charlie Desprat',
+      name: 'Charlotte Desprat',
       position: 'Publicity Director, Yale University',
       shortPosition: 'Publicity, Yale',
       bio: 'Charlotte Desprat is a French sophomore at Yale University from Prague and is currently majoring in history while venturing into more obscure topics such as the political anthropology of Russia or the history of epidemics in Western society since 1600. Her international background and passion for foreign cultures have enabled her to speak French, English, German and Russian and contribute to Accent and The Yale Globalist - two undergraduate publications focused on international affairs - as a writer, editor and layout designer. She found in SubLite the opportunity to combine her interests in writing, marketing and entrepreneurship while contributing to the larger student community. In her free time, she enjoys pondering the meaning of Russian jokes, hiking to East Rock, aggressively jumping in the New Haven snow until she realizes that it is ice but it is far too late, and practicing her guitar skills.',
@@ -287,14 +287,14 @@
       bio: 'Sloane is a sophomore at Yale University interested in Biomedical Engineering. She joined just a few weeks ago as the director of social media and is very excited to start promoting Sublite and the opportunities it provides for other students. Outside of Sublite, Sloane is on the gymnastics team at Yale where she excels on vault and floor. She also loves to travel and hopes to spend a summer just traveling to different countries.',
     },
 		{
-			photo: 'Elana',
+			photo: 'elana',
 			name: 'Elana Schmidt',
 			position: 'Campus Ambassador',
 			shortPosition: 'Campus Rep',
 			bio: 'Elana Schmidt is a freshman at Columbia College Chicago majoring in Media Management with a minor in Marketing. She is also a general board member of Columbia’s Student Programming Board as well as a member of the Women + Film Club. When she has free time, Elana enjoys attending musicals, improv shows, and watching How I Met Your Mother.',
 		},
 		{
-			photo: 'john',
+			photo: 'johnw',
 			name: 'Jiang Wang',
 			position: 'Campus Ambassador',
 			shortPosition: 'Campus Rep',
