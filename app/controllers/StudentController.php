@@ -646,7 +646,6 @@
         $data = $this->data($entry);
         if ($data['photo'] == 'assets/gfx/defaultpic.png')
             $data['photo'] = $GLOBALS['dirpreFromRoute'] . $data['photo'];
-        self::displayMetatags('recruiter');
         $data['studentid'] = new MongoId($_GET['id']);
         self::render('student/profile', $data);
       }

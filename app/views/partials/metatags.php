@@ -153,6 +153,18 @@
       Metatags::defaultDescription();
       break;
 
+    case 'student':
+      $name = View::get('name');
+      $photo = View::get('photo');
+      if (strpos($photo, 'assets/gfx') !== false)
+        $photo = 'https://sublite.net/app/' . $photo;
+
+      Metatags::ogTitle("$name on SubLite");
+      Metatags::ogImage($photo);
+      Metatags::ogDescription("Check out $name's profile on SubLite!");
+      Metatags::title("$name's profile on SubLite");
+      break;
+
     default:
       $title = "SubLite &ndash; Your One-Stop Shop for a Great Summer!";
       Metatags::bothTitles($title);

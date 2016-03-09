@@ -305,6 +305,7 @@
     GLOBALvarGet('CStats')->loadStats();
   });
   Router::register('student/profile', function() {
+    Controller::displayMetatags('student');
     GLOBALvarGet('CStudent')->view();
   });
   Router::register('team', function() {

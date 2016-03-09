@@ -1,5 +1,5 @@
 <style>
-  .recruiterpic {
+  .studentpic {
     width: 200px;
     height: 200px;
     background: transparent no-repeat center center;
@@ -7,13 +7,13 @@
     border-radius: 100px;
     display: inline-block;
   }
-  .recruiter headline {
+  .student headline {
     margin-bottom: -20px;
   }
-  .recruiter subheadline {
+  .student subheadline {
     color: #000;
   }
-  .recruiterinfo {
+  .studentinfo {
     margin: 40px 0;
   }
   .topeditprofile {
@@ -21,12 +21,12 @@
   }
 </style>
 
-<panel class="recruiter">
+<panel class="student">
   <div class="content">
     <headline><?php vecho('name'); ?></headline>
     <subheadline class="title"><?php vecho('school'); ?> '<?php vecho('class'); ?></subheadline>
-    <div class="recruiterinfo">
-      <div class="recruiterpic" style="background-image: url('<?php vecho('photo'); ?>');"></div>
+    <div class="studentinfo">
+      <div class="studentpic" style="background-image: url('<?php vecho('photo'); ?>');"></div>
 
       <?php if (vget('Loggedinstudent')) { ?>
         <br /><br />
