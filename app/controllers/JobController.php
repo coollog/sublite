@@ -362,15 +362,14 @@
     }
     function dataSearch($data) {
       $recruiter = clean($data['recruiter']);
-      $company = clean($data['company']);
       $title = clean($data['title']);
       $industry = clean($data['industry']);
       $city = clean($data['city']);
 
-      return array_merge($this->dataSearchSetup(), array(
-        'recruiter' => $recruiter, 'company' => $company, 'title' => $title,
+      return array_merge($this->dataSearchSetup(), [
+        'recruiter' => $recruiter, 'title' => $title,
         'industry' => $industry, 'city' => $city
-      ));
+      ]);
     }
 
     function search() {
@@ -441,27 +440,24 @@
       if ($this->isValid()) {
 
         // Searching for companies
-        $companyquery = array();
+        $companyquery = [];
 
-        if (strlen($company) > 0) {
-          $companyquery['name'] = array('$regex' => keywords2mregex($company));
-        }
         if (strlen($industry) > 0) {
-          $companyquery['industry'] = array('$regex' => keywords2mregex($industry));
+          $companyquery['industry'] = ['$regex' => keywords2mregex($industry)];
         }
         if (strlen($city) > 0) {
-          $companyquery['location'] = array('$regex' => keywords2mregex($city));
+          $companyquery['location'] = ['$regex' => keywords2mregex($city)];
         }
         $cs = $MCompany->find($companyquery);
 
         // Search query building
-        $query = array();
+        $query = [];
 
         if (strlen($recruiter) > 0)
           $query['recruiter'] = new MongoId($recruiter);
 
         if (strlen($title) > 0) {
-          $query['title'] = array('$regex' => keywords2mregex($title));
+          $query['$text'] = ['$search' => $title];
         }
 
         $companies = array();

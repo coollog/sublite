@@ -54,7 +54,11 @@
     <form method="get">
       <input type="hidden" id="recruiter" name="recruiter" value="<?php View::echof('recruiter'); ?>" />
 
-      <div class="form-slider"><label for="title">Job Title:</label><input type="text" id="title" name="title" value="<?php View::echof('title'); ?>" /></div>
+      <div class="form-slider">
+        <label for="title">Job Title/Description:</label>
+        <input type="text" id="title" name="title"
+               value="<?php View::echof('title'); ?>" />
+      </div>
 
       <div class="form-slider"><label for="industrylabel" id="ilabel">Industry:</label>
       <input type="hidden" id="industrylabel">
@@ -84,8 +88,6 @@
       </script>
 
       <div class="form-slider"><label for="city">City:</label><input type="text" id="city" name="city" value="<?php View::echof('city'); ?>" /></div>
-
-      <div class="form-slider"><label for="company">Company:</label><input type="text" id="company" name="company" value="<?php View::echof('company'); ?>" /></div>
 
       <a href="companies">See All Companies</a><br />
 
