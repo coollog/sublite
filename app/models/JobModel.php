@@ -81,6 +81,13 @@
 
     public function __construct() {
       parent::__construct(self::DB_TYPE, 'jobs');
+
+      // Create necessary indices.
+      mongo_ok(self::$collection->createIndex([
+        'title' => 'text',
+        'desc' => 'text',
+        'requirements' => 'text'
+      ]));
     }
 
     function save($data, $setRecruiter=true) {
