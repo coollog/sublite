@@ -144,12 +144,17 @@
     </td>
     <td class="mright">
       <?php if (!is_null(vget('current'))) { ?>
-        <?php foreach (vget('current') as $m) { ?>
+        <?php foreach (vget('current') as $m) {
+          $isStudent = StudentModel::exists(new MongoId($m['from']));
+          $profilelink = $isStudent ?
+              $GLOBALS['dirpre'] . "../student/profile?id=" . $m['from'] :
+              $GLOBALS['dirpre'] . "../employers/recruiter?id=" . $m['from'];
+        ?>
           <div class="mblockwrapper">
             <table class="mblock"><tr>
-              <td class="pp"><profpic style="background-image: url('<?php echo $m['frompic'] ?>');"></profpic></td>
+              <td class="pp"><a href="<?php echo $profilelink; ?>"><profpic style="background-image: url('<?php echo $m['frompic'] ?>');"></profpic></a></td>
               <td class="themessage"><data>
-                <name><?php echo $m['fromname']; ?></name><time><?php echo $m['time']; ?></time>
+                <a href="<?php echo $profilelink; ?>"><name><?php echo $m['fromname']; ?></name></a><time><?php echo $m['time']; ?></time>
                 <text><?php echo nl2br(autolink($m['msg'])); ?></text>
               </data></td>
             </tr></table>

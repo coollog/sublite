@@ -304,6 +304,10 @@
     GLOBALvarGet('CJob')->requireLogin();
     GLOBALvarGet('CStats')->loadStats();
   });
+  Router::register('student/profile', function() {
+    Controller::displayMetatags('student');
+    GLOBALvarGet('CStudent')->view();
+  });
   Router::register('team', function() {
     GLOBALvarGet('CApp')->team();
   });
@@ -452,6 +456,7 @@
   Router::route('/employers/S3', 'S3');
   Router::route('/housing/S3', 'S3');
   Router::route('/S3/resume', 'S3/resume');
+  Router::route('/student/profile', 'student/profile');
 
   Router::route('/stats', 'stats');
 
