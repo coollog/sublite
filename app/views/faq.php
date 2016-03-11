@@ -86,7 +86,7 @@ $(document).ready(function()
         Can I hide my listing so I can reuse it next year?
       </subheadline>
 
-      <div class="msg_body">Absolutely. We know that students may want to sublet the same space year after year. To make your life easier, we created a “publish-unpublish” function. You can unpublish your listing anytime by going to <a href="<?php vecho('dirpre'); ?>../housing/Manage.php">Manage</a>, clicking a listing to access its editing page, and unchecking the Publish? option. Next year when you’re ready to sublet again, simply check Publish? again to reactivate. You can also make edits to your listings anytime.</div>
+      <div class="msg_body">Absolutely. We know that students may want to sublet the same space year after year. To make your life easier, we created a “publish-unpublish” function. You can unpublish your listing anytime by going to <a href="<?php View::echof('dirpre'); ?>../housing/Manage.php">Manage</a>, clicking a listing to access its editing page, and unchecking the Publish? option. Next year when you’re ready to sublet again, simply check Publish? again to reactivate. You can also make edits to your listings anytime.</div>
 
       <subheadline class="msg_head">What legal issues should I consider before hosting on SubLite?</subheadline>
 
@@ -98,7 +98,7 @@ $(document).ready(function()
 
       <div class="msg_body">As soon as you find a space that interests you. Don’t wait until the last-minute, or it may be gone!
       <br />
-      Legitimate reasons to contact another user are to ask questions about the amenities and to inquire about price. Please contact hosts in good-faith. Spamming is expressly prohibited. For more guidance, refer to our <a href="<?php vecho('dirpre'); ?>../terms.php">Terms of Use</a>.</div>
+      Legitimate reasons to contact another user are to ask questions about the amenities and to inquire about price. Please contact hosts in good-faith. Spamming is expressly prohibited. For more guidance, refer to our <a href="<?php View::echof('dirpre'); ?>../terms.php">Terms of Use</a>.</div>
 
       <subheadline class="msg_head">What will my listing and profile information be used for?</subheadline>
 
@@ -106,7 +106,7 @@ $(document).ready(function()
       <br />
       We will not sell your information. You may see targeted advertising from sponsors based solely on non-identifying information such as your university and class year. We will not pass any of your information along to your universities, unless you violate the Terms of Use.
       <br />
-      For more information, read our <a href="<?php vecho('dirpre'); ?>../privacy.php">Privacy Policy</a>.</div>
+      For more information, read our <a href="<?php View::echof('dirpre'); ?>../privacy.php">Privacy Policy</a>.</div>
 
       <subheadline class="msg_head">Where can I leave feedback?</subheadline>
 

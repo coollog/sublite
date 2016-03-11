@@ -20,7 +20,7 @@
   }
 </style>
 <div class="container">
-  <?php vnotice(); ?>
+  <?php View::notice(); ?>
   <form method="post" enctype="multipart/form-data">
     Image (< 10MB): <input type="file" name="upload" />
     <input type="submit" value="Upload" /><br />
@@ -38,7 +38,7 @@
         echo 'window.parent.addImg(url);';
     ?>
   }
-  <?php vecho('reply'); ?>
+  <?php View::echof('reply'); ?>
 
   function resize() {
     window.parent.$('iframe.S3')

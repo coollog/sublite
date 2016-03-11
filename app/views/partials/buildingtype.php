@@ -11,14 +11,14 @@
     "House",
     "Other"
   );
-  if (!is_null(vget('any')))
+  if (!is_null(View::get('any')))
     array_unshift($buildingtypes, 'Any');
 ?>
 
 <div class="form-slider"><label for="buildingtype">Building type: </label>
 <select id="buildingtype" name="buildingtype" required>
-  <?php 
-    vecho('buildingtype', '<option selected="selected">{var}</option>');
+  <?php
+    View::echof('buildingtype', '<option selected="selected">{var}</option>');
     foreach ($buildingtypes as $buildingtype) {
       echo "<option>$buildingtype</option>";
     }

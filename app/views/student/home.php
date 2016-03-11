@@ -12,13 +12,13 @@
   <div class="content">
     <headline>Personal Profile</headline>
     <div class="studentinfo">
-      <div class="studentpic" style="background-image: url('<?php vecho('photo'); ?>');"></div>
+      <div class="studentpic" style="background-image: url('<?php View::echof('photo'); ?>');"></div>
 
-      <subheadline><?php vecho('name'); ?></subheadline>
-      <?php vecho('school'); ?> '<?php vecho('class'); ?>
+      <subheadline><?php View::echof('name'); ?></subheadline>
+      <?php View::echof('school'); ?> '<?php View::echof('class'); ?>
 
       <br /><br />
-      <div><?php echo vlinkto('<input type="button" value="Edit Profile" />', 'editprofile'); ?></div>
+      <div><?php echo View::linkto('<input type="button" value="Edit Profile" />', 'editprofile'); ?></div>
     </div>
   </div>
 </panel>

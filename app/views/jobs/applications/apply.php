@@ -102,7 +102,7 @@
             <input type="button" value="View Profile" />
           </a>
         </center>
-        <?php vnotice(); ?>
+        <?php View::notice(); ?>
 
         <br /><br />
         <?php
@@ -127,7 +127,7 @@
           }
         ?>
 
-        <?php vnotice(); ?>
+        <?php View::notice(); ?>
         <input type="submit" name="submit" id="submit" value="Apply Now" />
         <input type="button" id="savebutton" class="save" value="Save" />
         <div id="success">Application Saved!</div>

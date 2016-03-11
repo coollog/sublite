@@ -23,7 +23,7 @@
     height: 125px;
     display: block;
     margin: 0 auto;
-    background: url('<?php vecho('logophoto'); ?>') no-repeat center center;
+    background: url('<?php View::echof('logophoto'); ?>') no-repeat center center;
     background-size: contain;
     margin-bottom: 1em;
   }
@@ -39,7 +39,7 @@
     right: 0;
   }
   .officephoto {
-    background: url('<?php vecho('bannerphoto'); ?>') no-repeat center center;
+    background: url('<?php View::echof('bannerphoto'); ?>') no-repeat center center;
     background-size: cover;
     position: relative;
   }
@@ -83,7 +83,7 @@
 
 <panel class="job">
   <div class="content">
-    <?php if (vget('isme')) { ?>
+    <?php if (View::get('isme')) { ?>
       <a href="editcompany.php"><input type="button" value="Edit Company Profile" /></a><br /><br />
     <?php } ?>
 
@@ -94,39 +94,39 @@
             <div class="info">
               <div class="companylogo"></div>
               <?php
-                // $industries = vget('industry');
+                // $industries = View::get('industry');
                 // $last = $industries[count($industries) - 1];
                 // foreach ($industries as $industry) {
                 //   if ($industry == $last) echo $industry;
                 //   else echo "$industry, ";
                 // }
-                vecho('industry');
+                View::echof('industry');
               ?><br />
-              <?php vecho('size'); ?><br />
-              Founded in <?php vecho('founded'); ?><br />
+              <?php View::echof('size'); ?><br />
+              Founded in <?php View::echof('founded'); ?><br />
               <?php
-                // $locations = vget('location');
+                // $locations = View::get('location');
                 // $last = $locations[count($locations) - 1];
                 // foreach ($locations as $location) {
                 //   if ($location == $last) echo $location;
                 //   else echo "$location, ";
                 // }
-                vecho('location');
+                View::echof('location');
               ?><br />
               <div class="viewjobsbutton">
-                <a href="search.php?bycompany=<?php vecho('name'); ?>"><input type="button" value="View Job Listings" /></a>
+                <a href="search.php?bycompany=<?php View::echof('name'); ?>"><input type="button" value="View Job Listings" /></a>
               </div>
             </div>
           </td>
           <td colspan="2" class="officephoto">
-              <div class="companyname"><?php vecho('name'); ?></div>
+              <div class="companyname"><?php View::echof('name'); ?></div>
           </td>
         </tr>
         <tr>
           <?php
             global $pointer, $cols, $photos;
             $pointer = 0;
-            $photos = vget('photos');
+            $photos = View::get('photos');
             $cols = array(array(), array(), array());
             function insertPhoto($index, $col, $pos) {
               global $cols, $photos;
@@ -138,7 +138,7 @@
             }
             function blurb($name, $title, $color) {
               global $pointer, $cols;
-              if (strlen($val = vget($name)) > 0) {
+              if (strlen($val = View::get($name)) > 0) {
                 $val = html_entity_decode($val);
                 $cols[$pointer][] = "<div class=\"blurb $color\">
                                       <subheadline>$title</subheadline>
@@ -153,15 +153,15 @@
             blurb('socialevent', 'Social Events', 'blue');
             blurb('society', 'Giving Back to Society', 'orange');
             blurb('colorscheme', 'Colorful Office', 'cobalt');
-            blurb('media', vget('name') . ' in the Media', 'orange');
+            blurb('media', View::get('name') . ' in the Media', 'orange');
             blurb('employees', 'Employees Are Saying', 'purple');
             blurb('perks', 'Top 3 Perks', 'pink');
             blurb('forfun', 'For Fun', 'purple');
             blurb('dessert', 'Type of Dessert', 'blue');
             blurb('talent', 'Hidden Talents', 'cobalt');
             blurb('dresscode', 'Dress Code', 'pink');
-            blurb('freeanswer1', vget('freequestion1'), 'orange');
-            blurb('freeanswer2', vget('freequestion2'), 'blue');
+            blurb('freeanswer1', View::get('freequestion1'), 'orange');
+            blurb('freeanswer2', View::get('freequestion2'), 'blue');
 
             insertPhoto(0, 0, 1);
             insertPhoto(1, 0, 3);
@@ -183,7 +183,7 @@
     </div>
 
 
-    <?php if (vget('isme')) { ?>
+    <?php if (View::get('isme')) { ?>
       <br /><br />
       <a href="editcompany.php"><input type="button" value="Edit Company Profile" /></a>
     <?php } ?>

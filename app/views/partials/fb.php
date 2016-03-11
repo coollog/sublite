@@ -1,2 +1,2 @@
 <style>iframe { margin: 0; }</style>
-<div class="fb-like" data-href="https://sublite.net/<?php vecho('route'); ?>" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true" style="z-index: 2;"></div>
+<div class="fb-like" data-href="https://sublite.net/<?php View::echof('route'); ?>" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true" style="z-index: 2;"></div>

@@ -101,7 +101,7 @@
 
 <panel>
   <div class="content">
-    <?php vnotice(); ?>
+    <?php View::notice(); ?>
   </div>
 </panel>
 <panel class="form">
