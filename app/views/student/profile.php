@@ -23,12 +23,12 @@
 
 <panel class="student">
   <div class="content">
-    <headline><?php vecho('name'); ?></headline>
-    <subheadline class="title"><?php vecho('school'); ?> '<?php vecho('class'); ?></subheadline>
+    <headline><?php View::echof('name'); ?></headline>
+    <subheadline class="title"><?php View::echof('school'); ?> '<?php View::echof('class'); ?></subheadline>
     <div class="studentinfo">
-      <div class="studentpic" style="background-image: url('<?php vecho('photo'); ?>');"></div>
+      <div class="studentpic" style="background-image: url('<?php View::echof('photo'); ?>');"></div>
 
-      <?php if (vget('Loggedinstudent')) { ?>
+      <?php if (View::get('Loggedinstudent')) { ?>
         <br /><br />
         <?php
           View::partial('newmessage', [
