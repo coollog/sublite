@@ -70,38 +70,74 @@
   </panel>
 <?php } ?>
 
+<templates>
+  <jobtemplate>
+    <a href="<?php View::echoLink('jobs/job?id={_id}'); ?>" target="_blank">
+      <table class="jobblock"><tr>
+        <td class="img" style="background-image: url('{logo}');"></td>
+        <td>
+          <div class="title">{title} | {company}</div>
+          <div class="desc">{desc}</div>
+          <div class="info">Deadline: {deadline}</div>
+        </td>
+      </tr></table>
+    </a>
+  </jobtemplate>
+</templates>
+
+<script>
+  function loadContent(id, data, callback) {
+    var route = '<?php View::echoLink('jobs/search/ajax/'); ?>' + id;
+
+    $.post(route, data, function (data) {
+      console.log("'" + route + "' returned with:");
+      console.log(data);
+      data = JSON.parse(data);
+      callback(data);
+    });
+  }
+
+  var Jobs = {
+    container: 'jobs',
+    Recent: {
+      skip: 0,
+      count: 5,
+      load: function (initial) {
+        if (initial) $(Jobs.container).text('Loading recent jobs...');
+        loadContent('recent', {
+          skip: this.skip,
+          count: this.count
+        }, function (data) {
+          if (initial) Jobs.clear();
+          Jobs.addMulti(data.jobs);
+        });
+      }
+    },
+    clear: function () {
+      $(this.container).text('');
+    },
+    addMulti: function (data) {
+      data.forEach(function (job) {
+        var html = Templates.use('jobtemplate', job);
+        $(this.container).append(html);
+      });
+    }
+  };
+
+  $(function () {
+    // Templates.init();
+
+    // Jobs.Recent.load(true);
+  });
+</script>
+
 <panel class="results">
   <div class="content">
     <?php if (!is_null(View::get('recent'))) { ?>
       <headline>Recent Listings</headline>
     <?php } ?>
-    <?php
-      function jobBlock($job) {
-        $title = $job['title'];
-        $company = $job['company'];
-        $location = $job['location'];
-        $desc = $job['desc'];
-        $deadline = $job['deadline'];
-        $logo = $job['logophoto'];
-        return "
-          <table class=\"jobblock\"><tr>
-            <td class=\"img\" style=\"background-image: url('$logo');\"></td>
-            <td>
-              <div class=\"title\">$title | $company</div>
-              <div class=\"desc\">$desc</div>
-              <div class=\"info\">Deadline: $deadline</div>
-            </td>
-          </tr></table>
-        ";
-      }
-      $jobs = View::get('jobs');
-      foreach ($jobs as $job) {
-        echo View::linkTo(jobBlock($job), 'job', ['id' => $job['_id']->{'$id'}]);
-      }
-      if (count($jobs) == 0) {
-        echo "No jobs matching your query. Stay posted! New jobs are being added regularly.";
-      }
-    ?>
+
+    <jobs></jobs>
     <?php if (!is_null(View::get('recent')) && View::get('recent')) { ?>
       <a href="?showMore">Show More</a>
       <?php if (View::get('showMore')) { ?>
