@@ -30,6 +30,11 @@
      * @return Gets 'title', 'location', 'company', 'recruiter'.
      */
     public static function getByIdMinimal(MongoId $jobId);
+
+    /**
+     * @return Last $count jobs, skipping $skip from last.
+     */
+    public static function recent($skip, $count);
   }
 
   class JobModel extends Model {
@@ -77,6 +82,21 @@
         'company' => 1,
         'recruiter' => 1
       ]);
+    }
+
+    public static function recent($skip, $count) {
+      $query = (new DBQuery(self::$collection))
+        ->projectField('title')
+        ->projectField('company')
+        ->projectField('location')
+        ->projectField('desc')
+        ->projectField('deadline')
+        ->projectField('logophoto')
+        ->sortField('priority', -1)
+        ->sortField('_id', -1)
+        ->skip($skip)
+        ->limit($count);
+      return $query->run();
     }
 
     public function __construct() {

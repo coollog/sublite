@@ -372,27 +372,27 @@
       ]);
     }
 
+    // Function for processing results and showing them
+    function processSearchResults($res) {
+      global $MCompany;
+      // Processing results
+      $jobs = array();
+      foreach ($res as $job) {
+        $company = $MCompany->get($job['company']);
+        $job['company'] = $company['name'];
+        $job['desc'] = strmax($job['desc'], 300);
+        $job['logophoto'] = $company['logophoto'];
+        array_push($jobs, $job);
+      }
+      return $jobs;
+    }
+
     function search() {
       // $this->requireLogin();
 
       global $params;
       $params = $_REQUEST;
       global $MJob, $MStudent, $MCompany, $MRecruiter;
-
-      // Function for processing results and showing them
-      function process($res) {
-        global $MCompany;
-        // Processing results
-        $jobs = array();
-        foreach ($res as $job) {
-          $company = $MCompany->get($job['company']);
-          $job['company'] = $company['name'];
-          $job['desc'] = strmax($job['desc'], 300);
-          $job['logophoto'] = $company['logophoto'];
-          array_push($jobs, $job);
-        }
-        return $jobs;
-      }
 
       // Predefined searches
       $showSearch = true;
@@ -419,7 +419,7 @@
         } else $_SESSION['showMoreJobs'] = 6;
 
         $res = $MJob->last($_SESSION['showMoreJobs']);
-        $jobs = process($res);
+        $jobs = self::processSearchResults($res);
         $recent = count($jobs) < JobModel::getSize();
 
         self::render('jobs/search/form', $this->dataSearchSetup());
@@ -468,7 +468,7 @@
 
         // Performing search
         $res = $MJob->find($query);
-        $jobs = process($res);
+        $jobs = self::processSearchResults($res);
 
         if ($showSearch) self::render('jobs/search/form', $data);
         self::render('jobs/search/results', array('jobs' => $jobs, 'showCompany' => $showCompany, 'search' => 'jobs'));
