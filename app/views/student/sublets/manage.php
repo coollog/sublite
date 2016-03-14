@@ -1,4 +1,4 @@
-<style>
+<!--<style>
   .subletblock {
     text-align: left;
     padding: 20px 0;
@@ -52,4 +52,4 @@
       }
     ?>
   </div>
-</panel>
+</panel>-->

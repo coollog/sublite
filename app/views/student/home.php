@@ -38,6 +38,7 @@
         text-align: left;
       }
       links option {
+        color: black;
         padding: 1em 2em;
         font-weight: bold;
         transition: 0.1s all ease-out;
@@ -100,14 +101,24 @@
     #section_sublets {
       border-top-color: #ff7900;
     }
+      #section_sublets listsublet {
+        margin-top: -1em;
+        font-size: 0.8em;
+        display: block;
+      }
       section headline {
         font-size: 2em;
         margin-bottom: 0.5em;
       }
       section items {
         text-align: left;
+        height: calc(225px + 2em);
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
       }
       section item {
+        white-space: normal;
         width: 175px;
         height: 225px;
         box-shadow: 1px 1px 3px #ccc;
@@ -118,6 +129,7 @@
         cursor: pointer;
         font-size: 0.8em;
         line-height: 1.5em;
+        color: black;
       }
       section item:hover {
         opacity: 0.8;
@@ -144,7 +156,7 @@
         }
         items.applications item desc {
           margin: 1.5em 0;
-          height: 100px;
+          height: 90px;
           overflow: hidden;
         }
         items.applications item deadline {
@@ -152,6 +164,22 @@
         }
         items.applications item deadline:before {
           content: "Deadline: ";
+        }
+        items.applications item submitted {
+          text-transform: uppercase;
+          display: block;
+        }
+        items.applications item submitted.submitted {
+          color: #00B233;
+        }
+        items.applications item submitted.submitted:before {
+          content: "submitted";
+        }
+        items.applications item submitted.notSubmitted {
+          color: #FF1919;
+        }
+        items.applications item submitted.notSubmitted:before {
+          content: "not submitted";
         }
         items.sublets item photo {
           width: 100%;
@@ -191,6 +219,144 @@
   }
 </style>
 
+<templates>
+  <messagetemplate>
+    <table class="message">
+      <td>
+        <photo class="div imagecover"
+               style="background-image: url('{frompic}');">
+        </photo>
+      </td>
+      <td>
+        <name>{fromname}</name> | <date>{time}</date>
+        <br />
+        <text>{msg}</text>
+      </td>
+    </table>
+  </messagetemplate>
+  <applicationtemplate>
+    <a href="<?php View::echoLink('jobs/apply/{jobId}'); ?>">
+      <item class="inlinediv">
+        <logo class="inlinediv imagecover"
+              style="background-image: url('{logo}');">
+        </logo>
+        <headerinfo class="inlinediv">
+          <name>{title}</name>
+          <company>{company}</company>
+        </headerinfo>
+        <desc class="div">{desc}</desc>
+        <deadline>{deadline}</deadline>
+        <submitted></submitted>
+      </item>
+    </a>
+  </applicationtemplate>
+  <sublettemplate>
+    <a href="<?php View::echoLink('housing/editsublet?id={_id}'); ?>">
+      <item class="inlinediv">
+        <photo class="div imagecover"
+               style="background-image: url('{photo}');"></photo>
+        <info class="div">
+          <name>{title}</name>
+          <address>{address}</address>
+          <price>${price}</price><period>/{pricetype}</period>
+        </info>
+      </item>
+    </a>
+  </sublettemplate>
+</templates>
+
+<script>
+  var DataLoader = {
+    Messages: {
+      count: 0,
+      container: 'messagelist',
+      add: function (data) {
+        DataLoader.add(this, data, 'messagetemplate');
+      },
+      load: function (start, count) {
+        this.hasNoneText = $(this.container).html();
+        $(this.container).text('Loading messages...');
+        DataLoader.loadContent(this, 'messages', start, count, function (data) {
+          $('messages unread').text(' (' + data.unread + ')');
+        });
+      }
+    },
+    Applications: {
+      count: 0,
+      container: 'items.applications',
+      add: function (data) {
+        DataLoader.add(this, data, 'applicationtemplate');
+
+        // Submitted showing.
+        $('items.applications item').last().each(function () {
+          if (data.submitted) $(this).find('submitted').addClass('submitted');
+          else $(this).find('submitted').addClass('notSubmitted');
+        });
+      },
+      load: function (start, count) {
+        this.hasNoneText = $(this.container).html();
+        $(this.container).text('Loading your applications...');
+        DataLoader.loadContent(this, 'applications', start, count);
+      }
+    },
+    Sublets: {
+      count: 0,
+      container: 'items.sublets',
+      add: function (data) {
+        DataLoader.add(this, data, 'sublettemplate');
+      },
+      load: function (start, count) {
+        this.hasNoneText = $(this.container).html();
+        $(this.container).text('Loading your sublets...');
+        DataLoader.loadContent(this, 'sublets', start, count);
+      }
+    },
+    add: function (self, data, template) {
+      var html = Templates.use(template, data);
+
+      if (self.count == 0) $(self.container).html('');
+      $(self.container).append(html);
+
+      self.count ++;
+    },
+    hasNone: function (self) {
+      $(self.container).html(self.hasNoneText);
+    },
+    loadContent: function (self, id, start, count, callback) {
+      var route = 'home/ajax/' + id;
+
+      var data = {
+        start: start,
+        count: count
+      };
+
+      $.post(route, data, function (data) {
+        console.log("'" + route + "' returned with:");
+        console.log(data);
+        data = JSON.parse(data);
+
+        data[id].forEach(function (item) {
+          self.add(item);
+        });
+        if (data[id].length == 0) DataLoader.hasNone(self);
+
+        if (typeof callback !== 'undefined') callback(data);
+      });
+    },
+    load: function () {
+      this.Sublets.load(0, 3);
+      this.Applications.load(0, 3);
+      this.Messages.load(0, 5);
+    }
+  };
+
+  $(function () {
+    Templates.init();
+
+    DataLoader.load();
+  });
+</script>
+
 <panel id="dashboard">
   <div class="content clearfix">
     <leftside class="inlinediv">
@@ -205,141 +371,50 @@
           </school>
         </profile>
         <links class="div">
-          <option>
-            View Career Profile
-          </option>
-          <option>
-            Edit Career Profile
-          </option>
-          <option>
-            Housing Search
-          </option>
-          <option>
-            Internships
-          </option>
-          <option>
-            Messages
-          </option>
+          <?php echo View::linkTo('<option>View Career Profile</option>',
+                                  "$GLOBALS[dirpre]../jobs/viewprofile"); ?>
+          <?php echo View::linkTo('<option>Edit Career Profile</option>',
+                                  "$GLOBALS[dirpre]../jobs/editprofile"); ?>
+          <?php echo View::linkTo('<option>Housing Search</option>',
+                                  "$GLOBALS[dirpre]../housing/search"); ?>
+          <?php echo View::linkTo('<option>Job Search</option>',
+                                  "$GLOBALS[dirpre]../jobs/search"); ?>
+          <?php echo View::linkTo('<option>Messages</option>',
+                                  "$GLOBALS[dirpre]../messages"); ?>
         </links>
       </profilelinks>
       <messages class="inlinediv">
-        <subheadline>Messages</subheadline>
-        <messagelist>
-          <table class="message">
-            <td>
-              <photo class="div imagecover"
-                     style="background-image: url('<?php View::echof('photo'); ?>');">
-              </photo>
-            </td>
-            <td>
-              <name>Tony J.</name> | <date>Jan 1, 2018</date>
-              <br />
-              <text>asfaskjfwe jfelk jfawej laweasdfdsaf sadfs fsdaas</text>
-            </td>
-          </table>
-          <td></td>
-          <table class="message">
-            <td>
-              <photo class="div imagecover"
-                     style="background-image: url('<?php View::echof('photo'); ?>');">
-              </photo>
-            </td>
-            <td>
-              <name>Tony J.</name> | <date>Jan 1, 2018</date>
-              <br />
-              <text>Hello! I got your message!</text>
-            </td>
-          </table>
-        </messagelist>
-        <input type="button" value="Go to Messages" />
+        <subheadline>Messages<unread></unread></subheadline>
+        <messagelist>No messages.</messagelist>
+        <a href="<?php View::echoLink('messages'); ?>">
+          <input type="button" value="Go to Messages" />
+        </a>
       </messages>
     </leftside>
     <rightside class="inlinediv">
       <section class="inlinediv" id="section_job_applications">
         <headline>Your Job Applications</headline>
         <items class="div applications">
-          <item class="inlinediv">
-            <logo class="inlinediv imagecover"
-                  style="background-image: url('<?php View::echof('photo'); ?>');">
-            </logo>
-            <headerinfo class="inlinediv">
-              <name>Campus Ambassador</name>
-              <company>SubLite LLC.</company>
-            </headerinfo>
-            <desc class="div">
-              Help your classmates find internships and housing by advertising SubLite on campus! Ambassadors will lead their college's SubLite promotional activities by constructing their own team of assistants and completing tasks throughout the fall and spring semesters. There will be performance-based incentives abound for campus ambassadors that execute successful marketing campaigns.
-            </desc>
-            <deadline>2/20/2016</deadline>
-          </item>
-          <item class="inlinediv">
-            <logo class="inlinediv imagecover"
-                  style="background-image: url('<?php View::echof('photo'); ?>');">
-            </logo>
-            <headerinfo class="inlinediv">
-              <name>Campus Ambassador</name>
-              <company>SubLite LLC.</company>
-            </headerinfo>
-            <desc class="div">
-              Help your classmates find internships and housing by advertising SubLite on campus! Ambassadors will lead their college's SubLite promotional activities by constructing their own team of assistants and completing tasks throughout the fall and spring semesters. There will be performance-based incentives abound for campus ambassadors that execute successful marketing campaigns.
-            </desc>
-            <deadline>2/20/2016</deadline>
-          </item>
-          <item class="inlinediv">
-            <logo class="inlinediv imagecover"
-                  style="background-image: url('<?php View::echof('photo'); ?>');">
-            </logo>
-            <headerinfo class="inlinediv">
-              <name>Campus Ambassador</name>
-              <company>SubLite LLC.</company>
-            </headerinfo>
-            <desc class="div">
-              Help your classmates find internships and housing by advertising SubLite on campus! Ambassadors will lead their college's SubLite promotional activities by constructing their own team of assistants and completing tasks throughout the fall and spring semesters. There will be performance-based incentives abound for campus ambassadors that execute successful marketing campaigns.
-            </desc>
-            <deadline>2/20/2016</deadline>
-          </item>
+          You have no applications.
+          <a href="<?php View::echoLink('jobs/search'); ?>">
+            Start searching for jobs.
+          </a>
         </items>
       </section>
       <section class="div" id="section_sublets">
         <headline>Your Sublet Listings</headline>
+        <listsublet>
+          <a href="<?php View::echoLink('housing/addsublet'); ?>">
+            Add New Sublet
+          </a>
+        </listsublet>
         <items class="div sublets">
-          <item class="inlinediv">
-            <photo class="div imagecover"
-                   style="background-image: url('https://sublite.s3.amazonaws.com/1457310490.jpeg');"></photo>
-            <info class="div">
-              <name>Sublease available asap at University Trails</name>
-              <address>1 Prospect St, New Haven 06520</address>
-              <price>$410</price><period>/month</period>
-            </info>
-          </item>
+          You have no sublet listings.
+          <a href="<?php View::echoLink('housing/addsublet'); ?>">
+            List your sublet.
+          </a>
         </items>
       </section>
     </rightside>
   </div>
 </panel>
-
-<!--
-<style>
-  .studentpic {
-    background: transparent no-repeat center center;
-    background-size: cover;
-    width: 100px;
-    height: 100px;
-    border-radius: 50px;
-    margin: 0 auto;
-  }
-</style>
-<panel>
-  <div class="content">
-    <headline>Personal Profile</headline>
-    <div class="studentinfo">
-      <div class="studentpic" style="background-image: url('<?php View::echof('photo'); ?>');"></div>
-
-      <subheadline><?php View::echof('name'); ?></subheadline>
-      <?php View::echof('school'); ?> '<?php View::echof('class'); ?>
-
-      <br /><br />
-      <div><?php echo View::linkto('<input type="button" value="Edit Profile" />', 'editprofile'); ?></div>
-    </div>
-  </div>
-</panel>
--->

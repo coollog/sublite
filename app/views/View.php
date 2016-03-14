@@ -2,6 +2,7 @@
   interface ViewInterface {
     public static function echof($var, $format = null, $default = '');
     public static function echoCount($varName);
+    public static function echoLink($link);
     public static function get($varName);
     public static function linkTo($html,
                                   $route,
@@ -41,6 +42,9 @@
       $var = View::get($varName);
       echo $var[$key];
     }
+    public static function echoLink($link) {
+      echo "$GLOBALS[dirpre]../$link";
+    }
     public static function linkTo($html,
                                   $route,
                                   $params = null,
@@ -68,7 +72,6 @@
         <small>
           <a href="'.$GLOBALS['dirpre'].'../feedback">Found a bug?</a>
         </small>';
-
       View::echof('Success', "<div class=\"success\">{var}</div>");
       View::echof('Error', "<div class=\"error\">{var}$bugLink</div>");
     }
