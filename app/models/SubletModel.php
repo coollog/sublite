@@ -23,7 +23,7 @@
       return $this->find(array('publish' => true))->sort(array('_id'=>-1))->limit($n);
     }
     function getByStudent($id) {
-      return self::$collection->find(array('student' => new MongoId($id)));
+      return self::$collection->find(['student' => new MongoId($id)]);
     }
 
     function delete($id) {

@@ -103,6 +103,7 @@
         $applicationData = ApplicationModel::getApplication($jobId, $studentId);
         return self::edit(new MongoId($applicationData['_id']), $questions);
       }
+      echo 'creating application';
       return self::create($jobId, $studentId, $questions, false);
     }
 

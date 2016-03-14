@@ -63,6 +63,9 @@
       global $viewVars;
       return $viewVars;
     }
+    public static function echoLink($link) {
+      echo "$GLOBALS[dirpre]../$link";
+    }
     public static function notice() {
       $bugLink = '<br/>
         <small>

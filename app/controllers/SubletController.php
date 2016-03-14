@@ -60,15 +60,6 @@
         $err, 'must upload at least 1 photo');
     }
 
-    function manage() {
-      global $CStudent; $CStudent->requireLogin();
-      global $MSublet;
-      $data = array(
-        'sublets' => $MSublet->getByStudent($_SESSION['_id'])
-      );
-      self::render('student/sublets/manage', $data);
-    }
-
     function formDataCommon($data) {
       $data['startdate'] = fdate($data['startdate']);
       $data['enddate'] = fdate($data['enddate']);

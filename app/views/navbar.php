@@ -85,7 +85,7 @@
     array("Jobs", $path."jobs/search", "student"),
     // array("Socialize", $path."hubs/start", "student"),
     array("Add Sublet", $path."housing/addsublet", "student /housing"),
-    array("Dashboard", $path."housing/home", "student"),
+    array("Dashboard", $path."home", "student"),
     array("Messages", $path."messages", "student"),
 
     array("Search Housing", $path."housing/search", "notloggedin !/employers"),

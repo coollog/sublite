@@ -137,7 +137,8 @@
       if (!self::checkJobExists($jobId)) return;
 
       // Saving of application.
-      if (isset($params['questions'])) {
+      if (isset($params['saving'])) {
+        if (!isset($params['questions'])) $params['questions'] = [];
         ApplicationStudent::save($jobId, $studentId, $params['questions']);
         return;
       }
@@ -195,6 +196,7 @@
       self::render('jobs/applications/apply', [
         'questions' => $questions,
         'jobtitle' => $entry['title'],
+        'companyId' => $companyId,
         'companytitle' => $company['name'],
         'jobId' => $jobId,
         'submitted' => $submitted
