@@ -278,7 +278,7 @@
       $this->validate(
         ($entry = $MRecruiter->get($email)) != NULL and
         $MRecruiter->login($email, $pass),
-        $err, 'invalid credentials<br><small><a href="../login">Are you trying to log in as a student?</a></small>');
+        $err, 'invalid credentials<br><small><a href="' . $GLOBALS['dirpre'] . '../../login">Are you trying to log in as a student?</a></small>');
       $this->validate($entry['approved'] == 'approved',
         $err, 'account is pending approval. please allow 1-2 business days for us to verify your account. we will contact you when we approve your account. thank you!');
 
