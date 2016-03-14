@@ -75,6 +75,22 @@
       View::echof('Success', "<div class=\"success\">{var}</div>");
       View::echof('Error', "<div class=\"error\">{var}$bugLink</div>");
     }
+  }
+
+  function vprocess() {
+    global $viewVars;
+    if (isset($_SESSION['loggedin'])) {
+      $viewVars = array_merge($viewVars, [
+        'Loggedin' => true,
+        'L_id' => $_SESSION['_id'],
+        'Lemail' => $_SESSION['email'],
+        'Lpass' => $_SESSION['pass'],
+        'Lcompany' => isset($_SESSION['company'])
+      ]);
+    } else {
+      $viewVars['Loggedin'] = false;
+>>>>>>> finished student dashboard
+    }
     public static function checked($var, $val) {
       global $viewVars;
       if (isset($viewVars[$var])) {
