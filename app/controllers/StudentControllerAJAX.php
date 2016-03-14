@@ -4,6 +4,7 @@
   interface StudentControllerAJAXInterface {
     public static function dashboardSublets();
     public static function dashboardApplications();
+    public static function dashboardMessages();
   }
 
   class StudentControllerAJAX extends StudentController
