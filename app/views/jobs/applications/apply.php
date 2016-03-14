@@ -22,6 +22,11 @@
   .companyname {
     margin-top: -20px;
     font-size: 1.5em;
+    color: black;
+    transition: 0.1s all ease-out;
+  }
+  .companyname:hover {
+    opacity: 0.5;
   }
 
   .jobapplicationtitle {
@@ -57,21 +62,22 @@
     }
     return true;
   }
-  $(function() {
-    $('.save').click(function () {
-      var questions = [];
+  function save() {
+    var questions = [];
 
-      $('textarea').each(function() {
-        var question = {_id : $(this).attr('_id'), answer : $(this).val()}
-        questions.push(question);
-      });
-      $.post('', {questions: questions}, function (data) {
-        $('#fail').hide();
-        $('#success').show();
-         console.log('saved!');
-         console.log(data);
-      });
+    $('textarea').each(function() {
+      var question = {_id : $(this).attr('_id'), answer : $(this).val()}
+      questions.push(question);
     });
+    $.post('', {saving: true, questions: questions}, function (data) {
+      $('#fail').hide();
+      $('#success').show();
+       console.log('saved!');
+       console.log(data);
+    });
+  }
+  $(function() {
+    $('.save').click(save);
 
     $('input, textarea').keypress(function () {
       $('#success').hide();
@@ -79,13 +85,25 @@
     });
 
     $('#success, #fail').hide();
+
+    formunloadmsg(
+      "Are you sure you wish to leave this page? Unsaved changes will be lost."
+    );
   });
 </script>
 
 <panel class="form">
   <div class="content">
-    <headline><?php View::echof('jobtitle'); ?></headline>
-    <div class="companyname"><?php View::echof('companytitle'); ?></div>
+    <headline>
+      <a href="<?php View::echoLink('jobs/job?id='.View::get('jobId')); ?>">
+        <?php View::echof('jobtitle'); ?>
+      </a>
+    </headline>
+    <a href="<?php View::echoLink('jobs/company?id='.View::get('companyId')); ?>">
+      <div class="companyname">
+        <?php View::echof('companytitle'); ?>
+      </div>
+    </a>
 
     <form method="post"
           onsubmit="return confirm('Are you sure you want to submit? You cannot undo this.');">

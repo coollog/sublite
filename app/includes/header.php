@@ -31,10 +31,12 @@
   require_once($dirpre.'controllers/AppController.php');
   require_once($dirpre.'controllers/MigrationsController.php');
   require_once($dirpre.'controllers/CompanyController.php');
+  require_once($dirpre.'controllers/CompanyControllerAJAX.php');
   require_once($dirpre.'controllers/JobController.php');
   require_once($dirpre.'controllers/RecruiterController.php');
   require_once($dirpre.'controllers/S3/S3Controller.php');
   require_once($dirpre.'controllers/StudentController.php');
+  require_once($dirpre.'controllers/StudentControllerAJAX.php');
   require_once($dirpre.'controllers/MessageController.php');
   require_once($dirpre.'controllers/StatsController.php');
   require_once($dirpre.'controllers/SubletController.php');
@@ -43,7 +45,6 @@
   require_once($dirpre.'controllers/ApplicationController.php');
   require_once($dirpre.'controllers/ApplicationControllerAJAX.php');
   require_once($dirpre.'controllers/PaymentControllerAJAX.php');
-  require_once($dirpre.'controllers/CompanyControllerAJAX.php');
 
   require_once($dirpre.'models/AppModel.php');
   require_once($dirpre.'models/CompanyModel.php');

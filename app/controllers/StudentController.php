@@ -13,11 +13,6 @@
      */
     public static function editStudentProfile();
     public static function viewStudentProfile();
-
-    /**
-     * For managing job applications.
-     */
-    public static function manage();
   }
 
   class StudentController extends Controller
@@ -56,32 +51,6 @@
       $profile = toJSON(self::getStudentProfile($studentId));
 
       self::render('jobs/student/studentprofile', ['profile' => $profile]);
-    }
-
-    public static function manage() {
-      self::requireLogin();
-
-      $studentId = $_SESSION['_id'];
-      $applications = ApplicationStudent::getByStudent($studentId);
-
-      $data = [];
-      foreach ($applications as $application) {
-        $jobId = $application->getJobId();
-        $job = JobModel::getByIdMinimal($jobId);
-        if (is_null($job)) continue;
-        $companyId = $job['company'];
-        $companyName = CompanyModel::getName($companyId);
-        $data[] = [
-          'title' => $job['title'],
-          'location' => $job['location'],
-          'company' => $companyName,
-          'jobId' => $application->getJobId(),
-          'submitted' => $application->isSubmitted()
-        ];
-      }
-      self::render('jobs/student/home', [
-        'applications' => $data
-      ]);
     }
 
     private static function getStudentProfile(MongoId $studentId) {

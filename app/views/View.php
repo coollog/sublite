@@ -39,6 +39,9 @@
       global $viewVars;
       return $viewVars;
     }
+    public static function echoLink($link) {
+      echo "$GLOBALS[dirpre]../$link";
+    }
   }
 
   function vprocess() {

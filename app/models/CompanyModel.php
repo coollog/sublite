@@ -6,6 +6,11 @@
     // $count=0 means no limit.
     public static function getSubset($start, $count);
     public static function search($search);
+
+    /**
+     * @return Gets 'name', 'logophoto'.
+     */
+    public static function getByIdMinimal(MongoId $companyId);
   }
 
   class CompanyModel extends Model implements CompanyModelInterface {
@@ -22,6 +27,13 @@
     public static function search($search, $start=0, $count=0) {
       return (new DBQuery(self::$collection))
         ->skip($start)->limit($count)->textSearch($search);
+    }
+
+    public static function getByIdMinimal(MongoId $companyId) {
+      return self::getById($companyId, [
+        'name' => 1,
+        'logophoto' => 1
+      ]);
     }
 
     function __construct() {
