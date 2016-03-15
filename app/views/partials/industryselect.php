@@ -24,11 +24,11 @@
 ?>
 
 <left class="checkboxes">
-  <?php 
+  <?php
     $i = 1;
     foreach ($industries as $industry) {
   ?>
-    <input type="checkbox" name="industry[]" id="industry<?php echo $i; ?>" value="<?php echo $industry; ?>" <?php vchecked('industry', $industry); ?> />
+    <input type="checkbox" name="industry[]" id="industry<?php echo $i; ?>" value="<?php echo $industry; ?>" <?php View::checked('industry', $industry); ?> />
     <label style="display: inline-block" for="industry<?php echo $i; ?>"><?php echo $industry; ?></label><br />
   <?php
       $i ++;

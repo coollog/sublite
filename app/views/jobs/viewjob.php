@@ -1,6 +1,6 @@
 <style>
   panel.main {
-    background: url('<?php vecho("companybanner") ?>') no-repeat center center;
+    background: url('<?php View::echof("companybanner") ?>') no-repeat center center;
     background-size: cover;
     display: table;
     height: 200px;
@@ -71,7 +71,7 @@
       $_id = View::get('_id');
       $href = "apply/$_id";
 
-      if(vget('Loggedinstudent') || vget('Loggedin')) {
+      if(View::get('Loggedinstudent') || View::get('Loggedin')) {
         $buttonText = "Apply Now";
         $onClick = "";
 
@@ -92,7 +92,7 @@
           <input type="button" value="<?php echo $buttonText; ?>" />
         </a>
     <?php } else {
-      echo vlinkto(
+      echo View::linkTo(
         '<input type="button" class="apply"
         value="Login or register to apply for this opening!" />',
         'login');
@@ -120,18 +120,18 @@
   <div class="cell">
     <div class="banner">
       <div class="content">
-        <div class="tagline">Look inside <?php vecho('companyname'); ?></div>
-        <?php echo vlinkto('<input type="button" class="button" value="View Company Profile" />', 'company', array('id' => vget('companyid')), true); ?></div>
+        <div class="tagline">Look inside <?php View::echof('companyname'); ?></div>
+        <?php echo View::linkTo('<input type="button" class="button" value="View Company Profile" />', 'company', array('id' => View::get('companyid')), true); ?></div>
       </div>
     </div>
   </div>
 </panel>
 <panel class="job">
   <div class="content">
-    <headline id="jobtitle"><?php vecho('title'); ?></headline>
+    <headline id="jobtitle"><?php View::echof('title'); ?></headline>
     <subheadline id="jobsubtitle">
       <?php
-        $jobtype = vget('jobtype');
+        $jobtype = View::get('jobtype');
         switch ($jobtype) {
           case 'internship': echo 'Internship'; break;
           case 'fulltime': echo 'Full-time Position'; break;
@@ -143,7 +143,7 @@
     <apply></apply>
 
     <br /><br />
-    <?php vpartial('fb', array('route' => 'jobs/job.php?id='.vget('_id'))); ?>
+    <?php View::partial('fb', array('route' => 'jobs/job.php?id='.View::get('_id'))); ?>
 
     <div class="jobinfo">
       <table class="jobtable">
@@ -159,15 +159,15 @@
               </div>
               <subheadline>Posted By</subheadline>
               <?php
-                echo vlinkto(vget('recruitername'), 'recruiter', array('id' => vget('recruiterid')));
-                if(vget('Loggedinstudent')) {
+                echo View::linkTo(View::get('recruitername'), 'recruiter', array('id' => View::get('recruiterid')));
+                if(View::get('Loggedinstudent')) {
               ?>
-                  | <a href="newmessage.php?from=<?php vecho('L_id'); ?>&to=<?php vecho('recruiterid'); ?>" onClick="return confirm('I have read, fully understand, and agree to Sublite’s Terms of Service and Privacy Policy. I agree to contact the recruiter in good-faith to inquire about the listing.')">Contact</a>
+                  | <a href="newmessage.php?from=<?php View::echof('L_id'); ?>&to=<?php View::echof('recruiterid'); ?>" onClick="return confirm('I have read, fully understand, and agree to Sublite’s Terms of Service and Privacy Policy. I agree to contact the recruiter in good-faith to inquire about the listing.')">Contact</a>
               <?php
                 }
-                else if(!vget('Loggedin')) {
+                else if(!View::get('Loggedin')) {
               ?>
-                  | <?php echo vlinkto('Create an account to message this recruiter!', 'register'); ?>
+                  | <?php echo View::linkTo('Create an account to message this recruiter!', 'register'); ?>
               <?php
                 }
               ?>
@@ -177,7 +177,7 @@
 
             <div class="icon" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/deadlineico.png');">
               <div class="cell">
-                <subheadline><?php vecho('deadline'); ?></subheadline>
+                <subheadline><?php View::echof('deadline'); ?></subheadline>
                 <small>Deadline of application</small>
               </div>
             </div>
@@ -185,9 +185,9 @@
               <div class="cell">
                 <subheadline>
                   <?php
-                    if(vget('locationtype') == "home") echo 'Work at home!';
+                    if(View::get('locationtype') == "home") echo 'Work at home!';
                     else {
-                      vecho('location');
+                      View::echof('location');
                     }
                   ?>
                 </subheadline>
@@ -196,7 +196,7 @@
             </div>
             <div class="icon"
               <?php
-                if((!vget('duration') && !vget('startdate'))) {
+                if((!View::get('duration') && !View::get('startdate'))) {
                   echo 'style="display: none"';
                 }
                 else {
@@ -207,9 +207,9 @@
               <div class="cell">
                 <subheadline>
                 <?php
-                  $duration = vget('duration');
-                  $startdate = vget('startdate');
-                  $enddate = vget('enddate');
+                  $duration = View::get('duration');
+                  $startdate = View::get('startdate');
+                  $enddate = View::get('enddate');
                   if($duration) {
                     echo $duration . ' weeks';
                   }
@@ -267,7 +267,7 @@
       </table>
     </div>
 
-    <?php vpartial('fb', array('route' => 'jobs/job.php?id='.vget('_id'))); ?>
+    <?php View::partial('fb', array('route' => 'jobs/job.php?id='.View::get('_id'))); ?>
     <br /><br />
 
     <apply></apply>

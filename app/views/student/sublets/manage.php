@@ -43,12 +43,12 @@
           </div>
         ";
       }
-      $sublets = vget('sublets');
+      $sublets = View::get('sublets');
       foreach ($sublets as $sublet) {
-        echo vlinkto(subletBlock($sublet), 'editsublet', array('id' => $sublet['_id']->{'$id'}));
+        echo View::linkTo(subletBlock($sublet), 'editsublet', array('id' => $sublet['_id']->{'$id'}));
       }
       if ($sublets->count() == 0) {
-        echo "<b style=\"font-size: 1.5em;\">Congratulations! You have completed your profile and are on your way to finding tenants for the summer. Just take a moment to complete your sublet listing(s) by clicking the button below and you'll be all set!</b><br /><br />" . vlinkto('<input type="button" value="List Sublet" />', 'addsublet');
+        echo "<b style=\"font-size: 1.5em;\">Congratulations! You have completed your profile and are on your way to finding tenants for the summer. Just take a moment to complete your sublet listing(s) by clicking the button below and you'll be all set!</b><br /><br />" . View::linkTo('<input type="button" value="List Sublet" />', 'addsublet');
       }
     ?>
   </div>

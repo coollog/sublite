@@ -1,18 +1,18 @@
 <panel class="form">
   <div class="content">
     <headline>Edit Your Profile</headline>
-    <subheadline><?php vecho('email'); ?></subheadline>
+    <subheadline><?php View::echof('email'); ?></subheadline>
     <form method="post">
-      <?php vnotice(); ?>
+      <?php View::notice(); ?>
 
-      <div class="form-slider"><label for="name">Full Name</label><input type="text" id="name" name="name" value="<?php vecho('name'); ?>" maxlength="100" required /></div>
+      <div class="form-slider"><label for="name">Full Name</label><input type="text" id="name" name="name" value="<?php View::echof('name'); ?>" maxlength="100" required /></div>
 
-      <div class="form-slider"><label for="class">Class Year</label><input type="text" id="class" name="class" value="<?php vecho('class'); ?>" /></div>
-      <div class="form-slider"><label for="school">School</label><input type="text" id="name" name="school" value="<?php vecho('school'); ?>" /></div>
+      <div class="form-slider"><label for="class">Class Year</label><input type="text" id="class" name="class" value="<?php View::echof('class'); ?>" /></div>
+      <div class="form-slider"><label for="school">School</label><input type="text" id="name" name="school" value="<?php View::echof('school'); ?>" /></div>
 
       <p style="text-align:left;margin-bottom:0px;margin-top:0px">What is your gender?*</p>
       <select id="gender" name="gender" required>
-        <?php vecho('gender', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); ?>
+        <?php View::echof('gender', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); ?>
         <option value="Male">Male</option>
         <option value="Female">Female</option>
         <option value="Other">Other</option>
@@ -20,12 +20,12 @@
 
       <p style="text-align:left;margin-bottom:0px">Are you an undergraduate or graduate student? If you have graduated, select your most recent degree.</p>
       <label><input class="undergraduate" onchange="educationValueChanged()" type="radio" name="education" id="undergraduate" value="undergraduate" checked> Undergraduate</label>
-      <label><input class="graduate" onchange="educationValueChanged()" type="radio" name="education" id="graduate" value="graduate" <?php vchecked('education', 'graduate'); ?> > Graduate</label>
+      <label><input class="graduate" onchange="educationValueChanged()" type="radio" name="education" id="graduate" value="graduate" <?php View::checked('education', 'graduate'); ?> > Graduate</label>
 
       <div class="undergraduateShow">
         <p style="text-align:left;margin-bottom:0px">What degree are you pursuing or have already attained?*</p>
         <select class="undergraduateChoosers" name="undergraduateDegree" id="uDegreeChooser" type="singleselect" required>
-          <?php if(vget('education') == 'undergraduate') vecho('degree', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
+          <?php if(View::get('education') == 'undergraduate') View::echof('degree', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
           <option value="Bachelor of Arts">Bachelor of Arts</option>
           <option value="Bachelor of Science">Bachelor of Science</option>
           <option value="Associate Degree">Associate Degree</option>
@@ -34,7 +34,7 @@
 
         <p style="text-align:left;margin-bottom:0px">What year are you?*</p>
         <select class="undergraduateChoosers" name="undergraduateYear" id="uYearChooser" type="singleselect" required>
-          <?php if(vget('education') == 'undergraduate') vecho('year', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
+          <?php if(View::get('education') == 'undergraduate') View::echof('year', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
           <option value="Freshman">Freshman</option>
           <option value="Sophomore">Sophomore</option>
           <option value="Junior">Junior</option>
@@ -44,7 +44,7 @@
 
         <p style="text-align:left;margin-bottom:0px">What is the month and year of your (projected) graduation?*</p>
         <select class="undergraduateChoosers" name="undergraduateGraduationMonth" id="uGraduationMonthChooser" type="singleselect" required>
-          <?php if(vget('education') == 'undergraduate') vecho('graduationMonth', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
+          <?php if(View::get('education') == 'undergraduate') View::echof('graduationMonth', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
           <option value="January">January</option>
           <option value="February">February</option>
           <option value="March">March</option>
@@ -59,7 +59,7 @@
           <option value="December">December</option>
         </select>
         <select class="undergraduateChoosers" name="undergraduateGraduationYear" id="uGraduationYearChooser" type="singleselect" required>
-          <?php if(vget('education') == 'undergraduate') vecho('graduationYear', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
+          <?php if(View::get('education') == 'undergraduate') View::echof('graduationYear', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
           <option value="2000">2000</option>
           <option value="2001">2001</option>
           <option value="2002">2002</option>
@@ -92,7 +92,7 @@
       <div class="graduateShow" style="display:none">
         <p style="text-align:left;margin-bottom:0px">What degree are you pursuing or have already attained?*</p>
         <select class="graduateChoosers" name="graduateDegree" id="gDegreeChooser" type="singleselect" required>
-          <?php if(vget('education') == 'graduate') vecho('degree', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
+          <?php if(View::get('education') == 'graduate') View::echof('degree', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
           <option value="Masters (M.A)">Masters (M.A)</option>
           <option value="Masters (M.S)">Masters (M.S)</option>
           <option value="PhD">PhD</option>
@@ -104,7 +104,7 @@
 
         <p style="text-align:left;margin-bottom:0px">What year are you in your program?*</p>
         <select class="graduateChoosers" name="graduateYear" id="gYearChooser" type="singleselect" required>
-          <?php if(vget('education') == 'graduate') vecho('year', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
+          <?php if(View::get('education') == 'graduate') View::echof('year', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
           <option value="First year">First year</option>
           <option value="Second year">Second year</option>
           <option value="Third year">Third year</option>
@@ -119,7 +119,7 @@
 
         <p style="text-align:left;margin-bottom:0px">What is the month and year of your (projected) graduation?*</p>
         <select class="graduateChoosers" name="graduateGraduationMonth" id="gGraduationMonthChooser" type="singleselect" required>
-          <?php if(vget('education') == 'graduate') vecho('graduationMonth', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
+          <?php if(View::get('education') == 'graduate') View::echof('graduationMonth', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
           <option value="January">January</option>
           <option value="February">February</option>
           <option value="March">March</option>
@@ -134,7 +134,7 @@
           <option value="December">December</option>
         </select>
         <select class="graduateChoosers" name="graduateGraduationYear" id="gGraduationYearChooser" type="singleselect" required>
-          <?php if(vget('education') == 'graduate') vecho('graduationYear', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
+          <?php if(View::get('education') == 'graduate') View::echof('graduationYear', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); else echo '<option value="">Please Select...</option>'; ?>
           <option value="2000">2000</option>
           <option value="2001">2001</option>
           <option value="2002">2002</option>
@@ -166,7 +166,7 @@
 
       <p style="text-align:left;margin-bottom:0px">What is your (intended) major?*</p>
       <select name="majorChooser" id="majorChooser" type="singleselect" required>
-        <?php vecho('major', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); ?>
+        <?php View::echof('major', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); ?>
         <option value ="Accounting">Accounting</option>
         <option value ="Acupuncture">Acupuncture</option>
         <option value ="Administrative Assistant">Administrative Assistant</option>
@@ -373,7 +373,7 @@
 
       <p style="text-align:left;margin-bottom:0px">What is your GPA range?*</p>
       <select name="gpaChooser" id="gpaChooser" type="singleselect" required>
-        <?php vecho('gpa', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); ?>
+        <?php View::echof('gpa', '<option selected="selected">{var}</option>', '<option value="">Please Select...</option>'); ?>
         <option value ="3.51-4.00">3.51-4.00</option>
         <option value ="3.01-3.50">3.01-3.50</option>
         <option value ="2.51-3.00">2.51-3.00</option>
@@ -383,9 +383,9 @@
       </select>
 
       <p style="text-align:left;margin-bottom:0px">What are you looking for? Please select at least one.* <br> Your answers to the following will help us find better opportunities for you.</p>
-      <label><input class="internship" onchange="lookingForValueChanged()" type="checkbox" id="internship" name="internship" value="<?php vecho('internship'); ?>" <?php vchecked('lookingFor', 'internship'); ?> />Internship </label>
-      <label><input class="fulltime" onchange="lookingForValueChanged()" type="checkbox" id="fulltime" name="fulltime" value="<?php vecho('fulltime'); ?>" <?php vchecked('lookingFor', 'fulltime'); ?> />Full-Time </label>
-      <label><input class="housing" onchange="lookingForValueChanged()" type="checkbox" id="housing" name="housing" value="<?php vecho('housing'); ?>" <?php vchecked('lookingFor', 'housing'); ?> />Housing </label>
+      <label><input class="internship" onchange="lookingForValueChanged()" type="checkbox" id="internship" name="internship" value="<?php View::echof('internship'); ?>" <?php View::checked('lookingFor', 'internship'); ?> />Internship </label>
+      <label><input class="fulltime" onchange="lookingForValueChanged()" type="checkbox" id="fulltime" name="fulltime" value="<?php View::echof('fulltime'); ?>" <?php View::checked('lookingFor', 'fulltime'); ?> />Full-Time </label>
+      <label><input class="housing" onchange="lookingForValueChanged()" type="checkbox" id="housing" name="housing" value="<?php View::echof('housing'); ?>" <?php View::checked('lookingFor', 'housing'); ?> />Housing </label>
       <br>
 
       <div class="jobShow" style="display:none">
@@ -582,7 +582,7 @@
         <?php
           for($i = 0; $i < count($seasons); $i++) {
             ob_start();
-            vchecked('internshipTimes', $seasons[$i]);
+            View::checked('internshipTimes', $seasons[$i]);
             $checked = ob_get_contents();
             ob_end_clean();
 
@@ -597,7 +597,7 @@
         <?php
           for($i = 0; $i < count($seasons); $i++) {
             ob_start();
-            vchecked('fulltimeTimes', $seasons[$i]);
+            View::checked('fulltimeTimes', $seasons[$i]);
             $checked = ob_get_contents();
             ob_end_clean();
 
@@ -612,7 +612,7 @@
         <?php
           for($i = 0; $i < count($seasons); $i++) {
             ob_start();
-            vchecked('housingTimes', $seasons[$i]);
+            View::checked('housingTimes', $seasons[$i]);
             $checked = ob_get_contents();
             ob_end_clean();
 
@@ -622,17 +622,17 @@
         <br>
       </div>
 
-      <?php 
-        vpartial('s3single', array(
-          's3name' => 'photo', 
+      <?php
+        View::partial('s3single', array(
+          's3name' => 'photo',
           's3title' => 'Upload a profile picture *: ',
-          's3link' => vget('photo')
+          's3link' => View::get('photo')
         ));
       ?>
 
-      <div class="form-slider"><label for="bio" class="fortextarea">About yourself: (max. 1000 characters)*</label><textarea id="bio" name="bio" maxlength="1000"><?php vecho('bio'); ?></textarea></div>
+      <div class="form-slider"><label for="bio" class="fortextarea">About yourself: (max. 1000 characters)*</label><textarea id="bio" name="bio" maxlength="1000"><?php View::echof('bio'); ?></textarea></div>
 
-      <?php vnotice(); ?>
+      <?php View::notice(); ?>
       <input type="submit" name="edit" value="Update Profile" />
     </form>
   </div>
@@ -662,17 +662,17 @@ function lookingForValueChanged() {
     else
       $(".jobShow").hide();
 
-    if($('.internship').is(":checked"))   
+    if($('.internship').is(":checked"))
       $(".internshipShow").show();
     else
       $(".internshipShow").hide();
 
-    if($('.fulltime').is(":checked"))   
+    if($('.fulltime').is(":checked"))
       $(".fulltimeShow").show();
     else
       $(".fulltimeShow").hide();
 
-    if($('.housing').is(":checked"))   
+    if($('.housing').is(":checked"))
       $(".housingShow").show();
     else
       $(".housingShow").hide();
@@ -682,13 +682,13 @@ educationValueChanged();
 lookingForValueChanged();
 
 // Restore previously selected items
-<?php 
-  if(!is_null(vget('industry'))) {
-    echo "var industry = " . toJSON(vget('industry')) . ";";
+<?php
+  if(!is_null(View::get('industry'))) {
+    echo "var industry = " . toJSON(View::get('industry')) . ";";
     echo "$( \"#industryChooser\" ).val(industry);";
   }
-  if(!is_null(vget('cities'))) {
-    echo "var cities = " . toJSON(vget('cities')) . ";";
+  if(!is_null(View::get('cities'))) {
+    echo "var cities = " . toJSON(View::get('cities')) . ";";
     echo "$( \"#citiesChooser\" ).val(cities);";
   }
 ?>

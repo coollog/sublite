@@ -57,16 +57,16 @@
   $curdir = dirname($_SERVER['REQUEST_URI'] . '/.');
   // Various states the user can be in
   $states = array(
-    "loggedin" => vget('Loggedin') or vget('Loggedinstudent'),
-    "notloggedin" => !vget('Loggedin') and !vget('Loggedinstudent'),
-    "notloggedin !/employers" => !vget('Loggedin') and !vget('Loggedinstudent') and !preg_match('/^\/employers/', $curdir),
-    "notloggedin /employers" => !vget('Loggedin') and !vget('Loggedinstudent') and preg_match('/^\/employers/', $curdir),
-    "loggedin /employers" => vget('Loggedin') and !vget('Loggedinstudent') and preg_match('/^\/employers/', $curdir),
-    "recruiter hascompany" => vget('Loggedin') and vget('Lcompany'),
-    "recruiter nocompany" => vget('Loggedin') and !vget('Lcompany'),
-    "recruiter" => vget('Loggedin'),
-    "student" => vget('Loggedinstudent'),
-    "student /housing" => vget('Loggedinstudent') and preg_match('/^\/housing/', $curdir),
+    "loggedin" => View::get('Loggedin') or View::get('Loggedinstudent'),
+    "notloggedin" => !View::get('Loggedin') and !View::get('Loggedinstudent'),
+    "notloggedin !/employers" => !View::get('Loggedin') and !View::get('Loggedinstudent') and !preg_match('/^\/employers/', $curdir),
+    "notloggedin /employers" => !View::get('Loggedin') and !View::get('Loggedinstudent') and preg_match('/^\/employers/', $curdir),
+    "loggedin /employers" => View::get('Loggedin') and !View::get('Loggedinstudent') and preg_match('/^\/employers/', $curdir),
+    "recruiter hascompany" => View::get('Loggedin') and View::get('Lcompany'),
+    "recruiter nocompany" => View::get('Loggedin') and !View::get('Lcompany'),
+    "recruiter" => View::get('Loggedin'),
+    "student" => View::get('Loggedinstudent'),
+    "student /housing" => View::get('Loggedinstudent') and preg_match('/^\/housing/', $curdir),
     "all" => true
   );
   // Establish relative paths
