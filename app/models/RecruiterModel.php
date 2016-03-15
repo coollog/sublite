@@ -162,7 +162,7 @@
     }
 
     function getName($id) {
-      $entry = $this->getById(new MongoId($id));
+      $entry = self::getById(new MongoId($id));
       return $entry['firstname'] . ' ' . $entry['lastname'];
     }
 

@@ -250,8 +250,8 @@
     Controller::displayMetatags('searchjobs');
     GLOBALvarGet('CJob')->search();
   });
-  Router::register('jobs/search/recent', function() {
-    JobControllerAJAX::recent();
+  Router::register('jobs/search/search', function() {
+    JobControllerAJAX::search();
   });
   Router::register('jobs/companies', function() {
     CompanyController::viewAll();
@@ -432,7 +432,7 @@
   Router::route('/jobs/recruiter', 'jobs/recruiter');
   Router::route('/employers/search', 'jobs/search');
   Router::route('/jobs/search', 'jobs/search');
-  Router::route('/jobs/search/ajax/recent', 'jobs/search/recent');
+  Router::route('/jobs/search/ajax/search', 'jobs/search/search');
 
   Router::route('/leaderboard', 'leaderboard');
 

@@ -22,11 +22,11 @@
 
       if ($countCities) $cities = $MStats->countCities();
       else {
-        $doc = $this->getStats();
+        $doc = self::getStats();
         $cities = $doc['cities'];
       }
 
-      $this->save($stats = array(
+      self::save($stats = array(
         '_id' => 'stats',
         'recruiters' => $MStats->countRecruiters(),
         'jobs' => $MStats->countJobListings(),
@@ -49,7 +49,7 @@
       return $stats['industries'];
     }
     function getIndustriesByJobs() {
-      $stats = $this->getStats();
+      $stats = self::getStats();
       return $stats['industriesbyjobs'];
     }
 
@@ -63,16 +63,15 @@
       $email = $_SESSION['email'];
       $data = $_REQUEST;
 
-      if (($entry = $this->get('searches')) == NULL)
-        $entry = array();
+      if (($entry = self::get('searches')) == NULL) $entry = [];
       $entry['_id'] = 'searches';
-      $entry[time()] = array(
+      $entry[time()] = [
         'email' => $email,
         'type' => $type,
         'data' => $data
-      );
+      ];
 
-      $this->save($entry);
+      self::save($entry);
     }
 
     protected static $collection;
