@@ -8,7 +8,7 @@
       <?php
         if (View::get('_id') !== null) {
           $id = View::get('_id');
-          echo ' &nbsp; ' . View::linkto('<input type="button" value="View Company Profile" /><br /><br />', 'company', array('id' => $id));
+          echo ' &nbsp; ' . View::linkTo('<input type="button" value="View Company Profile" /><br /><br />', 'company', array('id' => $id));
         }
       ?>
       <?php View::notice(); ?>

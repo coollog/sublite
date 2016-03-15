@@ -22,7 +22,7 @@
       <?php
         if (View::get('_id') !== null) {
           $id = View::get('_id');
-          echo ' &nbsp; ' . View::linkto('<input type="button" value="View Job Listing" /><br /><br />', 'job', array('id' => $id), true);
+          echo ' &nbsp; ' . View::linkTo('<input type="button" value="View Job Listing" /><br /><br />', 'job', array('id' => $id), true);
         }
       ?>
       <?php View::notice(); ?>

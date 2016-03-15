@@ -9,7 +9,7 @@
   <div class="content">
     <headline>Edit Profile</headline>
     <form method="post">
-      <?php echo ' &nbsp; ' . View::linkto('<input type="button" value="View Profile" /><br /><br />', 'recruiter', array('id' => View::get('L_id')->{'$id'})); ?>
+      <?php echo ' &nbsp; ' . View::linkTo('<input type="button" value="View Profile" /><br /><br />', 'recruiter', array('id' => View::get('L_id')->{'$id'})); ?>
 
       <?php View::notice(); ?>
 

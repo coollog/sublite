@@ -5,7 +5,7 @@
       <?php
         if (View::get('_id') !== null) {
           $id = View::get('_id');
-          echo ' &nbsp; ' . View::linkto('<input type="button" value="View Sublet Listing" /><br /><br />', 'sublet', array('id' => $id), true);
+          echo ' &nbsp; ' . View::linkTo('<input type="button" value="View Sublet Listing" /><br /><br />', 'sublet', array('id' => $id), true);
         }
       ?>
 

@@ -92,7 +92,7 @@
           <input type="button" value="<?php echo $buttonText; ?>" />
         </a>
     <?php } else {
-      echo View::linkto(
+      echo View::linkTo(
         '<input type="button" class="apply"
         value="Login or register to apply for this opening!" />',
         'login');
@@ -121,7 +121,7 @@
     <div class="banner">
       <div class="content">
         <div class="tagline">Look inside <?php View::echof('companyname'); ?></div>
-        <?php echo View::linkto('<input type="button" class="button" value="View Company Profile" />', 'company', array('id' => View::get('companyid')), true); ?></div>
+        <?php echo View::linkTo('<input type="button" class="button" value="View Company Profile" />', 'company', array('id' => View::get('companyid')), true); ?></div>
       </div>
     </div>
   </div>
@@ -159,7 +159,7 @@
               </div>
               <subheadline>Posted By</subheadline>
               <?php
-                echo View::linkto(View::get('recruitername'), 'recruiter', array('id' => View::get('recruiterid')));
+                echo View::linkTo(View::get('recruitername'), 'recruiter', array('id' => View::get('recruiterid')));
                 if(View::get('Loggedinstudent')) {
               ?>
                   | <a href="newmessage.php?from=<?php View::echof('L_id'); ?>&to=<?php View::echof('recruiterid'); ?>" onClick="return confirm('I have read, fully understand, and agree to Sublite’s Terms of Service and Privacy Policy. I agree to contact the recruiter in good-faith to inquire about the listing.')">Contact</a>
@@ -167,7 +167,7 @@
                 }
                 else if(!View::get('Loggedin')) {
               ?>
-                  | <?php echo View::linkto('Create an account to message this recruiter!', 'register'); ?>
+                  | <?php echo View::linkTo('Create an account to message this recruiter!', 'register'); ?>
               <?php
                 }
               ?>

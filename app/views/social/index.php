@@ -245,7 +245,7 @@
             <?php } ?>
         <?php
           } else {
-            echo View::linkto('<input type="button" class="button" value="Login or register to sign up for the social hubs!" />', $GLOBALS['dirpre'].'../register');
+            echo View::linkTo('<input type="button" class="button" value="Login or register to sign up for the social hubs!" />', $GLOBALS['dirpre'].'../register');
           }
         ?>
       </div>
