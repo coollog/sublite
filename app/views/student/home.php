@@ -371,6 +371,8 @@
           </school>
         </profile>
         <links class="div">
+          <?php echo View::linkTo('<option>Edit Profile</option>',
+                                  "$GLOBALS[dirpre]../housing/editprofile"); ?>
           <?php echo View::linkTo('<option>View Career Profile</option>',
                                   "$GLOBALS[dirpre]../jobs/viewprofile"); ?>
           <?php echo View::linkTo('<option>Edit Career Profile</option>',
