@@ -114,9 +114,13 @@
                 View::echof('location');
               ?><br />
               <div class="viewjobsbutton">
+<<<<<<< HEAD
                 <a href="search.php?bycompany=<?php View::echof('_id'); ?>">
                   <input type="button" value="View Job Listings" />
                 </a>
+=======
+                <a href="search.php?bycompany=<?php vecho('_id'); ?>"><input type="button" value="View Job Listings" /></a>
+>>>>>>> finished job search by ajax
               </div>
             </div>
           </td>

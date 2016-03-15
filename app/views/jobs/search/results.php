@@ -60,7 +60,7 @@
   <jobtemplate>
     <a href="<?php View::echoLink('jobs/job?id={_id}'); ?>" target="_blank">
       <table class="jobblock"><tr>
-        <td class="img" style="background-image: url('{logo}');"></td>
+        <td class="img" style="background-image: url('{logophoto}');"></td>
         <td>
           <div class="title">{title} | {company}</div>
           <div class="desc">{desc}</div>
@@ -72,48 +72,11 @@
 </templates>
 
 <script>
-  function loadContent(id, data, callback) {
-    var route = '<?php View::echoLink('jobs/search/ajax/'); ?>' + id;
-
-    $.post(route, data, function (data) {
-      console.log("'" + route + "' returned with:");
-      console.log(data);
-      data = JSON.parse(data);
-      callback(data);
-    });
-  }
-
-  var Jobs = {
-    container: 'jobs',
-    Recent: {
-      skip: 0,
-      count: 5,
-      load: function (initial) {
-        if (initial) $(Jobs.container).text('Loading recent jobs...');
-        loadContent('recent', {
-          skip: this.skip,
-          count: this.count
-        }, function (data) {
-          if (initial) Jobs.clear();
-          Jobs.addMulti(data.jobs);
-        });
-      }
-    },
-    clear: function () {
-      $(this.container).text('');
-    },
-    addMulti: function (data) {
-      data.forEach(function (job) {
-        var html = Templates.use('jobtemplate', job);
-        $(this.container).append(html);
-      });
-    }
-  };
-
   $(function () {
-    // Templates.init();
-
-    // Jobs.Recent.load(true);
+    $('showMore').click(function () {
+      if (Jobs.state == 'recent') Jobs.load({}, false);
+      else Jobs.search(false);
+    });
   });
 </script>
 
