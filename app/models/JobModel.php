@@ -32,9 +32,10 @@
     public static function getByIdMinimal(MongoId $jobId);
 
     /**
-     * @return Last $count jobs, skipping $skip from last.
+     * @return Performs $query as search query and returns last $count jobs,
+     *         skipping $skip from last.
      */
-    public static function recent($skip, $count);
+    public static function search(array $query, $skip, $count, &$total);
   }
 
   class JobModel extends Model {
@@ -84,8 +85,9 @@
       ]);
     }
 
-    public static function recent($skip, $count) {
+    public static function search(array $query, $skip, $count, &$total) {
       $query = (new DBQuery(self::$collection))
+        ->setQuery($query)
         ->projectField('title')
         ->projectField('company')
         ->projectField('location')
@@ -96,6 +98,7 @@
         ->sortField('_id', -1)
         ->skip($skip)
         ->limit($count);
+      if (isset($total)) $total = $query->count();
       return $query->run();
     }
 

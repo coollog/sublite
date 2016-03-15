@@ -3,28 +3,71 @@
 
   interface JobControllerAJAXInterface {
     /**
-     * @param (skip, count)
+     * @param (query, skip, count)
      */
-    public static function recent();
+    public static function search();
   }
 
   class JobControllerAJAX extends JobController
-                              implements JobControllerAJAXInterface {
-    public static function recent() {
+                          implements JobControllerAJAXInterface {
+    public static function search() {
       global $params;
       $skip = $params['skip'];
       $count = $params['count'];
 
-      $data = [];
+      if (isset($params['query'])) {
+        $industry = $params['query']['industry'];
+        $city = $params['query']['city'];
+        $recruiterId = $params['query']['recruiterId'];
+        $companyId = $params['query']['companyId'];
+        $title = $params['query']['title'];
 
-      $res = JobModel::recent($skip, $count);
-      $jobs = self::processToView($res);
-      $more = $skip + $count < JobModel::getSize();
+        // Search query building
+        $query = [];
 
-      echo toJSON([ 'jobs' => $data, 'more' => $more ]);
+        if (strlen($title) > 0) $query['$text'] = ['$search' => $title];
+        if (strlen($recruiterId) > 0)
+          $query['recruiter'] = new MongoId($recruiterId);
+        if (strlen($companyId) > 0) {
+          $query['company'] = new MongoId($companyId);
+        } else {
+          $companies = self::findCompanyIdsByIndustryCity($industry, $city);
+          $query['company'] = ['$in' => $companies];
+        }
+      } else {
+        $query = [];
+      }
+
+      // Performing search
+      $total = 0;
+      $res = JobModel::search($query, $skip, $count, $total);
+      $jobs = self::processDBToView($res);
+      $more = $skip + $count < $total;
+
+      // Save search to db.
+      if ($skip == 0) AppModel::recordSearch('jobs');
+
+      echo toJSON([ 'jobs' => $jobs, 'more' => $more ]);
     }
 
-    private static function processToView(array $data) {
+    private static function findCompanyIdsByIndustryCity($industry, $city) {
+      $companyquery = [];
+      if (strlen($industry) > 0) {
+        $companyquery['industry'] = ['$regex' => keywords2mregex($industry)];
+      }
+      if (strlen($city) > 0) {
+        $companyquery['location'] = ['$regex' => keywords2mregex($city)];
+      }
+      $cs = CompanyModel::find($companyquery);
+
+      $companies = [];
+      foreach ($cs as $c) {
+        $companies[] = $c['_id'];
+      }
+      return $companies;
+    }
+
+    private static function processDBToView(array $data) {
       $jobs = [];
       foreach ($data as $job) {
         $job['_id'] = $job['_id']->{'$id'};

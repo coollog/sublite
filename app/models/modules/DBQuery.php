@@ -18,6 +18,8 @@
   interface DBQueryInterface {
     public function toQuery($name, $val);
     public function toNotQuery($name, $val);
+    public function setQuery(array $query);
+
     public function limit($n);
     public function skip($n);
 
@@ -60,6 +62,11 @@
      * Run the query and return the results.
      */
     public function run();
+
+    /**
+     * Count number of results.
+     */
+    public function count();
 
     /**
      * VISIBLE FOR TESTING
@@ -132,6 +139,22 @@
     }
 
     public function query() {
+      return self::cursorToArray(self::getCursor());
+    }
+
+    public function queryForOne() {
+      return $this->collection->findOne($this->query, $this->projection);
+    }
+
+    public function update(array $update) {
+      return $this->collection->update($this->query, $update);
+    }
+
+    public function remove() {
+      return $this->collection->remove($this->query);
+    }
+
+    protected function getCursor() {
       $cursor = $this->collection->find($this->query, $this->projection);
 
       if (!empty($this->sort)) {
@@ -145,19 +168,7 @@
         $cursor->skip($this->skip);
       }
 
-      return self::cursorToArray($cursor);
-    }
-
-    public function queryForOne() {
-      return $this->collection->findOne($this->query, $this->projection);
-    }
-
-    public function update(array $update) {
-      return $this->collection->update($this->query, $update);
-    }
-
-    public function remove() {
-      return $this->collection->remove($this->query);
+      return $cursor;
     }
 
     protected $collection;
@@ -191,6 +202,11 @@
 
     public function toNotQuery($name, $val) {
       $this->query[$name] = ['$ne' => $val];
+      return $this;
+    }
+
+    public function setQuery(array $query) {
+      $this->query = $query;
       return $this;
     }
 
@@ -234,6 +250,10 @@
 
     public function run() {
       return self::query();
+    }
+
+    public function count() {
+      return self::getCursor()->count();
     }
 
     public function getQuery() {
