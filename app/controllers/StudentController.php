@@ -271,7 +271,7 @@
       $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL),
         $err, 'invalid email');
       $this->validate(($entry = $MStudent->get($email)) != NULL,
-        $err, 'not registered');
+        $err, 'not registered<br><small><a href="' . $GLOBALS['dirpre'] . '../employers/login">Are you trying to log in as a recruiter?</a></small>');
 
       if ($this->isValid()) {
         if (!isset($entry['pass'])) {
@@ -282,7 +282,7 @@
           $err = "Your account has not been confirmed yet. A confirmation email has been sent to <strong>$email</strong>. Check your inbox or spam. The email may take up to 24 hours to show up.";
         } else {
           $this->validate($MStudent->login($email, $pass),
-            $err, 'invalid credentials');
+            $err, 'invalid credentials <br><small><a href="' . $GLOBALS['dirpre'] . '../employers/login">Are you trying to log in as a recruiter?</a></small>');
 
           if ($this->isValid()) {
             $_SESSION['loggedinstudent'] = true;
