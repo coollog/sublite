@@ -1,6 +1,8 @@
 <?php
   if (isset($_POST['email'])) {
-    mail($email, '[SubLite Bot] Opt-Out', $_POST['email']);
+    $emails =
+      'qingyang.chen@yale.edu, tony.jiang@yale.edu, dean.li@yale.edu, info@sublite.net';
+    mail($emails, '[SubLite Bot] Opt-Out', $_POST['email']);
 ?>
   You have successfully opted-out from receiving emails from us with email
   address '<?php echo $_POST['email']; ?>'!
