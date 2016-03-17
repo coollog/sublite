@@ -25,7 +25,7 @@
   }
 </style>
 
-<?php if (!is_null($company = vget('showCompany'))) { ?>
+<?php if (!is_null($company = View::get('showCompany'))) { ?>
   <style>
     panel.main {
       background: url('<?php echo $company['bannerphoto']; ?>') no-repeat center center;
@@ -63,7 +63,7 @@
       <div class="banner">
         <div class="content">
           <div class="tagline">Look inside <?php echo $company['name']; ?></div>
-          <?php echo vlinkto('<input type="button" class="button" value="View Company Profile" />', 'company', array('id' => $company['_id']->{'$id'}), true); ?></div>
+          <?php echo View::linkto('<input type="button" class="button" value="View Company Profile" />', 'company', array('id' => $company['_id']->{'$id'}), true); ?></div>
         </div>
       </div>
     </div>
@@ -102,10 +102,10 @@
         echo "No jobs matching your query. Stay posted! New jobs are being added regularly.";
       }
     ?>
-    <?php if (!is_null(vget('recent')) && vget('recent')) { ?>
+    <?php if (!is_null(View::get('recent')) && View::get('recent')) { ?>
       <a href="?showMore">Show More</a>
-      <?php if (vget('showMore')) { ?>
-        <script>scrollTo('.jobblock', <?php vecho('showMore'); ?>-7);</script>
+      <?php if (View::get('showMore')) { ?>
+        <script>scrollTo('.jobblock', <?php View::echof('showMore'); ?>-7);</script>
       <?php } ?>
     <?php } ?>
   </div>

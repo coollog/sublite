@@ -18,7 +18,7 @@ Messages:<br />
   var data1 = {
     labels: [
       <?php
-        $data = vget('students');
+        $data = View::get('students');
         foreach ($data as $label => $count) {
           $label = date('M, y', ($label+1)*3600*24*30.2);
           echo "'$label',";
@@ -36,7 +36,7 @@ Messages:<br />
         pointHighlightStroke: "rgba(220,220,220,1)",
         data: [
           <?php
-            $data = vget('students');
+            $data = View::get('students');
             foreach ($data as $count) {
               echo "'$count',";
             }
@@ -49,7 +49,7 @@ Messages:<br />
   var data2 = {
     labels: [
       <?php
-        $data = vget('msgs');
+        $data = View::get('msgs');
         foreach ($data as $label => $count) {
           $label = date('M d, y', ($label+1)*3600*24);
           echo "'$label',";
@@ -67,7 +67,7 @@ Messages:<br />
         pointHighlightStroke: "rgba(220,220,220,1)",
         data: [
           <?php
-            $data = vget('msgs');
+            $data = View::get('msgs');
             foreach ($data as $count) {
               echo "'$count',";
             }
@@ -80,7 +80,7 @@ Messages:<br />
   var data3 = {
     labels: [
       <?php
-        $data = vget('studentsday');
+        $data = View::get('studentsday');
         $n = 0;
         foreach ($data as $label => $count) {
           $label = date('M d, y', ($label+1)*3600*24);
@@ -101,7 +101,7 @@ Messages:<br />
         pointHighlightStroke: "rgba(220,220,220,1)",
         data: [
           <?php
-            $data = vget('studentsday');
+            $data = View::get('studentsday');
             foreach ($data as $count) {
               echo "'$count',";
             }
@@ -121,7 +121,7 @@ Messages:<br />
   var chart3 = new Chart(ctx3).Line(data3, options);
 </script>
 
-<?php if (vget('searchcities')) { ?>
+<?php if (View::get('searchcities')) { ?>
   <br />
   Search Cities:<br />
   <canvas id="chart4" width="800" height="400"></canvas>
@@ -129,7 +129,7 @@ Messages:<br />
     var data4 = {
       labels: [
       <?php
-        $data = vget('searchcities');
+        $data = View::get('searchcities');
         foreach ($data as $label => $count) {
           echo "'$label',";
         }
@@ -144,7 +144,7 @@ Messages:<br />
           highlightStroke: "rgba(220,220,220,1)",
           data: [
             <?php
-              $data = vget('searchcities');
+              $data = View::get('searchcities');
               foreach ($data as $count) {
                 echo "'$count',";
               }

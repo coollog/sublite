@@ -1,14 +1,14 @@
-<div class="inputs" name="<?php vecho('s3name'); ?>"></div>
+<div class="inputs" name="<?php View::echof('s3name'); ?>"></div>
 
-<subheadline><?php vecho('s3title'); ?></subheadline>
+<subheadline><?php View::echof('s3title'); ?></subheadline>
 
-<div class="iframe"><iframe class="S3" src="S3.php?name=<?php vecho('s3name'); ?>"></iframe></div>
+<div class="iframe"><iframe class="S3" src="S3.php?name=<?php View::echof('s3name'); ?>"></iframe></div>
 
 <subheadline>Current Photos</subheadline>
-<div class="img" type="multiple" name="<?php vecho('s3name'); ?>">None</div>
+<div class="img" type="multiple" name="<?php View::echof('s3name'); ?>">None</div>
 
 <script>
-  function addImg<?php vecho('s3name'); ?>(url, name) {
+  function addImg<?php View::echof('s3name'); ?>(url, name) {
     if ($('.img[name='+name+']').html() == 'None') $('.img[name='+name+']').html('');
 
     $('.inputs[name='+name+']')
@@ -24,9 +24,9 @@
     });
   }
   <?php
-    if (!is_null(vget('s3links'))) {
-      $name = vget('s3name');
-      foreach (vget('s3links') as $link) {
+    if (!is_null(View::get('s3links'))) {
+      $name = View::get('s3name');
+      foreach (View::get('s3links') as $link) {
         echo "addImg$name('$link', '$name');";
       }
     }

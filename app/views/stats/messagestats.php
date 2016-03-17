@@ -24,7 +24,7 @@
 
 <messagestats>
   <?php
-    $mlist = vget('mlist');
+    $mlist = View::get('mlist');
 
     foreach ($mlist as $m) {
   ?>

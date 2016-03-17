@@ -102,7 +102,7 @@
           <textarea name="description">{description}</textarea>
           Upload a banner:
           <?php
-            vpartial('s3single', array(
+            View::partial('s3single', array(
               's3name' => 'banner',
               's3title' => 'What would you like your banner image to be?*',
               's3link' => '{banner}'

@@ -22,7 +22,7 @@
       </a>
     ";
   }
-  $sublets = vget('sublets');
+  $sublets = View::get('sublets');
 ?>
 
 <style type="text/css">
@@ -55,7 +55,7 @@
 
   .results {
     width: 75%;
-  <?php if (is_null(vget('recent'))) { ?>
+  <?php if (is_null(View::get('recent'))) { ?>
     padding: 0;
   <?php } ?>
     display: inline-block;
@@ -65,7 +65,7 @@
     float: right;
   }
 
-  <?php if (!is_null(vget('recent'))) { ?>
+  <?php if (!is_null(View::get('recent'))) { ?>
     .results {
       width: 100%;
       display: block;
@@ -164,26 +164,26 @@
   }
 </style>
 
-<?php if (is_null(vget('recent'))) { ?>
+<?php if (is_null(View::get('recent'))) { ?>
   <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyDORLARDVNHaHBSLZ0UG-1EGABk-IH2uq0&sensor=false"></script>
   <script type="text/javascript">
     function initialize() {
       var locations = [
         <?php foreach ($sublets as $sublet) { ?>
           {
-            title: "<?php jsecho($sublet['title']); ?>",
-            link: "sublet.php?id=<?php jsecho($sublet['_id']->{'$id'}); ?>",
-            photo: "<?php jsecho($sublet['photo']); ?>",
-            summary: "<?php jsecho($sublet['summary']); ?>",
-            price: "<?php jsecho($sublet['price']); ?>",
-            pricetype: "<?php jsecho($sublet['pricetype']); ?>",
+            title: "<?php View::jsecho($sublet['title']); ?>",
+            link: "sublet.php?id=<?php View::jsecho($sublet['_id']->{'$id'}); ?>",
+            photo: "<?php View::jsecho($sublet['photo']); ?>",
+            summary: "<?php View::jsecho($sublet['summary']); ?>",
+            price: "<?php View::jsecho($sublet['price']); ?>",
+            pricetype: "<?php View::jsecho($sublet['pricetype']); ?>",
             latitude: <?php echo $sublet['latitude']; ?>,
             longitude: <?php echo $sublet['longitude']; ?>
           },
         <?php } ?>
       ];
 
-      var searchzone = new google.maps.LatLng(<?php vecho('latitude'); ?>, <?php vecho('longitude'); ?>);
+      var searchzone = new google.maps.LatLng(<?php View::echof('latitude'); ?>, <?php View::echof('longitude'); ?>);
 
       var styles = [
         {
@@ -210,7 +210,7 @@
       var mapOptions = {
         center: searchzone,
         /*adjust number to change starting zoom size*/
-        zoom: Math.round(14 - <?php vecho('maxProximity') ?> / 50 * 2),
+        zoom: Math.round(14 - <?php View::echof('maxProximity') ?> / 50 * 2),
         styles: styles
       };
 
@@ -285,15 +285,15 @@
 <?php } ?>
 
 <panel class="results">
-  <?php if (vget('showSearch')) vpartial('subletsearchform', vget('data')); ?>
+  <?php if (View::get('showSearch')) View::partial('subletsearchform', View::get('data')); ?>
 
-  <?php if (!is_null(vget('recent'))) { ?>
+  <?php if (!is_null(View::get('recent'))) { ?>
     <div class="content">
       <headline>Recent Listings</headline>
   <?php } ?>
       <div class="list">
         <?php
-          if (isset($_GET['delay'])) vecho('delay', '<div style="text-align: center;"><i>Results returned in {var} ms</div><br />');
+          if (isset($_GET['delay'])) View::echof('delay', '<div style="text-align: center;"><i>Results returned in {var} ms</div><br />');
 
           foreach ($sublets as $sublet) {
             echo subletBlock($sublet);
@@ -303,10 +303,10 @@
           }
         ?>
       </div>
-  <?php if (!is_null(vget('recent'))) { ?>
+  <?php if (!is_null(View::get('recent'))) { ?>
       <a href="?showMore">Show More</a>
-      <?php if (vget('showMore')) { ?>
-        <script>scrollTo('.subletblock', <?php vecho('showMore'); ?>-7);</script>
+      <?php if (View::get('showMore')) { ?>
+        <script>scrollTo('.subletblock', <?php View::echof('showMore'); ?>-7);</script>
       <?php } ?>
     </div>
   <?php } ?>

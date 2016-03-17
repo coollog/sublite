@@ -52,17 +52,17 @@
 <panel class="search">
   <div class="content">
     <form method="get">
-      <input type="hidden" id="recruiter" name="recruiter" value="<?php vecho('recruiter'); ?>" />
+      <input type="hidden" id="recruiter" name="recruiter" value="<?php View::echof('recruiter'); ?>" />
 
-      <div class="form-slider"><label for="title">Job Title:</label><input type="text" id="title" name="title" value="<?php vecho('title'); ?>" /></div>
+      <div class="form-slider"><label for="title">Job Title:</label><input type="text" id="title" name="title" value="<?php View::echof('title'); ?>" /></div>
 
       <div class="form-slider"><label for="industrylabel" id="ilabel">Industry:</label>
       <input type="hidden" id="industrylabel">
       <select id="industry" name="industry">
-        <?php vecho('industry', '<option selected="selected">{var}</option>'); ?>
+        <?php View::echof('industry', '<option selected="selected">{var}</option>'); ?>
         <?php
           // Process list of industries to make select form
-          foreach (vget('industries') as $industry) {
+          foreach (View::get('industries') as $industry) {
             echo "<option>$industry</option>";
           }
         ?>
@@ -78,18 +78,18 @@
         $('#industry')
           .change(function() { changeIndustryLabel($(this).val().length > 0); })
           .ready(function() { changeIndustryLabel(<?php
-            if (strlen(vget('industry')) > 0) echo 'true';
+            if (strlen(View::get('industry')) > 0) echo 'true';
             else echo 'false';
           ?>) });
       </script>
 
-      <div class="form-slider"><label for="city">City:</label><input type="text" id="city" name="city" value="<?php vecho('city'); ?>" /></div>
+      <div class="form-slider"><label for="city">City:</label><input type="text" id="city" name="city" value="<?php View::echof('city'); ?>" /></div>
 
-      <div class="form-slider"><label for="company">Company:</label><input type="text" id="company" name="company" value="<?php vecho('company'); ?>" /></div>
+      <div class="form-slider"><label for="company">Company:</label><input type="text" id="company" name="company" value="<?php View::echof('company'); ?>" /></div>
 
       <a href="companies">See All Companies</a><br />
 
-      <?php vnotice(); ?>
+      <?php View::notice(); ?>
 
       <input type="submit" name="search" value="Search" />
     </form>

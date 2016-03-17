@@ -171,11 +171,11 @@
           Meet other students working in the same city as you are!
         </div>
         <?php
-          if (vget('Loggedinstudent')) {
+          if (View::get('Loggedinstudent')) {
         ?>
-            <?php if (vget('myhub')) { ?>
+            <?php if (View::get('myhub')) { ?>
               <div id="tohub">
-                <a href="hub.php?id=<?php vecho('myhub'); ?>">
+                <a href="hub.php?id=<?php View::echof('myhub'); ?>">
                   <input type="button" value="Take me to my hub" />
                 </a>
 
@@ -215,7 +215,7 @@
               <br /><br />
             </div>
 
-            <?php if (vget('myhub')) { ?>
+            <?php if (View::get('myhub')) { ?>
                   <input id="switchhub" type="button" value="Switch to another city" />
                   <style>
                     #cityform {
@@ -232,8 +232,8 @@
               </div>
             <?php } ?>
 
-            <?php vnotice(); ?>
-            <?php if (!vget('signedup')) { ?>
+            <?php View::notice(); ?>
+            <?php if (!View::get('signedup')) { ?>
               <form id="cityform" method="post">
                 <div class="whitetext">Where are you this summer?</div>
                 <div class="form-slider">
@@ -245,7 +245,7 @@
             <?php } ?>
         <?php
           } else {
-            echo vlinkto('<input type="button" class="button" value="Login or register to sign up for the social hubs!" />', $GLOBALS['dirpre'].'../register');
+            echo View::linkTo('<input type="button" class="button" value="Login or register to sign up for the social hubs!" />', $GLOBALS['dirpre'].'../register');
           }
         ?>
       </div>

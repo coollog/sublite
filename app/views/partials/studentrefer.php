@@ -57,7 +57,7 @@
       <td>
         <div class="fb-like-box" data-href="https://www.facebook.com/SubLiteNet" data-width="200" data-colorscheme="light" data-show-faces="false" data-header="false" data-stream="false" data-show-border="false"></div>
         <br />
-        <div class="fb-share-button" data-href="https://sublite.net?r=<?php vecho('id'); ?>" data-layout="button"></div>
+        <div class="fb-share-button" data-href="https://sublite.net?r=<?php View::echof('id'); ?>" data-layout="button"></div>
       </td>
       <td></td>
       <td class="invitecontacts">
@@ -98,7 +98,7 @@
     $('.invitecontacts').html('Retrieving contacts list...');
 
     setTimeout(function() {
-      var emails = [], 
+      var emails = [],
           entries = data['feed']['entry'];
 
       for (var i = 0; i < entries.length; i ++) {
@@ -180,8 +180,8 @@
     var data = {
       emails: emails,
       name: name,
-      email: '<?php vecho('email'); ?>',
-      r: "<?php vecho('id'); ?>",
+      email: '<?php View::echof('email'); ?>',
+      r: "<?php View::echof('id'); ?>",
     };
     $.ajax({
       type: "POST",

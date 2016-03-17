@@ -61,7 +61,7 @@
       max-width: 75%;
     }
     .subletinfo .address {
-      
+
     }
     .subletinfo .price {
       display: inline-block;
@@ -231,17 +231,17 @@
   }
 
   function showShare() {
-    if (!localStorage.hideShare<?php vecho('_id'); ?>) {
+    if (!localStorage.hideShare<?php View::echof('_id'); ?>) {
       $('.popshare').fadeIn(200, 'easeInOutCubic');
     }
   }
   function hideShare() {
-    localStorage.hideShare<?php vecho('_id'); ?> = true;
+    localStorage.hideShare<?php View::echof('_id'); ?> = true;
     hidePop();
   }
 
   $(function() {
-    <?php if (vget('mine')) echo 'showShare();'; ?>
+    <?php if (View::get('mine')) echo 'showShare();'; ?>
     $('#hideshare').click(function() { hideShare(); });
     $('.popsharetext').click(function(e) { e.stopPropagation(); });
 
@@ -254,7 +254,7 @@
     });
     $('.pop, .popshare, #soundsgood').click(function() { hidePop(); });
 
-    <?php if (vget('commented')) {?>
+    <?php if (View::get('commented')) {?>
       scrollTo('.comments');
     <?php } ?>
   });
@@ -263,7 +263,7 @@
 <panel class="main">
   <?php
     $i = 0;
-    foreach (vget('photos') as $photo) {
+    foreach (View::get('photos') as $photo) {
   ?>
       <div class="photo" index="<?php echo $i; ?>" style="background-image: url('<?php echo $photo; ?>');" photo="<?php echo $photo; ?>"></div>
   <?php
@@ -281,34 +281,34 @@
 
         <div class="section1">
           <div class="price">
-            $<?php vecho('price'); ?><small>/<?php vecho('pricetype'); ?></small>
+            $<?php View::echof('price'); ?><small>/<?php View::echof('pricetype'); ?></small>
           </div>
-          <div class="title"><?php vecho('title'); ?></div>
-          <div class="address"><?php vecho('address'); ?></div>
+          <div class="title"><?php View::echof('title'); ?></div>
+          <div class="address"><?php View::echof('address'); ?></div>
         </div>
 
         <div class="section2">
           <div style="float: right;">
-            <?php vpartial('fb', array('route' => 'housing/sublet.php?id='.vget('_id'))); ?>
+            <?php View::partial('fb', array('route' => 'housing/sublet.php?id='.View::get('_id'))); ?>
           </div>
           <div class="details">
             <div class="detail"><table>
               <tr><td class="detailpng" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/sublet/room.png');"></td></tr>
-              <tr><td class="detailname"><?php vecho('roomtype'); ?></td></tr>
+              <tr><td class="detailname"><?php View::echof('roomtype'); ?></td></tr>
             </table></div>
             <div class="detail"><table>
               <tr><td class="detailpng" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/sublet/house.png');"></td></tr>
-              <tr><td class="detailname"><?php vecho('buildingtype'); ?></td></tr>
+              <tr><td class="detailname"><?php View::echof('buildingtype'); ?></td></tr>
             </table></div>
-            <?php if (strlen(vget('gender')) > 0) { ?>
+            <?php if (strlen(View::get('gender')) > 0) { ?>
               <div class="detail"><table>
                 <tr><td class="detailpng" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/sublet/gender.png'); background-size: 50px 50px;"></td></tr>
-                <tr><td class="detailname"><?php vecho('gender'); ?></td></tr>
+                <tr><td class="detailname"><?php View::echof('gender'); ?></td></tr>
               </table></div>
             <?php } ?>
             <div class="detail"><table>
               <tr><td class="detailpng" style="background-image: url('<?php echo $GLOBALS['dirpre']; ?>assets/gfx/sublet/guest.png');"></td></tr>
-              <tr><td class="detailname">max <?php vecho('occupancy'); ?> people</td></tr>
+              <tr><td class="detailname">max <?php View::echof('occupancy'); ?> people</td></tr>
             </table></div>
             <div class="detail"><table>
               <tr>
@@ -316,7 +316,7 @@
                 <td rowspan="2" style="width: auto; position: relative; left: -10px; text-align: left;">
                   anytime between
                   <div style="font-size: 1.5em; letter-spacing: -1px;">
-                    <strong><?php vecho('startdate'); ?></strong> &ndash; <strong><?php vecho('enddate'); ?></strong></normal>
+                    <strong><?php View::echof('startdate'); ?></strong> &ndash; <strong><?php View::echof('enddate'); ?></strong></normal>
                   </div>
                 </td>
               </tr>
@@ -328,15 +328,15 @@
 
       <td class="studentinfo">
         <div class="studentprofile">
-          <div class="studentpic" style="background-image: url('<?php vecho('studentpic'); ?>');"></div>
-          <div class="studentname"><?php vecho('studentname'); ?></div>
+          <div class="studentpic" style="background-image: url('<?php View::echof('studentpic'); ?>');"></div>
+          <div class="studentname"><?php View::echof('studentname'); ?></div>
           <div class="studentschool">
-            <?php vecho('studentcollege'); ?><?php vecho('studentclass'); ?>
+            <?php View::echof('studentcollege'); ?><?php View::echof('studentclass'); ?>
           </div>
-          <?php if(!vget('Loggedinstudent')) { ?>
+          <?php if(!View::get('Loggedinstudent')) { ?>
             <br /><i>You must <a href="../login.php">login</a> or <a href="../register.php">register</a> to contact the owner.</i>
           <?php } else { ?>
-            <a href="newmessage.php?from=<?php vecho('L_id'); ?>&to=<?php vecho('studentid'); ?>&msg=<?php vecho('studentmsg'); ?>" onClick="return confirm('I have read, fully understand, and agree to Sublite’s Terms of Service and Privacy Policy. I agree to contact the owner in good-faith to inquire about the listing.')">
+            <a href="newmessage.php?from=<?php View::echof('L_id'); ?>&to=<?php View::echof('studentid'); ?>&msg=<?php View::echof('studentmsg'); ?>" onClick="return confirm('I have read, fully understand, and agree to Sublite’s Terms of Service and Privacy Policy. I agree to contact the owner in good-faith to inquire about the listing.')">
               <input type="button" class="reverse" value="Contact Owner" />
             </a>
           <?php } ?>
@@ -350,7 +350,7 @@
 <panel class="summary">
   <div class="content">
     <subheadline>Summary</subheadline>
-    <?php echo nl2br(vget('summary')); ?>
+    <?php echo nl2br(View::get('summary')); ?>
   </div>
 </panel>
 
@@ -373,7 +373,7 @@
         "Sports Fields" => "ball"
       );
       $amenitiesn = 0;
-      foreach (vget('amenities') as $amenity) {
+      foreach (View::get('amenities') as $amenity) {
         if (!isset($amenities[$amenity])) continue;
         $png = $amenities[$amenity];
     ?>
@@ -398,7 +398,7 @@
   <div class="content">
     <subheadline>Comments</subheadline>
     <form method="post">
-      <?php if (count(vget('comments')) == 0) { ?>
+      <?php if (count(View::get('comments')) == 0) { ?>
         <i>No comments so far. Be the first to comment!</i><br />
       <?php } else { ?>
 
@@ -449,7 +449,7 @@
           }
         </style>
         <?php
-          foreach (vget('comments') as $comment) {
+          foreach (View::get('comments') as $comment) {
             extract($comment);
         ?>
           <div class="comment">
@@ -465,14 +465,14 @@
 
       <?php } ?>
       <br />
-      <?php if(!vget('Loggedinstudent')) { ?>
+      <?php if(!View::get('Loggedinstudent')) { ?>
         <i>You must <a href="../login.php">login</a> or <a href="../register.php">register</a> to comment.</i>
       <?php } else { ?>
 
-        <textarea id="comment" name="comment" required maxlength="2000" placeholder="Write Your Comment:"><?php vecho('comment'); ?></textarea>
-        <?php vnotice(); ?>
+        <textarea id="comment" name="comment" required maxlength="2000" placeholder="Write Your Comment:"><?php View::echof('comment'); ?></textarea>
+        <?php View::notice(); ?>
         <right>
-          <?php vpartial('fb', array('route' => 'housing/sublet.php?id='.vget('_id'))); ?>
+          <?php View::partial('fb', array('route' => 'housing/sublet.php?id='.View::get('_id'))); ?>
           &nbsp; <input type="submit" name="addcomment" value="Comment" />
         </right>
 
@@ -490,7 +490,7 @@
   <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyDORLARDVNHaHBSLZ0UG-1EGABk-IH2uq0&sensor=false"></script>
   <script type="text/javascript">
     function initialize() {
-      var myLatlng = new google.maps.LatLng(<?php vecho('latitude'); ?>, <?php vecho('longitude'); ?>);
+      var myLatlng = new google.maps.LatLng(<?php View::echof('latitude'); ?>, <?php View::echof('longitude'); ?>);
 
       var styles = [
         {
@@ -551,10 +551,10 @@
         Share your listing on social media such as Facebook groups to advertise your listing!
         <br />Copy and paste the link below into posts:
         <br /><br />
-          <copy>www.sublite.net/housing/sublet.php?id=<?php vecho('_id'); ?></copy>
+          <copy>www.sublite.net/housing/sublet.php?id=<?php View::echof('_id'); ?></copy>
         <br />
         or Like and Share below: <br /><br />
-        <?php vpartial('fb', array('route' => 'housing/sublet.php?id='.vget('_id'))); ?>
+        <?php View::partial('fb', array('route' => 'housing/sublet.php?id='.View::get('_id'))); ?>
         <br /><br /><br />
         <input type="button" id="soundsgood" value="Sounds good!" />
         <input type="button" id="hideshare" style="background: #999;" value="Don't show this again." />

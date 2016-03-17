@@ -336,27 +336,27 @@
 </viewframe>
 
 <viewtemplates>
-  <?php vpartial('hubs/viewtemplates/hub'); ?>
-  <?php vpartial('hubs/viewtemplates/meetup'); ?>
+  <?php View::partial('hubs/viewtemplates/hub'); ?>
+  <?php View::partial('hubs/viewtemplates/meetup'); ?>
 </viewtemplates>
 <tabtemplates>
-  <?php vpartial('hubs/tabtemplates/post'); ?>
-  <?php vpartial('hubs/tabtemplates/meetup'); ?>
-  <?php vpartial('hubs/tabtemplates/members'); ?>
+  <?php View::partial('hubs/tabtemplates/post'); ?>
+  <?php View::partial('hubs/tabtemplates/meetup'); ?>
+  <?php View::partial('hubs/tabtemplates/members'); ?>
 </tabtemplates>
 
-<?php vpartial('hubs/controllers/views'); ?>
-<?php vpartial('hubs/controllers/tabs'); ?>
+<?php View::partial('hubs/controllers/views'); ?>
+<?php View::partial('hubs/controllers/tabs'); ?>
 
-<?php vpartial('hubs/controllers/afterrender'); ?>
-<?php vpartial('hubs/controllers/comm'); ?>
+<?php View::partial('hubs/controllers/afterrender'); ?>
+<?php View::partial('hubs/controllers/comm'); ?>
 
 <script>
   // Actual code to set everything up for the first time
 
   // Config
   var myid = null,
-      thishub = '<?php vecho('hub'); ?>',
+      thishub = '<?php View::echof('hub'); ?>',
       thishubname = '';
 
   Views.setup();

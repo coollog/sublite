@@ -18,7 +18,7 @@
     $i = 1;
     foreach ($amenities as $a) {
   ?>
-      <input type="checkbox" name="amenities[]" id="amenities<?php echo $i; ?>" value="<?php echo $a; ?>" <?php vchecked('amenities', $a); ?> />
+      <input type="checkbox" name="amenities[]" id="amenities<?php echo $i; ?>" value="<?php echo $a; ?>" <?php View::checked('amenities', $a); ?> />
       <label style="display: inline-block;" for="amenities<?php echo $i; ?>"><?php echo $a; ?></label><br />
   <?php
       $i ++;

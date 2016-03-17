@@ -13,8 +13,8 @@
 
 <panel>
   <div class="content">
-    <confirmation>A confirmation email has been sent to <strong><?php vecho('email'); ?></strong>. Check your inbox or spam. The email may take up to 24 hours to show up.</confirmation>
+    <confirmation>A confirmation email has been sent to <strong><?php View::echof('email'); ?></strong>. Check your inbox or spam. The email may take up to 24 hours to show up.</confirmation>
 
-    <?php vpartial('studentrefer', array('email' => vget('email'))); ?>
+    <?php View::partial('studentrefer', array('email' => View::get('email'))); ?>
   </div>
 </panel>

@@ -236,7 +236,7 @@
           Maximize your next summer experience with your one-stop shop for internships and housing.
           <div style="font-size: 0.7em;"><br />Verify your ".edu" email address to get started! It's completely free!</div>
         </div>
-        <a href="register.php<?php if (!is_null($r = vget('r'))) echo "?r=$r"; ?>">
+        <a href="register.php<?php if (!is_null($r = View::get('r'))) echo "?r=$r"; ?>">
           <input type="button" class="registerlogin" value="Get Started" />
         </a>
         <div class="switch"><a href="../employers">switch to RECRUITER</a></div>
@@ -247,11 +247,11 @@
 </panel>
 <panel class="stats">
   <div class="content">
-    <div class="stat"><num><?php vecho('users'); ?></num><type>users</type></div>
-    <div class="stat"><num><?php vecho('universities'); ?></num><type>universities</type></div>
-    <div class="stat"><num><?php vecho('jobs'); ?></num><type>jobs</type></div>
-    <div class="stat"><num><?php vecho('sublets'); ?></num><type>sublets</type></div>
-    <div class="stat"><num><?php vecho('companies'); ?></num><type>companies</type></div>
+    <div class="stat"><num><?php View::echof('users'); ?></num><type>users</type></div>
+    <div class="stat"><num><?php View::echof('universities'); ?></num><type>universities</type></div>
+    <div class="stat"><num><?php View::echof('jobs'); ?></num><type>jobs</type></div>
+    <div class="stat"><num><?php View::echof('sublets'); ?></num><type>sublets</type></div>
+    <div class="stat"><num><?php View::echof('companies'); ?></num><type>companies</type></div>
   </div>
 </panel>
 <panel class="why">
