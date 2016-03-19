@@ -22,6 +22,7 @@
         $companyId = $params['query']['companyId'];
         $title = $params['query']['title'];
         $jobtype = $params['query']['jobtype'];
+        $salarytype = $params['query']['salarytype'];
 
         // Search query building
         $query = [];
@@ -51,6 +52,25 @@
         }
         // Filters
         if (!is_null($jobtype)) $query['jobtype'] = $jobtype;
+        if (!is_null($salarytype)) {
+          if (!is_array($salarytype) && strlen($salarytype) == 0) {
+            $query['salarytype'] = '';
+          } else {
+            $salaryTypes = [];
+            if (in_array('paid', $salarytype)) {
+              $salaryTypes = array_merge($salaryTypes, [
+                'month', 'week', 'day', 'hour', 'total'
+              ]);
+            }
+
+            if (in_array('unpaid', $salarytype)) {
+              $salaryTypes = array_merge($salaryTypes, [
+                'commission', 'other'
+              ]);
+            }
+            $query['salarytype'] = [ '$in' => $salaryTypes ];
+          }
+        }
       } else {
         $query = [];
       }

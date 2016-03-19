@@ -61,7 +61,7 @@
       $('filters').slideDown(100, 'easeOutCubic');
       $(this).slideUp(100, 'easeOutCubic');
     });
-      $('input[name=jobtype]').click(function () {
+      $('filters input[type=checkbox]').click(function () {
         Jobs.search(true);
       });
   });
@@ -108,6 +108,13 @@
         <input type="checkbox" name="jobtype" id="internship"
           value="internship" checked />
         <label for="internship"> Internship</label>
+        <br />
+        <input type="checkbox" name="salarytype" id="paid"
+          value="paid" checked />
+        <label for="paid"> Paid</label>
+        <input type="checkbox" name="salarytype" id="unpaid"
+          value="unpaid" checked />
+        <label for="unpaid"> Unpaid/Other</label>
       </form>
     </filters>
     <a><showFilters class="hide div">Show Filters</showFilters></a>

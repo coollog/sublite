@@ -106,6 +106,13 @@
       });
       if (jobTypes.length > 0) this.query.jobtype = { $in: jobTypes };
       else this.query.jobtype = null;
+
+      var salaryTypes = [];
+      $('input[name=salarytype]').each(function () {
+        if ($(this).is(':checked')) salaryTypes.push($(this).val());
+      });
+      if (salaryTypes.length > 0) this.query.salarytype = salaryTypes;
+      else this.query.salarytype = null;
     }
   };
 
