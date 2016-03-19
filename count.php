@@ -1,4 +1,6 @@
 <?php
+	error_reporting(E_ALL & ~E_STRICT);
+  ini_set('display_errors', '1');
 	function countLines($path, $extensions = array('php', 'html', 'css', 'js')) {
 		$it = new RecursiveIteratorIterator(
 			new RecursiveDirectoryIterator($path)
