@@ -31,8 +31,22 @@
         if (strlen($companyId) > 0) {
           $query['company'] = new MongoId($companyId);
         } else {
-          $companies = self::findCompanyIdsByIndustryCity($industry, $city);
-          $query['company'] = ['$in' => $companies];
+          $companies = self::findCompanyIdsByIndustry($industry, $city);
+          if (count($companies) > 0) $query['company'] = ['$in' => $companies];
+        }
+        // Location match city.
+        if (strlen($city) > 0) {
+          // TODO: Add filter for changing $maxDistance.
+          $geocode = Geocode::geocode($city);
+          if (!is_null($geocode)) {
+            $point = new GeoPoint($geocode['latitude'], $geocode['longitude']);
+            $query['geoJSON'] = [
+              '$near' => [
+                '$geometry' => $point->toArray(),
+                '$maxDistance' => miles2meters(10)
+              ]
+            ];
+          }
         }
       } else {
         $query = [];
@@ -50,21 +64,9 @@
       echo toJSON([ 'jobs' => $jobs, 'more' => $more ]);
     }
 
-    private static function findCompanyIdsByIndustryCity($industry, $city) {
-      $companyquery = [];
-      if (strlen($industry) > 0) {
-        $companyquery['industry'] = ['$regex' => keywords2mregex($industry)];
-      }
-      if (strlen($city) > 0) {
-        $companyquery['location'] = ['$regex' => keywords2mregex($city)];
-      }
-      $cs = CompanyModel::find($companyquery);
-
-      $companies = [];
-      foreach ($cs as $c) {
-        $companies[] = $c['_id'];
-      }
-      return $companies;
+    private static function findCompanyIdsByIndustry($industry) {
+      $companies = CompanyModel::getByIndustry($industry);
+      return getValuesOfKey($companies, '_id');
     }
 
     private static function processDBToView(array $data) {

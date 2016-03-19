@@ -157,6 +157,15 @@
     return $set;
   }
 
+  // @return a list of values for some key $key in the array of hashes $arr.
+  function getValuesOfKey(array $arr, $key) {
+    $vals = [];
+    foreach ($arr as $e) {
+      $vals[] = $e[$key];
+    }
+    return $vals;
+  }
+
   /**
    * Takes an array of data, and splits it into multiple arrays grouped by a
    * certain field in the data.

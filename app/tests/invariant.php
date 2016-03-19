@@ -6,6 +6,6 @@
   }
 
   function mongo_ok($response) {
-    invariant(isset($response['ok']));
+    invariant(isset($response['ok']) && $response['ok'] == 1);
   }
 ?>
