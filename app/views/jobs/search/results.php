@@ -26,6 +26,9 @@
     background-size: contain;
     width: 180px;
   }
+  showFilters {
+    cursor: pointer;
+  }
   showMore {
     cursor: pointer;
     display: none;
@@ -53,6 +56,14 @@
       if (Jobs.state == 'recent') Jobs.load({}, false);
       else Jobs.search(false);
     });
+
+    $('showFilters').click(function () {
+      $('filters').slideDown(100, 'easeOutCubic');
+      $(this).slideUp(100, 'easeOutCubic');
+    });
+      $('input[name=jobtype]').click(function () {
+        Jobs.search(true);
+      });
   });
 </script>
 
@@ -85,6 +96,21 @@
     <?php if (!is_null(View::get('recent'))) { ?>
       <headline>Recent Listings</headline>
     <?php } ?>
+
+    <filters class="hide div">
+      <form>
+        <input type="checkbox" name="jobtype" id="fulltime"
+          value="fulltime" checked />
+        <label for="fulltime"> Full-Time</label>
+        <input type="checkbox" name="jobtype" id="parttime"
+          value="fulltime" checked />
+        <label for="parttime"> Part-Time</label>
+        <input type="checkbox" name="jobtype" id="internship"
+          value="internship" checked />
+        <label for="internship"> Internship</label>
+      </form>
+    </filters>
+    <a><showFilters class="hide div">Show Filters</showFilters></a>
 
     <jobs></jobs>
 

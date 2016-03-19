@@ -21,6 +21,7 @@
         $recruiterId = $params['query']['recruiterId'];
         $companyId = $params['query']['companyId'];
         $title = $params['query']['title'];
+        $jobtype = $params['query']['jobtype'];
 
         // Search query building
         $query = [];
@@ -48,6 +49,8 @@
             ];
           }
         }
+        // Filters
+        if (!is_null($jobtype)) $query['jobtype'] = $jobtype;
       } else {
         $query = [];
       }
