@@ -19,12 +19,19 @@
       public static function bookmark() {
         self::requireLogin();
 
-        global $params;
+        if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+            // invalid ajax request, redirect
+            return self::ajaxError();
+        }
+        if (empty($_POST)) {
+            return self::ajaxError();
+        }
 
         $studentId = $_SESSION['_id'];
-        $itemId = new MongoId($params['id']);
-        $type = $params['type'];
-        $title = $params['title'];
+        $itemId = new MongoId($_POST['id']);
+        $type = $_POST['type'];
+        $title = $_POST['title'];
+
 
         StudentModel::bookmarkItem($studentId, $type, $itemId, $title);
 
