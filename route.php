@@ -15,6 +15,9 @@
   Router::register('backtoindex', function() {
     Controller::redirect("..");
   });
+  Router::register('bookmark', function(){
+    StudentControllerAJAX::bookmark();
+  });
   Router::register('changepass', function() {
     GLOBALvarGet('CStudent')->changePass();
   });
@@ -325,6 +328,8 @@
 
   Router::route('/admin/login', 'admin/login');
   Router::route('/admin/questions', 'admin/questions');
+
+  Router::route('/bookmark', 'bookmark');
 
   Router::route('/housing', 'backtoindex');
   Router::route('/housing/index', 'backtoindex');

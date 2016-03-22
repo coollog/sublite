@@ -13,6 +13,7 @@
     public static function incrementUnread(MongoId $studentId);
     public static function decrementUnread(MongoId $studentId);
 
+    public static function bookmarkItem(MongoId $studentId, $type, MongoId $itemId, $title);
     /**
      * Retrieves just email, name, and school name.
      */
@@ -78,6 +79,28 @@
     public static function decrementUnread(MongoId $studentId) {
       $update = (new DBUpdateQuery(self::$collection))
         ->queryForId($studentId)->toAdd('unread', -1);
+      $update->run();
+    }
+
+    /*
+     * Adds item to student's bookmarked jobs/sublets depending on type
+     */
+    public static function bookmarkItem(MongoId $studentId, $type, MongoId $itemId, $title) {
+      // push an array of data
+      $item = [
+          "id" => $itemId,
+          "title" => $title
+      ];
+      // determine if item is JOB or SUBLET, and push to correct list
+      $toPush = "";
+      if ($type === "JOB") {
+          $toPush = "bookmarkedJobs";
+      } else if ($type == "SUBLET") {
+          $toPush = "bookmarkedSublets";
+      }
+      // run query
+      $update = (new DBUpdateQuery(self::$collection))
+        ->queryForId($studentId)->toPush($toPush, $item);
       $update->run();
     }
 
