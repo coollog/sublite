@@ -194,13 +194,15 @@
         }
 
       }
-
+      $messages = [];
       foreach ($plist as $email => $data) {
         $type = $data['type'];
         $name = $data['name'];
         $count = $data['count'];
+        $messages[] = "$email ($type) - $name - sent $count";
       }
-      echo toJSON($plist);
+
+      echo toJSON($messages);
     }
 
     public static function getApplicationStats() {

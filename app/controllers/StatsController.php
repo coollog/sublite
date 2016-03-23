@@ -5,27 +5,13 @@
 
     function loadStats() {
       $updateArray = self::update();
-      //$recruiterArray = self::recruiters();
-      //$studentArray = self::students();
-      //$confirmedStudentArray = self::confirmedStudents();
       $missingRecruiterArray = self::missingrecruiter();
-      //$subletsended2014Array = self::subletsended2014();
-      //$unknownSchoolsArray = self::unknownschools();
       $cumulativeArray = self::cumulative();
-      //$getMessageParticipantsArray = self::getMessageParticipants();
-      //$applicationsArray = self::applications();
 
       $toRender = [
         "updateArray" => $updateArray,
-        //"recruiterArray" => $recruiterArray,
-        //"studentArray" => $studentArray,
-        //"confirmedStudentArray" => $confirmedStudentArray,
         "missingRecruiterArray" => $missingRecruiterArray,
-        //"subletsended2014Array" => $subletsended2014Array,
-        //"unknownSchoolsArray" => $unknownSchoolsArray,
-        "cumulativeArray" => $cumulativeArray,
-        //"getMessageParticipantsArray" => $getMessageParticipantsArray,
-        //"applicationsArray" => $applicationsArray
+        "cumulativeArray" => $cumulativeArray
       ];
       self::render('/stats/stats', $toRender);
     }
