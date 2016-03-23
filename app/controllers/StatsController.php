@@ -5,27 +5,27 @@
 
     function loadStats() {
       $updateArray = self::update();
-      $recruiterArray = self::recruiters();
-      $studentArray = self::students();
-      $confirmedStudentArray = self::confirmedStudents();
+      //$recruiterArray = self::recruiters();
+      //$studentArray = self::students();
+      //$confirmedStudentArray = self::confirmedStudents();
       $missingRecruiterArray = self::missingrecruiter();
-      $subletsended2014Array = self::subletsended2014();
-      $unknownSchoolsArray = self::unknownschools();
+      //$subletsended2014Array = self::subletsended2014();
+      //$unknownSchoolsArray = self::unknownschools();
       $cumulativeArray = self::cumulative();
-      $getMessageParticipantsArray = self::getMessageParticipants();
-      $applicationsArray = self::applications();
+      //$getMessageParticipantsArray = self::getMessageParticipants();
+      //$applicationsArray = self::applications();
 
       $toRender = [
         "updateArray" => $updateArray,
-        "recruiterArray" => $recruiterArray,
-        "studentArray" => $studentArray,
-        "confirmedStudentArray" => $confirmedStudentArray,
+        //"recruiterArray" => $recruiterArray,
+        //"studentArray" => $studentArray,
+        //"confirmedStudentArray" => $confirmedStudentArray,
         "missingRecruiterArray" => $missingRecruiterArray,
-        "subletsended2014Array" => $subletsended2014Array,
-        "unknownSchoolsArray" => $unknownSchoolsArray,
+        //"subletsended2014Array" => $subletsended2014Array,
+        //"unknownSchoolsArray" => $unknownSchoolsArray,
         "cumulativeArray" => $cumulativeArray,
-        "getMessageParticipantsArray" => $getMessageParticipantsArray,
-        "applicationsArray" => $applicationsArray
+        //"getMessageParticipantsArray" => $getMessageParticipantsArray,
+        //"applicationsArray" => $applicationsArray
       ];
       self::render('/stats/stats', $toRender);
     }
@@ -466,7 +466,7 @@
     /*
     * Takes an array full of strings, returns an array where each string has been wrapped in double quotes
     */
-    private static function quoteStringsInArray($array) {
+    protected static function quoteStringsInArray($array) {
       $quotedArray = [];
       foreach ($array as $key=>$str) {
         $quotedArray[$key] = '"'.trim($str,'"').'"';
