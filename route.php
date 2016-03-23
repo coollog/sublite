@@ -304,6 +304,30 @@
     GLOBALvarGet('CJob')->requireLogin();
     GLOBALvarGet('CStats')->loadStats();
   });
+  Router::register('stats/recruiters', function () {
+    GLOBALvarGet('CJob')->requireLogin();
+    StatsControllerAJAX::getRecruiterStats();
+  });
+  Router::register('stats/students', function () {
+    GLOBALvarGet('CJob')->requireLogin();
+    StatsControllerAJAX::getStudentStats();
+  });
+  Router::register('stats/sublets', function () {
+    GLOBALvarGet('CJob')->requireLogin();
+    StatsControllerAJAX::getSubletStats();
+  });
+  Router::register('stats/schools', function () {
+    GLOBALvarGet('CJob')->requireLogin();
+    StatsControllerAJAX::getSchoolStats();
+  });
+  Router::register('stats/messages', function () {
+    GLOBALvarGet('CJob')->requireLogin();
+    StatsControllerAJAX::getMessageStats();
+  });
+  Router::register('stats/applications', function () {
+    GLOBALvarGet('CJob')->requireLogin();
+    StatsControllerAJAX::getApplicationStats();
+  });
   Router::register('student/profile', function() {
     Controller::displayMetatags('student');
     GLOBALvarGet('CStudent')->view();
@@ -459,6 +483,12 @@
   Router::route('/student/profile', 'student/profile');
 
   Router::route('/stats', 'stats');
+  Router::route('/stats/recruiters', 'stats/recruiters');
+  Router::route('/stats/students', 'stats/students');
+  Router::route('/stats/sublets', 'stats/sublets');
+  Router::route('/stats/schools', 'stats/schools');
+  Router::route('/stats/messages', 'stats/messages');
+  Router::route('/stats/applications', 'stats/applications');
 
   Router::route('/team', 'team');
 
