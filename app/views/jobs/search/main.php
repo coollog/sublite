@@ -127,7 +127,7 @@
         $(self).prop('disabled', false);
         if (!$('filters').is(':visible')) $('showFilters').show();
       });
-      scrollTo('.results')
+      scrollTo('.results');
     });
 
     $('.searchScroll').click(function() {

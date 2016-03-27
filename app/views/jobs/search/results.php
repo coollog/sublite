@@ -62,7 +62,9 @@
       $(this).slideUp(100, 'easeOutCubic');
     });
       $('filters input[type=checkbox]').click(function () {
-        Jobs.search(true);
+        Jobs.search(true, function () {
+          scrollTo('.results');
+        });
       });
   });
 </script>
