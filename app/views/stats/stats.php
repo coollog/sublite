@@ -14,7 +14,6 @@ $(function() {
     var button = $("#"+method);
     $.getJSON("stats/"+method)
       .done(function(data) {
-        console.log(data);
         if ($.isArray(data)) {
           // one textarea
           button.append(makeTextArea(data));
@@ -32,8 +31,6 @@ $(function() {
         alert("Request failure.");
         console.log(data);
       });
-    console.log("clicked a button!");
-    console.log(this.id);
   });
 });
 
