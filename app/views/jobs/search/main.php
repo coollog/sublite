@@ -104,7 +104,7 @@
       $('input[name=jobtype]').each(function () {
         if ($(this).is(':checked')) jobTypes.push($(this).val());
       });
-      if (jobTypes.length > 0) this.query.jobtype = { $in: jobTypes };
+      if (jobTypes.length > 0) this.query.jobtype = jobTypes;
       else this.query.jobtype = null;
 
       var salaryTypes = [];

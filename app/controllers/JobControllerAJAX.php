@@ -51,7 +51,7 @@
           }
         }
         // Filters
-        if (!is_null($jobtype)) $query['jobtype'] = $jobtype;
+        if (!is_null($jobtype)) $query['jobtype'] = [ '$in' => $jobtype ];
         if (!is_null($salarytype)) {
           if (!is_array($salarytype) && strlen($salarytype) == 0) {
             $query['salarytype'] = '';
