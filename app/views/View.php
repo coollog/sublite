@@ -66,6 +66,21 @@
     public static function echoLink($link) {
       echo "$GLOBALS[dirpre]../$link";
     }
+  }
+
+  function vprocess() {
+    global $viewVars;
+    if (isset($_SESSION['loggedin'])) {
+      $viewVars = array_merge($viewVars, [
+        'Loggedin' => true,
+        'L_id' => $_SESSION['_id'],
+        'Lemail' => $_SESSION['email'],
+        'Lpass' => $_SESSION['pass'],
+        'Lcompany' => isset($_SESSION['company'])
+      ]);
+    } else {
+      $viewVars['Loggedin'] = false;
+    }
     public static function notice() {
       $bugLink = '<br/>
         <small>
