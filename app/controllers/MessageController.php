@@ -49,11 +49,10 @@
 
     // Some helper functions
     function getName($p) {
-      global $MStudent, $MRecruiter;
-      if ($MStudent->exists($p)) {
-        $name = $MStudent->getName($p);
-      } else if ($MRecruiter->IDexists($p)) {
-        $name = $MRecruiter->getName($p);
+      if (StudentModel::exists($p)) {
+        $name = StudentModel::getName($p);
+      } else if (RecruiterModel::IDexists($p)) {
+        $name = RecruiterModel::getName($p);
       } else {
         $name = 'Nonexistent';
       }
@@ -61,20 +60,19 @@
     }
     function getEmail($p) {
       global $MStudent, $MRecruiter;
-      if ($MStudent->exists($p)) {
-        $name = $MStudent->getEmail($p);
-      } else if ($MRecruiter->IDexists($p)) {
-        $name = $MRecruiter->getEmail(new MongoId($p));
+      if (StudentModel::exists($p)) {
+        $name = StudentModel::getEmail($p);
+      } else if (RecruiterModel::IDexists($p)) {
+        $name = RecruiterModel::getEmail(new MongoId($p));
       } else {
         $name = 'Nonexistent';
       }
       return $name;
     }
     function getType($p) {
-      global $MStudent, $MRecruiter;
-      if ($MStudent->exists($p)) {
+      if (StudentModel::exists($p)) {
         return 'student';
-      } else if ($MRecruiter->IDexists($p)) {
+      } else if (RecruiterModel::IDexists($p)) {
         return 'recruiter';
       } else {
         return 'none';
