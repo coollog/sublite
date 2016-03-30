@@ -10,24 +10,18 @@
     public static function getApplicationStats();
   }
 
-  class StatsControllerAJAX
-    extends StatsController
-    implements StatsControllerAJAXInterface
-  {
-
+  class StatsControllerAJAX extends StatsController
+                            implements StatsControllerAJAXInterface {
     public static function getRecruiterStats() {
-
-      global $MRecruiter, $MJob, $MCompany, $MApp;
       $recruiterArray = [];
       $recruiterColumns = ["email","firstname","lastname","company","datejoined","postedjob","madecompany","approved"];
       $jobColumns = ["jobname","jobviews","jobclicks","applicants"];
       $recruiterArray[] = implode(',', $recruiterColumns) . ',' . implode(',', $jobColumns);
 
+      $r = RecruiterModel::find();
+      $j = JobModel::find();
 
-      $r = $MRecruiter->find();
-      $j = $MJob->find();
-
-      $rids = array(); // an array of recruiters ids that have posted jobs
+      $rids = []; // an array of recruiters ids that have posted jobs
       foreach ($j as $job) {
         $rids[] = $job['recruiter']->{'$id'};
       }
@@ -35,7 +29,7 @@
       foreach ($r as $recruiter) {
         $info = [];
         $id = $recruiter['_id'];
-        $rdoc = $MRecruiter->getById($id);
+        $rdoc = RecruiterModel::getById($id);
         if (isset($recruiter['email'])) $info['email'] = $recruiter['email'];
         else $info['email'] = 'no email';
         if (isset($recruiter['firstname'])) $info['firstname'] = $recruiter['firstname'];
@@ -44,7 +38,7 @@
         else $info['lastname'] = 'no lastname';
         if (isset($recruiter['company'])) {
           if (MongoID::isValid($recruiter['company'])) { // if the company is a MongoID
-            $info['company'] = $MCompany->getName($recruiter['company']);
+            $info['company'] = CompanyModel::getName($recruiter['company']);
           } else {
             $info['company'] = $recruiter['company'];
           }
@@ -72,7 +66,7 @@
           }
         }
         $recruiterArray[] = implode(',', self::quoteStringsInArray($info));
-        $jobs = $MJob->getByRecruiter($id); // get jobs for recruiter
+        $jobs = JobModel::getByRecruiter($id); // get jobs for recruiter
 
         foreach ($jobs as $job) { //make rows under each recruiter for their listed jobs
           $jobInfo = [];
@@ -81,8 +75,9 @@
           $jobInfo['views'] = $job['stats']['views'];
           $jobInfo['clicks'] = $job['stats']['clicks'];
           $jobInfo['applicants'] = ApplicationModel::countByJob($job['_id'])['total'];
-          $recruiterArray[] = str_repeat(',', count($recruiterColumns)) . implode(',', self::quoteStringsInArray($jobInfo));
-
+          $recruiterArray[] =
+            str_repeat(',', count($recruiterColumns)) .
+            implode(',', self::quoteStringsInArray($jobInfo));
         }
       }
 
@@ -90,6 +85,7 @@
     }
 
     public static function getStudentStats() {
+      // TODO: Convert MStats to be StatsModel static calls.
       global $MStats;
       $studentArray = [];
       $studentArray[] = "email , firstname , lastname , school , confirmed";
@@ -125,15 +121,15 @@
     }
 
     public static function getSubletStats() {
-      global $MSublet, $MStudent;
       $subletsended2014Array = [];
 
-      $sublets = $MSublet->find(array('enddate' => array('$lte' => strtotime('1/1/2015'))));
+      $sublets = SubletModel::find(
+        [ 'enddate' => [ '$lte' => strtotime('1/1/2015') ] ]);
 
       $ss = array();
       foreach ($sublets as $s) {
         $id = $s['_id'];
-        $student = $MStudent->getById($s['student']);
+        $student = StudentModel::getById($s['student']);
         if (isset($student['name'])) $name = $student['name'];
         else $name = 'noname';
         if (isset($student['email'])) $email = $student['email'];
@@ -145,11 +141,12 @@
     }
 
     public static function getSchoolStats() {
-      global $MStudent, $S;
+      // TODO: Change $S to use Schools static class calls.
+      global $S;
       $unknownschoolsArray = [];
 
-      $domains = array();
-      $students = $MStudent->getAll();
+      $domains = [];
+      $students = StudentModel::getAll();
       foreach ($students as $student) {
         $email = $student['email'];
         if (!$S->hasSchoolOf($email)) {
@@ -165,8 +162,7 @@
     }
 
     public static function getMessageStats() {
-      global $MMessage, $CMessage;
-      $msgs = $MMessage->getAll();
+      $msgs = MessageModel::getAll();
       $getMessageParticipantsArray = [];
 
       $plist = array();
@@ -178,9 +174,9 @@
         $participants = $m['participants'];
 
         foreach ($participants as $p) {
-          $name = $CMessage->getName($p);
-          $email = $CMessage->getEmail($p);
-          $type = $CMessage->getType($p);
+          $name = MessageController::getName($p);
+          $email = MessageController::getEmail($p);
+          $type = MessageController::getType($p);
 
           if (isset($plist[$email])) {
             $plist[$email]['count']++;
