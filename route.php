@@ -177,9 +177,19 @@
     GLOBALvarGet('CStats')->graph();
   });
   Router::register('home', function() {
-    GLOBALvarGet('CStudent')->home();
-    GLOBALvarGet('CSublet')->manage();
-    StudentController::manage();
+    StudentController::home();
+    // GLOBALvarGet('CStudent')->home();
+    // GLOBALvarGet('CSublet')->manage();
+    // StudentController::manage();
+  });
+  Router::register('home/sublets', function() {
+    StudentControllerAJAX::dashboardSublets();
+  });
+  Router::register('home/applications', function() {
+    StudentControllerAJAX::dashboardApplications();
+  });
+  Router::register('home/messages', function() {
+    StudentControllerAJAX::dashboardMessages();
   });
   Router::register('housing/addsublet', function() {
     GLOBALvarGet('CSublet')->add();
@@ -413,7 +423,10 @@
 
   Router::route('/graph', 'graph');
 
-  Router::route('/housing/home', 'home');
+  Router::route('/home', 'home');
+  Router::route('/home/ajax/sublets', 'home/sublets');
+  Router::route('/home/ajax/applications', 'home/applications');
+  Router::route('/home/ajax/messages', 'home/messages');
 
   Router::route('/housing/search', 'housing/search');
   Router::route('/housing/sublet', 'housing/sublet');

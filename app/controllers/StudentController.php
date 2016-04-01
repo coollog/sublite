@@ -3,17 +3,28 @@
   require_once($GLOBALS['dirpre'].'controllers/modules/application/StudentProfile.php');
 
   interface StudentControllerInterface {
-    public static function editStudentProfile();
-    public static function viewStudentProfile();
+    /**
+     * Student dashboard.
+     */
+    public static function home();
 
     /**
-     * For managing job applications.
+     * For the career profile.
      */
-    public static function manage();
+    public static function editStudentProfile();
+    public static function viewStudentProfile();
   }
 
   class StudentController extends Controller
                           implements StudentControllerInterface {
+    public static function home() {
+      self::requireLogin();
+
+      $me = self::getMe();
+
+      self::render('student/home', $me);
+    }
+
     public static function editStudentProfile() {
       self::requireLogin();
       global $params;
@@ -42,32 +53,6 @@
       self::render('jobs/student/studentprofile', ['profile' => $profile]);
     }
 
-    public static function manage() {
-      self::requireLogin();
-
-      $studentId = $_SESSION['_id'];
-      $applications = ApplicationStudent::getByStudent($studentId);
-
-      $data = [];
-      foreach ($applications as $application) {
-        $jobId = $application->getJobId();
-        $job = JobModel::getByIdMinimal($jobId);
-        if (is_null($job)) continue;
-        $companyId = $job['company'];
-        $companyName = CompanyModel::getName($companyId);
-        $data[] = [
-          'title' => $job['title'],
-          'location' => $job['location'],
-          'company' => $companyName,
-          'jobId' => $application->getJobId(),
-          'submitted' => $application->isSubmitted()
-        ];
-      }
-      self::render('jobs/student/home', [
-        'applications' => $data
-      ]);
-    }
-
     private static function getStudentProfile(MongoId $studentId) {
       $name = StudentModel::getName($studentId);
 
@@ -78,6 +63,26 @@
       $profile['name'] = $name;
 
       return $profile;
+    }
+
+    private static function getMe() {
+      $me = StudentModel::me();
+      $me['_id'] = $me['_id']->{'$id'};
+
+      $photo = $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
+      if (isset($me['photo']) and !is_null($me['photo'])) {
+        $photo = $me['photo'];
+        if ($photo == 'nopic.png')
+          $photo = $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
+      }
+      $me['photo'] = $photo;
+
+      if (!isset($me['school']) || strlen($me['school']) == 0) {
+        global $S;
+        $me['school'] = $S->nameOf($me['email']);
+      }
+
+      return $me;
     }
 
     function data($data) {
@@ -175,28 +180,6 @@
     function validateData($data, &$err) {
       $this->validate($this->isValidName($data['firstname']),
         $err, 'first name is too long');
-    }
-
-    function home() {
-      $this->requireLogin();
-      global $MStudent, $MSublet;
-      $me = $MStudent->me();
-      $me['_id'] = $me['_id']->{'$id'};
-
-      $photo = $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
-      if (isset($me['photo']) and !is_null($me['photo'])) {
-        $photo = $me['photo'];
-        if ($photo == 'nopic.png')
-          $photo = $GLOBALS['dirpreFromRoute'].'assets/gfx/defaultpic.png';
-      }
-      $me['photo'] = $photo;
-
-      if (!isset($me['school']) || strlen($me['school']) == 0) {
-        global $S;
-        $me['school'] = $S->nameOf($me['email']);
-      }
-
-      $this->render('student/home', $me);
     }
 
     function index() {
