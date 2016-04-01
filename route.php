@@ -15,8 +15,14 @@
   Router::register('backtoindex', function() {
     Controller::redirect("..");
   });
-  Router::register('bookmark', function(){
-    StudentControllerAJAX::bookmark();
+  Router::register('bookmarks', function(){
+    StudentControllerAJAX::getBookmarkedItems();
+  });
+  Router::register('bookmarks/create', function(){
+    StudentControllerAJAX::createBookmark();
+  });
+  Router::register('bookmarks/delete', function(){
+    StudentControllerAJAX::deleteBookmark();
   });
   Router::register('changepass', function() {
     GLOBALvarGet('CStudent')->changePass();
@@ -329,7 +335,9 @@
   Router::route('/admin/login', 'admin/login');
   Router::route('/admin/questions', 'admin/questions');
 
-  Router::route('/bookmark', 'bookmark');
+  Router::route('/bookmarks', 'bookmarks');
+  Router::route('/bookmarks/create', 'bookmarks/create');
+  Router::route('/bookmarks/delete', 'bookmarks/delete');
 
   Router::route('/housing', 'backtoindex');
   Router::route('/housing/index', 'backtoindex');

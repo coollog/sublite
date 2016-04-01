@@ -13,7 +13,9 @@
     public static function incrementUnread(MongoId $studentId);
     public static function decrementUnread(MongoId $studentId);
 
-    public static function bookmarkItem(MongoId $studentId, $type, MongoId $itemId, $title);
+    public static function createBookmark(MongoId $studentId, $type, MongoId $itemId, $title);
+    public static function deleteBookmark(MongoId $studentId, $type, MongoId $itemId);
+    public static function getBookmarkedItems(MongoId $studentId, $type);
     /**
      * Retrieves just email, name, and school name.
      */
@@ -85,23 +87,62 @@
     /*
      * Adds item to student's bookmarked jobs/sublets depending on type
      */
-    public static function bookmarkItem(MongoId $studentId, $type, MongoId $itemId, $title) {
+    public static function createBookmark(MongoId $studentId, $type, MongoId $itemId, $title) {
       // push an array of data
       $item = [
-          "id" => $itemId,
-          "title" => $title
+        "id" => $itemId,
+        "title" => $title
       ];
       // determine if item is JOB or SUBLET, and push to correct list
       $toPush = "";
       if ($type === "JOB") {
-          $toPush = "bookmarkedJobs";
+        $toPush = "bookmarkedJobs";
       } else if ($type == "SUBLET") {
-          $toPush = "bookmarkedSublets";
+        $toPush = "bookmarkedSublets";
       }
       // run query
       $update = (new DBUpdateQuery(self::$collection))
         ->queryForId($studentId)->toPush($toPush, $item);
       $update->run();
+    }
+
+    /*
+     * Removes item from student's bookmarked jobs/sublets depending on type
+     */
+    public static function deleteBookmark(MongoId $studentId, $type, MongoId $itemId) {
+      // pull where the itemId is $itemId
+      $item = [
+        "id" => $itemId
+      ];
+      // determine if item is JOB or SUBLET, and push to correct list
+      $toPull = "";
+      if ($type === "JOB") {
+        $toPush = "bookmarkedJobs";
+      } else if ($type === "SUBLET") {
+        $toPush = "bookmarkedSublets";
+      }
+      // run query
+      $update = (new DBUpdateQuery(self::$collection))
+        ->queryForId($studentId)->toPull($toPull, $item);
+      $update->run();
+    }
+
+    /*
+     * Returns an array of jobs/sublets depending on type
+     */
+    public static function getBookmarkedItems(MongoId $studentId, $type) {
+      $field = "";
+      if ($type === "JOB") {
+        $field = "bookmarkedJobs";
+      } else if ($type === "SUBLET") {
+        $field = "bookmarkedSublets";
+      }
+      $query = self::queryForId($studentId)->projectField($field);
+      $bookmarkedItems = $query->findOne();
+      if (isset($bookmarkedItems['bookmarkedItems'])) {
+        return $bookmarkedItems['bookmarkedItems'];
+      }
+      return [];
     }
 
     public function __construct() {
