@@ -30,6 +30,12 @@
      * @return Gets 'title', 'location', 'company', 'recruiter'.
      */
     public static function getByIdMinimal(MongoId $jobId);
+
+    /**
+     * @return Performs $query as search query and returns last $count jobs,
+     *         skipping $skip from last.
+     */
+    public static function search(array $query, $skip, $count, &$total);
   }
 
   class JobModel extends Model {
@@ -79,8 +85,32 @@
       ]);
     }
 
+    public static function search(array $query, $skip, $count, &$total) {
+      $query = (new DBQuery(self::$collection))
+        ->setQuery($query)
+        ->projectField('title')
+        ->projectField('company')
+        ->projectField('location')
+        ->projectField('desc')
+        ->projectField('deadline')
+        ->projectField('logophoto')
+        ->sortField('priority', -1)
+        ->sortField('_id', -1)
+        ->skip($skip)
+        ->limit($count);
+      if (isset($total)) $total = $query->count();
+      return $query->run();
+    }
+
     public function __construct() {
       parent::__construct(self::DB_TYPE, 'jobs');
+
+      // Create necessary indices.
+      mongo_ok(self::$collection->createIndex([
+        'title' => 'text',
+        'desc' => 'text',
+        'requirements' => 'text'
+      ]));
     }
 
     function save($data, $setRecruiter=true) {

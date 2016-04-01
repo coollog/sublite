@@ -4,6 +4,7 @@
 
   interface JobControllerInterface {
     public static function delete(array $restOfRoute);
+    public static function search();
   }
 
   class JobController extends Controller implements JobControllerInterface {
@@ -36,6 +37,39 @@
 
       // Redirect back to home.
       self::redirect('../home');
+    }
+
+    public static function search() {
+      // Predefined searches
+      $showSearch = true;
+      $showCompany = null;
+      $recruiterId = null;
+      $recruiterName = null;
+      $companyId = null;
+      if (isset($_GET['byrecruiter'])) {
+        $recruiterId = $_GET['byrecruiter'];
+        $recruiterName = RecruiterModel::getName($recruiterId);
+        $showSearch = false;
+      }
+      if (isset($_GET['bycompany'])) {
+        $companyId = $_GET['bycompany'];
+        $showCompany = CompanyModel::getById(new MongoId($_GET['bycompany']));
+        $showSearch = false;
+      }
+
+      self::render('jobs/search/main', [
+        'showSearch' => $showSearch,
+        'showCompany' => $showCompany,
+        'recruiterId' => $recruiterId,
+        'recruiterName' => $recruiterName
+      ]);
+      self::render('jobs/search/form', [
+        'showSearch' => $showSearch,
+        'recruiterId' => $recruiterId,
+        'companyId' => $companyId,
+        'industries' => array_merge([''], AppModel::getIndustriesByJobs())
+      ]);
+      self::render('jobs/search/results', ['recent' => $showSearch]);
     }
 
     /**
@@ -362,133 +396,29 @@
     }
     function dataSearch($data) {
       $recruiter = clean($data['recruiter']);
-      $company = clean($data['company']);
       $title = clean($data['title']);
       $industry = clean($data['industry']);
       $city = clean($data['city']);
 
-      return array_merge($this->dataSearchSetup(), array(
-        'recruiter' => $recruiter, 'company' => $company, 'title' => $title,
+      return array_merge(self::dataSearchSetup(), [
+        'recruiter' => $recruiter, 'title' => $title,
         'industry' => $industry, 'city' => $city
-      ));
+      ]);
     }
 
-    function search() {
-      // $this->requireLogin();
-
-      global $params;
-      $params = $_REQUEST;
-      global $MJob, $MStudent, $MCompany, $MRecruiter;
-
-      // Function for processing results and showing them
-      function process($res) {
-        global $MCompany;
-        // Processing results
-        $jobs = array();
-        foreach ($res as $job) {
-          $company = $MCompany->get($job['company']);
-          $job['company'] = $company['name'];
-          $job['desc'] = strmax($job['desc'], 300);
-          $job['logophoto'] = $company['logophoto'];
-          array_push($jobs, $job);
-        }
-        return $jobs;
+    // Function for processing results and showing them
+    function processSearchResults($res) {
+      global $MCompany;
+      // Processing results
+      $jobs = array();
+      foreach ($res as $job) {
+        $company = $MCompany->get($job['company']);
+        $job['company'] = $company['name'];
+        $job['desc'] = strmax($job['desc'], 300);
+        $job['logophoto'] = $company['logophoto'];
+        array_push($jobs, $job);
       }
-
-      // Predefined searches
-      $showSearch = true;
-      $showCompany = null;
-      if (isset($_GET['byrecruiter'])) {
-        $params = $this->dataSearchEmpty();
-        $params['recruiter'] = $_GET['byrecruiter'];
-        $showSearch = false;
-      }
-      if (isset($_GET['bycompany'])) {
-        $params = $this->dataSearchEmpty();
-        $params['company'] = $_GET['bycompany'];
-        $showCompany = $MCompany->getByName($_GET['bycompany']);
-        $showSearch = false;
-      }
-
-      if ($showSearch and !isset($params['search'])) {
-        // If not searching for anything, then return last 6 entries
-        $showMore = isset($_GET['showMore']);
-        if ($showMore) {
-          if (isset($_SESSION['showMoreJobs'])) $_SESSION['showMoreJobs'] += 6;
-          else $_SESSION['showMoreJobs'] = 12;
-          $showMore = $_SESSION['showMoreJobs'];
-        } else $_SESSION['showMoreJobs'] = 6;
-
-        $res = $MJob->last($_SESSION['showMoreJobs']);
-        $jobs = process($res);
-        $recent = count($jobs) < JobModel::getSize();
-
-        self::render('jobs/search/form', $this->dataSearchSetup());
-        self::render('jobs/search/results', array('jobs' => $jobs, 'recent' => $recent, 'search' => 'jobs', 'showMore' => $showMore));
-        return;
-      }
-
-      // Params to vars
-      extract($data = $this->dataSearch($params));
-
-      // Validations
-      $this->startValidations();
-      $this->validate(!MongoId::isValid($recruiter) or
-                      !is_null(RecruiterModel::getById(new MongoId($recruiter))),
-        $err, 'unknown recruiter');
-
-      // Code
-      if ($this->isValid()) {
-
-        // Searching for companies
-        $companyquery = array();
-
-        if (strlen($company) > 0) {
-          $companyquery['name'] = array('$regex' => keywords2mregex($company));
-        }
-        if (strlen($industry) > 0) {
-          $companyquery['industry'] = array('$regex' => keywords2mregex($industry));
-        }
-        if (strlen($city) > 0) {
-          $companyquery['location'] = array('$regex' => keywords2mregex($city));
-        }
-        $cs = $MCompany->find($companyquery);
-
-        // Search query building
-        $query = array();
-
-        if (strlen($recruiter) > 0)
-          $query['recruiter'] = new MongoId($recruiter);
-
-        if (strlen($title) > 0) {
-          $query['title'] = array('$regex' => keywords2mregex($title));
-        }
-
-        $companies = array();
-        foreach ($cs as $c) {
-          array_push($companies, $c['_id']);
-        }
-        $query['company'] = array('$in' => $companies);
-
-        // Performing search
-        $res = $MJob->find($query);
-        $jobs = process($res);
-
-        if ($showSearch) self::render('jobs/search/form', $data);
-        self::render('jobs/search/results', array('jobs' => $jobs, 'showCompany' => $showCompany, 'search' => 'jobs'));
-
-        // Send email notification of search to us
-        // $this->sendrequestreport("Search for jobs:", $jobs);
-
-        // Save search to db
-        global $MApp;
-        $MApp->recordSearch('jobs');
-
-        return;
-      }
-
-      $this->error($err);
-      self::render('jobs/search/form', array_merge($data, array('search' => 'jobs')));
+      return $jobs;
     }
   }
 
