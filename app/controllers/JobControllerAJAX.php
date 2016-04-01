@@ -21,6 +21,8 @@
         $recruiterId = $params['query']['recruiterId'];
         $companyId = $params['query']['companyId'];
         $title = $params['query']['title'];
+        $jobtype = $params['query']['jobtype'];
+        $salarytype = $params['query']['salarytype'];
 
         // Search query building
         $query = [];
@@ -31,8 +33,43 @@
         if (strlen($companyId) > 0) {
           $query['company'] = new MongoId($companyId);
         } else {
-          $companies = self::findCompanyIdsByIndustryCity($industry, $city);
-          $query['company'] = ['$in' => $companies];
+          $companies = self::findCompanyIdsByIndustry($industry, $city);
+          if (count($companies) > 0) $query['company'] = ['$in' => $companies];
+        }
+        // Location match city.
+        if (strlen($city) > 0) {
+          // TODO: Add filter for changing $maxDistance.
+          $geocode = Geocode::geocode($city);
+          if (!is_null($geocode)) {
+            $point = new GeoPoint($geocode['latitude'], $geocode['longitude']);
+            $query['geoJSON'] = [
+              '$near' => [
+                '$geometry' => $point->toArray(),
+                '$maxDistance' => miles2meters(10)
+              ]
+            ];
+          }
+        }
+        // Filters
+        if (!is_null($jobtype)) $query['jobtype'] = [ '$in' => $jobtype ];
+        if (!is_null($salarytype)) {
+          if (!is_array($salarytype) && strlen($salarytype) == 0) {
+            $query['salarytype'] = '';
+          } else {
+            $salaryTypes = [];
+            if (in_array('paid', $salarytype)) {
+              $salaryTypes = array_merge($salaryTypes, [
+                'month', 'week', 'day', 'hour', 'total'
+              ]);
+            }
+
+            if (in_array('unpaid', $salarytype)) {
+              $salaryTypes = array_merge($salaryTypes, [
+                'commission', 'other'
+              ]);
+            }
+            $query['salarytype'] = [ '$in' => $salaryTypes ];
+          }
         }
       } else {
         $query = [];
@@ -50,21 +87,9 @@
       echo toJSON([ 'jobs' => $jobs, 'more' => $more ]);
     }
 
-    private static function findCompanyIdsByIndustryCity($industry, $city) {
-      $companyquery = [];
-      if (strlen($industry) > 0) {
-        $companyquery['industry'] = ['$regex' => keywords2mregex($industry)];
-      }
-      if (strlen($city) > 0) {
-        $companyquery['location'] = ['$regex' => keywords2mregex($city)];
-      }
-      $cs = CompanyModel::find($companyquery);
-
-      $companies = [];
-      foreach ($cs as $c) {
-        $companies[] = $c['_id'];
-      }
-      return $companies;
+    private static function findCompanyIdsByIndustry($industry) {
+      $companies = CompanyModel::getByIndustry($industry);
+      return getValuesOfKey($companies, '_id');
     }
 
     private static function processDBToView(array $data) {

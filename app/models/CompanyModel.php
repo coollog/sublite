@@ -11,6 +11,10 @@
      * @return Gets 'name', 'logophoto'.
      */
     public static function getByIdMinimal(MongoId $companyId);
+    /**
+     * @return Gets '_id'.
+     */
+    public static function getByIndustry($industry);
   }
 
   class CompanyModel extends Model implements CompanyModelInterface {
@@ -34,6 +38,13 @@
         'name' => 1,
         'logophoto' => 1
       ]);
+    }
+
+    public static function getByIndustry($industry) {
+      $query = (new DBQuery(self::$collection))
+        ->toQuery('industry', [ '$regex' => keywords2mregex($industry) ])
+        ->projectField('_id');
+      return $query->run();
     }
 
     function __construct() {

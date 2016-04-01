@@ -54,7 +54,11 @@
       $('.results headline').hide();
       this.state = 'search';
       this.count = 25;
-      if (initial) this.query = formJSON('.search form');
+      if (initial) {
+        this.query = formJSON('.search form');
+        // Filters
+        this.appendSearchFilters();
+      }
       this.load(this.query, initial, callback);
     },
     load: function (query, initial, callback) {
@@ -94,6 +98,21 @@
         $(self.container).append(html);
       });
       this.skip += this.count;
+    },
+    appendSearchFilters: function () {
+      var jobTypes = [];
+      $('input[name=jobtype]').each(function () {
+        if ($(this).is(':checked')) jobTypes.push($(this).val());
+      });
+      if (jobTypes.length > 0) this.query.jobtype = jobTypes;
+      else this.query.jobtype = null;
+
+      var salaryTypes = [];
+      $('input[name=salarytype]').each(function () {
+        if ($(this).is(':checked')) salaryTypes.push($(this).val());
+      });
+      if (salaryTypes.length > 0) this.query.salarytype = salaryTypes;
+      else this.query.salarytype = null;
     }
   };
 
@@ -106,8 +125,9 @@
       var self = this;
       Jobs.search(true, function () {
         $(self).prop('disabled', false);
+        if (!$('filters').is(':visible')) $('showFilters').show();
       });
-      scrollTo('.results')
+      scrollTo('.results');
     });
 
     $('.searchScroll').click(function() {

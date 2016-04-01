@@ -111,6 +111,8 @@
         'desc' => 'text',
         'requirements' => 'text'
       ]));
+      mongo_ok(self::$collection->createIndex([ 'company' => 1 ]));
+      mongo_ok(self::$collection->createIndex([ 'geoJSON' => '2dsphere' ]));
     }
 
     function save($data, $setRecruiter=true) {

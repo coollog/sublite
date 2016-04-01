@@ -23,6 +23,7 @@
   require_once($dirpre.'includes/functions/sendgmail.php');
   require_once($dirpre.'includes/functions/lib_autolink.php');
   require_once($dirpre.'includes/schools.php');
+  require_once($dirpre.'includes/classes/GeoJSON.php');
 
   // Global modules
   require_once($GLOBALS['dirpre'].'controllers/modules/Geocode.php');
