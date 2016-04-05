@@ -78,6 +78,7 @@
     $f = $format;
     return implode($sep, array_map(function ($v, $k) {
       global $f;
+      if (is_array($v)) $v = array2str($v);
       return sprintf($f, $k, $v);
     }, $arr, array_keys($arr)));
   }
