@@ -191,19 +191,16 @@
     }
 
     function view() {
-      // global $CJob; $CJob->requireLogin();
-      global $MCompany;
-      global $MRecruiter;
       // Validations
       $this->startValidations();
       $this->validate(isset($_GET['id']) and
-        ($entry = $MCompany->get($id = $_GET['id'])) != NULL,
+        ($entry = CompanyModel::getById($id = new MongoId($_GET['id']))) != NULL,
         $err, 'unknown company');
 
       // Code
       if ($this->isValid()) {
         $data = $entry;
-        $me = $MRecruiter->me();
+        $me = RecruiterModel::me();
 
         $data['isme'] = !is_null($me) ? idcmp($id, $me['company']) : false;
 
