@@ -114,7 +114,7 @@
                 View::echof('location');
               ?><br />
               <div class="viewjobsbutton">
-                <a href="search.php?bycompany=<?php View::echof('_id'); ?>">
+                <a href="search?bycompany=<?php View::echof('_id'); ?>">
                   <input type="button" value="View Job Listings" />
                 </a>
               </div>

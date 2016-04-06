@@ -18,7 +18,7 @@
     $s = str_replace('—', '-', $s); //by the way these are 2 different dashes
     $s = str_replace('…', '...', $s);
     $s = trim(htmlspecialchars(Encoding::toUTF8($s), ENT_QUOTES));
-    // Have this instead:
+    // TODO: Have this instead:
     // $s = trim(htmlspecialchars(htmlspecialchars_decode(
     //   Encoding::toUTF8($s), ENT_QUOTES), ENT_QUOTES));
     return $s;

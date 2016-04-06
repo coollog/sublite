@@ -98,6 +98,8 @@
         $(self.container).append(html);
       });
       this.skip += this.count;
+
+      repositionFooter();
     },
     appendSearchFilters: function () {
       var jobTypes = [];
