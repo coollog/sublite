@@ -149,7 +149,7 @@
       $duration = str2float(clean($data['duration']));
       $startdate = clean($data['startdate']);
       $enddate = clean($data['enddate']);
-      $salarytype = clean($data['salarytype']);
+      $salarytype = isset($data['salarytype']) ? clean($data['salarytype']) : '';
       $salary = clean($data['salary']);
       if ($salarytype != 'other' && $salarytype != 'commission')
         $salary = str2float($salary);

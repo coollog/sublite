@@ -41,22 +41,22 @@
           <?php View::checked('salarytype', 'month'); ?> required />
           <label for="month"> / month</label>
         <input type="radio" name="salarytype" id="week" value="week"
-          <?php View::checked('salarytype', 'week'); ?> />
+          <?php View::checked('salarytype', 'week'); ?> required />
           <label for="week"> / week</label>
         <input type="radio" name="salarytype" id="day" value="day"
-          <?php View::checked('salarytype', 'day'); ?> />
+          <?php View::checked('salarytype', 'day'); ?> required />
           <label for="day"> / day</label>
         <input type="radio" name="salarytype" id="hour" value="hour"
-          <?php View::checked('salarytype', 'hour'); ?> />
+          <?php View::checked('salarytype', 'hour'); ?> required />
           <label for="hour"> / hour</label>
         <input type="radio" name="salarytype" id="total" value="total"
-          <?php View::checked('salarytype', 'total'); ?> />
+          <?php View::checked('salarytype', 'total'); ?> required />
           <label for="total"> total payment</label>
         <input type="radio" name="salarytype" id="commission" value="commission"
-          <?php View::checked('salarytype', 'commission'); ?> />
+          <?php View::checked('salarytype', 'commission'); ?> required />
           <label for="commission"> commission</label>
         <input type="radio" name="salarytype" id="other" value="other"
-          <?php View::checked('salarytype', 'other'); ?> />
+          <?php View::checked('salarytype', 'other'); ?> required />
           <label for="other"> other (100 chars max)</label>
       </right>
       <div class="form-slider"><label for="deadline">Deadline for Application (mm/dd/yyyy):</label><input class="datepicker" type="text" id="deadline" name="deadline" value="<?php View::echof('deadline'); ?>" required /></div>
