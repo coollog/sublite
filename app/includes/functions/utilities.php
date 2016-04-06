@@ -18,6 +18,9 @@
     $s = str_replace('—', '-', $s); //by the way these are 2 different dashes
     $s = str_replace('…', '...', $s);
     $s = trim(htmlspecialchars(Encoding::toUTF8($s), ENT_QUOTES));
+    // Have this instead:
+    // $s = trim(htmlspecialchars(htmlspecialchars_decode(
+    //   Encoding::toUTF8($s), ENT_QUOTES), ENT_QUOTES));
     return $s;
   }
   function cleanfloat($s) {
@@ -214,13 +217,13 @@
         $val = escapeJson($val);
       } else if (is_string($val)) {
         // $val = escapeJsonString($val);
-        $val = htmlspecialchars($val);
+        $val = htmlspecialchars(htmlspecialchars_decode($val, ENT_QUOTES));
         // $val = htmlspecialchars(
         //     htmlspecialchars_decode($val, ENT_QUOTES), ENT_QUOTES);
       }
 
       if (is_string($key))
-        $newKey = htmlspecialchars($key);
+        $newKey = htmlspecialchars(htmlspecialchars_decode($key, ENT_QUOTES));
       else
         $newKey = $key;
       $newArr[$newKey] = $val;
