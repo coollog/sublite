@@ -260,10 +260,12 @@
     public static function countByJob(MongoId $jobId) {
       $query = (new DBQuery(self::$collection))
         ->toQuery('jobid', $jobId)
-        ->projectField('status');
+        ->projectField('status')
+        ->projectField('submitted');
       $applications = $query->run();
       $applicationCountData = [
         "total" => count($applications),
+        "submitted" => 0,
         "unclaimed" => 0,
         "review" => 0,
         "rejected" => 0,
@@ -272,6 +274,8 @@
       ];
       foreach ($applications as $app) {
         // Count each type of application.
+        if ($app['submitted']) $applicationCountData['submitted'] ++;
+
         switch ($app['status']) {
           case ApplicationStudent::STATUS_UNCLAIMED:
             $applicationCountData['unclaimed'] ++;
