@@ -51,11 +51,11 @@
           '_id' => $jobId->{'$id'},
           'title' => $job['title'],
           'location' => $job['location'],
-          'applicants' => $applicants['total']
+          'applicants' => $applicants['submitted']
         ];
         $jobArray[] = $jobListing;
 
-        $applicantCount += $applicants['total'];
+        $applicantCount += $applicants['submitted'];
         $totalViewCount += $job['stats']['views'];
         $totalApplyCount += $job['stats']['clicks'];
       }
