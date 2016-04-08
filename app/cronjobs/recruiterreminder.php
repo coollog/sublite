@@ -124,8 +124,7 @@
           if ($numEmailed > MAX_EMAILS) break;
 
           $recruitersEmailed[] = $reminder['email'];
-          //$mail->addAddress($reminder['email']);
-          $mail->addAddress("cyrieu@gmail.com"); // TODO REMOVE TESTING EMAIL
+          $mail->addAddress($reminder['email']);
           $recruiterId = $reminder['id'];
           $recruiterFullName = $reminder['name'];
           $numUnclaimed = $reminder['numUnclaimed'];
