@@ -38,7 +38,7 @@
     background: #d5d5d5;
   }
 
-  #fail {
+  #fail, #error {
     color: red;
     display: inline-block;
   }
@@ -57,7 +57,7 @@
     });
     if (blankFields.length) {
       $('#fail').show();
-      $('#success').hide();
+      $('#success, #error').hide();
       return false;
     }
     return true;
@@ -70,21 +70,25 @@
       questions.push(question);
     });
     $.post('', {saving: true, questions: questions}, function (data) {
-      $('#fail').hide();
-      $('#success').show();
-       console.log('saved!');
-       console.log(data);
+      if (data.length == 0) {
+        console.log(data);
+        $('#fail, #error').hide();
+        $('#success').show();
+        console.log('saved!');
+      } else {
+        $('#fail, #success').hide();
+        $('#error').show();
+      }
     });
   }
   $(function() {
     $('.save').click(save);
 
     $('input, textarea').keypress(function () {
-      $('#success').hide();
-      $('#hide').hide();
+      $('#success, #error, #fail').hide();
     });
 
-    $('#success, #fail').hide();
+    $('#success, #fail, #error').hide();
 
     formunloadmsg(
       "Are you sure you wish to leave this page? Unsaved changes will be lost."
@@ -150,6 +154,12 @@
         <input type="button" id="savebutton" class="save" value="Save" />
         <div id="success">Application Saved!</div>
         <div id="fail">Please fill out all questions.</div>
+        <div id="error">
+          An error occurred during saving. Please try again later. If this
+          problem persists, please
+          <a href="<?php echo $GLOBALS['dirpre']; ?>feedback">
+            inform us of this error</a>.
+        </div>
       </left>
     </form>
   </div>
