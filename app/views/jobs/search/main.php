@@ -69,6 +69,8 @@
         var loadText = 'Loading jobs...';
       }
 
+      console.log("asdfafafsd");
+
       if (initial) {
         this.skip = 0;
         $(Jobs.container).text(loadText);

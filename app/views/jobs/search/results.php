@@ -69,30 +69,6 @@
   });
 </script>
 
-<templates>
-  <jobtemplate>
-    <a href="<?php View::echoLink('jobs/job?id={_id}'); ?>" target="_blank">
-      <table class="jobblock"><tr>
-        <td class="img" style="background-image: url('{logophoto}');"></td>
-        <td>
-          <div class="title">{title} | {company}</div>
-          <div class="desc">{desc}</div>
-          <div class="info">Deadline: {deadline}</div>
-        </td>
-      </tr></table>
-    </a>
-  </jobtemplate>
-</templates>
-
-<script>
-  $(function () {
-    $('showMore').click(function () {
-      if (Jobs.state == 'recent') Jobs.load({}, false);
-      else Jobs.search(false);
-    });
-  });
-</script>
-
 <panel class="results">
   <div class="content">
     <?php if (!is_null(View::get('recent'))) { ?>
