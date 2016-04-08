@@ -105,6 +105,15 @@
 <script>
   <?php if (View::get('submitname') == 'add') { ?>
     formunloadfunction(function() { saveForm('#company') });
+    // Save form whenever it is modified.
+    $(function () {
+      $('#company').bind("DOMSubtreeModified", function() {
+        saveForm('#company');
+      });
+      $('textarea, input, select').change(function() {
+        saveForm('#company');
+      });
+    });
   <?php } else { ?>
     formunloadmsg("Are you sure you wish to leave this page? Unsaved changes will be lost.");
   <?php } ?>
@@ -129,21 +138,39 @@
         val: $(this).val()
       });
     });
+    var images = {};
+    $('.img').each(function () {
+      var name = $(this).attr('name');
+      var html = $(this).html();
+      images[name] = html;
+    });
+    var imageinputs = {};
+    $('.inputs').each(function () {
+      var name = $(this).attr('name');
+      var html = $(this).html();
+      imageinputs[name] = html;
+    });
 
     var formData = {
       'input': inputData,
       'textarea': textareaData,
       'checkbox': checkboxData,
-      'select': selectData
+      'select': selectData,
+      'images': images,
+      'imageinputs': imageinputs
     };
     localStorage.setItem('form'+form, JSON.stringify(formData));
+
+    console.log('saved form');
   }
   function loadForm(form) {
+    if (!localStorage.getItem('form'+form)) return;
+
     var formData = JSON.parse(localStorage.getItem('form'+form));
 
     var inputData = formData['input'];
     for (var name in inputData) {
-      $(form).find('input[name='+name+']').val(inputData[name]);
+      $(form).find('input[name="'+name+'"]').val(inputData[name]);
     }
     var textareaData = formData['textarea'];
     for (var name in textareaData) {
@@ -152,7 +179,7 @@
     var selectData = formData['select'];
     for (var name in selectData) {
       var val = selectData[name];
-      $(form).find('select[name='+name+']').find("option")
+      $(form).find('select[name="'+name+'"]').find("option")
         .filter(function() { return $(this).val() == val; })
         .prop('selected', true);
     }
@@ -161,12 +188,21 @@
       var name = checkboxData[i].name, val = checkboxData[i].val;
       // Fix [] error in selector
       name = name.replace('[]', '\\[\\]');
-      $(form).find('input[name='+name+']')
+      $(form).find('input[name="'+name+'"]')
         .filter(function() { return $(this).val() == val; })
         .prop('checked', true);
     }
+    var imageData = formData['images'];
+    for (var name in imageData) {
+      $('.img[name='+name+']').html(imageData[name]);
+    }
+    var imageInputsData = formData['imageinputs'];
+    for (var name in imageInputsData) {
+      $('.inputs[name='+name+']').html(imageInputsData[name]);
+    }
     console.log('loaded form');
   }
+
   <?php
     if (View::get('submitname') == 'add' && View::get('Error') == '') {
       echo "loadForm('#company');";
