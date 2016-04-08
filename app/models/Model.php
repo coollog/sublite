@@ -24,6 +24,14 @@
 
     public static $test = false;
 
+    public static function init($dbType, $collectionName) {
+      self::connect($dbType);
+
+      $dbName = self::dbTypeToName($dbType);
+      static::$collection = self::getCollection($dbType, $collectionName);
+      return static::$collection;
+    }
+
     public static function myCollection() {
       if (self::$test) {
         return substr(static::$collection->getName(), 0, -5);
@@ -131,11 +139,7 @@
     protected static $collection;
 
     public function __construct($dbType, $collectionName) {
-      self::connect($dbType);
-
-      $dbName = self::dbTypeToName($dbType);
-      static::$collection = self::getCollection($dbType, $collectionName);
-      return static::$collection;
+      return self::init($dbType, $collectionName);
     }
 
     public function __destruct() {

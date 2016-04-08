@@ -41,6 +41,10 @@
     const CREDITS_FOR_COMPANYPROFILE = 1;
     const CREDITS_FOR_JOB            = 1;
 
+    public static function init() {
+      parent::init(self::DB_TYPE, 'recruiters');
+    }
+
     public static function getNumUnread(MongoId $recruiterId) {
       $query = (new DBQuery(self::$collection))
         ->queryForId($recruiterId)->projectField('unread');
@@ -132,9 +136,7 @@
       return $entry['email'];
     }
 
-    function __construct() {
-      parent::__construct(self::DB_TYPE, 'recruiters');
-    }
+    function __construct() {}
 
     function save($data) {
       $data['msgs'] = array();
@@ -192,4 +194,5 @@
   }
 
   GLOBALvarSet('MRecruiter', new RecruiterModel());
+  RecruiterModel::init();
 ?>
