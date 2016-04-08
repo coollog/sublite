@@ -21,6 +21,7 @@
 </style>
 
 <script>
+
   function updateDiv(showDiv, totalDiv, days) {
       
     for(i = 1; i <= totalDiv; i++) {
@@ -34,7 +35,7 @@
     title.innerHTML = "Sign-ups in past number of days: " + days;
   }
 
-  function drawBarGraph(chart_id, my_data) {
+  function drawBarGraph(chart_id, my_data, ambassadors) {
     var key_array = new Array();
     var value_array = new Array();
 
@@ -42,6 +43,13 @@
       key_array.push(key);
       value_array.push(my_data[key]);
     }
+
+    var tempAbbrevs = ["Columbia College Chicago", "University of Hartford", "New York University", "UC Berkeley", "University of Virginia"];
+    var tempNewArray = new Array();
+    for(var i = 0; i < tempAbbrevs.length; i++) {
+      tempNewArray.push(tempAbbrevs[i] + " - " + ambassadors[i]);
+    }
+    key_array = tempNewArray;
 
     var data = {
       labels: key_array,
@@ -93,6 +101,7 @@
 
 <?php
   $schoolCount = View::get('counts');
+  $ambassadors = View::get('ambassadors');
   define('FOREVER', 0);
   define('SPRINT', 1);
 ?>
@@ -116,42 +125,42 @@
       <div id="showHideDiv1">
         <canvas id="7days" width="900" height="400"></canvas>
         <script>
-          drawBarGraph("7days", <?php echo toJSON($schoolCount[7]); ?>);
+          drawBarGraph("7days", <?php echo toJSON($schoolCount[7]); ?>, <?php echo toJSON($ambassadors);?>);
         </script>
       </div>
 
       <div id="showHideDiv2">
         <canvas id="30days" width="900" height="400"></canvas>
         <script>
-          drawBarGraph("30days", <?php echo toJSON($schoolCount[30]); ?>);
+          drawBarGraph("30days", <?php echo toJSON($schoolCount[30]); ?>, <?php echo toJSON($ambassadors);?>);
         </script>
       </div>
 
       <div id="showHideDiv3">
         <canvas id="90days" width="900" height="400"></canvas>
         <script>
-          drawBarGraph("90days", <?php echo toJSON($schoolCount[90]); ?>);
+          drawBarGraph("90days", <?php echo toJSON($schoolCount[90]); ?>, <?php echo toJSON($ambassadors);?>);
         </script>
       </div>
 
       <div id="showHideDiv4">
         <canvas id="180days" width="900" height="400"></canvas>
         <script>
-          drawBarGraph("180days", <?php echo toJSON($schoolCount[180]); ?>);
+          drawBarGraph("180days", <?php echo toJSON($schoolCount[180]); ?>, <?php echo toJSON($ambassadors);?>);
         </script>
       </div>
 
       <div id="showHideDiv5">
         <canvas id="foreverdays" width="900" height="400"></canvas>
         <script>
-          drawBarGraph("foreverdays", <?php echo toJSON($schoolCount[FOREVER]); ?>);
+          drawBarGraph("foreverdays", <?php echo toJSON($schoolCount[FOREVER]); ?>, <?php echo toJSON($ambassadors);?>);
         </script>
       </div>
 
       <div id="showHideDiv6">
         <canvas id="sprintdays" width="900" height="400"></canvas>
         <script>
-          drawBarGraph("sprintdays", <?php echo toJSON($schoolCount[SPRINT]); ?>);
+          drawBarGraph("sprintdays", <?php echo toJSON($schoolCount[SPRINT]); ?>, <?php echo toJSON($ambassadors);?>);
         </script>
       </div>
 

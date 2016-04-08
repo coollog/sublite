@@ -9,6 +9,7 @@
   class AppController extends Controller implements AppControllerInterface {
     public static function leaderboard() {
       $schools = array("Columbia College Chicago", "Hartford University", "New York University", "University of California Berkeley", "University of Virginia");
+      $ambassadors = array("Elana", "Stephen", "Solomon", "Helena, Jiang", "David");
       $countAdjustments = array("Columbia College Chicago" => 5, "Hartford University" => 1, "New York University" => 249, "University of California Berkeley" => 93, "University of Virginia" => 39);
       $counts = [7, 30, 90, 180];
 
@@ -36,7 +37,8 @@
 
       self::render('stats/leaderboard', [
         'schools' => $schools,
-        'counts' => $schoolCount
+        'counts' => $schoolCount,
+        'ambassadors' => $ambassadors
       ]);
     }
 

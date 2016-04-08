@@ -31,7 +31,8 @@
     public static function getSchoolCountSinceTimes(array $schools, array $times) {
       global $S;
 
-      $cursor = StudentModel::getAll();
+      $studentCursor = StudentModel::getAll();
+      $applicationCursor = ApplicationModel::getAll();
 
       $pattern = "/(.*)@(.*)/";
       $results = array();
@@ -41,7 +42,7 @@
         $schoolNames[$time] = array();
       }
 
-      foreach($cursor as $doc) {
+      foreach($studentCursor as $doc) {
         $success = isset($doc["email"]) ? preg_match($pattern, $doc["email"], $match) : null;
         if($success) {
           foreach($times as $time) {
@@ -54,6 +55,25 @@
           }
         }
       }
+
+      foreach($applicationCursor as $app) {
+        if($app["submitted"]) {
+          $doc = StudentModel::getById($app["studentid"]);
+        }
+        $success = isset($doc["email"]) ? preg_match($pattern, $doc["email"], $match) : null;
+        if($success) {
+          foreach($times as $time) {
+            if($doc["_id"]->getTimestamp() > $time) {
+              if(array_key_exists($match[2], $results[$time]))
+                $results[$time][$match[2]] += 10;
+              else
+                $results[$time][$match[2]] = 10;
+            }
+          }
+        }
+      }
+
+
 
       foreach($times as $time) {
         foreach($results[$time] as $key => $id) {
