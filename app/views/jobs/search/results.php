@@ -53,6 +53,8 @@
 <script>
   $(function () {
     $('showMore').click(function () {
+      Jobs.count = 10;
+
       if (Jobs.state == 'recent') Jobs.load({}, false);
       else Jobs.search(false);
     });
