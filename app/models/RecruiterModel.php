@@ -43,6 +43,7 @@
 
     public static function init() {
       parent::init(self::DB_TYPE, 'recruiters');
+      parent::checkReady();
     }
 
     public static function getNumUnread(MongoId $recruiterId) {
@@ -164,8 +165,8 @@
     }
 
     function getName($id) {
-      $entry = self::getById(new MongoId($id));
-      return $entry['firstname'] . ' ' . $entry['lastname'];
+      $entry = self::getByIdOnCollection(self::$collection, new MongoId($id));
+      return "$entry[firstname] $entry[lastname]";
     }
 
     function getPhoto($id) {
@@ -187,7 +188,7 @@
     }
 
     function IDexists($id) {
-      return (self::$collection->findOne(array('_id' => new MongoId($id))) !== NULL);
+      return self::$collection->findOne([ '_id' => new MongoId($id) ]) !== NULL;
     }
 
     protected static $collection;

@@ -59,6 +59,19 @@
       return $result['n'];
     }
 
+    /**
+     * TODO: We want to change ALL functions in this class to pass in the
+     * collection rather than use static::$collection as it is doesn't work
+     * if the top-level caller is a controller in some instance for some
+     * weird reason.
+     */
+    public static function getByIdOnCollection($collection, MongoId $id, array $projection = array()) {
+      $query = (new DBQuery($collection))
+        ->queryForId($id)->setProjection($projection);
+
+      return $query->findOne();
+    }
+
     public static function getById(MongoId $id, array $projection = array()) {
       self::checkReady();
 
