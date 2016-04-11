@@ -43,7 +43,8 @@
       $schools = self::getSchoolsForUnclaimed($jobId);
       $num = count($schools);
       if ($num > 4) {
-        $schools = array_rand($schools, $num);
+        shuffle($schools);
+        $schools = array_slice($schools, 0, 4);
       }
 
       $data = array_merge($countsHash, [
