@@ -237,13 +237,17 @@
 
     private static function getSchoolsForUnclaimed(MongoId $jobId) {
       global $S;
-      $schools = [];
+      $schoolMap = [];
       $unclaimed = ApplicationStudent::getUnclaimedByJob($jobId);
       foreach ($unclaimed as $application) {
         $studentId = $application->getStudentId();
         $student = StudentModel::getById($studentId, ['email' => 1]);
         $email = $student['email'];
         $school = $S->nameOf($email);
+        $schoolMap[$school] = true;
+      }
+      $schools = [];
+      foreach ($schoolMap as $school=>$set) {
         $schools[] = $school;
       }
       return $schools;
