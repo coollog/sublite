@@ -153,6 +153,8 @@
         }
         items.applications item name {
           font-weight: bold;
+          max-height: 35px;
+          overflow: hidden;
         }
         items.applications item desc {
           margin: 1.5em 0;
@@ -241,7 +243,7 @@
               style="background-image: url('{logo}');">
         </logo>
         <headerinfo class="inlinediv">
-          <name>{title}</name>
+          <name class="div">{title}</name>
           <company>{company}</company>
         </headerinfo>
         <desc class="div">{desc}</desc>
