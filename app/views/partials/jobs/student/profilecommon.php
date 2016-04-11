@@ -99,7 +99,7 @@
         val: val,
         required: required
       };
-      var fieldHTML = useTemplate('fieldtemplate', data);
+      var fieldHTML = Templates.use('fieldtemplate', data);
 
       return fieldHTML;
     },
@@ -119,7 +119,7 @@
       }
 
       var templateName = sectionName + 'itemtemplate';
-      var itemHTML = useTemplate(templateName, data);
+      var itemHTML = Templates.use(templateName, data);
 
       // Now add field sets.
       $('body').append(

@@ -175,6 +175,8 @@
 
 <script>
   $(function () {
+    Templates.init();
+
     var profileData = JSON.parse($('#profileData').html());
 
     (function setupProfile(profile) {
@@ -222,7 +224,6 @@
       var resume = profile.resume;
       var interests = profile.interests;
       var skills = profile.skills;
-      var resume = profile.resume;
 
       $('section[name=student] heading').html(name);
       addField('basicinfo', 'bio', bio);
