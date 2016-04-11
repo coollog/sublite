@@ -124,8 +124,7 @@
           if ($numEmailed > MAX_EMAILS) break;
 
           $recruitersEmailed[] = $reminder['email'];
-          //$mail->addAddress($reminder['email']);
-          $mail->addAddress("cyrieu@gmail.com"); // TODO REMOVE TESTING EMAIL
+          $mail->addAddress($reminder['email']);
           $recruiterId = $reminder['id'];
           $recruiterFullName = $reminder['name'];
           $numUnclaimed = $reminder['numUnclaimed'];
@@ -139,6 +138,7 @@
             You may view their names and universities before using your credits to unlock their applications.
             You have $credits free credits left, and you receive another free credit for every work opportunity posted on SubLite.
             In addition, you can purchase credits for 8 dollars. All purchases in quantities of 10 credits and over are 5 dollars, and unused credits can be refunded at the rate they were purchased at.
+            <br />
             <br />
             If you have any questions, feel free to reach out to our recruitment director Dean at dean.li@yale.edu! Thank you so much for using the SubLite Platform.
             <br  />
