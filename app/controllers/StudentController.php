@@ -581,7 +581,7 @@
       $this->validate(($entry = $MStudent->get($email)) != NULL,
         $err, 'no account found');
       $this->validate(isset($entry['pass']),
-        $err, 'account has not been confirmed yet. to resend a confirmation email, <a href="register.php">register</a> your email address again.');
+        $err, 'account has not been confirmed yet. to resend a confirmation email, <a href="register">register</a> your email address again.');
 
       if ($this->isValid()) {
         $id = $entry['_id'];

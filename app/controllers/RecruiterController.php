@@ -245,7 +245,7 @@
                 <br /><br />
                 Thank you for registering on SubLite! Your account has been approved.
                 <br /><br />
-                Log in at <a href=\"http://www.sublite.net/employers/login.php\">www.sublite.net/employers</a> to create a company profile and job listing!
+                Log in at <a href=\"http://www.sublite.net/employers/login\">www.sublite.net/employers</a> to create a company profile and job listing!
                 <br /><br />
                 As always, please do not hesitate to contact us if you have any questions or suggestions.
                 <br /><br />

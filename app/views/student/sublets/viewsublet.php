@@ -334,7 +334,7 @@
             <?php View::echof('studentcollege'); ?><?php View::echof('studentclass'); ?>
           </div>
           <?php if(!View::get('Loggedinstudent')) { ?>
-            <br /><i>You must <a href="../login.php">login</a> or <a href="../register.php">register</a> to contact the owner.</i>
+            <br /><i>You must <a href="../login">login</a> or <a href="../register">register</a> to contact the owner.</i>
           <?php } else { ?>
             <a href="newmessage.php?from=<?php View::echof('L_id'); ?>&to=<?php View::echof('studentid'); ?>&msg=<?php View::echof('studentmsg'); ?>" onClick="return confirm('I have read, fully understand, and agree to Sublite’s Terms of Service and Privacy Policy. I agree to contact the owner in good-faith to inquire about the listing.')">
               <input type="button" class="reverse" value="Contact Owner" />
@@ -466,7 +466,7 @@
       <?php } ?>
       <br />
       <?php if(!View::get('Loggedinstudent')) { ?>
-        <i>You must <a href="../login.php">login</a> or <a href="../register.php">register</a> to comment.</i>
+        <i>You must <a href="../login">login</a> or <a href="../register">register</a> to comment.</i>
       <?php } else { ?>
 
         <textarea id="comment" name="comment" required maxlength="2000" placeholder="Write Your Comment:"><?php View::echof('comment'); ?></textarea>

@@ -236,7 +236,7 @@
           Maximize your next summer experience with your one-stop shop for internships and housing.
           <div style="font-size: 0.7em;"><br />Verify your ".edu" email address to get started! It's completely free!</div>
         </div>
-        <a href="register.php<?php if (!is_null($r = View::get('r'))) echo "?r=$r"; ?>">
+        <a href="register<?php if (!is_null($r = View::get('r'))) echo "?r=$r"; ?>">
           <input type="button" class="registerlogin" value="Get Started" />
         </a>
         <div class="switch"><a href="../employers">switch to RECRUITER</a></div>
