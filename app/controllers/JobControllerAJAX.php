@@ -32,8 +32,8 @@
           $query['recruiter'] = new MongoId($recruiterId);
         if (strlen($companyId) > 0) {
           $query['company'] = new MongoId($companyId);
-        } else {
-          $companies = self::findCompanyIdsByIndustry($industry, $city);
+        } else if (strlen($industry) > 0) {
+          $companies = self::findCompanyIdsByIndustry($industry);
           if (count($companies) > 0) $query['company'] = ['$in' => $companies];
         }
         // Location match city.

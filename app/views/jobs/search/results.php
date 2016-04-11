@@ -83,7 +83,7 @@
           value="fulltime" checked />
         <label for="fulltime"> Full-Time</label>
         <input type="checkbox" name="jobtype" id="parttime"
-          value="fulltime" checked />
+          value="parttime" checked />
         <label for="parttime"> Part-Time</label>
         <input type="checkbox" name="jobtype" id="internship"
           value="internship" checked />
