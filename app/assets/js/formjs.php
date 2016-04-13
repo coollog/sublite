@@ -132,8 +132,8 @@
     $('.timepicker').timepicker({ 'scrollDefault': 'now' });
 
     $('.sliderrange').each(function() {
-      var min = $(this).attr('min'),
-          max = $(this).attr('max'),
+      var min = parseInt($(this).attr('min')),
+          max = parseInt($(this).attr('max')),
           minfield = $(this).attr('minfield'),
           maxfield = $(this).attr('maxfield'),
           minval = parseInt($(minfield).val()) || 0,
@@ -155,8 +155,8 @@
     });
 
     $('.slidermin').each(function() {
-      var min = $(this).attr('min'),
-          max = $(this).attr('max'),
+      var min = parseInt($(this).attr('min')),
+          max = parseInt($(this).attr('max')),
           field = $(this).attr('field'),
           value = parseInt($(field).val()) || 0;
 
