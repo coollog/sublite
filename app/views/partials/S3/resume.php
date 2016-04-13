@@ -37,7 +37,7 @@
 </script>
 
 <form id="uploadresume" method="post" enctype="multipart/form-data"
-      action="<?php echo $GLOBALS['dirpre']; ?>../S3/resume.php">
+      action="<?php echo $GLOBALS['dirpre']; ?>../S3/resume">
   Select file to upload (&lt; 10MB):
   <input type="file" accept=".doc, .docx, .rtf, .pdf" name="file" />
   <input type="submit" class="smallbutton" value="Upload" style="margin: 0;" />
