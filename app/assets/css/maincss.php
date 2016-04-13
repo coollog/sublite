@@ -22,6 +22,9 @@
   red, .red {
     color: #FF1919;
   }
+  orange, .orange {
+    color: #FF6919;
+  }
   a {
     color: #035d75;
     text-decoration: none;

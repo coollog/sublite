@@ -36,7 +36,7 @@
   require_once($dirpre.'controllers/JobController.php');
   require_once($dirpre.'controllers/JobControllerAJAX.php');
   require_once($dirpre.'controllers/RecruiterController.php');
-  require_once($dirpre.'controllers/S3/S3Controller.php');
+  require_once($dirpre.'controllers/S3/S3ControllerAJAX.php');
   require_once($dirpre.'controllers/StudentController.php');
   require_once($dirpre.'controllers/StudentControllerAJAX.php');
   require_once($dirpre.'controllers/MessageController.php');
