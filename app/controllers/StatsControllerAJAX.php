@@ -14,7 +14,8 @@
                             implements StatsControllerAJAXInterface {
     public static function getRecruiterStats() {
       $recruiterArray = [];
-      $recruiterColumns = ["email","firstname","lastname","company","datejoined","postedjob","madecompany","approved"];
+      $recruiterColumns = ["email","firstname","lastname","company","datejoined",
+        "credits", "postedjob","madecompany","approved"];
       $jobColumns = ["jobname","jobviews","jobclicks","applicants"];
       $recruiterArray[] = implode(',', $recruiterColumns) . ',' . implode(',', $jobColumns);
 
@@ -46,6 +47,8 @@
         }
         else $info['company'] = 'no company';
         $info['dateJoined'] = fdate($recruiter['_id']->getTimestamp());
+        if (isset($recruiter['credits'])) $info['credits'] = $recruiter['credits'];
+        else $info['credits'] = 0;
 
         if (in_array($id, $rids)) { // recruiters who have posted at least one job and have a company profile
           $info['postedJob'] = 'YES';
