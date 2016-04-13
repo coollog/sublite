@@ -6,6 +6,9 @@
                                           array $profileData);
     public static function getProfile(MongoId $studentId);
 
+    // Check a student's profile for completeness, return progress and missing items
+    public static function checkCompleteness(MongoId $studentId);
+
     public function __construct(MongoId $studentId, array $data);
     public function getData();
     public function getStudentId();
@@ -23,6 +26,12 @@
       $profileData = StudentModel::getProfile($studentId);
       if ($profileData === null) $profileData = [];
       return new StudentProfile($studentId, $profileData);
+    }
+
+    public static function checkCompleteness(MongoId $studentId) {
+      $profileData = self::getProfile($studentId);
+      // check $profileData for completeness
+      
     }
 
     //**********************
