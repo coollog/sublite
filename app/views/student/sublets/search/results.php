@@ -26,6 +26,9 @@
 ?>
 
 <style type="text/css">
+  .resultswithmap {
+    background: white;
+  }
   .resultsmap {
     width: 25%;
     padding: 0;
@@ -164,151 +167,154 @@
   }
 </style>
 
-<?php if (is_null(View::get('recent'))) { ?>
-  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyDORLARDVNHaHBSLZ0UG-1EGABk-IH2uq0&sensor=false"></script>
-  <script type="text/javascript">
-    function initialize() {
-      var locations = [
-        <?php foreach ($sublets as $sublet) { ?>
+
+<div class="resultswithmap">
+  <?php if (is_null(View::get('recent'))) { ?>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyDORLARDVNHaHBSLZ0UG-1EGABk-IH2uq0&sensor=false"></script>
+    <script type="text/javascript">
+      function initialize() {
+        var locations = [
+          <?php foreach ($sublets as $sublet) { ?>
+            {
+              title: "<?php View::jsecho($sublet['title']); ?>",
+              link: "sublet.php?id=<?php View::jsecho($sublet['_id']->{'$id'}); ?>",
+              photo: "<?php View::jsecho($sublet['photo']); ?>",
+              summary: "<?php View::jsecho($sublet['summary']); ?>",
+              price: "<?php View::jsecho($sublet['price']); ?>",
+              pricetype: "<?php View::jsecho($sublet['pricetype']); ?>",
+              latitude: <?php echo $sublet['latitude']; ?>,
+              longitude: <?php echo $sublet['longitude']; ?>
+            },
+          <?php } ?>
+        ];
+
+        var searchzone = new google.maps.LatLng(<?php View::echof('latitude'); ?>, <?php View::echof('longitude'); ?>);
+
+        var styles = [
           {
-            title: "<?php View::jsecho($sublet['title']); ?>",
-            link: "sublet.php?id=<?php View::jsecho($sublet['_id']->{'$id'}); ?>",
-            photo: "<?php View::jsecho($sublet['photo']); ?>",
-            summary: "<?php View::jsecho($sublet['summary']); ?>",
-            price: "<?php View::jsecho($sublet['price']); ?>",
-            pricetype: "<?php View::jsecho($sublet['pricetype']); ?>",
-            latitude: <?php echo $sublet['latitude']; ?>,
-            longitude: <?php echo $sublet['longitude']; ?>
-          },
-        <?php } ?>
-      ];
+            stylers: [
+              { hue: "#035d75" },
+              { saturation: -10 }
+            ]
+          },{
+            featureType: "road",
+            elementType: "geometry",
+            stylers: [
+              { lightness: 10},
+              { visibility: "simplified" }
+            ]
+          },{
+            featureType: "road.local",
+            elementType: "labels",
+            stylers: [
+              { visibility: "off" }
+            ]
+          }
+        ];
 
-      var searchzone = new google.maps.LatLng(<?php View::echof('latitude'); ?>, <?php View::echof('longitude'); ?>);
+        var mapOptions = {
+          center: searchzone,
+          /*adjust number to change starting zoom size*/
+          zoom: Math.round(14 - <?php View::echof('maxProximity') ?> / 50 * 2),
+          styles: styles
+        };
 
-      var styles = [
-        {
-          stylers: [
-            { hue: "#035d75" },
-            { saturation: -10 }
-          ]
-        },{
-          featureType: "road",
-          elementType: "geometry",
-          stylers: [
-            { lightness: 10},
-            { visibility: "simplified" }
-          ]
-        },{
-          featureType: "road.local",
-          elementType: "labels",
-          stylers: [
-            { visibility: "off" }
-          ]
+        var map = new google.maps.Map(document.getElementById('map-canvas'),
+            mapOptions);
+
+        // set icon for marker
+        var houseicon = '<?php echo $GLOBALS['dirpre']; ?>assets/gfx/map/marker.png';
+
+        // create the markers and infowindows based on array location
+        for (var i = 0; i < locations.length; i++) {
+          var address = new google.maps.LatLng(locations[i].latitude, locations[i].longitude);
+
+          var marker = new google.maps.Marker({
+            position: address,
+            map: map,
+            icon: houseicon
+          });
+
+          var infowindow = new google.maps.InfoWindow();
+
+          // creates infowindow when marker is clicked
+          google.maps.event.addListener(marker, 'click', (function (marker, i) {
+            return function() {
+              //content for info window in html
+              //change divs to format text
+              infowindow.setContent(
+                '<div class="iwcontent">' +
+                  '<h3 class="iwfirstHeading" class="firstHeading">' +
+                    '<a href ="' + locations[i].link + '" target="_blank">' +
+                      locations[i].title +
+                    '</a>' +
+                  '</h3>' +
+                  '<div class="iwbodyContent">' +
+                    '<div class="iwpic" style="background-image: url(\'' +
+                      locations[i].photo +
+                    '\');">' +
+                      '<div class="iwprice">$' +
+                        locations[i].price + '/' + locations[i].pricetype +
+                      '</div>' +
+                    '</div>' +
+                    '<p>' +
+                      locations[i].summary +
+                    '</p>' +
+                  '</div>' +
+                '</div>');
+
+              infowindow.open(map,marker);
+            }
+          })(marker, i));
         }
-      ];
 
-      var mapOptions = {
-        center: searchzone,
-        /*adjust number to change starting zoom size*/
-        zoom: Math.round(14 - <?php View::echof('maxProximity') ?> / 50 * 2),
-        styles: styles
-      };
-
-      var map = new google.maps.Map(document.getElementById('map-canvas'),
-          mapOptions);
-
-      // set icon for marker
-      var houseicon = '<?php echo $GLOBALS['dirpre']; ?>assets/gfx/map/marker.png';
-
-      // create the markers and infowindows based on array location
-      for (var i = 0; i < locations.length; i++) {
-        var address = new google.maps.LatLng(locations[i].latitude, locations[i].longitude);
-
-        var marker = new google.maps.Marker({
-          position: address,
+        // Marker for search location
+        var searchLocMarkerIcon = '<?php echo $GLOBALS['dirpre']; ?>assets/gfx/map/map-marker-icon.png';
+        var searchLocMarker = new google.maps.Marker({
+          position: searchzone,
           map: map,
-          icon: houseicon
+          icon: searchLocMarkerIcon
         });
 
-        var infowindow = new google.maps.InfoWindow();
-
-        // creates infowindow when marker is clicked
-        google.maps.event.addListener(marker, 'click', (function (marker, i) {
-          return function() {
-            //content for info window in html
-            //change divs to format text
-            infowindow.setContent(
-              '<div class="iwcontent">' +
-                '<h3 class="iwfirstHeading" class="firstHeading">' +
-                  '<a href ="' + locations[i].link + '" target="_blank">' +
-                    locations[i].title +
-                  '</a>' +
-                '</h3>' +
-                '<div class="iwbodyContent">' +
-                  '<div class="iwpic" style="background-image: url(\'' +
-                    locations[i].photo +
-                  '\');">' +
-                    '<div class="iwprice">$' +
-                      locations[i].price + '/' + locations[i].pricetype +
-                    '</div>' +
-                  '</div>' +
-                  '<p>' +
-                    locations[i].summary +
-                  '</p>' +
-                '</div>' +
-              '</div>');
-
-            infowindow.open(map,marker);
-          }
-        })(marker, i));
+        //clicking map will close opened infowindow
+        google.maps.event.addListener(map, 'click', function() {
+          infowindow.close(map, marker);
+        });
       }
 
-      // Marker for search location
-      var searchLocMarkerIcon = '<?php echo $GLOBALS['dirpre']; ?>assets/gfx/map/map-marker-icon.png';
-      var searchLocMarker = new google.maps.Marker({
-        position: searchzone,
-        map: map,
-        icon: searchLocMarkerIcon
-      });
-
-      //clicking map will close opened infowindow
-      google.maps.event.addListener(map, 'click', function() {
-        infowindow.close(map, marker);
-      });
-    }
-
-    google.maps.event.addDomListener(window, 'load', initialize);
-  </script>
-  <panel class="resultsmap">
-    <div id="map-canvas"></div>
-  </panel>
-<?php } ?>
-
-<panel class="results">
-  <?php if (View::get('showSearch')) View::partial('subletsearchform', View::get('data')); ?>
-
-  <?php if (!is_null(View::get('recent'))) { ?>
-    <div class="content">
-      <headline>Recent Listings</headline>
+      google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+    <panel class="resultsmap">
+      <div id="map-canvas"></div>
+    </panel>
   <?php } ?>
-      <div class="list">
-        <?php
-          if (isset($_GET['delay'])) View::echof('delay', '<div style="text-align: center;"><i>Results returned in {var} ms</div><br />');
 
-          foreach ($sublets as $sublet) {
-            echo subletBlock($sublet);
-          }
-          if (count($sublets) == 0) {
-            echo "No sublets matching your query. But don't fret! New sublets are being added regularly.";
-          }
-        ?>
+  <panel class="results">
+    <?php if (View::get('showSearch')) View::partial('subletsearchform', View::get('data')); ?>
+
+    <?php if (!is_null(View::get('recent'))) { ?>
+      <div class="content">
+        <headline>Recent Listings</headline>
+    <?php } ?>
+        <div class="list">
+          <?php
+            if (isset($_GET['delay'])) View::echof('delay', '<div style="text-align: center;"><i>Results returned in {var} ms</div><br />');
+
+            foreach ($sublets as $sublet) {
+              echo subletBlock($sublet);
+            }
+            if (count($sublets) == 0) {
+              echo "No sublets matching your query. But don't fret! New sublets are being added regularly.";
+            }
+          ?>
+        </div>
+    <?php if (!is_null(View::get('recent'))) { ?>
+        <a href="?showMore">Show More</a>
+        <?php if (View::get('showMore')) { ?>
+          <script>scrollTo('.subletblock', <?php View::echof('showMore'); ?>-7);</script>
+        <?php } ?>
       </div>
-  <?php if (!is_null(View::get('recent'))) { ?>
-      <a href="?showMore">Show More</a>
-      <?php if (View::get('showMore')) { ?>
-        <script>scrollTo('.subletblock', <?php View::echof('showMore'); ?>-7);</script>
-      <?php } ?>
-    </div>
-  <?php } ?>
-</panel>
-<div class="clear"></div>
+    <?php } ?>
+  </panel>
+  <div class="clear"></div>
+</div>
