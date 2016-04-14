@@ -31,7 +31,10 @@
   }
   showMore {
     cursor: pointer;
-    display: none;
+    display: block;
+  }
+  showMore.disabled {
+    color: #999;
   }
 </style>
 
@@ -52,11 +55,16 @@
 
 <script>
   $(function () {
-    $('showMore').click(function () {
-      Jobs.count = 10;
+    $('showMore').hide().click(function () {
+      if ($(this).hasClass('disabled')) return;
 
-      if (Jobs.state == 'recent') Jobs.load({}, false);
-      else Jobs.search(false);
+      Jobs.count = 10;
+      $(this).addClass('disabled');
+
+      function enable() { $('showMore').removeClass('disabled'); }
+
+      if (Jobs.state == 'recent') Jobs.load({}, false, enable);
+      else Jobs.search(false, enable);
     });
 
     $('showFilters').click(function () {
