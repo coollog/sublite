@@ -1,5 +1,17 @@
+<templates>
+  <locationtemplate>
+    <div class="form-slider locationdiv">
+      <label for="location{index}">Job Location (Address, City, State):</label>
+      <input type="text" id="location{index}" name="location" maxlength="500"
+             value="{location}" required />
+    </div>
+  </locationtemplate>
+</templates>
+
 <script>
   $(function () {
+    Templates.init();
+
     var salaryText = $('label[for=salary]').html();
     var commissionText = 'Commission:';
 
@@ -12,6 +24,58 @@
     }
     $('#commission').change(setSalaryLabel);
     setSalaryLabel();
+
+    if($("#fulltime, #parttime").is(":checked")){
+      $("#durationdiv").hide();
+      $("#enddatediv").hide();
+    }
+
+    $("#fulltime, #parttime").click(function(){
+      $("#durationdiv").hide(400);
+      $("#enddatediv").hide(400);
+    });
+
+    $("#internship").click(function(){
+      $("#durationdiv").show(400);
+      $("#enddatediv").show(400);
+    });
+
+    (function workFromHomeToggleLocations() {
+      $('#locationtype').click(function() {
+        var tmpLocation = $("input[name=location]").attr('value');
+        if ($(this).is(":checked")) {
+          tmpLocation = $("input[name=location]").attr('value');
+          $("input[name=location]").prop('required', false).val('');
+          $(".locationdiv").slideUp(200, 'easeOutCubic');
+        } else {
+          $("input[name=location]").prop('required', true).val(tmpLocation);
+          $(".locationdiv").slideDown(200, 'easeOutCubic');
+        }
+      });
+
+      if ($("#locationtype").is(":checked")) {
+        $("input[name=location]").prop('required', false);
+        $(".locationdiv").hide();
+      } else {
+        $("input[name=location]").prop('required', true);
+        $(".locationdiv").show();
+      }
+    })();
+
+    (function JobLocations() {
+      var count = 0;
+
+      this.add = function () {
+
+      }
+
+      $('input[name=location]').off('keydown').on('keydown', function () {
+
+      });
+
+      // Add all locations.
+      this.add(0, '<?php View::echof('location'); ?>');
+    })();
   });
 </script>
 
@@ -133,12 +197,11 @@
         <label for="locationtype"> Work at home job</label>
       </left>
 
-      <div class="form-slider" id="locationdiv">
-        <label for="location">Job Location (Address, City, State):</label>
-        <input type="text" id="location" name="location" maxlength="500"
-               value="<?php View::echof('location'); ?>" required />
+      <div class="locationdivs">
+
       </div>
 
+      <br />
       <input type="checkbox" name="terms" id="terms" value="agree" required />
       <label for="terms">
         I represent and warrant that I am employed by the company offering the

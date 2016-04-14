@@ -63,47 +63,6 @@
     });
     $('form:not(.js-allow-double-submission)').preventDoubleSubmission();
 
-    if($("#fulltime, #parttime").is(":checked")){
-      $("#durationdiv").hide();
-      $("#enddatediv").hide();
-    }
-
-    $("#fulltime, #parttime").click(function(){
-      $("#durationdiv").hide(400);
-      $("#enddatediv").hide(400);
-    });
-
-    $("#internship").click(function(){
-      $("#durationdiv").show(400);
-      $("#enddatediv").show(400);
-    });
-
-    $('#locationtype').click(function() {
-      var tmpLocation = $("#location").attr('value');
-      if($(this).is(":checked"))
-      {
-        tmpLocation = $("#location").attr('value');
-        $("#location").val('');
-        $("#location").prop('required', false);
-        $("#locationdiv").fadeTo(400, 0);
-        $("#locationdiv").css('visibility','hidden');
-      } else {
-        $("#location").prop('required', true);
-        $("#locationdiv").css('visibility','visible');
-        $("#locationdiv").fadeTo(400, 1);
-        $("#location").val(tmpLocation);
-      }
-    });
-
-    if($("#locationtype").is(":checked"))
-    {
-      $("#location").prop('required', false);
-      $("#locationdiv").css('visibility','hidden');
-    } else {
-      $("#location").prop('required', true);
-      $("#locationdiv").css('visibility','visible');
-    }
-
     formSetup();
   });
 
