@@ -171,6 +171,8 @@
 
 <script>
   $(function() {
+    Templates.init();
+
     var profileData = $('#profileData').html();
     var profile = JSON.parse(profileData);
     setupProfile(profile);
