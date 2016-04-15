@@ -60,6 +60,7 @@
     },
 
     use: function (templateName, data) {
+      console.log(templateName)
       var html = this.templateHTML[templateName];
       if (!isObject(data)) return this.error;
       for (var key in data) {
