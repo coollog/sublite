@@ -63,9 +63,11 @@
       // Perform validations.
       if (!isset($_FILES['file'])) return respond('no file selected');
       switch ($_FILES['file']['error']) {
+        case UPLOAD_ERR_OK: break;
         case UPLOAD_ERR_FORM_SIZE: return respond('max file size exceeded');
         case UPLOAD_ERR_NO_FILE: return respond('no file selected');
         case UPLOAD_ERR_INI_SIZE: return respond('file too large');
+        default: return respond('file failed to upload');
       }
       if ($_FILES['file']['size'] > 10*1024*1024)
         return respond('max file size exceeded');
