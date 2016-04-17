@@ -23,14 +23,18 @@
 
     function reply($id, $from, $msg) {
       $entry = $this->get($id);
+      $currentTime = time();
       array_push($entry['replies'], array(
-        'from' => $from, 'msg' => $msg, 'time' => time(), 'read' => false
+        'from' => $from, 'msg' => $msg, 'time' => $currentTime, 'read' => false
       ));
       foreach ($entry['participants'] as $participant) {
         if ($participant != $from) {
           $this->incrementUnread(new MongoId($participant));
         }
       }
+
+      $entry['time'] = $currentTime;
+
       self::$collection->save($entry);
       return $entry;
     }
@@ -39,7 +43,7 @@
       return self::$collection->find(array(
         'participants' => $participant,
         'replies' => array('$not' => array('$size' => 0))
-      ));
+      ))->sort(array('time' => 1));
     }
 
     function getLastOf($id) {
