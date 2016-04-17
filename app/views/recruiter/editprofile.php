@@ -21,11 +21,13 @@
 
       <div class="form-slider"><label for="phone">Phone number:</label><input type="text" id="phone" name="phone" value="<?php View::echof('phone'); ?>" /></div>
 
-      <input type="hidden" name="photo" value="<?php View::echof('photo'); ?>" />
-      <subheadline>Upload Photo</subheadline>
-      <div class="iframe"><iframe class="S3" src="S3.php"></iframe></div>
-      <subheadline>Current Photo</subheadline>
-      <div class="img"><img src="<?php View::echof('photo'); ?>" /></div>
+      <?php
+        View::partial('s3single', [
+          's3name' => 'photo',
+          's3title' => '',
+          's3link' => View::get('photo')
+        ]);
+      ?>
 
       <?php View::notice(); ?>
       <right><input type="submit" name="edit" value="Save Profile" /></right>
@@ -34,12 +36,5 @@
 </panel>
 
 <script>
-  function addImg(url) {
-    $('.img').html('<img class="img" src="' + url + '" />');
-    $('input[name=photo]').val(url);
-  }
-  $(function() {
-
-  });
   formunloadmsg("Are you sure you wish to leave this page? Unsaved changes will be lost.");
 </script>

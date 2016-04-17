@@ -23,8 +23,8 @@
         } else {
           $sublet['photo'] = $sublet['photos'][0];
         }
-        if ($sublet['city'] != '') $sublet['address'] .= $sublet['city'];
-        if ($sublet['state'] != '') $sublet['address'] .= $sublet['state'];
+        if ($sublet['city'] != '') $sublet['address'] .= ", $sublet[city]";
+        if ($sublet['state'] != '') $sublet['address'] .= ", $sublet[state]";
         $data[] = $sublet;
       }
 

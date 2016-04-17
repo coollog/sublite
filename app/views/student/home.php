@@ -156,6 +156,10 @@
           max-height: 35px;
           overflow: hidden;
         }
+        items.applications item company {
+          max-height: 15px;
+          overflow: hidden;
+        }
         items.applications item desc {
           margin: 1.5em 0;
           height: 90px;
@@ -244,7 +248,7 @@
         </logo>
         <headerinfo class="inlinediv">
           <name class="div">{title}</name>
-          <company>{company}</company>
+          <company class="div">{company}</company>
         </headerinfo>
         <desc class="div">{desc}</desc>
         <deadline>{deadline}</deadline>

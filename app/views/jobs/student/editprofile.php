@@ -171,6 +171,8 @@
 
 <script>
   $(function() {
+    Templates.init();
+
     var profileData = $('#profileData').html();
     var profile = JSON.parse(profileData);
     setupProfile(profile);
@@ -341,9 +343,9 @@
 
           // Set up smallinput and hide field.
           if (myType == 'textarea') {
-            var inputHTML = useTemplate('fieldtextareatemplate', data);
+            var inputHTML = Templates.use('fieldtextareatemplate', data);
           } else {
-            var inputHTML = useTemplate('fieldinputtemplate', data);
+            var inputHTML = Templates.use('fieldinputtemplate', data);
           }
           $(this).after(inputHTML).hide();
           $('section .smallinput[parent='+myId+']').focus();

@@ -307,11 +307,11 @@
   Router::register('runtests', function() {
     require_once($GLOBALS['dirpre'].'tests/runtests.php');
   });
-  Router::register('S3', function() {
-    GLOBALvarGet('CS3')->upload();
+  Router::register('S3/image', function() {
+    S3ControllerAJAX::uploadImage();
   });
   Router::register('S3/resume', function() {
-    S3Controller::resume();
+    S3ControllerAJAX::uploadResume();
   });
   Router::register('stats', function() {
     JobController::requireLogin();
@@ -493,9 +493,7 @@
 
   Router::route('/runtests', 'runtests');
 
-  Router::route('/S3', 'S3');
-  Router::route('/employers/S3', 'S3');
-  Router::route('/housing/S3', 'S3');
+  Router::route('/S3/image', 'S3/image');
   Router::route('/S3/resume', 'S3/resume');
   Router::route('/student/profile', 'student/profile');
 
