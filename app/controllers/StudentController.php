@@ -128,8 +128,8 @@
         $graduationMonth = $data['graduateGraduationMonth'];
         $graduationYear = $data['graduateGraduationYear'];
       }
-      $major = $data['majorChooser'];
-      $gpa = $data['gpaChooser'];
+      $major = isset($data['majorChooser']) ? $data['majorChooser'] : null;
+      $gpa = isset($data['gpaChooser']) ? $data['gpaChooser'] : null;
       $industry = isset($data['industryChooser']) ? array_map("htmlspecialchars_decode", $data['industryChooser']) : array();
       $cities = isset($data['citiesChooser']) ? $data['citiesChooser'] : array();
       if(is_null($industry))
@@ -499,8 +499,8 @@
       // Params to vars
       extract($data = $this->data($params));
       $registration = self::registrationData($params);
-      $data = array_merge($data, $registration);
       $saveData = array_merge($data, array("registration" => $registration));
+      $data = array_merge($data, $registration);
 
       $this->validate(strlen($photo) > 0,
         $err, 'must have profile picture');
