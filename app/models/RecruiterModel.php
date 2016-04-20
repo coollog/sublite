@@ -151,6 +151,24 @@
       return self::get($_SESSION['email']);
     }
 
+    public static function login($email, $pass) {
+      if (is_null($entry = self::get($email))) return false;
+      // Matches old hash
+      // password_get_info algoName is 'unknown' if (old) passwords are
+      // encrypted with crypt() and 'bcrypt' if encrypted with password_hash()
+      // (new)
+      if (password_get_info($entry['pass'])['algoName'] == 'unknown'
+          && hash_equals($entry['pass'], crypt($pass, $entry['pass']))) {
+        $entry['pass'] = password_hash($pass, PASSWORD_DEFAULT);
+        self::save($entry);
+        return true;
+      }
+
+      return password_verify($pass, $entry['pass']);
+    }
+
+    function __construct() {}
+
     public static function save(array $data) {
       $data['msgs'] = [];
       self::$collection->save($data);
@@ -160,13 +178,6 @@
     public static function hasCompany() {
       $me = self::me();
       return MongoId::isValid($me['company']);
-    }
-
-    function __construct() {}
-
-    function login($email, $pass) {
-      if (is_null($entry = $this->get($email))) return false;
-      return hash_equals($entry['pass'], crypt($pass, $entry['pass']));
     }
 
     function get($email) {

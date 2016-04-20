@@ -17,6 +17,13 @@
      * Retrieves just email, name, and school name.
      */
     public static function getByIdMinimal(MongoId $studentId);
+
+    /**
+     * Prefers to check against more secure hash using password_verify(). If
+     * the check fails but $entry['pass'] == md5(pass), we create a new hash
+     * using password_hash() and replace the old hash.
+     */
+    public static function login($email, $pass);
   }
 
   class StudentModel extends Model {
@@ -81,6 +88,22 @@
       $update->run();
     }
 
+    public static function login($email, $pass) {
+      if (is_null($entry = self::get($email))) return false;
+      // Matches new hash
+      if (password_verify($pass, $entry['pass'])) {
+        return true;
+      }
+      // Matches old hash
+      if ($entry['pass'] == md5($pass)) {
+        $entry['pass'] = password_hash($pass, PASSWORD_DEFAULT);
+        self::save($entry);
+        return true;
+      } else {
+        return false;
+      }
+    }
+
     public function __construct() {
       parent::__construct(self::DB_TYPE, 'emails');
     }
@@ -137,11 +160,6 @@
         );
       }
 
-    }
-
-    function login($email, $pass) {
-      if (is_null($entry = $this->get($email))) return false;
-      return $entry['pass'] == md5($pass);
     }
 
     function delete($id) {

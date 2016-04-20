@@ -264,7 +264,7 @@
 
           $err = "Your account has not been confirmed yet. A confirmation email has been sent to <strong>$email</strong>. Check your inbox or spam. The email may take up to 24 hours to show up.";
         } else {
-          $this->validate($MStudent->login($email, $pass),
+          $this->validate(StudentModel::login($email, $pass),
             $err, 'invalid credentials <br><small><a href="' . $GLOBALS['dirpre'] . '../employers/login">Are you trying to log in as a recruiter?</a></small>');
 
           if ($this->isValid()) {
@@ -454,7 +454,7 @@
             $err, 'must have profile picture');
 
           if ($this->isValid()) {
-            $pass = md5($pass);
+            $pass = password_hash($pass, PASSWORD_DEFAULT);
             // Save new account information
             $entry['name'] = $name;
             $entry['pass'] = $pass;
@@ -545,7 +545,7 @@
         $this->validate($pass == $pass2, $err, 'password mismatch');
 
         if ($this->isValid()) {
-          $entry['pass'] = md5($pass);
+          $entry['pass'] = password_hash($pass, PASSWORD_DEFAULT);
           $MStudent->save($entry);
 
           $params['email'] = $entry['email'];
@@ -653,7 +653,7 @@
         self::validate(($entry = $MStudent->get($email)) != NULL,
           $err, 'unknown email');
         if (!$skippass) {
-          self::validate($entry['pass'] == md5($pass),
+          self::validate(password_verify($pass, $entry['pass']) or $entry['pass'] == md5($pass),
             $err, 'invalid password');
         }
 
