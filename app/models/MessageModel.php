@@ -42,8 +42,8 @@
     function findByParticipant($participant) {
       return self::$collection->find(array(
         'participants' => $participant,
-        'replies' => array('$not' => array('$size' => 0))
-      ))->sort(array('time' => 1));
+        'replies' => [ '$not' => [ '$size' => 0 ] ]
+      ))->sort([ 'time' => 1 ]);
     }
 
     function getLastOf($id) {
