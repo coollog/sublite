@@ -119,7 +119,8 @@
         'company' => $companyprof,
         'stats' => $stats,
         'messages' => toJSON($messages),
-        'jobs' => $jobListings
+        'jobs' => $jobListings,
+        'id' => $myId
       ]);
     }
 
