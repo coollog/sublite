@@ -3,7 +3,7 @@
   require_once($GLOBALS['dirpre'].'controllers/modules/application/Question.php');
 
   interface AdminControllerInterface {
-
+    public static function login();
   }
 
   interface AdminControllerQuestionsInterface {
@@ -65,7 +65,7 @@
   }
 
   class AdminControllerQuestions extends AdminController
-                                implements AdminControllerQuestionsInterface {
+                                 implements AdminControllerQuestionsInterface {
     public static function manage() {
       self::ensureAdmin();
 

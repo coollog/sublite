@@ -161,13 +161,13 @@
     ApplicationControllerAJAX::claimApplications();
   });
   Router::register('faq', function() {
-    GLOBALvarGet('CApp')->faq();
+    AppController::faq();
   });
   Router::register('favicon.ico', function() {
     Controller::redirect('app/assets/gfx/favicon.png');
   });
   Router::register('feedback', function() {
-    GLOBALvarGet('CApp')->feedback();
+    AppController::feedback();
   });
   Router::register('forgotpass', function() {
     GLOBALvarGet('CStudent')->forgotPass();
@@ -285,7 +285,7 @@
     GLOBALvarGet('CMessage')->add();
   });
   Router::register('privacy', function() {
-    GLOBALvarGet('CApp')->privacy();
+    AppController::privacy();
   });
   Router::register('redirect', function() {
     GLOBALvarGet('MJob')->incrementApply($_GET['id']);
@@ -346,10 +346,10 @@
     GLOBALvarGet('CStudent')->view();
   });
   Router::register('team', function() {
-    GLOBALvarGet('CApp')->team();
+    AppController::team();
   });
   Router::register('terms', function() {
-    GLOBALvarGet('CApp')->terms();
+    AppController::terms();
   });
   Router::register('whereto', function() {
     GLOBALvarGet('CStudent')->whereto();
