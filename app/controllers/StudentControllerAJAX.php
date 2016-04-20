@@ -69,6 +69,7 @@
       foreach ($messages as $m) {
         $reply = array_pop($m['replies']);
         $reply['_id'] = $m['_id'];
+        $reply['msg'] = encodeSpecialChars($reply['msg']);
 
         $from = $reply['from'];
 

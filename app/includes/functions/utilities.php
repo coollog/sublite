@@ -198,6 +198,10 @@
     return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== FALSE);
   }
 
+  function encodeSpecialChars($str) {
+    return htmlspecialchars(htmlspecialchars_decode($str, ENT_QUOTES));
+  }
+
   /**
    * @param $value
    * @return mixed
@@ -217,13 +221,13 @@
         $val = escapeJson($val);
       } else if (is_string($val)) {
         // $val = escapeJsonString($val);
-        $val = htmlspecialchars(htmlspecialchars_decode($val, ENT_QUOTES));
+        $val = encodeSpecialChars($val);
         // $val = htmlspecialchars(
         //     htmlspecialchars_decode($val, ENT_QUOTES), ENT_QUOTES);
       }
 
       if (is_string($key))
-        $newKey = htmlspecialchars(htmlspecialchars_decode($key, ENT_QUOTES));
+        $newKey = encodeSpecialChars($key);
       else
         $newKey = $key;
       $newArr[$newKey] = $val;
