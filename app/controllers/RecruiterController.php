@@ -120,7 +120,7 @@
         'stats' => $stats,
         'messages' => toJSON($messages),
         'jobs' => $jobListings,
-        'id' => $myId
+        '_id' => $myId
       ]);
     }
 
