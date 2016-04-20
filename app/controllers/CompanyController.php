@@ -2,139 +2,106 @@
   require_once($GLOBALS['dirpre'].'controllers/Controller.php');
 
   interface CompanyControllerInterface {
+    // Process and clean up data from user or db.
+    public static function data(array $data);
     // View list of companies.
     public static function viewAll();
+    // Add a new company.
+    public static function add();
+    // Edit an existing company.
+    public static function edit();
+    // Display the company.
+    public static function view();
   }
 
   class CompanyController extends Controller
                           implements CompanyControllerInterface {
+    public static function data(array $data) {
+      // List of keys in $data to use.
+      $dataKeys = [
+        'name', 'size', 'desc', 'founded', 'location', 'corevalues', 'funfacts',
+        'society', 'socialevent', 'colorscheme', 'media', 'employees', 'perks',
+        'forfun', 'dessert', 'talent', 'dresscode', 'freequestion1',
+        'freeanswer1', 'freequestion2', 'freeanswer2'
+      ];
+
+      // Extract from $data the values to return.
+      $retData = [];
+      foreach ($dataKeys as $key) {
+        $retData[$key] = clean($data[$key]);
+      }
+
+      // Perform key-specific actions.
+      $industry = "";
+      if (isset($data['industry'])) {
+        $industry = $data['industry'];
+        if (is_array($industry)) {
+          $industry = clean(implode(', ', $industry));
+        }
+      }
+      $retData['industry'] = $industry;
+
+      $retData['bannerphoto'] =
+        isset($data['bannerphoto']) ? clean($data['bannerphoto']) : "";
+
+      $retData['logophoto'] =
+        isset($data['logophoto']) ? clean($data['logophoto']) : "";
+
+      $photos = [];
+      if (isset($data['photos'])) {
+        foreach ($data['photos'] as $photo) $photos[] = clean($photo);
+      }
+      $retData['photos'] = $photos;
+
+      return $retData;
+    }
+
     public static function viewAll() {
       self::displayMetatags('companyprofile');
       self::render('companies/list');
     }
 
-    function format($token) {
-      return $token;
-    }
+    public static function add() {
+      RecruiterController::requireLogin();
 
-    function data($data) {
-      $name = self::format(clean($data['name']));
-      if (isset($data['industry'])) {
-        $industry = $data['industry'];
-        if (is_array($industry)) {
-          $industry = implode(', ', $industry);
-          $industry = self::format(clean($industry));
-        }
-      } else {
-        $industry = "";
-      }
-      $size = self::format(clean($data['size']));
-      $desc = self::format(clean($data['desc']));
-      $founded = self::format(clean($data['founded']));
-      $location = self::format(clean($data['location']));
-      $corevalues = self::format(clean($data['corevalues']));
-      $bannerphoto = "";
-      if(isset($data['bannerphoto'])) {
-        $bannerphoto = self::format(clean($data['bannerphoto']));
-      }
-      $logophoto = "";
-      if(isset($data['logophoto'])) {
-        $logophoto = self::format(clean($data['logophoto']));
-      }
-      $photos = array();
-      if (isset($data['photos'])) {
-        foreach ($data['photos'] as $photo)
-          $photos[] = self::format(clean($photo));
-      }
-      $funfacts = self::format(clean($data['funfacts']));
-      $society = self::format(clean($data['society']));
-      $socialevent = self::format(clean($data['socialevent']));
-      $colorscheme = self::format(clean($data['colorscheme']));
-      $media = self::format(clean($data['media']));
-      $employees = self::format(clean($data['employees']));
-      $perks = self::format(clean($data['perks']));
-      $forfun = self::format(clean($data['forfun']));
-      $dessert = self::format(clean($data['dessert']));
-      $talent = self::format(clean($data['talent']));
-      $dresscode = self::format(clean($data['dresscode']));
-      $freequestion1 = self::format(clean($data['freequestion1']));
-      $freeanswer1 = self::format(clean($data['freeanswer1']));
-      $freequestion2 = self::format(clean($data['freequestion2']));
-      $freeanswer2 = self::format(clean($data['freeanswer2']));
-      return array(
-        'name' => $name, 'industry' => $industry, 'size' => $size,
-        'desc' => $desc, 'founded' => $founded, 'location' => $location,
-        'corevalues' => $corevalues, 'bannerphoto' => $bannerphoto,
-        'logophoto' => $logophoto, 'photos' => $photos,
-        'funfacts' => $funfacts,
-        'society' => $society, 'socialevent' => $socialevent,
-        'colorscheme' => $colorscheme, 'media' => $media,
-        'employees' => $employees, 'perks' => $perks, 'forfun' => $forfun,
-        'dessert' => $dessert, 'talent' => $talent, 'dresscode' => $dresscode,
-        'freequestion1' => $freequestion1, 'freeanswer1' => $freeanswer1,
-        'freequestion2' => $freequestion2, 'freeanswer2' => $freeanswer2
-      );
-    }
-    function validateData($data, &$err) {
-      $answered = 0;
-      foreach (array('funfacts', 'society', 'socialevent', 'colorscheme',
-                     'media', 'employees', 'perks', 'forfun', 'dessert',
-                     'talent', 'dresscode', 'freequestion1', 'freequestion2')
-              as $key) {
-        if (strlen($data[$key]) > 0) $answered ++;
-      }
-      $this->validate(strlen($data['industry']) > 0,
-        $err, 'must choose at least 1 industry');
-      $this->validate(strlen($data['bannerphoto']) > 0,
-        $err, 'must upload banner image');
-      $this->validate(strlen($data['logophoto']) > 0,
-        $err, 'must upload logo');
-      $this->validate(count($data['photos']) >= 4,
-        $err, 'must upload at least 4 additional photos');
-      $this->validate($answered >= 6,
-        $err, 'must answer at least 6 questions');
-    }
-
-    function add() {
       function formData($data) {
         $data['industry'] = isset($data['industry']) ? explode(', ', $data['industry']) : array();
-        return array_merge($data, array(
+        return array_merge($data, [
           'headline' => 'Create',
-          'submitname' => 'add', 'submitvalue' => 'Add Company'));
+          'submitname' => 'add', 'submitvalue' => 'Add Company'
+        ]);
       }
 
-      global $CRecruiter; $CRecruiter->requireLogin();
-
-      global $params, $MCompany, $MRecruiter;
-
-      $me = $MRecruiter->me();
-      if (!isset($_POST['add'])) {
-        self::render('companies/form', formData(array(
-          'name' => $me['company']))); return;
-      }
-      // Params to vars
+      global $params;
+      $me = RecruiterModel::me();
       $params['name'] = $me['company'];
-      extract($data = $this->data($params));
+
+      if (!isset($_POST['add'])) {
+        self::render('companies/form', formData([
+          'name' => $params['name']
+        ]));
+        return;
+      }
+
+      extract($data = self::data($params));
 
       // Validations
-      $this->startValidations();
-      $this->validate(!$this->exists(),
-        $err, 'company exists');
-      $this->validateData($data, $err);
+      self::startValidations();
+      self::validate(!MongoId::isValid($me['company']), $err, 'company exists');
+      self::validateData($data, $err);
 
       // Code
-      if ($this->isValid()) {
-        $id = $MCompany->save($data);
-        $me = $MRecruiter->me();
+      if (self::isValid()) {
+        $id = CompanyModel::save($data);
         $me['company'] = new MongoID($id);
-        $MRecruiter->save($me);
+        RecruiterModel::save($me);
         $_SESSION['company'] = $id;
 
         // Add credit for making company profile.
         $recruiterId = $_SESSION['_id'];
         RecruiterModel::addCreditsForNewCompanyProfile($recruiterId);
 
-        $this->redirect('home');
+        self::redirect('home');
         return;
       }
 
@@ -142,63 +109,72 @@
       self::render('companies/form', formData($data));
     }
 
-    function edit() { // FIX THIS ADD GET INFO LIKE DATA FROM VIEW AND STUFF
-      global $CRecruiter; $CRecruiter->requireLogin();
+    public static function edit() {
+      RecruiterController::requireLogin();
 
-      global $params, $MCompany, $MRecruiter;
+      global $params;
       // Params to vars
-      $me = $MRecruiter->me();
+      $me = RecruiterModel::me();
       $id = $params['_id'] = $me['company'];
-      if (!MongoId::isValid($me['company'])) $this->redirect('addcompany');
+      if (!MongoId::isValid($me['company'])) self::redirect('addcompany');
 
       // Validations
-      $this->startValidations();
-      $this->validate(($entry = $MCompany->get($me['company'])) !== NULL,
+      self::startValidations();
+      self::validate(($entry = CompanyModel::get($me['company'])) !== NULL,
         $err, 'unknown company');
 
       // Code
-      if ($this->isValid()) {
-        function formData($data) {
+      if (self::isValid()) {
+        function formData(array $data) {
           $data['industry'] = explode(', ', $data['industry']);
-          return array_merge($data, array(
+          return array_merge($data, [
             'headline' => 'Edit',
-            'submitname' => 'edit', 'submitvalue' => 'Save Company'));
+            'submitname' => 'edit', 'submitvalue' => 'Save Company'
+          ]);
         }
 
         if (!isset($_POST['edit'])) {
-          self::render('companies/form', formData(array_merge($this->data($entry), array('_id' => $id->{'$id'})))); return;
+          self::render('companies/form', formData(
+            array_merge(self::data($entry), [ '_id' => $id->{'$id'} ])
+          ));
+          return;
         }
 
         $params['name'] = $entry['name'];
-        extract($data = $this->data($params));
+        extract($data = self::data($params));
         // Validations
-        $this->validateData($data, $err);
+        self::validateData($data, $err);
 
-        if ($this->isValid()) {
+        if (self::isValid()) {
           $data['_id'] = new MongoId($id);
-          $MCompany->save($data);
-          $this->success('company saved');
-          self::render('companies/form', formData(array_merge($data, array('_id' => $id->{'$id'}))));
+          CompanyModel::save($data);
+          self::success('company saved');
+          self::render('companies/form', formData(
+            array_merge($data, [ '_id' => $id->{'$id'} ])
+          ));
           return;
         }
 
         self::error($err);
-        self::render('companies/form', formData(array_merge($this->data($data), array('_id' => $id->{'$id'})))); return;
+        self::render('companies/form', formData(
+          array_merge(self::data($data), [ '_id' => $id->{'$id'} ])
+        ));
+        return;
       }
 
       self::error($err);
       self::render('notice');
     }
 
-    function view() {
+    public static function view() {
       // Validations
-      $this->startValidations();
-      $this->validate(isset($_GET['id']) and
+      self::startValidations();
+      self::validate(isset($_GET['id']) and
         ($entry = CompanyModel::getById($id = new MongoId($_GET['id']))) != NULL,
         $err, 'unknown company');
 
       // Code
-      if ($this->isValid()) {
+      if (self::isValid()) {
         $data = $entry;
         $me = RecruiterModel::me();
 
@@ -213,12 +189,28 @@
       self::render('notice');
     }
 
-    function exists() {
-      global $MRecruiter;
-      $me = $MRecruiter->me();
-      return MongoId::isValid($me['company']);
+    private static function validateData(array $data, &$err) {
+      $optionalQuestions = [
+        'funfacts', 'society', 'socialevent', 'colorscheme',
+        'media', 'employees', 'perks', 'forfun', 'dessert',
+        'talent', 'dresscode', 'freequestion1', 'freequestion2'
+      ];
+
+      $answered = 0;
+      foreach ($optionalQuestions as $key) {
+        if (strlen($data[$key]) > 0) $answered ++;
+      }
+
+      self::validate(strlen($data['industry']) > 0,
+        $err, 'must choose at least 1 industry');
+      self::validate(strlen($data['bannerphoto']) > 0,
+        $err, 'must upload banner image');
+      self::validate(strlen($data['logophoto']) > 0,
+        $err, 'must upload logo');
+      self::validate(count($data['photos']) >= 4,
+        $err, 'must upload at least 4 additional photos');
+      self::validate($answered >= 6,
+        $err, 'must answer at least 6 questions');
     }
   }
-
-  GLOBALvarSet('CCompany', new CompanyController());
 ?>

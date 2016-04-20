@@ -229,16 +229,15 @@
     }
 
     function add() {
+      RecruiterController::requireLogin();
+
       function formData($data) {
         return array_merge($data, array(
           'headline' => 'Create',
           'submitname' => 'add', 'submitvalue' => 'Add Job'));
       }
 
-      global $CRecruiter; $CRecruiter->requireLogin();
-
-      global $CCompany;
-      if (!$CCompany->exists()) {
+      if (!RecruiterModel::hasCompany()) {
         $this->error('you must create a company profile first');
         self::render('notice'); return;
       }

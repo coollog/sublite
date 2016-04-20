@@ -26,7 +26,7 @@
   });
   Router::register('employers/addcompany', function() {
     Controller::displayMetatags('/employers');
-    GLOBALvarGet('CCompany')->add();
+    CompanyController::add();
   });
   Router::register('employers/addjob', function() {
     Controller::displayMetatags('/employers');
@@ -62,7 +62,7 @@
   });
   Router::register('employers/company', function() {
     Controller::displayMetatags('/employers');
-    GLOBALvarGet('CCompany')->view();
+    CompanyController::view();
   });
   Router::register('employers/createcustom', function () {
     echo ApplicationControllerAJAX::createCustom();
@@ -79,7 +79,7 @@
   });
   Router::register('employers/editcompany', function() {
     Controller::displayMetatags('/employers');
-    GLOBALvarGet('CCompany')->edit();
+    CompanyController::edit();
   });
   Router::register('employers/deletejob', function (array $restOfRoute) {
     Controller::displayMetatags('/employers');
@@ -260,7 +260,7 @@
     CompanyControllerAJAX::viewAll();
   });
   Router::register('jobs/company', function() {
-    GLOBALvarGet('CCompany')->view();
+    CompanyController::view();
   });
   Router::register('login', function() {
     GLOBALvarGet('CStudent')->login();

@@ -84,7 +84,7 @@
     }
 
     public static function feedback() {
-      function data($data) {
+      function data(array $data) {
         $name = clean($data['name']);
         $email = clean($data['email']);
         $feedback = clean($data['feedback']);
