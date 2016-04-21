@@ -460,12 +460,10 @@
           );
 
           // Near query.
+          $point = new GeoPoint($latitude, $longitude);
           $query['geoJSON'] = [
             '$near' => [
-              '$geometry' => [
-                'type' => 'Point',
-                'coordinates' => [ $longitude, $latitude ]
-              ],
+              '$geometry' => $point->toArray(),
               '$maxDistance' => miles2meters($maxProximity)
             ]
           ];
