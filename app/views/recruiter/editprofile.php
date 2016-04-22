@@ -9,17 +9,38 @@
   <div class="content">
     <headline>Edit Profile</headline>
     <form method="post">
-      <?php echo ' &nbsp; ' . View::linkTo('<input type="button" value="View Profile" /><br /><br />', 'recruiter', array('id' => View::get('L_id')->{'$id'})); ?>
+      <?php
+        echo ' &nbsp; ' .
+        View::linkTo('<input type="button" value="View Profile" /><br /><br />',
+                     'recruiter',
+                     [ 'id' => View::get('L_id')->{'$id'} ]);
+      ?>
 
       <?php View::notice(); ?>
 
-      <div class="form-slider"><label for="firstname">First Name:</label><input type="text" id="firstname" name="firstname" value="<?php View::echof('firstname'); ?>" required /></div>
+      <div class="form-slider">
+        <label for="firstname">First Name:</label>
+        <input type="text" id="firstname" name="firstname"
+               value="<?php View::echof('firstname'); ?>" required />
+      </div>
 
-      <div class="form-slider"><label for="lastname">Last Name:</label><input type="text" id="lastname" name="lastname" value="<?php View::echof('lastname'); ?>" required /></div>
+      <div class="form-slider">
+        <label for="lastname">Last Name:</label>
+        <input type="text" id="lastname" name="lastname"
+               value="<?php View::echof('lastname'); ?>" required />
+      </div>
 
-      <div class="form-slider"><label for="title">Job Title:</label><input type="text" id="title" name="title" value="<?php View::echof('title'); ?>" required /></div>
+      <div class="form-slider">
+        <label for="title">Job Title:</label>
+        <input type="text" id="title" name="title"
+               value="<?php View::echof('title'); ?>" required />
+      </div>
 
-      <div class="form-slider"><label for="phone">Phone number:</label><input type="text" id="phone" name="phone" value="<?php View::echof('phone'); ?>" /></div>
+      <div class="form-slider">
+        <label for="phone">Phone number:</label>
+        <input type="text" id="phone" name="phone"
+               value="<?php View::echof('phone'); ?>" required />
+      </div>
 
       <?php
         View::partial('s3single', [

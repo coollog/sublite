@@ -186,7 +186,7 @@
       // Params to vars
       $data = $params;
       $data['email'] = clean($params['email']);
-      $data['pass'] = crypt($params['pass']);
+      $data['pass'] = password_hash($params['pass'], PASSWORD_DEFAULT);
       $data['approved'] = 'pending';
       $data['unread'] = 0;
       extract($data = $this->data($data));
