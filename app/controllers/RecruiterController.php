@@ -452,7 +452,7 @@
           $jobs = $MJob->getByRecruiter($id);
           $data['jobtitles'] = array(); $data['joblocations'] = array();
           foreach ($jobs as $job) {
-            array_push($data['jobtitles'], $job['title']);
+            array_push($data['jobtitles'], [$job['title'], $job['_id']->{'$id'}]);
             array_push($data['joblocations'], $job['location']);
           }
 
