@@ -204,7 +204,9 @@
         <block>
           <btitle>Personal Profile</btitle>
 
-          <profpic class="roundpic"></profpic>
+          <a href="<?php echo $GLOBALS['dirpre']; ?>../employers/recruiter?id=<?php View::echof('_id')?>">
+            <profpic class="roundpic"></profpic>
+          </a>
 
           <name>
             <?php View::echoArray('personal', 'firstname'); ?>

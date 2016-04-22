@@ -63,10 +63,10 @@
     }
 
     function get($id) {
-      return self::$collection->findOne(array('_id' => new MongoId($id)));
+      return self::$collection->findOne([ '_id' => new MongoId($id) ]);
     }
     function getByName($name) {
-      return self::$collection->findOne(array('name' => $name));
+      return self::$collection->findOne([ 'name' => $name ]);
     }
     function getName($companyId) {
       $company = self::getById($companyId, ['name' => 1]);

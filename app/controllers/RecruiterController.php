@@ -119,7 +119,8 @@
         'company' => $companyprof,
         'stats' => $stats,
         'messages' => toJSON($messages),
-        'jobs' => $jobListings
+        'jobs' => $jobListings,
+        '_id' => $myId
       ]);
     }
 
@@ -277,7 +278,7 @@
         $err, 'invalid email');
       $this->validate(
         ($entry = $MRecruiter->get($email)) != NULL and
-        $MRecruiter->login($email, $pass),
+        RecruiterModel::login($email, $pass),
         $err, 'invalid credentials<br><small><a href="' . $GLOBALS['dirpre'] . '../../login">Are you trying to log in as a student?</a></small>');
       $this->validate($entry['approved'] == 'approved',
         $err, 'account is pending approval. please allow 1-2 business days for us to verify your account. we will contact you when we approve your account. thank you!');
@@ -366,7 +367,8 @@
           $MRecruiter->save($entry);
 
           $params['email'] = $entry['email'];
-          $_POST['login'] = true; $this->login();
+          $_POST['login'] = true;
+          $this->login();
           return;
         }
 
@@ -490,8 +492,7 @@
         self::validate(($entry = $MRecruiter->get($email)) != NULL,
           $err, 'unknown email');
         if (!$skippass) {
-          self::validate(hash_equals($entry['pass'], crypt($pass, $entry['pass'])),
-            $err, 'invalid password');
+          self::validate(RecruiterModel::login($email, $pass), $err, 'invalid password');
         }
 
         if (!self::isValid()) {

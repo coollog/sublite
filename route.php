@@ -26,7 +26,7 @@
   });
   Router::register('employers/addcompany', function() {
     Controller::displayMetatags('/employers');
-    GLOBALvarGet('CCompany')->add();
+    CompanyController::add();
   });
   Router::register('employers/addjob', function() {
     Controller::displayMetatags('/employers');
@@ -62,7 +62,7 @@
   });
   Router::register('employers/company', function() {
     Controller::displayMetatags('/employers');
-    GLOBALvarGet('CCompany')->view();
+    CompanyController::view();
   });
   Router::register('employers/createcustom', function () {
     echo ApplicationControllerAJAX::createCustom();
@@ -79,7 +79,7 @@
   });
   Router::register('employers/editcompany', function() {
     Controller::displayMetatags('/employers');
-    GLOBALvarGet('CCompany')->edit();
+    CompanyController::edit();
   });
   Router::register('employers/deletejob', function (array $restOfRoute) {
     Controller::displayMetatags('/employers');
@@ -161,13 +161,13 @@
     ApplicationControllerAJAX::claimApplications();
   });
   Router::register('faq', function() {
-    GLOBALvarGet('CApp')->faq();
+    AppController::faq();
   });
   Router::register('favicon.ico', function() {
     Controller::redirect('app/assets/gfx/favicon.png');
   });
   Router::register('feedback', function() {
-    GLOBALvarGet('CApp')->feedback();
+    AppController::feedback();
   });
   Router::register('forgotpass', function() {
     GLOBALvarGet('CStudent')->forgotPass();
@@ -260,7 +260,7 @@
     CompanyControllerAJAX::viewAll();
   });
   Router::register('jobs/company', function() {
-    GLOBALvarGet('CCompany')->view();
+    CompanyController::view();
   });
   Router::register('login', function() {
     GLOBALvarGet('CStudent')->login();
@@ -285,7 +285,7 @@
     GLOBALvarGet('CMessage')->add();
   });
   Router::register('privacy', function() {
-    GLOBALvarGet('CApp')->privacy();
+    AppController::privacy();
   });
   Router::register('redirect', function() {
     GLOBALvarGet('MJob')->incrementApply($_GET['id']);
@@ -346,10 +346,10 @@
     GLOBALvarGet('CStudent')->view();
   });
   Router::register('team', function() {
-    GLOBALvarGet('CApp')->team();
+    AppController::team();
   });
   Router::register('terms', function() {
-    GLOBALvarGet('CApp')->terms();
+    AppController::terms();
   });
   Router::register('whereto', function() {
     GLOBALvarGet('CStudent')->whereto();

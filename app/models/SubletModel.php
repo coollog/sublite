@@ -6,6 +6,8 @@
 
     function __construct() {
       parent::__construct(self::DB_TYPE, 'listings');
+
+      mongo_ok(self::$collection->createIndex([ 'geoJSON' => '2dsphere' ]));
     }
 
     function save($data) {

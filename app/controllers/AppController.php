@@ -4,33 +4,58 @@
 
   interface AppControllerInterface {
     public static function leaderboard();
+
+    public static function faq();
+    public static function privacy();
+    public static function terms();
+    public static function team();
+
+    public static function feedback();
   }
 
   class AppController extends Controller implements AppControllerInterface {
     public static function leaderboard() {
-      $schools = array("Columbia College Chicago", "Hartford University", "New York University", "University of California Berkeley", "University of Virginia");
-      $ambassadors = array("Elana", "Stephen", "Solomon", "Helena, Jiang", "David");
-      $countAdjustments = array("Columbia College Chicago" => 5, "Hartford University" => 1, "New York University" => 249, "University of California Berkeley" => 93, "University of Virginia" => 39);
-      $counts = [7, 30, 90, 180];
+      $schools = [
+        "Columbia College Chicago",
+        "Hartford University",
+        "New York University",
+        "University of California Berkeley",
+        "University of Virginia"
+      ];
+      $ambassadors = [
+        "Elana",
+        "Stephen",
+        "Solomon",
+        "Helena, Jiang",
+        "David"
+      ];
+      $countAdjustments = [
+        "Columbia College Chicago" => 5,
+        "Hartford University" => 1,
+        "New York University" => 249,
+        "University of California Berkeley" => 93,
+        "University of Virginia" => 39
+      ];
+      $counts = [ 7, 30, 90, 180 ];
 
-      //0 and last monday
+      // 0 and last monday
       $lastMonday = strtotime("last Monday", strtotime("+12 hours")) + 43200;
-      $times = array(0, $lastMonday);
+      $times = [ 0, $lastMonday ];
       $currentTime = time();
-      foreach($counts as $count) {
+      foreach ($counts as $count) {
         array_push($times, $currentTime - ($count * 86400));
       }
       $schoolCount = Leaderboard::getSchoolCountSinceTimes($schools, $times);
 
-      //Rename keys
+      // Rename keys
       $schoolCount[1] = $schoolCount[$lastMonday];
       unset($schoolCount[$lastMonday]);
-      foreach($counts as $count) {
+      foreach ($counts as $count) {
         $schoolCount[$count] = $schoolCount[$currentTime - ($count * 86400)];
         unset($schoolCount[$currentTime - ($count * 86400)]);
       }
 
-      //Adjust counts
+      // Adjust counts
       foreach ($countAdjustments as $school => $adjustment) {
         $schoolCount[0][$school] =  $schoolCount[0][$school] - $adjustment;
       }
@@ -42,47 +67,45 @@
       ]);
     }
 
-    function faq() {
-      $this->render('faq');
+    public static function faq() {
+      self::render('faq');
     }
 
-    function privacy() {
-      $this->render('privacy');
+    public static function privacy() {
+      self::render('privacy');
     }
 
-    function terms() {
-      $this->render('terms');
+    public static function terms() {
+      self::render('terms');
     }
 
-    function team() {
-      $this->render('team');
+    public static function team() {
+      self::render('team');
     }
 
-    function data($data) {
-      $name = clean($data['name']);
-      $email = clean($data['email']);
-      $feedback = clean($data['feedback']);
-      $data = array(
-        'name' => $name, 'email' => $email, 'feedback' => $feedback
-      );
-      return $data;
-    }
+    public static function feedback() {
+      function data(array $data) {
+        $name = clean($data['name']);
+        $email = clean($data['email']);
+        $feedback = clean($data['feedback']);
+        $data = [ 'name' => $name, 'email' => $email, 'feedback' => $feedback ];
+        return $data;
+      }
 
-    function feedback() {
       global $params;
 
       if (!isset($_POST['send'])) {
-        $this->render('feedback');
+        self::render('feedback');
         return;
       }
 
-      extract($data = $this->data($params));
+      extract($data = data($params));
 
-      $this->startValidations();
-      $this->validate(filter_var($email, FILTER_VALIDATE_EMAIL),
+      self::startValidations();
+      self::validate(filter_var($email, FILTER_VALIDATE_EMAIL),
         $err, 'invalid email');
 
-      if ($this->isValid()) {
+      if (self::isValid()) {
         $message = "
           <h1>Feedback Report</h1><br />
           <b>Name:</b> $name<br />
@@ -91,15 +114,13 @@
         ";
         sendgmail(array('tony.jiang@yale.edu', 'qingyang.chen@gmail.com'), "info@sublite.net", 'Feedback/Bug', $message);
 
-        $this->success('Thank you for submitting your feedback report and helping SubLite improve. We will process the report as soon as possible!');
-        $this->render('feedback', $data);
+        self::success('Thank you for submitting your feedback report and helping SubLite improve. We will process the report as soon as possible!');
+        self::render('feedback', $data);
         return;
       }
 
-      $this->error($err);
-      $this->render('feedback', $data);
+      self::error($err);
+      self::render('feedback', $data);
     }
   }
-
-  GLOBALvarSet('CApp', new AppController());
 ?>

@@ -458,15 +458,15 @@
           $query = array(
             'publish' => true,
           );
-          $proximityDeg = distanceDeg($maxProximity);
-          $query['geocode.latitude'] = array(
-            '$gte' => $latitude - $proximityDeg,
-            '$lte' => $latitude + $proximityDeg
-          );
-          $query['geocode.longitude'] = array(
-            '$gte' => $longitude - $proximityDeg,
-            '$lte' => $longitude + $proximityDeg
-          );
+
+          // Near query.
+          $point = new GeoPoint($latitude, $longitude);
+          $query['geoJSON'] = [
+            '$near' => [
+              '$geometry' => $point->toArray(),
+              '$maxDistance' => miles2meters($maxProximity)
+            ]
+          ];
           if (strlen($occupancy) > 0) {
             $query['occupancy'] = array('$gte' => $minOccupancy);
           }

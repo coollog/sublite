@@ -33,6 +33,15 @@
      */
     public static function getByIdMinimal(MongoId $recruiterId);
     public static function getEmail(MongoId $recruiterId);
+
+    // Gets the entry for the current user.
+    public static function me();
+
+    // Save the entry after changes or create it.
+    public static function save(array $data);
+
+    // @return if current user has a company.
+    public static function hasCompany();
   }
 
   class RecruiterModel extends Model implements RecruiterModelInterface {
@@ -137,17 +146,38 @@
       return $entry['email'];
     }
 
+    public static function me() {
+      if (!isset($_SESSION['email'])) return null;
+      return self::get($_SESSION['email']);
+    }
+
+    public static function login($email, $pass) {
+      if (is_null($entry = self::get($email))) return false;
+      // Matches old hash
+      // password_get_info algoName is 'unknown' if (old) passwords are
+      // encrypted with crypt() and 'bcrypt' if encrypted with password_hash()
+      // (new)
+      if (password_get_info($entry['pass'])['algoName'] == 'unknown'
+          && hash_equals($entry['pass'], crypt($pass, $entry['pass']))) {
+        $entry['pass'] = password_hash($pass, PASSWORD_DEFAULT);
+        self::save($entry);
+        return true;
+      }
+
+      return password_verify($pass, $entry['pass']);
+    }
+
     function __construct() {}
 
-    function save($data) {
-      $data['msgs'] = array();
+    public static function save(array $data) {
+      $data['msgs'] = [];
       self::$collection->save($data);
       return $data['_id']->{'$id'};
     }
 
-    function login($email, $pass) {
-      if (is_null($entry = $this->get($email))) return false;
-      return hash_equals($entry['pass'], crypt($pass, $entry['pass']));
+    public static function hasCompany() {
+      $me = self::me();
+      return MongoId::isValid($me['company']);
     }
 
     function get($email) {
@@ -172,11 +202,6 @@
     function getPhoto($id) {
       $entry = $this->getById(new MongoId($id));
       return isset($entry['photo']) ? $entry['photo'] : null;
-    }
-
-    function me() {
-      if (!isset($_SESSION['email'])) return null;
-      return self::get($_SESSION['email']);
     }
 
     function find($query=array()) {
