@@ -218,13 +218,10 @@
     }
 
     function manage() {
-      global $CRecruiter; $CRecruiter->requireLogin();
-      global $MJob;
+      RecruiterController::requireLogin();
 
-      $jobs = $MJob->getByRecruiter($_SESSION['_id']);
-      $data = array(
-        'jobs' => $jobs
-      );
+      $jobs = JobModel::getByRecruiter($_SESSION['_id']);
+      $data = [ 'jobs' => $jobs ];
       self::render('jobs/managejobs', $data);
     }
 
@@ -282,7 +279,7 @@
     }
 
     function edit() { // FIX THIS ADD GET INFO LIKE DATA FROM VIEW AND STUFF
-      global $CRecruiter; $CRecruiter->requireLogin();
+      RecruiterController::requireLogin();
 
       global $params, $MJob, $MRecruiter;
       // Params to vars
@@ -378,9 +375,8 @@
 
 
     function requireLogin() {
-      global $CRecruiter, $CStudent;
-      if ($CRecruiter->loggedIn()) $CRecruiter->requireLogin();
-      else $CStudent->requireLogin();
+      if (RecruiterController::loggedIn()) RecruiterController::requireLogin();
+      else StudentController::requireLogin();
     }
 
     function dataSearchSetup() {

@@ -34,7 +34,7 @@
   });
   Router::register('employers/approve', function() {
     Controller::displayMetatags('/employers');
-    GLOBALvarGet('CRecruiter')->approve();
+    RecruiterController::approve();
   });
   Router::register('employers/buycredits', function() {
     Controller::displayMetatags('/employers');
@@ -58,7 +58,7 @@
   });
   Router::register('employers/changepass', function() {
     Controller::displayMetatags('/employers');
-    GLOBALvarGet('CRecruiter')->changePass();
+    RecruiterController::changePass();
   });
   Router::register('employers/company', function() {
     Controller::displayMetatags('/employers');
@@ -91,11 +91,11 @@
   });
   Router::register('employers/editprofile', function() {
     Controller::displayMetatags('/employers');
-    GLOBALvarGet('CRecruiter')->edit();
+    RecruiterController::edit();
   });
   Router::register('employers/forgotpass', function() {
     Controller::displayMetatags('/employers');
-    GLOBALvarGet('CRecruiter')->forgotPass();
+    RecruiterController::forgotPass();
   });
   Router::register('employers/home', function() {
     Controller::displayMetatags('/employers');
@@ -103,20 +103,20 @@
   });
   Router::register('employers/index', function() {
     Controller::displayMetatags('/employers');
-    GLOBALvarGet('CRecruiter')->index();
+    RecruiterController::index();
   });
   Router::register('employers/login', function() {
     Controller::displayMetatags('/employers');
-    GLOBALvarGet('CRecruiter')->login();
+    RecruiterController::login();
   });
   Router::register('employers/loginregister', function() {
     Controller::displayMetatags('/employers');
-    GLOBALvarGet('CRecruiter')->register();
-    GLOBALvarGet('CRecruiter')->login();
+    RecruiterController::register();
+    RecruiterController::login();
   });
   Router::register('employers/logout', function() {
     Controller::displayMetatags('/employers');
-    GLOBALvarGet('CRecruiter')->logout();
+    RecruiterController::logout();
   });
   Router::register('employers/profile', function() {
     Controller::displayMetatags('/employers');
@@ -126,11 +126,11 @@
   });
   Router::register('employers/recruiter', function() {
     Controller::displayMetatags('/employers');
-    GLOBALvarGet('CRecruiter')->view();
+    RecruiterController::view();
   });
   Router::register('employers/register', function() {
     Controller::displayMetatags('/employers');
-    GLOBALvarGet('CRecruiter')->register();
+    RecruiterController::register();
   });
   Router::register('employers/S3', function() {
     Controller::displayMetatags('/employers');
@@ -244,7 +244,7 @@
     GLOBALvarGet('CJob')->view();
   });
   Router::register('jobs/recruiter', function() {
-    GLOBALvarGet('CRecruiter')->view();
+    RecruiterController::view();
   });
   Router::register('jobs/search', function() {
     Controller::displayMetatags('searchjobs');

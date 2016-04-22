@@ -79,7 +79,7 @@
     }
 
     function render($view, $vars = false) {
-      self::$renderQueue[] = array($view, $vars);
+      self::$renderQueue[] = [ $view, $vars ];
     }
     function directrender($view, $vars = false) {
       global $viewVars;

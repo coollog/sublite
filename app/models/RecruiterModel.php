@@ -167,8 +167,6 @@
       return password_verify($pass, $entry['pass']);
     }
 
-    function __construct() {}
-
     public static function save(array $data) {
       $data['msgs'] = [];
       self::$collection->save($data);
@@ -180,12 +178,15 @@
       return MongoId::isValid($me['company']);
     }
 
-    function get($email) {
-      return self::$collection->findOne(array('email' => $email));
+    public static function getByPass($pass) {
+      return (new DBQuery(self::$collection))
+        ->toQuery('pass', $pass)->findOne();
     }
 
-    function getByPass($pass) {
-      return self::$collection->findOne(array('pass' => $pass));
+    function __construct() {}
+
+    function get($email) {
+      return self::$collection->findOne([ 'email' => $email ]);
     }
 
     function getCompany($rid) {
@@ -209,7 +210,7 @@
     }
 
     function exists($email) {
-      return ($this->get($email) !== NULL);
+      return (self::get($email) !== NULL);
     }
 
     function IDexists($id) {

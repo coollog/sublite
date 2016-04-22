@@ -34,9 +34,9 @@
 
       <?php if (count($jobs = View::get('jobtitles')) > 0) { ?>
         <subheadline>Looking for</subheadline>
-      <?php foreach (array_unique($jobs) as $job)
-        $jobtitle = $job[0];
-        $joburl = $GLOBALS['dirpreFromRoute'] . '../jobs/job?id=' . $job[1];
+      <?php foreach ($jobs as $job)
+        $jobtitle = $job['title'];
+        $joburl = $GLOBALS['dirpreFromRoute'] . '../jobs/job?id=' . $job['_id'];
         echo "<a href=\"$joburl\">$jobtitle</a><br />"; }
       ?>
 
