@@ -18,6 +18,7 @@
   header("Cache-Control: post-check=0, pre-check=0", false);
   header("Pragma: no-cache");
 
+  require_once($dirpre.'includes/functions/hash_equals.php');
   require_once($dirpre.'includes/functions/geocode.php');
   require_once($dirpre.'includes/functions/sendgmail.php');
   require_once($dirpre.'includes/functions/lib_autolink.php');
