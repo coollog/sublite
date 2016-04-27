@@ -130,18 +130,6 @@
       return strlen($desc) <= 2500;
     }
 
-    // TODO? See if URL is actually valid
-    function isValidURL($url) {
-      if (filter_var($url, FILTER_VALIDATE_EMAIL)) {
-        return true;
-      }
-      // filter_var is pretty weak so we use other tests
-      if (!preg_match('`^((https?:\/\/)*[\w\-]+\.[\w\-]+)`',
-        $url)) return false;
-
-      return true;
-    }
-
     function data($data) {
       $title = clean($data['title']);
       $jobtype = clean($data['jobtype']);
