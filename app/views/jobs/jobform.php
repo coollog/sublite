@@ -65,8 +65,16 @@
     (function JobLocations() {
       var count = 0;
 
-      this.add = function () {
+      this.add = function (locations) {
+        locations.forEach(function (location) {
+          var html = Templates.use('locationtemplate', {
+            index: count,
+            location: location
+          });
+          $('.locationdivs').append(html);
 
+          count ++;
+        });
       }
 
       $('input[name=location]').off('keydown').on('keydown', function () {
@@ -74,7 +82,7 @@
       });
 
       // Add all locations.
-      this.add(0, '<?php View::echof('location'); ?>');
+      this.add(JSON.parse('<?php View::echof('location'); ?>'));
     })();
   });
 </script>

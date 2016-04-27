@@ -1,9 +1,19 @@
 <?php
   // Use GeoPoint for point GeoJSON.
 
-  class GeoJSON {
+  interface GeoJSONInterface {
+    public static function fromArray(array $arr);
+    public function toArray();
+    public function getCoordinates();
+  }
+
+  class GeoJSON implements GeoJSONInterface {
     const POINT = 'Point';
     const MULTIPOINT = 'MultiPoint';
+
+    public static function fromArray(array $arr) {
+      return new GeoJSON($arr['type'], $arr['coordinates']);
+    }
 
     public function __construct($type, $coordinates) {
       $this->type = $type;
@@ -15,6 +25,10 @@
         'type' => $this->type,
         'coordinates' => $this->coordinates
       ];
+    }
+
+    public function getCoordinates() {
+      return $this->coordinates;
     }
 
     private $type;
