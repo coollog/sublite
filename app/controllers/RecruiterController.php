@@ -454,7 +454,8 @@
               'title' => $job['title'],
               '_id' => $job['_id']->{'$id'}
             ];
-            $data['joblocations'][] = $job['location'];
+            $data['joblocations'] =
+              array_merge($data['joblocations'], $job['location']);
           }
 
           $data['isme'] =

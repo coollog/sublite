@@ -187,7 +187,10 @@
                   <?php
                     if(View::get('locationtype') == "home") echo 'Work at home!';
                     else {
-                      View::echof('location');
+                      $location = View::get('location');
+                      foreach ($location as $loc) {
+                        echo "$loc<br />";
+                      }
                     }
                   ?>
                 </subheadline>

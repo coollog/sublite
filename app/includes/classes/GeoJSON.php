@@ -42,8 +42,7 @@
   }
 
   class GeoMultiPoint extends GeoJSON {
-    public function __construct($coordinates) {
-      if (!isset($coordinates)) $coordinates = [];
+    public function __construct($coordinates = []) {
       parent::__construct(parent::MULTIPOINT, $coordinates);
     }
 

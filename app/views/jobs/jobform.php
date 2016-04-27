@@ -2,8 +2,8 @@
   <locationtemplate>
     <div class="form-slider locationdiv">
       <label for="location{index}">Job Location (Address, City, State):</label>
-      <input type="text" id="location{index}" name="location" maxlength="500"
-             value="{location}" required />
+      <input type="text" id="location{index}" name="location[]" maxlength="500"
+             value="{location}" />
     </div>
   </locationtemplate>
 </templates>
@@ -41,48 +41,63 @@
     });
 
     (function workFromHomeToggleLocations() {
+      var tmpLocations = {};
       $('#locationtype').click(function() {
-        var tmpLocation = $("input[name=location]").attr('value');
         if ($(this).is(":checked")) {
-          tmpLocation = $("input[name=location]").attr('value');
-          $("input[name=location]").prop('required', false).val('');
+          $('input[name="location[]"]').each(function () {
+            var id = $(this).attr('id');
+            var val = $(this).val();
+            tmpLocations[id] = val;
+          });
+          $('input[name="location[]"]').val('');
           $(".locationdiv").slideUp(200, 'easeOutCubic');
         } else {
-          $("input[name=location]").prop('required', true).val(tmpLocation);
+          $('input[name="location[]"]').each(function () {
+            var id = $(this).attr('id');
+            $(this).val(tmpLocations[id]);
+          });
           $(".locationdiv").slideDown(200, 'easeOutCubic');
         }
       });
 
       if ($("#locationtype").is(":checked")) {
-        $("input[name=location]").prop('required', false);
+        $('input[name="location[]"]').prop('required', false);
         $(".locationdiv").hide();
       } else {
-        $("input[name=location]").prop('required', true);
+        $('input[name="location[]"]').prop('required', true);
         $(".locationdiv").show();
       }
     })();
 
     (function JobLocations() {
-      var count = 0;
+      var jobLocations = this;
 
-      this.add = function (locations) {
-        locations.forEach(function (location) {
-          var html = Templates.use('locationtemplate', {
-            index: count,
-            location: location
+      this.add = function (location) {
+        var html = Templates.use('locationtemplate', {
+          index: new Date().getUTCMilliseconds(),
+          location: location
+        });
+        $('.locationdivs').append(html);
+
+        formSetup();
+
+        $('input[name="location[]"]').off('keyup').on('keyup', function () {
+          var allFilled = true;
+          $('input[name="location[]"]').each(function () {
+            if ($(this).val().length == 0) allFilled = false;
           });
-          $('.locationdivs').append(html);
 
-          count ++;
+          if (allFilled) jobLocations.add('');
+        }).off('change').on('change', function () {
+          if ($(this).val().length == 0) $(this).parent().remove();
         });
       }
 
-      $('input[name=location]').off('keydown').on('keydown', function () {
-
-      });
-
       // Add all locations.
-      this.add(JSON.parse('<?php View::echof('location'); ?>'));
+      <?php foreach (View::get('location') as $location) { ?>
+        this.add('<?php echo $location; ?>');
+      <?php } ?>
+      this.add('');
     })();
   });
 </script>
@@ -206,7 +221,7 @@
       </left>
 
       <div class="locationdivs">
-
+        Job Locations:
       </div>
 
       <br />
