@@ -130,6 +130,12 @@
       return strlen($desc) <= 2500;
     }
 
+    function hasEmail($desc) {
+      $matches = array();
+      $pattern = '/[A-Za-z0-9_-]+@[A-Za-z0-9_-]+\.([A-Za-z0-9_-][A-Za-z0-9_]+)/';
+      return preg_match($pattern, $desc, $matches);
+    }
+
     function data($data) {
       $title = clean($data['title']);
       $jobtype = clean($data['jobtype']);
@@ -203,6 +209,12 @@
         $err, 'invalid deadline: date should be in the future');
       $this->validate($this->isValidDescription($data['desc']),
         $err, 'description too long');
+      $this->validate(!$this->hasEmail($data['desc']),
+        $err, 'please do not include emails in your description');
+      $this->validate(!$this->hasEmail($data['desc']),
+        $err, 'please do not include emails in your description');
+      $this->validate(!$this->hasEmail($data['requirements']),
+        $err, 'please do not include emails in your requirements');
     }
 
     function manage() {
