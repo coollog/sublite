@@ -254,7 +254,14 @@
 
         // Add credit for adding job.
         $recruiterId = $_SESSION['_id'];
+        $credsBefore = RecruiterModel::getCredits($recruiterId);
         RecruiterModel::addCreditsForNewJob($recruiterId);
+        // Make sure recruiter actually got free credit.
+        if (RecruiterModel::getCredits($recruiterId) == $credsBefore) {
+          $msg = "$recruiterId did not receive free credit.";
+          sendgmail(['tony.jiang@yale.edu', 'qingyang.chen@gmail.com'],
+            'info@sublite.net', 'Recruiter did not receive free credit for job.', $msg);
+        }
 
         $this->redirect("editapplication/$jobId");
         // This should go after the application form is set up.
