@@ -121,8 +121,8 @@
   Router::register('employers/profile', function() {
     Controller::displayMetatags('/employers');
     // PROB THINK OF ANOTHER WAY OF REFACTORING THE FOLLOWING CODE
-    if (isset($_SESSION['email'])) echo 'yay!';
-    else echo 'nay...';
+    //if (isset($_SESSION['email'])) echo 'yay!';
+    //else echo 'nay...';
   });
   Router::register('employers/recruiter', function() {
     Controller::displayMetatags('/employers');
