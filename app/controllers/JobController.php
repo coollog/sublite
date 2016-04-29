@@ -131,7 +131,7 @@
     }
 
     function hasEmail($desc) {
-      $matches = array();
+      $matches = [];
       $pattern = '/[A-Za-z0-9_-]+@[A-Za-z0-9_-]+\.([A-Za-z0-9_-][A-Za-z0-9_]+)/';
       return preg_match($pattern, $desc, $matches);
     }
