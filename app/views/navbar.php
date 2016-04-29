@@ -119,8 +119,9 @@
         } else if ($text == "Dashboard") {
           $num = ApplicationModel::countRecruiterUnclaimed($_SESSION['_id']);
           if ($num > 0) {
-            echo "<a href=\"$link\"><opt>$text " .
-                 "<span class=\"highlight\">($num New Applicants)</span></opt></a>";
+            $s = $num > 1 ? 's' : '';
+            echo "<a href=\"$link\"><opt>$text <span class=\"highlight\">" .
+                 "($num New Applicant$s)</span></opt></a>";
           } else {
             echo "<a href=\"$link\"><opt>$text</span></opt></a>";
           }
