@@ -90,7 +90,6 @@
 
     array("Search Housing", $path."housing/search", "notloggedin !/employers"),
     array("Search Jobs", $path."jobs/search", "notloggedin !/employers"),
-    array("Summer Social", $path."hubs/start", "notloggedin !/employers"),
     array("List Sublet", $path."register", "notloggedin !/employers"),
     array("List Job", $path."employers/register", "notloggedin /employers"),
     array("Sign Up", $path."register", "notloggedin !/employers"),

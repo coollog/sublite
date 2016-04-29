@@ -130,18 +130,6 @@
       return strlen($desc) <= 2500;
     }
 
-    // TODO? See if URL is actually valid
-    function isValidURL($url) {
-      if (filter_var($url, FILTER_VALIDATE_EMAIL)) {
-        return true;
-      }
-      // filter_var is pretty weak so we use other tests
-      if (!preg_match('`^((https?:\/\/)*[\w\-]+\.[\w\-]+)`',
-        $url)) return false;
-
-      return true;
-    }
-
     function data($data) {
       $title = clean($data['title']);
       $jobtype = clean($data['jobtype']);
@@ -266,7 +254,14 @@
 
         // Add credit for adding job.
         $recruiterId = $_SESSION['_id'];
+        $credsBefore = RecruiterModel::getCredits($recruiterId);
         RecruiterModel::addCreditsForNewJob($recruiterId);
+        // Make sure recruiter actually got free credit.
+        if (RecruiterModel::getCredits($recruiterId) == $credsBefore) {
+          $msg = "$recruiterId did not receive free credit.";
+          sendgmail(['tony.jiang@yale.edu', 'qingyang.chen@gmail.com'],
+            'info@sublite.net', 'Recruiter did not receive free credit for job.', $msg);
+        }
 
         $this->redirect("editapplication/$jobId");
         // This should go after the application form is set up.
