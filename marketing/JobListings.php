@@ -13,18 +13,18 @@
       $cityStateCounts = [];
 
       foreach ($jobs as $job) {
-        if (empty($job['location'])) continue;
+        if (empty($job['location']) || count($job['location']) == 0) continue;
 
-        $location = $job['location'];
+        foreach ($job['location'] as $location) {
+          $geocode = GeocodeModel::get($location);
+          if (is_null($geocode)) continue;
+          $cityState = strtolower(getCityStateFromGeocode($geocode));
 
-        $geocode = GeocodeModel::get($location);
-        if (is_null($geocode)) continue;
-        $cityState = strtolower(getCityStateFromGeocode($geocode));
-
-        if (isset($cityStateCounts[$cityState])) {
-          $cityStateCounts[$cityState] ++;
-        } else {
-          $cityStateCounts[$cityState] = 1;
+          if (isset($cityStateCounts[$cityState])) {
+            $cityStateCounts[$cityState] ++;
+          } else {
+            $cityStateCounts[$cityState] = 1;
+          }
         }
       }
 

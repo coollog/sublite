@@ -153,61 +153,75 @@
       }
       $company = $data['company'];
       $desc = clean($data['desc']);
-      $location = clean($data['location']);
+      $location = [];
+      foreach ($data['location'] as $loc) {
+        if ($loc) $location[] = clean($loc);
+      }
       $locationtype = '';
       if(isset($data['locationtype'])) $locationtype = clean($data['locationtype']);
-      $geocode = geocode($location);
+      $geocodes = [];
+      $geoJSON = new GeoMultiPoint();
+      foreach ($location as $loc) {
+        $geocode = Geocode::geocode($loc);
+        $geocodes[] = $geocode;
+        $geoJSON->append($geocode['latitude'], $geocode['longitude']);
+      }
       if ($locationtype) {
         $location = '';
-        $geocode = '';
+        $geocodes = '';
       }
       $requirements = clean($data['requirements']);
 
-      return array(
+      return [
         'title' => $title, 'deadline' => $deadline, 'duration' => $duration,
-        'desc' => $desc, 'geocode' => $geocode,
+        'desc' => $desc,
+        'geocodes' => $geocodes, 'geoJSON' => $geoJSON->toArray(),
         'location' => $location, 'requirements' => $requirements,
         'salary' => $salary, 'company' => $company,
         'salarytype' => $salarytype, 'startdate' => $startdate,
         'enddate' => $enddate, 'jobtype' => $jobtype,
         'locationtype' => $locationtype
-      );
+      ];
     }
 
     function validateData($data, &$err) {
       if (strlen($data['locationtype']) == 0) {
-        $this->validate($data['geocode'] != NULL, $err, 'location invalid');
+        foreach ($data['geocodes'] as $geocode) {
+          self::validate($geocode != NULL, $err, 'location invalid');
+        }
       }
-      $this->validate(strlen($data['title']) <= 200,
-        $err, 'job title is too long');
-      $this->validate(strlen(strval($data['salary'])) > 0,
+      self::validate(count($data['location']) > 0,
+                     $err, 'job location is required');
+      self::validate(strlen($data['title']) <= 200,
+                     $err, 'job title is too long');
+      self::validate(strlen(strval($data['salary'])) > 0,
         $err, 'please input numeric compensation/stipend amount');
       if ($data['jobtype'] == 'internship') {
-        $this->validate($data['duration'], $err, 'please input duration');
-        $this->validate(!(!$data['startdate'] && $data['enddate']),
+        self::validate($data['duration'], $err, 'please input duration');
+        self::validate(!(!$data['startdate'] && $data['enddate']),
           $err, 'please also input a start date');
-        if($data['startdate']) $this->validate($this->isValidDate($data['startdate']),
+        if($data['startdate']) self::validate(self::isValidDate($data['startdate']),
           $err, 'invalid start date: please check date');
-        if($data['enddate']) $this->validate($this->isValidDate($data['enddate']),
+        if($data['enddate']) self::validate(self::isValidDate($data['enddate']),
           $err, 'invalid end date: please check date');
         if($data['startdate'] && $data['enddate']) {
-          $this->validate(strtotime($data['enddate']) > strtotime($data['startdate']),
+          self::validate(strtotime($data['enddate']) > strtotime($data['startdate']),
             $err, 'invalid date range: end date should be after start date.');
         }
       }
       else {
-        if($data['startdate']) $this->validate($this->isValidDate($data['startdate']),
+        if($data['startdate']) self::validate(self::isValidDate($data['startdate']),
           $err, 'invalid start date: please check date');
       }
-      // $this->validate($this->isValidDuration($data['duration']),
+      // self::validate(self::isValidDuration($data['duration']),
       //   $err, 'invalid duration');
-      // $this->validate($this->isValidCompensation($data['salary']),
+      // self::validate(self::isValidCompensation($data['salary']),
       //   $err, 'invalid compensation');
-      $this->validate($this->isValidDate($data['deadline']),
+      self::validate(self::isValidDate($data['deadline']),
         $err, 'invalid deadline: please check date');
-      $this->validate(strtotime($data['deadline']) > time(),
+      self::validate(strtotime($data['deadline']) > time(),
         $err, 'invalid deadline: date should be in the future');
-      $this->validate($this->isValidDescription($data['desc']),
+      self::validate(self::isValidDescription($data['desc']),
         $err, 'description too long');
       $this->validate(!$this->hasEmail($data['desc']),
         $err, 'please do not include emails in your description');
@@ -228,41 +242,44 @@
     function add() {
       RecruiterController::requireLogin();
 
-      function formData($data) {
-        return array_merge($data, array(
+      function formData(array $data) {
+        return array_merge($data, [
           'headline' => 'Create',
-          'submitname' => 'add', 'submitvalue' => 'Add Job'));
+          'submitname' => 'add', 'submitvalue' => 'Add Job'
+        ]);
       }
 
       if (!RecruiterModel::hasCompany()) {
-        $this->error('you must create a company profile first');
+        self::error('you must create a company profile first');
         self::render('notice'); return;
       }
 
       if (!isset($_POST['add'])) {
-        self::render('jobs/jobform', formData(array())); return;
+        self::render('jobs/jobform', formData([
+          'location' => []
+        ])); return;
       }
 
-      global $params, $MJob, $MRecruiter;
-      $me = $MRecruiter->me();
+      global $params;
+      $me = RecruiterModel::me();
       $params['company'] = $me['company'];
 
-      $this->startValidations();
-      $this->validate(isset($params['salarytype']),
-        $err, 'must select salary type');
+      self::startValidations();
+      self::validate(isset($params['salarytype']),
+                     $err, 'must select salary type');
 
       // Params to vars
-      extract($data = $this->data($params));
+      extract($data = self::data($params));
 
       // Validations
-      $this->validateData($data, $err);
+      self::validateData($data, $err);
 
       // Code
-      if ($this->isValid()) {
-        $data['applicants'] = array();
-        $data['viewers'] = array();
-        $data['stats'] = array('views' => 0, 'clicks' => 0);
-        $jobId = $MJob->save($data);
+      if (self::isValid()) {
+        $data['applicants'] = [];
+        $data['viewers'] = [];
+        $data['stats'] = [ 'views' => 0, 'clicks' => 0 ];
+        $jobId = JobModel::save($data);
 
         // Add credit for adding job.
         $recruiterId = $_SESSION['_id'];
@@ -275,13 +292,13 @@
             'info@sublite.net', 'Recruiter did not receive free credit for job.', $msg);
         }
 
-        $this->redirect("editapplication/$jobId");
+        self::redirect("editapplication/$jobId");
         // This should go after the application form is set up.
-        // $this->redirect('job', array('id' => $jobId));
+        // self::redirect('job', array('id' => $jobId));
         return;
       }
 
-      $this->error($err);
+      self::error($err);
       self::render('jobs/jobform', formData($data));
     }
 
