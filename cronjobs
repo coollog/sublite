@@ -3,4 +3,5 @@
 # Recruiter reminder cron job: reminds recruiters who have unclaimed applications
 # to check their recruiter dashboard and claim them
 # Runs at 2:00 AM every Sunday
-* 2 * * sun /usr/bin/php app/cronjobs/recruiterreminder.php
+* 2 * * 1 /usr/bin/php /var/www/html/app/cronjobs/recruiterreminder.php
+*/5 * * * * /bin/echo "hello" >> /home/ec2-user/cronoutput
