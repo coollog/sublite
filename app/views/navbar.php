@@ -108,16 +108,16 @@
         $text = $opt[0];
         $link = $opt[1];
         if (!$states[$opt[2]]) continue;
-        if ($opt[0] == "Messages") {
+        if ($text == "Messages") {
           $num = MessageModel::getNumUnread($_SESSION['_id']);
           if ($num > 0) {
-            echo "<a href=\"$link\"><opt>$text " . 
+            echo "<a href=\"$link\"><opt>$text " .
                  "<span class=\"highlight\">($num)</span></opt></a>";
           } else {
             echo "<a href=\"$link\"><opt>$text (0)</span></opt></a>";
           }
-        } else if ($opt[0] == "Dashboard") {
-          $num = ApplicationModel::getRecruiterTotalUnclaimed($_SESSION['_id']);
+        } else if ($text == "Dashboard") {
+          $num = ApplicationModel::countRecruiterUnclaimed($_SESSION['_id']);
           if ($num > 0) {
             echo "<a href=\"$link\"><opt>$text " .
                  "<span class=\"highlight\">($num New Applicants)</span></opt></a>";

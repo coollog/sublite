@@ -73,6 +73,7 @@
                                           array $projection = array()) {
       $query = (new DBQuery(self::$collection))
         ->toQuery('recruiter', $recruiterId);
+      $query->setProjection($projection);
       return $query->run();
     }
 

@@ -48,7 +48,7 @@
     public static function getUnclaimed(MongoId $jobId);
     public static function getClaimed(MongoId $jobId);
 
-    public static function getRecruiterTotalUnclaimed(MongoId $recruiterId);
+    public static function countRecruiterUnclaimed(MongoId $recruiterId);
 
     /**
      * Gets all submitted applications by $jobId, but project only 'status'.
@@ -185,11 +185,7 @@
       // Check job exists.
       if (!self::jobExists($jobId)) return null;
 
-      $query = (new DBQuery(self::$collection))
-        ->toQuery('jobid', $jobId)
-        ->toQuery('status', ApplicationStudent::STATUS_UNCLAIMED)
-        ->toQuery('submitted', true);
-      return $query->run();
+      return self::queryUnclaimed($jobId);
     }
 
     public static function getClaimed(MongoId $jobId) {
@@ -202,11 +198,11 @@
       return $query->run();
     }
 
-    public static function getRecruiterTotalUnclaimed(MongoId $recruiterId){
-      $jobs = JobModel::getByRecruiter($recruiterId);
+    public static function countRecruiterUnclaimed(MongoId $recruiterId){
+      $jobs = JobModel::getByRecruiter($recruiterId, [ '_id' => 1 ]);
       $num = 0;
-      foreach($jobs as $job) {
-        $num += count(self::getUnclaimed($job["_id"]));
+      foreach ($jobs as $job) {
+        $num += count(self::queryUnclaimed($job['_id']));
       }
       return $num;
     }
@@ -324,6 +320,14 @@
         ->projectField('jobid');
       $application = $query->findOne();
       return $application['jobid'];
+    }
+
+    private static function queryUnclaimed(MongoId $jobId) {
+      $query = (new DBQuery(self::$collection))
+        ->toQuery('jobid', $jobId)
+        ->toQuery('status', ApplicationStudent::STATUS_UNCLAIMED)
+        ->toQuery('submitted', true);
+      return $query->run();
     }
 
     protected static $collection;

@@ -68,7 +68,7 @@
           'title' => $job['title'],
           'location' => $job['location'],
           'applicants' => $applicants['submitted'],
-          'new_applicants' => $applicants['unclaimed']
+          'newApplicants' => $applicants['unclaimed']
         ];
         $jobArray[] = $jobListing;
 

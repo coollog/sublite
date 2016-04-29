@@ -148,7 +148,7 @@
       </info>
       <buttons>
         <a href="viewapplicants/{_id}">{applicants} applicants
-          ({new_applicants} new)</a> |
+          ({newApplicants} new)</a> |
         <a href="editjob?id={_id}">Edit Job</a> |
         <a href="editapplication/{_id}">Edit Application</a> |
         <a href="deletejob/{_id}" class="red">Delete Job</a>
