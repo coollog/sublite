@@ -285,7 +285,9 @@
       ];
       foreach ($applications as $app) {
         // Count each type of application.
-        if ($app['submitted']) $applicationCountData['submitted'] ++;
+        if (!$app['submitted']) continue;
+
+        $applicationCountData['submitted'] ++;
 
         switch ($app['status']) {
           case ApplicationStudent::STATUS_UNCLAIMED:
