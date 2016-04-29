@@ -60,7 +60,12 @@
           <label for="other"> other (100 chars max)</label>
       </right>
       <div class="form-slider"><label for="deadline">Deadline for Application (mm/dd/yyyy):</label><input class="datepicker" type="text" id="deadline" name="deadline" value="<?php View::echof('deadline'); ?>" required /></div>
-      Please do not include links to external applications or emails. If your company has its own application site, please contact us at <a href="mailto:info@sublite.net">info@sublite.net</a> and our team will get in touch to work with you.
+      <left>
+        Please do not include links to external applications or emails. If your
+        company has its own application site, please contact us at
+        <a href="mailto:info@sublite.net">info@sublite.net</a> and our team will
+        get in touch to work with you.
+      </left>
       <div class="form-slider"><label for="desc">Job Description (2500 chars max):</label><textarea id="desc" name="desc" required maxlength="2500"><?php View::echof('desc'); ?></textarea></div>
       <div class="form-slider"><label for="requirements">Requirements (2000 chars max):</label><textarea id="requirements" name="requirements" required maxlength="2000"><?php View::echof('requirements'); ?></textarea></div>
       <left>
