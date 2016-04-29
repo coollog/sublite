@@ -121,7 +121,7 @@
           $num = ApplicationModel::getRecruiterTotalUnclaimed($_SESSION['_id']);
           if ($num > 0) {
             echo "<a href=\"$link\"><opt>$text " .
-                 "<span class=\"highlight\">($num) New Applicants</span></opt></a>";
+                 "<span class=\"highlight\">($num New Applicants)</span></opt></a>";
           } else {
             echo "<a href=\"$link\"><opt>$text</span></opt></a>";
           }
