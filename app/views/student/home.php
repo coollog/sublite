@@ -37,15 +37,16 @@
         background: white;
         text-align: left;
       }
-      links option {
+      links linkOption {
         color: black;
         padding: 1em 2em;
         font-weight: bold;
         transition: 0.1s all ease-out;
         cursor: pointer;
         border-bottom: 0.5px solid #ddd;
+        display: block;
       }
-      links option:hover {
+      links linkOption:hover {
         opacity: 0.5;
       }
     messages {
@@ -377,17 +378,17 @@
           </school>
         </profile>
         <links class="div">
-          <?php echo View::linkTo('<option>Edit Profile</option>',
+          <?php echo View::linkTo('<linkOption>Edit Profile</linkOption>',
                                   "$GLOBALS[dirpre]../housing/editprofile"); ?>
-          <?php echo View::linkTo('<option>View Career Profile</option>',
+          <?php echo View::linkTo('<linkOption>View Career Profile</linkOption>',
                                   "$GLOBALS[dirpre]../jobs/viewprofile"); ?>
-          <?php echo View::linkTo('<option>Edit Career Profile</option>',
+          <?php echo View::linkTo('<linkOption>Edit Career Profile</linkOption>',
                                   "$GLOBALS[dirpre]../jobs/editprofile"); ?>
-          <?php echo View::linkTo('<option>Housing Search</option>',
+          <?php echo View::linkTo('<linkOption>Housing Search</linkOption>',
                                   "$GLOBALS[dirpre]../housing/search"); ?>
-          <?php echo View::linkTo('<option>Job Search</option>',
+          <?php echo View::linkTo('<linkOption>Job Search</linkOption>',
                                   "$GLOBALS[dirpre]../jobs/search"); ?>
-          <?php echo View::linkTo('<option>Messages</option>',
+          <?php echo View::linkTo('<linkOption>Messages</linkOption>',
                                   "$GLOBALS[dirpre]../messages"); ?>
         </links>
       </profilelinks>
