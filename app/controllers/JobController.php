@@ -343,7 +343,7 @@
       }
 
       $this->error($err);
-      self::render('jobs/jobform', formData($data, array_merge($data, array('_id' => $id))));
+      self::render('jobs/jobform', formData(array_merge($data, array('_id' => $id))));
     }
 
     function view() {

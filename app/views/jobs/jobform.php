@@ -94,7 +94,9 @@
       }
 
       // Add all locations.
-      <?php die(var_dump(View::get('location'))); ?>
+      <?php foreach (View::get('location') as $location) { ?>
+        this.add('<?php echo $location; ?>');
+      <?php } ?>
 
       this.add('');
     })();
