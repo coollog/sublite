@@ -324,7 +324,8 @@
       // Code
       if ($this->isValid()) {
         if (!isset($_POST['edit'])) {
-          die(var_dump($data));
+          die(var_dump(formData(array_merge($this->data($entry),
+                                            [ '_id' => $id ]))));
           self::render('jobs/jobform',
                        formData(array_merge($this->data($entry),
                                             [ '_id' => $id ])));
