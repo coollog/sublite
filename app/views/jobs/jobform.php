@@ -95,7 +95,7 @@
 
       // Add all locations.
       <?php
-        if (View::get('locationtype')) {
+        if (!View::get('locationtype')) {
           foreach (View::get('location') as $location) {
       ?>
             this.add('<?php echo $location; ?>');
