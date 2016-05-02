@@ -94,7 +94,7 @@
       }
 
       // Add all locations.
-      console.log('<?php echo View::get('location'); ?>');
+      <?php die(var_dump(View::get('location'))); ?>
 
       this.add('');
     })();
