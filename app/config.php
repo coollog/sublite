@@ -1,7 +1,7 @@
 <?php
   $dbname = 'subliteinternships';
   $dbnamestudent = 'sublite';
-  require_once($GLOBALS['dirpre'].'pass.php');
+  require_once(APPDIR.'pass.php');
 
   switch ($env) {
     case 'dev':

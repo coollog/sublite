@@ -3,7 +3,8 @@
   ini_set('display_errors', '1');
 
   $GLOBALS['dirpre'] = 'app/';
-  require_once($dirpre.'includes/header.php');
+  define('APPDIR', "$_SERVER[DOCUMENT_ROOT]/app/");
+  require_once(APPDIR.'includes/header.php');
 
   // Register functions to call. Try to have these in alphabetical order.
   Router::register('admin/login', function() {
@@ -305,7 +306,7 @@
     GLOBALvarGet('CStudent')->register();
   });
   Router::register('runtests', function() {
-    require_once($GLOBALS['dirpre'].'tests/runtests.php');
+    require_once(APPDIR.'tests/runtests.php');
   });
   Router::register('S3/image', function() {
     S3ControllerAJAX::uploadImage();
@@ -516,5 +517,5 @@
   // Perform the routing.
   Router::run();
 
-  require_once($dirpre.'includes/footer.php');
+  require_once(APPDIR.'includes/footer.php');
 ?>

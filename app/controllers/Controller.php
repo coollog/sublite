@@ -165,7 +165,7 @@
       $dirpreOrig = $GLOBALS['dirpre'];
       $GLOBALS['dirpre'] = $GLOBALS['dirpreFromRoute'];
       global $viewVars;
-      require_once(APPDIR."$relPath");
+      require_once(APPDIR.$relPath);
       $GLOBALS['dirpre'] = $dirpreOrig;
     }
 
@@ -174,8 +174,6 @@
 
   global $params;
   $params = $_POST;
-
-  define('APPDIR', "$_SERVER[DOCUMENT_ROOT]/app/");
 
   // REFACTOR ALL LOGIN/SESSION HANDLING CODE
   session_start();
