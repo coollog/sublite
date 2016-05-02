@@ -90,7 +90,7 @@
       $viewVars['Error'] = isset($error) ? $error : '';
       $viewVars['Success'] = isset($success) ? $success : '';
 
-      require_once($GLOBALS['dirpre'].'views/View.php');
+      require_once(APPDIR.'views/View.php');
       self::requireUsingRoutePath("views/$view.php");
     }
     function finish() {
@@ -106,7 +106,7 @@
         if ($vars === false) $vars = array();
         $viewVars = array_merge($viewVars, $vars);
       }
-      require_once($GLOBALS['dirpre'].'views/View.php');
+      require_once(APPDIR.'views/View.php');
       self::requireUsingRoutePath('includes/htmlheader.php');
 
       foreach (self::$renderQueue as $pair) {
@@ -174,6 +174,8 @@
 
   global $params;
   $params = $_POST;
+
+  define('APPDIR', "$_SERVER[DOCUMENT_ROOT]/app/");
 
   // REFACTOR ALL LOGIN/SESSION HANDLING CODE
   session_start();
