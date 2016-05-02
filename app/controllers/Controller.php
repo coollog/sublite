@@ -165,7 +165,7 @@
       $dirpreOrig = $GLOBALS['dirpre'];
       $GLOBALS['dirpre'] = $GLOBALS['dirpreFromRoute'];
       global $viewVars;
-      require_once(APPDIR.'$relPath');
+      require_once(APPDIR."$relPath");
       $GLOBALS['dirpre'] = $dirpreOrig;
     }
 
