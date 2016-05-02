@@ -324,7 +324,11 @@
       // Code
       if ($this->isValid()) {
         if (!isset($_POST['edit'])) {
-          self::render('jobs/jobform', formData(array_merge($this->data($entry), array('_id' => $id)))); return;
+          die(var_dump($data));
+          self::render('jobs/jobform',
+                       formData(array_merge($this->data($entry),
+                                            [ '_id' => $id ])));
+          return;
         }
 
         $me = $MRecruiter->me();
@@ -343,7 +347,6 @@
       }
 
       $this->error($err);
-      die(var_dump($data));
       self::render('jobs/jobform', formData(array_merge($data, [ '_id' => $id ])));
     }
 
