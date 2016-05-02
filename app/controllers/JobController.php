@@ -337,13 +337,14 @@
           $data = array_merge($entry, $data);
           $id = $MJob->save($data);
           $this->success('job saved');
-          self::render('jobs/jobform', formData(array_merge($data, array('_id' => $id))));
+          self::render('jobs/jobform', formData(array_merge($data, [ '_id' => $id ])));
           return;
         }
       }
 
       $this->error($err);
-      self::render('jobs/jobform', formData(array_merge($data, array('_id' => $id))));
+      die(var_dump($data));
+      self::render('jobs/jobform', formData(array_merge($data, [ '_id' => $id ])));
     }
 
     function view() {
