@@ -50,22 +50,22 @@
             tmpLocations[id] = val;
           });
           $('input[name="location[]"]').val('');
-          $(".locationdiv").slideUp(200, 'easeOutCubic');
+          $(".locationdivs").slideUp(200, 'easeOutCubic');
         } else {
           $('input[name="location[]"]').each(function () {
             var id = $(this).attr('id');
             $(this).val(tmpLocations[id]);
           });
-          $(".locationdiv").slideDown(200, 'easeOutCubic');
+          $(".locationdivs").slideDown(200, 'easeOutCubic');
         }
       });
 
       if ($("#locationtype").is(":checked")) {
         $('input[name="location[]"]').prop('required', false);
-        $(".locationdiv").hide();
+        $(".locationdivs").hide();
       } else {
         $('input[name="location[]"]').prop('required', true);
-        $(".locationdiv").show();
+        $(".locationdivs").show();
       }
     })();
 
