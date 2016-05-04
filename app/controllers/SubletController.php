@@ -2,6 +2,26 @@
   require_once($GLOBALS['dirpre'].'controllers/Controller.php');
 
   class SubletController extends Controller {
+
+    private static function checkSubletExists(MongoId $subletId) {
+      if (!GLOBALvarGet('MSublet')->exists($subletId)) {
+        self::error("nonexistent job");
+        self::render('notice');
+        return false;
+      }
+      return true;
+    }
+
+    private static function ownsSublet(MongoId $subletId) {
+      $studentId = $_SESSION['id'];
+      if (!GLOBALvarGet('MSublet')->matchSubletStudent($subletId, $studentId)) {
+        self::error('permission denied');
+        self::render('notice');
+        return false;
+      }
+      return true;
+    }
+
     function data($data) {
       $student = $data['student'];
       $address = clean($data['address']);
@@ -104,6 +124,23 @@
 
       self::error($err);
       self::render('student/sublets/subletform', formData($this->formDataCommon($data)));
+    }
+
+    function delete(array $restOfRoute) {
+      // TODO code to move sublet to oldsublets
+      $subletId = self::getIdFromRoute($restOfRoute);
+      if (is_null($subletId)) return;
+      // check if sublet exists
+      if (!self::checkSubletExists($jobId)) return;
+      // check if student owns sublet
+      if (!self::ownsSublet($jobId)) return;
+
+      // Delete this sublet.
+      SubletModel::deleteById($jobId);
+
+      // Redirect back to home.
+      self::redirect('../home');
+
     }
 
     function edit() {

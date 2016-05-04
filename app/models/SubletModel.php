@@ -15,6 +15,10 @@
       return $data['_id']->{'$id'};
     }
 
+    function delete($id) {
+
+    }
+
     function get($id) {
       return self::$collection->findOne(array('_id' => new MongoId($id)));
     }
@@ -28,12 +32,14 @@
       return self::$collection->find(['student' => new MongoId($id)]);
     }
 
-    function delete($id) {
-
-    }
-
     function exists($id) {
       return (self::$collection->findOne(array('_id' => new MongoId($id))) !== NULL);
+    }
+
+    function matchSubletStudent($subletId, $studentId) {
+      $query = self::queryForId($subletId)
+        ->toQuery('student', $studentId)->projectId();
+      return !is_null($query->findOne());
     }
 
     protected static $collection;

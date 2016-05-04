@@ -194,6 +194,9 @@
   Router::register('housing/addsublet', function() {
     GLOBALvarGet('CSublet')->add();
   });
+  Router::register('housing/deletesublet', function(array $restOfRoute) {
+    GLOBALvarGet('CSublet')->delete($restOfRoute);
+  });
   Router::register('housing/editsublet', function() {
     GLOBALvarGet('CSublet')->edit();
   });
@@ -434,6 +437,7 @@
   Router::route('/housing/search', 'housing/search');
   Router::route('/housing/sublet', 'housing/sublet');
   Router::route('/housing/addsublet', 'housing/addsublet');
+  Router::route('/housing/deletesublet', 'housing/deletesublet');
   Router::route('/housing/editsublet', 'housing/editsublet');
 
   Router::route('/hubs/admin', 'hubs/admin');
