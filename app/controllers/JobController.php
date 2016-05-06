@@ -183,8 +183,7 @@
         'locationtype' => $locationtype
       ];
 
-      if (!is_null($geoJSON->toArray()))
-        $data['geoJSON'] = $geoJSON->toArray();
+      if (!$locationtype) $data['geoJSON'] = $geoJSON->toArray();
 
       return $data;
     }

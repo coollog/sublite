@@ -179,9 +179,10 @@
       if (jobData.length == 0) return;
       $('joblistings').html('');
       jobData.forEach(function (job) {
-        console.log(job);
-        var location = job['location'].join(' / ');
-        job['location'] = location;
+        if (job['location'] !== '')
+          job['location'] = job['location'].join(' / ');
+        else
+          job['location'] = '';
 
         var jobListing = Templates.use('joblistingtemplate', job);
         $('joblistings').append(jobListing);
