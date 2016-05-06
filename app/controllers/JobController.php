@@ -154,8 +154,10 @@
       $company = $data['company'];
       $desc = clean($data['desc']);
       $location = [];
-      foreach ($data['location'] as $loc) {
-        if ($loc) $location[] = clean($loc);
+      if (is_array($data['location'])) {
+        foreach ($data['location'] as $loc) {
+          if ($loc) $location[] = clean($loc);
+        }
       }
       $locationtype = '';
       if(isset($data['locationtype'])) $locationtype = clean($data['locationtype']);
