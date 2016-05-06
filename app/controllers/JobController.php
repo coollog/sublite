@@ -172,16 +172,21 @@
       }
       $requirements = clean($data['requirements']);
 
-      return [
+      $data = [
         'title' => $title, 'deadline' => $deadline, 'duration' => $duration,
         'desc' => $desc,
-        'geocodes' => $geocodes, 'geoJSON' => $geoJSON->toArray(),
+        'geocodes' => $geocodes,
         'location' => $location, 'requirements' => $requirements,
         'salary' => $salary, 'company' => $company,
         'salarytype' => $salarytype, 'startdate' => $startdate,
         'enddate' => $enddate, 'jobtype' => $jobtype,
         'locationtype' => $locationtype
       ];
+
+      if (!is_null($geoJSON->toArray()))
+        $data['geoJSON'] = $geoJSON->toArray();
+
+      return $data;
     }
 
     function validateData($data, &$err) {

@@ -21,6 +21,7 @@
     }
 
     public function toArray() {
+      if (count($this->coordinates) < 2) return null;
       return [
         'type' => $this->type,
         'coordinates' => $this->coordinates
