@@ -916,7 +916,7 @@
           <?php View::echof('jobTitle'); ?>
           <?php
             $location = View::get('jobLocation');
-            if (count($location) > 0) {
+            if (is_array($location)) {
               echo ' | ';
               echo implode(' / ', $location);
             }
