@@ -917,7 +917,6 @@
           <?php
             $location = View::get('jobLocation');
             if (is_array($location)) {
-              die(var_dump($location));
               echo ' | ';
               echo implode(' / ', $location);
             }
