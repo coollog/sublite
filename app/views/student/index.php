@@ -217,16 +217,6 @@
   }
 </style>
 
-<script>
-  $(function() {
-
-
-    $('.arrow-down').click(function() {
-      scrollTo('panel.why');
-    });
-  });
-</script>
-
 <panel class="main">
   <div class="cell">
     <div class="banner">
@@ -343,3 +333,5 @@
     </a>
   </div>
 </panel>
+
+<script src="<?php echo $GLOBALS['dist']; ?>/views/student/index.js"></script>
