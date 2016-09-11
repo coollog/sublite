@@ -1,5 +1,5 @@
 $(() => {
-  $('.arrow-down').click(function() {
+  $('.arrow-down').click(() => {
     scrollTo('panel.why');
   });
 });
