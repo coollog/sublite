@@ -244,6 +244,18 @@
   Router::register('jobs/job', function() {
     GLOBALvarGet('CJob')->view();
   });
+  Router::register('jobs/portal', function() {
+    JobController::portal();
+  });
+  Router::register('jobs/popular', function() {
+    JobPortalControllerAJAX::mostPopular();
+  });
+  Router::register('jobs/recent', function() {
+    JobPortalControllerAJAX::recent();
+  });
+  Router::register('jobs/industry', function() {
+    JobPortalControllerAJAX::byIndustry();
+  });
   Router::register('jobs/recruiter', function() {
     RecruiterController::view();
   });
@@ -308,6 +320,9 @@
   Router::register('runtests', function() {
     require_once(APPDIR.'tests/runtests.php');
   });
+  Router::register('jobs/popular', function() {
+    JobPortalControllerAJAX::mostPopular();
+  });
   Router::register('S3/image', function() {
     S3ControllerAJAX::uploadImage();
   });
@@ -358,6 +373,7 @@
 
   // Map route to registered functions. Try to have these in alphabetical order,
   // and then in groupings.
+  Router::route('/jobs/popular', 'jobs/popular');
   Router::route('/index', 'index');
   Router::route('/', 'index');
 
@@ -458,6 +474,10 @@
   Router::route('/employers/search', 'jobs/search');
   Router::route('/jobs/search', 'jobs/search');
   Router::route('/jobs/search/ajax/search', 'jobs/search/search');
+  Router::route('/jobs/portal', 'jobs/portal');
+  Router::route('/jobs/ajax/popular', 'jobs/popular');
+  Router::route('/jobs/ajax/recent', 'jobs/recent');
+  Router::route('/jobs/ajax/industry', 'jobs/industry');
 
   Router::route('/leaderboard', 'leaderboard');
 

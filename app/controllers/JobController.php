@@ -39,6 +39,11 @@
       self::redirect('../home');
     }
 
+    public static function portal() {
+      self::render('jobs/portal', [
+        ]);
+    }
+
     public static function search() {
       // Predefined searches
       $showSearch = true;
