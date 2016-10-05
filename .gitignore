@@ -10,3 +10,4 @@ mail
 mongosaves
 node_modules
 app/dist
+public
