@@ -25,5 +25,8 @@
     "babel-preset-es2015": "^6.14.0",
     "css-brunch": "^2.6.1",
     "javascript-brunch": "^2.0.0"
+  },
+  "dependencies": {
+    "whatwg-fetch": "^1.0.0"
   }
 }

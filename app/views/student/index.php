@@ -117,5 +117,5 @@
   </div>
 </panel>
 
-<script src="public/app.js"></script>
+<script src="<?php echo $GLOBALS["dirpre"]; ?>../public/app.js"></script>
 <script>require('views/student/index.js');</script>

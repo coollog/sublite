@@ -356,6 +356,9 @@
   Router::register('whereto', function() {
     GLOBALvarGet('CStudent')->whereto();
   });
+  Router::register('/jobs/portal', function () {
+    JobPortalController::viewPortal();
+  });
 
   // Map route to registered functions. Try to have these in alphabetical order,
   // and then in groupings.
@@ -514,6 +517,7 @@
   Router::route('/whereto', 'whereto');
   Router::route('/housing/whereto', 'whereto');
   Router::route('/jobs/whereto', 'whereto');
+  Router::route('/jobs/portal', '/jobs/portal');
 
   // Perform the routing.
   Router::run();

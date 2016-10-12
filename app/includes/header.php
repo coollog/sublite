@@ -49,6 +49,8 @@
   require_once(APPDIR.'controllers/PaymentControllerAJAX.php');
   require_once(APPDIR.'controllers/CompanyControllerAJAX.php');
   require_once(APPDIR.'controllers/StatsControllerAJAX.php');
+  require_once(APPDIR.'controllers/JobPortalController.php');
+  require_once(APPDIR.'controllers/JobPortalControllerAJAX.php');
 
   require_once(APPDIR.'models/AppModel.php');
   require_once(APPDIR.'models/CompanyModel.php');
