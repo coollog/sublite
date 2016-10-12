@@ -8,3 +8,6 @@ housingold
 tmpscript
 mail
 mongosaves
+node_modules
+app/dist
+public

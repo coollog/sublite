@@ -1,0 +1,29 @@
+{
+  "name": "sublite",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "bunch build",
+    "watch": "brunch watch",
+    "prod": "brunch build --production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coollog/sublite.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/coollog/sublite/issues"
+  },
+  "homepage": "https://sublite.net",
+  "devDependencies": {
+    "babel-brunch": "^6.0.6",
+    "babel-core": "^6.14.0",
+    "babel-preset-es2015": "^6.14.0",
+    "css-brunch": "^2.6.1",
+    "javascript-brunch": "^2.0.0"
+  }
+}
