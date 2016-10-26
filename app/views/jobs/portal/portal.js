@@ -6,26 +6,29 @@ export class JobPortal {
   }
 
   addSection(sectionType) {
-    const section = new Section(sectionType);
+    this.sections.push(new Section(sectionType));
   }
 
-  static getData() {
-    return fetch('/jobs/search/ajax/search', {
+  static getData(type, skip, count) {
+    var route = '/jobs/search/ajax/search';
+
+    var query = {};
+
+    switch (type) {
+
+    }
+
+    return fetch(route, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       body: $.param({
-        query: {},
-        skip: 0,
-        count: 10
+        query: query,
+        skip: skip,
+        count: count
       })
-    });
-  }
-
-  static populate() {
-    JobPortal.getData().then(res => res.json())
-      .then(data => console.log(data));
+    }).then(res => res.json());
   }
 }
 
@@ -38,14 +41,39 @@ class Section {
   addJob(job) {
     this.jobs.push(job);
   }
+
+  load(pageIndex) {
+    var skip = pageIndex * Section.NUMPERPAGE;
+    JobPortal.getData(this.type, skip, Section.NUMPERPAGE).then(data => {
+      for (var i = 0; i < Section.NUMPERPAGE && i < data.jobs.length; i ++) {
+        var job = Job.create(data.jobs[i]);
+        this.addJob(job);
+      }
+    });
+  }
 }
 
-class Job {
-  constructor() {
+Section.NUMPERPAGE = 10;
 
+
+class Job {
+  constructor(_id, company, deadline, desc, location, logophoto, title) {
+    this._id = _id;
+    this.company = company;
+    this.deadline = deadline;
+    this.desc = desc;
+    this.location = location;
+    this.logophoto = logophoto;
+    this.title = title;
   }
 
   static create(data) {
-    console.log('data', data);
+    return new Job(
+        data._id,
+        data.company,
+        data.deadline,
+        data.desc,
+        data.location,
+        data.logophoto, data.title);
   }
 }

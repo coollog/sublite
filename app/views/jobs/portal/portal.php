@@ -8,5 +8,7 @@
 
 <script>
   var module = require('views/jobs/portal/portal.js');
-  module.JobPortal.populate();
+  var portal = new module.JobPortal();
+  portal.addSection('recent');
+  portal.sections[0].load(0);
 </script>
