@@ -10,6 +10,7 @@ module.exports = {
     'ecmaFeatures': {
       'experimentalObjectRestSpread': true,
     },
+    'ecmaVersion': 8,
     'sourceType': 'module'
   },
   'rules': {

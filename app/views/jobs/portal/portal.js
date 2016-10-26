@@ -1,3 +1,4 @@
+require('babel-polyfill');
 import 'whatwg-fetch';
 
 export class JobPortal {
@@ -9,14 +10,16 @@ export class JobPortal {
     this.sections.push(new Section(sectionType));
   }
 
+  /**
+   * Examples of section type is most recent,
+   */
   static getData(type, skip, count) {
-    var route = '/jobs/search/ajax/search';
+    const route = '/jobs/search/ajax/search';
+    const query = {};
 
-    var query = {};
+    // switch (type) {
 
-    switch (type) {
-
-    }
+    // }
 
     return fetch(route, {
       method: 'POST',
@@ -30,6 +33,24 @@ export class JobPortal {
       })
     }).then(res => res.json());
   }
+
+  async render() {
+    this.addSection('recent');
+    await Promise.all(this.sections.map(x => x.load(0)));
+    for (const section of this.sections) {
+      const sectionElem = document.createElement('div');
+      sectionElem.className = 'section';
+      for (const job of section.jobs) {
+        const jobElem = document.createElement('div');
+        jobElem.className = 'job';
+        const companyElem = document.createElement('div');
+        companyElem.appendChild(document.createTextNode(job.company));
+        jobElem.appendChild(companyElem);
+        sectionElem.appendChild(jobElem);
+      }
+      document.getElementsByClassName('content')[0].appendChild(sectionElem);
+    }
+  }
 }
 
 class Section {
@@ -42,14 +63,13 @@ class Section {
     this.jobs.push(job);
   }
 
-  load(pageIndex) {
-    var skip = pageIndex * Section.NUMPERPAGE;
-    JobPortal.getData(this.type, skip, Section.NUMPERPAGE).then(data => {
-      for (var i = 0; i < Section.NUMPERPAGE && i < data.jobs.length; i ++) {
-        var job = Job.create(data.jobs[i]);
-        this.addJob(job);
-      }
-    });
+  async load(pageIndex) {
+    const skip = pageIndex * Section.NUMPERPAGE;
+    const data = await JobPortal.getData(this.type, skip, Section.NUMPERPAGE);
+    for (let i = 0; i < Section.NUMPERPAGE && i < data.jobs.length; i++) {
+      const job = Job.create(data.jobs[i]);
+      this.addJob(job);
+    }
   }
 }
 
@@ -69,11 +89,12 @@ class Job {
 
   static create(data) {
     return new Job(
-        data._id,
-        data.company,
-        data.deadline,
-        data.desc,
-        data.location,
-        data.logophoto, data.title);
+      data._id,
+      data.company,
+      data.deadline,
+      data.desc,
+      data.location,
+      data.logophoto, data.title
+    );
   }
 }
