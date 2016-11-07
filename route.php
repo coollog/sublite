@@ -3,6 +3,7 @@
   ini_set('display_errors', '1');
 
   $GLOBALS['dirpre'] = 'app/';
+  $GLOBALS['public'] = 'public/';
   define('APPDIR', "$_SERVER[DOCUMENT_ROOT]/app/");
   require_once(APPDIR.'includes/header.php');
 
