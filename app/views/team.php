@@ -51,7 +51,7 @@
   }
   #teamBlock{
     float: center;
-    height: 900px;
+    height: 500px;
     width: 700px;
   }
   .picBox{
@@ -179,7 +179,7 @@
       name: 'Qingyang Chen',
       position: 'Co-founder & Chief Executive Officer, Yale University',
       shortPosition: 'Co-founder &amp; CEO, Yale',
-      bio: 'Qingyang, better known as Q, is a junior at Yale University majoring in Computer Science. Q joined the team as the technical co-founder and led the development of the website. His background in programming started with video games, and gradually expanded into robotics and web development. On the web, Q goes by the username &ldquo;coollog&rdquo;, and is best known for creating the online multiplayer video game Scandux, as well as other contributions to the indie game community. Q has also co-founded The Boola, a social news website, and enjoys producing videos in his free time.'
+      bio: 'Qingyang, better known as Q, is a senior at Yale University majoring in Computer Science. Q joined the team as the technical co-founder and led the development of the website. His background in programming started with video games, and gradually expanded into robotics and web development. On the web, Q goes by the username &ldquo;coollog&rdquo;, and is best known for creating the online multiplayer video game Scandux, as well as other contributions to the indie game community. Q has also co-founded The Boola, a social news website, and enjoys producing videos in his free time.'
     },
     {
       photo: 'yuanling',
@@ -200,7 +200,7 @@
       name: 'Tony Jiang',
       position: 'Vice-President of Engineering, Yale University',
       shortPosition: 'VP of Engineering, Yale',
-      bio: 'Tony Jiang is a sophomore at Yale University currently studying premed and majoring in computer science. He is an avid competitive programmer, competing in contests such as USACO and ACM-ICPC. In the past couple of summers, he has worked as a researcher and programmer in a bioinformatics lab. He is a member of the Yale Ballroom Dance Team and enjoys eating at Chipotle in his free time.',
+      bio: 'Tony Jiang is a junior at Yale University currently studying premed and majoring in computer science. He is an avid competitive programmer, competing in contests such as USACO and ACM-ICPC. In the past couple of summers, he has worked as a researcher and programmer in a bioinformatics lab. He is a member of the Yale Ballroom Dance Team and enjoys eating at Chipotle in his free time.',
     },
     {
       photo: 'michelle',
@@ -214,14 +214,7 @@
       name: 'Alex Croxford',
       position: 'Business Development Director, Yale University',
       shortPosition: 'Business Development, Yale',
-      bio: 'Alex Croxford is a sophomore at Yale University and currently planning to major in Electrical Engineering and Computer Science. He loves the outdoors and is a member Branford Sustainability and BSA Venturing Crew. Over the past summers, he has enjoyed working on his family’s farm in Illinois. In his free time he loves camping, hiking, and spending time with family and friends.',
-    },
-    {
-      photo: 'eddie',
-      name: 'Edward She',
-      position: 'Software Engineer, Yale University',
-      shortPosition: 'Software, Yale',
-      bio: 'Edward She is a sophomore at Yale University studying Computer Science and Economics, although he is interested in practically anything STEM-related. In particular, he enjoys math, problem solving, and puzzles of all types. Edward loves coding because he views it as a combination of all three of these things. Outside of academic pursuits, Edward especially enjoys food and, in particular, searching for free food. His love for food has partially led him to become actively involved in the Chinese American Students Association, where he organizes events with free food. He is also involved with Yale University Diversified Investments and YHack.',
+      bio: 'Alex Croxford is a junior at Yale University and currently planning to major in Electrical Engineering and Computer Science. He loves the outdoors and is a member Branford Sustainability and BSA Venturing Crew. Over the past summers, he has enjoyed working on his family’s farm in Illinois. In his free time he loves camping, hiking, and spending time with family and friends.',
     },
     {
       photo: 'chris',
