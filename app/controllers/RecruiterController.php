@@ -384,7 +384,7 @@
       }
 
       global $params;
-      extract($data = self::data($params));
+      extract($data = data($params));
 
       // Validations
       self::startValidations();
