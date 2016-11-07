@@ -1,6 +1,5 @@
 <panel>
-  <div class="content">
-    Hello world!
+  <div class="content" id="content">
   </div>
 </panel>
 <script src="<?php echo $GLOBALS["dirpre"]; ?>../public/vendor.js"></script>

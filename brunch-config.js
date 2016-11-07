@@ -13,7 +13,7 @@ module.exports = {
 
   plugins: {
     babel: {
-      presets: ['es2015'], plugins: ['syntax-async-functions', 'transform-regenerator']
+      presets: ['es2015', 'react'], plugins: ['syntax-async-functions', 'transform-regenerator']
     }
   }
 };

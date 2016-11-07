@@ -1,9 +1,66 @@
+/* global require */
 require('babel-polyfill');
 import 'whatwg-fetch';
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+class JobComponent extends React.Component {
+  render() {
+    return (
+      <div className="job-component">
+        <div className="job-company">{this.props.company}</div>
+        <div className="job-desc">{this.props.desc}</div>
+      </div>
+    );
+  }
+}
+
+JobComponent.propTypes = {
+  company: React.PropTypes.string,
+  desc: React.PropTypes.string
+};
+
+class SectionComponent extends React.Component {
+  render() {
+    return (
+      <div className="section-component">
+        {this.props.jobs.map(job => <JobComponent key={job._id} company={job.company} desc={job.desc} />)}
+      </div>
+    );
+  }
+}
+
+SectionComponent.propTypes = {
+  jobs: React.PropTypes.array
+};
+
+class JobPortalComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      sections: []
+    };
+  }
+
+  render() {
+    return (
+      <div className="job-portal-component">
+        {
+          this.state.sections.map(section => <SectionComponent key={section.type} jobs={section.jobs} />)
+        }
+      </div>
+    );
+  }
+}
+
+JobPortalComponent.propTypes = {
+  sections: React.PropTypes.array
+};
 
 export class JobPortal {
   constructor() {
     this.sections = [];
+    this.jpComponent = ReactDOM.render(<JobPortalComponent />, document.getElementById('content'));
   }
 
   addSection(sectionType) {
@@ -36,20 +93,9 @@ export class JobPortal {
 
   async render() {
     this.addSection('recent');
+    // Load first page of each section
     await Promise.all(this.sections.map(x => x.load(0)));
-    for (const section of this.sections) {
-      const sectionElem = document.createElement('div');
-      sectionElem.className = 'section';
-      for (const job of section.jobs) {
-        const jobElem = document.createElement('div');
-        jobElem.className = 'job';
-        const companyElem = document.createElement('div');
-        companyElem.appendChild(document.createTextNode(job.company));
-        jobElem.appendChild(companyElem);
-        sectionElem.appendChild(jobElem);
-      }
-      document.getElementsByClassName('content')[0].appendChild(sectionElem);
-    }
+    this.jpComponent.setState({ sections: this.sections });
   }
 }
 
@@ -94,7 +140,8 @@ class Job {
       data.deadline,
       data.desc,
       data.location,
-      data.logophoto, data.title
+      data.logophoto,
+      data.title
     );
   }
 }

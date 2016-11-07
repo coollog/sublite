@@ -4,11 +4,12 @@ module.exports = {
     'browser': true,
     'jquery': true
   },
-  'extends': ['eslint:recommended'],
+  'extends': ['eslint:recommended', 'plugin:react/recommended'],
   'installedESLint': true,
   'parserOptions': {
     'ecmaFeatures': {
       'experimentalObjectRestSpread': true,
+      'jsx': true
     },
     'ecmaVersion': 8,
     'sourceType': 'module'
@@ -31,5 +32,6 @@ module.exports = {
       'error',
       'always'
     ]
-  }
+  },
+  'plugins': ['react']
 };
