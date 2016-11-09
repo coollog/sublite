@@ -2,7 +2,8 @@ module.exports = {
   'env': {
     'es6': true,
     'browser': true,
-    'jquery': true
+    'jquery': true,
+    'node': true
   },
   'extends': ['eslint:recommended', 'plugin:react/recommended'],
   'installedESLint': true,

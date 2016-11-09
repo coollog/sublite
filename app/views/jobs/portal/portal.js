@@ -1,4 +1,3 @@
-/* global require */
 require('babel-polyfill');
 import 'whatwg-fetch';
 import React from 'react';
@@ -24,7 +23,11 @@ class SectionComponent extends React.Component {
   render() {
     return (
       <div className="section-component">
-        {this.props.jobs.map(job => <JobComponent key={job._id} company={job.company} desc={job.desc} />)}
+        {this.props.jobs.map(job =>
+          <JobComponent
+            key={job._id}
+            company={job.company}
+            desc={job.desc} />)}
       </div>
     );
   }
@@ -42,11 +45,26 @@ class JobPortalComponent extends React.Component {
     };
   }
 
+  handleClick(index) {
+    return async () => {
+      const newSection = this.state.sections[index];
+      await newSection.load();
+      this.setState({ sections: this.state.sections });
+    };
+  }
+
   render() {
     return (
       <div className="job-portal-component">
         {
-          this.state.sections.map(section => <SectionComponent key={section.type} jobs={section.jobs} />)
+          this.state.sections.map((section, index) =>
+            <div key={section.type}>
+              <SectionComponent jobs={section.jobs} />
+              <a href="javascript:void(0);"
+                 onClick={this.handleClick(index)}>
+                Load more
+              </a>
+            </div>)
         }
       </div>
     );
@@ -60,7 +78,8 @@ JobPortalComponent.propTypes = {
 export class JobPortal {
   constructor() {
     this.sections = [];
-    this.jpComponent = ReactDOM.render(<JobPortalComponent />, document.getElementById('content'));
+    this.jpComponent = ReactDOM.render(<JobPortalComponent />,
+      document.getElementById('content'));
   }
 
   addSection(sectionType) {
@@ -94,7 +113,7 @@ export class JobPortal {
   async render() {
     this.addSection('recent');
     // Load first page of each section
-    await Promise.all(this.sections.map(x => x.load(0)));
+    await Promise.all(this.sections.map(x => x.load()));
     this.jpComponent.setState({ sections: this.sections });
   }
 }
@@ -103,14 +122,16 @@ class Section {
   constructor(type) {
     this.type = type;
     this.jobs = [];
+    this.nextPageIndex = 0;
   }
 
   addJob(job) {
     this.jobs.push(job);
   }
 
-  async load(pageIndex) {
-    const skip = pageIndex * Section.NUMPERPAGE;
+  async load() {
+    const skip = this.nextPageIndex * Section.NUMPERPAGE;
+    this.nextPageIndex++;
     const data = await JobPortal.getData(this.type, skip, Section.NUMPERPAGE);
     for (let i = 0; i < Section.NUMPERPAGE && i < data.jobs.length; i++) {
       const job = Job.create(data.jobs[i]);
@@ -119,7 +140,7 @@ class Section {
   }
 }
 
-Section.NUMPERPAGE = 10;
+Section.NUMPERPAGE = 2;
 
 
 class Job {
