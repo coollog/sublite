@@ -44,6 +44,7 @@
       $companyId = $params['companyId'];
       $jobtype = $params['jobtype'];
       $salarytype = $params['salarytype'];
+      $notExpired = $params['notExpired'];
 
       // Search query building
       $query = [];
@@ -77,6 +78,10 @@
           }
           $query['salarytype'] = [ '$in' => $salaryTypes ];
         }
+      }
+      if (!is_null($notExpired) && $notExpired) {
+        $query['$where'] =
+          'function() { return new Date(this.deadline).getTime() > Date.now() }';
       }
 
       return $query;

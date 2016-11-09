@@ -103,6 +103,10 @@
         <input type="checkbox" name="salarytype" id="unpaid"
           value="unpaid" checked />
         <label for="unpaid"> Unpaid/Other</label>
+        <br />
+        <input type="checkbox" name="notExpired" id="notExpired"
+          value="notExpired" />
+        <label for="notExpired"> Not Expired</label>
       </form>
     </filters>
     <a><showFilters class="hide div">Show Filters</showFilters></a>

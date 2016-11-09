@@ -115,6 +115,8 @@
       });
       if (salaryTypes.length > 0) this.query.salarytype = salaryTypes;
       else this.query.salarytype = null;
+
+      this.query.notExpired = $('#notExpired').is(':checked') ? true : null;
     }
   };
 
