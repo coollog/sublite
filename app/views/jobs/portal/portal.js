@@ -59,7 +59,8 @@ class JobPortalComponent extends React.Component {
         {
           this.state.sections.map((section, index) =>
             <div key={section.type}>
-              <SectionComponent jobs={section.jobs} />
+              <SectionComponent jobs={section.jobs}
+                className="section-component" />
               <a href="javascript:void(0);"
                  onClick={this.handleClick(index)}>
                 Load more
