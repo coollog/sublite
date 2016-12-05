@@ -18,7 +18,9 @@
   header("Cache-Control: post-check=0, pre-check=0", false);
   header("Pragma: no-cache");
 
-  require_once(APPDIR.'includes/functions/hash_equals.php');
+  if (!function_exists('hash_equals')) {
+    require_once(APPDIR.'includes/functions/hash_equals.php');
+  }
   require_once(APPDIR.'includes/functions/geocode.php');
   require_once(APPDIR.'includes/functions/sendgmail.php');
   require_once(APPDIR.'includes/functions/lib_autolink.php');

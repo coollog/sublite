@@ -34,7 +34,11 @@
     }
 
     public static function recent() {
+      global $params;
+      $skip = $params['skip'];
+      $count = $params['count'];
 
+      self::search([], $skip, $count);
     }
 
     public static function byIndustry() {
@@ -60,7 +64,6 @@
       return $jobs;
     }
 
-
     private static function topViewersSince($days, $stats, $skip, $num) {
       $time = time() - 86400*$days;
 
@@ -83,6 +86,19 @@
       $jobs = array_slice($jobs, $skip, $num);
       //return $jobs;
       return array_keys($jobs);
+    }
+
+    private static function search(array $query, $skip, $count) {
+      $total = 0;
+      $res = JobModel::search($query, $skip, $count, $total);
+
+      $more = $skip + $count < $total;
+
+      // Save search to db.
+      if ($skip == 0) AppModel::recordSearch('jobs');
+
+      $jobs = self::processDBToView($res);
+      echo toJSON([ 'jobs' => $jobs, 'more' => $more, 'total' => $total ]);
     }
   }
 ?>
