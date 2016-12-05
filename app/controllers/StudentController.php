@@ -599,8 +599,11 @@
                 <br /><br />
                 Best,<br />
                 The SubLite Team";
-        sendgmail($email, array("info@sublite.net",
-          "SubLite, LLC."), 'SubLite Student Account Password Reset', $msg);
+        $result = sendgmail($email, [
+          "info@sublite.net",
+          "SubLite, LLC."
+        ], 'SubLite Student Account Password Reset', $msg);
+        die(var_dump($result));
 
         $this->success('A link to reset your password has been sent to your email. If you do not receive it in the next hour, check your spam folder or whitelist info@sublite.net. <a href="mailto: info@sublite.net">Contact us</a> if you have any further questions.');
         $this->render('forgotpass');

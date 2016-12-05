@@ -188,7 +188,7 @@
           password_hash($params['pass'], PASSWORD_DEFAULT);
         RecruiterModel::save($data);
 
-        $approveurl = "http://$GLOBALS[domain]/approve.php?p=$pass";
+        $approveurl = "http://$GLOBALS[domain]/employers/approve?p=$pass";
         $msg = "New recruiter registered needs approval of account.
                 <br />Registration information:<br />
                 Email: $email<br />
