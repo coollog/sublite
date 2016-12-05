@@ -38,7 +38,7 @@
       $skip = $params['skip'];
       $count = $params['count'];
 
-      self::search([], $skip, $count);
+      self::query([], $skip, $count);
     }
 
     public static function byIndustry() {
@@ -88,7 +88,7 @@
       return array_keys($jobs);
     }
 
-    private static function search(array $query, $skip, $count) {
+    private static function query(array $query, $skip, $count) {
       $total = 0;
       $res = JobModel::search($query, $skip, $count, $total);
 
